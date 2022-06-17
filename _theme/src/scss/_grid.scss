@@ -1,0 +1,101 @@
+.entry-content {
+
+    .section__content:not(.alignwide):not(.alignfull):not(.alignleft):not(.alignright):not(.is-style-wide) {
+        max-width: initial;
+        width: initial;
+    }
+
+    .section {
+
+        position: relative;
+        width: 100%;
+        max-width: 100%;
+        padding: 0;
+        margin: 0;
+
+        &:not(.alignwide):not(.alignfull){
+            
+            .section__content {
+                max-width: $wpe_column_container_max_width !important;
+                margin: 0 auto;
+            }
+        }
+
+        &.alignwide {
+
+            .section__content {
+
+                .#{$wpe_column_container_class_name} {
+                    max-width: $wpe_column_container_max_width !important;
+                    margin: 0 auto;
+                }
+            }
+        }
+
+        .section__content {
+            position: relative;
+
+            .#{$wpe_column_container_class_name} {
+                margin: 0 auto;
+                padding: 0 15px;
+
+                .grid {
+                    display: grid;
+                    grid-template-columns: repeat(12, [col-start] 1fr);
+                    grid-gap: 10px;
+
+                    @media screen and (min-width: 981px) {
+                        @for $i from 1 through 100 {
+                            .gridColumnStartDesktop-#{$i} {
+                                grid-column-start: $i;
+                            }
+                            .gridColumnEndDesktop-#{$i} {
+                                grid-column-end: $i;
+                            }
+                            .gridRowStartDesktop-#{$i} {
+                                grid-row-start: $i;
+                            }
+                            .gridRowEndDesktop-#{$i} {
+                                grid-row-end: $i;
+                            }
+                        }
+                    }
+
+                    @media screen and (max-width: 980px) and (min-width: 561px) {
+                        @for $i from 1 through 100 {
+                            .gridColumnStartTablet-#{$i} {
+                                grid-column-start: $i;
+                            }
+                            .gridColumnEndTablet-#{$i} {
+                                grid-column-end: $i;
+                            }
+                            .gridRowStartTablet-#{$i} {
+                                grid-row-start: $i;
+                            }
+                            .gridRowEndTablet-#{$i} {
+                                grid-row-end: $i;
+                            }
+                        }
+                    }
+                    
+                    @media screen and (max-width: 560px) {
+                        @for $i from 1 through 100 {
+                            .gridColumnStartMobile-#{$i} {
+                                grid-column-start: $i;
+                            }
+                            .gridColumnEndMobile-#{$i} {
+                                grid-column-end: $i;
+                            }
+                            .gridRowStartMobile-#{$i} {
+                                grid-row-start: $i;
+                            }
+                            .gridRowEndMobile-#{$i} {
+                                grid-row-end: $i;
+                            }
+                        }
+                    }
+                }
+            } 
+        }
+    }
+}

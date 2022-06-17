@@ -1,0 +1,240 @@
+.wpe-component_edit_placeholder {
+
+    .basicField {
+
+        .components-base-control__label, .components-input-control__label {
+            padding-bottom: 0;
+            margin-bottom: 8px;
+        }
+    }
+
+    .tab-panel-wpe-component {
+
+        .components-tab-panel__tabs {
+            background: #f3f4f5;
+
+            &-item {
+                margin-bottom: 0;
+
+                &:focus:not(:disabled), &.active-tab {
+                    box-shadow: 0 3px #007CBA;
+                }
+            }
+        }
+
+        .components-tab-panel__tab-content {
+            padding: 10px 10px 0px 10px;
+        }
+    }
+
+    .objectField-content {
+
+        .tab-panel-wpe-component {
+            margin-top: 20px;
+        }
+    }
+
+    .basicField, .repeatableField {
+        border-bottom: 1px solid #73b7d94d;
+        padding: 20px 0;
+
+        &:last-child {
+            border-bottom: none;
+        }
+
+        .block-editor-media-placeholder {
+            box-shadow: none;
+            background: #f3f4f5;
+        }
+    }
+
+    .repeatableField {
+        
+        .block-editor-media-placeholder {
+            margin-bottom: 8px;
+        }
+    }
+
+    .objectField {
+
+        .objectField-content {
+            background: #f3f4f5;
+            padding: 0 20px;
+
+            .basicField, .repeatableField {
+                border-color: #e2e4e7;
+            }
+        }
+    }
+
+    .components-panel {
+
+        margin-bottom: 8px;
+        
+        .components-panel__body {
+            padding: 0;
+
+            .components-panel__body-title {
+                margin: 0;
+                padding: 10px 0 12px 15px;
+                
+                .components-button {
+                    display: block;
+                }
+
+                .components-button:focus {
+                    box-shadow: none;
+                }
+
+                .removeRepeatable {
+                    right: 55px;
+                }
+            }
+            &.is-opened > .components-panel__body-title {
+
+                background: #f3f4f5;
+            }
+
+            .objectField-content {
+                background: white;
+            }
+        }
+        
+        &:hover .removeRepeatable {
+            visibility: visible;
+        }
+    }
+
+    .components-base-control {
+        
+        position: relative;
+
+        .removeRepeatable {
+            visibility: hidden;
+            position: absolute;
+            top: 0;
+            right: 0;
+            padding-right: 0;
+        }
+
+        .components-select-control__input {
+            margin-left: 16px;
+        }
+    }
+
+    .components-base-control__field {
+
+        &:hover .removeRepeatable {
+            visibility: visible;
+        }
+    }
+
+    .components-placeholder {
+
+        .media-preview-container {
+            position: relative;
+            width: 100%;
+            border: 1px solid #e2e4e7;
+            padding: 10px;
+            display: flex;
+            background: white;
+
+            .file-details {
+                margin-left: 10px;
+            }
+
+            .reset-button {
+                position: absolute;
+                background: white;
+                top: 16px;
+                right: 16px;
+                display: none;
+            }
+            &:hover > .reset-button {
+                display: inline-flex;
+            }
+        }
+    }
+
+    .rich-text-container {
+
+        .block-editor-rich-text__editable {
+            background: #fff;
+            padding: 6px 8px;
+            border-radius: 2px;
+            border: 1px solid #757575;
+        }
+    }
+
+    .link-control-container {
+
+        padding: 1em 0;
+        background: white;
+        border: 1px solid #cce4f1;
+
+        .components-base-control__label {
+            margin: 0 16px;
+        }
+        
+        .components-text-control__input {
+            width: auto;
+        }
+
+        .components-button.removeRepeatable {
+            right: 16px;
+        }
+
+        .block-editor-link-control {
+            border-top: 1px solid #e2e4e7;
+        }
+        
+    }
+
+    .radio-control-container {
+        
+        padding: 1em;
+        background: white;
+        border: 1px solid #cce4f1;
+    }
+
+    .dateTime-container {
+        background: #f3f4f5;
+        padding: 20px;
+        border-radius: 2px;
+
+        .components-datetime {
+            display: flex;
+            justify-content: space-between;
+
+            .components-datetime__buttons {
+                justify-content: flex-end;
+                flex-direction: column;
+                align-items: flex-end;
+            }
+        }
+    }
+}
+
+.wpe-component_edit_placeholder {
+    z-index: 1;
+}
+
+.block-editor-block-inspector {
+
+    .child-range-control {
+        padding-left: 10px;
+    }
+}
+
+.block-editor-block-list__layout {
+
+    .wp-block {
+
+        .alert {
+            color: red;
+            border: 2px solid red;
+            padding: 4em  0;
+            text-align: center;
+        }
+    }
+}

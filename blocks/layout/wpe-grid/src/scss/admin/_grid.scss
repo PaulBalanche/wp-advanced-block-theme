@@ -1,0 +1,64 @@
+#editor {
+
+    .block-editor-block-list__block[data-type="custom/wpe-grid"] {
+
+        display: grid;
+        column-gap: 0.4%;
+        row-gap: 0.4%;
+        padding-top: 28px;
+        padding-right: 0.8%;
+        padding-bottom: 0.8%;
+        padding-left: 0.8%;
+        margin-top: 0;
+        margin-bottom: 0;
+
+        &::before {
+
+            content: 'Grid';
+            display: block;
+            visibility: hidden;
+            position: absolute;
+            left: 0;
+            top: 0;
+            font-size: .6rem;
+            background: #007cba;
+            color: white;
+            padding: 0px 10px;
+        }
+
+        &.is-selected {
+
+            &::before {
+                visibility: visible;
+            }
+        }
+
+        &.has-child-selected {
+
+            &::before {
+                visibility: visible;
+            }
+        }
+
+        // &:hover::after,
+        &:focus::after,
+        &:active::after,
+        &.is-selected::after,
+        &.has-child-selected::after {
+            // &::after {
+            // box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+            // border: 1px dashed rgba(0, 124, 186, 0.2);
+            background: rgba(0, 124, 186, 0.05);
+            box-shadow: none;
+        }
+        // &:not([contenteditable]):focus::after {
+        //     border: none;
+        // }
+    }
+
+    .block-editor-block-list__layout.is-root-container > .block-editor-block-variation-picker {
+        max-width: $max_width_main_column;
+        margin: auto;
+        margin-top: $base_padding;
+    }
+}

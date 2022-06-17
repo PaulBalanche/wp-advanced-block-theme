@@ -1,0 +1,90 @@
+.block-editor-block-list__block[data-type="custom/wpe-column"] {
+
+    width: 100%;
+    padding: 0.6rem;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+
+    // &:hover::after,
+    // &:focus::after,
+    // &:active::after,
+    // &.is-selected::after,
+    // &.has-child-selected::after {
+    //     // box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+    //     border: 1px dashed rgba(0, 124, 186, 0.5);
+    //     top: 2px;
+    //     right: 1px;
+    //     bottom: 2px;
+    //     left: 1px;
+    // }
+    &:not([contenteditable])::focus::after {
+        border: none;
+    }
+
+    @for $i from 1 through 100 {
+        .desktop &.gridColumnStartDesktop-#{$i} {
+            grid-column-start: $i;
+        }
+        .desktop &.gridColumnEndDesktop-#{$i} {
+            grid-column-end: $i;
+        }
+        .desktop &.gridRowStartDesktop-#{$i} {
+            grid-row-start: $i;
+        }
+        .desktop &.gridRowEndDesktop-#{$i} {
+            grid-row-end: $i;
+        }
+    }
+    
+    @for $i from 1 through 100 {
+        .tablet &.gridColumnStartTablet-#{$i} {
+            grid-column-start: $i;
+        }
+        .tablet &.gridColumnEndTablet-#{$i} {
+            grid-column-end: $i;
+        }
+        .tablet &.gridRowStartTablet-#{$i} {
+            grid-row-start: $i;
+        }
+        .tablet &.gridRowEndTablet-#{$i} {
+            grid-row-end: $i;
+        }
+    }
+    
+    @for $i from 1 through 100 {
+        .mobile &.gridColumnStartMobile-#{$i} {
+            grid-column-start: $i;
+        }
+        .mobile &.gridColumnEndMobile-#{$i} {
+            grid-column-end: $i;
+        }
+        .mobile &.gridRowStartMobile-#{$i} {
+            grid-row-start: $i;
+        }
+        .mobile &.gridRowEndMobile-#{$i} {
+            grid-row-end: $i;
+        }
+    }
+
+    .wp-block-custom-wpe-column {
+        
+        .block-editor-block-list__layout {
+            display: block !important;
+            padding: 10px !important;
+        }
+    }
+}
+
+
+#editor {
+    
+    .block-editor-block-list__block[data-type="custom/wpe-column"] {
+        
+        &:hover > .block-list-appender {
+            visibility: visible;
+        }
+
+    }
+}

@@ -1,0 +1,23 @@
+{
+    "name": "wpextend/wp-advanced-block-theme",
+    "version": "0.0.1",
+    "type": "wordpress-plugin",
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "Paul Balanche",
+            "email": "paul.balanche@gmail.com",
+            "homepage": "https://github.com/PaulBalanche/",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=7.0.0",
+        "timber/timber": "^1.19"
+    },
+    "autoload": {
+        "psr-4": {
+            "Abt\\": "inc/"
+        }
+    }
+}
