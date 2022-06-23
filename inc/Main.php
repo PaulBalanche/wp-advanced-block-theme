@@ -7,6 +7,7 @@ use Abt\Filters\Blocks as BlocksFilter;
 use Abt\Controllers\Theme as ThemeController;
 use Abt\Controllers\LayoutBlocks as LayoutBlocksController;
 use Abt\Controllers\ComponentBlocks as ComponentBlocksController;
+use Abt\Controllers\BlockPatterns as BlockPatternsController;
 use Abt\Services\CliCommand;
 use Abt\Models\ComponentBlock;
 use Abt\Singleton\Config;
@@ -30,6 +31,7 @@ class Main {
         new ThemeController();
         new LayoutBlocksController();
         new ComponentBlocksController();
+        new BlockPatternsController();
 
         // WP-CLI
         if ( defined( 'WP_CLI' ) && \WP_CLI ) {

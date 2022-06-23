@@ -125,7 +125,7 @@ class FrontEnd extends ServiceBase {
         }
 
         if( $component_id ) {
-            $component_props = apply_filters('wpextend/get_frontspec_component_props_' . $component_id, $component_props);
+            $component_props = apply_filters('abt/get_frontspec_component_props_' . $component_id, $component_props);
         }
 
         return $component_props;

@@ -54,11 +54,11 @@ class Timber {
 
             $path_view = ( strpos($twig_view, '.twig') !== false ) ? $twig_view : $twig_view . '/' . $twig_view . '.twig';
 
-            if ( defined('TIMBER_CONTROLLERS_STRING_OUTPUT') && TIMBER_CONTROLLERS_STRING_OUTPUT ) {
-               return \Timber\Timber::compile( $path_view, $context );
+            if ( defined('TIMBER_RENDER_ECHOES') && TIMBER_RENDER_ECHOES ) {
+                \Timber\Timber::render( $path_view, $context );
             }
             else {
-                \Timber\Timber::render( $path_view, $context );
+                return \Timber\Timber::compile( $path_view, $context );
             }
         }
     }

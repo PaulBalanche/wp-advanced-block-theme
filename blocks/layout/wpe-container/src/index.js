@@ -74,5 +74,5 @@ function updateSettingsParent( settings, name ) {
 }
 
 if( global_localized?.container?.is_main ) {
-    addFilter( 'blocks.registerBlockType', 'wpextend/updateSettingsParent', updateSettingsParent );
+    addFilter( 'blocks.registerBlockType', 'abt/updateSettingsParent', updateSettingsParent );
 }

@@ -98,6 +98,7 @@
             .objectField-content {
                 background: white;
             }
+
         }
         
         &:hover .removeRepeatable {
@@ -235,6 +236,33 @@
             border: 2px solid red;
             padding: 4em  0;
             text-align: center;
+        }
+    }
+}
+
+.interface-interface-skeleton__sidebar {
+
+    .components-panel__body {
+
+        &.is-opened {
+
+            .components-panel__body-title {
+                background: #f0f0f0;
+            }
+        }
+
+        .components-button.components-panel__body-toggle {
+            box-shadow: none;
+        }
+    }
+
+    .components-tab-panel__tabs {
+
+        margin: -5px -16px 20px -16px;
+        
+        .active-tab {
+            box-shadow: inset 0 var(--wp-admin-border-width-focus) var(--wp-admin-theme-color);
+            background: #f0f0f0;
         }
     }
 }

@@ -117,7 +117,10 @@ class Scripts extends ServiceBase {
         }
 
         $src = $this->glob_asset_file( $asset['src'] );
-        
+        if( is_null($src) ) {
+            return;
+        }
+
         $deps = ( isset($asset['deps']) && is_array( $asset['deps'] ) ) ? $asset['deps'] : [];
         if( $is_editor_enque ) {
             $deps = array_merge( $deps, [ 'wp-edit-blocks' ] );
@@ -145,6 +148,8 @@ class Scripts extends ServiceBase {
 
         if( strpos($src, 'http') !== 0  ) {
 
+            $returned_src = null;
+
             $trimed = trim( $src, './' );
             $exploded = explode( '/', $trimed );
             $filename = $exploded[ count($exploded) - 1 ];
@@ -154,13 +159,16 @@ class Scripts extends ServiceBase {
             if( file_exists($absolute_dir_path) ) {
 
                 $glob = glob( $absolute_dir_path . $filename );
-                usort( $glob, function( $a, $b ) { return  - ( filemtime($a) <=> filemtime($b) ); } );
-                $last_file = $glob[0];
-                $src = ( strpos($src, '/') === 0 ) ? '/' . $relative_dir_path . pathinfo($last_file)['basename'] : get_stylesheet_directory_uri() . '/' . pathinfo($last_file)['basename'];
+                if( is_array($glob) && count($glob) > 0 ) {
+                    usort( $glob, function( $a, $b ) { return  - ( filemtime($a) <=> filemtime($b) ); } );
+                    $last_file = $glob[0];
+                    $returned_src = ( strpos($src, '/') === 0 ) ? '/' . $relative_dir_path . pathinfo($last_file)['basename'] : get_stylesheet_directory_uri() . '/' . $relative_dir_path . pathinfo($last_file)['basename'];
+                }
             }
 
+            $src = $returned_src;
         }
-        
+
         return $src;
     }
 

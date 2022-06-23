@@ -17,11 +17,11 @@ error_reporting(E_ALL | E_STRICT);
  * Define variables
  *
  */
-define( 'ABT_PLUGIN_DIR',                        plugin_dir_path( __FILE__ )                                                             );
-define( 'ABT_PLUGIN_URL' ,                       plugins_url('', __FILE__) . '/'                                                         );
-define( 'ABT_TEMPLATE_VIEWS_LOCATION' ,          ( defined('THEME_VIEW_ROOT_LOCATION') ) ? THEME_VIEW_ROOT_LOCATION : 'views/'           );
-define( 'ABT_TEMPLATE_COMPONENTS_SUB_LOCATION',  ( defined('COMPONENTS_RELATIVE_PATH') ) ? COMPONENTS_RELATIVE_PATH : 'components/'      );
-define( 'ABT_CONTAINER_CLASS_NAME',              ( defined('GUTENBERG_CONTAINER_CLASS') ) ? GUTENBERG_CONTAINER_CLASS : 'container'      );
+define( 'ABT_PLUGIN_DIR',                        plugin_dir_path( __FILE__ )                                                                );
+define( 'ABT_PLUGIN_URL' ,                       plugins_url('', __FILE__) . '/'                                                            );
+define( 'ABT_TEMPLATE_VIEWS_LOCATION' ,          ( defined('THEME_VIEW_ROOT_LOCATION') )    ? THEME_VIEW_ROOT_LOCATION  : 'views/'          );
+define( 'ABT_TEMPLATE_COMPONENTS_SUB_LOCATION',  ( defined('COMPONENTS_RELATIVE_PATH') )    ? COMPONENTS_RELATIVE_PATH  : 'components/'     );
+define( 'ABT_CONTAINER_CLASS_NAME',              ( defined('CONTAINER_CLASS_NAME') )        ? CONTAINER_CLASS_NAME      : 'container'       );
 
 
 

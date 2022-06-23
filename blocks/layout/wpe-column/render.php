@@ -24,7 +24,7 @@ function custom_wpe_column_render_callback( $attributes, $content ) {
 
     // Render
     return \Abt\Services\Render::render(
-        apply_filters('wpextend/wpe_column_view_path', 'wpe-column'),
-        apply_filters('wpextend/wpe_column_data', $data, $attributes)
+        apply_filters('abt/wpe_column_view_path', 'wpe-column'),
+        apply_filters('abt/wpe_column_data', $data, $attributes)
     );
 }

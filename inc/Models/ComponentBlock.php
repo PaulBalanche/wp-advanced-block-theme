@@ -353,27 +353,27 @@ class ComponentBlock extends ModelBase {
             $render_attributes = $this->get_attributes();
 
             // Filters attributes
-            $render_attributes = apply_filters( 'wpextend/render_wpe_component_attributes', $render_attributes );
-            $render_attributes = apply_filters( 'wpextend/render_wpe_component_attributes_' . $this->get_ID(), $render_attributes );
+            $render_attributes = apply_filters( 'abt/render_component_block_attributes', $render_attributes );
+            $render_attributes = apply_filters( 'abt/render_component_block_attributes_' . $this->get_ID(), $render_attributes );
 
             // Anchor detection
             $render_attributes['anchor'] = $this->detect_block_anchor();
 
             // Filters spacing
-            $render_attributes['margin'] = apply_filters( 'wpextend/wpe_gutenberg_blocks_spacing_formatting', ( isset($render_attributes['margin']) ) ? $render_attributes['margin'] : '', 'margin' );
-            $render_attributes['padding'] = apply_filters( 'wpextend/wpe_gutenberg_blocks_spacing_formatting', ( isset($render_attributes['padding']) ) ? $render_attributes['padding'] : '', 'padding' );
+            $render_attributes['margin'] = apply_filters( 'abt/block_spacing_formatting', ( isset($render_attributes['margin']) ) ? $render_attributes['margin'] : '', 'margin' );
+            $render_attributes['padding'] = apply_filters( 'abt/block_spacing_formatting', ( isset($render_attributes['padding']) ) ? $render_attributes['padding'] : '', 'padding' );
 
             // Formatting attributes
             $render_attributes = apply_filters( 'Abt\attributes_formatting', $render_attributes, $block_spec );
 
             // Start rendering
-            if( apply_filters( 'wpextend/display_wpe_component_' . $this->get_ID(), true, $render_attributes ) ) {
+            if( apply_filters( 'abt/display_component_block_' . $this->get_ID(), true, $render_attributes ) ) {
 
                 // Check missing required attributes
                 $missing_required_attributes = $this->get_missing_required_attributes( $render_attributes );
                 if( count($missing_required_attributes) == 0 ) {
                     
-                    $render = apply_filters( 'wpextend/render_wpe_component_' . $this->get_ID(), RenderService::render( $block_spec['path'], $render_attributes ) );
+                    $render = apply_filters( 'abt/render_component_block_' . $this->get_ID(), RenderService::render( $block_spec['path'], $render_attributes ) );
                 }
                 else if( Request::is_admin_editor_request() ) {
 

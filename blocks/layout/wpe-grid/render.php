@@ -11,7 +11,7 @@ function custom_wpe_grid_render_callback( $attributes, $content ) {
 
     // Render
     return \Abt\Services\Render::render(
-        apply_filters('wpextend/wpe_grid_view_path', 'wpe-grid'),
-        apply_filters('wpextend/wpe_grid_data', $data, $attributes)
+        apply_filters('abt/wpe_grid_view_path', 'wpe-grid'),
+        apply_filters('abt/wpe_grid_data', $data, $attributes)
     );
 }

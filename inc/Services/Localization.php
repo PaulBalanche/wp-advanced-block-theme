@@ -8,6 +8,7 @@ class Localization extends ServiceBase {
         parent::__construct();
 
         $this->add_actions();
+        $this->add_filters();
     }
     
 
@@ -20,6 +21,18 @@ class Localization extends ServiceBase {
 
         // Internationalization text domain
         add_action( 'after_setup_theme', [ $this, 'theme_text_domain_setup' ] );        
+    }
+
+
+
+    /**
+     * Add Wordpress filters
+     * 
+     */
+    public function add_filters() {
+
+        // Retrieves all i18n theme data
+        add_filter( 'Abt\get_i18n_theme_data', [ $this, 'get_i18n_theme_data' ], 10, 2 );
     }
 
 
@@ -39,6 +52,24 @@ class Localization extends ServiceBase {
         else {
             define( 'THEME_TEXT_DOMAIN', 'my-theme' );
         }
+    }
+
+
+
+
+    /**
+     * Internationalization text domain
+     * 
+     */
+    public function get_i18n_theme_data( $initiale_value, $key ){
+
+        $i18n = $this->get_config()->get_spec('i18n');
+        if( is_array($i18n) && isset($i18n[$key]) && ! empty($i18n[$key]) ) {
+
+            $initiale_value = $i18n[$key];
+        }
+        
+        return $initiale_value;
     }
 
 }

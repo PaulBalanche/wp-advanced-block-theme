@@ -22,8 +22,8 @@ if( ! function_exists( 'core_gallery_render_callback' ) ) {
 
             // Render
             return \Abt\Services\Render::render(
-                apply_filters('wpextend/core_gallery_view_path', $view_path),
-                apply_filters('wpextend/core_gallery_data', $data, $attributes)
+                apply_filters('abt/core_gallery_view_path', $view_path),
+                apply_filters('abt/core_gallery_data', $data, $attributes)
             );
         }
     }

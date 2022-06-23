@@ -33,7 +33,10 @@ class Blocks extends FiltersBase {
         $allowed_block_types_theme = $this->get_config()->get_spec('allowed_block_types');
         if( ! is_null($allowed_block_types_theme) ) {
 
-            $allowed_block_types = apply_filters( 'Abt\allowed_block_types_all', $allowed_block_types_theme );
+            // Add core/block for reusable-blocks support
+            $allowed_block_types = array_merge( $allowed_block_types_theme, [ 'core/block' ] );
+
+            $allowed_block_types = apply_filters( 'Abt\allowed_block_types_all', $allowed_block_types );
         }
 
         return $allowed_block_types;

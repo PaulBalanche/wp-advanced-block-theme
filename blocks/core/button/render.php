@@ -16,8 +16,8 @@ if( ! function_exists( 'core_button_render_callback' ) ) {
 
         // Render
         return \Abt\Services\Render::render(
-            apply_filters('wpextend/core_button_view_path', 'core-button'),
-            apply_filters('wpextend/core_button_data', $data, $attributes)
+            apply_filters('abt/core_button_view_path', 'core-button'),
+            apply_filters('abt/core_button_data', $data, $attributes)
         );
     }
 
