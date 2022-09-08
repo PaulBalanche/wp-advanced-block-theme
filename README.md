@@ -2,8 +2,8 @@
 
 ### Create `current_theme/`theme\_spec.`json` file:
 
-{% content-ref url="theme_spec.json.md" %}
-[theme\_spec.json.md](theme\_spec.json.md)
+{% content-ref url="group-1/page-1/theme_spec.json.md" %}
+[theme\_spec.json.md](group-1/page-1/theme\_spec.json.md)
 {% endcontent-ref %}
 
 ###
