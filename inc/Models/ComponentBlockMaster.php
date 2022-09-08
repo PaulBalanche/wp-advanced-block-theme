@@ -100,7 +100,6 @@ class ComponentBlockMaster extends ModelBase {
 
         if( ! isset( $attributes['id_component'] ) )
             return;
-        
 
         $componentBlockInstance = Main::getInstance()->get_component_block_instance( $attributes['id_component'] );
         $componentBlockInstance->set_attributes($attributes);
