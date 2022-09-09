@@ -5,4 +5,4 @@
 * [Theme & Components spec](theme-and-components-spec/README.md)
   * [theme\_spec.json](theme\_spec.json.md)
   * [viewspec.json](viewspec.json.md)
-* [Actions and Filters](actions-and-filters.md)
+* [Hooks](hooks.md)
