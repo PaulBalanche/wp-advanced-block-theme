@@ -129,7 +129,7 @@ class Scripts extends ServiceBase {
         $ver = ( isset($asset['ver']) && ! empty( $asset['ver'] ) ) ? $asset['ver'] : false;
 
         if( $is_js ) {
-            $in_footer = ( isset($js['media']) ) ? ( $js['media'] ) : false;
+            $in_footer = ( isset($asset['in_footer']) ) ? ( $asset['in_footer'] ) : false;
             wp_enqueue_script( $handle, $src, $deps, $ver, $in_footer );
         }
         else{
