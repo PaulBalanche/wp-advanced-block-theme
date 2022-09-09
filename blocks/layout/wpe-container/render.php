@@ -32,8 +32,8 @@ function custom_wpe_container_render_callback( $attributes, $content_wrapped ) {
     $data = [
         'content' => $content,
         'align' => ( isset($attributes['align']) ) ? 'align' . $attributes['align'] : '',
-        'margin' => apply_filters( 'abt/block_spacing_formatting', ( isset($attributes['margin']) ) ? $attributes['margin'] : '', 'margin' ),
-        'padding' => apply_filters( 'abt/block_spacing_formatting', ( isset($attributes['padding']) ) ? $attributes['padding'] : '', 'padding' ),
+        'margin' => apply_filters( 'Abt\block_spacing_formatting', ( isset($attributes['margin']) ) ? $attributes['margin'] : '', 'margin' ),
+        'padding' => apply_filters( 'Abt\block_spacing_formatting', ( isset($attributes['padding']) ) ? $attributes['padding'] : '', 'padding' ),
         'style' => ( isset($attributes['style']) ) ? 'st-' . $attributes['style'] : '',
         'container_class_name' => \Abt\Singleton\Config::getInstance()->get('containerClassName'),
         'background' => '',
@@ -48,7 +48,7 @@ function custom_wpe_container_render_callback( $attributes, $content_wrapped ) {
 
     // Render
     return \Abt\Services\Render::render(
-        apply_filters('abt/wpe_container_view_path', 'wpe-container'),
-        apply_filters('abt/wpe_container_data', $data, $attributes)
+        apply_filters( 'Abt\wpe_container_view_path', 'wpe-container' ),
+        apply_filters( 'Abt\wpe_container_data', $data, $attributes )
     );
 }

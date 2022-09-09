@@ -18,7 +18,7 @@ class Relation {
                 $attributes[$key_prop] = get_post($attributes[$key_prop]);
             }
 
-            $attributes[$key_prop] = apply_filters('abt/pre_render_component_relation', $attributes[$key_prop], $componentId, $key_prop);
+            $attributes[$key_prop] = apply_filters( 'Abt\pre_render_component_relation', $attributes[$key_prop], $componentId, $key_prop );
         }
     }
 
