@@ -1,12 +1,14 @@
 # viewspec.json
 
+
+
 ```json
 {
-  "id": "my-first-component",
+  "id": "my-first-component",  
   "name": "My first component",
+  "description": "Here an awesome description",
   "category": "Ma new category",
   "parent": null,
-  "path": "my-first-component.twig",
   "props_categories": [
       {
           "id": "media",
@@ -143,20 +145,6 @@
 
 
 
-## # Components definitions
-
-## **id**
-
-## name
-
-## **category**
-
-## path
-
-{% hint style="danger" %}
-Your components path configuration have to be relative to the COMPONENTS\_RELATIVE\_PATH environment variable.
-{% endhint %}
-
 ## props
 
 ### **# label**
@@ -176,14 +164,15 @@ The type will influence the back-office rendering and the structure of the saved
   * string
   * number
   * text
-  * richText
-  * wysiwyg
+  * richText / wysiwyg
   * boolean
-  * select
+  * select / color
   * radio
   * link
   * relation
+  * date
   * image
+  * video
   * file
   * gallery
   * object

@@ -12,6 +12,6 @@ By default, all components are available anywhere. It's possible to constraint a
 
 
 
-#### [> theme\_spec.json](theme\_spec.json.md)
+#### [> theme\_spec.json](../theme\_spec.json.md)
 
-#### [> viewspec.json](viewspec.json.md)
+#### [> viewspec.json](../viewspec.json.md)
