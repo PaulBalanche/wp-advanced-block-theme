@@ -1254,7 +1254,7 @@ class WpeComponent extends Component {
             };
 
             // 1. Loop Props Categories
-            if( typeof element.props_categories != 'undefined' ) {
+            if( typeof element.props_categories != 'undefined' && element.props_categories != null ) {
                 for (const [keyCatProps, valueCatProps] of Object.entries(element.props_categories)) {
 
                     catReOrder[valueCatProps.id] = { name: valueCatProps.name, props: {} }
@@ -1264,7 +1264,7 @@ class WpeComponent extends Component {
             // 2. Loop Props
             for (const [keyProp, valueProp] of Object.entries(element.props)) {
 
-                if( typeof valueProp.category != 'undefined' && valueProp.category in catReOrder ) {
+                if( typeof valueProp.category != 'undefined' && valueProp.category != null && valueProp.category in catReOrder ) {
                     catReOrder[valueProp.category].props[keyProp] = valueProp;
                 }
                 else {
