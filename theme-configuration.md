@@ -1,14 +1,6 @@
 # Theme configuration
 
-### Create `current_theme/`theme\_spec.`json` file:
-
-{% content-ref url="theme_spec.json.md" %}
-[theme\_spec.json.md](theme\_spec.json.md)
-{% endcontent-ref %}
-
-###
-
-### Environment variables uses by WPextend plugin:
+### Environment variables uses by WPextend plugin
 
 ```css
 # Template location in current theme (default: views/)
@@ -27,3 +19,7 @@ FRONT_ENV='dev'
 {% hint style="danger" %}
 Don't forget to add them in **config/application.php**.
 {% endhint %}
+
+
+
+#### [> Theme & Components spec](theme-and-components-spec/)
