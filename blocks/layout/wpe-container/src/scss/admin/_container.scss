@@ -132,6 +132,7 @@
 
         .block-list-appender {
             visibility: hidden;
+            position: relative;
         }
         &:hover > .block-list-appender {
             visibility: visible;
@@ -153,6 +154,7 @@
             max-width: $max_width_main_column;
             margin: auto;
             margin-top: $base_padding;
+            box-shadow: none;
 
             &:hover {
                 border: 1px solid #007cba;

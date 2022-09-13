@@ -1,24 +1,20 @@
 <?php
 
-if( ! function_exists( 'core_button_render_callback' ) ) {
+if( ! function_exists( 'abt_core_button_render_callback' ) ) {
 
-    function core_button_render_callback( $attributes, $content ) {
+    function abt_core_button_render_callback( $block_content, $block ) {
 
-        preg_match( '/^<div class="wp-block-button([^"]*)"><a class="wp-block-button__link" href="([^"]*)">(.*)<\/a><\/div>$/ms', $content, $matches );
+        preg_match( '/<a class="wp-block-button__link"[^>]*(?:href="([^"]*)")?[^>]*(?:target="([^"]*)")?[^>]*>(.*)<\/a>/', $block_content, $matches );
 
         // Define data
         $data = [
-            'content' => $content,
-            'style_class' => trim($matches[1]),
-            'href' => $matches[2],
+            'style_class' => $block['attrs']['className'] ?? null,
+            'href' => $matches[1],
+            'target' => ( in_array($matches[2], [ '_self', '_blank' ]) ) ? $matches[2] : null,
             'label' => $matches[3]
         ];
 
-        // Render
-        return \Abt\Services\Render::render(
-            apply_filters( 'Abt\core_button_view_path', 'core-button' ),
-            apply_filters( 'Abt\core_button_data', $data, $attributes )
-        );
+        return $data;
     }
 
 }

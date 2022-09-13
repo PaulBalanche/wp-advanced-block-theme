@@ -168,9 +168,9 @@ class ComponentBlock extends ModelBase {
             'description' => $component_frontspec['description'] ?? '',
             'category' => ( isset($component_frontspec['category']) && ! empty($component_frontspec['category']) ) ? [ 'slug' => sanitize_title($component_frontspec['category']), 'title' => $component_frontspec['category'] ] : [ 'slug' => sanitize_title($this->get_config()->get('componentBlockDefaultCategory')), 'title' => $this->get_config()->get('componentBlockDefaultCategory') ],
             'props' => $component_frontspec['props'] ?? [],
-            'props_categories' => ( isset($component_frontspec['props_categories']) ) ? $component_frontspec['props_categories'] : null,
-            'path' => $component_frontspec['path'],
-            'parent' => ( array_key_exists('parent', $component_frontspec) ) ? $component_frontspec['parent'] : $default_parent
+            'props_categories' => $component_frontspec['props_categories'] ?? null,
+            'path' => $component_frontspec['path'] ?? null,
+            'parent' => $component_frontspec['parent'] ?? $default_parent
         ];
 
         $block_spec_json_filename = $block_dir . '/' . $this->get_config()->get('viewspecJsonFilename');

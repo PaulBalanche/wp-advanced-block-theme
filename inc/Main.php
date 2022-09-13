@@ -7,15 +7,18 @@ use Abt\Filters\Blocks as BlocksFilter;
 use Abt\Controllers\Theme as ThemeController;
 use Abt\Controllers\LayoutBlocks as LayoutBlocksController;
 use Abt\Controllers\ComponentBlocks as ComponentBlocksController;
+use Abt\Controllers\CoreBlocks as CoreBlocksController;
 use Abt\Controllers\BlockPatterns as BlockPatternsController;
 use Abt\Services\CliCommand;
 use Abt\Models\ComponentBlock;
+use Abt\Models\CoreBlock;
 use Abt\Singleton\Config;
 
 class Main {
 
     private static $_instance;
     private $componentBlockInstances = [],
+            $coreBlockInstances = [],
             $blocksRegistered = [],
             $config;
 
@@ -31,6 +34,7 @@ class Main {
         new ThemeController();
         new LayoutBlocksController();
         new ComponentBlocksController();
+        new CoreBlocksController();
         new BlockPatternsController();
 
         // WP-CLI
@@ -78,11 +82,36 @@ class Main {
 
 
     /**
+     * Get Core instance object if exists, or create it
+     * 
+     */
+    public function get_core_block_instance( $blockId ) {
+
+        if( ! isset( $this->coreBlockInstances[ $blockId ] ) ) {
+            new CoreBlock( $blockId );
+        }
+
+        return $this->coreBlockInstances[ $blockId ];
+    }
+
+
+
+    /**
      * Add ComponentBlock instance object
      * 
      */
     public function add_component_block_instance( $instance ) {
         $this->componentBlockInstances[ $instance->get_ID() ] = $instance;
+    }
+    
+    
+    
+    /**
+     * Add CoreBlock instance object
+     * 
+     */
+    public function add_core_block_instance( $instance ) {
+        $this->coreBlockInstances[ $instance->get_ID() ] = $instance;
     }
 
 
