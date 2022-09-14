@@ -12,6 +12,7 @@ use Abt\Controllers\BlockPatterns as BlockPatternsController;
 use Abt\Services\CliCommand;
 use Abt\Models\ComponentBlock;
 use Abt\Models\CoreBlock;
+use Abt\Models\LayoutBlock;
 use Abt\Singleton\Config;
 
 class Main {
@@ -19,6 +20,7 @@ class Main {
     private static $_instance;
     private $componentBlockInstances = [],
             $coreBlockInstances = [],
+            $layoutBlockInstances = [],
             $blocksRegistered = [],
             $config;
 
@@ -93,6 +95,21 @@ class Main {
 
         return $this->coreBlockInstances[ $blockId ];
     }
+    
+    
+    
+    /**
+     * Get Layout instance object if exists, or create it
+     * 
+     */
+    public function get_layout_block_instance( $blockId ) {
+
+        if( ! isset( $this->layoutBlockInstances[ $blockId ] ) ) {
+            new LayoutBlock( $blockId );
+        }
+
+        return $this->layoutBlockInstances[ $blockId ];
+    }
 
 
 
@@ -112,6 +129,16 @@ class Main {
      */
     public function add_core_block_instance( $instance ) {
         $this->coreBlockInstances[ $instance->get_ID() ] = $instance;
+    }
+
+
+
+    /**
+     * Add LayoutBlock instance object
+     * 
+     */
+    public function add_layout_block_instance( $instance ) {
+        $this->layoutBlockInstances[ $instance->get_ID() ] = $instance;
     }
 
 

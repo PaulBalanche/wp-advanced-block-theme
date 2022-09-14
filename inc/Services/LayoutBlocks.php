@@ -2,7 +2,7 @@
 
 namespace Abt\Services;
 
-use Abt\Models\LayoutBlock;
+use Abt\Main;
 
 class LayoutBlocks extends ServiceBase {
 
@@ -18,9 +18,9 @@ class LayoutBlocks extends ServiceBase {
      */
     public function register_layout_blocks() {
 
-        foreach( $this->get_layout_blocks() as $custom_block ) {
+        foreach( $this->get_layout_blocks() as $layout_block ) {
 
-            $layoutBlockInstance = new LayoutBlock( $custom_block );
+            $layoutBlockInstance = Main::getInstance()->get_layout_block_instance( $layout_block );
             $layoutBlockInstance->register();
         }
     }

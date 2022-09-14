@@ -33,6 +33,5 @@ class CoreBlocks extends ServiceBase {
             }
         }
     }
-
-
+    
 }

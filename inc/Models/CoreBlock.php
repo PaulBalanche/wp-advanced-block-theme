@@ -8,12 +8,13 @@ use Abt\Main;
 class CoreBlock extends ModelBase {
 
     private $blockId = null,
-        $blockSpec;
+        $blockSpec = null,
+        $view_path;
 
     public function __construct( $blockId ) {
         parent::__construct();
-        
         $this->set_ID( $blockId );
+        $this->define_view_path();
 
         $this->add_filters();
     }
@@ -59,6 +60,20 @@ class CoreBlock extends ModelBase {
     public function get_block_dir() {
 
         return get_stylesheet_directory() . '/' . $this->get_config()->get('componentBlocksLocation') . $this->get_ID();
+    }
+
+
+
+    public function get_view_path() {
+        return $this->view_path;
+    }
+
+
+
+    public function define_view_path() {
+
+        $block_spec = $this->get_block_spec();
+        $this->view_path = ( is_array($block_spec) && isset($block_spec['path']) && ! is_null($block_spec['path']) ) ? $block_spec['path'] : null;
     }
 
 
@@ -121,16 +136,11 @@ class CoreBlock extends ModelBase {
      * 
      */
     public function render( $block_content, $block ) {
-        
-        $block_spec = $this->get_block_spec();
-        if( is_array($block_spec) && isset($block_spec['path']) && ! is_null($block_spec['path']) ) {
-            
-            include( ABT_PLUGIN_DIR . 'blocks/' . $this->get_ID() . '/render.php' );
-            if( function_exists( 'abt_' . str_replace( [ '-', '/' ], '_', $this->get_ID() ) . '_render_callback' ) ) {
 
-                $render_attributes = call_user_func( 'abt_' . str_replace( [ '-', '/' ], '_', $this->get_ID() ) . '_render_callback', $block_content, $block );
-                $block_content = RenderService::render( $block_spec['path'], $render_attributes );
-            }
+        if( file_exists( ABT_PLUGIN_DIR . 'blocks/' . $this->get_ID() . '/rendered_attributes.php' ) ) {
+
+            $attributes = include( ABT_PLUGIN_DIR . 'blocks/' . $this->get_ID() . '/rendered_attributes.php' );
+            $block_content = RenderService::render( $this->get_view_path(), $attributes );
         }
 
         return $block_content;

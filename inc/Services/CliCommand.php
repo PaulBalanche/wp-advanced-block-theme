@@ -4,6 +4,7 @@ namespace Abt\Services;
 
 use Abt\Models\ComponentBlock;
 use Abt\Models\CoreBlock;
+use Abt\Models\LayoutBlock;
 use Abt\Services\FrontEnd as FrontEndService;
 
 /**
@@ -31,8 +32,8 @@ class CliCommand extends ServiceBase {
      */
     public function generate_component_blocks() {
 
-        $core_blocks_overrided = $this->get_config()->get_spec('core_blocks_overrided');
-
+        $custom_blocks_routing = $this->get_config()->get_spec('custom_blocks_routing');
+        
         $front_components = $this->frontEndService->get_components();
         if( is_array($front_components) && count($front_components) > 0 ) {
             foreach( $front_components as $component ) {
@@ -43,15 +44,28 @@ class CliCommand extends ServiceBase {
                 // If invalid or null component, just bypass it and continue to the next component
                 if( ! is_null( $component_frontspec ) && is_array( $component_frontspec ) && isset($component_frontspec['id'], $component_frontspec['path']) ) {
 
-                    if( $core_blocks_overrided && is_array($core_blocks_overrided) && array_key_exists($component_frontspec['id'], $core_blocks_overrided) ) {
+                    if( $custom_blocks_routing && is_array($custom_blocks_routing) && array_key_exists($component_frontspec['id'], $custom_blocks_routing) ) {
 
-                        // CoreBlock instanciation && block spec generation
-                        $coreBlockInstance = new CoreBlock( $core_blocks_overrided[$component_frontspec['id']] );
-                        $block_spec = $coreBlockInstance->generate_block_spec( $component_frontspec );
+                        if( strpos( $custom_blocks_routing[$component_frontspec['id']], 'core/' ) !== false ) {
 
-                        // WP_CLI messages
-                        if( $block_spec ) { \WP_CLI::success( $block_spec . ' successfully generated.' ); }
-                        else { \WP_CLI::error( $component_frontspec['id'] . ': an error occurs during block spec generation...' ); }
+                            // CoreBlock instanciation && block spec generation
+                            $coreBlockInstance = new CoreBlock( $custom_blocks_routing[$component_frontspec['id']] );
+                            $block_spec = $coreBlockInstance->generate_block_spec( $component_frontspec );
+
+                            // WP_CLI messages
+                            if( $block_spec ) { \WP_CLI::success( $block_spec . ' successfully generated.' ); }
+                            else { \WP_CLI::error( $component_frontspec['id'] . ': an error occurs during block spec generation...' ); }
+                        }
+                        else if( strpos( $custom_blocks_routing[$component_frontspec['id']], 'layout/' ) !== false ) {
+
+                            // LayoutBlock instanciation && block spec generation
+                            $layoutBlockInstance = new LayoutBlock( str_replace( 'layout/', '', $custom_blocks_routing[$component_frontspec['id']] ) );
+                            $block_spec = $layoutBlockInstance->generate_block_spec( $component_frontspec );
+
+                            // WP_CLI messages
+                            if( $block_spec ) { \WP_CLI::success( $block_spec . ' successfully generated.' ); }
+                            else { \WP_CLI::error( $component_frontspec['id'] . ': an error occurs during block spec generation...' ); }
+                        }
                     }
                     else {
 
