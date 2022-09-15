@@ -80,6 +80,7 @@
             {
                 "name": "column-2",
                 "title": "2 column",
+                "icon": "columns2",
                 "attributes": { "gridCountColumns": 2 },
                 "innerBlocks": [
                     {
@@ -89,6 +90,26 @@
                     {
                         "name": "custom/wpe-column",
                         "attributes": { "columnStartDesktop": 7, "columnStartTablet": 7, "widthDesktop": 6, "widthTablet": 6, "widthMobile": 12,"rowStartMobile": 2 }
+                    }
+                ]
+            },
+            {
+                "name": "column-3",
+                "title": "3 column",
+                "icon": "colum3",
+                "attributes": { "gridCountColumns": 3 },
+                "innerBlocks": [
+                    {
+                        "name": "custom/wpe-column",
+                        "attributes": { "widthDesktop": 4, "widthTablet": 4, "widthMobile": 12 }
+                    },
+                    {
+                        "name": "custom/wpe-column",
+                        "attributes": { "columnStartDesktop": 5, "columnStartTablet": 5, "widthDesktop": 4, "widthTablet": 4, "widthMobile": 12,"rowStartMobile": 2 }
+                    },
+                    {
+                        "name": "custom/wpe-column",
+                        "attributes": { "columnStartDesktop": 9, "columnStartTablet": 9, "widthDesktop": 4, "widthTablet": 4, "widthMobile": 12,"rowStartMobile": 2 }
                     }
                 ]
             }
