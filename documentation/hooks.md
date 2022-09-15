@@ -1,17 +1,6 @@
 # Hooks
 
-Abt\core\_button\_view\_path\
-Abt\core\_button\_data\
-Abt\core\_gallery\_view\_path\
-Abt\core\_gallery\_data\
-Abt\wpe\_column\_view\_path\
-Abt\wpe\_column\_data\
 Abt\block\_spacing\_formatting\
-Abt\block\_spacing\_formatting\
-Abt\wpe\_container\_view\_path\
-Abt\wpe\_container\_data\
-Abt\wpe\_grid\_view\_path\
-Abt\wpe\_grid\_data\
 Abt\allowed\_block\_types\_all\
 Abt\pre\_render\_component\_relation\
 Abt\render\_component\_block\_attributes\

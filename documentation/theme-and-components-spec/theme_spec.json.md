@@ -93,6 +93,22 @@
                 ]
             }
         ]
+    },
+    "galleryType": [
+        {
+            "label": "Test",
+            "value": "test"
+        },
+        {
+            "label": "Test 2",
+            "value": "test_2"
+        }
+    ],
+    "custom_blocks_routing": {
+        "button": "core/button",
+        "container": "layout/wpe-container",
+        "image": "core/image",
+        "text-image": "core/media-text"
     }
 } 
 ```
