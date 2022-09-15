@@ -50,39 +50,36 @@ class FrontEnd extends ServiceBase {
      * 
      */
     public function get_component_viewspec( $component, $dir = null ) {
-
-        $component_viewspec = null;
         
         $component_relative_dir = $this->get_components_dir($dir);
         $component_dir = get_stylesheet_directory() . '/' . $component_relative_dir;
         $path_viewspec_file = $component_dir . $component . '/' . $this->get_config()->get('viewspecJsonFilename');
 
-        // If viewspec file exist
-        if( file_exists( $path_viewspec_file ) ) {
+        // Get the file content
+        $component_viewspec = ( file_exists( $path_viewspec_file ) ) ? json_decode( file_get_contents( $path_viewspec_file ), true ) : [];
+        if( is_array($component_viewspec) ) {
+            
+            // Define ID if doesn't exists
+            $component_viewspec['id'] = $component_viewspec['id'] ?? $component;
 
-            // Get the file content
-            $component_viewspec = json_decode( file_get_contents( $path_viewspec_file ), true );
-            if( $component_viewspec && is_array($component_viewspec) ) {
-
-                // Add path attribute requires by component render method
-                $render_file = glob( $component_dir . $component . '/*.twig' );
-                if( $render_file && is_array($render_file) && count($render_file) == 1 ) {
-                    $component_viewspec['path'] = $this->get_config()->get('templateComponentsSubLocation') . $component . '/' . pathinfo($render_file[0])['basename'];
-                }
-
-                // Get and treat component props
-                if( isset($component_viewspec['props']) && is_array($component_viewspec['props']) ) {
-                    $component_viewspec['props'] = $this->get_component_props($component_viewspec['props'], $component_viewspec['id']);
-                }
-
-                // Ensure right component type
-                $component_viewspec['type'] = ( isset($component_viewspec['type']) && $component_viewspec['type'] != 'twig' ) ? $component_viewspec['type'] : 'object';
-
-                // Remove useless component attributes
-                unset($component_viewspec['engine']);
-
-                return apply_filters( 'Abt\get_component_viewspec', $component_viewspec, $component_relative_dir );
+            // Add path attribute requires by component render method
+            $render_file = glob( $component_dir . $component . '/*.twig' );
+            if( $render_file && is_array($render_file) && count($render_file) == 1 ) {
+                $component_viewspec['path'] = $this->get_config()->get('templateComponentsSubLocation') . $component . '/' . pathinfo($render_file[0])['basename'];
             }
+
+            // Get and treat component props
+            if( isset($component_viewspec['props']) && is_array($component_viewspec['props']) ) {
+                $component_viewspec['props'] = $this->get_component_props($component_viewspec['props'], $component_viewspec['id']);
+            }
+
+            // Ensure right component type
+            $component_viewspec['type'] = ( isset($component_viewspec['type']) && $component_viewspec['type'] != 'twig' ) ? $component_viewspec['type'] : 'object';
+
+            // Remove useless component attributes
+            unset($component_viewspec['engine']);
+
+            return apply_filters( 'Abt\get_component_viewspec', $component_viewspec, $component_relative_dir );
         }
 
         return null;

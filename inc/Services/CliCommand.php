@@ -36,6 +36,12 @@ class CliCommand extends ServiceBase {
         
         $front_components = $this->frontEndService->get_components();
         if( is_array($front_components) && count($front_components) > 0 ) {
+
+            // Remove current component blocks directory
+            if( file_exists(get_stylesheet_directory() . '/' . $this->get_config()->get('componentBlocksLocation')) ) {
+                exec( 'rm -r ' . get_stylesheet_directory() . '/' . $this->get_config()->get('componentBlocksLocation') );
+            }
+
             foreach( $front_components as $component ) {
 
                 // Get viewspec JSON file for a single component returned by frontEndService
@@ -51,20 +57,12 @@ class CliCommand extends ServiceBase {
                             // CoreBlock instanciation && block spec generation
                             $coreBlockInstance = new CoreBlock( $custom_blocks_routing[$component_frontspec['id']] );
                             $block_spec = $coreBlockInstance->generate_block_spec( $component_frontspec );
-
-                            // WP_CLI messages
-                            if( $block_spec ) { \WP_CLI::success( $block_spec . ' successfully generated.' ); }
-                            else { \WP_CLI::error( $component_frontspec['id'] . ': an error occurs during block spec generation...' ); }
                         }
                         else if( strpos( $custom_blocks_routing[$component_frontspec['id']], 'layout/' ) !== false ) {
 
                             // LayoutBlock instanciation && block spec generation
                             $layoutBlockInstance = new LayoutBlock( str_replace( 'layout/', '', $custom_blocks_routing[$component_frontspec['id']] ) );
                             $block_spec = $layoutBlockInstance->generate_block_spec( $component_frontspec );
-
-                            // WP_CLI messages
-                            if( $block_spec ) { \WP_CLI::success( $block_spec . ' successfully generated.' ); }
-                            else { \WP_CLI::error( $component_frontspec['id'] . ': an error occurs during block spec generation...' ); }
                         }
                     }
                     else {
@@ -73,13 +71,20 @@ class CliCommand extends ServiceBase {
                         $componentBlockInstance = new ComponentBlock();
                         $block_spec = $componentBlockInstance->generate_block_spec( $component_frontspec );
                         $block_metadata = $componentBlockInstance->generate_block_metadata();
+                    }
 
-                        // WP_CLI messages
+                    // WP_CLI messages
+                    if( isset($block_spec) ) {
                         if( $block_spec ) { \WP_CLI::success( $block_spec . ' successfully generated.' ); }
                         else { \WP_CLI::error( $component_frontspec['id'] . ': an error occurs during block spec generation...' ); }
+                    }
+                    if( isset($block_metadata) ) {
                         if( $block_metadata ) { \WP_CLI::success( $block_metadata . ' successfully generated.' ); }
                         else {  \WP_CLI::error( $component_frontspec['id'] . ': an error occurs during block metadata generation...' ); }
                     }
+                }
+                else {
+                    \WP_CLI::error( $component . ': an error occurs during component viewspec generation...' );
                 }
             }
         }
