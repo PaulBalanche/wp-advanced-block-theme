@@ -13,10 +13,12 @@ if( isset($block['innerBlocks']) && is_array($block['innerBlocks']) && count($bl
         if( is_array($image) && isset($image['blockName']) && $image['blockName'] == 'core/image' ) {
 
             preg_match( '/(?:<figcaption[^>]*>((?:(?!<\/figcaption>).)+)<\/figcaption>)/', $image['innerHTML'], $caption );
-            $data['images'][] = [
-                'id' => $image['attrs']['id'],
-                'size' => $image['attrs']['sizeSlug'] ?? null,
-            ];
+            $data['images'][] = array_merge(
+                Abt\Helpers\Image::get_image_data( $image['attrs']['id'], $image['attrs']['sizeSlug'] ?? null ),
+                [
+                    'content' => ( count($caption) == 2 ) ? $caption[1] : null
+                ]
+            );
         }
     }
 
