@@ -1,9 +1,8 @@
 # Table of contents
 
-* [How it works?](README.md)
-
 ## documentation
 
+* [How it works?](README.md)
 * [Theme configuration](documentation/theme-configuration.md)
 * [Theme & Components spec](documentation/theme-and-components-spec/README.md)
   * [theme\_spec.json](documentation/theme-and-components-spec/theme\_spec.json.md)
