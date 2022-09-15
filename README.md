@@ -5,7 +5,7 @@
 Components developed by front-end developer have to be placed inside the theme, under 2 directory level: by default **views/components/**.\
 Each component need to have 2 files: **viewspec.json** and _**component\_name**_**.twig**
 
-#### [> Find more information about front-end part](front-end-part/)
+#### [> Find more information about front-end part](documentation/front-end-part/)
 
 ### **Back-end part**
 
@@ -18,4 +18,4 @@ You can add an **override.json** file in order to add or replace some component 
 
 
 
-#### [> Theme configuration](theme-configuration.md)
+#### [> Theme configuration](documentation/theme-configuration.md)
