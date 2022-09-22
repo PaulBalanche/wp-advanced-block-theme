@@ -169,7 +169,7 @@ class LayoutBlock extends ModelBase {
      * Render method
      * 
      */
-    public function render( $attributes, $content ) {
+    public function render( $attributes, $content, $block_instance ) {
 
         if( file_exists( $this->get_block_dir() . '/rendered_attributes.php' ) ) {
 

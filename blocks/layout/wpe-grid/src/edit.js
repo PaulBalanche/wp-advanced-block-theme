@@ -98,7 +98,8 @@ class WpeGrid extends Component {
         // const deviceType = this.getDeviceType();
         const deviceType = experimentalDeviceType.toLowerCase();
         if( typeof deviceType != 'undefined' && deviceType != 'undefined' ) {
-            innerBlocksProps.className = this.state.defaultClassName + ' ' + deviceType;
+            // innerBlocksProps.className = this.state.defaultClassName + ' ' + deviceType;
+            innerBlocksProps.className += ' ' + deviceType;
         }
 
         // Padding & Margin

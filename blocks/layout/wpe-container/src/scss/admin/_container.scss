@@ -34,10 +34,10 @@
     .block-editor-block-list__block[data-type="custom/wpe-container"] {
 
         max-width: $max_width_main_column;
-        padding-top: 2%;
-        padding-right: 0.6%;
-        padding-bottom: 0.6%;
-        padding-left: 0.6%;
+        padding-top: 30px;
+        padding-right: 1rem;
+        padding-bottom: 1rem;
+        padding-left: 1rem;
         margin-top: 0;
         margin-bottom: 0;
 
@@ -119,16 +119,6 @@
         // &:not([contenteditable]):focus::after {
         //     border: none;
         // }
-        
-        &:hover .block-editor-block-list__block[data-type="custom/wpe-column"]::after,
-        &:focus .block-editor-block-list__block[data-type="custom/wpe-column"]::after,
-        &:active .block-editor-block-list__block[data-type="custom/wpe-column"]::after,
-        &.is-selected .block-editor-block-list__block[data-type="custom/wpe-column"]::after,
-        &.has-child-selected .block-editor-block-list__block[data-type="custom/wpe-column"]::after {
-            // background: rgba(0, 124, 186, 0.05);
-            border: 1px dashed rgba(0,124,186,.25);
-            overflow: initial;
-        }
 
         .block-list-appender {
             visibility: hidden;
