@@ -118,7 +118,7 @@ class WpeGrid extends Component {
          */
         if( typeof(inner_blocks ) != 'object' || ( typeof(inner_blocks ) == 'object' && countColumns == 0 ) ) {
 
-            var editDisplay = (
+            return (
                 <div { ...innerBlocksProps }>
                     <__experimentalBlockVariationPicker
                         icon={ get( blockType, [ 'icon', 'src' ] ) }

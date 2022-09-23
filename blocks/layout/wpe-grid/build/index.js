@@ -9449,7 +9449,7 @@ var WpeGrid = /*#__PURE__*/function (_Component) {
        */
 
       if (_babel_runtime_helpers_typeof__WEBPACK_IMPORTED_MODULE_2___default()(inner_blocks) != 'object' || _babel_runtime_helpers_typeof__WEBPACK_IMPORTED_MODULE_2___default()(inner_blocks) == 'object' && countColumns == 0) {
-        var editDisplay = Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])("div", innerBlocksProps, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_11__["__experimentalBlockVariationPicker"], {
+        return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])("div", innerBlocksProps, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_11__["__experimentalBlockVariationPicker"], {
           icon: Object(lodash__WEBPACK_IMPORTED_MODULE_14__["get"])(blockType, ['icon', 'src']),
           label: Object(lodash__WEBPACK_IMPORTED_MODULE_14__["get"])(blockType, ['title']),
           variations: blockVariations,
@@ -9917,7 +9917,9 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_2__["registerBlockType"])('cus
   variations: variations,
   edit: Object(_edit__WEBPACK_IMPORTED_MODULE_8__["default"])(configTotalColumns),
   save: function save() {
-    return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__["InnerBlocks"].Content, null);
+    var blockProps = _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__["useBlockProps"].save();
+    var innerBlocksProps = _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__["useInnerBlocksProps"].save(blockProps);
+    return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__["createElement"])("div", innerBlocksProps);
   }
 });
 

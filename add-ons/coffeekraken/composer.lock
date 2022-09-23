@@ -1,0 +1,43 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "596185c0bab0b525304276c09a6d306f",
+    "packages": [
+        {
+            "name": "coffeekraken/sugar",
+            "version": "2.0.0-alpha.20",
+            "dist": {
+                "type": "path",
+                "url": "/Users/paulbalanche/www/github.com/sugar",
+                "reference": "c634a543161a4a55859d6b66eb8193f6aad8c322"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/php/autoload.php"
+                ]
+            },
+            "homepage": "https://coffeekraken.io",
+            "transport-options": {
+                "symlink": false,
+                "relative": false
+            }
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": {
+        "coffeekraken/sugar": 15
+    },
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": {
+        "php": ">=7.4"
+    },
+    "platform-dev": [],
+    "plugin-api-version": "2.3.0"
+}

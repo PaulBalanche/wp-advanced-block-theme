@@ -173,8 +173,9 @@ class LayoutBlock extends ModelBase {
 
         if( file_exists( $this->get_block_dir() . '/rendered_attributes.php' ) ) {
 
-            $attributes = include( $this->get_block_dir() . '/rendered_attributes.php' );
-            $content = RenderService::render( $this->get_view_path(), $attributes );
+            $pre_rendered_attributes = include( $this->get_block_dir() . '/rendered_attributes.php' );
+            $pre_rendered_attributes = apply_filters( 'Abt\pre_render_attributes_layout_' . $this->get_ID(), $pre_rendered_attributes, $attributes, $content, $block_instance );
+            $content = RenderService::render( $this->get_view_path(), $pre_rendered_attributes );
         }
 
         return $content;

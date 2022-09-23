@@ -2,7 +2,7 @@
  * WordPress dependencies
  */
 import { registerBlockType } from '@wordpress/blocks';
-import { InnerBlocks } from '@wordpress/block-editor';
+import { useBlockProps, useInnerBlocksProps } from '@wordpress/block-editor';
 import { __ } from '@wordpress/i18n';
 import { Icon } from '@wordpress/icons';
 
@@ -55,6 +55,10 @@ registerBlockType( 'custom/wpe-grid', {
     variations,
     edit: edit(configTotalColumns),
     save: () => {
-        return <InnerBlocks.Content />;
+
+        const blockProps = useBlockProps.save();
+        const innerBlocksProps = useInnerBlocksProps.save( blockProps );
+    
+        return <div {...innerBlocksProps} />
     },
 } )

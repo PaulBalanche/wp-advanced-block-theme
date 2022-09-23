@@ -1,0 +1,36 @@
+{
+    "name": "wpextend/coffeekraken-add-on",
+    "version": "1.0.0",
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "Paul Balanche",
+            "email": "paul.balanche@gmail.com",
+            "homepage": "https://github.com/PaulBalanche/",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=7.4",
+        "coffeekraken/sugar": "2.0.0-alpha.20"
+    },
+    "autoload": {
+        "psr-4": {
+            "Abt\\Coffeekraken\\": "inc/"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "composer/installers": true
+        }
+    },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "~/www/github.com/sugar",
+            "options": {
+                "symlink": false
+            }
+        }
+    ]
+}

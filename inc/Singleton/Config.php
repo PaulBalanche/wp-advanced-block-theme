@@ -26,7 +26,8 @@ class Config {
         $componentBlockPrefixName           = 'wpe-component',
         $componentBlockDefaultCategory      = 'WPE Custom',
         $containerClassName                 = ABT_CONTAINER_CLASS_NAME,
-        $specData = null;
+        $specData = null,
+        $addOnsLocation = 'add-ons';
         
 
 
