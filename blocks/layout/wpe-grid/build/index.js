@@ -9481,15 +9481,16 @@ var WpeGrid = /*#__PURE__*/function (_Component) {
           Object(_wordpress_data__WEBPACK_IMPORTED_MODULE_13__["dispatch"])('core/block-editor').replaceInnerBlocks(clientId, _inner_blocks_new, false);
         }
 
-        var gridForm = [];
+        var GridDevice = {};
         /**
          * Update grid
          */
 
         getLayouts().forEach(function (layout) {
-          // Loop on each columns to update start and width attributes
+          var gridForm = []; // Loop on each columns to update start and width attributes
+
           inner_blocks.forEach(function (element, index) {
-            if (layout.value === deviceType) {
+            if (true) {
               var indexLabel = index + 1; // Column
 
               var currentColumnStart = element.attributes['columnStart' + layout.attributeName] - 1;
@@ -9506,7 +9507,7 @@ var WpeGrid = /*#__PURE__*/function (_Component) {
               var RowStart = maxHeight - currentHeight;
               gridForm.push(Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])("div", {
                 key: index
-              }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["HorizontalRule"], null), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])("label", null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])("strong", null, "Column " + indexLabel)), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])("div", {
+              }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["HorizontalRule"], null), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])("label", null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])("strong", null, "Cell " + indexLabel)), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])("div", {
                 className: "flex flex-2 mt-smaller"
               }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["RangeControl"], {
                 label: "Column start",
@@ -9578,7 +9579,25 @@ var WpeGrid = /*#__PURE__*/function (_Component) {
               }))));
             }
           });
+          GridDevice[layout.value] = gridForm;
         });
+        var panelGridLayout = Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["PanelBody"], {
+          title: 'Layout',
+          initialOpen: false
+        }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["TabPanel"], {
+          className: "padding-tab-panel",
+          activeClass: "active-tab" // onSelect={ (tabName) => wp.data.dispatch('core/edit-post').__experimentalSetPreviewDeviceType( tabName.charAt(0).toUpperCase() + tabName.slice(1) ) }
+          ,
+          tabs: getLayouts().map(function (layout) {
+            return {
+              name: layout.value,
+              title: layout.label,
+              className: 'tab-' + layout.value
+            };
+          })
+        }, function (tab) {
+          return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["Fragment"], null, GridDevice[tab.name]);
+        }));
         /**
          * Render edit
          */
@@ -9613,10 +9632,7 @@ var WpeGrid = /*#__PURE__*/function (_Component) {
           },
           min: 1,
           max: configTotalColumns
-        })), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["PanelBody"], {
-          title: 'Layout (' + deviceType + ')',
-          initialOpen: true
-        }, gridForm), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_component_block_master_src_marginControls__WEBPACK_IMPORTED_MODULE_15__["MarginControls"], {
+        })), panelGridLayout, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_component_block_master_src_marginControls__WEBPACK_IMPORTED_MODULE_15__["MarginControls"], {
           props: this.props,
           deviceType: experimentalDeviceType
         }));

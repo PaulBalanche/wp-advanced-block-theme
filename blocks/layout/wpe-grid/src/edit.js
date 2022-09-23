@@ -23,7 +23,8 @@ import {
     ToolbarGroup,
     MenuGroup,
     MenuItem,
-    HorizontalRule
+    HorizontalRule,
+    TabPanel
 } from '@wordpress/components';
 
 import { withSelect, dispatch } from '@wordpress/data';
@@ -166,17 +167,26 @@ class WpeGrid extends Component {
             }
 
 
-            
-            var gridForm = [];
+
+
+
+
+
+
+
+
+            var GridDevice = {};
             /**
              * Update grid
              */
             getLayouts().forEach( ( layout ) => {
 
+                var gridForm = [];
+
                 // Loop on each columns to update start and width attributes
                 inner_blocks.forEach( ( element, index ) => {
 
-                    if( layout.value === deviceType ) {
+                    if( true || layout.value === deviceType ) {
 
                         let indexLabel = index + 1;
 
@@ -203,7 +213,7 @@ class WpeGrid extends Component {
                             <div key={index} >
                                 <HorizontalRule />
                                 <label>
-                                    <strong>{"Column " + indexLabel}</strong>
+                                    <strong>{"Cell " + indexLabel}</strong>
                                 </label>
                                 <div className="flex flex-2 mt-smaller">
                                     <RangeControl
@@ -286,9 +296,35 @@ class WpeGrid extends Component {
                         );
                     }
                 });
+
+                GridDevice[layout.value] = gridForm;
             });
 
+            var panelGridLayout = (
+                <PanelBody title={ 'Layout' } initialOpen={ false }>
+                    <TabPanel
+                        className="padding-tab-panel"
+                        activeClass="active-tab"
+                        // onSelect={ (tabName) => wp.data.dispatch('core/edit-post').__experimentalSetPreviewDeviceType( tabName.charAt(0).toUpperCase() + tabName.slice(1) ) }
+                        tabs={ getLayouts().map( (layout) => ({
+                            name: layout.value,
+                            title: layout.label,
+                            className: 'tab-' + layout.value,
+                        }) ) }
+                    >
+                        { ( tab ) => <>{ GridDevice[tab.name] }</> }
+                    </TabPanel>
+                </PanelBody>
+            );
 
+
+
+
+
+
+
+
+            
 
             /**
              * Render edit
@@ -331,9 +367,7 @@ class WpeGrid extends Component {
                             max={ configTotalColumns }
                         />
                     </PanelBody>
-                    <PanelBody title={ 'Layout (' + deviceType + ')' } initialOpen={ true }>
-                        { gridForm }
-                    </PanelBody>
+                    { panelGridLayout }
                     <MarginControls props={ this.props } deviceType={ experimentalDeviceType } />
                 </InspectorControls>
             );
