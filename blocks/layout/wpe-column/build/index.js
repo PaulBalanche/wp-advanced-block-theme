@@ -86,6 +86,37 @@
 /************************************************************************/
 /******/ ({
 
+/***/ "../../../src/devices.js":
+/*!*********************************************************************************************************!*\
+  !*** /Users/paulbalanche/www/bitbucket.org/test/web/app/plugins/wp-advanced-block-theme/src/devices.js ***!
+  \*********************************************************************************************************/
+/*! exports provided: getLayouts, setBodyDevice */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getLayouts", function() { return getLayouts; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "setBodyDevice", function() { return setBodyDevice; });
+var layout = [];
+Object.keys(theme_spec.media.queries).forEach(function (key, index) {
+  layout.push({
+    value: key,
+    label: key.charAt(0).toUpperCase() + key.slice(1),
+    attributeName: key.charAt(0).toUpperCase() + key.slice(1)
+  });
+});
+var getLayouts = function getLayouts() {
+  return layout;
+};
+function setBodyDevice(device) {
+  getLayouts().forEach(function (layout) {
+    document.body.classList.remove(layout.value);
+  });
+  document.body.classList.add(device);
+}
+
+/***/ }),
+
 /***/ "./node_modules/@babel/runtime/helpers/assertThisInitialized.js":
 /*!**********************************************************************!*\
   !*** ./node_modules/@babel/runtime/helpers/assertThisInitialized.js ***!
@@ -322,6 +353,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_9__);
 /* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @wordpress/data */ "@wordpress/data");
 /* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(_wordpress_data__WEBPACK_IMPORTED_MODULE_10__);
+/* harmony import */ var _src_devices_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../../../src/devices.js */ "../../../src/devices.js");
 
 
 
@@ -343,32 +375,9 @@ function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Re
 
 
 
-var getLayouts = function getLayouts() {
-  return [{
-    value: 'desktop',
-    label: 'Desktop',
-    attributeName: 'Desktop'
-  }, {
-    value: 'tablet',
-    label: 'Tablet',
-    attributeName: 'Tablet'
-  }, {
-    value: 'mobile',
-    label: 'Mobile',
-    attributeName: 'Mobile'
-  }];
-};
-
-function setBodyDevice(device) {
-  getLayouts().forEach(function (layout) {
-    document.body.classList.remove(layout.value);
-  });
-  document.body.classList.add(device);
-}
 /**
  * registerBlockType edit function
  */
-
 
 var WpeColumn = /*#__PURE__*/function (_Component) {
   _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_3___default()(WpeColumn, _Component);
@@ -382,7 +391,7 @@ var WpeColumn = /*#__PURE__*/function (_Component) {
 
     _this = _super.apply(this, arguments);
     _this.state = {
-      selectedDevice: getLayouts()[0].value,
+      //  selectedDevice: getLayouts()[0].value,
       defaultClassName: null
     };
     return _this;
@@ -434,7 +443,7 @@ var WpeColumn = /*#__PURE__*/function (_Component) {
        */
 
       var deviceLayout = {};
-      getLayouts().forEach(function (layout) {
+      Object(_src_devices_js__WEBPACK_IMPORTED_MODULE_11__["getLayouts"])().forEach(function (layout) {
         deviceLayout[layout.value] = Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_6__["createElement"])(_wordpress_element__WEBPACK_IMPORTED_MODULE_6__["Fragment"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_6__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_9__["RangeControl"], {
           label: "Column start",
           value: attributes['columnStart' + layout.attributeName],
@@ -477,9 +486,9 @@ var WpeColumn = /*#__PURE__*/function (_Component) {
         activeClass: "active-tab" // onSelect={ (tabName) => wp.data.dispatch('core/edit-post').__experimentalSetPreviewDeviceType( tabName.charAt(0).toUpperCase() + tabName.slice(1) ) }
         ,
         onSelect: function onSelect(tabName) {
-          return setBodyDevice(tabName);
+          return Object(_src_devices_js__WEBPACK_IMPORTED_MODULE_11__["setBodyDevice"])(tabName);
         },
-        tabs: getLayouts().map(function (layout) {
+        tabs: Object(_src_devices_js__WEBPACK_IMPORTED_MODULE_11__["getLayouts"])().map(function (layout) {
           return {
             name: layout.value,
             title: layout.label,

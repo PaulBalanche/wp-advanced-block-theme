@@ -39,16 +39,16 @@
     }
 
     @for $i from 1 through 100 {
-        .desktop &.gridColumnStartDesktop-#{$i} {
+        &.gridColumnStartDesktop-#{$i} {
             grid-column-start: $i;
         }
-        .desktop &.gridColumnEndDesktop-#{$i} {
+        &.gridColumnEndDesktop-#{$i} {
             grid-column-end: $i;
         }
-        .desktop &.gridRowStartDesktop-#{$i} {
+        &.gridRowStartDesktop-#{$i} {
             grid-row-start: $i;
         }
-        .desktop &.gridRowEndDesktop-#{$i} {
+        &.gridRowEndDesktop-#{$i} {
             grid-row-end: $i;
         }
     }

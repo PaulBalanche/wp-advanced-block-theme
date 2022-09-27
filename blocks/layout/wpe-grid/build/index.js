@@ -86,6 +86,37 @@
 /************************************************************************/
 /******/ ({
 
+/***/ "../../../src/devices.js":
+/*!*********************************************************************************************************!*\
+  !*** /Users/paulbalanche/www/bitbucket.org/test/web/app/plugins/wp-advanced-block-theme/src/devices.js ***!
+  \*********************************************************************************************************/
+/*! exports provided: getLayouts, setBodyDevice */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getLayouts", function() { return getLayouts; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "setBodyDevice", function() { return setBodyDevice; });
+var layout = [];
+Object.keys(theme_spec.media.queries).forEach(function (key, index) {
+  layout.push({
+    value: key,
+    label: key.charAt(0).toUpperCase() + key.slice(1),
+    attributeName: key.charAt(0).toUpperCase() + key.slice(1)
+  });
+});
+var getLayouts = function getLayouts() {
+  return layout;
+};
+function setBodyDevice(device) {
+  getLayouts().forEach(function (layout) {
+    document.body.classList.remove(layout.value);
+  });
+  document.body.classList.add(device);
+}
+
+/***/ }),
+
 /***/ "../../component-block-master/node_modules/@babel/runtime/helpers/arrayLikeToArray.js":
 /*!********************************************************************************************************************************************************************************!*\
   !*** /Users/paulbalanche/www/bitbucket.org/test/web/app/plugins/wp-advanced-block-theme/blocks/component-block-master/node_modules/@babel/runtime/helpers/arrayLikeToArray.js ***!
@@ -9324,6 +9355,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! lodash */ "lodash");
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_14___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_14__);
 /* harmony import */ var _component_block_master_src_marginControls__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ../../../component-block-master/src/_marginControls */ "../../component-block-master/src/_marginControls.js");
+/* harmony import */ var _src_devices_js__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ../../../../src/devices.js */ "../../../src/devices.js");
 
 
 
@@ -9349,6 +9381,7 @@ function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Re
 
 
 
+
 /**
  * Add some columns in wpe-container based on variation selected
  *
@@ -9360,29 +9393,6 @@ function createBlocksFromInnerBlocksTemplate(innerBlocksTemplate) {
         attributes = _ref.attributes;
     return Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_9__["createBlock"])(name, attributes);
   });
-}
-
-var getLayouts = function getLayouts() {
-  return [{
-    value: 'desktop',
-    label: 'Desktop',
-    attributeName: 'Desktop'
-  }, {
-    value: 'tablet',
-    label: 'Tablet',
-    attributeName: 'Tablet'
-  }, {
-    value: 'mobile',
-    label: 'Mobile',
-    attributeName: 'Mobile'
-  }];
-};
-
-function setBodyDevice(device) {
-  getLayouts().forEach(function (layout) {
-    document.body.classList.remove(layout.value);
-  });
-  document.body.classList.add(device);
 }
 /**
  * registerBlockType edit function
@@ -9401,7 +9411,7 @@ var WpeGrid = /*#__PURE__*/function (_Component) {
 
     _this = _super.apply(this, arguments);
     _this.state = {
-      selectedDevice: getLayouts()[0].value,
+      selectedDevice: Object(_src_devices_js__WEBPACK_IMPORTED_MODULE_16__["getLayouts"])()[0].value,
       defaultClassName: null
     };
     return _this;
@@ -9483,7 +9493,7 @@ var WpeGrid = /*#__PURE__*/function (_Component) {
 
 
         var deviceLayout = {};
-        getLayouts().forEach(function (layout) {
+        Object(_src_devices_js__WEBPACK_IMPORTED_MODULE_16__["getLayouts"])().forEach(function (layout) {
           deviceLayout[layout.value] = [];
           inner_blocks.forEach(function (element, index) {
             deviceLayout[layout.value].push(Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["PanelBody"], {
@@ -9533,9 +9543,9 @@ var WpeGrid = /*#__PURE__*/function (_Component) {
           activeClass: "active-tab" // onSelect={ (tabName) => wp.data.dispatch('core/edit-post').__experimentalSetPreviewDeviceType( tabName.charAt(0).toUpperCase() + tabName.slice(1) ) }
           ,
           onSelect: function onSelect(tabName) {
-            return setBodyDevice(tabName);
+            return Object(_src_devices_js__WEBPACK_IMPORTED_MODULE_16__["setBodyDevice"])(tabName);
           },
-          tabs: getLayouts().map(function (layout) {
+          tabs: Object(_src_devices_js__WEBPACK_IMPORTED_MODULE_16__["getLayouts"])().map(function (layout) {
             return {
               name: layout.value,
               title: layout.label,

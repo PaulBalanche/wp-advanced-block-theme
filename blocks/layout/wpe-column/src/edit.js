@@ -1,40 +1,28 @@
 /**
  * WordPress dependencies
  */
- import { Component } from '@wordpress/element';
- import { compose } from '@wordpress/compose';
- import {
-     InnerBlocks,
-     InspectorControls,
-     useBlockProps,
-     useInnerBlocksProps,
-     __experimentalBlockVariationPicker,
-     __experimentalBlock as Block
- } from '@wordpress/block-editor';
- 
- import {
-     PanelBody,
-     RangeControl,
-     TabPanel
- } from '@wordpress/components';
- 
- import { select, withSelect } from '@wordpress/data';
- 
- const getLayouts = () => ( [
-     { value: 'desktop', label: 'Desktop', attributeName: 'Desktop' },
-     { value: 'tablet', label: 'Tablet', attributeName: 'Tablet' },
-     { value: 'mobile', label: 'Mobile', attributeName: 'Mobile' },
- ] );
+import { Component } from '@wordpress/element';
+import { compose } from '@wordpress/compose';
+import {
+    InnerBlocks,
+    InspectorControls,
+    useBlockProps,
+    useInnerBlocksProps,
+    __experimentalBlockVariationPicker,
+    __experimentalBlock as Block
+} from '@wordpress/block-editor';
+
+import {
+    PanelBody,
+    RangeControl,
+    TabPanel
+} from '@wordpress/components';
+
+import { select, withSelect } from '@wordpress/data';
+
+import { getLayouts, setBodyDevice } from '../../../../src/devices.js';
 
 
-function setBodyDevice( device ) {
-
-    getLayouts().forEach( ( layout ) => {
-        document.body.classList.remove(layout.value);
-    });
-
-    document.body.classList.add(device);
-}
  
  /**
   * registerBlockType edit function
@@ -45,7 +33,7 @@ function setBodyDevice( device ) {
          super( ...arguments );
  
          this.state = {
-             selectedDevice: getLayouts()[0].value,
+            //  selectedDevice: getLayouts()[0].value,
              defaultClassName: null
          };
      }

@@ -34,6 +34,8 @@ import { get, map, times } from 'lodash';
 
 import { MarginControls, generateMarginClassName } from '../../../component-block-master/src/_marginControls';
 
+import { getLayouts, setBodyDevice } from '../../../../src/devices.js';
+
 /**
  * Add some columns in wpe-container based on variation selected
  *
@@ -48,22 +50,6 @@ function createBlocksFromInnerBlocksTemplate ( innerBlocksTemplate ) {
                 attributes
             )
     );
-}
-
-
-const getLayouts = () => ( [
-	{ value: 'desktop', label: 'Desktop', attributeName: 'Desktop' },
-	{ value: 'tablet', label: 'Tablet', attributeName: 'Tablet' },
-	{ value: 'mobile', label: 'Mobile', attributeName: 'Mobile' },
-] );
-
-function setBodyDevice( device ) {
-
-    getLayouts().forEach( ( layout ) => {
-        document.body.classList.remove(layout.value);
-    });
-
-    document.body.classList.add(device);
 }
 
 /**
