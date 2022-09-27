@@ -15,7 +15,9 @@ import {
 } from '@wordpress/block-editor';
 
 import {
+    Panel,
     PanelBody,
+    PanelRow,
     Button,
     ButtonGroup,
     RangeControl,
@@ -55,6 +57,15 @@ const getLayouts = () => ( [
 	{ value: 'mobile', label: 'Mobile', attributeName: 'Mobile' },
 ] );
 
+function setBodyDevice( device ) {
+
+    getLayouts().forEach( ( layout ) => {
+        document.body.classList.remove(layout.value);
+    });
+
+    document.body.classList.add(device);
+}
+
 /**
  * registerBlockType edit function
  */
@@ -88,7 +99,6 @@ class WpeGrid extends Component {
             countColumns,
             blockVariations,
             blockType,
-            configTotalColumns,
             experimentalDeviceType
         } = this.props;
 
@@ -97,23 +107,12 @@ class WpeGrid extends Component {
 
         // Device
         // const deviceType = this.getDeviceType();
-        const deviceType = experimentalDeviceType.toLowerCase();
-        if( typeof deviceType != 'undefined' && deviceType != 'undefined' ) {
-            // innerBlocksProps.className = this.state.defaultClassName + ' ' + deviceType;
-            innerBlocksProps.className += ' ' + deviceType;
-        }
-
-        // Padding & Margin
-        // const className = generateMarginClassName(this.props);
-        // if( className ) {
-        //     innerBlocksProps.className += className;
+        // const deviceType = experimentalDeviceType.toLowerCase();
+        // if( typeof deviceType != 'undefined' && deviceType != 'undefined' ) {
+        //     // innerBlocksProps.className = this.state.defaultClassName + ' ' + deviceType;
+        //     innerBlocksProps.className += ' ' + deviceType;
         // }
-        const className = '';    
-
-        let sectionStyle = {};
-        var heightGridTemplateRows = 1;
-
-
+ 
         /**
          * Define innerBlocks
          */
@@ -140,13 +139,12 @@ class WpeGrid extends Component {
                     />
                 </div>
             );
-
-            var gridForm = null;
         }
         else {
 
             /**
              * Add or remove columns
+             * 
              */
             if( attributes.gridCountColumns > countColumns ) {
 
@@ -175,144 +173,73 @@ class WpeGrid extends Component {
 
 
 
-            var GridDevice = {};
+            
+
+
             /**
-             * Update grid
+             * Layout panel
+             * 
              */
+            var deviceLayout = {};
+
             getLayouts().forEach( ( layout ) => {
 
-                var gridForm = [];
+                deviceLayout[ layout.value ] = [];
 
-                // Loop on each columns to update start and width attributes
                 inner_blocks.forEach( ( element, index ) => {
-
-                    if( true || layout.value === deviceType ) {
-
-                        let indexLabel = index + 1;
-
-                        // Column
-                        let currentColumnStart = element.attributes['columnStart' + layout.attributeName] - 1;
-                        let currentWidth = element.attributes['width' + layout.attributeName];
-                        let maxColumnStart = configTotalColumns - currentWidth;
-                        let maxWidth = configTotalColumns - currentColumnStart;
-
-                        let disabledColumnStart = ( maxColumnStart == 0 ) ? true : false;
-                        maxColumnStart = ( maxColumnStart == 0 ) ? 1 : maxColumnStart;
-
-                        // Row
-                        let currentRowStart = element.attributes['rowStart' + layout.attributeName] - 1;
-                        let currentHeight = element.attributes['height' + layout.attributeName];
-
-                        if( currentRowStart + currentHeight > heightGridTemplateRows )
-                            heightGridTemplateRows = currentRowStart + currentHeight;
-
-                        let maxHeight = heightGridTemplateRows + 1;
-                        let RowStart = maxHeight - currentHeight;
-
-                        gridForm.push(
-                            <div key={index} >
-                                <HorizontalRule />
-                                <label>
-                                    <strong>{"Cell " + indexLabel}</strong>
-                                </label>
-                                <div className="flex flex-2 mt-smaller">
-                                    <RangeControl
-                                        label="Column start"
-                                        value={ currentColumnStart }
-                                        onChange={ ( value ) => updateColumnAttribute(index, 'columnStart' + layout.attributeName, Number.parseInt(value) + 1) }
-                                        min={ 0 }
-                                        max={ maxColumnStart }
-                                        marks={ [
-                                            {
-                                                value: 0,
-                                                label: '0',
-                                            },
-                                            {
-                                                value: maxColumnStart,
-                                                label: maxColumnStart,
-                                            }
-                                        ] }                                       
-                                        withInputField={false}
-                                        disabled={ disabledColumnStart }
-                                    />
-                                    <RangeControl
-                                        label="Width"
-                                        value={ currentWidth }
-                                        onChange={ ( value ) => updateColumnAttribute(index, 'width' + layout.attributeName, Number.parseInt(value)) }
-                                        min={ 1 }
-                                        max={ maxWidth }
-                                        marks={ [
-                                            {
-                                                value: 0,
-                                                label: '1',
-                                            },
-                                            {
-                                                value: maxWidth,
-                                                label: maxWidth,
-                                            }
-                                        ] }    
-                                        withInputField={false}
-                                    />
-                                </div>
-                                <div className="flex flex-2">
-                                    <RangeControl
-                                        label="Row start"
-                                        value={ currentRowStart }
-                                        onChange={ ( value ) => updateColumnAttribute(index, 'rowStart' + layout.attributeName, Number.parseInt(value) + 1) }
-                                        min={ 0 }
-                                        max={ RowStart }
-                                        marks={ [
-                                            {
-                                                value: 0,
-                                                label: '0',
-                                            },
-                                            {
-                                                value: RowStart,
-                                                label: RowStart,
-                                            }
-                                        ] }    
-                                        withInputField={false}
-                                    />
-                                    <RangeControl
-                                        label="Height"
-                                        value={ currentHeight }
-                                        onChange={ ( value ) => updateColumnAttribute(index, 'height' + layout.attributeName, Number.parseInt(value)) }
-                                        min={ 1 }
-                                        max={ maxHeight }
-                                        marks={ [
-                                            {
-                                                value: 0,
-                                                label: '1',
-                                            },
-                                            {
-                                                value: maxHeight,
-                                                label: maxHeight,
-                                            }
-                                        ] }    
-                                        withInputField={false}
-                                    />
-                                </div>
-                            </div>
-                        );
-                    }
+                    deviceLayout[ layout.value ].push(
+                        <PanelBody
+                            title={ "Cell " + ( index + 1 ) }
+                            initialOpen={ false }
+                            key={ layout.value + "-" + index }
+                        >
+                            <RangeControl
+                                label="Column start"
+                                value={ element.attributes['columnStart' + layout.attributeName] }
+                                onChange={ ( value ) => updateColumnAttribute(index, 'columnStart' + layout.attributeName, Number.parseInt(value)) }
+                                min={ 1 }
+                                max={ element.attributes['columnStart' + layout.attributeName] + 1 }
+                            />
+                            <RangeControl
+                                label="Width"
+                                value={ element.attributes['width' + layout.attributeName] }
+                                onChange={ ( value ) => updateColumnAttribute(index, 'width' + layout.attributeName, Number.parseInt(value)) }
+                                min={ 1 }
+                                max={ element.attributes['width' + layout.attributeName] + 1 }
+                            />
+                            <RangeControl
+                                label="Row start"
+                                value={ element.attributes['rowStart' + layout.attributeName] }
+                                onChange={ ( value ) => updateColumnAttribute(index, 'rowStart' + layout.attributeName, Number.parseInt(value)) }
+                                min={ 1 }
+                                max={ element.attributes['rowStart' + layout.attributeName] + 1 }
+                            />
+                            <RangeControl
+                                label="Height"
+                                value={ element.attributes['height' + layout.attributeName] }
+                                onChange={ ( value ) => updateColumnAttribute(index, 'height' + layout.attributeName, Number.parseInt(value)) }
+                                min={ 1 }
+                                max={ element.attributes['height' + layout.attributeName] + 1 }
+                            />
+                        </PanelBody>
+                    );
                 });
-
-                GridDevice[layout.value] = gridForm;
             });
 
-            var panelGridLayout = (
+            var panelDeviceLayout = (
                 <PanelBody title={ 'Layout' } initialOpen={ false }>
                     <TabPanel
                         className="padding-tab-panel"
                         activeClass="active-tab"
                         // onSelect={ (tabName) => wp.data.dispatch('core/edit-post').__experimentalSetPreviewDeviceType( tabName.charAt(0).toUpperCase() + tabName.slice(1) ) }
+                        onSelect={ (tabName) => setBodyDevice(tabName) }
                         tabs={ getLayouts().map( (layout) => ({
                             name: layout.value,
                             title: layout.label,
                             className: 'tab-' + layout.value,
                         }) ) }
                     >
-                        { ( tab ) => <>{ GridDevice[tab.name] }</> }
+                        { ( tab ) => <>{ deviceLayout[tab.name] }</> }
                     </TabPanel>
                 </PanelBody>
             );
@@ -333,11 +260,6 @@ class WpeGrid extends Component {
                 <div { ...innerBlocksProps } />
             )
         }
-
-        Object.assign(sectionStyle, {
-            gridTemplateColumns: 'repeat(' + configTotalColumns + ', [col-start] 1fr)'
-        });
-
 
         function updateColumnAttribute(indexFunction, attributeName, newValue ) {
 
@@ -360,14 +282,14 @@ class WpeGrid extends Component {
                 <InspectorControls>
                     <PanelBody>
                         <RangeControl
-                            label="Number of columns"
+                            label="Number of cells"
                             value={ attributes.gridCountColumns }
                             onChange={ ( value ) => setAttributes( { gridCountColumns: value } ) }
                             min={ 1 }
-                            max={ configTotalColumns }
+                            max={ attributes.gridCountColumns + 1 }
                         />
                     </PanelBody>
-                    { panelGridLayout }
+                    { panelDeviceLayout }
                     <MarginControls props={ this.props } deviceType={ experimentalDeviceType } />
                 </InspectorControls>
             );
@@ -375,6 +297,7 @@ class WpeGrid extends Component {
 
         /**
          * Render
+         * 
          */
         return (
             <>
@@ -385,13 +308,12 @@ class WpeGrid extends Component {
     }
 }
 
-export default (configTotalColumns) => compose( [
+export default () => compose( [
 	withSelect( ( select, props ) => {
 
         const { __experimentalGetPreviewDeviceType } = select( 'core/edit-post' );
 
         return {
-            configTotalColumns: configTotalColumns,
             backgroundData: ! props.attributes.backgroundFile ? null : select('core').getEntityRecord('postType', 'attachment', props.attributes.backgroundFile ),
             inner_blocks: select('core/block-editor').getBlocks(props.clientId),
             innerBlocksProps: useInnerBlocksProps( useBlockProps( { className: '' } ), { renderAppender: false } ),

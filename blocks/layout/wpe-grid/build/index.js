@@ -9377,6 +9377,13 @@ var getLayouts = function getLayouts() {
     attributeName: 'Mobile'
   }];
 };
+
+function setBodyDevice(device) {
+  getLayouts().forEach(function (layout) {
+    document.body.classList.remove(layout.value);
+  });
+  document.body.classList.add(device);
+}
 /**
  * registerBlockType edit function
  */
@@ -9424,26 +9431,15 @@ var WpeGrid = /*#__PURE__*/function (_Component) {
           countColumns = _this$props.countColumns,
           blockVariations = _this$props.blockVariations,
           blockType = _this$props.blockType,
-          configTotalColumns = _this$props.configTotalColumns,
           experimentalDeviceType = _this$props.experimentalDeviceType;
       if (this.state.defaultClassName === null) this.state.defaultClassName = innerBlocksProps.className; // Device
       // const deviceType = this.getDeviceType();
-
-      var deviceType = experimentalDeviceType.toLowerCase();
-
-      if (typeof deviceType != 'undefined' && deviceType != 'undefined') {
-        // innerBlocksProps.className = this.state.defaultClassName + ' ' + deviceType;
-        innerBlocksProps.className += ' ' + deviceType;
-      } // Padding & Margin
-      // const className = generateMarginClassName(this.props);
-      // if( className ) {
-      //     innerBlocksProps.className += className;
+      // const deviceType = experimentalDeviceType.toLowerCase();
+      // if( typeof deviceType != 'undefined' && deviceType != 'undefined' ) {
+      //     // innerBlocksProps.className = this.state.defaultClassName + ' ' + deviceType;
+      //     innerBlocksProps.className += ' ' + deviceType;
       // }
 
-
-      var className = '';
-      var sectionStyle = {};
-      var heightGridTemplateRows = 1;
       /**
        * Define innerBlocks
        */
@@ -9463,10 +9459,10 @@ var WpeGrid = /*#__PURE__*/function (_Component) {
             }
           }
         }));
-        var gridForm = null;
       } else {
         /**
          * Add or remove columns
+         * 
          */
         if (attributes.gridCountColumns > countColumns) {
           var numberOfColumnsToAdd = attributes.gridCountColumns - countColumns;
@@ -9480,114 +9476,65 @@ var WpeGrid = /*#__PURE__*/function (_Component) {
 
           Object(_wordpress_data__WEBPACK_IMPORTED_MODULE_13__["dispatch"])('core/block-editor').replaceInnerBlocks(clientId, _inner_blocks_new, false);
         }
-
-        var GridDevice = {};
         /**
-         * Update grid
+         * Layout panel
+         * 
          */
 
+
+        var deviceLayout = {};
         getLayouts().forEach(function (layout) {
-          var gridForm = []; // Loop on each columns to update start and width attributes
-
+          deviceLayout[layout.value] = [];
           inner_blocks.forEach(function (element, index) {
-            if (true) {
-              var indexLabel = index + 1; // Column
-
-              var currentColumnStart = element.attributes['columnStart' + layout.attributeName] - 1;
-              var currentWidth = element.attributes['width' + layout.attributeName];
-              var maxColumnStart = configTotalColumns - currentWidth;
-              var maxWidth = configTotalColumns - currentColumnStart;
-              var disabledColumnStart = maxColumnStart == 0 ? true : false;
-              maxColumnStart = maxColumnStart == 0 ? 1 : maxColumnStart; // Row
-
-              var currentRowStart = element.attributes['rowStart' + layout.attributeName] - 1;
-              var currentHeight = element.attributes['height' + layout.attributeName];
-              if (currentRowStart + currentHeight > heightGridTemplateRows) heightGridTemplateRows = currentRowStart + currentHeight;
-              var maxHeight = heightGridTemplateRows + 1;
-              var RowStart = maxHeight - currentHeight;
-              gridForm.push(Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])("div", {
-                key: index
-              }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["HorizontalRule"], null), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])("label", null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])("strong", null, "Cell " + indexLabel)), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])("div", {
-                className: "flex flex-2 mt-smaller"
-              }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["RangeControl"], {
-                label: "Column start",
-                value: currentColumnStart,
-                onChange: function onChange(value) {
-                  return updateColumnAttribute(index, 'columnStart' + layout.attributeName, Number.parseInt(value) + 1);
-                },
-                min: 0,
-                max: maxColumnStart,
-                marks: [{
-                  value: 0,
-                  label: '0'
-                }, {
-                  value: maxColumnStart,
-                  label: maxColumnStart
-                }],
-                withInputField: false,
-                disabled: disabledColumnStart
-              }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["RangeControl"], {
-                label: "Width",
-                value: currentWidth,
-                onChange: function onChange(value) {
-                  return updateColumnAttribute(index, 'width' + layout.attributeName, Number.parseInt(value));
-                },
-                min: 1,
-                max: maxWidth,
-                marks: [{
-                  value: 0,
-                  label: '1'
-                }, {
-                  value: maxWidth,
-                  label: maxWidth
-                }],
-                withInputField: false
-              })), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])("div", {
-                className: "flex flex-2"
-              }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["RangeControl"], {
-                label: "Row start",
-                value: currentRowStart,
-                onChange: function onChange(value) {
-                  return updateColumnAttribute(index, 'rowStart' + layout.attributeName, Number.parseInt(value) + 1);
-                },
-                min: 0,
-                max: RowStart,
-                marks: [{
-                  value: 0,
-                  label: '0'
-                }, {
-                  value: RowStart,
-                  label: RowStart
-                }],
-                withInputField: false
-              }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["RangeControl"], {
-                label: "Height",
-                value: currentHeight,
-                onChange: function onChange(value) {
-                  return updateColumnAttribute(index, 'height' + layout.attributeName, Number.parseInt(value));
-                },
-                min: 1,
-                max: maxHeight,
-                marks: [{
-                  value: 0,
-                  label: '1'
-                }, {
-                  value: maxHeight,
-                  label: maxHeight
-                }],
-                withInputField: false
-              }))));
-            }
+            deviceLayout[layout.value].push(Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["PanelBody"], {
+              title: "Cell " + (index + 1),
+              initialOpen: false,
+              key: layout.value + "-" + index
+            }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["RangeControl"], {
+              label: "Column start",
+              value: element.attributes['columnStart' + layout.attributeName],
+              onChange: function onChange(value) {
+                return updateColumnAttribute(index, 'columnStart' + layout.attributeName, Number.parseInt(value));
+              },
+              min: 1,
+              max: element.attributes['columnStart' + layout.attributeName] + 1
+            }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["RangeControl"], {
+              label: "Width",
+              value: element.attributes['width' + layout.attributeName],
+              onChange: function onChange(value) {
+                return updateColumnAttribute(index, 'width' + layout.attributeName, Number.parseInt(value));
+              },
+              min: 1,
+              max: element.attributes['width' + layout.attributeName] + 1
+            }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["RangeControl"], {
+              label: "Row start",
+              value: element.attributes['rowStart' + layout.attributeName],
+              onChange: function onChange(value) {
+                return updateColumnAttribute(index, 'rowStart' + layout.attributeName, Number.parseInt(value));
+              },
+              min: 1,
+              max: element.attributes['rowStart' + layout.attributeName] + 1
+            }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["RangeControl"], {
+              label: "Height",
+              value: element.attributes['height' + layout.attributeName],
+              onChange: function onChange(value) {
+                return updateColumnAttribute(index, 'height' + layout.attributeName, Number.parseInt(value));
+              },
+              min: 1,
+              max: element.attributes['height' + layout.attributeName] + 1
+            })));
           });
-          GridDevice[layout.value] = gridForm;
         });
-        var panelGridLayout = Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["PanelBody"], {
+        var panelDeviceLayout = Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["PanelBody"], {
           title: 'Layout',
           initialOpen: false
         }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["TabPanel"], {
           className: "padding-tab-panel",
           activeClass: "active-tab" // onSelect={ (tabName) => wp.data.dispatch('core/edit-post').__experimentalSetPreviewDeviceType( tabName.charAt(0).toUpperCase() + tabName.slice(1) ) }
           ,
+          onSelect: function onSelect(tabName) {
+            return setBodyDevice(tabName);
+          },
           tabs: getLayouts().map(function (layout) {
             return {
               name: layout.value,
@@ -9596,7 +9543,7 @@ var WpeGrid = /*#__PURE__*/function (_Component) {
             };
           })
         }, function (tab) {
-          return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["Fragment"], null, GridDevice[tab.name]);
+          return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["Fragment"], null, deviceLayout[tab.name]);
         }));
         /**
          * Render edit
@@ -9604,10 +9551,6 @@ var WpeGrid = /*#__PURE__*/function (_Component) {
 
         var editDisplay = Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])("div", innerBlocksProps);
       }
-
-      Object.assign(sectionStyle, {
-        gridTemplateColumns: 'repeat(' + configTotalColumns + ', [col-start] 1fr)'
-      });
 
       function updateColumnAttribute(indexFunction, attributeName, newValue) {
         inner_blocks.forEach(function (element, index) {
@@ -9623,7 +9566,7 @@ var WpeGrid = /*#__PURE__*/function (_Component) {
 
       if (!attributes.gridLocked) {
         inspectorControls = Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_11__["InspectorControls"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["PanelBody"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["RangeControl"], {
-          label: "Number of columns",
+          label: "Number of cells",
           value: attributes.gridCountColumns,
           onChange: function onChange(value) {
             return setAttributes({
@@ -9631,14 +9574,15 @@ var WpeGrid = /*#__PURE__*/function (_Component) {
             });
           },
           min: 1,
-          max: configTotalColumns
-        })), panelGridLayout, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_component_block_master_src_marginControls__WEBPACK_IMPORTED_MODULE_15__["MarginControls"], {
+          max: attributes.gridCountColumns + 1
+        })), panelDeviceLayout, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_component_block_master_src_marginControls__WEBPACK_IMPORTED_MODULE_15__["MarginControls"], {
           props: this.props,
           deviceType: experimentalDeviceType
         }));
       }
       /**
        * Render
+       * 
        */
 
 
@@ -9649,13 +9593,12 @@ var WpeGrid = /*#__PURE__*/function (_Component) {
   return WpeGrid;
 }(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["Component"]);
 
-/* harmony default export */ __webpack_exports__["default"] = (function (configTotalColumns) {
+/* harmony default export */ __webpack_exports__["default"] = (function () {
   return Object(_wordpress_compose__WEBPACK_IMPORTED_MODULE_10__["compose"])([Object(_wordpress_data__WEBPACK_IMPORTED_MODULE_13__["withSelect"])(function (select, props) {
     var _select = select('core/edit-post'),
         __experimentalGetPreviewDeviceType = _select.__experimentalGetPreviewDeviceType;
 
     return {
-      configTotalColumns: configTotalColumns,
       backgroundData: !props.attributes.backgroundFile ? null : select('core').getEntityRecord('postType', 'attachment', props.attributes.backgroundFile),
       inner_blocks: select('core/block-editor').getBlocks(props.clientId),
       innerBlocksProps: Object(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_11__["useInnerBlocksProps"])(Object(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_11__["useBlockProps"])({
@@ -9891,7 +9834,6 @@ variations.forEach(function (elt, index) {
     });
   }
 });
-var configTotalColumns = global_localized.gridConfig && global_localized.gridConfig.totalColumns ? global_localized.gridConfig.totalColumns : _config_json__WEBPACK_IMPORTED_MODULE_7__["totalColumns"];
 Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_2__["registerBlockType"])('custom/wpe-grid', {
   title: 'Grid',
   category: 'wpe-layout',
@@ -9931,7 +9873,7 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_2__["registerBlockType"])('cus
     }
   },
   variations: variations,
-  edit: Object(_edit__WEBPACK_IMPORTED_MODULE_8__["default"])(configTotalColumns),
+  edit: Object(_edit__WEBPACK_IMPORTED_MODULE_8__["default"])(),
   save: function save() {
     var blockProps = _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__["useBlockProps"].save();
     var innerBlocksProps = _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__["useInnerBlocksProps"].save(blockProps);

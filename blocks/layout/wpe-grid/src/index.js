@@ -26,8 +26,6 @@ variations.forEach( function (elt, index){
     }
 });
 
-var configTotalColumns = ( global_localized.gridConfig && global_localized.gridConfig.totalColumns ) ? global_localized.gridConfig.totalColumns : gridConfig.totalColumns;
-
 registerBlockType( 'custom/wpe-grid', {
     title: 'Grid',
     category: 'wpe-layout',
@@ -53,7 +51,7 @@ registerBlockType( 'custom/wpe-grid', {
         }
     },
     variations,
-    edit: edit(configTotalColumns),
+    edit: edit(),
     save: () => {
 
         const blockProps = useBlockProps.save();

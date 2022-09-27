@@ -1,9 +1,9 @@
 import { registerBlockType } from '@wordpress/blocks';
 import {
-    InnerBlocks,
-    useBlockProps,
-    useInnerBlocksProps
+    InnerBlocks
 } from '@wordpress/block-editor';
+
+import edit from './edit';
 
 registerBlockType( 'custom/wpe-column', {
     title: 'Col',
@@ -64,65 +64,7 @@ registerBlockType( 'custom/wpe-column', {
             default: 1
         }
     },
-    edit: ( ( { attributes, className } ) => {
-
-        let newClassName = '';
-
-        if( Number.isInteger(attributes.columnStartDesktop) && attributes.columnStartDesktop > 0 &&
-            Number.isInteger(attributes.widthDesktop) && attributes.widthDesktop > 0 ) {
-
-            let ColumnEndDesktop = attributes.columnStartDesktop + attributes.widthDesktop;
-            newClassName += "gridColumnStartDesktop-" + attributes.columnStartDesktop + " gridColumnEndDesktop-" + ColumnEndDesktop + " ";
-        }
-
-        if( Number.isInteger(attributes.columnStartTablet) && attributes.columnStartTablet > 0 &&
-            Number.isInteger(attributes.widthTablet) && attributes.widthTablet > 0 ) {
-
-            let ColumnEndTablet = attributes.columnStartTablet + attributes.widthTablet;
-            newClassName += "gridColumnStartTablet-" + attributes.columnStartTablet + " gridColumnEndTablet-" + ColumnEndTablet + " ";
-        }
-
-        if( Number.isInteger(attributes.columnStartMobile) && attributes.columnStartMobile > 0 &&
-            Number.isInteger(attributes.widthMobile) && attributes.widthMobile > 0 ) {
-
-            let ColumnEndMobile= attributes.columnStartMobile + attributes.widthMobile;
-            newClassName += "gridColumnStartMobile-" + attributes.columnStartMobile + " gridColumnEndMobile-" + ColumnEndMobile + " ";
-        }
-
-        if( Number.isInteger(attributes.rowStartDesktop) && attributes.rowStartDesktop > 0 &&
-            Number.isInteger(attributes.heightDesktop) && attributes.heightDesktop > 0 ) {
-
-            let RowEndDesktop = attributes.rowStartDesktop + attributes.heightDesktop;
-            newClassName += "gridRowStartDesktop-" + attributes.rowStartDesktop + " gridRowEndDesktop-" + RowEndDesktop + " ";
-        }
-
-        if( Number.isInteger(attributes.rowStartTablet) && attributes.rowStartTablet > 0 &&
-            Number.isInteger(attributes.heightTablet) && attributes.heightTablet > 0 ) {
-
-            let RowEndTablet = attributes.rowStartTablet + attributes.heightTablet;
-            newClassName += "gridRowStartTablet-" + attributes.rowStartTablet + " gridRowEndTablet-" + RowEndTablet + " ";
-        }
-
-        if( Number.isInteger(attributes.rowStartMobile) && attributes.rowStartMobile > 0 &&
-            Number.isInteger(attributes.heightMobile) && attributes.heightMobile > 0 ) {
-
-            let RowEndMobile= attributes.rowStartMobile + attributes.heightMobile;
-            newClassName += "gridRowStartMobile-" + attributes.rowStartMobile + " gridRowEndMobile-" + RowEndMobile + " ";
-        }
-
-
-
-        const blockProps = useBlockProps( {
-            className: newClassName,
-        } );
-        const innerBlocksProps = useInnerBlocksProps( blockProps, {
-            renderAppender: InnerBlocks.ButtonBlockAppender,
-        } );
-
-        // Render
-        return <div { ...innerBlocksProps } />
-    } ),
- 
+    edit: edit(),
     save: () => {
         return <InnerBlocks.Content />;
     },
