@@ -6,12 +6,13 @@ class Config {
     
     private static $_instance;
 
-    private $frontspecJsonFileName          = 'frontspec.json',
+    private $frontspecJsonFileName          = ABT_FRONTSPEC_JSON_FILENAME,
         $themespecJsonFileName              = 'theme_spec.json',
         $viewspecJsonFilename               = 'viewspec.json',
         $overrideSpecJsonFilename           = 'override.json',
         $blockMetadataJsonFilename          = 'block.json',
         $allowedBlockTypesJsonFileName      = 'allowed_block_types.json',
+        $frontendRelativePath               = ABT_FRONTEND_RELATIVE_PATH,
         $templateViewsLocation              = ABT_TEMPLATE_VIEWS_LOCATION,
         $templateComponentsSubLocation      = ABT_TEMPLATE_COMPONENTS_SUB_LOCATION,
         $componentMasterBlocksLocation      = 'blocks/component-block-master/',
@@ -66,7 +67,7 @@ class Config {
         // If specData propertie is still emtpy, load spec files
         if( is_null( $this->specData ) ) {
 
-            $front_spec = $this->spec_file_get_contents( $this->get('frontspecJsonFileName') );
+            $front_spec = $this->spec_file_get_contents( $this->get_front_end_file_path($this->get('frontspecJsonFileName')) );
             $theme_spec = $this->spec_file_get_contents( $this->get('themespecJsonFileName') );
 
             $this->specData = array_replace_recursive( $front_spec, $theme_spec);
@@ -81,6 +82,16 @@ class Config {
         }
         else
             return $this->specData;
+    }
+
+
+
+    public function get_front_end_file_path( $filepath ) {
+
+        $frontendRelativePath = trim( $this->get('frontendRelativePath'), '/' );
+        $frontendRelativePath = ( ! empty($frontendRelativePath) ) ? $frontendRelativePath . '/' : '';
+
+        return $frontendRelativePath . $filepath;
     }
 
 

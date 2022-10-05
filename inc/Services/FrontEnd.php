@@ -10,7 +10,7 @@ class FrontEnd extends ServiceBase {
      */
     public function get_components_dir( $subLocation = null ) {
 
-        return $this->get_config()->get('templateViewsLocation') . ( is_null($subLocation) ? $this->get_config()->get('templateComponentsSubLocation') : $subLocation );
+        return rtrim( $this->get_config()->get_front_end_file_path( $this->get_config()->get('templateViewsLocation') ) . ( is_null($subLocation) ? $this->get_config()->get('templateComponentsSubLocation') : $subLocation ), '/' ) . '/';
     }
 
 
@@ -34,13 +34,13 @@ class FrontEnd extends ServiceBase {
 
                     $render_file = glob( $components_dir . $component . '/*.twig' );
                     if( $render_file && is_array($render_file) && count($render_file) == 1 ) {
-                        $components[] = $component;
+                        $components[] =  $this->get_config()->get('templateComponentsSubLocation') . $component;
                     }
                 }
             }
         }
 
-        return $components;
+        return apply_filters( 'Abt\get_components', $components );
     }
 
 
@@ -49,23 +49,28 @@ class FrontEnd extends ServiceBase {
      * Recursive function to get and treat viewspec JSON file for a single component
      * 
      */
-    public function get_component_viewspec( $component, $dir = null ) {
+    public function get_component_viewspec( $component ) {
         
-        $component_relative_dir = $this->get_components_dir($dir);
+        $pathinfoComponent = pathinfo($component);
+        $dir = trim( $pathinfoComponent['dirname'], '/' ) . '/';
+        $componentName = $pathinfoComponent['basename'];
+
+        $component_relative_dir = $this->get_components_dir( $dir );
         $component_dir = get_stylesheet_directory() . '/' . $component_relative_dir;
-        $path_viewspec_file = $component_dir . $component . '/' . $this->get_config()->get('viewspecJsonFilename');
+        $path_viewspec_file = $component_dir . $componentName . '/' . $this->get_config()->get('viewspecJsonFilename');
 
         // Get the file content
         $component_viewspec = ( file_exists( $path_viewspec_file ) ) ? json_decode( file_get_contents( $path_viewspec_file ), true ) : [];
+        $component_viewspec = apply_filters( 'Abt\pre_get_component_viewspec', $component_viewspec, $component );
         if( is_array($component_viewspec) ) {
             
             // Define ID if doesn't exists
             $component_viewspec['id'] = $component_viewspec['id'] ?? $component;
 
             // Add path attribute requires by component render method
-            $render_file = glob( $component_dir . $component . '/*.twig' );
+            $render_file = glob( $component_dir . $componentName . '/*.twig' );
             if( $render_file && is_array($render_file) && count($render_file) == 1 ) {
-                $component_viewspec['path'] = $this->get_config()->get('templateComponentsSubLocation') . $component . '/' . pathinfo($render_file[0])['basename'];
+                $component_viewspec['path'] = $dir . $componentName . '/' . pathinfo($render_file[0])['basename'];
             }
 
             // Get and treat component props

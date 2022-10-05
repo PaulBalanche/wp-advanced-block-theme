@@ -136,6 +136,8 @@ class LayoutBlock extends ModelBase {
                 }
             }
 
+            wp_localize_script( $handle, 'theme_spec', $this->get_config()->get_spec() );
+
             $args['editor_script'] = $handle;
         }
     }

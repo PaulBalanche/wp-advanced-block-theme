@@ -33,7 +33,7 @@ class CliCommand extends ServiceBase {
     public function generate_component_blocks() {
 
         $custom_blocks_routing = $this->get_config()->get_spec('custom_blocks_routing');
-        
+  
         $front_components = $this->frontEndService->get_components();
         if( is_array($front_components) && count($front_components) > 0 ) {
 

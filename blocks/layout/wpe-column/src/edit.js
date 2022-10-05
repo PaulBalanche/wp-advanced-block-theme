@@ -20,84 +20,57 @@ import {
 
 import { select, withSelect } from '@wordpress/data';
 
-import { getLayouts, setBodyDevice } from '../../../../src/devices.js';
+import { getLayouts, setBodyDevice, getBodyDevice } from '../../../../src/devices.js';
 
-
+/**
+ * registerBlockType edit function
+ * 
+ */
+class WpeColumn extends Component {
  
- /**
-  * registerBlockType edit function
-  */
- class WpeColumn extends Component {
- 
-     constructor() {
-         super( ...arguments );
- 
-         this.state = {
-            //  selectedDevice: getLayouts()[0].value,
-             defaultClassName: null
-         };
-     }
- 
-     render() {
- 
-        var {
-            attributes,
-            setAttributes,
-            innerBlocksProps
-        } = this.props;
+    constructor( attr ) {
+        super( ...arguments );
+    }
 
-        let newClassName = '';
+    getLayout( key, device ) {
+       
+        if( typeof this.props.attributes.layout == 'undefined' ) { return 1; }
+        if( typeof this.props.attributes.layout[device] == 'undefined' ) { return 1; }
+        if( typeof this.props.attributes.layout[device][key] == 'undefined' ) { return 1; }
 
-        if( Number.isInteger(attributes.columnStartDesktop) && attributes.columnStartDesktop > 0 &&
-            Number.isInteger(attributes.widthDesktop) && attributes.widthDesktop > 0 ) {
+        return this.props.attributes.layout[device][key];
+    }
 
-            let ColumnEndDesktop = attributes.columnStartDesktop + attributes.widthDesktop;
-            newClassName += "gridColumnStartDesktop-" + attributes.columnStartDesktop + " gridColumnEndDesktop-" + ColumnEndDesktop + " ";
-        }
+    setLayout( key, value, device ) {
+       
+        let curentLayout = ( typeof this.props.attributes.layout == 'undefined' ) ? {} : this.props.attributes.layout;
+        if( typeof curentLayout[device] == 'undefined' ) { curentLayout[device] = {}; }
+        curentLayout[device][key] = value;
 
-        if( Number.isInteger(attributes.columnStartTablet) && attributes.columnStartTablet > 0 &&
-            Number.isInteger(attributes.widthTablet) && attributes.widthTablet > 0 ) {
+        this.setAttributes( { layout: null} );
+        this.setAttributes( { layout: curentLayout} );
+    }
 
-            let ColumnEndTablet = attributes.columnStartTablet + attributes.widthTablet;
-            newClassName += "gridColumnStartTablet-" + attributes.columnStartTablet + " gridColumnEndTablet-" + ColumnEndTablet + " ";
-        }
+    setAttributes( attributes ) {
+        this.props.setAttributes( attributes );
+    }
 
-        if( Number.isInteger(attributes.columnStartMobile) && attributes.columnStartMobile > 0 &&
-            Number.isInteger(attributes.widthMobile) && attributes.widthMobile > 0 ) {
+    render() {
 
-            let ColumnEndMobile= attributes.columnStartMobile + attributes.widthMobile;
-            newClassName += "gridColumnStartMobile-" + attributes.columnStartMobile + " gridColumnEndMobile-" + ColumnEndMobile + " ";
-        }
+        var { innerBlocksProps } = this.props;
+        
+        innerBlocksProps.style = {
+            gridColumnStart: this.getLayout( 'columnStart', getBodyDevice() ),
+            gridColumnEnd: this.getLayout( 'columnStart', getBodyDevice() ) + this.getLayout( 'width', getBodyDevice() ),
+            gridRowStart: this.getLayout( 'rowStart', getBodyDevice() ),
+            gridRowEnd: this.getLayout( 'rowStart', getBodyDevice() ) + this.getLayout( 'height', getBodyDevice() )
+        };
 
-        if( Number.isInteger(attributes.rowStartDesktop) && attributes.rowStartDesktop > 0 &&
-            Number.isInteger(attributes.heightDesktop) && attributes.heightDesktop > 0 ) {
-
-            let RowEndDesktop = attributes.rowStartDesktop + attributes.heightDesktop;
-            newClassName += "gridRowStartDesktop-" + attributes.rowStartDesktop + " gridRowEndDesktop-" + RowEndDesktop + " ";
-        }
-
-        if( Number.isInteger(attributes.rowStartTablet) && attributes.rowStartTablet > 0 &&
-            Number.isInteger(attributes.heightTablet) && attributes.heightTablet > 0 ) {
-
-            let RowEndTablet = attributes.rowStartTablet + attributes.heightTablet;
-            newClassName += "gridRowStartTablet-" + attributes.rowStartTablet + " gridRowEndTablet-" + RowEndTablet + " ";
-        }
-
-        if( Number.isInteger(attributes.rowStartMobile) && attributes.rowStartMobile > 0 &&
-            Number.isInteger(attributes.heightMobile) && attributes.heightMobile > 0 ) {
-
-            let RowEndMobile= attributes.rowStartMobile + attributes.heightMobile;
-            newClassName += "gridRowStartMobile-" + attributes.rowStartMobile + " gridRowEndMobile-" + RowEndMobile + " ";
-        }
-
-        innerBlocksProps.className += ' ' + newClassName;
- 
- 
         /**
          * Layout panel
          * 
          */
-        var deviceLayout = {};
+        let deviceLayout = {};
 
         getLayouts().forEach( ( layout ) => {
 
@@ -105,48 +78,49 @@ import { getLayouts, setBodyDevice } from '../../../../src/devices.js';
                 <>
                     <RangeControl
                         label="Column start"
-                        value={ attributes['columnStart' + layout.attributeName] }
-                        onChange={ ( value ) => setAttributes( { ['columnStart' + layout.attributeName]: Number.parseInt(value) } ) }
+                        value={ this.getLayout( 'columnStart', layout.value ) }
+                        onChange={ ( value ) => this.setLayout( 'columnStart', Number.parseInt(value), layout.value ) }
                         min={ 1 }
-                        max={ attributes['columnStart' + layout.attributeName] + 1 }
+                        max={ this.getLayout( 'columnStart', layout.value ) + 1 }
                     />
                     <RangeControl
                         label="Width"
-                        value={ attributes['width' + layout.attributeName] }
-                        onChange={ ( value ) => setAttributes( { ['width' + layout.attributeName]: Number.parseInt(value) } ) }
+                        value={ this.getLayout( 'width', layout.value ) }
+                        onChange={ ( value ) => this.setLayout( 'width', Number.parseInt(value), layout.value ) }
                         min={ 1 }
-                        max={ attributes['width' + layout.attributeName] + 1 }
+                        max={ this.getLayout( 'width', layout.value ) + 1 }
                     />
                     <RangeControl
                         label="Row start"
-                        value={ attributes['rowStart' + layout.attributeName] }
-                        onChange={ ( value ) => setAttributes( { ['rowStart' + layout.attributeName]: Number.parseInt(value) } ) }
+                        value={ this.getLayout( 'rowStart', layout.value ) }
+                        onChange={ ( value ) => this.setLayout( 'rowStart', Number.parseInt(value), layout.value ) }
                         min={ 1 }
-                        max={ attributes['rowStart' + layout.attributeName] + 1 }
+                        max={ this.getLayout( 'rowStart', layout.value ) + 1 }
                     />
                     <RangeControl
                         label="Height"
-                        value={ attributes['height' + layout.attributeName] }
-                        onChange={ ( value ) => setAttributes( { ['height' + layout.attributeName]: Number.parseInt(value) } ) }
+                        value={ this.getLayout( 'height', layout.value ) }
+                        onChange={ ( value ) => this.setLayout( 'height', Number.parseInt(value), layout.value ) }
                         min={ 1 }
-                        max={ attributes['height' + layout.attributeName] + 1 }
+                        max={ this.getLayout( 'height', layout.value ) + 1 }
                     />
                 </>
             );
         });
 
-        var panelDeviceLayout = (
+        let panelDeviceLayout = (
             <PanelBody title={ 'Layout' } initialOpen={ true }>
                 <TabPanel
                     className="padding-tab-panel"
                     activeClass="active-tab"
                     // onSelect={ (tabName) => wp.data.dispatch('core/edit-post').__experimentalSetPreviewDeviceType( tabName.charAt(0).toUpperCase() + tabName.slice(1) ) }
-                    onSelect={ (tabName) => setBodyDevice(tabName) }
-                    tabs={ getLayouts().map( (layout) => ({
+                    onSelect={ (tabName) => setBodyDevice( tabName, this ) }
+                    tabs={ getLayouts().map( (layout) => ( {
                         name: layout.value,
                         title: layout.label,
                         className: 'tab-' + layout.value,
-                    }) ) }
+                    } ) ) }
+                    initialTabName={ getBodyDevice() }
                 >
                     { ( tab ) => <>{ deviceLayout[tab.name] }</> }
                 </TabPanel>
@@ -166,14 +140,14 @@ import { getLayouts, setBodyDevice } from '../../../../src/devices.js';
                 <div { ...innerBlocksProps } />
             </>
         );
-     }
- }
- 
- export default () => compose( [
-     withSelect( ( select, props ) => {
- 
-         return {
+    }
+}
+
+export default () => compose( [
+    withSelect( () => {
+
+        return {
             innerBlocksProps: useInnerBlocksProps( useBlockProps( { className: '' } ), { renderAppender: InnerBlocks.ButtonBlockAppender } ),
-         };
-     } ),
- ] )( WpeColumn );
+        };
+    } ),
+] )( WpeColumn );

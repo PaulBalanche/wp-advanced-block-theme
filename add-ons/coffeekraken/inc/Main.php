@@ -2,7 +2,9 @@
 
 namespace Abt\Coffeekraken;
 
+use Abt\Coffeekraken\Controllers\Twig as TwigController;
 use Abt\Coffeekraken\Controllers\Grid as GridController;
+use Abt\Coffeekraken\Controllers\Scripts as ScriptsController;
 
 class Main {
 
@@ -10,7 +12,9 @@ class Main {
 
     function __construct() {
 
+        new TwigController();
         new GridController();
+        new ScriptsController();
     }
 
     /**

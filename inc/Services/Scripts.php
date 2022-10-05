@@ -33,7 +33,7 @@ class Scripts extends ServiceBase {
      */
     public function enqueue_theme_scripts_and_styles() {
 
-        $assets = $this->get_config()->get_spec('assets');
+        $assets = apply_filters( 'Abt\get_assets_spec', $this->get_config()->get_spec('assets') );
         if( ! is_null($assets) && is_array($assets) ) {
             
             // CSS
@@ -60,7 +60,7 @@ class Scripts extends ServiceBase {
      */
     public function enqueue_block_editor_assets() {
 
-        $assets = $this->get_config()->get_spec('assets');
+        $assets = apply_filters( 'Abt\get_assets_spec', $this->get_config()->get_spec('assets') );
         if( ! is_null($assets) && is_array($assets) ) {
             
             // CSS

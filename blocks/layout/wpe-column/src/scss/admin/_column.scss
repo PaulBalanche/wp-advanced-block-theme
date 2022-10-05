@@ -38,51 +38,6 @@
         }
     }
 
-    @for $i from 1 through 100 {
-        &.gridColumnStartDesktop-#{$i} {
-            grid-column-start: $i;
-        }
-        &.gridColumnEndDesktop-#{$i} {
-            grid-column-end: $i;
-        }
-        &.gridRowStartDesktop-#{$i} {
-            grid-row-start: $i;
-        }
-        &.gridRowEndDesktop-#{$i} {
-            grid-row-end: $i;
-        }
-    }
-    
-    @for $i from 1 through 100 {
-        .tablet &.gridColumnStartTablet-#{$i} {
-            grid-column-start: $i;
-        }
-        .tablet &.gridColumnEndTablet-#{$i} {
-            grid-column-end: $i;
-        }
-        .tablet &.gridRowStartTablet-#{$i} {
-            grid-row-start: $i;
-        }
-        .tablet &.gridRowEndTablet-#{$i} {
-            grid-row-end: $i;
-        }
-    }
-    
-    @for $i from 1 through 100 {
-        .mobile &.gridColumnStartMobile-#{$i} {
-            grid-column-start: $i;
-        }
-        .mobile &.gridColumnEndMobile-#{$i} {
-            grid-column-end: $i;
-        }
-        .mobile &.gridRowStartMobile-#{$i} {
-            grid-row-start: $i;
-        }
-        .mobile &.gridRowEndMobile-#{$i} {
-            grid-row-end: $i;
-        }
-    }
-
     .wp-block-custom-wpe-column {
         
         .block-editor-block-list__layout {

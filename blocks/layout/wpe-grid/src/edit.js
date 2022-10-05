@@ -3,7 +3,7 @@
  */
 import { createBlock } from '@wordpress/blocks';
 import { Component, useRef } from '@wordpress/element';
-import { compose } from '@wordpress/compose';
+import { compose, withState } from '@wordpress/compose';
 import {
     InnerBlocks,
     InspectorControls,
@@ -11,7 +11,8 @@ import {
     useBlockProps,
     useInnerBlocksProps,
     __experimentalBlockVariationPicker,
-    __experimentalBlock as Block
+    __experimentalBlock as Block,
+    store as blockEditorStore
 } from '@wordpress/block-editor';
 
 import {
@@ -34,7 +35,7 @@ import { get, map, times } from 'lodash';
 
 import { MarginControls, generateMarginClassName } from '../../../component-block-master/src/_marginControls';
 
-import { getLayouts, setBodyDevice } from '../../../../src/devices.js';
+import { getLayouts, setBodyDevice, getBodyDevice } from '../../../../src/devices.js';
 
 /**
  * Add some columns in wpe-container based on variation selected
@@ -61,17 +62,13 @@ class WpeGrid extends Component {
         super( ...arguments );
 
         this.state = {
-            selectedDevice: getLayouts()[0].value,
+            selectedDevice: null,
             defaultClassName: null
 		};
     }
 
     getDeviceType() {
 		return this.state.selectedDevice;
-    }
-
-    setDeviceType(deviceType) {
-        this.setState( { selectedDevice: deviceType } );
     }
 
     render() {
@@ -85,8 +82,11 @@ class WpeGrid extends Component {
             countColumns,
             blockVariations,
             blockType,
-            experimentalDeviceType
+            experimentalDeviceType,
+            setState
         } = this.props;
+
+        const { replaceInnerBlocks } = dispatch( blockEditorStore );
 
         if( this.state.defaultClassName === null )
             this.state.defaultClassName = innerBlocksProps.className;
@@ -112,7 +112,7 @@ class WpeGrid extends Component {
                         variations={ blockVariations }
                         onSelect={ ( nextVariation ) => {
                             if ( nextVariation.innerBlocks ) {
-                                dispatch( 'core/block-editor' ).replaceInnerBlocks(
+                                replaceInnerBlocks(
                                     clientId,
                                     createBlocksFromInnerBlocksTemplate( nextVariation.innerBlocks ),
                                     false
@@ -138,126 +138,44 @@ class WpeGrid extends Component {
                 let inner_blocks_new = [
                     ...inner_blocks,
                     ...times( numberOfColumnsToAdd, () => {
-                        return createBlock('custom/wpe-column')
+                        return createBlock( 'custom/wpe-column')
                     } )
                 ];
-                dispatch( 'core/block-editor' ).replaceInnerBlocks(clientId, inner_blocks_new, false);
-                inner_blocks = inner_blocks_new;
+                replaceInnerBlocks(clientId, inner_blocks_new, false);
+                // inner_blocks = inner_blocks_new;
             }
             else if( attributes.gridCountColumns < countColumns ) {
             
                 let inner_blocks_new = inner_blocks.slice(0, attributes.gridCountColumns);
-                dispatch( 'core/block-editor' ).replaceInnerBlocks(clientId, inner_blocks_new, false);
+                replaceInnerBlocks(clientId, inner_blocks_new, false);
             }
 
 
 
+            const MyRadioControl = withState( {
+            } )( ( { setState } ) => (
+                <div
+                    onClick={ ( e ) => {
+                        let dasd = 'mobile';
+                        setBodyDevice( dasd, this );
+                        // setState( { selectedDevice: dasd } );
+                    } }
+                >test</div>
+            ) );
 
 
 
 
-
-
-
-            
-
-
-            /**
-             * Layout panel
-             * 
-             */
-            var deviceLayout = {};
-
-            getLayouts().forEach( ( layout ) => {
-
-                deviceLayout[ layout.value ] = [];
-
-                inner_blocks.forEach( ( element, index ) => {
-                    deviceLayout[ layout.value ].push(
-                        <PanelBody
-                            title={ "Cell " + ( index + 1 ) }
-                            initialOpen={ false }
-                            key={ layout.value + "-" + index }
-                        >
-                            <RangeControl
-                                label="Column start"
-                                value={ element.attributes['columnStart' + layout.attributeName] }
-                                onChange={ ( value ) => updateColumnAttribute(index, 'columnStart' + layout.attributeName, Number.parseInt(value)) }
-                                min={ 1 }
-                                max={ element.attributes['columnStart' + layout.attributeName] + 1 }
-                            />
-                            <RangeControl
-                                label="Width"
-                                value={ element.attributes['width' + layout.attributeName] }
-                                onChange={ ( value ) => updateColumnAttribute(index, 'width' + layout.attributeName, Number.parseInt(value)) }
-                                min={ 1 }
-                                max={ element.attributes['width' + layout.attributeName] + 1 }
-                            />
-                            <RangeControl
-                                label="Row start"
-                                value={ element.attributes['rowStart' + layout.attributeName] }
-                                onChange={ ( value ) => updateColumnAttribute(index, 'rowStart' + layout.attributeName, Number.parseInt(value)) }
-                                min={ 1 }
-                                max={ element.attributes['rowStart' + layout.attributeName] + 1 }
-                            />
-                            <RangeControl
-                                label="Height"
-                                value={ element.attributes['height' + layout.attributeName] }
-                                onChange={ ( value ) => updateColumnAttribute(index, 'height' + layout.attributeName, Number.parseInt(value)) }
-                                min={ 1 }
-                                max={ element.attributes['height' + layout.attributeName] + 1 }
-                            />
-                        </PanelBody>
-                    );
-                });
-            });
-
-            var panelDeviceLayout = (
-                <PanelBody title={ 'Layout' } initialOpen={ false }>
-                    <TabPanel
-                        className="padding-tab-panel"
-                        activeClass="active-tab"
-                        // onSelect={ (tabName) => wp.data.dispatch('core/edit-post').__experimentalSetPreviewDeviceType( tabName.charAt(0).toUpperCase() + tabName.slice(1) ) }
-                        onSelect={ (tabName) => setBodyDevice(tabName) }
-                        tabs={ getLayouts().map( (layout) => ({
-                            name: layout.value,
-                            title: layout.label,
-                            className: 'tab-' + layout.value,
-                        }) ) }
-                    >
-                        { ( tab ) => <>{ deviceLayout[tab.name] }</> }
-                    </TabPanel>
-                </PanelBody>
-            );
-
-
-
-
-
-
-
-
-            
 
             /**
              * Render edit
              */
             var editDisplay = (
-                <div { ...innerBlocksProps } />
+                <>
+                    <MyRadioControl />
+                    <div { ...innerBlocksProps } />
+                </>
             )
-        }
-
-        function updateColumnAttribute(indexFunction, attributeName, newValue ) {
-
-            inner_blocks.forEach( ( element, index ) => {
-
-                if( index == indexFunction ) {
-
-                    // Update the child block's attributes
-                    if( element.attributes[attributeName] != newValue )
-                        dispatch('core/editor').updateBlockAttributes(element.clientId, { [attributeName]: newValue });
-                }
-            });
         }
 
         // InspectorControls
@@ -275,7 +193,6 @@ class WpeGrid extends Component {
                             max={ attributes.gridCountColumns + 1 }
                         />
                     </PanelBody>
-                    { panelDeviceLayout }
                     <MarginControls props={ this.props } deviceType={ experimentalDeviceType } />
                 </InspectorControls>
             );

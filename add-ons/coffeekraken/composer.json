@@ -12,6 +12,7 @@
     ],
     "require": {
         "php": ">=7.4",
+        "coffeekraken/s-specs": "2.0.0-alpha.20",
         "coffeekraken/sugar": "2.0.0-alpha.20"
     },
     "autoload": {
@@ -27,7 +28,14 @@
     "repositories": [
         {
             "type": "path",
-            "url": "~/www/github.com/sugar",
+            "url": "~/www/github.com/coffeekraken/packages/tools/s-specs",
+            "options": {
+                "symlink": false
+            }
+        },
+        {
+            "type": "path",
+            "url": "~/www/github.com/coffeekraken/packages/tools/sugar",
             "options": {
                 "symlink": false
             }
