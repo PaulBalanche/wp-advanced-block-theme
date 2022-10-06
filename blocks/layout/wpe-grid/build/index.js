@@ -1029,7 +1029,9 @@ class WpeGrid extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Component 
       blockVariations,
       blockType,
       experimentalDeviceType,
-      setState
+      setState,
+      isSelectedBlock,
+      isParentOfSelectedBlock
     } = this.props;
     const {
       replaceInnerBlocks
@@ -1071,28 +1073,33 @@ class WpeGrid extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Component 
         let inner_blocks_new = [...inner_blocks, ...(0,lodash__WEBPACK_IMPORTED_MODULE_6__.times)(numberOfColumnsToAdd, () => {
           return (0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__.createBlock)('custom/wpe-column');
         })];
-        replaceInnerBlocks(clientId, inner_blocks_new, false); // inner_blocks = inner_blocks_new;
+        replaceInnerBlocks(clientId, inner_blocks_new, false);
       } else if (attributes.gridCountColumns < countColumns) {
         let inner_blocks_new = inner_blocks.slice(0, attributes.gridCountColumns);
         replaceInnerBlocks(clientId, inner_blocks_new, false);
       }
 
-      const MyRadioControl = (0,_wordpress_compose__WEBPACK_IMPORTED_MODULE_2__.withState)({})(_ref2 => {
-        let {
-          setState
-        } = _ref2;
-        return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-          onClick: e => {
-            let dasd = 'mobile';
-            (0,_src_devices_js__WEBPACK_IMPORTED_MODULE_8__.setBodyDevice)(dasd, this); // setState( { selectedDevice: dasd } );
-          }
-        }, "test");
-      });
+      let deviceButtonGroupClassName = isSelectedBlock || isParentOfSelectedBlock ? ' is-selected' : '';
       /**
        * Render edit
        */
 
-      var editDisplay = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(MyRadioControl, null), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", innerBlocksProps));
+      var editDisplay = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+        className: "deviceButtonGroup" + deviceButtonGroupClassName
+      }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.ButtonGroup, null, (0,_src_devices_js__WEBPACK_IMPORTED_MODULE_8__.getLayouts)().map(layout => {
+        return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.Button, {
+          key: "layoutButton_" + layout.value + "_" + clientId,
+          isPressed: (0,_src_devices_js__WEBPACK_IMPORTED_MODULE_8__.getBodyDevice)() == layout.value,
+          onClick: () => {
+            (0,_src_devices_js__WEBPACK_IMPORTED_MODULE_8__.setBodyDevice)(layout.value);
+            inner_blocks.forEach(elt => {
+              (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_5__.dispatch)('core/editor').updateBlockAttributes(elt.clientId, {
+                updated: true
+              });
+            });
+          }
+        }, layout.value);
+      }))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", innerBlocksProps));
     } // InspectorControls
 
 
@@ -1138,7 +1145,9 @@ class WpeGrid extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Component 
     countColumns: select('core/block-editor').getBlockCount(props.clientId),
     blockVariations: select('core/blocks').getBlockVariations(props.name, 'block'),
     blockType: select('core/blocks').getBlockType(props.name),
-    experimentalDeviceType: __experimentalGetPreviewDeviceType()
+    experimentalDeviceType: __experimentalGetPreviewDeviceType(),
+    isSelectedBlock: select('core/block-editor').isBlockSelected(props.clientId),
+    isParentOfSelectedBlock: select('core/block-editor').hasSelectedInnerBlock(props.clientId, true)
   };
 })])(WpeGrid));
 
@@ -1331,11 +1340,9 @@ Object.keys(theme_spec.media.queries).forEach(function (key, index) {
 });
 const getLayouts = () => layout;
 function setBodyDevice(device) {
-  let component = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
   const el = document.getElementsByClassName('edit-post-visual-editor__content-area'); // const dropZone = document.getElementsByClassName('block-editor-block-list__layout');
 
   el[0].style.margin = 'auto';
-  console.log(theme_spec.media.queries);
   Object.keys(theme_spec.media.queries).forEach(item => {
     if (device == item) {
       let width = theme_spec.media.queries[item]['max-width'] != null ? theme_spec.media.queries[item]['max-width'] + 'px' : '100%';

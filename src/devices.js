@@ -8,14 +8,13 @@ Object.keys(theme_spec.media.queries).forEach(function( key, index ) {
 });
 export const getLayouts = () => ( layout );
 
-export function setBodyDevice( device, component = null ) {
+export function setBodyDevice( device ) {
     
     const el = document.getElementsByClassName('edit-post-visual-editor__content-area');
     // const dropZone = document.getElementsByClassName('block-editor-block-list__layout');
 
     el[0].style.margin = 'auto';
 
-    console.log(theme_spec.media.queries);
     Object.keys(theme_spec.media.queries).forEach((item) => {
 
         if( device == item ) {

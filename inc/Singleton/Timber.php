@@ -36,10 +36,12 @@ class Timber {
         new \Timber\Timber();
 
         // Template Locations
-        \Timber\Timber::$locations = [
+        $locations = [
             get_stylesheet_directory() . '/' . Config::getInstance()->get_front_end_file_path( Config::getInstance()->get('templateViewsLocation') ),
             ABT_PLUGIN_DIR . 'views'
         ];
+
+        \Timber\Timber::$locations = apply_filters( 'Abt\timber_locations', $locations );
     }
 
 

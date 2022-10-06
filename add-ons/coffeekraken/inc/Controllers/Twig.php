@@ -4,13 +4,16 @@ namespace Abt\Coffeekraken\Controllers;
 
 class Twig {
 
-    private $config;
+    private $config,
+        $initSugarTwig = false;
 
     public function __construct() {
 
         $this->config = \Abt\Singleton\Config::getInstance();
 
         $this->add_filters();
+
+        $_ENV['S_FRONTSPEC_PATH'] = get_stylesheet_directory() . '/' . $this->config->get_front_end_file_path( $this->config->get('frontspecJsonFileName') );
     }
 
     /**
@@ -21,9 +24,12 @@ class Twig {
 
         // Init Twig template
         add_filter( 'timber/twig', [ $this, 'initSugarTwig' ] );
+        add_filter( 'Abt\timber_locations', [ $this, 'timber_locations' ] );
 
         add_filter( 'Abt\get_components', [ $this, 'get_components' ], 10, 1 );
         add_filter( 'Abt\pre_get_component_viewspec', [ $this, 'pre_get_component_viewspec' ], 10, 2 );
+        add_filter( 'Abt\get_component_viewspec', [ $this, 'get_component_viewspec' ], 10, 2 );
+        
     }
 
     /**
@@ -32,11 +38,22 @@ class Twig {
      * 
      */
     public function initSugarTwig( $twig ) {
-        
-        // init twig with Sugar power
-        $twig = \Sugar\twig\initTwig($twig);
 
+        if( ! $this->initSugarTwig ) {
+
+            // init twig with Sugar power
+            $twig = \Sugar\twig\initTwig( $twig );
+            $this->initSugarTwig = false;
+        }
         return $twig;
+    }
+
+
+    public function timber_locations( $locations ) {
+
+        $locations = array_merge( $locations, \Sugar\twig\getDefaultViewDirs() );
+
+        return $locations;
     }
 
 
@@ -113,6 +130,17 @@ class Twig {
                 $component_viewspec = json_decode(json_encode( \Sugar\specs\readSpec( $block['dotpath'], $namespace_settings ) ), true);
                 break;
             }
+        }
+
+        return $component_viewspec;
+    }
+
+
+
+    public function get_component_viewspec( $component_viewspec, $component ) {
+
+        if( ! isset($component_viewspec['path']) && isset($component_viewspec['viewPath']) ) {
+            $component_viewspec['path'] = $component_viewspec['viewPath'];
         }
 
         return $component_viewspec;

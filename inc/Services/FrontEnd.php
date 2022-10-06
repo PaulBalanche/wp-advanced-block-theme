@@ -65,7 +65,7 @@ class FrontEnd extends ServiceBase {
         if( is_array($component_viewspec) ) {
             
             // Define ID if doesn't exists
-            $component_viewspec['id'] = $component_viewspec['id'] ?? $component;
+            $component_viewspec['id'] = $component_viewspec['id'] ?? $componentName;
 
             // Add path attribute requires by component render method
             $render_file = glob( $component_dir . $componentName . '/*.twig' );
@@ -84,7 +84,7 @@ class FrontEnd extends ServiceBase {
             // Remove useless component attributes
             unset($component_viewspec['engine']);
 
-            return apply_filters( 'Abt\get_component_viewspec', $component_viewspec, $component_relative_dir );
+            return apply_filters( 'Abt\get_component_viewspec', $component_viewspec, $component );
         }
 
         return null;
@@ -103,10 +103,10 @@ class FrontEnd extends ServiceBase {
             foreach($component_props as $key_props => $props) {
 
                 // Extend attribute
-                if( is_array($props) && isset($props['extends']) ) {
-                    $component_props[$key_props] = wp_parse_args( $props, $this->get_extends_component_viewspec($props['extends']) );
-                    unset( $component_props[$key_props]['extends'] );
-                }
+                // if( is_array($props) && isset($props['extends']) ) {
+                //     $component_props[$key_props] = wp_parse_args( $props, $this->get_extends_component_viewspec($props['extends']) );
+                //     unset( $component_props[$key_props]['extends'] );
+                // }
 
                 // If invalid or null component, or type absent, or need only editable props => just bypass it and continue to the next component
                 if( is_null($component_props[$key_props]) || ! is_array($component_props[$key_props]) || ! isset($component_props[$key_props]['type']) || ( isset( $props['editable'] ) && $props['editable'] == false ) ) {

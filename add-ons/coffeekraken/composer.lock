@@ -4,15 +4,38 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "95b8637e2853b5714bd0bd332698e78d",
+    "content-hash": "2c1d5407997cd007337a090b8730f397",
     "packages": [
+        {
+            "name": "coffeekraken/s-frontspec",
+            "version": "2.0.0-alpha.20",
+            "dist": {
+                "type": "path",
+                "url": "/Users/paulbalanche/www/github.com/coffeekraken/packages/core/s-frontspec",
+                "reference": "c30dc3f0b2a8c6a55eaf8a2c372971970fd61ecc"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/php/autoload.php"
+                ]
+            },
+            "homepage": "https://coffeekraken.io",
+            "transport-options": {
+                "symlink": false,
+                "relative": false
+            }
+        },
         {
             "name": "coffeekraken/s-specs",
             "version": "2.0.0-alpha.20",
             "dist": {
                 "type": "path",
                 "url": "/Users/paulbalanche/www/github.com/coffeekraken/packages/tools/s-specs",
-                "reference": "7ebf59216f8b0040be5a0a2ad8b160c9cea63a10"
+                "reference": "efd2f823618e6ddbfe326e00e75ffc4834552c2c"
+            },
+            "require": {
+                "coffeekraken/s-frontspec": "^2.0@alpha"
             },
             "type": "library",
             "autoload": {
@@ -32,9 +55,10 @@
             "dist": {
                 "type": "path",
                 "url": "/Users/paulbalanche/www/github.com/coffeekraken/packages/tools/sugar",
-                "reference": "e958979030ef961cc313b6655077c3f12a0bed44"
+                "reference": "1e75de5d57c25d9b53020a20e21942824862ba22"
             },
             "require": {
+                "coffeekraken/s-frontspec": "^2.0@alpha",
                 "coffeekraken/s-specs": "^2.0@alpha",
                 "twig/twig": "^3.4"
             },
@@ -297,6 +321,7 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "coffeekraken/s-specs": 15,
+        "coffeekraken/s-frontspec": 15,
         "coffeekraken/sugar": 15
     },
     "prefer-stable": false,

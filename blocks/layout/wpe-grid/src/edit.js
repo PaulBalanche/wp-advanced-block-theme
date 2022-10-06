@@ -83,7 +83,9 @@ class WpeGrid extends Component {
             blockVariations,
             blockType,
             experimentalDeviceType,
-            setState
+            setState,
+            isSelectedBlock,
+            isParentOfSelectedBlock
         } = this.props;
 
         const { replaceInnerBlocks } = dispatch( blockEditorStore );
@@ -142,7 +144,6 @@ class WpeGrid extends Component {
                     } )
                 ];
                 replaceInnerBlocks(clientId, inner_blocks_new, false);
-                // inner_blocks = inner_blocks_new;
             }
             else if( attributes.gridCountColumns < countColumns ) {
             
@@ -151,28 +152,36 @@ class WpeGrid extends Component {
             }
 
 
-
-            const MyRadioControl = withState( {
-            } )( ( { setState } ) => (
-                <div
-                    onClick={ ( e ) => {
-                        let dasd = 'mobile';
-                        setBodyDevice( dasd, this );
-                        // setState( { selectedDevice: dasd } );
-                    } }
-                >test</div>
-            ) );
+            
 
 
-
-
+            let deviceButtonGroupClassName = ( isSelectedBlock || isParentOfSelectedBlock ) ? ' is-selected' : '';
 
             /**
              * Render edit
              */
             var editDisplay = (
                 <>
-                    <MyRadioControl />
+                    <div className={ "deviceButtonGroup" + deviceButtonGroupClassName } >
+                        <ButtonGroup>
+                            { getLayouts().map( ( layout ) => {
+                                return (
+                                    <Button
+                                        key={ "layoutButton_" + layout.value + "_" + clientId }
+                                        isPressed={ getBodyDevice() == layout.value }
+                                        onClick={ () => {
+                                            setBodyDevice( layout.value );
+                                            inner_blocks.forEach( ( elt ) => {
+                                                dispatch('core/editor').updateBlockAttributes( elt.clientId, { updated: true } );
+                                            });
+                                        } }
+                                    >
+                                        { layout.value }
+                                    </Button>
+                                );
+                            } ) }
+                        </ButtonGroup>
+                    </div>
                     <div { ...innerBlocksProps } />
                 </>
             )
@@ -223,7 +232,9 @@ export default () => compose( [
             countColumns: select( 'core/block-editor' ).getBlockCount(props.clientId),
             blockVariations: select('core/blocks').getBlockVariations(props.name, 'block'),
             blockType: select('core/blocks').getBlockType(props.name),
-            experimentalDeviceType: __experimentalGetPreviewDeviceType()
+            experimentalDeviceType: __experimentalGetPreviewDeviceType(),
+            isSelectedBlock: select('core/block-editor').isBlockSelected(props.clientId),
+            isParentOfSelectedBlock: select('core/block-editor').hasSelectedInnerBlock(props.clientId, true)
         };
     } ),
 ] )( WpeGrid );

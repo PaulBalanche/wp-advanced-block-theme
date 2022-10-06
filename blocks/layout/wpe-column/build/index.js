@@ -81,60 +81,41 @@ class WpeColumn extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Componen
     var {
       innerBlocksProps
     } = this.props;
+    let currentBodyDevice = (0,_src_devices_js__WEBPACK_IMPORTED_MODULE_5__.getBodyDevice)();
     innerBlocksProps.style = {
-      gridColumnStart: this.getLayout('columnStart', (0,_src_devices_js__WEBPACK_IMPORTED_MODULE_5__.getBodyDevice)()),
-      gridColumnEnd: this.getLayout('columnStart', (0,_src_devices_js__WEBPACK_IMPORTED_MODULE_5__.getBodyDevice)()) + this.getLayout('width', (0,_src_devices_js__WEBPACK_IMPORTED_MODULE_5__.getBodyDevice)()),
-      gridRowStart: this.getLayout('rowStart', (0,_src_devices_js__WEBPACK_IMPORTED_MODULE_5__.getBodyDevice)()),
-      gridRowEnd: this.getLayout('rowStart', (0,_src_devices_js__WEBPACK_IMPORTED_MODULE_5__.getBodyDevice)()) + this.getLayout('height', (0,_src_devices_js__WEBPACK_IMPORTED_MODULE_5__.getBodyDevice)())
+      gridColumnStart: this.getLayout('columnStart', currentBodyDevice),
+      gridColumnEnd: this.getLayout('columnStart', currentBodyDevice) + this.getLayout('width', currentBodyDevice),
+      gridRowStart: this.getLayout('rowStart', currentBodyDevice),
+      gridRowEnd: this.getLayout('rowStart', currentBodyDevice) + this.getLayout('height', currentBodyDevice)
     };
-    /**
-     * Layout panel
-     * 
-     */
-
-    let deviceLayout = {};
-    (0,_src_devices_js__WEBPACK_IMPORTED_MODULE_5__.getLayouts)().forEach(layout => {
-      deviceLayout[layout.value] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.RangeControl, {
-        label: "Column start",
-        value: this.getLayout('columnStart', layout.value),
-        onChange: value => this.setLayout('columnStart', Number.parseInt(value), layout.value),
-        min: 1,
-        max: this.getLayout('columnStart', layout.value) + 1
-      }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.RangeControl, {
-        label: "Width",
-        value: this.getLayout('width', layout.value),
-        onChange: value => this.setLayout('width', Number.parseInt(value), layout.value),
-        min: 1,
-        max: this.getLayout('width', layout.value) + 1
-      }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.RangeControl, {
-        label: "Row start",
-        value: this.getLayout('rowStart', layout.value),
-        onChange: value => this.setLayout('rowStart', Number.parseInt(value), layout.value),
-        min: 1,
-        max: this.getLayout('rowStart', layout.value) + 1
-      }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.RangeControl, {
-        label: "Height",
-        value: this.getLayout('height', layout.value),
-        onChange: value => this.setLayout('height', Number.parseInt(value), layout.value),
-        min: 1,
-        max: this.getLayout('height', layout.value) + 1
-      }));
-    });
     let panelDeviceLayout = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.PanelBody, {
-      title: 'Layout',
+      title: 'Layout (' + currentBodyDevice + ')',
       initialOpen: true
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.TabPanel, {
-      className: "padding-tab-panel",
-      activeClass: "active-tab" // onSelect={ (tabName) => wp.data.dispatch('core/edit-post').__experimentalSetPreviewDeviceType( tabName.charAt(0).toUpperCase() + tabName.slice(1) ) }
-      ,
-      onSelect: tabName => (0,_src_devices_js__WEBPACK_IMPORTED_MODULE_5__.setBodyDevice)(tabName, this),
-      tabs: (0,_src_devices_js__WEBPACK_IMPORTED_MODULE_5__.getLayouts)().map(layout => ({
-        name: layout.value,
-        title: layout.label,
-        className: 'tab-' + layout.value
-      })),
-      initialTabName: (0,_src_devices_js__WEBPACK_IMPORTED_MODULE_5__.getBodyDevice)()
-    }, tab => (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, deviceLayout[tab.name])));
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.RangeControl, {
+      label: "Column start",
+      value: this.getLayout('columnStart', currentBodyDevice),
+      onChange: value => this.setLayout('columnStart', Number.parseInt(value), currentBodyDevice),
+      min: 1,
+      max: this.getLayout('columnStart', currentBodyDevice) + 1
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.RangeControl, {
+      label: "Width",
+      value: this.getLayout('width', currentBodyDevice),
+      onChange: value => this.setLayout('width', Number.parseInt(value), currentBodyDevice),
+      min: 1,
+      max: this.getLayout('width', currentBodyDevice) + 1
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.RangeControl, {
+      label: "Row start",
+      value: this.getLayout('rowStart', currentBodyDevice),
+      onChange: value => this.setLayout('rowStart', Number.parseInt(value), currentBodyDevice),
+      min: 1,
+      max: this.getLayout('rowStart', currentBodyDevice) + 1
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.RangeControl, {
+      label: "Height",
+      value: this.getLayout('height', currentBodyDevice),
+      onChange: value => this.setLayout('height', Number.parseInt(value), currentBodyDevice),
+      min: 1,
+      max: this.getLayout('height', currentBodyDevice) + 1
+    }));
     let inspectorControls = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.InspectorControls, null, panelDeviceLayout); // Render
 
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, inspectorControls, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", innerBlocksProps));
@@ -176,11 +157,9 @@ Object.keys(theme_spec.media.queries).forEach(function (key, index) {
 });
 const getLayouts = () => layout;
 function setBodyDevice(device) {
-  let component = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
   const el = document.getElementsByClassName('edit-post-visual-editor__content-area'); // const dropZone = document.getElementsByClassName('block-editor-block-list__layout');
 
   el[0].style.margin = 'auto';
-  console.log(theme_spec.media.queries);
   Object.keys(theme_spec.media.queries).forEach(item => {
     if (device == item) {
       let width = theme_spec.media.queries[item]['max-width'] != null ? theme_spec.media.queries[item]['max-width'] + 'px' : '100%';
