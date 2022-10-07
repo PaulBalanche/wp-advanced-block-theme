@@ -3,11 +3,13 @@
 namespace Abt\Coffeekraken\Controllers;
 
 use Abt\Coffeekraken\Helpers\Css;
+use Abt\Controllers\ControllerBase;
 
-class Grid {
+class Grid extends ControllerBase {
 
     public function __construct() {
-
+        parent::__construct();
+        
         $this->add_filters();
     }
 
@@ -18,7 +20,6 @@ class Grid {
     public function add_filters() {
 
         add_filter( 'Abt\pre_render_attributes_layout_wpe-grid', [ $this, 'handle_grid' ], 10, 4 );
-        // add_filter( 'Abt\pre_render_attributes_layout_wpe-layout', [ $this, 'handle_layout' ], 10, 4 );
     }
 
     public function handle_grid( $pre_rendered_attributes, $attributes, $content, $block_instance ) {
@@ -35,7 +36,7 @@ class Grid {
 
         // Generate Coffeekraken CSS layout string
         $layout = [];
-        $media = \Abt\Singleton\Config::getInstance()->get_spec('media');
+        $media = $this->get_config()->get_spec('media');
         if( $media && is_array($media) && isset($media['defaultAction'], $media['queries']) && is_array($media['queries']) && count($media['queries']) > 0 ) {
 
             $defaultMedia = ( $media['defaultAction'] == '<=' ) ? array_key_first( $media['queries'] ) : array_key_last( $media['queries'] );
@@ -63,26 +64,5 @@ class Grid {
         // Return
         return $pre_rendered_attributes;
     }
-
-
-    // public function handle_layout( $pre_rendered_attributes, $attributes, $content, $block_instance ) {
-
-    //     $media = \Abt\Singleton\Config::getInstance()->get_spec('media');
-
-    //     // Generate grid ID
-    //     $grid_id = ( isset($pre_rendered_attributes['anchor']) && ! empty($pre_rendered_attributes['anchor']) ) ? $pre_rendered_attributes['anchor'] : 'grid_' . mt_rand();
-    
-    //     // Prepare data
-    //     $pre_rendered_attributes = array_merge( $pre_rendered_attributes, [
-    //         'id' => $grid_id,
-    //         'media' => $media,
-    //         'frontspec' => [
-    //             'media' => $media
-    //         ]
-    //     ] );
-    
-    //     // Return
-    //     return $pre_rendered_attributes;
-    // }
 
 }

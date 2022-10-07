@@ -2,11 +2,12 @@
 
 namespace Abt\Coffeekraken\Controllers;
 
-use Abt\Coffeekraken\Helpers\Css;
+use Abt\Controllers\ControllerBase;
 
-class Scripts {
+class Scripts extends ControllerBase {
 
     public function __construct() {
+        parent::__construct();
 
         $this->add_filters();
     }
@@ -18,6 +19,7 @@ class Scripts {
     public function add_filters() {
 
         add_filter( 'Abt\get_assets_spec', [ $this, 'get_assets_spec' ] );
+        add_filter( 'Abt\render_template_context', [ $this, 'render_template_context' ] );
     }
 
     public function get_assets_spec( $assets ){
@@ -30,7 +32,7 @@ class Scripts {
                 if( isset($asset['src']) ) {
                     
                     $pathinfo = pathinfo($asset['src']);
-                    $asset['src'] = \Abt\Singleton\Config::getInstance()->get_front_end_file_path( trim($asset['src'], '/') );
+                    $asset['src'] = $this->get_config()->get_front_end_file_path( trim($asset['src'], '/') );
 
                     switch( $pathinfo['extension'] ) {
                         case 'js':
@@ -59,38 +61,40 @@ class Scripts {
         return $assets;
     }
 
-    public static function get_front_spec() {
+    public function render_template_context( $context ) {
 
-        $front_spec = \Abt\Singleton\Config::getInstance()->get_spec();
-        if( is_array($front_spec) && isset($front_spec['assets']) && is_array($front_spec['assets']) ) {
+        if( is_array($context) && isset($context['frontspec']) ) {
 
-            foreach( $front_spec['assets'] as $key_asset => $asset ) {
+            if( is_array($context['frontspec']) && isset($context['frontspec']['assets']) && is_array($context['frontspec']['assets']) ) {
 
-                if( is_array($asset) && isset($asset['src']) ) {
+                foreach( $context['frontspec']['assets'] as $key_asset => $asset ) {
 
-                    // Check if ENV exists
-                    if( isset($asset['env']) ) {
-                        if( defined('FRONT_ENV') ) {
-                            if( FRONT_ENV != $asset['env'] ) {
-                                unset($front_spec['assets'][$key_asset]);
-                                continue;
+                    if( is_array($asset) && isset($asset['src']) ) {
+
+                        // Check if ENV exists
+                        if( isset($asset['env']) ) {
+                            if( defined('FRONT_ENV') ) {
+                                if( FRONT_ENV != $asset['env'] ) {
+                                    unset($context['frontspec']['assets'][$key_asset]);
+                                    continue;
+                                }
+                            }
+                            else {
+                                if( WP_ENV != $asset['env'] ) {
+                                    unset($context['frontspec']['assets'][$key_asset]);
+                                    continue;
+                                }
                             }
                         }
-                        else {
-                            if( WP_ENV != $asset['env'] ) {
-                                unset($front_spec['assets'][$key_asset]);
-                                continue;
-                            }
-                        }
+
+                        $context['frontspec']['assets'][$key_asset]['src'] = get_stylesheet_directory_uri() . '/' . $this->get_config()->get_front_end_file_path( trim($asset['src'], '/') );
                     }
+                } 
 
-                    $front_spec['assets'][$key_asset]['src'] = get_stylesheet_directory_uri() . '/' . \Abt\Singleton\Config::getInstance()->get_front_end_file_path( trim($asset['src'], '/') );
-                }
-            } 
-
+            }
         }
 
-        return $front_spec;
+        return $context;
     }
 
 }

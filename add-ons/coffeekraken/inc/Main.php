@@ -2,6 +2,7 @@
 
 namespace Abt\Coffeekraken;
 
+use Abt\Coffeekraken\Controllers\Components as ComponentsController;
 use Abt\Coffeekraken\Controllers\Twig as TwigController;
 use Abt\Coffeekraken\Controllers\Grid as GridController;
 use Abt\Coffeekraken\Controllers\Scripts as ScriptsController;
@@ -14,6 +15,7 @@ class Main {
 
         new TwigController();
         new GridController();
+        new ComponentsController();
         new ScriptsController();
     }
 

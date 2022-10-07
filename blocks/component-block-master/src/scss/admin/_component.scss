@@ -266,3 +266,35 @@
         }
     }
 }
+
+
+.is-root-container {
+
+    &:hover > .block-editor-block-list__block {
+
+        position: relative;
+        
+        &::before {
+            content: ' (source: ' attr(data-title) ') ';
+            display: block;
+            visibility: hidden;
+            position: absolute;
+            left: 0;
+            top: 0;
+            font-size: .6rem;
+            background: #007cba;
+            color: #fff;
+            padding: 0px 10px;
+        }
+        &::after {
+
+            border: 1px dashed rgba(0,124,186,.25);
+            overflow: initial;
+            box-shadow: none;
+            top: 0;
+            right: 0;
+            left: 0;
+            bottom: 0;
+        }
+    }
+}

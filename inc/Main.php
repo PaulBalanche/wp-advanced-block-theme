@@ -23,7 +23,8 @@ class Main {
             $coreBlockInstances = [],
             $layoutBlockInstances = [],
             $blocksRegistered = [],
-            $config;
+            $config,
+            $themeController;
 
     function __construct() {
 
@@ -34,7 +35,7 @@ class Main {
         new BlocksFilter();
 
         // Controllers
-        new ThemeController();
+        $this->themeController = new ThemeController();
         new LayoutBlocksController();
         new ComponentBlocksController();
         new CoreBlocksController();
@@ -64,6 +65,10 @@ class Main {
 
     public function get_config() {
         return $this->config;
+    }
+    
+    public function get_theme_controller() {
+        return $this->themeController;
     }
     
 
