@@ -113,6 +113,8 @@ class WpeComponent extends Component {
     
     renderControl( prop, keys, valueProp ) {
 
+        prop.type = prop.type.toLowerCase();
+
         let blocReturned = [];
 
         let repeatable = ( typeof prop.repeatable != "undefined" && !! prop.repeatable ) ? true : false;
@@ -138,7 +140,8 @@ class WpeComponent extends Component {
 
             keyLoop = this.returnStringOrNumber(keyLoop, true);
 
-            let label = prop.label;
+            let label = ( typeof prop.label != "undefined" ) ? prop.label : ( ( typeof prop.title != "undefined" ) ? prop.title : keys.slice(-1) );
+
             if( repeatable ) {
                 let index = keyLoop + 1;
                 label = label + " " + index + "/" + currentValueAttribute.length;
@@ -147,7 +150,7 @@ class WpeComponent extends Component {
             let required_field = ( typeof prop.required != "undefined" && prop.required ) ? true : false;
 
             let fieldId = this.props.clientId + "-" + keys.join("-") + "-" + keyLoop;
-            switch(prop.type) {
+            switch( prop.type ) {
 
                 case 'string':
                     blocReturned.push( this.renderTextControl( fieldId, label, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], false, repeatable, required_field ) );
@@ -162,9 +165,6 @@ class WpeComponent extends Component {
                     break;
                 
                 case 'richText':
-                    blocReturned.push( this.renderWysiwygControl( fieldId, label, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field ) );
-                    break;
-
                 case 'wysiwyg':
                     blocReturned.push( this.renderWysiwygControl( fieldId, label, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field ) );
                     break;
@@ -174,9 +174,6 @@ class WpeComponent extends Component {
                     break;
 
                 case 'select':
-                    blocReturned.push( this.renderSelectControl( fieldId, label, prop.options, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field ) );
-                    break;
-                
                 case 'color':
                     blocReturned.push( this.renderSelectControl( fieldId, label, prop.options, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field ) );
                     break;
@@ -206,9 +203,6 @@ class WpeComponent extends Component {
                     break;
                 
                 case 'file':
-                    blocReturned.push( this.renderFileControl( prop.type, fieldId, label, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field ) );
-                    break;
-                
                 case 'gallery':
                     blocReturned.push( this.renderFileControl( prop.type, fieldId, label, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field ) );
                     break;

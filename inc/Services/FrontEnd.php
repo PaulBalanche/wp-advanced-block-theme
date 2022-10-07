@@ -79,7 +79,7 @@ class FrontEnd extends ServiceBase {
             }
 
             // Ensure right component type
-            $component_viewspec['type'] = ( isset($component_viewspec['type']) && $component_viewspec['type'] != 'twig' ) ? $component_viewspec['type'] : 'object';
+            $component_viewspec['type'] = ( isset($component_viewspec['type']) && $component_viewspec['type'] != 'twig' ) ? strtolower($component_viewspec['type']) : 'object';
 
             // Remove useless component attributes
             unset($component_viewspec['engine']);
@@ -115,13 +115,13 @@ class FrontEnd extends ServiceBase {
                 }
 
                 // Serialize and add some update into few attributes.
-                $component_props[$key_props]['repeatable'] = ( strpos($component_props[$key_props]['type'], '[]') !== false || ( isset($component_props[$key_props]['repeatable']) && $component_props[$key_props]['repeatable']) ) ? true : false;
-                $component_props[$key_props]['type'] = str_replace('[]', '', strtolower($component_props[$key_props]['type']));
+                $component_props[$key_props]['repeatable'] = ( strpos($component_props[$key_props]['type'], '[]') !== false || strpos($component_props[$key_props]['type'], '{}') !== false || ( isset($component_props[$key_props]['repeatable']) && $component_props[$key_props]['repeatable']) ) ? true : false;
+                $component_props[$key_props]['type'] = str_replace( [ '[]', '{}', 'component' ], [ '', '', 'object' ], strtolower($component_props[$key_props]['type']));
                 $component_props[$key_props]['label'] = ( isset($component_props[$key_props]['label']) ) ? $component_props[$key_props]['label'] : ucfirst($key_props);
                 $component_props[$key_props]['category'] = ( isset($component_props[$key_props]['category']) ) ? strtolower($component_props[$key_props]['category']) : '';
                 
                 // If type is object with sub-props, call this recursive method
-                if( ( $component_props[$key_props]['type'] == 'object' || $component_props[$key_props]['type'] == 'Object[]' ) && isset($component_props[$key_props]['props']) && is_array($component_props[$key_props]['props']) )
+                if( ( in_array( strtolower($component_props[$key_props]['type']), [ 'object', 'component' ] ) || strtolower($component_props[$key_props]['type']) == 'object[]' || strtolower($component_props[$key_props]['type']) == 'object{}' ) && isset($component_props[$key_props]['props']) && is_array($component_props[$key_props]['props']) )
                     $component_props[$key_props]['props'] = $this->get_component_props($component_props[$key_props]['props'], false);
             }
         }

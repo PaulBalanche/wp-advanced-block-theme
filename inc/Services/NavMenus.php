@@ -33,6 +33,11 @@ class NavMenus extends ServiceBase {
 
         // Retrieves all menu items of a navigation menu.
         add_filter( 'Abt\get_nav_menu_items', [ $this, 'get_nav_menu_items' ], 10, 2 );
+
+        // Hide admin bar
+        if( ! is_null($this->get_config()->get_spec('show_admin_bar')) && ! $this->get_config()->get_spec('show_admin_bar') ) {
+            add_filter( 'show_admin_bar', '__return_false' );
+        }
     }
 
 
@@ -67,15 +72,44 @@ class NavMenus extends ServiceBase {
                 $nav_menu_items = [];
 
 				foreach( $menu_items as $item ) {
-                    $nav_menu_items[] = [
+
+                    $item_data = [
                         'title' => $item->title,
+                        'label' => $item->title,
                         'url' => $item->url,
+                        'href' => $item->url,
                     ];
+
+                    if( $item->menu_item_parent > 0 ) {
+                        $this->recursive_add_menu_item_parent( $nav_menu_items, $item->menu_item_parent, $item->ID, $item_data );
+                    }
+                    else {
+                        $nav_menu_items[$item->ID] = $item_data;
+                    }
 				}
 			}
 		}
 
         return $nav_menu_items;
+    }
+
+    public function recursive_add_menu_item_parent( &$nav_menu_items, $parentId, $key, $value ) {
+
+        if( isset($nav_menu_items[$parentId]) ) {
+            if( ! isset($nav_menu_items[$parentId]['children']) || ! is_array($nav_menu_items[$parentId]['children']) ) {
+                $nav_menu_items[$parentId]['children'] = [];
+            }
+
+            $nav_menu_items[$parentId]['children'][$key] = $value;
+        }
+        else {
+            foreach( $nav_menu_items as $key2 => $val2 ) {
+
+                if( isset($val2['children']) ) {
+                    $this->recursive_add_menu_item_parent( $nav_menu_items[$key2]['children'], $parentId, $key, $value );
+                }
+            }
+        }
     }
 
 }

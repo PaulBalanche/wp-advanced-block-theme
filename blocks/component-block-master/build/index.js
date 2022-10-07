@@ -1599,6 +1599,7 @@ var WpeComponent = /*#__PURE__*/function (_Component) {
     value: function renderControl(prop, keys, valueProp) {
       var _this = this;
 
+      prop.type = prop.type.toLowerCase();
       var blocReturned = [];
       var repeatable = typeof prop.repeatable != "undefined" && !!prop.repeatable ? true : false;
       var currentValueAttribute = valueProp;
@@ -1611,7 +1612,7 @@ var WpeComponent = /*#__PURE__*/function (_Component) {
 
       for (var keyLoop in currentValueAttribute) {
         keyLoop = this.returnStringOrNumber(keyLoop, true);
-        var label = prop.label;
+        var label = typeof prop.label != "undefined" ? prop.label : typeof prop.title != "undefined" ? prop.title : keys.slice(-1);
 
         if (repeatable) {
           var index = keyLoop + 1;
@@ -1635,9 +1636,6 @@ var WpeComponent = /*#__PURE__*/function (_Component) {
             break;
 
           case 'richText':
-            blocReturned.push(this.renderWysiwygControl(fieldId, label, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field));
-            break;
-
           case 'wysiwyg':
             blocReturned.push(this.renderWysiwygControl(fieldId, label, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field));
             break;
@@ -1647,9 +1645,6 @@ var WpeComponent = /*#__PURE__*/function (_Component) {
             break;
 
           case 'select':
-            blocReturned.push(this.renderSelectControl(fieldId, label, prop.options, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field));
-            break;
-
           case 'color':
             blocReturned.push(this.renderSelectControl(fieldId, label, prop.options, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field));
             break;
@@ -1679,9 +1674,6 @@ var WpeComponent = /*#__PURE__*/function (_Component) {
             break;
 
           case 'file':
-            blocReturned.push(this.renderFileControl(prop.type, fieldId, label, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field));
-            break;
-
           case 'gallery':
             blocReturned.push(this.renderFileControl(prop.type, fieldId, label, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field));
             break;

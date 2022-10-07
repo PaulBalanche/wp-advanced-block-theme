@@ -59,4 +59,38 @@ class Scripts {
         return $assets;
     }
 
+    public static function get_front_spec() {
+
+        $front_spec = \Abt\Singleton\Config::getInstance()->get_spec();
+        if( is_array($front_spec) && isset($front_spec['assets']) && is_array($front_spec['assets']) ) {
+
+            foreach( $front_spec['assets'] as $key_asset => $asset ) {
+
+                if( is_array($asset) && isset($asset['src']) ) {
+
+                    // Check if ENV exists
+                    if( isset($asset['env']) ) {
+                        if( defined('FRONT_ENV') ) {
+                            if( FRONT_ENV != $asset['env'] ) {
+                                unset($front_spec['assets'][$key_asset]);
+                                continue;
+                            }
+                        }
+                        else {
+                            if( WP_ENV != $asset['env'] ) {
+                                unset($front_spec['assets'][$key_asset]);
+                                continue;
+                            }
+                        }
+                    }
+
+                    $front_spec['assets'][$key_asset]['src'] = get_stylesheet_directory_uri() . '/' . \Abt\Singleton\Config::getInstance()->get_front_end_file_path( trim($asset['src'], '/') );
+                }
+            } 
+
+        }
+
+        return $front_spec;
+    }
+
 }
