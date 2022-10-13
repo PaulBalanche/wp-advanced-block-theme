@@ -92,9 +92,9 @@ class CoreBlock extends ModelBase {
             mkdir( $block_dir , 0750, true );
         }
 
-        $this->blockSpec = [
+        $this->blockSpec = apply_filters( 'Abt\generate_core_block_spec', [
             'path' => $component_frontspec['path'] ?? null
-        ];
+        ], $this );
 
         $block_spec_json_filename = $block_dir . '/' . $this->get_config()->get('viewspecJsonFilename');
         
@@ -147,5 +147,23 @@ class CoreBlock extends ModelBase {
     }
 
 
+
+    /**
+     * Get override-spec JSON file
+     * 
+     */
+    public function get_override_viewspec() {
+
+        $override_spec_file = $this->get_block_dir() . '/' . $this->get_config()->get('overrideSpecJsonFilename');
+        if( file_exists($override_spec_file) ) {
+
+            $override_spec = json_decode( file_get_contents($override_spec_file), true );
+            if( is_array($override_spec) ) {
+                return $override_spec;
+            }
+        }
+
+        return false;
+    }
 
 }

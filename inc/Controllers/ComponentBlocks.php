@@ -39,8 +39,8 @@ class ComponentBlocks extends ControllerBase {
      */
     public function add_filters() {
 
-        // Merge component attributes with override-spec JSON file
-        add_filter( 'Abt\get_component_viewspec', [ $this, 'filter_get_component_viewspec' ], 10, 2 );
+        // If needed, override component block spec juste before generate it
+        add_filter( 'Abt\generate_component_block_spec', [ $this->componentBlocksService, 'override_block_spec' ], 10, 2 );
 
         // Managing block categories
         add_filter( 'block_categories_all', [ $this->componentBlocksService, 'filter_block_categories' ], 10, 2 );
@@ -50,17 +50,6 @@ class ComponentBlocks extends ControllerBase {
 
         // Fromat attributes before rendering
         add_filter( 'Abt\attributes_formatting', 'Abt\Helpers\Attributes::formatting', 10, 2 );
-    }
-
-
-
-    /**
-     * Filter get_component_viewspec method in order to merge component attributes with override-spec JSON file
-     * 
-     */
-    public function filter_get_component_viewspec( $viewspec_data, $component_dir ) {
-
-        return ( $component_dir == $this->frontEndService->get_components_dir() ) ? $this->componentBlocksService->override_component_viewspec( $viewspec_data ) : $viewspec_data;
     }
 
 }

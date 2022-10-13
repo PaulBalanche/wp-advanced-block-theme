@@ -20,7 +20,7 @@ import {
 
 import { withSelect } from '@wordpress/data';
 
-import { MarginControls, generateMarginClassName } from '../../../component-block-master/src/_marginControls';
+import { MarginControls, generateMarginClassName } from '../../../component-block-master/src/_marginControls.js';
 
 
 /**

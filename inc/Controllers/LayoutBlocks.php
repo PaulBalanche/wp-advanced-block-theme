@@ -38,6 +38,9 @@ class LayoutBlocks extends ControllerBase {
 
         // Managing block categories
         add_filter( 'block_categories_all', [ $this->layoutBlocksService, 'filter_block_categories' ], 10, 2 );
+
+        // If needed, override layout block spec juste before generate it
+        add_filter( 'Abt\generate_layout_block_spec', [ $this->layoutBlocksService, 'override_block_spec' ], 10, 2 );
     }
 
 }

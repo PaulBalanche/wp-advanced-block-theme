@@ -65,7 +65,9 @@ class FrontEnd extends ServiceBase {
         if( is_array($component_viewspec) ) {
             
             // Define ID if doesn't exists
-            $component_viewspec['id'] = $component_viewspec['id'] ?? $componentName;
+            $component_viewspec['id'] = $component_viewspec['id'] ?? sanitize_title($component);
+            $component_viewspec['name'] = $component_viewspec['name'] ?? ucfirst($componentName);
+            $component_viewspec['category'] = $component_viewspec['category'] ?? ucfirst( str_replace( '/', '-', str_replace('/' . $componentName, '', $component)) );
 
             // Add path attribute requires by component render method
             $render_file = glob( $component_dir . $componentName . '/*.twig' );

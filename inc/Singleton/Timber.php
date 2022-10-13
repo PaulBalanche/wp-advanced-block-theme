@@ -8,6 +8,8 @@ class Timber {
 
     public function __construct() {
         $this->init();
+
+        $this->add_filters();
     }
 
 
@@ -23,6 +25,16 @@ class Timber {
             self::$_instance = new Timber();
         }
         return self::$_instance;
+    }
+
+
+    /**
+     * Add Wordpress filters
+     * 
+     */
+    public function add_filters() {
+
+        add_filter( 'timber/twig', [ $this, 'addGlobal' ] );
     }
 
 
@@ -42,6 +54,14 @@ class Timber {
         ];
 
         \Timber\Timber::$locations = apply_filters( 'Abt\timber_locations', $locations );
+    }
+
+
+    public function addGlobal( $twig ) {
+
+        $twig->addGlobal('frontspec', Config::getInstance()->get_spec() );
+
+        return $twig;
     }
 
 

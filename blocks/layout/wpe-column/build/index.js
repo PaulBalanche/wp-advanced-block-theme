@@ -19,7 +19,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/data */ "@wordpress/data");
 /* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_wordpress_data__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _src_devices_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../../src/devices.js */ "../../../src/devices.js");
+/* harmony import */ var _packages_devices_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../../packages/devices.js */ "../../../packages/devices.js");
 
 
 /**
@@ -37,7 +37,7 @@ __webpack_require__.r(__webpack_exports__);
  */
 
 class WpeColumn extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Component {
-  constructor(attr) {
+  constructor() {
     super(...arguments);
   }
 
@@ -81,7 +81,7 @@ class WpeColumn extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Componen
     var {
       innerBlocksProps
     } = this.props;
-    let currentBodyDevice = (0,_src_devices_js__WEBPACK_IMPORTED_MODULE_5__.getBodyDevice)();
+    let currentBodyDevice = (0,_packages_devices_js__WEBPACK_IMPORTED_MODULE_5__.getBodyDevice)();
     innerBlocksProps.style = {
       gridColumnStart: this.getLayout('columnStart', currentBodyDevice),
       gridColumnEnd: this.getLayout('columnStart', currentBodyDevice) + this.getLayout('width', currentBodyDevice),
@@ -135,10 +135,10 @@ class WpeColumn extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Componen
 
 /***/ }),
 
-/***/ "../../../src/devices.js":
-/*!*******************************!*\
-  !*** ../../../src/devices.js ***!
-  \*******************************/
+/***/ "../../../packages/devices.js":
+/*!************************************!*\
+  !*** ../../../packages/devices.js ***!
+  \************************************/
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 __webpack_require__.r(__webpack_exports__);

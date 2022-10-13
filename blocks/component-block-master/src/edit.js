@@ -26,7 +26,7 @@ import {
     DateTimePicker
 } from '@wordpress/components';
 
-import { MarginControls } from './_marginControls';
+import { MarginControls } from './_marginControls.js';
 
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@paulbalanche/ckeditor5-build-classic-with-alignment';
@@ -1257,6 +1257,9 @@ class WpeComponent extends Component {
 
             // 2. Loop Props
             for (const [keyProp, valueProp] of Object.entries(element.props)) {
+
+                if( typeof valueProp != 'object' || valueProp == null )
+                    continue;
 
                 if( typeof valueProp.category != 'undefined' && valueProp.category != null && valueProp.category in catReOrder ) {
                     catReOrder[valueProp.category].props[keyProp] = valueProp;

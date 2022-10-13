@@ -162,7 +162,7 @@ class ComponentBlock extends ModelBase {
         $container_spec = $this->get_config()->get_spec('container');
         $default_parent = ( $container_spec && is_array($container_spec) && isset($container_spec['is_main']) && $container_spec['is_main'] ) ? [ 'custom/wpe-container', 'custom/wpe-column' ] : null;
 
-        $this->blockSpec = [
+        $this->blockSpec = apply_filters( 'Abt\generate_component_block_spec', [
             'id' => $this->get_ID(),
             'name' => $component_frontspec['name'] ?? $this->get_ID(),
             'description' => $component_frontspec['description'] ?? '',
@@ -171,7 +171,7 @@ class ComponentBlock extends ModelBase {
             'props_categories' => $component_frontspec['props_categories'] ?? null,
             'path' => $component_frontspec['path'] ?? null,
             'parent' => $component_frontspec['parent'] ?? $default_parent
-        ];
+        ], $this );
 
         $block_spec_json_filename = $block_dir . '/' . $this->get_config()->get('viewspecJsonFilename');
         
@@ -320,7 +320,7 @@ class ComponentBlock extends ModelBase {
 
 
     /**
-     * Merge component attributes with override-spec JSON file
+     * Get override-spec JSON file
      * 
      */
     public function get_override_viewspec() {

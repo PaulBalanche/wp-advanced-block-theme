@@ -126,16 +126,13 @@ class ComponentBlocks extends ServiceBase {
 
 
     /**
-     * Merge component attributes with override-spec JSON file
+     * If needed, override layout block spec juste before generate it
      * 
      */
-    public function override_component_viewspec( $viewspec_data ) {
+    public function override_block_spec( $block_spec, $componentBlockInstance ) {
 
-        // ComponentBlock instanciation && get ovveride data
-        $componentBlockInstance = Main::getInstance()->get_component_block_instance( $viewspec_data['id'] );
         $override_spec = $componentBlockInstance->get_override_viewspec();
-
-        return ( $override_spec ) ? array_replace_recursive( $viewspec_data, $override_spec ) : $viewspec_data;
+        return ( $override_spec ) ? array_replace_recursive( $block_spec, $override_spec ) : $block_spec;
     }
 
 

@@ -8,7 +8,7 @@ import {
     TabPanel
 } from '@wordpress/components';
 
-import { merge } from 'merge-anything'
+import { merge } from 'merge-anything';
 
 export class MarginControls extends Component {
 

@@ -34,4 +34,7 @@ $data = [
     'anchor' => $anchor
 ];
 
-return $data;
+unset($attributes['margin']);
+unset($attributes['padding']);
+
+return array_merge( $data, $attributes );

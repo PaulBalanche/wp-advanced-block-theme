@@ -26,7 +26,6 @@ export function setBodyDevice( device ) {
     getLayouts().forEach( ( layout ) => {
         document.body.classList.remove(layout.value);
     });
-
     document.body.classList.add(device);
 }
 

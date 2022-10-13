@@ -23,6 +23,8 @@ class Twig extends ControllerBase {
         // Init Twig template
         add_filter( 'timber/twig', [ $this, 'initSugarTwig' ] );
         add_filter( 'Abt\timber_locations', [ $this, 'timber_locations' ] );
+        
+        // add_filter( 'Abt\localize_editor_script', [ $this, 'localize_editor_script' ], 10, 3 );
     }
 
     /**
@@ -46,4 +48,15 @@ class Twig extends ControllerBase {
         return $locations;
     }
 
+
+
+    public function localize_editor_script( $spec, $layout, $js_variable ) {
+
+        $spacing = json_decode(json_encode( \Sugar\specs\readSpec( '@sugar.views.props.spacing' ) ), true);
+
+        echo '<pre>';print_r($spacing);die;
+        echo '<pre>';print_r($spec);die;
+
+        return $spec;
+    }
 }

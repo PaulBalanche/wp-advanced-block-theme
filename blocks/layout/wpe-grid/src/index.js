@@ -8,7 +8,7 @@ import { Icon } from '@wordpress/icons';
 
 import * as gridIcons from './icons';
 
-import * as gridConfig from '../config.json';
+// import * as gridConfig from '../config.json';
 
 /**
  * Internal dependencies
@@ -26,6 +26,40 @@ variations.forEach( function (elt, index){
     }
 });
 
+
+let attributes = {
+    gridCountColumns: {
+        type: 'number'
+    },
+    gridLocked: {
+        type: 'boolean',
+        default: false
+    },
+    padding: {
+        type: 'object'
+    },
+    margin: {
+        type: 'object'
+    }
+};
+if( typeof block_spec.props == 'object' ) {
+    console.log(block_spec.props);
+    for( const [key, value] of Object.entries(block_spec.props) ) {       
+
+        if( typeof value != 'object' || value == null )
+            continue;
+
+        switch( value.type ) {
+
+            case 'select':
+                attributes[key] = {
+                    type: 'string'
+                };
+                break;
+        }
+    }
+}
+
 registerBlockType( 'custom/wpe-grid', {
     title: 'Grid',
     category: 'wpe-layout',
@@ -34,24 +68,10 @@ registerBlockType( 'custom/wpe-grid', {
         lightBlockWrapper: true,
         anchor: true
     },
-    parent: [ 'custom/wpe-container' ],
-    attributes: {
-        gridCountColumns: {
-            type: 'number'
-        },
-        gridLocked: {
-            type: 'boolean',
-            default: false
-        },
-        padding: {
-            type: 'object'
-        },
-        margin: {
-            type: 'object'
-        }
-    },
+    // parent: [ 'custom/wpe-container' ],
+    attributes: attributes,
     variations,
-    edit: edit(),
+    edit: edit( block_spec ),
     save: () => {
 
         const blockProps = useBlockProps.save();

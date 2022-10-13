@@ -1,9 +1,5 @@
 #editor {
 
-    // .wp-block {
-    //     overflow: auto;
-    // }
-
     .wp-block[data-align="full"] {
         margin-left: 0;
         margin-right: 0;
@@ -73,7 +69,7 @@
             max-width: 100%;
         }
 
-        &.is-selected {
+        &:hover, &.is-selected {
 
             &::before {
                 visibility: visible;
@@ -109,16 +105,10 @@
         &:active::after,
         &.is-selected::after,
         &.has-child-selected::after {
-            // &::after {
-            // box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
-            // border: 1px dashed rgba(0, 124, 186, 0.2);
             background: rgba(0, 124, 186, 0.05);
             box-shadow: none;
             border: 1px solid rgba(0,124,186,.5);
         }
-        // &:not([contenteditable]):focus::after {
-        //     border: none;
-        // }
 
         .block-list-appender {
             visibility: hidden;

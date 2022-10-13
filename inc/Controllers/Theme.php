@@ -26,11 +26,19 @@ class Theme extends ControllerBase {
 
         $view = 'layouts/main.twig';
 
+        $menus = [];
+        $menu_locations = $this->get_config()->get_spec('menus');
+        if( ! is_null($menu_locations) && is_array($menu_locations) ) {
+            foreach( $menu_locations as $id_menu => $menu ) {
+                $menus[$id_menu] = [ 'items' => apply_filters( 'Abt\get_nav_menu_items', [], $id_menu ) ];
+            }
+        }
+
         echo RenderService::render(
             $view,
             apply_filters( 'Abt\render_template_context', [
                 'body' => $content,
-                'menu' => [ 'items' => apply_filters( 'Abt\get_nav_menu_items', [], 'top-left' ) ],
+                'menus' => $menus,
                 'frontspec' => $this->get_config()->get_spec()
             ] )
         );

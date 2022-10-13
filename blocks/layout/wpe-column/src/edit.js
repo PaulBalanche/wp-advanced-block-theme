@@ -8,19 +8,17 @@ import {
     InspectorControls,
     useBlockProps,
     useInnerBlocksProps,
-    __experimentalBlockVariationPicker,
-    __experimentalBlock as Block
+    __experimentalBlockVariationPicker
 } from '@wordpress/block-editor';
 
 import {
     PanelBody,
-    RangeControl,
-    TabPanel
+    RangeControl
 } from '@wordpress/components';
 
-import { select, withSelect } from '@wordpress/data';
+import { withSelect } from '@wordpress/data';
 
-import { getLayouts, setBodyDevice, getBodyDevice } from '../../../../src/devices.js';
+import { getBodyDevice } from '../../../../packages/devices.js';
 
 /**
  * registerBlockType edit function
@@ -28,7 +26,7 @@ import { getLayouts, setBodyDevice, getBodyDevice } from '../../../../src/device
  */
 class WpeColumn extends Component {
  
-    constructor( attr ) {
+    constructor() {
         super( ...arguments );
     }
 

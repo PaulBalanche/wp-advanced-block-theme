@@ -25,6 +25,9 @@ Object.values(global_localized.components).forEach( ( element ) => {
 
     for (const [key, value] of Object.entries(element.props)) {
         
+        if( typeof value != 'object' || value == null )
+            continue;
+
         let currentType = ( typeof value.repeatable != 'undefined' && value.repeatable ) ? 'array' : value.type.toLowerCase();
         switch( currentType ) {
             case 'string':

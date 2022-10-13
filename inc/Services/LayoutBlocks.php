@@ -73,4 +73,16 @@ class LayoutBlocks extends ServiceBase {
         return $layout_blocks;
     }
 
+
+
+    /**
+     * If needed, override layout block spec juste before generate it
+     * 
+     */
+    public function override_block_spec( $block_spec, $layoutBlockInstance ) {
+
+        $override_spec = $layoutBlockInstance->get_override_viewspec();
+        return ( $override_spec ) ? array_replace_recursive( $block_spec, $override_spec ) : $block_spec;
+    }
+
 }

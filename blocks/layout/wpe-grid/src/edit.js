@@ -2,12 +2,10 @@
  * WordPress dependencies
  */
 import { createBlock } from '@wordpress/blocks';
-import { Component, useRef } from '@wordpress/element';
-import { compose, withState } from '@wordpress/compose';
+import { Component } from '@wordpress/element';
+import { compose } from '@wordpress/compose';
 import {
-    InnerBlocks,
     InspectorControls,
-    BlockControls,
     useBlockProps,
     useInnerBlocksProps,
     __experimentalBlockVariationPicker,
@@ -16,26 +14,20 @@ import {
 } from '@wordpress/block-editor';
 
 import {
-    Panel,
     PanelBody,
-    PanelRow,
     Button,
     ButtonGroup,
     RangeControl,
-    Dropdown,
-    ToolbarGroup,
-    MenuGroup,
-    MenuItem,
-    HorizontalRule,
-    TabPanel
+    SelectControl,
+    HorizontalRule
 } from '@wordpress/components';
 
-import { withSelect, dispatch } from '@wordpress/data';
+import { withSelect, withDispatch, dispatch } from '@wordpress/data';
 import { get, map, times } from 'lodash';
 
-import { MarginControls, generateMarginClassName } from '../../../component-block-master/src/_marginControls';
+import { MarginControls } from '../../../component-block-master/src/_marginControls.js';
 
-import { getLayouts, setBodyDevice, getBodyDevice } from '../../../../src/devices.js';
+import { getLayouts, setBodyDevice, getBodyDevice } from '../../../../packages/devices.js';
 
 /**
  * Add some columns in wpe-container based on variation selected
@@ -60,20 +52,12 @@ class WpeGrid extends Component {
 
 	constructor() {
         super( ...arguments );
-
-        this.state = {
-            selectedDevice: null,
-            defaultClassName: null
-		};
-    }
-
-    getDeviceType() {
-		return this.state.selectedDevice;
     }
 
     render() {
 
         var {
+            block_spec,
 			attributes,
             setAttributes,
             clientId,
@@ -83,24 +67,11 @@ class WpeGrid extends Component {
             blockVariations,
             blockType,
             experimentalDeviceType,
-            setState,
             isSelectedBlock,
-            isParentOfSelectedBlock
+            isParentOfSelectedBlock,
+            replaceInnerBlocks
         } = this.props;
 
-        const { replaceInnerBlocks } = dispatch( blockEditorStore );
-
-        if( this.state.defaultClassName === null )
-            this.state.defaultClassName = innerBlocksProps.className;
-
-        // Device
-        // const deviceType = this.getDeviceType();
-        // const deviceType = experimentalDeviceType.toLowerCase();
-        // if( typeof deviceType != 'undefined' && deviceType != 'undefined' ) {
-        //     // innerBlocksProps.className = this.state.defaultClassName + ' ' + deviceType;
-        //     innerBlocksProps.className += ' ' + deviceType;
-        // }
- 
         /**
          * Define innerBlocks
          */
@@ -121,7 +92,7 @@ class WpeGrid extends Component {
                                 );
                             }
                             if( nextVariation.attributes ) {
-                                dispatch('core/editor').updateBlockAttributes( clientId, nextVariation.attributes );
+                                dispatch('core/block-editor').updateBlockAttributes( clientId, nextVariation.attributes );
                             }
                         } }
                     />
@@ -136,19 +107,46 @@ class WpeGrid extends Component {
              */
             if( attributes.gridCountColumns > countColumns ) {
 
+                // Define rowStart fo the new colums added
+
+                let initLayout = {};
+                getLayouts().forEach( ( layout ) => {
+
+                    initLayout[ layout.value ] = {
+                        columnStart: 1,
+                        width: 1,
+                        rowStart: 2,
+                        height: 1
+                    };
+                    inner_blocks.forEach(element => {
+                        if( element.attributes.layout && element.attributes.layout[ layout.value ] ) {
+
+                            let currentRowStart = ( element.attributes.layout[ layout.value ].rowStart && element.attributes.layout[ layout.value ].rowStart ) ? element.attributes.layout[ layout.value ].rowStart : 1
+                            let currentHeight = ( element.attributes.layout[ layout.value ].height && element.attributes.layout[ layout.value ].height ) ? element.attributes.layout[ layout.value ].height : 1;
+                            let currentRowEnd = currentRowStart + currentHeight;
+                            if( currentRowEnd > initLayout[ layout.value ].rowStart ) {
+                                initLayout[ layout.value ].rowStart = currentRowEnd;
+                            }
+                        }
+                    });                    
+                } );
+
                 let numberOfColumnsToAdd = attributes.gridCountColumns - countColumns;
                 let inner_blocks_new = [
                     ...inner_blocks,
                     ...times( numberOfColumnsToAdd, () => {
-                        return createBlock( 'custom/wpe-column')
+                        return createBlock( 'custom/wpe-column', {
+                            layout: initLayout
+                        } )
                     } )
                 ];
-                replaceInnerBlocks(clientId, inner_blocks_new, false);
+
+                replaceInnerBlocks( clientId, inner_blocks_new, false );
             }
             else if( attributes.gridCountColumns < countColumns ) {
             
                 let inner_blocks_new = inner_blocks.slice(0, attributes.gridCountColumns);
-                replaceInnerBlocks(clientId, inner_blocks_new, false);
+                replaceInnerBlocks( clientId, inner_blocks_new, false );
             }
 
 
@@ -172,7 +170,7 @@ class WpeGrid extends Component {
                                         onClick={ () => {
                                             setBodyDevice( layout.value );
                                             inner_blocks.forEach( ( elt ) => {
-                                                dispatch('core/editor').updateBlockAttributes( elt.clientId, { updated: true } );
+                                                dispatch('core/block-editor').updateBlockAttributes( elt.clientId, { updated: true } );
                                             });
                                         } }
                                     >
@@ -185,6 +183,55 @@ class WpeGrid extends Component {
                     <div { ...innerBlocksProps } />
                 </>
             )
+        }
+
+
+
+
+        /**
+         * Custom layout props
+         * 
+         */
+        let InspectorControlsCustomProps = [];
+        if( typeof block_spec.props == 'object' ) {
+
+            for( const [key, value] of Object.entries(block_spec.props) ) {
+
+                if( typeof value != 'object' || value == null )
+                    continue;
+
+                switch( value.type ) {
+
+                    case 'select':
+                        InspectorControlsCustomProps.push(
+                            <SelectControl
+                                key={ "inspectorSelect_" + key + "_" + clientId }
+                                label={ value.label }
+                                value={ attributes[key] }
+                                options={
+                                [ { label: 'Choose...', value: '' } ].concat( value.options.map( function(value) {
+                                        return { label: value.name, value: value.value }
+                                    } ) )
+                                }
+                                onChange={ ( value ) => { setAttributes( { [key]: value } ) } }
+                            />
+                        );
+                        break;
+                };
+
+                InspectorControlsCustomProps.push(<HorizontalRule key={ "HorizontalRule_" + key + "_" + clientId } />);
+            }
+
+            // Remove last HorizontalRule
+            InspectorControlsCustomProps.pop();
+
+            if( InspectorControlsCustomProps.length > 0 ) {
+                InspectorControlsCustomProps = (
+                    <PanelBody title={ 'Custom props' } initialOpen={ false }>
+                        { InspectorControlsCustomProps }
+                    </PanelBody>
+                );
+            }
         }
 
         // InspectorControls
@@ -203,6 +250,7 @@ class WpeGrid extends Component {
                         />
                     </PanelBody>
                     <MarginControls props={ this.props } deviceType={ experimentalDeviceType } />
+                    { InspectorControlsCustomProps }
                 </InspectorControls>
             );
         }
@@ -220,12 +268,13 @@ class WpeGrid extends Component {
     }
 }
 
-export default () => compose( [
+export default ( block_spec ) => compose( [
 	withSelect( ( select, props ) => {
 
         const { __experimentalGetPreviewDeviceType } = select( 'core/edit-post' );
 
         return {
+            block_spec,
             backgroundData: ! props.attributes.backgroundFile ? null : select('core').getEntityRecord('postType', 'attachment', props.attributes.backgroundFile ),
             inner_blocks: select('core/block-editor').getBlocks(props.clientId),
             innerBlocksProps: useInnerBlocksProps( useBlockProps( { className: '' } ), { renderAppender: false } ),
@@ -237,4 +286,12 @@ export default () => compose( [
             isParentOfSelectedBlock: select('core/block-editor').hasSelectedInnerBlock(props.clientId, true)
         };
     } ),
+    withDispatch( ( dispatch ) => {
+        
+		const { replaceInnerBlocks } = dispatch( blockEditorStore );
+
+		return {
+			replaceInnerBlocks
+		};
+	} )
 ] )( WpeGrid );

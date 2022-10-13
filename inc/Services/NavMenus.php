@@ -48,8 +48,12 @@ class NavMenus extends ServiceBase {
      */
     public function register_menu_locations() {
 
-        $menu_locations = $this->get_config()->get_spec('menu_locations');
-        if( ! is_null($menu_locations) ) {
+        $menu_locations = $this->get_config()->get_spec('menus');
+        if( ! is_null($menu_locations) && is_array($menu_locations) ) {
+
+            array_walk( $menu_locations, function( &$item, $key ) {
+                $item = $item['name'] ?? $key;
+            } );
 
             register_nav_menus( $menu_locations );
         }

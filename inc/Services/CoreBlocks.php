@@ -33,5 +33,17 @@ class CoreBlocks extends ServiceBase {
             }
         }
     }
+
+
+
+    /**
+     * If needed, override layout block spec juste before generate it
+     * 
+     */
+    public function override_block_spec( $block_spec, $coreBlockInstance ) {
+
+        $override_spec = $coreBlockInstance->get_override_viewspec();
+        return ( $override_spec ) ? array_replace_recursive( $block_spec, $override_spec ) : $block_spec;
+    }
     
 }

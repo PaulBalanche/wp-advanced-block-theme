@@ -54,7 +54,7 @@ class LayoutBlock extends ModelBase {
      * Get theme custom block directory
      * 
      */
-    public function get_theme_custon_block_dir() {
+    public function get_theme_custom_block_dir() {
 
         return get_stylesheet_directory() . '/' . $this->get_config()->get('componentBlocksLocation') . 'layout/' . $this->get_ID();
     }
@@ -86,7 +86,7 @@ class LayoutBlock extends ModelBase {
 
         if( is_null($this->blockSpec) ) {
 
-            $spec_json_file = $this->get_theme_custon_block_dir() . '/' . $this->get_config()->get('viewspecJsonFilename');
+            $spec_json_file = $this->get_theme_custom_block_dir() . '/' . $this->get_config()->get('viewspecJsonFilename');
             if( file_exists($spec_json_file) ) {
 
                 $block_spec = json_decode( file_get_contents( $spec_json_file ), true );
@@ -136,7 +136,9 @@ class LayoutBlock extends ModelBase {
                 }
             }
 
-            wp_localize_script( $handle, 'theme_spec', $this->get_config()->get_spec() );
+            wp_localize_script( $handle, 'theme_spec', apply_filters( 'Abt\localize_editor_script', $this->get_config()->get_spec(), $this->get_ID(), 'theme_spec' ) );
+
+            wp_localize_script( $handle, 'block_spec', apply_filters( 'Abt\localize_editor_script', ( $this->get_block_spec() ?? [] ), $this->get_ID(), 'block_spec' ) );
 
             $args['editor_script'] = $handle;
         }
@@ -210,22 +212,42 @@ class LayoutBlock extends ModelBase {
     public function generate_block_spec( $component_frontspec ) {
 
         // Get the theme custom block directory
-        $theme_custom_block_dir = $this->get_theme_custon_block_dir();
+        $theme_custom_block_dir = $this->get_theme_custom_block_dir();
 
         // Create blocks directory if missing
         if( ! file_exists( $theme_custom_block_dir ) ) {
             mkdir( $theme_custom_block_dir , 0750, true );
         }
 
-        $this->blockSpec = [
-            'path' => $component_frontspec['path'] ?? null
-        ];
+        $this->blockSpec = apply_filters( 'Abt\generate_layout_block_spec', [
+            'path' => $component_frontspec['path'] ?? null,
+            'props' => $component_frontspec['props'] ?? []
+        ], $this );
 
         $block_spec_json_filename = $theme_custom_block_dir . '/' . $this->get_config()->get('viewspecJsonFilename');
         
         // Write the components frontspec generated in a JSON file
         if( file_put_contents( $block_spec_json_filename , json_encode( $this->blockSpec, JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES ) ) ) {
             return $block_spec_json_filename;
+        }
+
+        return false;
+    }
+
+
+    /**
+     * Get override-spec JSON file
+     * 
+     */
+    public function get_override_viewspec() {
+
+        $override_spec_file = $this->get_theme_custom_block_dir() . '/' . $this->get_config()->get('overrideSpecJsonFilename');
+        if( file_exists($override_spec_file) ) {
+
+            $override_spec = json_decode( file_get_contents($override_spec_file), true );
+            if( is_array($override_spec) ) {
+                return $override_spec;
+            }
         }
 
         return false;

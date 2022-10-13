@@ -38,9 +38,9 @@ class CliCommand extends ServiceBase {
         if( is_array($front_components) && count($front_components) > 0 ) {
 
             // Remove current component blocks directory
-            if( file_exists(get_stylesheet_directory() . '/' . $this->get_config()->get('componentBlocksLocation')) ) {
-                exec( 'rm -r ' . get_stylesheet_directory() . '/' . $this->get_config()->get('componentBlocksLocation') );
-            }
+            // if( file_exists(get_stylesheet_directory() . '/' . $this->get_config()->get('componentBlocksLocation')) ) {
+            //     exec( 'rm -r ' . get_stylesheet_directory() . '/' . $this->get_config()->get('componentBlocksLocation') );
+            // }
 
             foreach( $front_components as $component ) {
 
