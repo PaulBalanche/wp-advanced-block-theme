@@ -2,10 +2,16 @@
 
 ```json
 {
-    "menu_locations": {
-        "top-left": "Top left",
-        "top-right": "Top right",
-        "bottom": "Bottom"
+    "menus": {
+        "top-left": {
+            "name": "Top left"
+        },
+        "top-right": {
+            "name": "Top right"
+        },
+        "bottom": {
+            "name": "Bottom"
+        }
     },
     "text_domain": "wpe-basic-boilerplate-theme",
     "spacing": "bootstrap",
@@ -65,6 +71,11 @@
                 "value": "dark"
             }
         ]
+    },
+    "layout": {
+        "container": {
+            "default": "1280px"
+        }
     },
     "allowed_block_types": [
         "core/paragraph",
@@ -130,6 +141,31 @@
         "container": "layout/wpe-container",
         "image": "core/image",
         "text-image": "core/media-text"
+    },
+    "add_ons": [
+        "coffeekraken"
+    ],
+    "show_admin_bar": false,
+    "media": {
+        "defaultMedia": "desktop",
+        "queries": {
+            "mobile": {
+                "min-width": 0,
+                "max-width": 639
+            },
+            "tablet": {
+                "min-width": 640,
+                "max-width": 1279
+            },
+            "desktop": {
+                "min-width": 1280,
+                "max-width": 2047
+            },
+            "wide": {
+                "min-width": 2048,
+                "max-width": null
+            }
+        }
     }
 } 
 ```
