@@ -7,6 +7,9 @@ import { InnerBlocks, useBlockProps } from '@wordpress/block-editor';
  */
 import edit from './edit';
 
+import { initDevice } from '../../../packages/devices.js';
+initDevice();
+
 var current_user_can_edit_posts = global_localized.current_user_can_edit_posts;
 
 Object.values(global_localized.components).forEach( ( element ) => {

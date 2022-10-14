@@ -86,6 +86,94 @@
 /************************************************************************/
 /******/ ({
 
+/***/ "../../packages/devices.js":
+/*!**************************************************************************************************************!*\
+  !*** /Users/paulbalanche/www/bitbucket.org/test/web/app/plugins/wp-advanced-block-theme/packages/devices.js ***!
+  \**************************************************************************************************************/
+/*! exports provided: initDevice, getLayouts, getBodyDevice, setBodyDevice, setWidthContainer */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "initDevice", function() { return initDevice; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getLayouts", function() { return getLayouts; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getBodyDevice", function() { return getBodyDevice; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "setBodyDevice", function() { return setBodyDevice; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "setWidthContainer", function() { return setWidthContainer; });
+function initDevice() {
+  document.addEventListener("DOMContentLoaded", function (event) {
+    var _theme_spec, _theme_spec$media, _theme_spec2, _theme_spec2$layout, _theme_spec2$layout$c;
+
+    if (((_theme_spec = theme_spec) === null || _theme_spec === void 0 ? void 0 : (_theme_spec$media = _theme_spec.media) === null || _theme_spec$media === void 0 ? void 0 : _theme_spec$media.defaultMedia) != 'undefined') {
+      setBodyDevice(theme_spec.media.defaultMedia);
+    }
+
+    if (((_theme_spec2 = theme_spec) === null || _theme_spec2 === void 0 ? void 0 : (_theme_spec2$layout = _theme_spec2.layout) === null || _theme_spec2$layout === void 0 ? void 0 : (_theme_spec2$layout$c = _theme_spec2$layout.container) === null || _theme_spec2$layout$c === void 0 ? void 0 : _theme_spec2$layout$c.default) != 'undefined') {
+      setWidthContainer(theme_spec.layout.container.default);
+    }
+  });
+}
+function getLayouts() {
+  var layout = [];
+  Object.keys(theme_spec.media.queries).forEach(function (key, index) {
+    layout.push({
+      value: key,
+      label: key.charAt(0).toUpperCase() + key.slice(1),
+      attributeName: key.charAt(0).toUpperCase() + key.slice(1)
+    });
+  });
+  return layout;
+}
+function getBodyDevice() {
+  var currentDevice = 'desktop';
+  getLayouts().forEach(function (layout) {
+    if (document.body.classList.contains(layout.value)) {
+      currentDevice = layout.value;
+      return;
+    }
+  });
+  return currentDevice;
+}
+function setBodyDevice(device) {
+  var loading = setInterval(function () {
+    var editor_area = document.getElementsByClassName('edit-post-visual-editor__content-area');
+
+    if (editor_area) {
+      editor_area[0].style.margin = 'auto';
+      Object.keys(theme_spec.media.queries).forEach(function (item) {
+        if (device == item) {
+          if (theme_spec.media.queries[item]['max-width'] != null && theme_spec.media.queries[item]['max-width'] <= editor_area[0].offsetWidth) {
+            editor_area[0].style.width = theme_spec.media.queries[item]['max-width'] + 'px';
+          } else {
+            editor_area[0].style.removeProperty('width');
+          }
+        }
+      });
+      clearInterval(loading);
+    }
+  }, 100); // Checks every 100ms(0.1s)
+
+  getLayouts().forEach(function (layout) {
+    document.body.classList.remove(layout.value);
+  });
+  document.body.classList.add(device);
+}
+function setWidthContainer(width) {
+  var loading = setInterval(function () {
+    var wp_block_elements = document.getElementsByClassName('wp-block');
+
+    if (wp_block_elements) {
+      for (var i = 0; i < wp_block_elements.length; i++) {
+        wp_block_elements[i].style.maxWidth = width;
+      }
+
+      clearInterval(loading);
+    }
+  }, 100); // Checks every 100ms(0.1s)
+}
+
+/***/ }),
+
 /***/ "./node_modules/@babel/runtime/helpers/arrayLikeToArray.js":
 /*!*****************************************************************!*\
   !*** ./node_modules/@babel/runtime/helpers/arrayLikeToArray.js ***!
@@ -1023,6 +1111,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_9__);
 /* harmony import */ var merge_anything__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! merge-anything */ "./node_modules/merge-anything/dist/index.esm.js");
+/* harmony import */ var _packages_devices_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../../packages/devices.js */ "../../packages/devices.js");
 
 
 
@@ -1036,6 +1125,7 @@ __webpack_require__.r(__webpack_exports__);
 function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_7___default()(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_7___default()(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_6___default()(this, result); }; }
 
 function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
 
 
 
@@ -1062,65 +1152,31 @@ var MarginControls = /*#__PURE__*/function (_Component) {
     }
 
     _this.state = {
-      padding: Object(merge_anything__WEBPACK_IMPORTED_MODULE_10__["merge"])({
-        mobile: {
-          all: undefined,
-          top: undefined,
-          bottom: undefined,
-          left: undefined,
-          right: undefined,
-          x: undefined,
-          y: undefined
-        },
-        tablet: {
-          all: undefined,
-          top: undefined,
-          bottom: undefined,
-          left: undefined,
-          right: undefined,
-          x: undefined,
-          y: undefined
-        },
-        desktop: {
-          all: undefined,
-          top: undefined,
-          bottom: undefined,
-          left: undefined,
-          right: undefined,
-          x: undefined,
-          y: undefined
-        }
-      }, _this.parentProps.attributes.padding),
-      margin: Object(merge_anything__WEBPACK_IMPORTED_MODULE_10__["merge"])({
-        mobile: {
-          all: undefined,
-          top: undefined,
-          bottom: undefined,
-          left: undefined,
-          right: undefined,
-          x: undefined,
-          y: undefined
-        },
-        tablet: {
-          all: undefined,
-          top: undefined,
-          bottom: undefined,
-          left: undefined,
-          right: undefined,
-          x: undefined,
-          y: undefined
-        },
-        desktop: {
-          all: undefined,
-          top: undefined,
-          bottom: undefined,
-          left: undefined,
-          right: undefined,
-          x: undefined,
-          y: undefined
-        }
-      }, _this.parentProps.attributes.margin)
+      padding: {},
+      margin: {}
     };
+    Object(_packages_devices_js__WEBPACK_IMPORTED_MODULE_11__["getLayouts"])().forEach(function (layout) {
+      _this.state.padding[layout.value] = {
+        all: undefined,
+        top: undefined,
+        bottom: undefined,
+        left: undefined,
+        right: undefined,
+        x: undefined,
+        y: undefined
+      };
+      _this.state.margin[layout.value] = {
+        all: undefined,
+        top: undefined,
+        bottom: undefined,
+        left: undefined,
+        right: undefined,
+        x: undefined,
+        y: undefined
+      };
+    });
+    _this.state.padding = Object(merge_anything__WEBPACK_IMPORTED_MODULE_10__["merge"])(_this.state.padding, _this.parentProps.attributes.padding);
+    _this.state.margin = Object(merge_anything__WEBPACK_IMPORTED_MODULE_10__["merge"])(_this.state.margin, _this.parentProps.attributes.margin);
     return _this;
   } // getPadding( type ) {
   //     if( this.state.padding[this.props.deviceType.toLowerCase()].hasOwnProperty(type) ) {
@@ -1161,11 +1217,12 @@ var MarginControls = /*#__PURE__*/function (_Component) {
   }, {
     key: "resetPadding",
     value: function resetPadding(deviceType) {
-      var newPadding = {
-        mobile: deviceType == 'mobile' ? {} : this.state.padding.mobile,
-        tablet: deviceType == 'tablet' ? {} : this.state.padding.tablet,
-        desktop: deviceType == 'desktop' ? {} : this.state.padding.desktop
-      };
+      var _this2 = this;
+
+      var newPadding = {};
+      Object(_packages_devices_js__WEBPACK_IMPORTED_MODULE_11__["getLayouts"])().forEach(function (layout) {
+        newPadding[layout.value] = deviceType == layout.value ? {} : _this2.state.padding[layout.value];
+      });
       this.setState({
         padding: newPadding
       });
@@ -1176,11 +1233,12 @@ var MarginControls = /*#__PURE__*/function (_Component) {
   }, {
     key: "resetMargin",
     value: function resetMargin(deviceType) {
-      var newMargin = {
-        mobile: deviceType == 'mobile' ? {} : this.state.margin.mobile,
-        tablet: deviceType == 'tablet' ? {} : this.state.margin.tablet,
-        desktop: deviceType == 'desktop' ? {} : this.state.margin.desktop
-      };
+      var _this3 = this;
+
+      var newMargin = {};
+      Object(_packages_devices_js__WEBPACK_IMPORTED_MODULE_11__["getLayouts"])().forEach(function (layout) {
+        newMargin[layout.value] = deviceType == layout.value ? {} : _this3.state.margin[layout.value];
+      });
       this.setState({
         margin: newMargin
       });
@@ -1191,7 +1249,7 @@ var MarginControls = /*#__PURE__*/function (_Component) {
   }, {
     key: "renderBtnReset",
     value: function renderBtnReset(property, deviceType) {
-      var _this2 = this;
+      var _this4 = this;
 
       var propertyToTreat = property == 'padding' ? this.state.padding : this.state.margin;
       var btnResetPadding = [];
@@ -1210,9 +1268,9 @@ var MarginControls = /*#__PURE__*/function (_Component) {
               className: "is-secondary",
               onClick: function onClick() {
                 if (property == 'padding') {
-                  _this2.resetPadding(deviceType);
+                  _this4.resetPadding(deviceType);
                 } else {
-                  _this2.resetMargin(deviceType);
+                  _this4.resetMargin(deviceType);
                 }
               }
             }, "Reset ", deviceType)));
@@ -1226,34 +1284,28 @@ var MarginControls = /*#__PURE__*/function (_Component) {
   }, {
     key: "render",
     value: function render() {
-      var _this3 = this;
+      var _this5 = this;
 
       return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["Fragment"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_9__["PanelBody"], {
         title: 'Padding',
         initialOpen: false
       }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_9__["TabPanel"], {
         className: "padding-tab-panel",
-        activeClass: "active-tab" // onSelect={ (tabName) => wp.data.dispatch('core/edit-post').__experimentalSetPreviewDeviceType( tabName.charAt(0).toUpperCase() + tabName.slice(1) ) }
-        ,
-        tabs: [{
-          name: 'mobile',
-          title: 'Mobile (all)',
-          className: 'tab-one'
-        }, {
-          name: 'tablet',
-          title: 'Tablet',
-          className: 'tab-two'
-        }, {
-          name: 'desktop',
-          title: 'Desktop',
-          className: 'tab-three'
-        }]
+        activeClass: "active-tab",
+        initialTabName: Object(_packages_devices_js__WEBPACK_IMPORTED_MODULE_11__["getBodyDevice"])(),
+        tabs: Object(_packages_devices_js__WEBPACK_IMPORTED_MODULE_11__["getLayouts"])().map(function (layout) {
+          return {
+            name: layout.value,
+            title: layout.label,
+            className: 'tab-' + layout.value
+          };
+        })
       }, function (tab) {
         return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["Fragment"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_9__["RangeControl"], {
           label: "All",
-          value: _this3.state.padding[tab.name].all,
+          value: _this5.state.padding[tab.name].all,
           onChange: function onChange(value) {
-            _this3.setPadding('all', tab.name, value);
+            _this5.setPadding('all', tab.name, value);
           },
           min: 0,
           max: 5
@@ -1261,9 +1313,9 @@ var MarginControls = /*#__PURE__*/function (_Component) {
           className: "child-range-control"
         }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_9__["RangeControl"], {
           label: "Padding Y",
-          value: _this3.state.padding[tab.name].y,
+          value: _this5.state.padding[tab.name].y,
           onChange: function onChange(value) {
-            _this3.setPadding('y', tab.name, value);
+            _this5.setPadding('y', tab.name, value);
           },
           min: 0,
           max: 5
@@ -1271,25 +1323,25 @@ var MarginControls = /*#__PURE__*/function (_Component) {
           className: "child-range-control"
         }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_9__["RangeControl"], {
           label: "Top",
-          value: _this3.state.padding[tab.name].top,
+          value: _this5.state.padding[tab.name].top,
           onChange: function onChange(value) {
-            return _this3.setPadding('top', tab.name, value);
+            return _this5.setPadding('top', tab.name, value);
           },
           min: 0,
           max: 5
         }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_9__["RangeControl"], {
           label: "Bottom",
-          value: _this3.state.padding[tab.name].bottom,
+          value: _this5.state.padding[tab.name].bottom,
           onChange: function onChange(value) {
-            return _this3.setPadding('bottom', tab.name, value);
+            return _this5.setPadding('bottom', tab.name, value);
           },
           min: 0,
           max: 5
         })), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_9__["HorizontalRule"], null), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_9__["RangeControl"], {
           label: "X",
-          value: _this3.state.padding[tab.name].x,
+          value: _this5.state.padding[tab.name].x,
           onChange: function onChange(value) {
-            _this3.setPadding('x', tab.name, value);
+            _this5.setPadding('x', tab.name, value);
           },
           min: 0,
           max: 5
@@ -1297,47 +1349,41 @@ var MarginControls = /*#__PURE__*/function (_Component) {
           className: "child-range-control"
         }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_9__["RangeControl"], {
           label: "Left",
-          value: _this3.state.padding[tab.name].left,
+          value: _this5.state.padding[tab.name].left,
           onChange: function onChange(value) {
-            return _this3.setPadding('left', tab.name, value);
+            return _this5.setPadding('left', tab.name, value);
           },
           min: 0,
           max: 5
         }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_9__["RangeControl"], {
           label: "Right",
-          value: _this3.state.padding[tab.name].right,
+          value: _this5.state.padding[tab.name].right,
           onChange: function onChange(value) {
-            return _this3.setPadding('right', tab.name, value);
+            return _this5.setPadding('right', tab.name, value);
           },
           min: 0,
           max: 5
-        }))), _this3.renderBtnReset('padding', tab.name));
+        }))), _this5.renderBtnReset('padding', tab.name));
       })), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_9__["PanelBody"], {
         title: 'Margin',
         initialOpen: false
       }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_9__["TabPanel"], {
         className: "margin-tab-panel",
-        activeClass: "active-tab" // onSelect={ (tabName) => wp.data.dispatch('core/edit-post').__experimentalSetPreviewDeviceType( tabName.charAt(0).toUpperCase() + tabName.slice(1) ) }
-        ,
-        tabs: [{
-          name: 'mobile',
-          title: 'Mobile (all)',
-          className: 'tab-one'
-        }, {
-          name: 'tablet',
-          title: 'Tablet',
-          className: 'tab-two'
-        }, {
-          name: 'desktop',
-          title: 'Desktop',
-          className: 'tab-three'
-        }]
+        activeClass: "active-tab",
+        initialTabName: Object(_packages_devices_js__WEBPACK_IMPORTED_MODULE_11__["getBodyDevice"])(),
+        tabs: Object(_packages_devices_js__WEBPACK_IMPORTED_MODULE_11__["getLayouts"])().map(function (layout) {
+          return {
+            name: layout.value,
+            title: layout.label,
+            className: 'tab-' + layout.value
+          };
+        })
       }, function (tab) {
         return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["Fragment"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_9__["RangeControl"], {
           label: "All",
-          value: _this3.state.margin[tab.name].all,
+          value: _this5.state.margin[tab.name].all,
           onChange: function onChange(value) {
-            _this3.setMargin('all', tab.name, value);
+            _this5.setMargin('all', tab.name, value);
           },
           min: 0,
           max: 5
@@ -1345,9 +1391,9 @@ var MarginControls = /*#__PURE__*/function (_Component) {
           className: "child-range-control"
         }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_9__["RangeControl"], {
           label: "Y",
-          value: _this3.state.margin[tab.name].y,
+          value: _this5.state.margin[tab.name].y,
           onChange: function onChange(value) {
-            _this3.setMargin('y', tab.name, value);
+            _this5.setMargin('y', tab.name, value);
           },
           min: 0,
           max: 5
@@ -1355,25 +1401,25 @@ var MarginControls = /*#__PURE__*/function (_Component) {
           className: "child-range-control"
         }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_9__["RangeControl"], {
           label: "Top",
-          value: _this3.state.margin[tab.name].top,
+          value: _this5.state.margin[tab.name].top,
           onChange: function onChange(value) {
-            return _this3.setMargin('top', tab.name, value);
+            return _this5.setMargin('top', tab.name, value);
           },
           min: 0,
           max: 5
         }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_9__["RangeControl"], {
           label: "Bottom",
-          value: _this3.state.margin[tab.name].bottom,
+          value: _this5.state.margin[tab.name].bottom,
           onChange: function onChange(value) {
-            return _this3.setMargin('bottom', tab.name, value);
+            return _this5.setMargin('bottom', tab.name, value);
           },
           min: 0,
           max: 5
         })), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_9__["HorizontalRule"], null), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_9__["RangeControl"], {
           label: "X",
-          value: _this3.state.margin[tab.name].x,
+          value: _this5.state.margin[tab.name].x,
           onChange: function onChange(value) {
-            _this3.setMargin('x', tab.name, value);
+            _this5.setMargin('x', tab.name, value);
           },
           min: 0,
           max: 5
@@ -1381,21 +1427,21 @@ var MarginControls = /*#__PURE__*/function (_Component) {
           className: "child-range-control"
         }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_9__["RangeControl"], {
           label: "Left",
-          value: _this3.state.margin[tab.name].left,
+          value: _this5.state.margin[tab.name].left,
           onChange: function onChange(value) {
-            return _this3.setMargin('left', tab.name, value);
+            return _this5.setMargin('left', tab.name, value);
           },
           min: 0,
           max: 5
         }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_9__["RangeControl"], {
           label: "Right",
-          value: _this3.state.margin[tab.name].right,
+          value: _this5.state.margin[tab.name].right,
           onChange: function onChange(value) {
-            return _this3.setMargin('right', tab.name, value);
+            return _this5.setMargin('right', tab.name, value);
           },
           min: 0,
           max: 5
-        }))), _this3.renderBtnReset('margin', tab.name));
+        }))), _this5.renderBtnReset('margin', tab.name));
       })));
     }
   }]);
@@ -2766,6 +2812,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/block-editor */ "@wordpress/block-editor");
 /* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_4__);
 /* harmony import */ var _edit__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./edit */ "./src/edit.js");
+/* harmony import */ var _packages_devices_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../packages/devices.js */ "../../packages/devices.js");
 
 
 
@@ -2776,6 +2823,8 @@ __webpack_require__.r(__webpack_exports__);
  */
 
 
+
+Object(_packages_devices_js__WEBPACK_IMPORTED_MODULE_6__["initDevice"])();
 var current_user_can_edit_posts = global_localized.current_user_can_edit_posts;
 Object.values(global_localized.components).forEach(function (element) {
   var initAttributes = {

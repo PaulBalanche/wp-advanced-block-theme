@@ -145,31 +145,33 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "getBodyDevice": function() { return /* binding */ getBodyDevice; },
 /* harmony export */   "getLayouts": function() { return /* binding */ getLayouts; },
-/* harmony export */   "setBodyDevice": function() { return /* binding */ setBodyDevice; }
+/* harmony export */   "initDevice": function() { return /* binding */ initDevice; },
+/* harmony export */   "setBodyDevice": function() { return /* binding */ setBodyDevice; },
+/* harmony export */   "setWidthContainer": function() { return /* binding */ setWidthContainer; }
 /* harmony export */ });
-var layout = [];
-Object.keys(theme_spec.media.queries).forEach(function (key, index) {
-  layout.push({
-    value: key,
-    label: key.charAt(0).toUpperCase() + key.slice(1),
-    attributeName: key.charAt(0).toUpperCase() + key.slice(1)
-  });
-});
-const getLayouts = () => layout;
-function setBodyDevice(device) {
-  const el = document.getElementsByClassName('edit-post-visual-editor__content-area'); // const dropZone = document.getElementsByClassName('block-editor-block-list__layout');
+function initDevice() {
+  document.addEventListener("DOMContentLoaded", function (event) {
+    var _theme_spec, _theme_spec$media, _theme_spec2, _theme_spec2$layout, _theme_spec2$layout$c;
 
-  el[0].style.margin = 'auto';
-  Object.keys(theme_spec.media.queries).forEach(item => {
-    if (device == item) {
-      let width = theme_spec.media.queries[item]['max-width'] != null ? theme_spec.media.queries[item]['max-width'] + 'px' : '100%';
-      el[0].style.width = width;
+    if (((_theme_spec = theme_spec) === null || _theme_spec === void 0 ? void 0 : (_theme_spec$media = _theme_spec.media) === null || _theme_spec$media === void 0 ? void 0 : _theme_spec$media.defaultMedia) != 'undefined') {
+      setBodyDevice(theme_spec.media.defaultMedia);
+    }
+
+    if (((_theme_spec2 = theme_spec) === null || _theme_spec2 === void 0 ? void 0 : (_theme_spec2$layout = _theme_spec2.layout) === null || _theme_spec2$layout === void 0 ? void 0 : (_theme_spec2$layout$c = _theme_spec2$layout.container) === null || _theme_spec2$layout$c === void 0 ? void 0 : _theme_spec2$layout$c.default) != 'undefined') {
+      setWidthContainer(theme_spec.layout.container.default);
     }
   });
-  getLayouts().forEach(layout => {
-    document.body.classList.remove(layout.value);
+}
+function getLayouts() {
+  var layout = [];
+  Object.keys(theme_spec.media.queries).forEach(function (key, index) {
+    layout.push({
+      value: key,
+      label: key.charAt(0).toUpperCase() + key.slice(1),
+      attributeName: key.charAt(0).toUpperCase() + key.slice(1)
+    });
   });
-  document.body.classList.add(device);
+  return layout;
 }
 function getBodyDevice() {
   let currentDevice = 'desktop';
@@ -180,6 +182,43 @@ function getBodyDevice() {
     }
   });
   return currentDevice;
+}
+function setBodyDevice(device) {
+  var loading = setInterval(function () {
+    var editor_area = document.getElementsByClassName('edit-post-visual-editor__content-area');
+
+    if (editor_area) {
+      editor_area[0].style.margin = 'auto';
+      Object.keys(theme_spec.media.queries).forEach(item => {
+        if (device == item) {
+          if (theme_spec.media.queries[item]['max-width'] != null && theme_spec.media.queries[item]['max-width'] <= editor_area[0].offsetWidth) {
+            editor_area[0].style.width = theme_spec.media.queries[item]['max-width'] + 'px';
+          } else {
+            editor_area[0].style.removeProperty('width');
+          }
+        }
+      });
+      clearInterval(loading);
+    }
+  }, 100); // Checks every 100ms(0.1s)
+
+  getLayouts().forEach(layout => {
+    document.body.classList.remove(layout.value);
+  });
+  document.body.classList.add(device);
+}
+function setWidthContainer(width) {
+  var loading = setInterval(function () {
+    var wp_block_elements = document.getElementsByClassName('wp-block');
+
+    if (wp_block_elements) {
+      for (var i = 0; i < wp_block_elements.length; i++) {
+        wp_block_elements[i].style.maxWidth = width;
+      }
+
+      clearInterval(loading);
+    }
+  }, 100); // Checks every 100ms(0.1s)
 }
 
 /***/ }),

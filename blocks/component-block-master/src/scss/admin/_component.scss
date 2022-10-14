@@ -229,7 +229,28 @@
 
 .block-editor-block-list__layout {
 
-    .wp-block {
+    & > .wp-block {
+
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+        padding: 2rem;
+        background: rgba(0,124,186,.05);
+
+        &.block-list-appender {
+            visibility: hidden;
+            border: 1px dashed rgba(0,124,186,.5);
+            background: none;
+            width: 100%;
+
+            button {
+                box-shadow: none;
+            }
+        }
+
+        & > .wp-block {
+            padding: initial;
+            background: initial;
+        }
 
         .alert {
             color: red;
@@ -237,6 +258,8 @@
             padding: 4em  0;
             text-align: center;
         }
+
+        
     }
 }
 

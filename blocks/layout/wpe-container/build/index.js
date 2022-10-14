@@ -86,6 +86,94 @@
 /************************************************************************/
 /******/ ({
 
+/***/ "../../../packages/devices.js":
+/*!**************************************************************************************************************!*\
+  !*** /Users/paulbalanche/www/bitbucket.org/test/web/app/plugins/wp-advanced-block-theme/packages/devices.js ***!
+  \**************************************************************************************************************/
+/*! exports provided: initDevice, getLayouts, getBodyDevice, setBodyDevice, setWidthContainer */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "initDevice", function() { return initDevice; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getLayouts", function() { return getLayouts; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getBodyDevice", function() { return getBodyDevice; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "setBodyDevice", function() { return setBodyDevice; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "setWidthContainer", function() { return setWidthContainer; });
+function initDevice() {
+  document.addEventListener("DOMContentLoaded", function (event) {
+    var _theme_spec, _theme_spec$media, _theme_spec2, _theme_spec2$layout, _theme_spec2$layout$c;
+
+    if (((_theme_spec = theme_spec) === null || _theme_spec === void 0 ? void 0 : (_theme_spec$media = _theme_spec.media) === null || _theme_spec$media === void 0 ? void 0 : _theme_spec$media.defaultMedia) != 'undefined') {
+      setBodyDevice(theme_spec.media.defaultMedia);
+    }
+
+    if (((_theme_spec2 = theme_spec) === null || _theme_spec2 === void 0 ? void 0 : (_theme_spec2$layout = _theme_spec2.layout) === null || _theme_spec2$layout === void 0 ? void 0 : (_theme_spec2$layout$c = _theme_spec2$layout.container) === null || _theme_spec2$layout$c === void 0 ? void 0 : _theme_spec2$layout$c.default) != 'undefined') {
+      setWidthContainer(theme_spec.layout.container.default);
+    }
+  });
+}
+function getLayouts() {
+  var layout = [];
+  Object.keys(theme_spec.media.queries).forEach(function (key, index) {
+    layout.push({
+      value: key,
+      label: key.charAt(0).toUpperCase() + key.slice(1),
+      attributeName: key.charAt(0).toUpperCase() + key.slice(1)
+    });
+  });
+  return layout;
+}
+function getBodyDevice() {
+  var currentDevice = 'desktop';
+  getLayouts().forEach(function (layout) {
+    if (document.body.classList.contains(layout.value)) {
+      currentDevice = layout.value;
+      return;
+    }
+  });
+  return currentDevice;
+}
+function setBodyDevice(device) {
+  var loading = setInterval(function () {
+    var editor_area = document.getElementsByClassName('edit-post-visual-editor__content-area');
+
+    if (editor_area) {
+      editor_area[0].style.margin = 'auto';
+      Object.keys(theme_spec.media.queries).forEach(function (item) {
+        if (device == item) {
+          if (theme_spec.media.queries[item]['max-width'] != null && theme_spec.media.queries[item]['max-width'] <= editor_area[0].offsetWidth) {
+            editor_area[0].style.width = theme_spec.media.queries[item]['max-width'] + 'px';
+          } else {
+            editor_area[0].style.removeProperty('width');
+          }
+        }
+      });
+      clearInterval(loading);
+    }
+  }, 100); // Checks every 100ms(0.1s)
+
+  getLayouts().forEach(function (layout) {
+    document.body.classList.remove(layout.value);
+  });
+  document.body.classList.add(device);
+}
+function setWidthContainer(width) {
+  var loading = setInterval(function () {
+    var wp_block_elements = document.getElementsByClassName('wp-block');
+
+    if (wp_block_elements) {
+      for (var i = 0; i < wp_block_elements.length; i++) {
+        wp_block_elements[i].style.maxWidth = width;
+      }
+
+      clearInterval(loading);
+    }
+  }, 100); // Checks every 100ms(0.1s)
+}
+
+/***/ }),
+
 /***/ "../../component-block-master/node_modules/@babel/runtime/helpers/arrayLikeToArray.js":
 /*!********************************************************************************************************************************************************************************!*\
   !*** /Users/paulbalanche/www/bitbucket.org/test/web/app/plugins/wp-advanced-block-theme/blocks/component-block-master/node_modules/@babel/runtime/helpers/arrayLikeToArray.js ***!
@@ -991,6 +1079,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_9__);
 /* harmony import */ var merge_anything__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! merge-anything */ "../../component-block-master/node_modules/merge-anything/dist/index.esm.js");
+/* harmony import */ var _packages_devices_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../../packages/devices.js */ "../../../packages/devices.js");
 
 
 
@@ -1004,6 +1093,7 @@ __webpack_require__.r(__webpack_exports__);
 function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_7___default()(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_7___default()(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_6___default()(this, result); }; }
 
 function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
 
 
 

@@ -10,6 +10,8 @@ import {
 
 import { merge } from 'merge-anything';
 
+import { getLayouts, setBodyDevice, getBodyDevice } from '../../../packages/devices.js';
+
 export class MarginControls extends Component {
 
 	constructor( attr ) {
@@ -24,18 +26,17 @@ export class MarginControls extends Component {
         }
 
         this.state = {
-            padding: merge( {
-                mobile: { all: undefined, top: undefined, bottom: undefined, left: undefined, right: undefined, x: undefined, y: undefined },
-                tablet: { all: undefined, top: undefined, bottom: undefined, left: undefined, right: undefined, x: undefined, y: undefined },
-                desktop: { all: undefined, top: undefined, bottom: undefined, left: undefined, right: undefined, x: undefined, y: undefined }
-            }, this.parentProps.attributes.padding),
-            margin: merge( {
-                mobile: { all: undefined, top: undefined, bottom: undefined, left: undefined, right: undefined, x: undefined, y: undefined },
-                tablet: { all: undefined, top: undefined, bottom: undefined, left: undefined, right: undefined, x: undefined, y: undefined },
-                desktop: { all: undefined, top: undefined, bottom: undefined, left: undefined, right: undefined, x: undefined, y: undefined }
-            }, this.parentProps.attributes.margin)
-		};
+            padding: {},
+            margin: {}
+        };
+        getLayouts().forEach( ( layout ) => {
 
+            this.state.padding[ layout.value ] = { all: undefined, top: undefined, bottom: undefined, left: undefined, right: undefined, x: undefined, y: undefined };
+            this.state.margin[ layout.value ] = { all: undefined, top: undefined, bottom: undefined, left: undefined, right: undefined, x: undefined, y: undefined };
+        } );
+
+        this.state.padding = merge( this.state.padding, this.parentProps.attributes.padding );
+        this.state.margin = merge( this.state.margin, this.parentProps.attributes.margin );
     }
 
     // getPadding( type ) {
@@ -70,22 +71,24 @@ export class MarginControls extends Component {
 
     resetPadding( deviceType ) {
 
-        const newPadding = {
-            mobile: ( deviceType == 'mobile' ) ? {} : this.state.padding.mobile,
-            tablet: ( deviceType == 'tablet' ) ? {} : this.state.padding.tablet,
-            desktop: ( deviceType == 'desktop' ) ? {} : this.state.padding.desktop
-        };
+        let newPadding = {};
+        getLayouts().forEach( ( layout ) => {
+
+            newPadding[ layout.value ] = ( deviceType == layout.value ) ? {} : this.state.padding[ layout.value ];
+        } );
+
         this.setState( { padding: newPadding } );
         this.parentProps.setAttributes( { padding: newPadding } );
     }
     
     resetMargin( deviceType ) {
         
-        const newMargin = {
-            mobile: ( deviceType == 'mobile' ) ? {} : this.state.margin.mobile,
-            tablet: ( deviceType == 'tablet' ) ? {} : this.state.margin.tablet,
-            desktop: ( deviceType == 'desktop' ) ? {} : this.state.margin.desktop
-        };
+        let newMargin = {};
+        getLayouts().forEach( ( layout ) => {
+
+            newMargin[ layout.value ] = ( deviceType == layout.value ) ? {} : this.state.margin[ layout.value ];
+        } );
+
         this.setState( { margin: newMargin } );
         this.parentProps.setAttributes( { margin: newMargin } );
     }
@@ -139,24 +142,14 @@ export class MarginControls extends Component {
                     <TabPanel
                         className="padding-tab-panel"
                         activeClass="active-tab"
-                        // onSelect={ (tabName) => wp.data.dispatch('core/edit-post').__experimentalSetPreviewDeviceType( tabName.charAt(0).toUpperCase() + tabName.slice(1) ) }
-                        tabs={ [
-                            {
-                                name: 'mobile',
-                                title: 'Mobile (all)',
-                                className: 'tab-one',
-                            },
-                            {
-                                name: 'tablet',
-                                title: 'Tablet',
-                                className: 'tab-two',
-                            },
-                            {
-                                name: 'desktop',
-                                title: 'Desktop',
-                                className: 'tab-three',
-                            }
-                        ] }
+                        initialTabName={ getBodyDevice() }
+                        tabs={ getLayouts().map( ( layout ) => {
+                            return {
+                                name: layout.value,
+                                title: layout.label,
+                                className: 'tab-' + layout.value,
+                            };
+                        } ) }
                     >
                         { ( tab ) => 
                             <>
@@ -240,24 +233,14 @@ export class MarginControls extends Component {
                     <TabPanel
                         className="margin-tab-panel"
                         activeClass="active-tab"
-                        // onSelect={ (tabName) => wp.data.dispatch('core/edit-post').__experimentalSetPreviewDeviceType( tabName.charAt(0).toUpperCase() + tabName.slice(1) ) }
-                        tabs={ [
-                            {
-                                name: 'mobile',
-                                title: 'Mobile (all)',
-                                className: 'tab-one',
-                            },
-                            {
-                                name: 'tablet',
-                                title: 'Tablet',
-                                className: 'tab-two',
-                            },
-                            {
-                                name: 'desktop',
-                                title: 'Desktop',
-                                className: 'tab-three',
-                            }
-                        ] }
+                        initialTabName={ getBodyDevice() }
+                        tabs={ getLayouts().map( ( layout ) => {
+                            return {
+                                name: layout.value,
+                                title: layout.label,
+                                className: 'tab-' + layout.value,
+                            };
+                        } ) }
                     >
                         { ( tab ) => 
                             <>
