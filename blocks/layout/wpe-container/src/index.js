@@ -46,7 +46,7 @@ registerBlockType( 'custom/wpe-container', {
             type: 'object'
         }
     },
-    edit: edit(global_localized.container),
+    edit: edit( global_localized.container, theme_spec ),
     save: () => {
 
         const blockProps = useBlockProps.save();

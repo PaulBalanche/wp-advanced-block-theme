@@ -40,7 +40,8 @@ class WpeContainer extends Component {
             containerConfig,
             backgroundData,
             innerBlocksProps,
-            experimentalDeviceType
+            experimentalDeviceType,
+            theme_spec
         } = this.props;
 
         // Padding & Margin
@@ -121,7 +122,7 @@ class WpeContainer extends Component {
                     <PanelBody title={ 'Background' } initialOpen={ false }>
                         { mediaPlaceholder }
                     </PanelBody>
-                    <MarginControls props={ this.props } deviceType={ experimentalDeviceType } />
+                    <MarginControls props={ this.props } deviceType={ experimentalDeviceType } margin={ ( theme_spec?.margin ) ? theme_spec?.margin : null } />
                 </InspectorControls>
                 <div { ...innerBlocksProps } />
             </>
@@ -129,13 +130,14 @@ class WpeContainer extends Component {
     }
 }
 
-export default (containerConfig) => compose( [
+export default ( containerConfig, theme_spec ) => compose( [
 	withSelect( ( select, props ) => {
 
         const { __experimentalGetPreviewDeviceType } = select( 'core/edit-post' );
 
         return {
             containerConfig: containerConfig,
+            theme_spec,
             innerBlocksProps: useInnerBlocksProps( useBlockProps( { className: '' } ), { renderAppender: InnerBlocks.ButtonBlockAppender } ),
             backgroundData: ! props.attributes.backgroundFile ? null : select('core').getEntityRecord('postType', 'attachment', props.attributes.backgroundFile ),
             experimentalDeviceType: __experimentalGetPreviewDeviceType()

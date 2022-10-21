@@ -6,6 +6,7 @@ use Abt\Coffeekraken\Controllers\Components as ComponentsController;
 use Abt\Coffeekraken\Controllers\Twig as TwigController;
 use Abt\Coffeekraken\Controllers\Grid as GridController;
 use Abt\Coffeekraken\Controllers\Scripts as ScriptsController;
+use Abt\Coffeekraken\Controllers\Spacing as SpacingController;
 
 class Main {
 
@@ -17,6 +18,7 @@ class Main {
         new GridController();
         new ComponentsController();
         new ScriptsController();
+        new SpacingController();
     }
 
     /**

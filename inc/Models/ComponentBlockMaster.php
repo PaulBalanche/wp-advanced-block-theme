@@ -43,6 +43,8 @@ class ComponentBlockMaster extends ModelBase {
             'styles' => $this->get_config()->get_spec('styles')
         ];
         wp_localize_script( $handle, 'global_localized', $data_localized );
+
+        wp_localize_script( $handle, 'theme_spec', apply_filters( 'Abt\localize_editor_script', $this->get_config()->get_spec(), $this->get_config()->get('componentBlockPrefixName'), 'theme_spec' ) );
     }
 
 

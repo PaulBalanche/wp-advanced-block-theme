@@ -19,6 +19,7 @@
     "@ckeditor/ckeditor5-react": "^3.0.2",
     "@paulbalanche/ckeditor5-build-classic-with-alignment": "^1.0.2",
     "@wordpress/icons": "^2.10.3",
-    "@wordpress/server-side-render": "^1.21.3"
+    "@wordpress/server-side-render": "^1.21.3",
+    "merge-anything": "^5.0.4"
   }
 }

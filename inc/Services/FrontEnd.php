@@ -57,7 +57,12 @@ class FrontEnd extends ServiceBase {
 
         $component_relative_dir = $this->get_components_dir( $dir );
         $component_dir = get_stylesheet_directory() . '/' . $component_relative_dir;
-        $path_viewspec_file = $component_dir . $componentName . '/' . $this->get_config()->get('viewspecJsonFilename');
+
+        $path_viewspec_file = glob( $component_dir . $componentName . '/*.json' );
+        if( $path_viewspec_file && is_array($path_viewspec_file) && count($path_viewspec_file) == 1 ) {
+            $path_viewspec_file = $path_viewspec_file[0];
+        }
+        // $path_viewspec_file = $component_dir . $componentName . '/' . $this->get_config()->get('viewspecJsonFilename');
 
         // Get the file content
         $component_viewspec = ( file_exists( $path_viewspec_file ) ) ? json_decode( file_get_contents( $path_viewspec_file ), true ) : [];
@@ -129,7 +134,7 @@ class FrontEnd extends ServiceBase {
         }
 
         if( $component_id ) {
-            $component_props = apply_filters('abt/get_frontspec_component_props_' . $component_id, $component_props);
+            $component_props = apply_filters('Abt\get_frontspec_component_props_' . $component_id, $component_props);
         }
 
         return $component_props;

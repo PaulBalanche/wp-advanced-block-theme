@@ -135,7 +135,7 @@ Object.values(global_localized.components).forEach( ( element ) => {
         parent: element.parent,
         attributes: initAttributes,
         description: element.description,
-        edit: edit(element, current_user_can_edit_posts, global_localized.styles),
+        edit: edit(element, current_user_can_edit_posts, global_localized.styles, theme_spec),
         save: () => {
             return (
                 <div { ...useBlockProps.save() } >

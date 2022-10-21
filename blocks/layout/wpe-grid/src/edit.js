@@ -58,6 +58,7 @@ class WpeGrid extends Component {
 
         var {
             block_spec,
+            theme_spec,
 			attributes,
             setAttributes,
             clientId,
@@ -249,7 +250,7 @@ class WpeGrid extends Component {
                             max={ attributes.gridCountColumns + 1 }
                         />
                     </PanelBody>
-                    <MarginControls props={ this.props } deviceType={ experimentalDeviceType } />
+                    <MarginControls props={ this.props } deviceType={ experimentalDeviceType } margin={ ( theme_spec?.margin ) ? theme_spec?.margin : null } />
                     { InspectorControlsCustomProps }
                 </InspectorControls>
             );
@@ -268,13 +269,14 @@ class WpeGrid extends Component {
     }
 }
 
-export default ( block_spec ) => compose( [
+export default ( block_spec, theme_spec ) => compose( [
 	withSelect( ( select, props ) => {
 
         const { __experimentalGetPreviewDeviceType } = select( 'core/edit-post' );
 
         return {
             block_spec,
+            theme_spec,
             backgroundData: ! props.attributes.backgroundFile ? null : select('core').getEntityRecord('postType', 'attachment', props.attributes.backgroundFile ),
             inner_blocks: select('core/block-editor').getBlocks(props.clientId),
             innerBlocksProps: useInnerBlocksProps( useBlockProps( { className: '' } ), { renderAppender: false } ),

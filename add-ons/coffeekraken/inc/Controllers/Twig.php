@@ -24,7 +24,7 @@ class Twig extends ControllerBase {
         add_filter( 'timber/twig', [ $this, 'initSugarTwig' ] );
         add_filter( 'Abt\timber_locations', [ $this, 'timber_locations' ] );
         
-        // add_filter( 'Abt\localize_editor_script', [ $this, 'localize_editor_script' ], 10, 3 );
+        add_filter( 'Abt\localize_editor_script', [ $this, 'localize_editor_script' ], 10, 3 );
     }
 
     /**
@@ -50,12 +50,19 @@ class Twig extends ControllerBase {
 
 
 
-    public function localize_editor_script( $spec, $layout, $js_variable ) {
+    public function localize_editor_script( $spec, $block, $js_variable ) {
 
-        $spacing = json_decode(json_encode( \Sugar\specs\readSpec( '@sugar.views.props.spacing' ) ), true);
+        if( $js_variable == 'theme_spec' && isset($spec['margin']) && is_array($spec['margin']) ) {
 
-        echo '<pre>';print_r($spacing);die;
-        echo '<pre>';print_r($spec);die;
+            $new_margin = [];
+            foreach( array_keys($spec['margin']) as $val ) {
+                $new_margin[] = [
+                    'label' => $val,
+                    'value' => $val
+                ];
+            }
+            $spec['margin'] = $new_margin;
+        }
 
         return $spec;
     }

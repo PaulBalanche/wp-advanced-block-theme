@@ -6,6 +6,7 @@ use Abt\Helpers\Request;
 use Abt\Services\Render as RenderService;
 use Abt\Singleton\Config;
 use Abt\Main;
+use \Abt\Helpers\Anchor;
 
 class ComponentBlock extends ModelBase {
 
@@ -354,27 +355,29 @@ class ComponentBlock extends ModelBase {
             $render_attributes = $this->get_attributes();
 
             // Filters attributes
-            $render_attributes = apply_filters( 'abt/render_component_block_attributes', $render_attributes );
-            $render_attributes = apply_filters( 'abt/render_component_block_attributes_' . $this->get_ID(), $render_attributes );
+            $render_attributes = apply_filters( 'Abt\render_component_block_attributes', $render_attributes );
+            $render_attributes = apply_filters( 'Abt\render_component_block_attributes_' . $this->get_ID(), $render_attributes );
 
             // Anchor detection
-            $render_attributes['anchor'] = $this->detect_block_anchor();
+            $content =  $this->get_content();
+            $render_attributes['anchor'] = Anchor::get( $this->get_config()->get('blocksNamespace') . '-' . $this->get_config()->get('componentBlockPrefixName'), $content );
+           
 
             // Filters spacing
-            $render_attributes['margin'] = apply_filters( 'abt/block_spacing_formatting', ( isset($render_attributes['margin']) ) ? $render_attributes['margin'] : '', 'margin' );
-            $render_attributes['padding'] = apply_filters( 'abt/block_spacing_formatting', ( isset($render_attributes['padding']) ) ? $render_attributes['padding'] : '', 'padding' );
+            $render_attributes['margin'] = apply_filters( 'Abt\block_spacing_formatting', ( isset($render_attributes['margin']) ) ? $render_attributes['margin'] : '', 'margin' );
+            $render_attributes['padding'] = apply_filters( 'Abt\block_spacing_formatting', ( isset($render_attributes['padding']) ) ? $render_attributes['padding'] : '', 'padding' );
 
             // Formatting attributes
             $render_attributes = apply_filters( 'Abt\attributes_formatting', $render_attributes, $block_spec );
 
             // Start rendering
-            if( apply_filters( 'abt/display_component_block_' . $this->get_ID(), true, $render_attributes ) ) {
+            if( apply_filters( 'Abt\display_component_block_' . $this->get_ID(), true, $render_attributes ) ) {
 
                 // Check missing required attributes
                 $missing_required_attributes = $this->get_missing_required_attributes( $render_attributes );
                 if( count($missing_required_attributes) == 0 ) {
                     
-                    $render = apply_filters( 'abt/render_component_block_' . $this->get_ID(), RenderService::render( $block_spec['path'], $render_attributes ) );
+                    $render = apply_filters( 'Abt\render_component_block_' . $this->get_ID(), RenderService::render( $block_spec['path'], $render_attributes ) );
                 }
                 else if( Request::is_admin_editor_request() ) {
 
@@ -388,42 +391,6 @@ class ComponentBlock extends ModelBase {
 
         return $render;
     }
-
-
-
-    /**
-     * Detect anchor into the block content wrapper
-     * 
-     */
-    public function detect_block_anchor() {
-
-        $anchor = null;
-
-        if( preg_match( '/<div(.*)class="wp-block-' . $this->get_config()->get('blocksNamespace') . '-' . $this->get_config()->get('componentBlockPrefixName') . '-[^"]*"([^>]*)>(.*)<\/div>/s', $this->get_content(), $content ) === 1 ) {
-                
-            $class_prev = $content[1];
-            $class_next = $content[2];
-            $content = $content[3];
-
-            if( strpos($class_prev, 'id="') !== false ) {
-
-                preg_match( '/id="(.*)"/', $class_prev, $match_anchor );
-                if( is_array($match_anchor) && count($match_anchor) == 2 ) {
-                    $anchor = $match_anchor[1];
-                }
-            }
-            elseif( strpos($class_next, 'id="') !== false ) {
-
-                preg_match( '/id="(.*)"/', $class_next, $match_anchor );
-                if( is_array($match_anchor) && count($match_anchor) == 2 ) {
-                    $anchor = $match_anchor[1];
-                }
-            }
-        }
-        
-        return $anchor;
-    }
-
 
 
 

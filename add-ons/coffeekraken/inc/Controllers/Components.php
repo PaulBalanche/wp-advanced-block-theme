@@ -94,8 +94,8 @@ class Components extends ControllerBase {
         foreach( $this->get_front_blocks() as $block ) {
             if( str_replace( get_stylesheet_directory() . '/' . $this->get_config()->get_front_end_file_path( $this->get_config()->get('templateViewsLocation') ) , '', $block['dir'] ) == $component ) {
 
-                $namespace_settings = $this->get_components_namespace_settings( $block['namespace'], pathinfo($block['dir'])['dirname'] );
-                $component_viewspec = json_decode(json_encode( \Sugar\specs\readSpec( $block['dotpath'], $namespace_settings ) ), true);
+                $namespace_settings = $this->get_components_namespace_settings( str_replace('/', '.', $component ), $this->get_config()->get('templateViewsLocation') );
+                $component_viewspec = json_decode(json_encode( \Sugar\specs\readSpec( str_replace('/', '.', $component ), $namespace_settings ) ), true);
                 break;
             }
         }

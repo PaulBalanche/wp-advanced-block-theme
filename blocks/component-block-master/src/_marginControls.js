@@ -2,10 +2,10 @@ import { Component } from '@wordpress/element';
 
 import {
     PanelBody,
-    RangeControl,
     Button,
     HorizontalRule,
-    TabPanel
+    TabPanel,
+    SelectControl
 } from '@wordpress/components';
 
 import { merge } from 'merge-anything';
@@ -17,6 +17,29 @@ export class MarginControls extends Component {
 	constructor( attr ) {
         super( ...arguments );
         this.parentProps = attr.props;
+
+        this.spacing = ( attr?.margin ) ? attr.margin : [
+            {
+                "label": "1",
+                "value": "1"
+            },
+            {
+                "label": "2",
+                "value": "2"
+            },
+            {
+                "label": "3",
+                "value": "3"
+            },
+            {
+                "label": "4",
+                "value": "4"
+            },
+            {
+                "label": "5",
+                "value": "5"
+            }
+        ];
 
         if( ! this.parentProps.attributes.hasOwnProperty('padding') ) {
             this.parentProps.attributes.padding = {};
@@ -153,74 +176,67 @@ export class MarginControls extends Component {
                     >
                         { ( tab ) => 
                             <>
-                                <RangeControl
+                                <SelectControl
                                     label="All"
                                     value={ this.state.padding[tab.name].all }
+                                    options={ [ { label: 'Default', value: '' } ].concat( this.spacing ) }
                                     onChange={ ( value ) => {
                                         this.setPadding('all', tab.name, value);
                                     } }
-                                    min={ 0 }
-                                    max={ 5 }
                                 />
                                 <HorizontalRule />
                                 <div className="child-range-control">
-                                    <RangeControl
+                                    <SelectControl
                                         label="Padding Y"
                                         value={ this.state.padding[tab.name].y }
+                                        options={ [ { label: 'Default', value: '' } ].concat( this.spacing ) }
                                         onChange={ ( value ) => {
                                             this.setPadding('y', tab.name, value);
                                         } }
-                                        min={ 0 }
-                                        max={ 5 }
                                     />
                                     <div className="child-range-control">
-                                        <RangeControl
+                                        <SelectControl
                                             label="Top"
                                             value={ this.state.padding[tab.name].top }
+                                            options={ [ { label: 'Default', value: '' } ].concat( this.spacing ) }
                                             onChange={ ( value ) => 
                                                 this.setPadding('top', tab.name, value)
                                             }
-                                            min={ 0 }
-                                            max={ 5 }
                                         />
-                                        <RangeControl
+                                        <SelectControl
                                             label="Bottom"
                                             value={ this.state.padding[tab.name].bottom }
+                                            options={ [ { label: 'Default', value: '' } ].concat( this.spacing ) }
                                             onChange={ ( value ) =>
                                                 this.setPadding('bottom', tab.name, value)
                                             }
-                                            min={ 0 }
-                                            max={ 5 }
                                         />
                                     </div>
                                     <HorizontalRule />
-                                    <RangeControl
+                                    <SelectControl
                                         label="X"
                                         value={ this.state.padding[tab.name].x }
+                                        options={ [ { label: 'Default', value: '' } ].concat( this.spacing ) }
                                         onChange={ ( value ) => {
                                             this.setPadding('x', tab.name, value);
                                         } }
-                                        min={ 0 }
-                                        max={ 5 }
                                     />
                                     <div className="child-range-control">
-                                        <RangeControl
+                                        <SelectControl
                                             label="Left"
                                             value={ this.state.padding[tab.name].left }
+                                            options={ [ { label: 'Default', value: '' } ].concat( this.spacing ) }
                                             onChange={ ( value ) => 
                                                 this.setPadding('left', tab.name, value)
                                             }
-                                            min={ 0 }
-                                            max={ 5 }
                                         />
-                                        <RangeControl
+                                        <SelectControl
                                             label="Right"
                                             value={ this.state.padding[tab.name].right }
+                                            options={ [ { label: 'Default', value: '' } ].concat( this.spacing ) }
                                             onChange={ ( value ) =>
                                                 this.setPadding('right', tab.name, value)
                                             }
-                                            min={ 0 }
-                                            max={ 5 }
                                         />
                                     </div>
                                 </div>
@@ -244,74 +260,67 @@ export class MarginControls extends Component {
                     >
                         { ( tab ) => 
                             <>
-                            <RangeControl
+                            <SelectControl
                                 label="All"
                                 value={ this.state.margin[tab.name].all }
+                                options={ [ { label: 'Default', value: '' } ].concat( this.spacing ) }
                                 onChange={ ( value ) => {
                                     this.setMargin('all', tab.name, value);
                                 } }
-                                min={ 0 }
-                                max={ 5 }
                             />
                             <HorizontalRule />
                             <div className="child-range-control">
-                                <RangeControl
+                                <SelectControl
                                     label="Y"
                                     value={ this.state.margin[tab.name].y }
+                                    options={ [ { label: 'Default', value: '' } ].concat( this.spacing ) }
                                     onChange={ ( value ) => {
                                         this.setMargin('y', tab.name, value);
                                     } }
-                                    min={ 0 }
-                                    max={ 5 }
                                 />
                                 <div className="child-range-control">
-                                    <RangeControl
+                                    <SelectControl
                                         label="Top"
                                         value={ this.state.margin[tab.name].top }
+                                        options={ [ { label: 'Default', value: '' } ].concat( this.spacing ) }
                                         onChange={ ( value ) =>
                                             this.setMargin('top', tab.name, value)
                                         }
-                                        min={ 0 }
-                                        max={ 5 }
                                     />
-                                    <RangeControl
+                                    <SelectControl
                                         label="Bottom"
                                         value={ this.state.margin[tab.name].bottom }
+                                        options={ [ { label: 'Default', value: '' } ].concat( this.spacing ) }
                                         onChange={ ( value ) =>
                                             this.setMargin('bottom', tab.name, value)
                                         }
-                                        min={ 0 }
-                                        max={ 5 }
                                     />
                                 </div>
                                 <HorizontalRule />
-                                <RangeControl
+                                <SelectControl
                                     label="X"
                                     value={ this.state.margin[tab.name].x }
+                                    options={ [ { label: 'Default', value: '' } ].concat( this.spacing ) }
                                     onChange={ ( value ) => {
                                         this.setMargin('x', tab.name, value);
                                     } }
-                                    min={ 0 }
-                                    max={ 5 }
                                 />
                                 <div className="child-range-control">
-                                    <RangeControl
+                                    <SelectControl
                                         label="Left"
                                         value={ this.state.margin[tab.name].left }
+                                        options={ [ { label: 'Default', value: '' } ].concat( this.spacing ) }
                                         onChange={ ( value ) =>
                                             this.setMargin('left', tab.name, value)
                                         }
-                                        min={ 0 }
-                                        max={ 5 }
                                     />
-                                    <RangeControl
+                                    <SelectControl
                                         label="Right"
                                         value={ this.state.margin[tab.name].right }
+                                        options={ [ { label: 'Default', value: '' } ].concat( this.spacing ) }
                                         onChange={ ( value ) =>
                                             this.setMargin('right', tab.name, value)
                                         }
-                                        min={ 0 }
-                                        max={ 5 }
                                     />
                                 </div>
                             </div>

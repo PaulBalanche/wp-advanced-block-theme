@@ -28,47 +28,45 @@ class Spacing extends FiltersBase {
      * 
      */
     public function wpe_gutenberg_blocks_spacing_formatting( $spacing, $type = 'padding' ) {
-
-        $spacing_formatted = '';
-
-        switch( $this->get_config()->get_spec('spacing') ) {
-
-            case 'bootstrap':
-            
-                if( $spacing && is_array($spacing) ) {
-                    foreach( $spacing as $breakpoint_key => $breakpoint_value ) {
-                        if( is_array($breakpoint_value) ) {
-                            foreach( $breakpoint_value as $key => $val ) {
-                                $spacing_formatted .= ( $type == 'margin' ) ? ' m' : ' p';
-                                $spacing_formatted .= str_replace( [ 'top', 'right', 'bottom', 'left', 'all' ], [ 't', 'e', 'b', 's', '' ], $key );
-                                $spacing_formatted .= '-';
-                                $spacing_formatted .= str_replace( [ 'mobile', 'tablet', 'desktop' ], [ '', 'sm-', 'lg-' ], $breakpoint_key );
-                                $spacing_formatted .= $val;
-                            }
-                        }
-                    }
-                }
-
-                $spacing = trim( $spacing_formatted );
                 
-                break;
+        if( $spacing && is_array($spacing) ) {
 
-            default:
+            $config_spacing = $this->get_config()->get_spec('spacing');
+            if( is_null($config_spacing) ) {
 
-                if( $spacing && is_array($spacing) ) {
-                    foreach( $spacing as $breakpoint_key => $breakpoint_value ) {
-                        if( is_array($breakpoint_value) ) {
-                            foreach( $breakpoint_value as $key => $val ) {
-                                $spacing_formatted .= $breakpoint_key;
-                                $spacing_formatted .= '-';
-                                $spacing_formatted .= ( ( $type == 'margin' ) ? 'm' : 'p' );
-                                $spacing_formatted .= '-' . $key . '-' . $val . ' ';
-                            }
+                $spacing_formatted = '';
+                foreach( $spacing as $breakpoint_key => $breakpoint_value ) {
+                    if( is_array($breakpoint_value) ) {
+                        foreach( $breakpoint_value as $key => $val ) {
+                            $spacing_formatted .= $breakpoint_key;
+                            $spacing_formatted .= '-';
+                            $spacing_formatted .= ( ( $type == 'margin' ) ? 'm' : 'p' );
+                            $spacing_formatted .= '-' . $key . '-' . $val . ' ';
                         }
                     }
                 }
-        
                 $spacing = trim( $spacing_formatted );
+            }
+            else {
+                switch( $config_spacing ) {
+
+                    case 'bootstrap':
+                        $spacing_formatted = '';
+                        foreach( $spacing as $breakpoint_key => $breakpoint_value ) {
+                            if( is_array($breakpoint_value) ) {
+                                foreach( $breakpoint_value as $key => $val ) {
+                                    $spacing_formatted .= ( $type == 'margin' ) ? ' m' : ' p';
+                                    $spacing_formatted .= str_replace( [ 'top', 'right', 'bottom', 'left', 'all' ], [ 't', 'e', 'b', 's', '' ], $key );
+                                    $spacing_formatted .= '-';
+                                    $spacing_formatted .= str_replace( [ 'mobile', 'tablet', 'desktop' ], [ '', 'sm-', 'lg-' ], $breakpoint_key );
+                                    $spacing_formatted .= $val;
+                                }
+                            }
+                        }
+                        $spacing = trim( $spacing_formatted );
+                        break;
+                }
+            }
         }
 
         return $spacing;

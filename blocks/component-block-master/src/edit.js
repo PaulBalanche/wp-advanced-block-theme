@@ -1219,7 +1219,7 @@ class WpeComponent extends Component {
      */
     render() {
 
-        const { attributes, isSelected, clientId, element, current_user_can_edit_posts, experimentalDeviceType } = this.props;
+        const { attributes, isSelected, clientId, element, current_user_can_edit_posts, experimentalDeviceType, theme_spec } = this.props;
 
         // Because of ID will be not saved to the block’s comment delimiter default attribute, we manually set it.
         if( typeof attributes.id_component == 'undefined' )
@@ -1342,7 +1342,7 @@ class WpeComponent extends Component {
         return (
             <>
                 <InspectorControls>
-                    <MarginControls props={ this.props } deviceType={ experimentalDeviceType } />
+                    <MarginControls props={ this.props } deviceType={ experimentalDeviceType } margin={ ( theme_spec?.margin ) ? theme_spec?.margin : null } />
                 </InspectorControls>
                 <Placeholder
                     key={ clientId + "-placeholder" }
@@ -1357,7 +1357,7 @@ class WpeComponent extends Component {
     }
 }
 
-export default (element, current_user_can_edit_posts, frontspec_styles ) => withSelect( ( select, props ) => {
+export default (element, current_user_can_edit_posts, frontspec_styles, theme_spec ) => withSelect( ( select, props ) => {
 
     const { getEntityRecords } = select( 'core' );
     const { __experimentalGetPreviewDeviceType } = select( 'core/edit-post' );
@@ -1382,6 +1382,7 @@ export default (element, current_user_can_edit_posts, frontspec_styles ) => with
         element,
         current_user_can_edit_posts: current_user_can_edit_posts,
         frontspec_styles: frontspec_styles,
+        theme_spec,
         experimentalDeviceType: __experimentalGetPreviewDeviceType()
     };
 } )( WpeComponent )

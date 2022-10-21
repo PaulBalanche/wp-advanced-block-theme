@@ -26,7 +26,6 @@ variations.forEach( function (elt, index){
     }
 });
 
-
 let attributes = {
     gridCountColumns: {
         type: 'number'
@@ -43,7 +42,7 @@ let attributes = {
     }
 };
 if( typeof block_spec.props == 'object' ) {
-    console.log(block_spec.props);
+
     for( const [key, value] of Object.entries(block_spec.props) ) {       
 
         if( typeof value != 'object' || value == null )
@@ -71,7 +70,7 @@ registerBlockType( 'custom/wpe-grid', {
     // parent: [ 'custom/wpe-container' ],
     attributes: attributes,
     variations,
-    edit: edit( block_spec ),
+    edit: edit( block_spec, theme_spec ),
     save: () => {
 
         const blockProps = useBlockProps.save();

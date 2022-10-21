@@ -2,516 +2,6 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "../../component-block-master/node_modules/is-what/dist/index.esm.js":
-/*!***************************************************************************!*\
-  !*** ../../component-block-master/node_modules/is-what/dist/index.esm.js ***!
-  \***************************************************************************/
-/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "getType": function() { return /* binding */ getType; },
-/* harmony export */   "isAnyObject": function() { return /* binding */ isAnyObject; },
-/* harmony export */   "isArray": function() { return /* binding */ isArray; },
-/* harmony export */   "isBlob": function() { return /* binding */ isBlob; },
-/* harmony export */   "isBoolean": function() { return /* binding */ isBoolean; },
-/* harmony export */   "isDate": function() { return /* binding */ isDate; },
-/* harmony export */   "isEmptyArray": function() { return /* binding */ isEmptyArray; },
-/* harmony export */   "isEmptyObject": function() { return /* binding */ isEmptyObject; },
-/* harmony export */   "isEmptyString": function() { return /* binding */ isEmptyString; },
-/* harmony export */   "isError": function() { return /* binding */ isError; },
-/* harmony export */   "isFile": function() { return /* binding */ isFile; },
-/* harmony export */   "isFullArray": function() { return /* binding */ isFullArray; },
-/* harmony export */   "isFullObject": function() { return /* binding */ isFullObject; },
-/* harmony export */   "isFullString": function() { return /* binding */ isFullString; },
-/* harmony export */   "isFunction": function() { return /* binding */ isFunction; },
-/* harmony export */   "isMap": function() { return /* binding */ isMap; },
-/* harmony export */   "isNaNValue": function() { return /* binding */ isNaNValue; },
-/* harmony export */   "isNull": function() { return /* binding */ isNull; },
-/* harmony export */   "isNullOrUndefined": function() { return /* binding */ isNullOrUndefined; },
-/* harmony export */   "isNumber": function() { return /* binding */ isNumber; },
-/* harmony export */   "isObject": function() { return /* binding */ isObject; },
-/* harmony export */   "isObjectLike": function() { return /* binding */ isObjectLike; },
-/* harmony export */   "isOneOf": function() { return /* binding */ isOneOf; },
-/* harmony export */   "isPlainObject": function() { return /* binding */ isPlainObject; },
-/* harmony export */   "isPrimitive": function() { return /* binding */ isPrimitive; },
-/* harmony export */   "isPromise": function() { return /* binding */ isPromise; },
-/* harmony export */   "isRegExp": function() { return /* binding */ isRegExp; },
-/* harmony export */   "isSet": function() { return /* binding */ isSet; },
-/* harmony export */   "isString": function() { return /* binding */ isString; },
-/* harmony export */   "isSymbol": function() { return /* binding */ isSymbol; },
-/* harmony export */   "isType": function() { return /* binding */ isType; },
-/* harmony export */   "isUndefined": function() { return /* binding */ isUndefined; },
-/* harmony export */   "isWeakMap": function() { return /* binding */ isWeakMap; },
-/* harmony export */   "isWeakSet": function() { return /* binding */ isWeakSet; }
-/* harmony export */ });
-/**
- * Returns the object type of the given payload
- *
- * @param {*} payload
- * @returns {string}
- */
-function getType(payload) {
-    return Object.prototype.toString.call(payload).slice(8, -1);
-}
-/**
- * Returns whether the payload is undefined
- *
- * @param {*} payload
- * @returns {payload is undefined}
- */
-function isUndefined(payload) {
-    return getType(payload) === 'Undefined';
-}
-/**
- * Returns whether the payload is null
- *
- * @param {*} payload
- * @returns {payload is null}
- */
-function isNull(payload) {
-    return getType(payload) === 'Null';
-}
-/**
- * Returns whether the payload is a plain JavaScript object (excluding special classes or objects with other prototypes)
- *
- * @param {*} payload
- * @returns {payload is PlainObject}
- */
-function isPlainObject(payload) {
-    if (getType(payload) !== 'Object')
-        return false;
-    return payload.constructor === Object && Object.getPrototypeOf(payload) === Object.prototype;
-}
-/**
- * Returns whether the payload is a plain JavaScript object (excluding special classes or objects with other prototypes)
- *
- * @param {*} payload
- * @returns {payload is PlainObject}
- */
-function isObject(payload) {
-    return isPlainObject(payload);
-}
-/**
- * Returns whether the payload is a an empty object (excluding special classes or objects with other prototypes)
- *
- * @param {*} payload
- * @returns {payload is { [K in any]: never }}
- */
-function isEmptyObject(payload) {
-    return isPlainObject(payload) && Object.keys(payload).length === 0;
-}
-/**
- * Returns whether the payload is a an empty object (excluding special classes or objects with other prototypes)
- *
- * @param {*} payload
- * @returns {payload is PlainObject}
- */
-function isFullObject(payload) {
-    return isPlainObject(payload) && Object.keys(payload).length > 0;
-}
-/**
- * Returns whether the payload is an any kind of object (including special classes or objects with different prototypes)
- *
- * @param {*} payload
- * @returns {payload is PlainObject}
- */
-function isAnyObject(payload) {
-    return getType(payload) === 'Object';
-}
-/**
- * Returns whether the payload is an object like a type passed in < >
- *
- * Usage: isObjectLike<{id: any}>(payload) // will make sure it's an object and has an `id` prop.
- *
- * @template T this must be passed in < >
- * @param {*} payload
- * @returns {payload is T}
- */
-function isObjectLike(payload) {
-    return isAnyObject(payload);
-}
-/**
- * Returns whether the payload is a function (regular or async)
- *
- * @param {*} payload
- * @returns {payload is AnyFunction}
- */
-function isFunction(payload) {
-    return typeof payload === 'function';
-}
-/**
- * Returns whether the payload is an array
- *
- * @param {any} payload
- * @returns {payload is any[]}
- */
-function isArray(payload) {
-    return getType(payload) === 'Array';
-}
-/**
- * Returns whether the payload is a an array with at least 1 item
- *
- * @param {*} payload
- * @returns {payload is any[]}
- */
-function isFullArray(payload) {
-    return isArray(payload) && payload.length > 0;
-}
-/**
- * Returns whether the payload is a an empty array
- *
- * @param {*} payload
- * @returns {payload is []}
- */
-function isEmptyArray(payload) {
-    return isArray(payload) && payload.length === 0;
-}
-/**
- * Returns whether the payload is a string
- *
- * @param {*} payload
- * @returns {payload is string}
- */
-function isString(payload) {
-    return getType(payload) === 'String';
-}
-/**
- * Returns whether the payload is a string, BUT returns false for ''
- *
- * @param {*} payload
- * @returns {payload is string}
- */
-function isFullString(payload) {
-    return isString(payload) && payload !== '';
-}
-/**
- * Returns whether the payload is ''
- *
- * @param {*} payload
- * @returns {payload is string}
- */
-function isEmptyString(payload) {
-    return payload === '';
-}
-/**
- * Returns whether the payload is a number (but not NaN)
- *
- * This will return `false` for `NaN`!!
- *
- * @param {*} payload
- * @returns {payload is number}
- */
-function isNumber(payload) {
-    return getType(payload) === 'Number' && !isNaN(payload);
-}
-/**
- * Returns whether the payload is a boolean
- *
- * @param {*} payload
- * @returns {payload is boolean}
- */
-function isBoolean(payload) {
-    return getType(payload) === 'Boolean';
-}
-/**
- * Returns whether the payload is a regular expression (RegExp)
- *
- * @param {*} payload
- * @returns {payload is RegExp}
- */
-function isRegExp(payload) {
-    return getType(payload) === 'RegExp';
-}
-/**
- * Returns whether the payload is a Map
- *
- * @param {*} payload
- * @returns {payload is Map<any, any>}
- */
-function isMap(payload) {
-    return getType(payload) === 'Map';
-}
-/**
- * Returns whether the payload is a WeakMap
- *
- * @param {*} payload
- * @returns {payload is WeakMap<any, any>}
- */
-function isWeakMap(payload) {
-    return getType(payload) === 'WeakMap';
-}
-/**
- * Returns whether the payload is a Set
- *
- * @param {*} payload
- * @returns {payload is Set<any>}
- */
-function isSet(payload) {
-    return getType(payload) === 'Set';
-}
-/**
- * Returns whether the payload is a WeakSet
- *
- * @param {*} payload
- * @returns {payload is WeakSet<any>}
- */
-function isWeakSet(payload) {
-    return getType(payload) === 'WeakSet';
-}
-/**
- * Returns whether the payload is a Symbol
- *
- * @param {*} payload
- * @returns {payload is symbol}
- */
-function isSymbol(payload) {
-    return getType(payload) === 'Symbol';
-}
-/**
- * Returns whether the payload is a Date, and that the date is valid
- *
- * @param {*} payload
- * @returns {payload is Date}
- */
-function isDate(payload) {
-    return getType(payload) === 'Date' && !isNaN(payload);
-}
-/**
- * Returns whether the payload is a Blob
- *
- * @param {*} payload
- * @returns {payload is Blob}
- */
-function isBlob(payload) {
-    return getType(payload) === 'Blob';
-}
-/**
- * Returns whether the payload is a File
- *
- * @param {*} payload
- * @returns {payload is File}
- */
-function isFile(payload) {
-    return getType(payload) === 'File';
-}
-/**
- * Returns whether the payload is a Promise
- *
- * @param {*} payload
- * @returns {payload is Promise<any>}
- */
-function isPromise(payload) {
-    return getType(payload) === 'Promise';
-}
-/**
- * Returns whether the payload is an Error
- *
- * @param {*} payload
- * @returns {payload is Error}
- */
-function isError(payload) {
-    return getType(payload) === 'Error';
-}
-/**
- * Returns whether the payload is literally the value `NaN` (it's `NaN` and also a `number`)
- *
- * @param {*} payload
- * @returns {payload is typeof NaN}
- */
-function isNaNValue(payload) {
-    return getType(payload) === 'Number' && isNaN(payload);
-}
-/**
- * Returns whether the payload is a primitive type (eg. Boolean | Null | Undefined | Number | String | Symbol)
- *
- * @param {*} payload
- * @returns {(payload is boolean | null | undefined | number | string | symbol)}
- */
-function isPrimitive(payload) {
-    return (isBoolean(payload) ||
-        isNull(payload) ||
-        isUndefined(payload) ||
-        isNumber(payload) ||
-        isString(payload) ||
-        isSymbol(payload));
-}
-/**
- * Returns true whether the payload is null or undefined
- *
- * @param {*} payload
- * @returns {(payload is null | undefined)}
- */
-var isNullOrUndefined = isOneOf(isNull, isUndefined);
-function isOneOf(a, b, c, d, e) {
-    return function (value) {
-        return a(value) || b(value) || (!!c && c(value)) || (!!d && d(value)) || (!!e && e(value));
-    };
-}
-/**
- * Does a generic check to check that the given payload is of a given type.
- * In cases like Number, it will return true for NaN as NaN is a Number (thanks javascript!);
- * It will, however, differentiate between object and null
- *
- * @template T
- * @param {*} payload
- * @param {T} type
- * @throws {TypeError} Will throw type error if type is an invalid type
- * @returns {payload is T}
- */
-function isType(payload, type) {
-    if (!(type instanceof Function)) {
-        throw new TypeError('Type must be a function');
-    }
-    if (!Object.prototype.hasOwnProperty.call(type, 'prototype')) {
-        throw new TypeError('Type is not a class');
-    }
-    // Classes usually have names (as functions usually have names)
-    var name = type.name;
-    return getType(payload) === name || Boolean(payload && payload.constructor === type);
-}
-
-
-
-
-/***/ }),
-
-/***/ "../../component-block-master/node_modules/merge-anything/dist/index.esm.js":
-/*!**********************************************************************************!*\
-  !*** ../../component-block-master/node_modules/merge-anything/dist/index.esm.js ***!
-  \**********************************************************************************/
-/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "concatArrays": function() { return /* binding */ concatArrays; },
-/* harmony export */   "merge": function() { return /* binding */ merge; },
-/* harmony export */   "mergeAndCompare": function() { return /* binding */ mergeAndCompare; },
-/* harmony export */   "mergeAndConcat": function() { return /* binding */ mergeAndConcat; }
-/* harmony export */ });
-/* harmony import */ var is_what__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! is-what */ "../../component-block-master/node_modules/is-what/dist/index.esm.js");
-
-
-/*! *****************************************************************************
-Copyright (c) Microsoft Corporation.
-
-Permission to use, copy, modify, and/or distribute this software for any
-purpose with or without fee is hereby granted.
-
-THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
-REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
-AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
-INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
-LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
-OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
-PERFORMANCE OF THIS SOFTWARE.
-***************************************************************************** */
-
-function __spreadArray(to, from) {
-    for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
-        to[j] = from[i];
-    return to;
-}
-
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-function concatArrays(originVal, newVal) {
-    if ((0,is_what__WEBPACK_IMPORTED_MODULE_0__.isArray)(originVal) && (0,is_what__WEBPACK_IMPORTED_MODULE_0__.isArray)(newVal)) {
-        // concat logic
-        return originVal.concat(newVal);
-    }
-    return newVal; // always return newVal as fallback!!
-}
-
-function assignProp(carry, key, newVal, originalObject) {
-    var propType = {}.propertyIsEnumerable.call(originalObject, key)
-        ? 'enumerable'
-        : 'nonenumerable';
-    if (propType === 'enumerable')
-        carry[key] = newVal;
-    if (propType === 'nonenumerable') {
-        Object.defineProperty(carry, key, {
-            value: newVal,
-            enumerable: false,
-            writable: true,
-            configurable: true,
-        });
-    }
-}
-function mergeRecursively(origin, newComer, compareFn) {
-    // always return newComer if its not an object
-    if (!(0,is_what__WEBPACK_IMPORTED_MODULE_0__.isPlainObject)(newComer))
-        return newComer;
-    // define newObject to merge all values upon
-    var newObject = {};
-    if ((0,is_what__WEBPACK_IMPORTED_MODULE_0__.isPlainObject)(origin)) {
-        var props_1 = Object.getOwnPropertyNames(origin);
-        var symbols_1 = Object.getOwnPropertySymbols(origin);
-        newObject = __spreadArray(__spreadArray([], props_1), symbols_1).reduce(function (carry, key) {
-            var targetVal = origin[key];
-            if ((!(0,is_what__WEBPACK_IMPORTED_MODULE_0__.isSymbol)(key) && !Object.getOwnPropertyNames(newComer).includes(key)) ||
-                ((0,is_what__WEBPACK_IMPORTED_MODULE_0__.isSymbol)(key) && !Object.getOwnPropertySymbols(newComer).includes(key))) {
-                assignProp(carry, key, targetVal, origin);
-            }
-            return carry;
-        }, {});
-    }
-    // newObject has all properties that newComer hasn't
-    var props = Object.getOwnPropertyNames(newComer);
-    var symbols = Object.getOwnPropertySymbols(newComer);
-    var result = __spreadArray(__spreadArray([], props), symbols).reduce(function (carry, key) {
-        // re-define the origin and newComer as targetVal and newVal
-        var newVal = newComer[key];
-        var targetVal = (0,is_what__WEBPACK_IMPORTED_MODULE_0__.isPlainObject)(origin) ? origin[key] : undefined;
-        // When newVal is an object do the merge recursively
-        if (targetVal !== undefined && (0,is_what__WEBPACK_IMPORTED_MODULE_0__.isPlainObject)(newVal)) {
-            newVal = mergeRecursively(targetVal, newVal, compareFn);
-        }
-        var propToAssign = compareFn ? compareFn(targetVal, newVal, key) : newVal;
-        assignProp(carry, key, propToAssign, newComer);
-        return carry;
-    }, newObject);
-    return result;
-}
-/**
- * Merge anything recursively.
- * Objects get merged, special objects (classes etc.) are re-assigned "as is".
- * Basic types overwrite objects or other basic types.
- * @param object
- * @param otherObjects
- */
-function merge(object) {
-    var otherObjects = [];
-    for (var _i = 1; _i < arguments.length; _i++) {
-        otherObjects[_i - 1] = arguments[_i];
-    }
-    return otherObjects.reduce(function (result, newComer) {
-        return mergeRecursively(result, newComer);
-    }, object);
-}
-function mergeAndCompare(compareFn, object) {
-    var otherObjects = [];
-    for (var _i = 2; _i < arguments.length; _i++) {
-        otherObjects[_i - 2] = arguments[_i];
-    }
-    return otherObjects.reduce(function (result, newComer) {
-        return mergeRecursively(result, newComer, compareFn);
-    }, object);
-}
-function mergeAndConcat(object) {
-    var otherObjects = [];
-    for (var _i = 1; _i < arguments.length; _i++) {
-        otherObjects[_i - 1] = arguments[_i];
-    }
-    return otherObjects.reduce(function (result, newComer) {
-        return mergeRecursively(result, newComer, concatArrays);
-    }, object);
-}
-
-
-
-
-/***/ }),
-
 /***/ "./node_modules/@wordpress/icons/build-module/icon/index.js":
 /*!******************************************************************!*\
   !*** ./node_modules/@wordpress/icons/build-module/icon/index.js ***!
@@ -578,7 +68,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var merge_anything__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! merge-anything */ "../../component-block-master/node_modules/merge-anything/dist/index.esm.js");
+/* harmony import */ var merge_anything__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! merge-anything */ "../../component-block-master/node_modules/merge-anything/dist/index.es.js");
 /* harmony import */ var _packages_devices_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../packages/devices.js */ "../../../packages/devices.js");
 
 
@@ -589,6 +79,22 @@ class MarginControls extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Com
   constructor(attr) {
     super(...arguments);
     this.parentProps = attr.props;
+    this.spacing = attr !== null && attr !== void 0 && attr.margin ? attr.margin : [{
+      "label": "1",
+      "value": "1"
+    }, {
+      "label": "2",
+      "value": "2"
+    }, {
+      "label": "3",
+      "value": "3"
+    }, {
+      "label": "4",
+      "value": "4"
+    }, {
+      "label": "5",
+      "value": "5"
+    }];
 
     if (!this.parentProps.attributes.hasOwnProperty('padding')) {
       this.parentProps.attributes.padding = {};
@@ -599,65 +105,31 @@ class MarginControls extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Com
     }
 
     this.state = {
-      padding: (0,merge_anything__WEBPACK_IMPORTED_MODULE_3__.merge)({
-        mobile: {
-          all: undefined,
-          top: undefined,
-          bottom: undefined,
-          left: undefined,
-          right: undefined,
-          x: undefined,
-          y: undefined
-        },
-        tablet: {
-          all: undefined,
-          top: undefined,
-          bottom: undefined,
-          left: undefined,
-          right: undefined,
-          x: undefined,
-          y: undefined
-        },
-        desktop: {
-          all: undefined,
-          top: undefined,
-          bottom: undefined,
-          left: undefined,
-          right: undefined,
-          x: undefined,
-          y: undefined
-        }
-      }, this.parentProps.attributes.padding),
-      margin: (0,merge_anything__WEBPACK_IMPORTED_MODULE_3__.merge)({
-        mobile: {
-          all: undefined,
-          top: undefined,
-          bottom: undefined,
-          left: undefined,
-          right: undefined,
-          x: undefined,
-          y: undefined
-        },
-        tablet: {
-          all: undefined,
-          top: undefined,
-          bottom: undefined,
-          left: undefined,
-          right: undefined,
-          x: undefined,
-          y: undefined
-        },
-        desktop: {
-          all: undefined,
-          top: undefined,
-          bottom: undefined,
-          left: undefined,
-          right: undefined,
-          x: undefined,
-          y: undefined
-        }
-      }, this.parentProps.attributes.margin)
+      padding: {},
+      margin: {}
     };
+    (0,_packages_devices_js__WEBPACK_IMPORTED_MODULE_2__.getLayouts)().forEach(layout => {
+      this.state.padding[layout.value] = {
+        all: undefined,
+        top: undefined,
+        bottom: undefined,
+        left: undefined,
+        right: undefined,
+        x: undefined,
+        y: undefined
+      };
+      this.state.margin[layout.value] = {
+        all: undefined,
+        top: undefined,
+        bottom: undefined,
+        left: undefined,
+        right: undefined,
+        x: undefined,
+        y: undefined
+      };
+    });
+    this.state.padding = (0,merge_anything__WEBPACK_IMPORTED_MODULE_3__.merge)(this.state.padding, this.parentProps.attributes.padding);
+    this.state.margin = (0,merge_anything__WEBPACK_IMPORTED_MODULE_3__.merge)(this.state.margin, this.parentProps.attributes.margin);
   } // getPadding( type ) {
   //     if( this.state.padding[this.props.deviceType.toLowerCase()].hasOwnProperty(type) ) {
   //         return this.state.padding[this.props.deviceType.toLowerCase()][type];
@@ -701,11 +173,10 @@ class MarginControls extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Com
   }
 
   resetPadding(deviceType) {
-    const newPadding = {
-      mobile: deviceType == 'mobile' ? {} : this.state.padding.mobile,
-      tablet: deviceType == 'tablet' ? {} : this.state.padding.tablet,
-      desktop: deviceType == 'desktop' ? {} : this.state.padding.desktop
-    };
+    let newPadding = {};
+    (0,_packages_devices_js__WEBPACK_IMPORTED_MODULE_2__.getLayouts)().forEach(layout => {
+      newPadding[layout.value] = deviceType == layout.value ? {} : this.state.padding[layout.value];
+    });
     this.setState({
       padding: newPadding
     });
@@ -715,11 +186,10 @@ class MarginControls extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Com
   }
 
   resetMargin(deviceType) {
-    const newMargin = {
-      mobile: deviceType == 'mobile' ? {} : this.state.margin.mobile,
-      tablet: deviceType == 'tablet' ? {} : this.state.margin.tablet,
-      desktop: deviceType == 'desktop' ? {} : this.state.margin.desktop
-    };
+    let newMargin = {};
+    (0,_packages_devices_js__WEBPACK_IMPORTED_MODULE_2__.getLayouts)().forEach(layout => {
+      newMargin[layout.value] = deviceType == layout.value ? {} : this.state.margin[layout.value];
+    });
     this.setState({
       margin: newMargin
     });
@@ -762,149 +232,165 @@ class MarginControls extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Com
       initialOpen: false
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.TabPanel, {
       className: "padding-tab-panel",
-      activeClass: "active-tab" // onSelect={ (tabName) => wp.data.dispatch('core/edit-post').__experimentalSetPreviewDeviceType( tabName.charAt(0).toUpperCase() + tabName.slice(1) ) }
-      ,
-      tabs: [{
-        name: 'mobile',
-        title: 'Mobile (all)',
-        className: 'tab-one'
-      }, {
-        name: 'tablet',
-        title: 'Tablet',
-        className: 'tab-two'
-      }, {
-        name: 'desktop',
-        title: 'Desktop',
-        className: 'tab-three'
-      }]
-    }, tab => (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.RangeControl, {
+      activeClass: "active-tab",
+      initialTabName: (0,_packages_devices_js__WEBPACK_IMPORTED_MODULE_2__.getBodyDevice)(),
+      tabs: (0,_packages_devices_js__WEBPACK_IMPORTED_MODULE_2__.getLayouts)().map(layout => {
+        return {
+          name: layout.value,
+          title: layout.label,
+          className: 'tab-' + layout.value
+        };
+      })
+    }, tab => (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.SelectControl, {
       label: "All",
       value: this.state.padding[tab.name].all,
+      options: [{
+        label: 'Default',
+        value: ''
+      }].concat(this.spacing),
       onChange: value => {
         this.setPadding('all', tab.name, value);
-      },
-      min: 0,
-      max: 5
+      }
     }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.HorizontalRule, null), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "child-range-control"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.RangeControl, {
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.SelectControl, {
       label: "Padding Y",
       value: this.state.padding[tab.name].y,
+      options: [{
+        label: 'Default',
+        value: ''
+      }].concat(this.spacing),
       onChange: value => {
         this.setPadding('y', tab.name, value);
-      },
-      min: 0,
-      max: 5
+      }
     }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "child-range-control"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.RangeControl, {
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.SelectControl, {
       label: "Top",
       value: this.state.padding[tab.name].top,
-      onChange: value => this.setPadding('top', tab.name, value),
-      min: 0,
-      max: 5
-    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.RangeControl, {
+      options: [{
+        label: 'Default',
+        value: ''
+      }].concat(this.spacing),
+      onChange: value => this.setPadding('top', tab.name, value)
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.SelectControl, {
       label: "Bottom",
       value: this.state.padding[tab.name].bottom,
-      onChange: value => this.setPadding('bottom', tab.name, value),
-      min: 0,
-      max: 5
-    })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.HorizontalRule, null), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.RangeControl, {
+      options: [{
+        label: 'Default',
+        value: ''
+      }].concat(this.spacing),
+      onChange: value => this.setPadding('bottom', tab.name, value)
+    })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.HorizontalRule, null), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.SelectControl, {
       label: "X",
       value: this.state.padding[tab.name].x,
+      options: [{
+        label: 'Default',
+        value: ''
+      }].concat(this.spacing),
       onChange: value => {
         this.setPadding('x', tab.name, value);
-      },
-      min: 0,
-      max: 5
+      }
     }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "child-range-control"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.RangeControl, {
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.SelectControl, {
       label: "Left",
       value: this.state.padding[tab.name].left,
-      onChange: value => this.setPadding('left', tab.name, value),
-      min: 0,
-      max: 5
-    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.RangeControl, {
+      options: [{
+        label: 'Default',
+        value: ''
+      }].concat(this.spacing),
+      onChange: value => this.setPadding('left', tab.name, value)
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.SelectControl, {
       label: "Right",
       value: this.state.padding[tab.name].right,
-      onChange: value => this.setPadding('right', tab.name, value),
-      min: 0,
-      max: 5
+      options: [{
+        label: 'Default',
+        value: ''
+      }].concat(this.spacing),
+      onChange: value => this.setPadding('right', tab.name, value)
     }))), this.renderBtnReset('padding', tab.name)))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.PanelBody, {
       title: 'Margin',
       initialOpen: false
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.TabPanel, {
       className: "margin-tab-panel",
-      activeClass: "active-tab" // onSelect={ (tabName) => wp.data.dispatch('core/edit-post').__experimentalSetPreviewDeviceType( tabName.charAt(0).toUpperCase() + tabName.slice(1) ) }
-      ,
-      tabs: [{
-        name: 'mobile',
-        title: 'Mobile (all)',
-        className: 'tab-one'
-      }, {
-        name: 'tablet',
-        title: 'Tablet',
-        className: 'tab-two'
-      }, {
-        name: 'desktop',
-        title: 'Desktop',
-        className: 'tab-three'
-      }]
-    }, tab => (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.RangeControl, {
+      activeClass: "active-tab",
+      initialTabName: (0,_packages_devices_js__WEBPACK_IMPORTED_MODULE_2__.getBodyDevice)(),
+      tabs: (0,_packages_devices_js__WEBPACK_IMPORTED_MODULE_2__.getLayouts)().map(layout => {
+        return {
+          name: layout.value,
+          title: layout.label,
+          className: 'tab-' + layout.value
+        };
+      })
+    }, tab => (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.SelectControl, {
       label: "All",
       value: this.state.margin[tab.name].all,
+      options: [{
+        label: 'Default',
+        value: ''
+      }].concat(this.spacing),
       onChange: value => {
         this.setMargin('all', tab.name, value);
-      },
-      min: 0,
-      max: 5
+      }
     }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.HorizontalRule, null), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "child-range-control"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.RangeControl, {
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.SelectControl, {
       label: "Y",
       value: this.state.margin[tab.name].y,
+      options: [{
+        label: 'Default',
+        value: ''
+      }].concat(this.spacing),
       onChange: value => {
         this.setMargin('y', tab.name, value);
-      },
-      min: 0,
-      max: 5
+      }
     }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "child-range-control"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.RangeControl, {
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.SelectControl, {
       label: "Top",
       value: this.state.margin[tab.name].top,
-      onChange: value => this.setMargin('top', tab.name, value),
-      min: 0,
-      max: 5
-    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.RangeControl, {
+      options: [{
+        label: 'Default',
+        value: ''
+      }].concat(this.spacing),
+      onChange: value => this.setMargin('top', tab.name, value)
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.SelectControl, {
       label: "Bottom",
       value: this.state.margin[tab.name].bottom,
-      onChange: value => this.setMargin('bottom', tab.name, value),
-      min: 0,
-      max: 5
-    })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.HorizontalRule, null), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.RangeControl, {
+      options: [{
+        label: 'Default',
+        value: ''
+      }].concat(this.spacing),
+      onChange: value => this.setMargin('bottom', tab.name, value)
+    })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.HorizontalRule, null), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.SelectControl, {
       label: "X",
       value: this.state.margin[tab.name].x,
+      options: [{
+        label: 'Default',
+        value: ''
+      }].concat(this.spacing),
       onChange: value => {
         this.setMargin('x', tab.name, value);
-      },
-      min: 0,
-      max: 5
+      }
     }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "child-range-control"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.RangeControl, {
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.SelectControl, {
       label: "Left",
       value: this.state.margin[tab.name].left,
-      onChange: value => this.setMargin('left', tab.name, value),
-      min: 0,
-      max: 5
-    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.RangeControl, {
+      options: [{
+        label: 'Default',
+        value: ''
+      }].concat(this.spacing),
+      onChange: value => this.setMargin('left', tab.name, value)
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.SelectControl, {
       label: "Right",
       value: this.state.margin[tab.name].right,
-      onChange: value => this.setMargin('right', tab.name, value),
-      min: 0,
-      max: 5
+      options: [{
+        label: 'Default',
+        value: ''
+      }].concat(this.spacing),
+      onChange: value => this.setMargin('right', tab.name, value)
     }))), this.renderBtnReset('margin', tab.name)))));
   }
 
@@ -1015,6 +501,7 @@ class WpeGrid extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Component 
   render() {
     var {
       block_spec,
+      theme_spec,
       attributes,
       setAttributes,
       clientId,
@@ -1175,7 +662,8 @@ class WpeGrid extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Component 
         max: attributes.gridCountColumns + 1
       })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_component_block_master_src_marginControls_js__WEBPACK_IMPORTED_MODULE_7__.MarginControls, {
         props: this.props,
-        deviceType: experimentalDeviceType
+        deviceType: experimentalDeviceType,
+        margin: theme_spec !== null && theme_spec !== void 0 && theme_spec.margin ? theme_spec === null || theme_spec === void 0 ? void 0 : theme_spec.margin : null
       }), InspectorControlsCustomProps);
     }
     /**
@@ -1189,12 +677,13 @@ class WpeGrid extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Component 
 
 }
 
-/* harmony default export */ __webpack_exports__["default"] = (block_spec => (0,_wordpress_compose__WEBPACK_IMPORTED_MODULE_2__.compose)([(0,_wordpress_data__WEBPACK_IMPORTED_MODULE_5__.withSelect)((select, props) => {
+/* harmony default export */ __webpack_exports__["default"] = ((block_spec, theme_spec) => (0,_wordpress_compose__WEBPACK_IMPORTED_MODULE_2__.compose)([(0,_wordpress_data__WEBPACK_IMPORTED_MODULE_5__.withSelect)((select, props) => {
   const {
     __experimentalGetPreviewDeviceType
   } = select('core/edit-post');
   return {
     block_spec,
+    theme_spec,
     backgroundData: !props.attributes.backgroundFile ? null : select('core').getEntityRecord('postType', 'attachment', props.attributes.backgroundFile),
     inner_blocks: select('core/block-editor').getBlocks(props.clientId),
     innerBlocksProps: (0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__.useInnerBlocksProps)((0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__.useBlockProps)({
@@ -1553,6 +1042,501 @@ module.exports = window["wp"]["i18n"];
 
 /***/ }),
 
+/***/ "../../component-block-master/node_modules/is-what/dist/index.es.js":
+/*!**************************************************************************!*\
+  !*** ../../component-block-master/node_modules/is-what/dist/index.es.js ***!
+  \**************************************************************************/
+/***/ (function(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "getType": function() { return /* binding */ getType; },
+/* harmony export */   "isAnyObject": function() { return /* binding */ isAnyObject; },
+/* harmony export */   "isArray": function() { return /* binding */ isArray; },
+/* harmony export */   "isBlob": function() { return /* binding */ isBlob; },
+/* harmony export */   "isBoolean": function() { return /* binding */ isBoolean; },
+/* harmony export */   "isDate": function() { return /* binding */ isDate; },
+/* harmony export */   "isEmptyArray": function() { return /* binding */ isEmptyArray; },
+/* harmony export */   "isEmptyObject": function() { return /* binding */ isEmptyObject; },
+/* harmony export */   "isEmptyString": function() { return /* binding */ isEmptyString; },
+/* harmony export */   "isError": function() { return /* binding */ isError; },
+/* harmony export */   "isFile": function() { return /* binding */ isFile; },
+/* harmony export */   "isFullArray": function() { return /* binding */ isFullArray; },
+/* harmony export */   "isFullObject": function() { return /* binding */ isFullObject; },
+/* harmony export */   "isFullString": function() { return /* binding */ isFullString; },
+/* harmony export */   "isFunction": function() { return /* binding */ isFunction; },
+/* harmony export */   "isMap": function() { return /* binding */ isMap; },
+/* harmony export */   "isNaNValue": function() { return /* binding */ isNaNValue; },
+/* harmony export */   "isNegativeNumber": function() { return /* binding */ isNegativeNumber; },
+/* harmony export */   "isNull": function() { return /* binding */ isNull; },
+/* harmony export */   "isNullOrUndefined": function() { return /* binding */ isNullOrUndefined; },
+/* harmony export */   "isNumber": function() { return /* binding */ isNumber; },
+/* harmony export */   "isObject": function() { return /* binding */ isObject; },
+/* harmony export */   "isObjectLike": function() { return /* binding */ isObjectLike; },
+/* harmony export */   "isOneOf": function() { return /* binding */ isOneOf; },
+/* harmony export */   "isPlainObject": function() { return /* binding */ isPlainObject; },
+/* harmony export */   "isPositiveNumber": function() { return /* binding */ isPositiveNumber; },
+/* harmony export */   "isPrimitive": function() { return /* binding */ isPrimitive; },
+/* harmony export */   "isPromise": function() { return /* binding */ isPromise; },
+/* harmony export */   "isRegExp": function() { return /* binding */ isRegExp; },
+/* harmony export */   "isSet": function() { return /* binding */ isSet; },
+/* harmony export */   "isString": function() { return /* binding */ isString; },
+/* harmony export */   "isSymbol": function() { return /* binding */ isSymbol; },
+/* harmony export */   "isType": function() { return /* binding */ isType; },
+/* harmony export */   "isUndefined": function() { return /* binding */ isUndefined; },
+/* harmony export */   "isWeakMap": function() { return /* binding */ isWeakMap; },
+/* harmony export */   "isWeakSet": function() { return /* binding */ isWeakSet; }
+/* harmony export */ });
+/**
+ * Returns the object type of the given payload
+ *
+ * @param {*} payload
+ * @returns {string}
+ */
+function getType(payload) {
+    return Object.prototype.toString.call(payload).slice(8, -1);
+}
+/**
+ * Returns whether the payload is undefined
+ *
+ * @param {*} payload
+ * @returns {payload is undefined}
+ */
+function isUndefined(payload) {
+    return getType(payload) === 'Undefined';
+}
+/**
+ * Returns whether the payload is null
+ *
+ * @param {*} payload
+ * @returns {payload is null}
+ */
+function isNull(payload) {
+    return getType(payload) === 'Null';
+}
+/**
+ * Returns whether the payload is a plain JavaScript object (excluding special classes or objects with other prototypes)
+ *
+ * @param {*} payload
+ * @returns {payload is PlainObject}
+ */
+function isPlainObject(payload) {
+    if (getType(payload) !== 'Object')
+        return false;
+    return payload.constructor === Object && Object.getPrototypeOf(payload) === Object.prototype;
+}
+/**
+ * Returns whether the payload is a plain JavaScript object (excluding special classes or objects with other prototypes)
+ *
+ * @param {*} payload
+ * @returns {payload is PlainObject}
+ */
+function isObject(payload) {
+    return isPlainObject(payload);
+}
+/**
+ * Returns whether the payload is a an empty object (excluding special classes or objects with other prototypes)
+ *
+ * @param {*} payload
+ * @returns {payload is { [K in any]: never }}
+ */
+function isEmptyObject(payload) {
+    return isPlainObject(payload) && Object.keys(payload).length === 0;
+}
+/**
+ * Returns whether the payload is a an empty object (excluding special classes or objects with other prototypes)
+ *
+ * @param {*} payload
+ * @returns {payload is PlainObject}
+ */
+function isFullObject(payload) {
+    return isPlainObject(payload) && Object.keys(payload).length > 0;
+}
+/**
+ * Returns whether the payload is an any kind of object (including special classes or objects with different prototypes)
+ *
+ * @param {*} payload
+ * @returns {payload is PlainObject}
+ */
+function isAnyObject(payload) {
+    return getType(payload) === 'Object';
+}
+/**
+ * Returns whether the payload is an object like a type passed in < >
+ *
+ * Usage: isObjectLike<{id: any}>(payload) // will make sure it's an object and has an `id` prop.
+ *
+ * @template T this must be passed in < >
+ * @param {*} payload
+ * @returns {payload is T}
+ */
+function isObjectLike(payload) {
+    return isAnyObject(payload);
+}
+/**
+ * Returns whether the payload is a function (regular or async)
+ *
+ * @param {*} payload
+ * @returns {payload is AnyFunction}
+ */
+function isFunction(payload) {
+    return typeof payload === 'function';
+}
+/**
+ * Returns whether the payload is an array
+ *
+ * @param {any} payload
+ * @returns {payload is any[]}
+ */
+function isArray(payload) {
+    return getType(payload) === 'Array';
+}
+/**
+ * Returns whether the payload is a an array with at least 1 item
+ *
+ * @param {*} payload
+ * @returns {payload is any[]}
+ */
+function isFullArray(payload) {
+    return isArray(payload) && payload.length > 0;
+}
+/**
+ * Returns whether the payload is a an empty array
+ *
+ * @param {*} payload
+ * @returns {payload is []}
+ */
+function isEmptyArray(payload) {
+    return isArray(payload) && payload.length === 0;
+}
+/**
+ * Returns whether the payload is a string
+ *
+ * @param {*} payload
+ * @returns {payload is string}
+ */
+function isString(payload) {
+    return getType(payload) === 'String';
+}
+/**
+ * Returns whether the payload is a string, BUT returns false for ''
+ *
+ * @param {*} payload
+ * @returns {payload is string}
+ */
+function isFullString(payload) {
+    return isString(payload) && payload !== '';
+}
+/**
+ * Returns whether the payload is ''
+ *
+ * @param {*} payload
+ * @returns {payload is string}
+ */
+function isEmptyString(payload) {
+    return payload === '';
+}
+/**
+ * Returns whether the payload is a number (but not NaN)
+ *
+ * This will return `false` for `NaN`!!
+ *
+ * @param {*} payload
+ * @returns {payload is number}
+ */
+function isNumber(payload) {
+    return getType(payload) === 'Number' && !isNaN(payload);
+}
+/**
+ * Returns whether the payload is a positive number (but not 0)
+ *
+ * @param {*} payload
+ * @returns {payload is number}
+ */
+function isPositiveNumber(payload) {
+    return isNumber(payload) && payload > 0;
+}
+/**
+ * Returns whether the payload is a negative number (but not 0)
+ *
+ * @param {*} payload
+ * @returns {payload is number}
+ */
+function isNegativeNumber(payload) {
+    return isNumber(payload) && payload < 0;
+}
+/**
+ * Returns whether the payload is a boolean
+ *
+ * @param {*} payload
+ * @returns {payload is boolean}
+ */
+function isBoolean(payload) {
+    return getType(payload) === 'Boolean';
+}
+/**
+ * Returns whether the payload is a regular expression (RegExp)
+ *
+ * @param {*} payload
+ * @returns {payload is RegExp}
+ */
+function isRegExp(payload) {
+    return getType(payload) === 'RegExp';
+}
+/**
+ * Returns whether the payload is a Map
+ *
+ * @param {*} payload
+ * @returns {payload is Map<any, any>}
+ */
+function isMap(payload) {
+    return getType(payload) === 'Map';
+}
+/**
+ * Returns whether the payload is a WeakMap
+ *
+ * @param {*} payload
+ * @returns {payload is WeakMap<any, any>}
+ */
+function isWeakMap(payload) {
+    return getType(payload) === 'WeakMap';
+}
+/**
+ * Returns whether the payload is a Set
+ *
+ * @param {*} payload
+ * @returns {payload is Set<any>}
+ */
+function isSet(payload) {
+    return getType(payload) === 'Set';
+}
+/**
+ * Returns whether the payload is a WeakSet
+ *
+ * @param {*} payload
+ * @returns {payload is WeakSet<any>}
+ */
+function isWeakSet(payload) {
+    return getType(payload) === 'WeakSet';
+}
+/**
+ * Returns whether the payload is a Symbol
+ *
+ * @param {*} payload
+ * @returns {payload is symbol}
+ */
+function isSymbol(payload) {
+    return getType(payload) === 'Symbol';
+}
+/**
+ * Returns whether the payload is a Date, and that the date is valid
+ *
+ * @param {*} payload
+ * @returns {payload is Date}
+ */
+function isDate(payload) {
+    return getType(payload) === 'Date' && !isNaN(payload);
+}
+/**
+ * Returns whether the payload is a Blob
+ *
+ * @param {*} payload
+ * @returns {payload is Blob}
+ */
+function isBlob(payload) {
+    return getType(payload) === 'Blob';
+}
+/**
+ * Returns whether the payload is a File
+ *
+ * @param {*} payload
+ * @returns {payload is File}
+ */
+function isFile(payload) {
+    return getType(payload) === 'File';
+}
+/**
+ * Returns whether the payload is a Promise
+ *
+ * @param {*} payload
+ * @returns {payload is Promise<any>}
+ */
+function isPromise(payload) {
+    return getType(payload) === 'Promise';
+}
+/**
+ * Returns whether the payload is an Error
+ *
+ * @param {*} payload
+ * @returns {payload is Error}
+ */
+function isError(payload) {
+    return getType(payload) === 'Error';
+}
+/**
+ * Returns whether the payload is literally the value `NaN` (it's `NaN` and also a `number`)
+ *
+ * @param {*} payload
+ * @returns {payload is typeof NaN}
+ */
+function isNaNValue(payload) {
+    return getType(payload) === 'Number' && isNaN(payload);
+}
+/**
+ * Returns whether the payload is a primitive type (eg. Boolean | Null | Undefined | Number | String | Symbol)
+ *
+ * @param {*} payload
+ * @returns {(payload is boolean | null | undefined | number | string | symbol)}
+ */
+function isPrimitive(payload) {
+    return (isBoolean(payload) ||
+        isNull(payload) ||
+        isUndefined(payload) ||
+        isNumber(payload) ||
+        isString(payload) ||
+        isSymbol(payload));
+}
+/**
+ * Returns true whether the payload is null or undefined
+ *
+ * @param {*} payload
+ * @returns {(payload is null | undefined)}
+ */
+const isNullOrUndefined = isOneOf(isNull, isUndefined);
+function isOneOf(a, b, c, d, e) {
+    return (value) => a(value) || b(value) || (!!c && c(value)) || (!!d && d(value)) || (!!e && e(value));
+}
+/**
+ * Does a generic check to check that the given payload is of a given type.
+ * In cases like Number, it will return true for NaN as NaN is a Number (thanks javascript!);
+ * It will, however, differentiate between object and null
+ *
+ * @template T
+ * @param {*} payload
+ * @param {T} type
+ * @throws {TypeError} Will throw type error if type is an invalid type
+ * @returns {payload is T}
+ */
+function isType(payload, type) {
+    if (!(type instanceof Function)) {
+        throw new TypeError('Type must be a function');
+    }
+    if (!Object.prototype.hasOwnProperty.call(type, 'prototype')) {
+        throw new TypeError('Type is not a class');
+    }
+    // Classes usually have names (as functions usually have names)
+    const name = type.name;
+    return getType(payload) === name || Boolean(payload && payload.constructor === type);
+}
+
+
+
+
+/***/ }),
+
+/***/ "../../component-block-master/node_modules/merge-anything/dist/index.es.js":
+/*!*********************************************************************************!*\
+  !*** ../../component-block-master/node_modules/merge-anything/dist/index.es.js ***!
+  \*********************************************************************************/
+/***/ (function(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "concatArrays": function() { return /* binding */ concatArrays; },
+/* harmony export */   "merge": function() { return /* binding */ merge; },
+/* harmony export */   "mergeAndCompare": function() { return /* binding */ mergeAndCompare; },
+/* harmony export */   "mergeAndConcat": function() { return /* binding */ mergeAndConcat; }
+/* harmony export */ });
+/* harmony import */ var is_what__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! is-what */ "../../component-block-master/node_modules/is-what/dist/index.es.js");
+
+
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+function concatArrays(originVal, newVal) {
+    if ((0,is_what__WEBPACK_IMPORTED_MODULE_0__.isArray)(originVal) && (0,is_what__WEBPACK_IMPORTED_MODULE_0__.isArray)(newVal)) {
+        // concat logic
+        return originVal.concat(newVal);
+    }
+    return newVal; // always return newVal as fallback!!
+}
+
+function assignProp(carry, key, newVal, originalObject) {
+    const propType = {}.propertyIsEnumerable.call(originalObject, key)
+        ? 'enumerable'
+        : 'nonenumerable';
+    if (propType === 'enumerable')
+        carry[key] = newVal;
+    if (propType === 'nonenumerable') {
+        Object.defineProperty(carry, key, {
+            value: newVal,
+            enumerable: false,
+            writable: true,
+            configurable: true,
+        });
+    }
+}
+function mergeRecursively(origin, newComer, compareFn) {
+    // always return newComer if its not an object
+    if (!(0,is_what__WEBPACK_IMPORTED_MODULE_0__.isPlainObject)(newComer))
+        return newComer;
+    // define newObject to merge all values upon
+    let newObject = {};
+    if ((0,is_what__WEBPACK_IMPORTED_MODULE_0__.isPlainObject)(origin)) {
+        const props = Object.getOwnPropertyNames(origin);
+        const symbols = Object.getOwnPropertySymbols(origin);
+        newObject = [...props, ...symbols].reduce((carry, key) => {
+            const targetVal = origin[key];
+            if ((!(0,is_what__WEBPACK_IMPORTED_MODULE_0__.isSymbol)(key) && !Object.getOwnPropertyNames(newComer).includes(key)) ||
+                ((0,is_what__WEBPACK_IMPORTED_MODULE_0__.isSymbol)(key) && !Object.getOwnPropertySymbols(newComer).includes(key))) {
+                assignProp(carry, key, targetVal, origin);
+            }
+            return carry;
+        }, {});
+    }
+    // newObject has all properties that newComer hasn't
+    const props = Object.getOwnPropertyNames(newComer);
+    const symbols = Object.getOwnPropertySymbols(newComer);
+    const result = [...props, ...symbols].reduce((carry, key) => {
+        // re-define the origin and newComer as targetVal and newVal
+        let newVal = newComer[key];
+        const targetVal = (0,is_what__WEBPACK_IMPORTED_MODULE_0__.isPlainObject)(origin) ? origin[key] : undefined;
+        // When newVal is an object do the merge recursively
+        if (targetVal !== undefined && (0,is_what__WEBPACK_IMPORTED_MODULE_0__.isPlainObject)(newVal)) {
+            newVal = mergeRecursively(targetVal, newVal, compareFn);
+        }
+        const propToAssign = compareFn ? compareFn(targetVal, newVal, key) : newVal;
+        assignProp(carry, key, propToAssign, newComer);
+        return carry;
+    }, newObject);
+    return result;
+}
+/**
+ * Merge anything recursively.
+ * Objects get merged, special objects (classes etc.) are re-assigned "as is".
+ * Basic types overwrite objects or other basic types.
+ * @param object
+ * @param otherObjects
+ */
+function merge(object, ...otherObjects) {
+    return otherObjects.reduce((result, newComer) => {
+        return mergeRecursively(result, newComer);
+    }, object);
+}
+function mergeAndCompare(compareFn, object, ...otherObjects) {
+    return otherObjects.reduce((result, newComer) => {
+        return mergeRecursively(result, newComer, compareFn);
+    }, object);
+}
+function mergeAndConcat(object, ...otherObjects) {
+    return otherObjects.reduce((result, newComer) => {
+        return mergeRecursively(result, newComer, concatArrays);
+    }, object);
+}
+
+
+
+
+/***/ }),
+
 /***/ "./node_modules/@babel/runtime/helpers/esm/defineProperty.js":
 /*!*******************************************************************!*\
   !*** ./node_modules/@babel/runtime/helpers/esm/defineProperty.js ***!
@@ -1771,8 +1755,6 @@ let attributes = {
 };
 
 if (typeof block_spec.props == 'object') {
-  console.log(block_spec.props);
-
   for (const [key, value] of Object.entries(block_spec.props)) {
     if (typeof value != 'object' || value == null) continue;
 
@@ -1811,7 +1793,7 @@ if (typeof block_spec.props == 'object') {
   // parent: [ 'custom/wpe-container' ],
   attributes: attributes,
   variations,
-  edit: (0,_edit__WEBPACK_IMPORTED_MODULE_5__["default"])(block_spec),
+  edit: (0,_edit__WEBPACK_IMPORTED_MODULE_5__["default"])(block_spec, theme_spec),
   save: () => {
     const blockProps = _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.useBlockProps.save();
     const innerBlocksProps = _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.useInnerBlocksProps.save(blockProps);

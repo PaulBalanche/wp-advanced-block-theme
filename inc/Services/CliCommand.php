@@ -43,7 +43,7 @@ class CliCommand extends ServiceBase {
             // }
 
             foreach( $front_components as $component ) {
-
+                
                 // Get viewspec JSON file for a single component returned by frontEndService
                 $component_frontspec = $this->frontEndService->get_component_viewspec( $component );
 

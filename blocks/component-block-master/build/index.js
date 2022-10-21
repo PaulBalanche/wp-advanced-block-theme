@@ -569,11 +569,11 @@ module.exports["default"] = module.exports, module.exports.__esModule = true;
 
 /***/ }),
 
-/***/ "./node_modules/is-what/dist/index.esm.js":
-/*!************************************************!*\
-  !*** ./node_modules/is-what/dist/index.esm.js ***!
-  \************************************************/
-/*! exports provided: getType, isAnyObject, isArray, isBlob, isBoolean, isDate, isEmptyArray, isEmptyObject, isEmptyString, isError, isFile, isFullArray, isFullObject, isFullString, isFunction, isMap, isNaNValue, isNull, isNullOrUndefined, isNumber, isObject, isObjectLike, isOneOf, isPlainObject, isPrimitive, isPromise, isRegExp, isSet, isString, isSymbol, isType, isUndefined, isWeakMap, isWeakSet */
+/***/ "./node_modules/is-what/dist/index.es.js":
+/*!***********************************************!*\
+  !*** ./node_modules/is-what/dist/index.es.js ***!
+  \***********************************************/
+/*! exports provided: getType, isAnyObject, isArray, isBlob, isBoolean, isDate, isEmptyArray, isEmptyObject, isEmptyString, isError, isFile, isFullArray, isFullObject, isFullString, isFunction, isMap, isNaNValue, isNegativeNumber, isNull, isNullOrUndefined, isNumber, isObject, isObjectLike, isOneOf, isPlainObject, isPositiveNumber, isPrimitive, isPromise, isRegExp, isSet, isString, isSymbol, isType, isUndefined, isWeakMap, isWeakSet */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -595,6 +595,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isFunction", function() { return isFunction; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isMap", function() { return isMap; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isNaNValue", function() { return isNaNValue; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isNegativeNumber", function() { return isNegativeNumber; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isNull", function() { return isNull; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isNullOrUndefined", function() { return isNullOrUndefined; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isNumber", function() { return isNumber; });
@@ -602,6 +603,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isObjectLike", function() { return isObjectLike; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isOneOf", function() { return isOneOf; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isPlainObject", function() { return isPlainObject; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isPositiveNumber", function() { return isPositiveNumber; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isPrimitive", function() { return isPrimitive; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isPromise", function() { return isPromise; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isRegExp", function() { return isRegExp; });
@@ -773,6 +775,24 @@ function isNumber(payload) {
     return getType(payload) === 'Number' && !isNaN(payload);
 }
 /**
+ * Returns whether the payload is a positive number (but not 0)
+ *
+ * @param {*} payload
+ * @returns {payload is number}
+ */
+function isPositiveNumber(payload) {
+    return isNumber(payload) && payload > 0;
+}
+/**
+ * Returns whether the payload is a negative number (but not 0)
+ *
+ * @param {*} payload
+ * @returns {payload is number}
+ */
+function isNegativeNumber(payload) {
+    return isNumber(payload) && payload < 0;
+}
+/**
  * Returns whether the payload is a boolean
  *
  * @param {*} payload
@@ -909,11 +929,9 @@ function isPrimitive(payload) {
  * @param {*} payload
  * @returns {(payload is null | undefined)}
  */
-var isNullOrUndefined = isOneOf(isNull, isUndefined);
+const isNullOrUndefined = isOneOf(isNull, isUndefined);
 function isOneOf(a, b, c, d, e) {
-    return function (value) {
-        return a(value) || b(value) || (!!c && c(value)) || (!!d && d(value)) || (!!e && e(value));
-    };
+    return (value) => a(value) || b(value) || (!!c && c(value)) || (!!d && d(value)) || (!!e && e(value));
 }
 /**
  * Does a generic check to check that the given payload is of a given type.
@@ -934,7 +952,7 @@ function isType(payload, type) {
         throw new TypeError('Type is not a class');
     }
     // Classes usually have names (as functions usually have names)
-    var name = type.name;
+    const name = type.name;
     return getType(payload) === name || Boolean(payload && payload.constructor === type);
 }
 
@@ -943,10 +961,10 @@ function isType(payload, type) {
 
 /***/ }),
 
-/***/ "./node_modules/merge-anything/dist/index.esm.js":
-/*!*******************************************************!*\
-  !*** ./node_modules/merge-anything/dist/index.esm.js ***!
-  \*******************************************************/
+/***/ "./node_modules/merge-anything/dist/index.es.js":
+/*!******************************************************!*\
+  !*** ./node_modules/merge-anything/dist/index.es.js ***!
+  \******************************************************/
 /*! exports provided: concatArrays, merge, mergeAndCompare, mergeAndConcat */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -956,29 +974,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "merge", function() { return merge; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "mergeAndCompare", function() { return mergeAndCompare; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "mergeAndConcat", function() { return mergeAndConcat; });
-/* harmony import */ var is_what__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! is-what */ "./node_modules/is-what/dist/index.esm.js");
+/* harmony import */ var is_what__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! is-what */ "./node_modules/is-what/dist/index.es.js");
 
-
-/*! *****************************************************************************
-Copyright (c) Microsoft Corporation.
-
-Permission to use, copy, modify, and/or distribute this software for any
-purpose with or without fee is hereby granted.
-
-THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
-REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
-AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
-INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
-LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
-OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
-PERFORMANCE OF THIS SOFTWARE.
-***************************************************************************** */
-
-function __spreadArray(to, from) {
-    for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
-        to[j] = from[i];
-    return to;
-}
 
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 function concatArrays(originVal, newVal) {
@@ -990,7 +987,7 @@ function concatArrays(originVal, newVal) {
 }
 
 function assignProp(carry, key, newVal, originalObject) {
-    var propType = {}.propertyIsEnumerable.call(originalObject, key)
+    const propType = {}.propertyIsEnumerable.call(originalObject, key)
         ? 'enumerable'
         : 'nonenumerable';
     if (propType === 'enumerable')
@@ -1009,12 +1006,12 @@ function mergeRecursively(origin, newComer, compareFn) {
     if (!Object(is_what__WEBPACK_IMPORTED_MODULE_0__["isPlainObject"])(newComer))
         return newComer;
     // define newObject to merge all values upon
-    var newObject = {};
+    let newObject = {};
     if (Object(is_what__WEBPACK_IMPORTED_MODULE_0__["isPlainObject"])(origin)) {
-        var props_1 = Object.getOwnPropertyNames(origin);
-        var symbols_1 = Object.getOwnPropertySymbols(origin);
-        newObject = __spreadArray(__spreadArray([], props_1), symbols_1).reduce(function (carry, key) {
-            var targetVal = origin[key];
+        const props = Object.getOwnPropertyNames(origin);
+        const symbols = Object.getOwnPropertySymbols(origin);
+        newObject = [...props, ...symbols].reduce((carry, key) => {
+            const targetVal = origin[key];
             if ((!Object(is_what__WEBPACK_IMPORTED_MODULE_0__["isSymbol"])(key) && !Object.getOwnPropertyNames(newComer).includes(key)) ||
                 (Object(is_what__WEBPACK_IMPORTED_MODULE_0__["isSymbol"])(key) && !Object.getOwnPropertySymbols(newComer).includes(key))) {
                 assignProp(carry, key, targetVal, origin);
@@ -1023,17 +1020,17 @@ function mergeRecursively(origin, newComer, compareFn) {
         }, {});
     }
     // newObject has all properties that newComer hasn't
-    var props = Object.getOwnPropertyNames(newComer);
-    var symbols = Object.getOwnPropertySymbols(newComer);
-    var result = __spreadArray(__spreadArray([], props), symbols).reduce(function (carry, key) {
+    const props = Object.getOwnPropertyNames(newComer);
+    const symbols = Object.getOwnPropertySymbols(newComer);
+    const result = [...props, ...symbols].reduce((carry, key) => {
         // re-define the origin and newComer as targetVal and newVal
-        var newVal = newComer[key];
-        var targetVal = Object(is_what__WEBPACK_IMPORTED_MODULE_0__["isPlainObject"])(origin) ? origin[key] : undefined;
+        let newVal = newComer[key];
+        const targetVal = Object(is_what__WEBPACK_IMPORTED_MODULE_0__["isPlainObject"])(origin) ? origin[key] : undefined;
         // When newVal is an object do the merge recursively
         if (targetVal !== undefined && Object(is_what__WEBPACK_IMPORTED_MODULE_0__["isPlainObject"])(newVal)) {
             newVal = mergeRecursively(targetVal, newVal, compareFn);
         }
-        var propToAssign = compareFn ? compareFn(targetVal, newVal, key) : newVal;
+        const propToAssign = compareFn ? compareFn(targetVal, newVal, key) : newVal;
         assignProp(carry, key, propToAssign, newComer);
         return carry;
     }, newObject);
@@ -1046,30 +1043,18 @@ function mergeRecursively(origin, newComer, compareFn) {
  * @param object
  * @param otherObjects
  */
-function merge(object) {
-    var otherObjects = [];
-    for (var _i = 1; _i < arguments.length; _i++) {
-        otherObjects[_i - 1] = arguments[_i];
-    }
-    return otherObjects.reduce(function (result, newComer) {
+function merge(object, ...otherObjects) {
+    return otherObjects.reduce((result, newComer) => {
         return mergeRecursively(result, newComer);
     }, object);
 }
-function mergeAndCompare(compareFn, object) {
-    var otherObjects = [];
-    for (var _i = 2; _i < arguments.length; _i++) {
-        otherObjects[_i - 2] = arguments[_i];
-    }
-    return otherObjects.reduce(function (result, newComer) {
+function mergeAndCompare(compareFn, object, ...otherObjects) {
+    return otherObjects.reduce((result, newComer) => {
         return mergeRecursively(result, newComer, compareFn);
     }, object);
 }
-function mergeAndConcat(object) {
-    var otherObjects = [];
-    for (var _i = 1; _i < arguments.length; _i++) {
-        otherObjects[_i - 1] = arguments[_i];
-    }
-    return otherObjects.reduce(function (result, newComer) {
+function mergeAndConcat(object, ...otherObjects) {
+    return otherObjects.reduce((result, newComer) => {
         return mergeRecursively(result, newComer, concatArrays);
     }, object);
 }
@@ -1110,7 +1095,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__);
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_9__);
-/* harmony import */ var merge_anything__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! merge-anything */ "./node_modules/merge-anything/dist/index.esm.js");
+/* harmony import */ var merge_anything__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! merge-anything */ "./node_modules/merge-anything/dist/index.es.js");
 /* harmony import */ var _packages_devices_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../../packages/devices.js */ "../../packages/devices.js");
 
 
@@ -1142,6 +1127,22 @@ var MarginControls = /*#__PURE__*/function (_Component) {
 
     _this = _super.apply(this, arguments);
     _this.parentProps = attr.props;
+    _this.spacing = attr !== null && attr !== void 0 && attr.margin ? attr.margin : [{
+      "label": "1",
+      "value": "1"
+    }, {
+      "label": "2",
+      "value": "2"
+    }, {
+      "label": "3",
+      "value": "3"
+    }, {
+      "label": "4",
+      "value": "4"
+    }, {
+      "label": "5",
+      "value": "5"
+    }];
 
     if (!_this.parentProps.attributes.hasOwnProperty('padding')) {
       _this.parentProps.attributes.padding = {};
@@ -1301,68 +1302,82 @@ var MarginControls = /*#__PURE__*/function (_Component) {
           };
         })
       }, function (tab) {
-        return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["Fragment"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_9__["RangeControl"], {
+        return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["Fragment"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_9__["SelectControl"], {
           label: "All",
           value: _this5.state.padding[tab.name].all,
+          options: [{
+            label: 'Default',
+            value: ''
+          }].concat(_this5.spacing),
           onChange: function onChange(value) {
             _this5.setPadding('all', tab.name, value);
-          },
-          min: 0,
-          max: 5
+          }
         }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_9__["HorizontalRule"], null), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])("div", {
           className: "child-range-control"
-        }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_9__["RangeControl"], {
+        }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_9__["SelectControl"], {
           label: "Padding Y",
           value: _this5.state.padding[tab.name].y,
+          options: [{
+            label: 'Default',
+            value: ''
+          }].concat(_this5.spacing),
           onChange: function onChange(value) {
             _this5.setPadding('y', tab.name, value);
-          },
-          min: 0,
-          max: 5
+          }
         }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])("div", {
           className: "child-range-control"
-        }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_9__["RangeControl"], {
+        }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_9__["SelectControl"], {
           label: "Top",
           value: _this5.state.padding[tab.name].top,
+          options: [{
+            label: 'Default',
+            value: ''
+          }].concat(_this5.spacing),
           onChange: function onChange(value) {
             return _this5.setPadding('top', tab.name, value);
-          },
-          min: 0,
-          max: 5
-        }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_9__["RangeControl"], {
+          }
+        }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_9__["SelectControl"], {
           label: "Bottom",
           value: _this5.state.padding[tab.name].bottom,
+          options: [{
+            label: 'Default',
+            value: ''
+          }].concat(_this5.spacing),
           onChange: function onChange(value) {
             return _this5.setPadding('bottom', tab.name, value);
-          },
-          min: 0,
-          max: 5
-        })), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_9__["HorizontalRule"], null), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_9__["RangeControl"], {
+          }
+        })), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_9__["HorizontalRule"], null), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_9__["SelectControl"], {
           label: "X",
           value: _this5.state.padding[tab.name].x,
+          options: [{
+            label: 'Default',
+            value: ''
+          }].concat(_this5.spacing),
           onChange: function onChange(value) {
             _this5.setPadding('x', tab.name, value);
-          },
-          min: 0,
-          max: 5
+          }
         }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])("div", {
           className: "child-range-control"
-        }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_9__["RangeControl"], {
+        }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_9__["SelectControl"], {
           label: "Left",
           value: _this5.state.padding[tab.name].left,
+          options: [{
+            label: 'Default',
+            value: ''
+          }].concat(_this5.spacing),
           onChange: function onChange(value) {
             return _this5.setPadding('left', tab.name, value);
-          },
-          min: 0,
-          max: 5
-        }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_9__["RangeControl"], {
+          }
+        }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_9__["SelectControl"], {
           label: "Right",
           value: _this5.state.padding[tab.name].right,
+          options: [{
+            label: 'Default',
+            value: ''
+          }].concat(_this5.spacing),
           onChange: function onChange(value) {
             return _this5.setPadding('right', tab.name, value);
-          },
-          min: 0,
-          max: 5
+          }
         }))), _this5.renderBtnReset('padding', tab.name));
       })), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_9__["PanelBody"], {
         title: 'Margin',
@@ -1379,68 +1394,82 @@ var MarginControls = /*#__PURE__*/function (_Component) {
           };
         })
       }, function (tab) {
-        return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["Fragment"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_9__["RangeControl"], {
+        return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["Fragment"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_9__["SelectControl"], {
           label: "All",
           value: _this5.state.margin[tab.name].all,
+          options: [{
+            label: 'Default',
+            value: ''
+          }].concat(_this5.spacing),
           onChange: function onChange(value) {
             _this5.setMargin('all', tab.name, value);
-          },
-          min: 0,
-          max: 5
+          }
         }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_9__["HorizontalRule"], null), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])("div", {
           className: "child-range-control"
-        }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_9__["RangeControl"], {
+        }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_9__["SelectControl"], {
           label: "Y",
           value: _this5.state.margin[tab.name].y,
+          options: [{
+            label: 'Default',
+            value: ''
+          }].concat(_this5.spacing),
           onChange: function onChange(value) {
             _this5.setMargin('y', tab.name, value);
-          },
-          min: 0,
-          max: 5
+          }
         }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])("div", {
           className: "child-range-control"
-        }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_9__["RangeControl"], {
+        }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_9__["SelectControl"], {
           label: "Top",
           value: _this5.state.margin[tab.name].top,
+          options: [{
+            label: 'Default',
+            value: ''
+          }].concat(_this5.spacing),
           onChange: function onChange(value) {
             return _this5.setMargin('top', tab.name, value);
-          },
-          min: 0,
-          max: 5
-        }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_9__["RangeControl"], {
+          }
+        }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_9__["SelectControl"], {
           label: "Bottom",
           value: _this5.state.margin[tab.name].bottom,
+          options: [{
+            label: 'Default',
+            value: ''
+          }].concat(_this5.spacing),
           onChange: function onChange(value) {
             return _this5.setMargin('bottom', tab.name, value);
-          },
-          min: 0,
-          max: 5
-        })), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_9__["HorizontalRule"], null), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_9__["RangeControl"], {
+          }
+        })), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_9__["HorizontalRule"], null), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_9__["SelectControl"], {
           label: "X",
           value: _this5.state.margin[tab.name].x,
+          options: [{
+            label: 'Default',
+            value: ''
+          }].concat(_this5.spacing),
           onChange: function onChange(value) {
             _this5.setMargin('x', tab.name, value);
-          },
-          min: 0,
-          max: 5
+          }
         }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])("div", {
           className: "child-range-control"
-        }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_9__["RangeControl"], {
+        }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_9__["SelectControl"], {
           label: "Left",
           value: _this5.state.margin[tab.name].left,
+          options: [{
+            label: 'Default',
+            value: ''
+          }].concat(_this5.spacing),
           onChange: function onChange(value) {
             return _this5.setMargin('left', tab.name, value);
-          },
-          min: 0,
-          max: 5
-        }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_9__["RangeControl"], {
+          }
+        }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_9__["SelectControl"], {
           label: "Right",
           value: _this5.state.margin[tab.name].right,
+          options: [{
+            label: 'Default',
+            value: ''
+          }].concat(_this5.spacing),
           onChange: function onChange(value) {
             return _this5.setMargin('right', tab.name, value);
-          },
-          min: 0,
-          max: 5
+          }
         }))), _this5.renderBtnReset('margin', tab.name));
       })));
     }
@@ -2610,7 +2639,8 @@ var WpeComponent = /*#__PURE__*/function (_Component) {
           clientId = _this$props2.clientId,
           element = _this$props2.element,
           current_user_can_edit_posts = _this$props2.current_user_can_edit_posts,
-          experimentalDeviceType = _this$props2.experimentalDeviceType; // Because of ID will be not saved to the block’s comment delimiter default attribute, we manually set it.
+          experimentalDeviceType = _this$props2.experimentalDeviceType,
+          theme_spec = _this$props2.theme_spec; // Because of ID will be not saved to the block’s comment delimiter default attribute, we manually set it.
 
       if (typeof attributes.id_component == 'undefined') this.setAttributes({
         id_component: element.id
@@ -2741,7 +2771,8 @@ var WpeComponent = /*#__PURE__*/function (_Component) {
 
       return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["Fragment"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_12__["InspectorControls"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_marginControls_js__WEBPACK_IMPORTED_MODULE_14__["MarginControls"], {
         props: this.props,
-        deviceType: experimentalDeviceType
+        deviceType: experimentalDeviceType,
+        margin: theme_spec !== null && theme_spec !== void 0 && theme_spec.margin ? theme_spec === null || theme_spec === void 0 ? void 0 : theme_spec.margin : null
       })), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_13__["Placeholder"], {
         key: clientId + "-placeholder",
         label: element.name,
@@ -2754,7 +2785,7 @@ var WpeComponent = /*#__PURE__*/function (_Component) {
   return WpeComponent;
 }(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__["Component"]);
 
-/* harmony default export */ __webpack_exports__["default"] = (function (element, current_user_can_edit_posts, frontspec_styles) {
+/* harmony default export */ __webpack_exports__["default"] = (function (element, current_user_can_edit_posts, frontspec_styles, theme_spec) {
   return Object(_wordpress_data__WEBPACK_IMPORTED_MODULE_10__["withSelect"])(function (select, props) {
     var _select = select('core'),
         getEntityRecords = _select.getEntityRecords;
@@ -2785,6 +2816,7 @@ var WpeComponent = /*#__PURE__*/function (_Component) {
       element: element,
       current_user_can_edit_posts: current_user_can_edit_posts,
       frontspec_styles: frontspec_styles,
+      theme_spec: theme_spec,
       experimentalDeviceType: __experimentalGetPreviewDeviceType()
     };
   })(WpeComponent);
@@ -2967,7 +2999,7 @@ Object.values(global_localized.components).forEach(function (element) {
     parent: element.parent,
     attributes: initAttributes,
     description: element.description,
-    edit: Object(_edit__WEBPACK_IMPORTED_MODULE_5__["default"])(element, current_user_can_edit_posts, global_localized.styles),
+    edit: Object(_edit__WEBPACK_IMPORTED_MODULE_5__["default"])(element, current_user_can_edit_posts, global_localized.styles, theme_spec),
     save: function save() {
       return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__["createElement"])("div", _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_4__["useBlockProps"].save(), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_4__["InnerBlocks"].Content, null));
     }

@@ -237,7 +237,6 @@
         background: rgba(0,124,186,.05);
 
         &.block-list-appender {
-            visibility: hidden;
             border: 1px dashed rgba(0,124,186,.5);
             background: none;
             width: 100%;
@@ -245,6 +244,9 @@
             button {
                 box-shadow: none;
             }
+        }
+        .block-list-appender {
+            visibility: hidden;
         }
 
         & > .wp-block {
