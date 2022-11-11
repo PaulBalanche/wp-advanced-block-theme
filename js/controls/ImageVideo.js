@@ -1,6 +1,5 @@
 import {
-    MediaPlaceholder,
-    __experimentalLinkControl as LinkControl
+    MediaPlaceholder
 } from '@wordpress/block-editor';
 
 import {
@@ -10,7 +9,7 @@ import {
     RadioControl,
 } from '@wordpress/components';
 
-import { updateAttributes, removeEltRepeatable, fileSizeFormat, setAttributes } from '../Attributes';
+import { updateAttributes, removeEltRepeatable, fileSizeFormat, setAttributes, renderPanelComponent } from '../attributes';
 
 export function renderImageVideo( type, args, id, label, keys, valueProp, objectValue, repeatable = false, required = false, clientId ) {
 

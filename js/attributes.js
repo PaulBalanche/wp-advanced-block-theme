@@ -9,15 +9,15 @@ import { getLayouts, setBodyDevice, getBodyDevice } from './devices';
 
 import {
     renderDateTimeControl,
-    // renderFileControl,
-    // renderImageVideoControl,
+    renderFileControl,
+    renderImageVideoControl,
     renderLinkControl,
     renderRadioControl,
     renderRelationControl,
     renderSelectControl,
     renderTextControl,
     renderTextareaControl,
-    // renderToggleControl,
+    renderToggleControl,
     // renderWysiwygControl
 } from './controls';
 
@@ -153,9 +153,9 @@ export function renderControl( prop, keys, valueProp, clientId ) {
             //     blocReturned.push( renderWysiwygControl( fieldId, label, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, clientId ) );
             //     break;
 
-            // case 'boolean':
-            //     blocReturned.push( renderToggleControl( fieldId, label, prop.help, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, clientId ) );
-            //     break;
+            case 'boolean':
+                blocReturned.push( renderToggleControl( fieldId, label, prop.help, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, clientId ) );
+                break;
 
             case 'select':
             case 'color':
@@ -178,18 +178,18 @@ export function renderControl( prop, keys, valueProp, clientId ) {
                 blocReturned.push( renderDateTimeControl( fieldId, label, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, clientId ) );
                 break;
 
-            // case 'image':
-            //     blocReturned.push( renderImageVideoControl( prop.type, ( prop.image && typeof prop.image == 'object' ) ? prop.image : {}, fieldId, label, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, clientId ) );
-            //     break;
+            case 'image':
+                blocReturned.push( renderImageVideoControl( prop.type, ( prop.image && typeof prop.image == 'object' ) ? prop.image : {}, fieldId, label, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, clientId ) );
+                break;
 
-            // case 'video':
-            //     blocReturned.push( renderImageVideoControl( prop.type, ( prop.video && typeof prop.video == 'object' ) ? prop.video : {}, fieldId, label, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, clientId ) );
-            //     break;
+            case 'video':
+                blocReturned.push( renderImageVideoControl( prop.type, ( prop.video && typeof prop.video == 'object' ) ? prop.video : {}, fieldId, label, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, clientId ) );
+                break;
             
-            // case 'file':
-            // case 'gallery':
-            //     blocReturned.push( renderFileControl( prop.type, fieldId, label, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, clientId ) );
-            //     break;
+            case 'file':
+            case 'gallery':
+                blocReturned.push( renderFileControl( prop.type, fieldId, label, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, clientId ) );
+                break;
 
             case 'object':
 

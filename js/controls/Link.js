@@ -1,8 +1,11 @@
 import {
     Button,
-    TextControl,
-    LinkControl
+    TextControl
 } from '@wordpress/components';
+
+import {
+    __experimentalLinkControl as LinkControl
+} from '@wordpress/block-editor';
 
 import { updateAttributes, removeEltRepeatable, renderPanelComponent } from '../attributes';
 

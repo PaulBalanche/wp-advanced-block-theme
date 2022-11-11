@@ -3,15 +3,15 @@ export function renderDateTimeControl( id, label, keys, valueProp, objectValue, 
     return renderDateTime( id, label, keys, valueProp, objectValue, repeatable, required, clientId );
 }
 
-// import { renderFile } from './controls/File';
-// export function renderFileControl( type, id, label, keys, valueProp, objectValue, repeatable = false, required = false, clientId ) {
-//     return renderFile( type, id, label, keys, valueProp, objectValue, repeatable, required, clientId );
-// }
+import { renderFile } from './controls/File';
+export function renderFileControl( type, id, label, keys, valueProp, objectValue, repeatable = false, required = false, clientId ) {
+    return renderFile( type, id, label, keys, valueProp, objectValue, repeatable, required, clientId );
+}
 
-// import { renderImageVideo } from './controls/ImageVideo';
-// export function renderImageVideoControl( type, args, id, label, keys, valueProp, objectValue, repeatable = false, required = false, clientId ) {
-//     return renderImageVideo( type, args, id, label, keys, valueProp, objectValue, repeatable, required, clientId );
-// }
+import { renderImageVideo } from './controls/ImageVideo';
+export function renderImageVideoControl( type, args, id, label, keys, valueProp, objectValue, repeatable = false, required = false, clientId ) {
+    return renderImageVideo( type, args, id, label, keys, valueProp, objectValue, repeatable, required, clientId );
+}
 
 import { renderLink } from './controls/Link';
 export function renderLinkControl( id, label, keys, valueProp, objectValue, repeatable = false, required = false, clientId ) {
@@ -43,10 +43,10 @@ export function renderTextareaControl( id, label, keys, valueProp, objectValue, 
     return renderTextarea( id, label, keys, valueProp, objectValue, repeatable, required, clientId );
 }
 
-// import { renderToggle } from './controls/Toggle';
-// export function renderToggleControl( id, label, help, keys, valueProp, objectValue, repeatable = false, required = false, clientId ) {
-//     return renderToggle( id, label, help, keys, valueProp, objectValue, repeatable, required, clientId );
-// }
+import { renderToggle } from './controls/Toggle';
+export function renderToggleControl( id, label, help, keys, valueProp, objectValue, repeatable = false, required = false, clientId ) {
+    return renderToggle( id, label, help, keys, valueProp, objectValue, repeatable, required, clientId );
+}
 
 // import { renderWysiwyg } from './controls/Wysiwyg';
 // export function renderWysiwygControl( id, label, keys, valueProp, objectValue, repeatable = false, required = false, clientId ) {

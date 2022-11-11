@@ -1031,9 +1031,10 @@ function renderControl(prop, keys, valueProp, clientId) {
       // case 'wysiwyg':
       //     blocReturned.push( renderWysiwygControl( fieldId, label, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, clientId ) );
       //     break;
-      // case 'boolean':
-      //     blocReturned.push( renderToggleControl( fieldId, label, prop.help, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, clientId ) );
-      //     break;
+
+      case 'boolean':
+        blocReturned.push((0,_controls__WEBPACK_IMPORTED_MODULE_3__.renderToggleControl)(fieldId, label, prop.help, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, clientId));
+        break;
 
       case 'select':
       case 'color':
@@ -1055,16 +1056,19 @@ function renderControl(prop, keys, valueProp, clientId) {
       case 'date':
         blocReturned.push((0,_controls__WEBPACK_IMPORTED_MODULE_3__.renderDateTimeControl)(fieldId, label, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, clientId));
         break;
-      // case 'image':
-      //     blocReturned.push( renderImageVideoControl( prop.type, ( prop.image && typeof prop.image == 'object' ) ? prop.image : {}, fieldId, label, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, clientId ) );
-      //     break;
-      // case 'video':
-      //     blocReturned.push( renderImageVideoControl( prop.type, ( prop.video && typeof prop.video == 'object' ) ? prop.video : {}, fieldId, label, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, clientId ) );
-      //     break;
-      // case 'file':
-      // case 'gallery':
-      //     blocReturned.push( renderFileControl( prop.type, fieldId, label, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, clientId ) );
-      //     break;
+
+      case 'image':
+        blocReturned.push((0,_controls__WEBPACK_IMPORTED_MODULE_3__.renderImageVideoControl)(prop.type, prop.image && typeof prop.image == 'object' ? prop.image : {}, fieldId, label, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, clientId));
+        break;
+
+      case 'video':
+        blocReturned.push((0,_controls__WEBPACK_IMPORTED_MODULE_3__.renderImageVideoControl)(prop.type, prop.video && typeof prop.video == 'object' ? prop.video : {}, fieldId, label, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, clientId));
+        break;
+
+      case 'file':
+      case 'gallery':
+        blocReturned.push((0,_controls__WEBPACK_IMPORTED_MODULE_3__.renderFileControl)(prop.type, fieldId, label, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, clientId));
+        break;
 
       case 'object':
         if (typeof prop.props == "object") {
@@ -1166,62 +1170,74 @@ function renderPanelComponent(id, label, inner) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "renderDateTimeControl": function() { return /* binding */ renderDateTimeControl; },
+/* harmony export */   "renderFileControl": function() { return /* binding */ renderFileControl; },
+/* harmony export */   "renderImageVideoControl": function() { return /* binding */ renderImageVideoControl; },
 /* harmony export */   "renderLinkControl": function() { return /* binding */ renderLinkControl; },
 /* harmony export */   "renderRadioControl": function() { return /* binding */ renderRadioControl; },
 /* harmony export */   "renderRelationControl": function() { return /* binding */ renderRelationControl; },
 /* harmony export */   "renderSelectControl": function() { return /* binding */ renderSelectControl; },
 /* harmony export */   "renderTextControl": function() { return /* binding */ renderTextControl; },
-/* harmony export */   "renderTextareaControl": function() { return /* binding */ renderTextareaControl; }
+/* harmony export */   "renderTextareaControl": function() { return /* binding */ renderTextareaControl; },
+/* harmony export */   "renderToggleControl": function() { return /* binding */ renderToggleControl; }
 /* harmony export */ });
 /* harmony import */ var _controls_DateTime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./controls/DateTime */ "../../../js/controls/DateTime.js");
-/* harmony import */ var _controls_Link__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./controls/Link */ "../../../js/controls/Link.js");
-/* harmony import */ var _controls_Radio__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./controls/Radio */ "../../../js/controls/Radio.js");
-/* harmony import */ var _controls_Relation__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./controls/Relation */ "../../../js/controls/Relation.js");
-/* harmony import */ var _controls_Select__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./controls/Select */ "../../../js/controls/Select.js");
-/* harmony import */ var _controls_Text__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./controls/Text */ "../../../js/controls/Text.js");
-/* harmony import */ var _controls_Textarea__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./controls/Textarea */ "../../../js/controls/Textarea.js");
+/* harmony import */ var _controls_File__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./controls/File */ "../../../js/controls/File.js");
+/* harmony import */ var _controls_ImageVideo__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./controls/ImageVideo */ "../../../js/controls/ImageVideo.js");
+/* harmony import */ var _controls_Link__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./controls/Link */ "../../../js/controls/Link.js");
+/* harmony import */ var _controls_Radio__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./controls/Radio */ "../../../js/controls/Radio.js");
+/* harmony import */ var _controls_Relation__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./controls/Relation */ "../../../js/controls/Relation.js");
+/* harmony import */ var _controls_Select__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./controls/Select */ "../../../js/controls/Select.js");
+/* harmony import */ var _controls_Text__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./controls/Text */ "../../../js/controls/Text.js");
+/* harmony import */ var _controls_Textarea__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./controls/Textarea */ "../../../js/controls/Textarea.js");
+/* harmony import */ var _controls_Toggle__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./controls/Toggle */ "../../../js/controls/Toggle.js");
 
 function renderDateTimeControl(id, label, keys, valueProp, objectValue) {
   let repeatable = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : false;
   let required = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : false;
   let clientId = arguments.length > 7 ? arguments[7] : undefined;
   return (0,_controls_DateTime__WEBPACK_IMPORTED_MODULE_0__.renderDateTime)(id, label, keys, valueProp, objectValue, repeatable, required, clientId);
-} // import { renderFile } from './controls/File';
-// export function renderFileControl( type, id, label, keys, valueProp, objectValue, repeatable = false, required = false, clientId ) {
-//     return renderFile( type, id, label, keys, valueProp, objectValue, repeatable, required, clientId );
-// }
-// import { renderImageVideo } from './controls/ImageVideo';
-// export function renderImageVideoControl( type, args, id, label, keys, valueProp, objectValue, repeatable = false, required = false, clientId ) {
-//     return renderImageVideo( type, args, id, label, keys, valueProp, objectValue, repeatable, required, clientId );
-// }
+}
 
+function renderFileControl(type, id, label, keys, valueProp, objectValue) {
+  let repeatable = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : false;
+  let required = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : false;
+  let clientId = arguments.length > 8 ? arguments[8] : undefined;
+  return (0,_controls_File__WEBPACK_IMPORTED_MODULE_1__.renderFile)(type, id, label, keys, valueProp, objectValue, repeatable, required, clientId);
+}
+
+function renderImageVideoControl(type, args, id, label, keys, valueProp, objectValue) {
+  let repeatable = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : false;
+  let required = arguments.length > 8 && arguments[8] !== undefined ? arguments[8] : false;
+  let clientId = arguments.length > 9 ? arguments[9] : undefined;
+  return (0,_controls_ImageVideo__WEBPACK_IMPORTED_MODULE_2__.renderImageVideo)(type, args, id, label, keys, valueProp, objectValue, repeatable, required, clientId);
+}
 
 function renderLinkControl(id, label, keys, valueProp, objectValue) {
   let repeatable = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : false;
   let required = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : false;
   let clientId = arguments.length > 7 ? arguments[7] : undefined;
-  return (0,_controls_Link__WEBPACK_IMPORTED_MODULE_1__.renderLink)(id, label, keys, valueProp, objectValue, repeatable, required, clientId);
+  return (0,_controls_Link__WEBPACK_IMPORTED_MODULE_3__.renderLink)(id, label, keys, valueProp, objectValue, repeatable, required, clientId);
 }
 
 function renderRadioControl(id, label, options, keys, valueProp, objectValue) {
   let repeatable = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : false;
   let required = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : false;
   let clientId = arguments.length > 8 ? arguments[8] : undefined;
-  return (0,_controls_Radio__WEBPACK_IMPORTED_MODULE_2__.renderRadio)(id, label, options, keys, valueProp, objectValue, repeatable, required, clientId);
+  return (0,_controls_Radio__WEBPACK_IMPORTED_MODULE_4__.renderRadio)(id, label, options, keys, valueProp, objectValue, repeatable, required, clientId);
 }
 
 function renderRelationControl(id, label, entity, keys, valueProp, objectValue) {
   let repeatable = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : false;
   let required = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : false;
   let clientId = arguments.length > 8 ? arguments[8] : undefined;
-  return (0,_controls_Relation__WEBPACK_IMPORTED_MODULE_3__.renderRelation)(id, label, entity, keys, valueProp, objectValue, repeatable, required, clientId);
+  return (0,_controls_Relation__WEBPACK_IMPORTED_MODULE_5__.renderRelation)(id, label, entity, keys, valueProp, objectValue, repeatable, required, clientId);
 }
 
 function renderSelectControl(id, label, options, keys, valueProp, attributeValue) {
   let repeatable = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : false;
   let required = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : false;
   let clientId = arguments.length > 8 ? arguments[8] : undefined;
-  return (0,_controls_Select__WEBPACK_IMPORTED_MODULE_4__.renderSelect)(id, label, options, keys, valueProp, attributeValue, repeatable, required, clientId);
+  return (0,_controls_Select__WEBPACK_IMPORTED_MODULE_6__.renderSelect)(id, label, options, keys, valueProp, attributeValue, repeatable, required, clientId);
 }
 
 function renderTextControl(id, label, keys, valueProp, objectValue) {
@@ -1229,19 +1245,22 @@ function renderTextControl(id, label, keys, valueProp, objectValue) {
   let repeatable = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : false;
   let required = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : false;
   let clientId = arguments.length > 8 ? arguments[8] : undefined;
-  return (0,_controls_Text__WEBPACK_IMPORTED_MODULE_5__.renderText)(id, label, keys, valueProp, objectValue, isNumber, repeatable, required, clientId);
+  return (0,_controls_Text__WEBPACK_IMPORTED_MODULE_7__.renderText)(id, label, keys, valueProp, objectValue, isNumber, repeatable, required, clientId);
 }
 
 function renderTextareaControl(id, label, keys, valueProp, objectValue) {
   let repeatable = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : false;
   let required = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : false;
   let clientId = arguments.length > 7 ? arguments[7] : undefined;
-  return (0,_controls_Textarea__WEBPACK_IMPORTED_MODULE_6__.renderTextarea)(id, label, keys, valueProp, objectValue, repeatable, required, clientId);
-} // import { renderToggle } from './controls/Toggle';
-// export function renderToggleControl( id, label, help, keys, valueProp, objectValue, repeatable = false, required = false, clientId ) {
-//     return renderToggle( id, label, help, keys, valueProp, objectValue, repeatable, required, clientId );
-// }
-// import { renderWysiwyg } from './controls/Wysiwyg';
+  return (0,_controls_Textarea__WEBPACK_IMPORTED_MODULE_8__.renderTextarea)(id, label, keys, valueProp, objectValue, repeatable, required, clientId);
+}
+
+function renderToggleControl(id, label, help, keys, valueProp, objectValue) {
+  let repeatable = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : false;
+  let required = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : false;
+  let clientId = arguments.length > 8 ? arguments[8] : undefined;
+  return (0,_controls_Toggle__WEBPACK_IMPORTED_MODULE_9__.renderToggle)(id, label, help, keys, valueProp, objectValue, repeatable, required, clientId);
+} // import { renderWysiwyg } from './controls/Wysiwyg';
 // export function renderWysiwygControl( id, label, keys, valueProp, objectValue, repeatable = false, required = false, clientId ) {
 //     return renderWysiwyg( id, label, keys, valueProp, objectValue, repeatable, required, clientId );
 // }
@@ -1309,6 +1328,430 @@ function renderDateTime(id, label, keys, valueProp, objectValue) {
 
 /***/ }),
 
+/***/ "../../../js/controls/File.js":
+/*!************************************!*\
+  !*** ../../../js/controls/File.js ***!
+  \************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "renderFile": function() { return /* binding */ renderFile; }
+/* harmony export */ });
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/block-editor */ "@wordpress/block-editor");
+/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _attributes__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../attributes */ "../../../js/attributes.js");
+
+
+
+
+function renderFile(type, id, label, keys, valueProp, objectValue) {
+  let repeatable = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : false;
+  let required = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : false;
+  let clientId = arguments.length > 8 ? arguments[8] : undefined;
+  label = label && required ? label + '*' : label;
+  let preview = false;
+
+  if (objectValue && typeof objectValue == 'object') {
+    switch (type) {
+      case "image":
+        preview = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
+          key: id + "-imagePreview",
+          alt: "Edit image",
+          title: "Edit image",
+          className: "edit-image-preview",
+          src: objectValue.preview
+        });
+        break;
+
+      case "video":
+        preview = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
+          key: id + "-filePreview",
+          alt: "Edit file",
+          title: "Edit file",
+          className: "edit-file-preview",
+          src: objectValue.preview
+        }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+          key: id + "-fileDetails",
+          className: "file-details"
+        }, objectValue.name, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), objectValue.mime, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), (0,_attributes__WEBPACK_IMPORTED_MODULE_3__.fileSizeFormat)(objectValue.size)));
+        break;
+
+      case "file":
+        preview = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
+          key: id + "-filePreview",
+          alt: "Edit file",
+          title: "Edit file",
+          className: "edit-file-preview",
+          src: objectValue.preview
+        }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+          key: id + "-fileDetails",
+          className: "file-details"
+        }, objectValue.name, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), objectValue.mime, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), (0,_attributes__WEBPACK_IMPORTED_MODULE_3__.fileSizeFormat)(objectValue.size)));
+        break;
+
+      case "gallery":
+        preview = [];
+        objectValue.forEach(image => {
+          preview.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", {
+            key: id + "-galleryImageContainerLi" + image.id,
+            className: "blocks-gallery-item"
+          }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
+            key: id + "-galleryImage_" + image.id,
+            src: image.preview
+          })));
+        });
+        let columns = objectValue.length > 5 ? 5 : objectValue.length;
+        preview = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("figure", {
+          key: id + "-galleryImagefigure",
+          className: "wp-block-gallery columns-" + columns
+        }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", {
+          key: id + "-galleryImageContainerUl",
+          className: "blocks-gallery-grid"
+        }, preview));
+        break;
+    }
+
+    preview = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      key: id + "-mediaPreviewContainer",
+      className: "media-preview-container"
+    }, preview, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Button, {
+      key: id + "-removeMedia",
+      isSecondary: true,
+      isSmall: true,
+      className: "reset-button",
+      onClick: () => {
+        if (type == "gallery" && objectValue.length > 1) (0,_attributes__WEBPACK_IMPORTED_MODULE_3__.setAttributes)({
+          [keys]: objectValue.slice(0, objectValue.length - 1)
+        }, clientId);else if (repeatable) (0,_attributes__WEBPACK_IMPORTED_MODULE_3__.removeEltRepeatable)(keys, valueProp);else (0,_attributes__WEBPACK_IMPORTED_MODULE_3__.setAttributes)({
+          [keys]: undefined
+        }, clientId);
+      }
+    }, "Remove"));
+  }
+
+  let inner = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    key: id + "-MediaPlaceholderBasicContainer",
+    className: "basicField"
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.MediaPlaceholder, {
+    key: id,
+    onSelect: value => {
+      let newValue = undefined;
+
+      switch (type) {
+        case "image":
+          if (typeof value.id != 'undefined') {
+            newValue = {
+              id: value.id,
+              preview: value.url
+            };
+          }
+
+          break;
+
+        case "video":
+          if (typeof value.id != 'undefined') {
+            newValue = {
+              id: value.id,
+              preview: value.icon,
+              name: value.filename,
+              mime: value.mime,
+              size: value.filesizeInBytes
+            };
+          }
+
+          break;
+
+        case "file":
+          if (typeof value.id != 'undefined') {
+            newValue = {
+              id: value.id,
+              preview: value.icon,
+              name: value.filename,
+              mime: value.mime,
+              size: value.filesizeInBytes
+            };
+          }
+
+          break;
+
+        case "gallery":
+          newValue = [];
+          value.forEach(image => {
+            if (typeof image.id != 'undefined') {
+              newValue.push({
+                id: image.id,
+                preview: image.url
+              });
+            }
+          });
+          break;
+      }
+
+      if (typeof newValue != 'undefined' && (typeof newValue != 'object' || Object.keys(newValue).length > 0)) (0,_attributes__WEBPACK_IMPORTED_MODULE_3__.updateAttributes)(keys, valueProp, newValue, false, clientId);
+    },
+    multiple: type == 'gallery',
+    addToGallery: type == 'gallery' && !!objectValue,
+    value: objectValue,
+    disableDropZone: true
+  }, preview));
+  return renderPanelComponent(id, label, inner, false);
+}
+
+/***/ }),
+
+/***/ "../../../js/controls/ImageVideo.js":
+/*!******************************************!*\
+  !*** ../../../js/controls/ImageVideo.js ***!
+  \******************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "renderImageVideo": function() { return /* binding */ renderImageVideo; }
+/* harmony export */ });
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/block-editor */ "@wordpress/block-editor");
+/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _attributes__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../attributes */ "../../../js/attributes.js");
+
+
+
+
+function renderImageVideo(type, args, id, label, keys, valueProp, objectValue) {
+  let repeatable = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : false;
+  let required = arguments.length > 8 && arguments[8] !== undefined ? arguments[8] : false;
+  let clientId = arguments.length > 9 ? arguments[9] : undefined;
+  label = label && required ? label + '*' : label;
+  let videoControl = [];
+  var tabPanelResponsive = []; // Responsive init
+
+  if (!args.responsive || typeof args.responsive != 'object') args.responsive = ['default']; // Remove useless data
+
+  if (typeof objectValue == 'object') {
+    for (var i in objectValue) {
+      if (!args.responsive.includes(i)) delete objectValue[i];
+    }
+  } // Loop on each responsive entries
+
+
+  for (var i in args.responsive) {
+    let responsive_id = args.responsive[i];
+    let responsiveContent = []; // Update component attribute if empty 
+
+    if (!objectValue[responsive_id]) {
+      if (typeof objectValue != 'object') (0,_attributes__WEBPACK_IMPORTED_MODULE_3__.updateAttributes)(keys, valueProp, {
+        [responsive_id]: {}
+      }, false, clientId);else (0,_attributes__WEBPACK_IMPORTED_MODULE_3__.updateAttributes)(keys.concat(responsive_id), valueProp, {}, false, clientId);
+    }
+
+    if (type == 'image') {
+      let preview = false;
+
+      if (objectValue[responsive_id] && typeof objectValue[responsive_id] == 'object' && objectValue[responsive_id].preview) {
+        preview = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+          key: id + "-mediaPreviewContainer" + responsive_id,
+          className: "media-preview-container"
+        }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
+          key: id + "-imagePreview" + responsive_id,
+          alt: "Edit image",
+          title: "Edit image",
+          className: "edit-image-preview",
+          src: objectValue[responsive_id].preview
+        }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Button, {
+          key: id + "-removeMedia" + responsive_id,
+          isSecondary: true,
+          isSmall: true,
+          className: "reset-button",
+          onClick: () => {
+            (0,_attributes__WEBPACK_IMPORTED_MODULE_3__.updateAttributes)(keys.concat(responsive_id), valueProp, undefined, false, clientId);
+          }
+        }, "Remove"));
+      } // MediaPlaceholder labels
+
+
+      let labels = {
+        title: responsive_id != 'default' ? label + ' (' + responsive_id + ')' : label
+      };
+
+      if (args.instructions && typeof args.instructions == 'object' && args.instructions[responsive_id]) {
+        labels.instructions = args.instructions[responsive_id];
+      }
+
+      responsiveContent.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+        key: id + "-MediaPlaceholderBasicContainer-" + responsive_id,
+        className: "basicField"
+      }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.MediaPlaceholder, {
+        key: id + "-MediaPlaceholder-" + responsive_id,
+        onSelect: value => {
+          let newValue = undefined;
+
+          if (typeof value.id != 'undefined') {
+            newValue = {
+              id: value.id,
+              preview: value.url
+            };
+          }
+
+          if (typeof newValue != 'undefined' && (typeof newValue != 'object' || Object.keys(newValue).length > 0)) (0,_attributes__WEBPACK_IMPORTED_MODULE_3__.updateAttributes)(keys.concat(responsive_id), valueProp, newValue, false, clientId);
+        },
+        value: objectValue[responsive_id] ? objectValue[responsive_id] : false,
+        disableDropZone: true,
+        labels: labels
+      }, preview)));
+    } else if (type == 'video') {
+      /**
+       * Video type
+       */
+      let options_video_type = [];
+      if (args.file) options_video_type.push({
+        label: 'File',
+        value: 'file'
+      });
+      if (args.embed) options_video_type.push({
+        label: 'Embed',
+        value: 'embed'
+      });
+      let selected_option = objectValue[responsive_id] && objectValue[responsive_id].type ? objectValue[responsive_id].type : args.file ? 'file' : args.embed ? 'embed' : false;
+      const VideoRadioControl = withState({
+        option: selected_option
+      })(_ref => {
+        let {
+          option,
+          setState
+        } = _ref;
+        return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.RadioControl, {
+          key: id + "-videoType-" + responsive_id,
+          label: "Video type",
+          selected: option,
+          options: options_video_type,
+          onChange: newValue => {
+            setState({
+              newValue
+            });
+            (0,_attributes__WEBPACK_IMPORTED_MODULE_3__.updateAttributes)(keys.concat(responsive_id), valueProp, {
+              type: newValue
+            }, false, clientId);
+          }
+        });
+      });
+      responsiveContent.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+        key: id + "-videoTypeBasicContainer-" + responsive_id,
+        className: "basicField"
+      }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(VideoRadioControl, null)));
+      /**
+       * File
+       */
+
+      if (selected_option == 'file') {
+        let preview = false;
+
+        if (objectValue[responsive_id] && objectValue[responsive_id].file && typeof objectValue[responsive_id].file == 'object') {
+          preview = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
+            key: id + "-filePreview-" + responsive_id,
+            alt: "Edit file",
+            title: "Edit file",
+            className: "edit-file-preview",
+            src: objectValue[responsive_id].file.preview
+          }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+            key: id + "-fileDetails-" + responsive_id,
+            className: "file-details"
+          }, objectValue[responsive_id].file.name, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), objectValue[responsive_id].file.mime, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), (0,_attributes__WEBPACK_IMPORTED_MODULE_3__.fileSizeFormat)(objectValue[responsive_id].file.size)));
+          preview = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+            key: id + "-mediaPreviewContainer-" + responsive_id,
+            className: "media-preview-container"
+          }, preview, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Button, {
+            key: id + "-removeMedia-" + responsive_id,
+            isSecondary: true,
+            isSmall: true,
+            className: "reset-button",
+            onClick: () => (0,_attributes__WEBPACK_IMPORTED_MODULE_3__.updateAttributes)(keys.concat(responsive_id), valueProp, {
+              type: 'file'
+            }, false, clientId)
+          }, "Remove"));
+        }
+
+        responsiveContent.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+          key: id + "-MediaPlaceholderBasicContainer-" + responsive_id,
+          className: "basicField"
+        }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.MediaPlaceholder, {
+          key: id + "-MediaPlaceholder-" + responsive_id,
+          onSelect: value => {
+            let newValue = undefined;
+
+            if (typeof value.id != 'undefined') {
+              newValue = {
+                id: value.id,
+                preview: value.icon,
+                name: value.filename,
+                mime: value.mime,
+                size: value.filesizeInBytes
+              };
+            }
+
+            if (typeof newValue != 'undefined' && (typeof newValue != 'object' || Object.keys(newValue).length > 0)) (0,_attributes__WEBPACK_IMPORTED_MODULE_3__.updateAttributes)(keys.concat(responsive_id), valueProp, {
+              type: 'file',
+              file: newValue
+            }, false, clientId);
+          },
+          value: objectValue[responsive_id] && objectValue[responsive_id].file ? objectValue[responsive_id].file : false,
+          disableDropZone: true
+        }, preview)));
+      }
+      /**
+       * Embed
+       */
+
+
+      if (selected_option == 'embed') {
+        responsiveContent.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+          key: id + "-embedLinkBasicContainer-" + responsive_id,
+          className: "basicField"
+        }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.TextControl, {
+          key: id + "-embedLink",
+          label: 'Embed link',
+          type: 'text',
+          value: objectValue[responsive_id] && objectValue[responsive_id].embed ? objectValue[responsive_id].embed.url : '',
+          onChange: newValue => (0,_attributes__WEBPACK_IMPORTED_MODULE_3__.updateAttributes)(keys.concat(responsive_id), valueProp, {
+            type: 'embed',
+            embed: {
+              url: newValue
+            }
+          }, false, clientId)
+        })));
+      }
+    } // Tab panel construction
+
+
+    tabPanelResponsive.push({
+      name: responsive_id,
+      title: responsive_id.charAt(0).toUpperCase() + responsive_id.slice(1),
+      content: responsiveContent
+    });
+  } // Render tab if more than 1 content
+
+
+  if (tabPanelResponsive.length > 1) {
+    videoControl.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.TabPanel, {
+      key: id + "-tabPanelVideo",
+      className: "tab-panel-wpe-component",
+      activeClass: "active-tab",
+      tabs: tabPanelResponsive
+    }, tabPanelResponsive => tabPanelResponsive.content));
+  } else videoControl.push(tabPanelResponsive[0].content);
+
+  return (0,_attributes__WEBPACK_IMPORTED_MODULE_3__.renderPanelComponent)(id, label, videoControl, false);
+}
+
+/***/ }),
+
 /***/ "../../../js/controls/Link.js":
 /*!************************************!*\
   !*** ../../../js/controls/Link.js ***!
@@ -1323,7 +1766,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _attributes__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../attributes */ "../../../js/attributes.js");
+/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/block-editor */ "@wordpress/block-editor");
+/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _attributes__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../attributes */ "../../../js/attributes.js");
+
 
 
 
@@ -1343,7 +1789,7 @@ function renderLink(id, label, keys, valueProp, objectValue) {
       key: id + "-repeatableRemoveElt",
       isLink: true,
       className: "removeRepeatable",
-      onClick: () => (0,_attributes__WEBPACK_IMPORTED_MODULE_2__.removeEltRepeatable)(keys, valueProp)
+      onClick: () => (0,_attributes__WEBPACK_IMPORTED_MODULE_3__.removeEltRepeatable)(keys, valueProp)
     }, "Remove"));
   }
 
@@ -1365,9 +1811,9 @@ function renderLink(id, label, keys, valueProp, objectValue) {
     type: "text",
     value: objectValue.text,
     onChange: newValue => {
-      (0,_attributes__WEBPACK_IMPORTED_MODULE_2__.updateAttributes)(keys.concat('text'), valueProp, newValue, false, clientId);
+      (0,_attributes__WEBPACK_IMPORTED_MODULE_3__.updateAttributes)(keys.concat('text'), valueProp, newValue, false, clientId);
     }
-  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.LinkControl, {
+  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.__experimentalLinkControl, {
     key: id + "-LinkControl",
     className: "wp-block-navigation-link__inline-link-input",
     value: objectValue,
@@ -1390,10 +1836,10 @@ function renderLink(id, label, keys, valueProp, objectValue) {
       } : {
         text: objectValue.text
       };
-      (0,_attributes__WEBPACK_IMPORTED_MODULE_2__.updateAttributes)(keys, valueProp, newObjectValue, false, clientId);
+      (0,_attributes__WEBPACK_IMPORTED_MODULE_3__.updateAttributes)(keys, valueProp, newObjectValue, false, clientId);
     }
   })))));
-  return (0,_attributes__WEBPACK_IMPORTED_MODULE_2__.renderPanelComponent)(id, label, inner, false);
+  return (0,_attributes__WEBPACK_IMPORTED_MODULE_3__.renderPanelComponent)(id, label, inner, false);
 }
 
 /***/ }),
@@ -1659,6 +2105,50 @@ function renderTextarea(id, label, keys, valueProp, objectValue) {
     key: id,
     label: label,
     value: objectValue,
+    onChange: newValue => (0,_attributes__WEBPACK_IMPORTED_MODULE_2__.updateAttributes)(keys, valueProp, newValue, false, clientId)
+  });
+}
+
+/***/ }),
+
+/***/ "../../../js/controls/Toggle.js":
+/*!**************************************!*\
+  !*** ../../../js/controls/Toggle.js ***!
+  \**************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "renderToggle": function() { return /* binding */ renderToggle; }
+/* harmony export */ });
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _attributes__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../attributes */ "../../../js/attributes.js");
+
+
+
+function renderToggle(id, label, help, keys, valueProp, objectValue) {
+  let repeatable = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : false;
+  let required = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : false;
+  let clientId = arguments.length > 8 ? arguments[8] : undefined;
+  label = required ? label + '*' : label;
+
+  if (repeatable) {
+    label = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, label, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
+      key: id + "-repeatableRemoveElt",
+      isLink: true,
+      className: "removeRepeatable",
+      onClick: () => (0,_attributes__WEBPACK_IMPORTED_MODULE_2__.removeEltRepeatable)(keys, valueProp)
+    }, "Remove"));
+  }
+
+  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.ToggleControl, {
+    key: id,
+    label: label,
+    help: typeof help == 'object' && Array.isArray(help) && help.length == 2 ? !!objectValue ? help[1] : help[0] : false,
+    checked: objectValue,
     onChange: newValue => (0,_attributes__WEBPACK_IMPORTED_MODULE_2__.updateAttributes)(keys, valueProp, newValue, false, clientId)
   });
 }

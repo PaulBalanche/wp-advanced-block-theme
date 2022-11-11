@@ -1,6 +1,5 @@
 import {
-    MediaPlaceholder,
-    __experimentalLinkControl as LinkControl
+    MediaPlaceholder
 } from '@wordpress/block-editor';
 
 import {
