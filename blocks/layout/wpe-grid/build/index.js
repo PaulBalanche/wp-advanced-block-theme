@@ -69,7 +69,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var merge_anything__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! merge-anything */ "../../component-block-master/node_modules/merge-anything/dist/index.es.js");
-/* harmony import */ var _packages_devices_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../packages/devices.js */ "../../../packages/devices.js");
+/* harmony import */ var _js_devices_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../js/devices.js */ "../../../js/devices.js");
 
 
 
@@ -108,7 +108,7 @@ class MarginControls extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Com
       padding: {},
       margin: {}
     };
-    (0,_packages_devices_js__WEBPACK_IMPORTED_MODULE_2__.getLayouts)().forEach(layout => {
+    (0,_js_devices_js__WEBPACK_IMPORTED_MODULE_2__.getLayouts)().forEach(layout => {
       this.state.padding[layout.value] = {
         all: undefined,
         top: undefined,
@@ -144,6 +144,10 @@ class MarginControls extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Com
   // }
 
 
+  getLayouts() {
+    return (0,_js_devices_js__WEBPACK_IMPORTED_MODULE_2__.getLayouts)();
+  }
+
   setPadding(type, deviceType, value) {
     const newPadding = (0,merge_anything__WEBPACK_IMPORTED_MODULE_3__.merge)(this.state.padding, {
       [deviceType]: {
@@ -174,7 +178,7 @@ class MarginControls extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Com
 
   resetPadding(deviceType) {
     let newPadding = {};
-    (0,_packages_devices_js__WEBPACK_IMPORTED_MODULE_2__.getLayouts)().forEach(layout => {
+    (0,_js_devices_js__WEBPACK_IMPORTED_MODULE_2__.getLayouts)().forEach(layout => {
       newPadding[layout.value] = deviceType == layout.value ? {} : this.state.padding[layout.value];
     });
     this.setState({
@@ -187,7 +191,7 @@ class MarginControls extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Com
 
   resetMargin(deviceType) {
     let newMargin = {};
-    (0,_packages_devices_js__WEBPACK_IMPORTED_MODULE_2__.getLayouts)().forEach(layout => {
+    (0,_js_devices_js__WEBPACK_IMPORTED_MODULE_2__.getLayouts)().forEach(layout => {
       newMargin[layout.value] = deviceType == layout.value ? {} : this.state.margin[layout.value];
     });
     this.setState({
@@ -233,8 +237,8 @@ class MarginControls extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Com
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.TabPanel, {
       className: "padding-tab-panel",
       activeClass: "active-tab",
-      initialTabName: (0,_packages_devices_js__WEBPACK_IMPORTED_MODULE_2__.getBodyDevice)(),
-      tabs: (0,_packages_devices_js__WEBPACK_IMPORTED_MODULE_2__.getLayouts)().map(layout => {
+      initialTabName: (0,_js_devices_js__WEBPACK_IMPORTED_MODULE_2__.getBodyDevice)(),
+      tabs: (0,_js_devices_js__WEBPACK_IMPORTED_MODULE_2__.getLayouts)().map(layout => {
         return {
           name: layout.value,
           title: layout.label,
@@ -315,8 +319,8 @@ class MarginControls extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Com
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.TabPanel, {
       className: "margin-tab-panel",
       activeClass: "active-tab",
-      initialTabName: (0,_packages_devices_js__WEBPACK_IMPORTED_MODULE_2__.getBodyDevice)(),
-      tabs: (0,_packages_devices_js__WEBPACK_IMPORTED_MODULE_2__.getLayouts)().map(layout => {
+      initialTabName: (0,_js_devices_js__WEBPACK_IMPORTED_MODULE_2__.getBodyDevice)(),
+      tabs: (0,_js_devices_js__WEBPACK_IMPORTED_MODULE_2__.getLayouts)().map(layout => {
         return {
           name: layout.value,
           title: layout.label,
@@ -459,12 +463,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! lodash */ "lodash");
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_6__);
 /* harmony import */ var _component_block_master_src_marginControls_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../component-block-master/src/_marginControls.js */ "../../component-block-master/src/_marginControls.js");
-/* harmony import */ var _packages_devices_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../../packages/devices.js */ "../../../packages/devices.js");
+/* harmony import */ var _js_devices__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../../js/devices */ "../../../js/devices.js");
+/* harmony import */ var _js_attributes__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../../../js/attributes */ "../../../js/attributes.js");
 
 
 /**
  * WordPress dependencies
  */
+
 
 
 
@@ -496,6 +502,13 @@ function createBlocksFromInnerBlocksTemplate(innerBlocksTemplate) {
 class WpeGrid extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Component {
   constructor() {
     super(...arguments);
+    this.state = {
+      configMode: false
+    };
+  }
+
+  componentDidUpdate() {
+    (0,_js_devices__WEBPACK_IMPORTED_MODULE_8__.initContainer)();
   }
 
   render() {
@@ -542,7 +555,7 @@ class WpeGrid extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Component 
       if (attributes.gridCountColumns > countColumns) {
         // Define rowStart fo the new colums added
         let initLayout = {};
-        (0,_packages_devices_js__WEBPACK_IMPORTED_MODULE_8__.getLayouts)().forEach(layout => {
+        (0,_js_devices__WEBPACK_IMPORTED_MODULE_8__.getLayouts)().forEach(layout => {
           initLayout[layout.value] = {
             columnStart: 1,
             width: 1,
@@ -575,17 +588,87 @@ class WpeGrid extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Component 
 
       let deviceButtonGroupClassName = isSelectedBlock || isParentOfSelectedBlock ? ' is-selected' : '';
       /**
-       * Render edit
+       * Custom layout props
+       * 
        */
 
-      var editDisplay = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      let InspectorControlsCustomProps = [];
+
+      if (typeof block_spec.props == 'object') {
+        for (const [key, value] of Object.entries(block_spec.props)) {
+          if (typeof value != 'object' || value == null) continue;
+          InspectorControlsCustomProps.push((0,_js_attributes__WEBPACK_IMPORTED_MODULE_9__.renderControl)(value, [key], {
+            [key]: attributes[key]
+          }, clientId)); // let InspectorControlsCustomPropsTemp = '';
+          // switch( value.type ) {
+          //     case 'string':
+          //         InspectorControlsCustomPropsTemp = renderTextControl( key + "_" + clientId, value.label, [ key ], attributes[key], attributes[key], false, false, clientId );
+          //         break;
+          //     case 'select':
+          //         InspectorControlsCustomPropsTemp = renderSelectControl( key + "_" + clientId, value.label, value.options, [ key ], attributes[key], attributes[key], false, false, clientId );
+          //         break;
+          // };
+          // InspectorControlsCustomProps.push(
+          //     <div
+          //         key={ key + "_" + clientId + "-basicContainer"}
+          //         className="basicField"
+          //     >
+          //         { value.label }
+          //         { InspectorControlsCustomPropsTemp }
+          //     </div>
+          // );
+        } // Remove last HorizontalRule
+
+
+        InspectorControlsCustomProps.pop();
+
+        if (InspectorControlsCustomProps.length > 0) {
+          InspectorControlsCustomProps = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.Panel, {
+            key: clientId + "-panel"
+          }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.PanelBody, {
+            key: clientId + "-PanelBody",
+            title: 'Custom props',
+            initialOpen: false
+          }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+            key: clientId + "-panelBodyDivObject",
+            className: "objectField components-base-control"
+          }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+            key: clientId + "-panelBodySubDivObject",
+            className: "objectField-content"
+          }, InspectorControlsCustomProps))));
+        }
+      }
+
+      const MyToggleControl = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+        className: "toggleControlComponentMode"
+      }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.ToggleControl, {
+        key: clientId + "-ToggleControlComponentMode",
+        label: "Mode",
+        help: this.state.configMode ? 'Configuration' : 'Live',
+        checked: this.state.configMode,
+        onChange: () => {
+          this.setState({
+            configMode: !this.state.configMode
+          });
+        }
+      }));
+      const EditDisplay = this.state.configMode ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.Placeholder, {
+        key: clientId + "-placeholder",
+        label: "Grid",
+        isColumnLayout: true,
+        className: "wpe-component_edit_placeholder"
+      }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_component_block_master_src_marginControls_js__WEBPACK_IMPORTED_MODULE_7__.MarginControls, {
+        props: this.props,
+        deviceType: experimentalDeviceType,
+        margin: theme_spec !== null && theme_spec !== void 0 && theme_spec.margin ? theme_spec === null || theme_spec === void 0 ? void 0 : theme_spec.margin : null
+      }), InspectorControlsCustomProps) : (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
         className: "deviceButtonGroup" + deviceButtonGroupClassName
-      }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.ButtonGroup, null, (0,_packages_devices_js__WEBPACK_IMPORTED_MODULE_8__.getLayouts)().map(layout => {
+      }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.ButtonGroup, null, (0,_js_devices__WEBPACK_IMPORTED_MODULE_8__.getLayouts)().map(layout => {
         return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.Button, {
           key: "layoutButton_" + layout.value + "_" + clientId,
-          isPressed: (0,_packages_devices_js__WEBPACK_IMPORTED_MODULE_8__.getBodyDevice)() == layout.value,
+          isPressed: (0,_js_devices__WEBPACK_IMPORTED_MODULE_8__.getBodyDevice)() == layout.value,
           onClick: () => {
-            (0,_packages_devices_js__WEBPACK_IMPORTED_MODULE_8__.setBodyDevice)(layout.value);
+            (0,_js_devices__WEBPACK_IMPORTED_MODULE_8__.setBodyDevice)(layout.value);
             inner_blocks.forEach(elt => {
               (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_5__.dispatch)('core/block-editor').updateBlockAttributes(elt.clientId, {
                 updated: true
@@ -594,58 +677,11 @@ class WpeGrid extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Component 
           }
         }, layout.value);
       }))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", innerBlocksProps));
-    }
-    /**
-     * Custom layout props
-     * 
-     */
+      /**
+       * Render edit
+       */
 
-
-    let InspectorControlsCustomProps = [];
-
-    if (typeof block_spec.props == 'object') {
-      for (const [key, value] of Object.entries(block_spec.props)) {
-        if (typeof value != 'object' || value == null) continue;
-
-        switch (value.type) {
-          case 'select':
-            InspectorControlsCustomProps.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.SelectControl, {
-              key: "inspectorSelect_" + key + "_" + clientId,
-              label: value.label,
-              value: attributes[key],
-              options: [{
-                label: 'Choose...',
-                value: ''
-              }].concat(value.options.map(function (value) {
-                return {
-                  label: value.name,
-                  value: value.value
-                };
-              })),
-              onChange: value => {
-                setAttributes({
-                  [key]: value
-                });
-              }
-            }));
-            break;
-        }
-
-        ;
-        InspectorControlsCustomProps.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.HorizontalRule, {
-          key: "HorizontalRule_" + key + "_" + clientId
-        }));
-      } // Remove last HorizontalRule
-
-
-      InspectorControlsCustomProps.pop();
-
-      if (InspectorControlsCustomProps.length > 0) {
-        InspectorControlsCustomProps = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.PanelBody, {
-          title: 'Custom props',
-          initialOpen: false
-        }, InspectorControlsCustomProps);
-      }
+      var editDisplay = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, MyToggleControl, EditDisplay);
     } // InspectorControls
 
 
@@ -660,11 +696,7 @@ class WpeGrid extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Component 
         }),
         min: 1,
         max: attributes.gridCountColumns + 1
-      })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_component_block_master_src_marginControls_js__WEBPACK_IMPORTED_MODULE_7__.MarginControls, {
-        props: this.props,
-        deviceType: experimentalDeviceType,
-        margin: theme_spec !== null && theme_spec !== void 0 && theme_spec.margin ? theme_spec === null || theme_spec === void 0 ? void 0 : theme_spec.margin : null
-      }), InspectorControlsCustomProps);
+      })));
     }
     /**
      * Render
@@ -874,16 +906,776 @@ const columns6 = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElemen
 
 /***/ }),
 
-/***/ "../../../packages/devices.js":
+/***/ "../../../js/attributes.js":
+/*!*********************************!*\
+  !*** ../../../js/attributes.js ***!
+  \*********************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "fileSizeFormat": function() { return /* binding */ fileSizeFormat; },
+/* harmony export */   "recursiveUpdateObjectFromObject": function() { return /* binding */ recursiveUpdateObjectFromObject; },
+/* harmony export */   "removeEltRepeatable": function() { return /* binding */ removeEltRepeatable; },
+/* harmony export */   "renderControl": function() { return /* binding */ renderControl; },
+/* harmony export */   "renderPanelComponent": function() { return /* binding */ renderPanelComponent; },
+/* harmony export */   "returnStringOrNumber": function() { return /* binding */ returnStringOrNumber; },
+/* harmony export */   "setAttributes": function() { return /* binding */ setAttributes; },
+/* harmony export */   "updateAttributes": function() { return /* binding */ updateAttributes; }
+/* harmony export */ });
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _devices__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./devices */ "../../../js/devices.js");
+/* harmony import */ var _controls__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./controls */ "../../../js/controls.js");
+/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/data */ "@wordpress/data");
+/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_wordpress_data__WEBPACK_IMPORTED_MODULE_4__);
+
+
+
+
+
+function returnStringOrNumber(value) {
+  let isNumber = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+  return !!isNumber ? parseInt(value, 10) : value;
+}
+
+function addEltToRepeatable(arrayKey, currentValueProp, currentValueRepeatableField) {
+  let isNumber = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
+  let clientId = arguments.length > 4 ? arguments[4] : undefined;
+  updateAttributes(arrayKey, currentValueProp, currentValueRepeatableField.concat(""), isNumber, clientId);
+}
+
+function removeEltRepeatable(arrayKey, currentValueProp) {
+  updateAttributes(arrayKey, currentValueProp, false, false, clientId);
+}
+function fileSizeFormat(filesizeInBytes) {
+  if (filesizeInBytes > 1000000) return Math.round(filesizeInBytes / 10000) / 100 + " Mo";else return Math.round(filesizeInBytes / 1000) + " Ko";
+}
+function setAttributes(attributes, clientId) {
+  (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_4__.dispatch)('core/block-editor').updateBlockAttributes(clientId, attributes);
+}
+function updateAttributes(arrayKey, currentValue, newValue) {
+  let isNumber = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
+  let clientId = arguments.length > 4 ? arguments[4] : undefined;
+  let keyToUpdate = arrayKey[0];
+  let newValueToUpdate = recursiveUpdateObjectFromObject(arrayKey, currentValue, newValue, isNumber);
+  setAttributes({
+    [keyToUpdate]: newValueToUpdate[keyToUpdate]
+  }, clientId);
+}
+function recursiveUpdateObjectFromObject(arrayKey, fromObject, newValue) {
+  let isNumber = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
+  const firstElement = arrayKey.shift();
+  if (typeof fromObject != 'object' || Array.isArray(fromObject) && typeof firstElement == 'string' || !Array.isArray(fromObject) && typeof firstElement == 'number') fromObject = typeof firstElement == 'string' ? {} : [];
+  let objectReturned = Array.isArray(fromObject) ? [] : {};
+
+  for (const [key, val] of Object.entries(fromObject)) {
+    if (key == firstElement) {
+      if (arrayKey.length > 0) objectReturned[key] = recursiveUpdateObjectFromObject(arrayKey, val, newValue, isNumber);else if (!!newValue) objectReturned[key] = returnStringOrNumber(newValue, isNumber);
+    } else objectReturned[key] = val;
+  }
+
+  if (typeof objectReturned[firstElement] == 'undefined') {
+    if (arrayKey.length > 0) objectReturned[firstElement] = recursiveUpdateObjectFromObject(arrayKey, undefined, newValue, isNumber);else if (!!newValue) objectReturned[firstElement] = returnStringOrNumber(newValue, isNumber);
+  } // Re-index in case of element suppression
+
+
+  if (arrayKey.length == 0 && !newValue) {
+    for (let index = 0; index < objectReturned.length; index++) {
+      if (typeof objectReturned[index] == 'undefined') objectReturned.splice(index, 1);
+    }
+  }
+
+  return objectReturned;
+}
+function renderControl(prop, keys, valueProp, clientId) {
+  prop.type = prop.type.toLowerCase();
+  let blocReturned = [];
+  let repeatable = typeof prop.repeatable != "undefined" && !!prop.repeatable ? true : false;
+  let currentValueAttribute = valueProp;
+  keys.forEach(element => {
+    if (typeof currentValueAttribute == 'object') {
+      if (currentValueAttribute.hasOwnProperty(element) && typeof currentValueAttribute[element] != "undefined") currentValueAttribute = currentValueAttribute[element];else currentValueAttribute = "";
+    }
+  });
+  if (!repeatable) currentValueAttribute = [currentValueAttribute];else if (typeof currentValueAttribute != "object" || currentValueAttribute.length == 0) currentValueAttribute = [""];
+  let responsive = typeof prop.responsive != "undefined" && !!prop.responsive ? true : false;
+
+  for (var keyLoop in currentValueAttribute) {
+    keyLoop = returnStringOrNumber(keyLoop, true);
+    let label = typeof prop.label != "undefined" ? prop.label : typeof prop.title != "undefined" ? prop.title : keys.slice(-1);
+
+    if (repeatable) {
+      let index = keyLoop + 1;
+      label = label + " " + index + "/" + currentValueAttribute.length;
+    }
+
+    let required_field = typeof prop.required != "undefined" && prop.required ? true : false;
+    let fieldId = clientId + "-" + keys.join("-") + "-" + keyLoop;
+
+    switch (prop.type) {
+      case 'string':
+        blocReturned.push((0,_controls__WEBPACK_IMPORTED_MODULE_3__.renderTextControl)(fieldId, label, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], false, repeatable, required_field, clientId));
+        break;
+
+      case 'number':
+        blocReturned.push((0,_controls__WEBPACK_IMPORTED_MODULE_3__.renderTextControl)(fieldId, label, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], true, repeatable, required_field, clientId));
+        break;
+
+      case 'text':
+        blocReturned.push((0,_controls__WEBPACK_IMPORTED_MODULE_3__.renderTextareaControl)(fieldId, label, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, clientId));
+        break;
+      // case 'richText':
+      // case 'wysiwyg':
+      //     blocReturned.push( renderWysiwygControl( fieldId, label, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, clientId ) );
+      //     break;
+      // case 'boolean':
+      //     blocReturned.push( renderToggleControl( fieldId, label, prop.help, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, clientId ) );
+      //     break;
+
+      case 'select':
+      case 'color':
+        blocReturned.push((0,_controls__WEBPACK_IMPORTED_MODULE_3__.renderSelectControl)(fieldId, label, prop.options, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, clientId));
+        break;
+
+      case 'radio':
+        blocReturned.push((0,_controls__WEBPACK_IMPORTED_MODULE_3__.renderRadioControl)(fieldId, label, prop.options, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, clientId));
+        break;
+
+      case 'link':
+        blocReturned.push((0,_controls__WEBPACK_IMPORTED_MODULE_3__.renderLinkControl)(fieldId, label, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, clientId));
+        break;
+
+      case 'relation':
+        blocReturned.push((0,_controls__WEBPACK_IMPORTED_MODULE_3__.renderRelationControl)(fieldId, label, prop.entity, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, clientId));
+        break;
+
+      case 'date':
+        blocReturned.push((0,_controls__WEBPACK_IMPORTED_MODULE_3__.renderDateTimeControl)(fieldId, label, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, clientId));
+        break;
+      // case 'image':
+      //     blocReturned.push( renderImageVideoControl( prop.type, ( prop.image && typeof prop.image == 'object' ) ? prop.image : {}, fieldId, label, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, clientId ) );
+      //     break;
+      // case 'video':
+      //     blocReturned.push( renderImageVideoControl( prop.type, ( prop.video && typeof prop.video == 'object' ) ? prop.video : {}, fieldId, label, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, clientId ) );
+      //     break;
+      // case 'file':
+      // case 'gallery':
+      //     blocReturned.push( renderFileControl( prop.type, fieldId, label, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, clientId ) );
+      //     break;
+
+      case 'object':
+        if (typeof prop.props == "object") {
+          let tempKeyObject = repeatable ? keys.concat(keyLoop) : keys;
+          let fieldsetObject = [];
+
+          if (responsive) {
+            fieldsetObject.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.TabPanel, {
+              key: fieldId + "-TabPanel",
+              className: "tab-panel-wpe-component",
+              activeClass: "active-tab",
+              initialTabName: (0,_devices__WEBPACK_IMPORTED_MODULE_2__.getBodyDevice)(),
+              tabs: (0,_devices__WEBPACK_IMPORTED_MODULE_2__.getLayouts)().map(layout => {
+                return {
+                  name: layout.value,
+                  title: layout.label,
+                  className: 'tab-' + layout.value
+                };
+              })
+            }, tab => {
+              let tempKeyObjectReponsive = keys.concat(tab.name);
+              let fieldsetObjectResponsive = [];
+
+              for (const [keySubProp, valueSubProp] of Object.entries(prop.props)) {
+                fieldsetObjectResponsive.push(renderControl(valueSubProp, tempKeyObjectReponsive.concat(keySubProp), valueProp, clientId));
+              }
+
+              return fieldsetObjectResponsive;
+            }));
+          } else {
+            for (const [keySubProp, valueSubProp] of Object.entries(prop.props)) {
+              fieldsetObject.push(renderControl(valueSubProp, tempKeyObject.concat(keySubProp), valueProp, clientId));
+            }
+          }
+
+          if (repeatable) {
+            label = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, label, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
+              key: fieldId + "-repeatableRemoveElt",
+              isLink: true,
+              className: "removeRepeatable",
+              onClick: () => removeEltRepeatable(tempKeyObject, valueProp)
+            }, "Remove"));
+          }
+
+          blocReturned.push(renderPanelComponent(fieldId, label, fieldsetObject, false));
+        }
+
+        break;
+    }
+  } // Add repeatable button
+
+
+  if (!!repeatable) {
+    blocReturned.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
+      key: clientId + "-" + keys.join("-") + "-repeatableAddElt",
+      isSecondary: true,
+      isSmall: true,
+      onClick: () => addEltToRepeatable(keys, valueProp, currentValueAttribute, false, clientId)
+    }, "Add"));
+    blocReturned = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      key: clientId + "-" + keys.join("-") + "-repeatableContainer",
+      className: "repeatableField components-base-control"
+    }, blocReturned);
+  } else {
+    blocReturned = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      key: clientId + "-" + keys.join("-") + "-basicContainer",
+      className: "basicField"
+    }, blocReturned);
+  } // Return
+
+
+  return blocReturned;
+}
+function renderPanelComponent(id, label, inner) {
+  let initialOpen = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
+  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Panel, {
+    key: id + "-panel"
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.PanelBody, {
+    key: id + "-PanelBody",
+    title: label,
+    initialOpen: initialOpen
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    key: id + "-panelBodyDivObject",
+    className: "objectField components-base-control"
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    key: id + "-panelBodySubDivObject",
+    className: "objectField-content"
+  }, inner))));
+}
+
+/***/ }),
+
+/***/ "../../../js/controls.js":
+/*!*******************************!*\
+  !*** ../../../js/controls.js ***!
+  \*******************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "renderDateTimeControl": function() { return /* binding */ renderDateTimeControl; },
+/* harmony export */   "renderLinkControl": function() { return /* binding */ renderLinkControl; },
+/* harmony export */   "renderRadioControl": function() { return /* binding */ renderRadioControl; },
+/* harmony export */   "renderRelationControl": function() { return /* binding */ renderRelationControl; },
+/* harmony export */   "renderSelectControl": function() { return /* binding */ renderSelectControl; },
+/* harmony export */   "renderTextControl": function() { return /* binding */ renderTextControl; },
+/* harmony export */   "renderTextareaControl": function() { return /* binding */ renderTextareaControl; }
+/* harmony export */ });
+/* harmony import */ var _controls_DateTime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./controls/DateTime */ "../../../js/controls/DateTime.js");
+/* harmony import */ var _controls_Link__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./controls/Link */ "../../../js/controls/Link.js");
+/* harmony import */ var _controls_Radio__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./controls/Radio */ "../../../js/controls/Radio.js");
+/* harmony import */ var _controls_Relation__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./controls/Relation */ "../../../js/controls/Relation.js");
+/* harmony import */ var _controls_Select__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./controls/Select */ "../../../js/controls/Select.js");
+/* harmony import */ var _controls_Text__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./controls/Text */ "../../../js/controls/Text.js");
+/* harmony import */ var _controls_Textarea__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./controls/Textarea */ "../../../js/controls/Textarea.js");
+
+function renderDateTimeControl(id, label, keys, valueProp, objectValue) {
+  let repeatable = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : false;
+  let required = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : false;
+  let clientId = arguments.length > 7 ? arguments[7] : undefined;
+  return (0,_controls_DateTime__WEBPACK_IMPORTED_MODULE_0__.renderDateTime)(id, label, keys, valueProp, objectValue, repeatable, required, clientId);
+} // import { renderFile } from './controls/File';
+// export function renderFileControl( type, id, label, keys, valueProp, objectValue, repeatable = false, required = false, clientId ) {
+//     return renderFile( type, id, label, keys, valueProp, objectValue, repeatable, required, clientId );
+// }
+// import { renderImageVideo } from './controls/ImageVideo';
+// export function renderImageVideoControl( type, args, id, label, keys, valueProp, objectValue, repeatable = false, required = false, clientId ) {
+//     return renderImageVideo( type, args, id, label, keys, valueProp, objectValue, repeatable, required, clientId );
+// }
+
+
+function renderLinkControl(id, label, keys, valueProp, objectValue) {
+  let repeatable = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : false;
+  let required = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : false;
+  let clientId = arguments.length > 7 ? arguments[7] : undefined;
+  return (0,_controls_Link__WEBPACK_IMPORTED_MODULE_1__.renderLink)(id, label, keys, valueProp, objectValue, repeatable, required, clientId);
+}
+
+function renderRadioControl(id, label, options, keys, valueProp, objectValue) {
+  let repeatable = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : false;
+  let required = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : false;
+  let clientId = arguments.length > 8 ? arguments[8] : undefined;
+  return (0,_controls_Radio__WEBPACK_IMPORTED_MODULE_2__.renderRadio)(id, label, options, keys, valueProp, objectValue, repeatable, required, clientId);
+}
+
+function renderRelationControl(id, label, entity, keys, valueProp, objectValue) {
+  let repeatable = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : false;
+  let required = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : false;
+  let clientId = arguments.length > 8 ? arguments[8] : undefined;
+  return (0,_controls_Relation__WEBPACK_IMPORTED_MODULE_3__.renderRelation)(id, label, entity, keys, valueProp, objectValue, repeatable, required, clientId);
+}
+
+function renderSelectControl(id, label, options, keys, valueProp, attributeValue) {
+  let repeatable = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : false;
+  let required = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : false;
+  let clientId = arguments.length > 8 ? arguments[8] : undefined;
+  return (0,_controls_Select__WEBPACK_IMPORTED_MODULE_4__.renderSelect)(id, label, options, keys, valueProp, attributeValue, repeatable, required, clientId);
+}
+
+function renderTextControl(id, label, keys, valueProp, objectValue) {
+  let isNumber = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : false;
+  let repeatable = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : false;
+  let required = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : false;
+  let clientId = arguments.length > 8 ? arguments[8] : undefined;
+  return (0,_controls_Text__WEBPACK_IMPORTED_MODULE_5__.renderText)(id, label, keys, valueProp, objectValue, isNumber, repeatable, required, clientId);
+}
+
+function renderTextareaControl(id, label, keys, valueProp, objectValue) {
+  let repeatable = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : false;
+  let required = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : false;
+  let clientId = arguments.length > 7 ? arguments[7] : undefined;
+  return (0,_controls_Textarea__WEBPACK_IMPORTED_MODULE_6__.renderTextarea)(id, label, keys, valueProp, objectValue, repeatable, required, clientId);
+} // import { renderToggle } from './controls/Toggle';
+// export function renderToggleControl( id, label, help, keys, valueProp, objectValue, repeatable = false, required = false, clientId ) {
+//     return renderToggle( id, label, help, keys, valueProp, objectValue, repeatable, required, clientId );
+// }
+// import { renderWysiwyg } from './controls/Wysiwyg';
+// export function renderWysiwygControl( id, label, keys, valueProp, objectValue, repeatable = false, required = false, clientId ) {
+//     return renderWysiwyg( id, label, keys, valueProp, objectValue, repeatable, required, clientId );
+// }
+
+/***/ }),
+
+/***/ "../../../js/controls/DateTime.js":
+/*!****************************************!*\
+  !*** ../../../js/controls/DateTime.js ***!
+  \****************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "renderDateTime": function() { return /* binding */ renderDateTime; }
+/* harmony export */ });
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);
+
+
+function renderDateTime(id, label, keys, valueProp, objectValue) {
+  let repeatable = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : false;
+  let required = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : false;
+  let clientId = arguments.length > 7 ? arguments[7] : undefined;
+  label = required ? label + '*' : label;
+
+  if (repeatable) {
+    label = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, label, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
+      key: id + "-repeatableRemoveElt",
+      isLink: true,
+      className: "removeRepeatable",
+      onClick: () => removeEltRepeatable(keys, valueProp)
+    }, "Remove"));
+  }
+
+  const MyDateTimePicker = withState({
+    date: objectValue ? objectValue : new Date()
+  })(_ref => {
+    let {
+      date,
+      setState
+    } = _ref;
+    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.DateTimePicker, {
+      key: id,
+      currentDate: date,
+      onChange: newDate => {
+        setState({
+          date: newDate
+        });
+        updateAttributes(keys, valueProp, newDate, false, clientId);
+      },
+      is12Hour: false
+    });
+  });
+  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    key: id + "-dateTimeContainer",
+    className: "dateTime-container"
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "components-base-control__label",
+    key: id + "-label"
+  }, label), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(MyDateTimePicker, null));
+}
+
+/***/ }),
+
+/***/ "../../../js/controls/Link.js":
 /*!************************************!*\
-  !*** ../../../packages/devices.js ***!
+  !*** ../../../js/controls/Link.js ***!
   \************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "renderLink": function() { return /* binding */ renderLink; }
+/* harmony export */ });
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _attributes__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../attributes */ "../../../js/attributes.js");
+
+
+
+function renderLink(id, label, keys, valueProp, objectValue) {
+  let repeatable = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : false;
+  let required = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : false;
+  let clientId = arguments.length > 7 ? arguments[7] : undefined;
+
+  if (typeof objectValue == 'undefined') {
+    objectValue = {};
+  }
+
+  label = required ? label + '*' : label;
+
+  if (repeatable) {
+    label = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, label, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
+      key: id + "-repeatableRemoveElt",
+      isLink: true,
+      className: "removeRepeatable",
+      onClick: () => (0,_attributes__WEBPACK_IMPORTED_MODULE_2__.removeEltRepeatable)(keys, valueProp)
+    }, "Remove"));
+  }
+
+  let inner = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    key: id + "-LinkControlBasicContainer",
+    className: "basicField"
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    key: id + "-LinkControlComponentsBaseControl",
+    className: "components-base-control"
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    key: id + "-LinkControlComponentsBaseControlField",
+    className: "components-base-control__field"
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    key: id + "-LinkControlContainer",
+    className: "link-control-container"
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.TextControl, {
+    key: id + "-text",
+    label: "Text",
+    type: "text",
+    value: objectValue.text,
+    onChange: newValue => {
+      (0,_attributes__WEBPACK_IMPORTED_MODULE_2__.updateAttributes)(keys.concat('text'), valueProp, newValue, false, clientId);
+    }
+  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.LinkControl, {
+    key: id + "-LinkControl",
+    className: "wp-block-navigation-link__inline-link-input",
+    value: objectValue,
+    settings: [{
+      id: 'url',
+      title: 'URL ...'
+    }, {
+      id: 'opensInNewTab',
+      title: 'Open in new tab'
+    }],
+    onChange: _ref => {
+      let {
+        url: newURL,
+        opensInNewTab: newOpensInNewTab
+      } = _ref;
+      let newObjectValue = typeof newURL == 'string' ? {
+        text: objectValue.text,
+        url: newURL,
+        opensInNewTab: newOpensInNewTab
+      } : {
+        text: objectValue.text
+      };
+      (0,_attributes__WEBPACK_IMPORTED_MODULE_2__.updateAttributes)(keys, valueProp, newObjectValue, false, clientId);
+    }
+  })))));
+  return (0,_attributes__WEBPACK_IMPORTED_MODULE_2__.renderPanelComponent)(id, label, inner, false);
+}
+
+/***/ }),
+
+/***/ "../../../js/controls/Radio.js":
+/*!*************************************!*\
+  !*** ../../../js/controls/Radio.js ***!
+  \*************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "renderRadio": function() { return /* binding */ renderRadio; }
+/* harmony export */ });
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _attributes__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../attributes */ "../../../js/attributes.js");
+/* harmony import */ var _wordpress_compose__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/compose */ "@wordpress/compose");
+/* harmony import */ var _wordpress_compose__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_compose__WEBPACK_IMPORTED_MODULE_3__);
+
+
+
+
+function renderRadio(id, label, options, keys, valueProp, objectValue) {
+  let repeatable = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : false;
+  let required = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : false;
+  let clientId = arguments.length > 8 ? arguments[8] : undefined;
+  if (typeof options == 'undefined') return null;
+  label = required ? label + '*' : label;
+
+  if (repeatable) {
+    label = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, label, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
+      key: id + "-repeatableRemoveElt",
+      isLink: true,
+      className: "removeRepeatable",
+      onClick: () => (0,_attributes__WEBPACK_IMPORTED_MODULE_2__.removeEltRepeatable)(keys, valueProp)
+    }, "Remove"));
+  }
+
+  const MyRadioControl = (0,_wordpress_compose__WEBPACK_IMPORTED_MODULE_3__.withState)({
+    option: objectValue
+  })(_ref => {
+    let {
+      option,
+      setState
+    } = _ref;
+    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.RadioControl, {
+      key: id,
+      label: label,
+      selected: option,
+      options: options.map(function (value) {
+        return {
+          label: value.name,
+          value: value.value
+        };
+      }),
+      onChange: newValue => {
+        setState({
+          newValue
+        });
+        (0,_attributes__WEBPACK_IMPORTED_MODULE_2__.updateAttributes)(keys, valueProp, newValue, false, clientId);
+      }
+    });
+  });
+  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    key: id + "-RadioControlComponentsBaseControl",
+    className: "components-base-control"
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    key: id + "-RadioControlComponentsBaseControlField",
+    className: "components-base-control__field"
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    key: id + "-RadioControlContainer",
+    className: "radio-control-container"
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(MyRadioControl, null))));
+}
+
+/***/ }),
+
+/***/ "../../../js/controls/Relation.js":
+/*!****************************************!*\
+  !*** ../../../js/controls/Relation.js ***!
+  \****************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "renderRelation": function() { return /* binding */ renderRelation; }
+/* harmony export */ });
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _attributes__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../attributes */ "../../../js/attributes.js");
+
+
+
+function renderRelation(id, label, entity, keys, valueProp, objectValue) {
+  let repeatable = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : false;
+  let required = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : false;
+  let clientId = arguments.length > 8 ? arguments[8] : undefined;
+  if (typeof entity == 'undefined' || typeof this.props.relations[entity] == 'undefined' || this.props.relations[entity] == null || Object.keys(this.props.relations[entity]).length == 0) return null;
+  label = required ? label + '*' : label;
+
+  if (repeatable) {
+    label = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, label, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
+      key: id + "-repeatableRemoveElt",
+      isLink: true,
+      className: "removeRepeatable",
+      onClick: () => (0,_attributes__WEBPACK_IMPORTED_MODULE_2__.removeEltRepeatable)(keys, valueProp)
+    }, "Remove"));
+  }
+
+  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.SelectControl, {
+    key: id,
+    label: label,
+    value: objectValue,
+    options: this.props.relations[entity].map(function (value) {
+      return {
+        label: value.title.raw,
+        value: value.id
+      };
+    }),
+    onChange: newValue => (0,_attributes__WEBPACK_IMPORTED_MODULE_2__.updateAttributes)(keys, valueProp, newValue, false, clientId)
+  });
+}
+
+/***/ }),
+
+/***/ "../../../js/controls/Select.js":
+/*!**************************************!*\
+  !*** ../../../js/controls/Select.js ***!
+  \**************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "renderSelect": function() { return /* binding */ renderSelect; }
+/* harmony export */ });
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _attributes__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../attributes */ "../../../js/attributes.js");
+
+
+
+function renderSelect(id, label, options, keys, valueProp, attributeValue) {
+  let repeatable = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : false;
+  let required = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : false;
+  let clientId = arguments.length > 8 ? arguments[8] : undefined;
+  if (typeof options == 'undefined') return null;
+  label = required ? label + '*' : label;
+
+  if (repeatable) {
+    label = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, label, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
+      key: id + "-repeatableRemoveElt",
+      isLink: true,
+      className: "removeRepeatable",
+      onClick: () => (0,_attributes__WEBPACK_IMPORTED_MODULE_2__.removeEltRepeatable)(keys, valueProp)
+    }, "Remove"));
+  }
+
+  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.SelectControl, {
+    key: id,
+    label: label,
+    value: attributeValue,
+    options: [{
+      label: 'Choose...',
+      value: ''
+    }].concat(options.map(function (value) {
+      return {
+        label: value.name,
+        value: value.value
+      };
+    })),
+    onChange: newValue => (0,_attributes__WEBPACK_IMPORTED_MODULE_2__.updateAttributes)(keys, valueProp, newValue, false, clientId)
+  });
+}
+
+/***/ }),
+
+/***/ "../../../js/controls/Text.js":
+/*!************************************!*\
+  !*** ../../../js/controls/Text.js ***!
+  \************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "renderText": function() { return /* binding */ renderText; }
+/* harmony export */ });
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _attributes__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../attributes */ "../../../js/attributes.js");
+
+
+
+function renderText(id, label, keys, valueProp, objectValue) {
+  let isNumber = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : false;
+  let repeatable = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : false;
+  let required = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : false;
+  let clientId = arguments.length > 8 ? arguments[8] : undefined;
+  label = required ? label + '*' : label;
+
+  if (repeatable) {
+    label = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, label, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
+      key: id + "-repeatableRemoveElt",
+      isLink: true,
+      className: "removeRepeatable",
+      onClick: () => (0,_attributes__WEBPACK_IMPORTED_MODULE_2__.removeEltRepeatable)(keys, valueProp)
+    }, "Remove"));
+  }
+
+  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.TextControl, {
+    key: id,
+    label: label,
+    type: !!isNumber ? "number" : "text",
+    value: objectValue,
+    onChange: newValue => (0,_attributes__WEBPACK_IMPORTED_MODULE_2__.updateAttributes)(keys, valueProp, newValue, isNumber, clientId)
+  });
+}
+
+/***/ }),
+
+/***/ "../../../js/controls/Textarea.js":
+/*!****************************************!*\
+  !*** ../../../js/controls/Textarea.js ***!
+  \****************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "renderTextarea": function() { return /* binding */ renderTextarea; }
+/* harmony export */ });
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _attributes__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../attributes */ "../../../js/attributes.js");
+
+
+
+function renderTextarea(id, label, keys, valueProp, objectValue) {
+  let repeatable = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : false;
+  let required = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : false;
+  let clientId = arguments.length > 7 ? arguments[7] : undefined;
+  label = required ? label + '*' : label;
+
+  if (repeatable) {
+    label = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, label, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
+      key: id + "-repeatableRemoveElt",
+      isLink: true,
+      className: "removeRepeatable",
+      onClick: () => (0,_attributes__WEBPACK_IMPORTED_MODULE_2__.removeEltRepeatable)(keys, valueProp)
+    }, "Remove"));
+  }
+
+  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.TextareaControl, {
+    key: id,
+    label: label,
+    value: objectValue,
+    onChange: newValue => (0,_attributes__WEBPACK_IMPORTED_MODULE_2__.updateAttributes)(keys, valueProp, newValue, false, clientId)
+  });
+}
+
+/***/ }),
+
+/***/ "../../../js/devices.js":
+/*!******************************!*\
+  !*** ../../../js/devices.js ***!
+  \******************************/
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "getBodyDevice": function() { return /* binding */ getBodyDevice; },
 /* harmony export */   "getLayouts": function() { return /* binding */ getLayouts; },
+/* harmony export */   "initContainer": function() { return /* binding */ initContainer; },
 /* harmony export */   "initDevice": function() { return /* binding */ initDevice; },
 /* harmony export */   "setBodyDevice": function() { return /* binding */ setBodyDevice; },
 /* harmony export */   "setWidthContainer": function() { return /* binding */ setWidthContainer; }
@@ -900,6 +1692,13 @@ function initDevice() {
       setWidthContainer(theme_spec.layout.container.default);
     }
   });
+}
+function initContainer() {
+  var _theme_spec3, _theme_spec3$layout, _theme_spec3$layout$c;
+
+  if (((_theme_spec3 = theme_spec) === null || _theme_spec3 === void 0 ? void 0 : (_theme_spec3$layout = _theme_spec3.layout) === null || _theme_spec3$layout === void 0 ? void 0 : (_theme_spec3$layout$c = _theme_spec3$layout.container) === null || _theme_spec3$layout$c === void 0 ? void 0 : _theme_spec3$layout$c.default) != 'undefined') {
+    setWidthContainer(theme_spec.layout.container.default);
+  }
 }
 function getLayouts() {
   var layout = [];
@@ -1787,7 +2586,6 @@ if (typeof block_spec.props == 'object') {
     d: "M13.6,23.6c-0.1,0-0.2,0-0.2-0.1c-0.2-0.1-0.2-0.3-0.2-0.4v-9.5c0-0.2,0.1-0.3,0.2-0.4l8.2-4.7c0.2-0.1,0.3-0.1,0.5,0      c0.2,0.1,0.2,0.3,0.2,0.4v9.5c0,0.2-0.1,0.3-0.3,0.4l-8.2,4.7C13.8,23.6,13.7,23.6,13.6,23.6z M14.1,13.9v8.3l7.2-4.2V9.8      L14.1,13.9z"
   })))))),
   supports: {
-    lightBlockWrapper: true,
     anchor: true
   },
   // parent: [ 'custom/wpe-container' ],

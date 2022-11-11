@@ -2,7 +2,7 @@
  * WordPress dependencies
  */
 import { createBlock } from '@wordpress/blocks';
-import { Component } from '@wordpress/element';
+import { Component, useState } from '@wordpress/element';
 import { compose } from '@wordpress/compose';
 import {
     InspectorControls,
@@ -14,12 +14,13 @@ import {
 } from '@wordpress/block-editor';
 
 import {
+    Panel,
     PanelBody,
     Button,
     ButtonGroup,
     RangeControl,
-    SelectControl,
-    HorizontalRule
+    Placeholder,
+    ToggleControl
 } from '@wordpress/components';
 
 import { withSelect, withDispatch, dispatch } from '@wordpress/data';
@@ -27,7 +28,8 @@ import { get, map, times } from 'lodash';
 
 import { MarginControls } from '../../../component-block-master/src/_marginControls.js';
 
-import { getLayouts, setBodyDevice, getBodyDevice } from '../../../../packages/devices.js';
+import { getLayouts, setBodyDevice, getBodyDevice, initContainer } from '../../../../js/devices';
+import { renderControl } from '../../../../js/attributes';
 
 /**
  * Add some columns in wpe-container based on variation selected
@@ -52,6 +54,14 @@ class WpeGrid extends Component {
 
 	constructor() {
         super( ...arguments );
+
+        this.state = {
+            configMode: false
+        };
+    }
+
+    componentDidUpdate() {
+        initContainer();
     }
 
     render() {
@@ -156,10 +166,111 @@ class WpeGrid extends Component {
 
             let deviceButtonGroupClassName = ( isSelectedBlock || isParentOfSelectedBlock ) ? ' is-selected' : '';
 
+
+
+
+
+
+
             /**
-             * Render edit
+             * Custom layout props
+             * 
              */
-            var editDisplay = (
+            let InspectorControlsCustomProps = [];
+            if( typeof block_spec.props == 'object' ) {
+
+                for( const [key, value] of Object.entries(block_spec.props) ) {
+
+                    if( typeof value != 'object' || value == null )
+                        continue;
+
+                    InspectorControlsCustomProps.push( renderControl( value, [ key ], { [key]: attributes[key] }, clientId ) );
+
+                    // let InspectorControlsCustomPropsTemp = '';
+                    // switch( value.type ) {
+
+                    //     case 'string':
+                    //         InspectorControlsCustomPropsTemp = renderTextControl( key + "_" + clientId, value.label, [ key ], attributes[key], attributes[key], false, false, clientId );
+                    //         break;
+
+                    //     case 'select':
+                    //         InspectorControlsCustomPropsTemp = renderSelectControl( key + "_" + clientId, value.label, value.options, [ key ], attributes[key], attributes[key], false, false, clientId );
+                    //         break;
+                    // };
+
+                    // InspectorControlsCustomProps.push(
+                    //     <div
+                    //         key={ key + "_" + clientId + "-basicContainer"}
+                    //         className="basicField"
+                    //     >
+                    //         { value.label }
+                    //         { InspectorControlsCustomPropsTemp }
+                    //     </div>
+                    // );
+                }
+
+                // Remove last HorizontalRule
+                InspectorControlsCustomProps.pop();
+
+                if( InspectorControlsCustomProps.length > 0 ) {
+                    InspectorControlsCustomProps = (
+                        <Panel
+                            key={ clientId + "-panel" }
+                        >
+                            <PanelBody
+                                key={ clientId + "-PanelBody" }
+                                title={ 'Custom props' }
+                                initialOpen={ false }
+                            >
+                                <div
+                                    key={ clientId + "-panelBodyDivObject" }
+                                    className="objectField components-base-control"
+                                >
+                                    <div
+                                        key={ clientId + "-panelBodySubDivObject" }
+                                        className="objectField-content"
+                                    > 
+                                        { InspectorControlsCustomProps }
+                                    </div>
+                                </div>
+                            </PanelBody>
+                        </Panel>
+                    );
+                }
+            }
+
+
+
+
+
+
+            const MyToggleControl = <div className="toggleControlComponentMode">
+                <ToggleControl
+                    key={ clientId + "-ToggleControlComponentMode" }
+                    label="Mode"
+                    help={
+                        this.state.configMode
+                            ? 'Configuration'
+                            : 'Live'
+                    }
+                    checked={ this.state.configMode }
+                    onChange={ () => {
+                        this.setState( { configMode: ! this.state.configMode } )
+                    } }
+                />
+            </div>;
+
+            const EditDisplay = ( this.state.configMode ) ?
+                <Placeholder
+                    key={ clientId + "-placeholder" }
+                    label={ "Grid" }
+                    isColumnLayout={ true }
+                    className="wpe-component_edit_placeholder"
+                >
+                    <MarginControls props={ this.props } deviceType={ experimentalDeviceType } margin={ ( theme_spec?.margin ) ? theme_spec?.margin : null } />
+                    { InspectorControlsCustomProps }
+                </Placeholder>
+            :
                 <>
                     <div className={ "deviceButtonGroup" + deviceButtonGroupClassName } >
                         <ButtonGroup>
@@ -183,56 +294,17 @@ class WpeGrid extends Component {
                     </div>
                     <div { ...innerBlocksProps } />
                 </>
+            ;
+            
+            /**
+             * Render edit
+             */
+            var editDisplay = (
+                <>
+                    { MyToggleControl }
+                    { EditDisplay }
+                </>
             )
-        }
-
-
-
-
-        /**
-         * Custom layout props
-         * 
-         */
-        let InspectorControlsCustomProps = [];
-        if( typeof block_spec.props == 'object' ) {
-
-            for( const [key, value] of Object.entries(block_spec.props) ) {
-
-                if( typeof value != 'object' || value == null )
-                    continue;
-
-                switch( value.type ) {
-
-                    case 'select':
-                        InspectorControlsCustomProps.push(
-                            <SelectControl
-                                key={ "inspectorSelect_" + key + "_" + clientId }
-                                label={ value.label }
-                                value={ attributes[key] }
-                                options={
-                                [ { label: 'Choose...', value: '' } ].concat( value.options.map( function(value) {
-                                        return { label: value.name, value: value.value }
-                                    } ) )
-                                }
-                                onChange={ ( value ) => { setAttributes( { [key]: value } ) } }
-                            />
-                        );
-                        break;
-                };
-
-                InspectorControlsCustomProps.push(<HorizontalRule key={ "HorizontalRule_" + key + "_" + clientId } />);
-            }
-
-            // Remove last HorizontalRule
-            InspectorControlsCustomProps.pop();
-
-            if( InspectorControlsCustomProps.length > 0 ) {
-                InspectorControlsCustomProps = (
-                    <PanelBody title={ 'Custom props' } initialOpen={ false }>
-                        { InspectorControlsCustomProps }
-                    </PanelBody>
-                );
-            }
         }
 
         // InspectorControls
@@ -250,8 +322,6 @@ class WpeGrid extends Component {
                             max={ attributes.gridCountColumns + 1 }
                         />
                     </PanelBody>
-                    <MarginControls props={ this.props } deviceType={ experimentalDeviceType } margin={ ( theme_spec?.margin ) ? theme_spec?.margin : null } />
-                    { InspectorControlsCustomProps }
                 </InspectorControls>
             );
         }

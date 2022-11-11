@@ -10,7 +10,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@wordpress/scripts": "10.0.0"
+    "@wordpress/scripts": "24.1.0"
   },
   "dependencies": {
     "@ckeditor/ckeditor5-alignment": "^29.0.0",

@@ -38,6 +38,10 @@ class Spacing extends ControllerBase {
             foreach( $spacing as $breakpoint_key => $breakpoint_value ) {
                 if( is_array($breakpoint_value) ) {
 
+                    if( isset($breakpoint_value['all']) ) {
+                        $coffeekraken_spacing['all'] = $breakpoint_value['all'];
+                    }
+                    
                     if( isset($breakpoint_value['y']) ) {
                         $coffeekraken_spacing['block'] = $breakpoint_value['y'];
                     }
@@ -69,5 +73,5 @@ class Spacing extends ControllerBase {
 
         return $spacing;
     }
-    
+
 }

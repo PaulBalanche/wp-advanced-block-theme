@@ -7,7 +7,7 @@ import { InnerBlocks, useBlockProps } from '@wordpress/block-editor';
  */
 import edit from './edit';
 
-import { initDevice } from '../../../packages/devices.js';
+import { initDevice } from '../../../js/devices';
 initDevice();
 
 var current_user_can_edit_posts = global_localized.current_user_can_edit_posts;
@@ -26,7 +26,7 @@ Object.values(global_localized.components).forEach( ( element ) => {
         }
     };
 
-    for (const [key, value] of Object.entries(element.props)) {
+    for( const [ key, value ] of Object.entries(element.props) ) {
         
         if( typeof value != 'object' || value == null )
             continue;

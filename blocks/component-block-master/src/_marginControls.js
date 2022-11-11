@@ -10,7 +10,7 @@ import {
 
 import { merge } from 'merge-anything';
 
-import { getLayouts, setBodyDevice, getBodyDevice } from '../../../packages/devices.js';
+import { getLayouts, setBodyDevice, getBodyDevice } from '../../../js/devices.js';
 
 export class MarginControls extends Component {
 
@@ -52,6 +52,7 @@ export class MarginControls extends Component {
             padding: {},
             margin: {}
         };
+
         getLayouts().forEach( ( layout ) => {
 
             this.state.padding[ layout.value ] = { all: undefined, top: undefined, bottom: undefined, left: undefined, right: undefined, x: undefined, y: undefined };
@@ -77,6 +78,11 @@ export class MarginControls extends Component {
         
     //     return null;
     // }
+
+    getLayouts() {
+
+        return getLayouts();
+    }
 
     setPadding( type, deviceType, value ) {
 

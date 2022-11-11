@@ -11,6 +11,13 @@ export function initDevice() {
      });
 }
 
+export function initContainer() {
+
+    if( theme_spec?.layout?.container?.default != 'undefined' ) {
+        setWidthContainer( theme_spec.layout.container.default );
+    }
+}
+
 export function getLayouts() {
     
     var layout = [];
@@ -21,7 +28,6 @@ export function getLayouts() {
             attributeName: key.charAt(0).toUpperCase() + key.slice(1)
         });
     });
-    
 
     return layout;
 }
