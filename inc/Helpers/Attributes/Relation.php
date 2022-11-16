@@ -2,6 +2,8 @@
 
 namespace Abt\Helpers\Attributes;
 
+use Abt\Helpers\Attributes;
+
 class Relation {
     
     public static function format( &$attributes, $key_prop, $prop, $componentId ) {
@@ -19,6 +21,7 @@ class Relation {
             }
 
             $attributes[$key_prop] = apply_filters( 'Abt\pre_render_component_relation', $attributes[$key_prop], $componentId, $key_prop );
+            Attributes::responsive( $attributes[$key_prop], $prop );
         }
     }
 

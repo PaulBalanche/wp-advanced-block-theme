@@ -3,9 +3,11 @@ import {
     TextControl
 } from '@wordpress/components';
 
-import { updateAttributes, removeEltRepeatable } from '../attributes';
+import { updateAttributes, removeEltRepeatable, renderTabPanelComponent } from '../attributes';
 
-export function renderText( id, label, keys, valueProp, objectValue, isNumber = false, repeatable = false, required = false, clientId ) {
+import { getLayouts, setBodyDevice, getBodyDevice } from '../devices';
+
+export function renderText( id, label, keys, valueProp, objectValue, isNumber = false, repeatable = false, required = false, clientId, responsive = false ) {
 
     label = ( required ) ? label + '*' : label;
 
@@ -27,15 +29,55 @@ export function renderText( id, label, keys, valueProp, objectValue, isNumber = 
         );
     }
 
-    return (
-        <TextControl
-            key={ id }
-            label={ label }
-            type={ !! isNumber ? "number" : "text" }
-            value={ objectValue }
-            onChange={ ( newValue ) =>
-                updateAttributes( keys, valueProp, newValue, isNumber, clientId )
-            }
-        />
+    if( responsive ) {
+
+        let newInner = renderTabPanelComponent(
+                id,
+                getLayouts().map( ( layout ) => {
+                    return {
+                        name: layout.value,
+                        title: layout.label,
+                        className: 'tab-' + layout.value,
+                    };
+                } ),
+                function ( tab ) {
+
+                    return renderTextControl(
+                        id + "-" + tab.name,
+                        label,
+                        isNumber,
+                        ( typeof objectValue[tab.name] == 'string' ) ? objectValue[tab.name] : '',
+                        keys.concat(tab.name),
+                        valueProp,
+                        clientId
+                    );
+                },
+                getBodyDevice()
+            );
+        
+        return newInner;
+    }
+
+    return renderTextControl(
+        id,
+        label,
+        isNumber,
+        objectValue,
+        keys,
+        valueProp,
+        clientId
     );
+}
+
+function renderTextControl( id, label, isNumber, value, keysToUpdate, valueProp, clientId ) {
+
+    return <TextControl
+        key={ id }
+        label={ label }
+        type={ !! isNumber ? "number" : "text" }
+        value={ value }
+        onChange={ ( newValue ) =>
+            updateAttributes( keysToUpdate, valueProp, newValue, isNumber, clientId )
+        }
+    />
 }

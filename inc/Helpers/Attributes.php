@@ -26,7 +26,7 @@ class Attributes {
                 switch( $prop['type'] ) {
                     
                     case 'boolean':
-                        Boolean::format( $attributes, $key_prop );
+                        Boolean::format( $attributes, $key_prop, $prop );
                         break;
 
                     case 'image':
@@ -54,17 +54,30 @@ class Attributes {
                         break;
 
                     case 'link':
-                        Link::format( $attributes, $key_prop );
+                        Link::format( $attributes, $key_prop, $prop );
                         break;
 
                     case 'date':
-                        Date::format( $attributes, $key_prop );
+                        Date::format( $attributes, $key_prop, $prop );
                         break;
                 }
             }
         }
 
         return $attributes;
+    }
+
+
+
+    /**
+     * Formatting attributes to responsive if needed
+     * 
+     */
+    public static function responsive( &$attributes, $prop ) {
+
+         if( isset($prop['responsive']) && $prop['responsive'] ) {
+            $attributes = [ 'media' =>  $attributes ];
+        }
     }
 
 }

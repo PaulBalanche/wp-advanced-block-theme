@@ -6,5 +6,4 @@
       "@ckeditor/ckeditor5-react": "^3.0.2",
       "@paulbalanche/ckeditor5-build-classic-with-alignment": "^1.0.2"
     }
-  }
-  
+}

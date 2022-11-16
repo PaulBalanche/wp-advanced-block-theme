@@ -4,13 +4,13 @@ export function renderDateTimeControl( id, label, keys, valueProp, objectValue, 
 }
 
 import { renderFile } from './controls/File';
-export function renderFileControl( type, id, label, keys, valueProp, objectValue, repeatable = false, required = false, clientId ) {
-    return renderFile( type, id, label, keys, valueProp, objectValue, repeatable, required, clientId );
+export function renderFileControl( type, id, label, keys, valueProp, objectValue, repeatable = false, required = false, clientId, responsive = false ) {
+    return renderFile( type, id, label, keys, valueProp, objectValue, repeatable, required, clientId, responsive );
 }
 
 import { renderImageVideo } from './controls/ImageVideo';
-export function renderImageVideoControl( type, args, id, label, keys, valueProp, objectValue, repeatable = false, required = false, clientId ) {
-    return renderImageVideo( type, args, id, label, keys, valueProp, objectValue, repeatable, required, clientId );
+export function renderImageVideoControl( type, args, id, label, keys, valueProp, objectValue, repeatable = false, required = false, clientId, responsive = false ) {
+    return renderImageVideo( type, args, id, label, keys, valueProp, objectValue, repeatable, required, clientId, responsive );
 }
 
 import { renderLink } from './controls/Link';
@@ -34,8 +34,8 @@ export function renderSelectControl( id, label, options, keys, valueProp, attrib
 }
 
 import { renderText } from './controls/Text';
-export function renderTextControl( id, label, keys, valueProp, objectValue, isNumber = false, repeatable = false, required = false, clientId ) {
-    return renderText( id, label, keys, valueProp, objectValue, isNumber, repeatable, required, clientId );
+export function renderTextControl( id, label, keys, valueProp, objectValue, isNumber = false, repeatable = false, required = false, clientId, responsive = false ) {
+    return renderText( id, label, keys, valueProp, objectValue, isNumber, repeatable, required, clientId, responsive );
 }
 
 import { renderTextarea } from './controls/Textarea';

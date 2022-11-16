@@ -115,6 +115,17 @@ class ComponentBlock extends ModelBase {
 
         return get_stylesheet_directory() . '/' . $this->get_config()->get('componentBlocksLocation') . $this->get_block_name();
     }
+    
+    
+    
+    /**
+     * Get block directory uri
+     * 
+     */
+    public function get_block_dir_uri() {
+
+        return get_stylesheet_directory_uri() . '/' . $this->get_config()->get('componentBlocksLocation') . $this->get_block_name();
+    }
 
 
 
@@ -138,6 +149,27 @@ class ComponentBlock extends ModelBase {
         }
 
         return $this->blockSpec;
+    }
+    
+    
+    
+    /**
+     * Get block screenshot src
+     * 
+     */
+    public function get_screenshot_src() {
+
+        $screenshot_file = array_merge(
+            glob( $this->get_block_dir() . '/*.jpg' ),
+            glob( $this->get_block_dir() . '/*.jpeg' ),
+            glob( $this->get_block_dir() . '/*.png' )
+        );
+        if( $screenshot_file && is_array($screenshot_file) && count($screenshot_file) > 0 ) {
+            $pathinfo_screenshot = pathinfo($screenshot_file[0]);
+            return str_replace( home_url(), '', $this->get_block_dir_uri() . '/' . $pathinfo_screenshot['basename'] );
+        }
+
+        return false;
     }
 
 
@@ -171,7 +203,8 @@ class ComponentBlock extends ModelBase {
             'props' => $component_frontspec['props'] ?? [],
             'props_categories' => $component_frontspec['props_categories'] ?? null,
             'path' => $component_frontspec['path'] ?? null,
-            'parent' => $component_frontspec['parent'] ?? $default_parent
+            'parent' => $component_frontspec['parent'] ?? $default_parent,
+            'screenshot' => $this->get_screenshot_src()
         ], $this );
 
         $block_spec_json_filename = $block_dir . '/' . $this->get_config()->get('viewspecJsonFilename');
@@ -219,18 +252,6 @@ class ComponentBlock extends ModelBase {
             $attributes = [
                 'id_component' => [
                     'type' => 'string'
-                ],
-                'anchor' => [
-                    'type' => 'string'
-                ],
-                'padding' => [
-                    'type' => 'object'
-                ],
-                'margin' => [
-                    'type' => 'object'
-                ],
-                'editor' => [
-                    'type' => 'boolean'
                 ]
             ];
 
@@ -239,6 +260,8 @@ class ComponentBlock extends ModelBase {
                 if( is_array($val_prop) && isset($val_prop['type']) ) {
 
                     $currentType = ( isset($val_prop['repeatable']) && $val_prop['repeatable'] == true ) ? 'array' : strtolower($val_prop['type']);
+                    $currentType = ( isset($val_prop['responsive']) && $val_prop['responsive'] == true ) ? 'object' : $currentType;
+                    
                     switch( $currentType ) {
                         case 'string':
                             $currentType = 'string';
@@ -364,8 +387,8 @@ class ComponentBlock extends ModelBase {
            
 
             // Filters spacing
-            $render_attributes['margin'] = apply_filters( 'Abt\block_spacing_formatting', ( isset($render_attributes['margin']) ) ? $render_attributes['margin'] : '', 'margin' );
-            $render_attributes['padding'] = apply_filters( 'Abt\block_spacing_formatting', ( isset($render_attributes['padding']) ) ? $render_attributes['padding'] : '', 'padding' );
+            // $render_attributes['margin'] = apply_filters( 'Abt\block_spacing_formatting', ( isset($render_attributes['margin']) ) ? $render_attributes['margin'] : '', 'margin' );
+            // $render_attributes['padding'] = apply_filters( 'Abt\block_spacing_formatting', ( isset($render_attributes['padding']) ) ? $render_attributes['padding'] : '', 'padding' );
 
             // Formatting attributes
             $render_attributes = apply_filters( 'Abt\attributes_formatting', $render_attributes, $block_spec );
@@ -377,12 +400,8 @@ class ComponentBlock extends ModelBase {
                 $missing_required_attributes = $this->get_missing_required_attributes( $render_attributes );
                 if( count($missing_required_attributes) == 0 ) {
 
-                    if( Request::is_admin_editor_request() ) {
-                        $render = $this->get_ID();
-                    }
-                    else {
-                        $render = apply_filters( 'Abt\render_component_block_' . $this->get_ID(), RenderService::render( $block_spec['path'], $render_attributes ) );
-                    }
+                    // echo '<pre>';print_r($render_attributes);
+                    $render = apply_filters( 'Abt\render_component_block_' . $this->get_ID(), RenderService::render( $block_spec['path'], $render_attributes ) );
                 }
                 else if( Request::is_admin_editor_request() ) {
 

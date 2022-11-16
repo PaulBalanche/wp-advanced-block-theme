@@ -12,10 +12,13 @@ class RecursiveObject {
             if( isset($prop['repeatable']) && $prop['repeatable'] ) {
                 foreach( $attributes[$key_prop] as $key => $val ) {
                     $attributes[$key_prop][$key] = Attributes::formatting( $val, $prop );
+                    Attributes::responsive( $attributes[$key_prop][$key], $prop );
                 }
             }
-            else
+            else {
                 $attributes[$key_prop] = Attributes::formatting( $attributes[$key_prop], $prop );
+                Attributes::responsive( $attributes[$key_prop], $prop );
+            }
         }
     }
 

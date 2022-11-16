@@ -17,12 +17,6 @@ Object.values(global_localized.components).forEach( ( element ) => {
     var initAttributes = {
         id_component: {
             type: 'string'
-        },
-        padding: {
-            type: 'object'
-        },
-        margin: {
-            type: 'object'
         }
     };
 
@@ -32,6 +26,8 @@ Object.values(global_localized.components).forEach( ( element ) => {
             continue;
 
         let currentType = ( typeof value.repeatable != 'undefined' && value.repeatable ) ? 'array' : value.type.toLowerCase();
+        currentType = ( typeof value.responsive != 'undefined' && value.responsive ) ? 'object' : currentType;
+        
         switch( currentType ) {
             case 'string':
                 initAttributes[key] = {

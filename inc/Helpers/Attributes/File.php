@@ -2,6 +2,8 @@
 
 namespace Abt\Helpers\Attributes;
 
+use Abt\Helpers\Attributes;
+
 class File {
     
     public static function format( &$attributes, $key_prop, $prop ) {
@@ -25,6 +27,7 @@ class File {
             }
 
             $attributes[$key_prop] = ( $prop['repeatable'] ) ? $files : $files[0];
+            Attributes::responsive( $attributes[$key_prop], $prop );
         }
     }
 

@@ -2,6 +2,8 @@
 
 namespace Abt\Helpers\Attributes;
 
+use Abt\Helpers\Attributes;
+
 class Image {
     
     public static function format( &$attributes, $key_prop, $prop ) {
@@ -50,6 +52,7 @@ class Image {
             }
 
             $attributes[$key_prop] = ( $prop['repeatable'] ) ? $images : $images[0];
+            Attributes::responsive( $attributes[$key_prop], $prop );
         }
     }
 

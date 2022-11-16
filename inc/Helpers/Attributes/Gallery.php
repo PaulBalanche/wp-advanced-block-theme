@@ -2,6 +2,8 @@
 
 namespace Abt\Helpers\Attributes;
 
+use Abt\Helpers\Attributes;
+
 class Gallery {
     
     public static function format( &$attributes, $key_prop, $prop ) {
@@ -28,6 +30,7 @@ class Gallery {
             }
 
             $attributes[$key_prop] = $images;
+            Attributes::responsive( $attributes[$key_prop], $prop );
         }
     }
 

@@ -137,7 +137,7 @@ export function renderControl( prop, keys, valueProp, clientId ) {
         switch( prop.type ) {
 
             case 'string':
-                blocReturned.push( renderTextControl( fieldId, label, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], false, repeatable, required_field, clientId ) );
+                blocReturned.push( renderTextControl( fieldId, label, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], false, repeatable, required_field, clientId, responsive ) );
                 break;
 
             case 'number':
@@ -179,7 +179,7 @@ export function renderControl( prop, keys, valueProp, clientId ) {
                 break;
 
             case 'image':
-                blocReturned.push( renderImageVideoControl( prop.type, ( prop.image && typeof prop.image == 'object' ) ? prop.image : {}, fieldId, label, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, clientId ) );
+                blocReturned.push( renderImageVideoControl( prop.type, ( prop.image && typeof prop.image == 'object' ) ? prop.image : {}, fieldId, label, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, clientId, responsive ) );
                 break;
 
             case 'video':
@@ -188,7 +188,7 @@ export function renderControl( prop, keys, valueProp, clientId ) {
             
             case 'file':
             case 'gallery':
-                blocReturned.push( renderFileControl( prop.type, fieldId, label, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, clientId ) );
+                blocReturned.push( renderFileControl( prop.type, fieldId, label, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, clientId, responsive ) );
                 break;
 
             case 'object':
@@ -200,28 +200,27 @@ export function renderControl( prop, keys, valueProp, clientId ) {
 
                     if( responsive ) {
 
-                        fieldsetObject.push( <TabPanel
-                            key={ fieldId + "-TabPanel" }
-                            className="tab-panel-wpe-component"
-                            activeClass="active-tab"
-                            initialTabName={ getBodyDevice() }
-                            tabs={ getLayouts().map( ( layout ) => {
-                                return {
-                                    name: layout.value,
-                                    title: layout.label,
-                                    className: 'tab-' + layout.value,
-                                };
-                            } ) }
-                        >
-                            { ( tab ) => {
-                                let tempKeyObjectReponsive = keys.concat(tab.name);
-                                let fieldsetObjectResponsive = [];
-                                for( const [ keySubProp, valueSubProp ] of Object.entries(prop.props) ) {
-                                    fieldsetObjectResponsive.push( renderControl( valueSubProp, tempKeyObjectReponsive.concat(keySubProp), valueProp, clientId ) );
-                                }
-                                return fieldsetObjectResponsive;
-                            } }
-                        </TabPanel> );
+                        fieldsetObject.push(
+                            renderTabPanelComponent(
+                                fieldId,
+                                getLayouts().map( ( layout ) => {
+                                    return {
+                                        name: layout.value,
+                                        title: layout.label,
+                                        className: 'tab-' + layout.value,
+                                    };
+                                } ),
+                                function ( tab ) {
+                                    let tempKeyObjectReponsive = keys.concat(tab.name);
+                                    let fieldsetObjectResponsive = [];
+                                    for( const [ keySubProp, valueSubProp ] of Object.entries(prop.props) ) {
+                                        fieldsetObjectResponsive.push( renderControl( valueSubProp, tempKeyObjectReponsive.concat(keySubProp), valueProp, clientId ) );
+                                    }
+                                    return fieldsetObjectResponsive;
+                                },
+                                getBodyDevice()
+                            )
+                        );
                     }
                     else {
                         for (const [keySubProp, valueSubProp] of Object.entries(prop.props)) {
@@ -259,7 +258,7 @@ export function renderControl( prop, keys, valueProp, clientId ) {
     if( !! repeatable ) {
         blocReturned.push(
             <Button
-                key={ clientId + "-" + keys.join("-") + "-repeatableAddElt"}
+                key={ clientId + "-" + keys.join("-") + "-repeatableAddElt" }
                 isSecondary
                 isSmall
                 onClick={ () => 
@@ -317,4 +316,15 @@ export function renderPanelComponent( id, label, inner, initialOpen = false ) {
             </PanelBody>
         </Panel>
     );
+}
+
+export function renderTabPanelComponent( id, tabs, inner, initialTabName = null  ) {
+
+    return <TabPanel
+        key={ id + "-tabPanel" }
+        className="tab-panel-wpe-component"
+        activeClass="active-tab"
+        initialTabName={ initialTabName }
+        tabs={ tabs }
+    >{ inner }</TabPanel>;
 }

@@ -44,9 +44,10 @@
   margin-top: 40px;
 }
 
-.toggleControlComponentMode {
+.buttonGroupComponentModeContainer {
   display: flex;
-  flex-direction: row-reverse;
+  justify-content: space-around;
+  padding-bottom: 1rem;
 }
 
 .interface-complementary-area .flex {

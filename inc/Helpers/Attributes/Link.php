@@ -2,9 +2,11 @@
 
 namespace Abt\Helpers\Attributes;
 
+use Abt\Helpers\Attributes;
+
 class Link {
     
-    public static function format( &$attributes, $key_prop ) {
+    public static function format( &$attributes, $key_prop, $prop ) {
         
         if( isset($attributes[$key_prop]) && is_array($attributes[$key_prop]) ) {
 
@@ -14,6 +16,7 @@ class Link {
                     'text' => ( isset($attributes[$key_prop]['text']) ) ? $attributes[$key_prop]['text'] : '',
                     'target' => ( isset($attributes[$key_prop]['opensInNewTab']) && $attributes[$key_prop]['opensInNewTab'] == '1' ) ? true : false
                 ];
+                Attributes::responsive( $attributes[$key_prop], $prop );
             }
             else {
                 $attributes[$key_prop] = null;

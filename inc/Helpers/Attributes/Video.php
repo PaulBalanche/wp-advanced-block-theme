@@ -2,6 +2,8 @@
 
 namespace Abt\Helpers\Attributes;
 
+use Abt\Helpers\Attributes;
+
 class Video {
     
     public static function format( &$attributes, $key_prop, $prop ) {
@@ -63,6 +65,8 @@ class Video {
             if( count($attributes[$key_prop]) == 1 && isset($attributes[$key_prop]['default']) ) {
                 $attributes[$key_prop] = $attributes[$key_prop]['default'];
             }
+
+            Attributes::responsive( $attributes[$key_prop], $prop );
         }
     }
 

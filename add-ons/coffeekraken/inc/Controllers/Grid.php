@@ -54,7 +54,9 @@ class Grid extends ControllerBase {
         // Prepare data
         $pre_rendered_attributes = array_merge( $pre_rendered_attributes, [
             'id' => $grid_id,
-            'layout' => $layout,
+            'layout' => [
+                'media' => $layout
+            ],
             'frontspec' => [
                 'media' => $media
             ],

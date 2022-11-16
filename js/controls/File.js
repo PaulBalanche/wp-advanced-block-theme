@@ -8,7 +8,7 @@ import {
 
 import { updateAttributes, removeEltRepeatable, fileSizeFormat, setAttributes } from '../attributes';
 
-export function renderFile( type, id, label, keys, valueProp, objectValue, repeatable = false, required = false, clientId ) {
+export function renderFile( type, id, label, keys, valueProp, objectValue, repeatable = false, required = false, clientId, responsive = false ) {
 
     label = ( label && required ) ? label + '*' : label;
     
@@ -195,6 +195,34 @@ export function renderFile( type, id, label, keys, valueProp, objectValue, repea
             >{ preview }</MediaPlaceholder>
         </div>
     );
+
+
+    // if( responsive ) {
+
+    //     let newInner = [];
+
+    //     newInner.push(
+    //         renderTabPanelComponent(
+    //             id,
+    //             getLayouts().map( ( layout ) => {
+    //                 return {
+    //                     name: layout.value,
+    //                     title: layout.label,
+    //                     className: 'tab-' + layout.value,
+    //                 };
+    //             } ),
+    //             function ( tab ) {
+    //                 return tab.label;
+    //             },
+    //             getBodyDevice()
+    //         )
+    //     );
+        
+    //     inner = newInner;
+    // }
+
+
+
 
     return renderPanelComponent( id, label, inner, false );
 }

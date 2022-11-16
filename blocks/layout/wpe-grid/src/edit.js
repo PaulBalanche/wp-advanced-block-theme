@@ -56,7 +56,7 @@ class WpeGrid extends Component {
         super( ...arguments );
 
         this.state = {
-            configMode: false
+            configMode: 1
         };
     }
 
@@ -176,8 +176,10 @@ class WpeGrid extends Component {
              * Custom layout props
              * 
              */
-            let InspectorControlsCustomProps = [];
+            let configuration = null;
             if( typeof block_spec.props == 'object' ) {
+
+                let InspectorControlsCustomProps = [];
 
                 for( const [key, value] of Object.entries(block_spec.props) ) {
 
@@ -185,91 +187,47 @@ class WpeGrid extends Component {
                         continue;
 
                     InspectorControlsCustomProps.push( renderControl( value, [ key ], { [key]: attributes[key] }, clientId ) );
-
-                    // let InspectorControlsCustomPropsTemp = '';
-                    // switch( value.type ) {
-
-                    //     case 'string':
-                    //         InspectorControlsCustomPropsTemp = renderTextControl( key + "_" + clientId, value.label, [ key ], attributes[key], attributes[key], false, false, clientId );
-                    //         break;
-
-                    //     case 'select':
-                    //         InspectorControlsCustomPropsTemp = renderSelectControl( key + "_" + clientId, value.label, value.options, [ key ], attributes[key], attributes[key], false, false, clientId );
-                    //         break;
-                    // };
-
-                    // InspectorControlsCustomProps.push(
-                    //     <div
-                    //         key={ key + "_" + clientId + "-basicContainer"}
-                    //         className="basicField"
-                    //     >
-                    //         { value.label }
-                    //         { InspectorControlsCustomPropsTemp }
-                    //     </div>
-                    // );
                 }
 
-                // Remove last HorizontalRule
-                InspectorControlsCustomProps.pop();
-
                 if( InspectorControlsCustomProps.length > 0 ) {
-                    InspectorControlsCustomProps = (
-                        <Panel
-                            key={ clientId + "-panel" }
-                        >
-                            <PanelBody
-                                key={ clientId + "-PanelBody" }
-                                title={ 'Custom props' }
-                                initialOpen={ false }
-                            >
-                                <div
-                                    key={ clientId + "-panelBodyDivObject" }
-                                    className="objectField components-base-control"
-                                >
-                                    <div
-                                        key={ clientId + "-panelBodySubDivObject" }
-                                        className="objectField-content"
-                                    > 
-                                        { InspectorControlsCustomProps }
-                                    </div>
-                                </div>
-                            </PanelBody>
-                        </Panel>
-                    );
+
+                    configuration = <Placeholder
+                        key={ clientId + "-placeholder" }
+                        label={ "Grid configuration" }
+                        isColumnLayout={ true }
+                        className="wpe-component_edit_placeholder"
+                    >
+                        { InspectorControlsCustomProps }
+                    </Placeholder>;
                 }
             }
 
+            const buttonGroup = ( configuration != null ) ?
+                <div className="buttonGroupComponentModeContainer">
+                    <ButtonGroup
+                        key={ clientId + "-buttonGroupComponentMode" }
+                    >
+                        <Button
+                            key={ clientId + "-buttonConfigMode1" }
+                            isPressed={ this.state.configMode == 1 }
+                            onClick={ () => {
+                                this.setState( { configMode: 1 } )
+                            } }
+                        >Live content</Button>
+                        <Button
+                            key={ clientId + "-buttonConfigMode3" }
+                            isPressed={ this.state.configMode == 3 }
+                            onClick={ () => {
+                                this.setState( { configMode: 3 } )
+                            } }
+                        >Edit</Button>
+                    </ButtonGroup>
+                </div>
+            :
+            null;
 
-
-
-
-
-            const MyToggleControl = <div className="toggleControlComponentMode">
-                <ToggleControl
-                    key={ clientId + "-ToggleControlComponentMode" }
-                    label="Mode"
-                    help={
-                        this.state.configMode
-                            ? 'Configuration'
-                            : 'Live'
-                    }
-                    checked={ this.state.configMode }
-                    onChange={ () => {
-                        this.setState( { configMode: ! this.state.configMode } )
-                    } }
-                />
-            </div>;
-
-            const EditDisplay = ( this.state.configMode ) ?
-                <Placeholder
-                    key={ clientId + "-placeholder" }
-                    label={ "Grid" }
-                    isColumnLayout={ true }
-                    className="wpe-component_edit_placeholder"
-                >
-                    <MarginControls props={ this.props } deviceType={ experimentalDeviceType } margin={ ( theme_spec?.margin ) ? theme_spec?.margin : null } />
-                    { InspectorControlsCustomProps }
-                </Placeholder>
+            const EditDisplay = ( configuration != null && this.state.configMode == 3 ) ?
+                configuration
             :
                 <>
                     <div className={ "deviceButtonGroup" + deviceButtonGroupClassName } >
@@ -301,7 +259,7 @@ class WpeGrid extends Component {
              */
             var editDisplay = (
                 <>
-                    { MyToggleControl }
+                    { buttonGroup }
                     { EditDisplay }
                 </>
             )

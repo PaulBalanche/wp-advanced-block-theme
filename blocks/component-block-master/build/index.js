@@ -2,379 +2,6 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "./src/_marginControls.js":
-/*!********************************!*\
-  !*** ./src/_marginControls.js ***!
-  \********************************/
-/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "MarginControls": function() { return /* binding */ MarginControls; },
-/* harmony export */   "generateMarginClassName": function() { return /* binding */ generateMarginClassName; }
-/* harmony export */ });
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var merge_anything__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! merge-anything */ "./node_modules/merge-anything/dist/index.es.js");
-/* harmony import */ var _js_devices_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../js/devices.js */ "../../js/devices.js");
-
-
-
-
-
-class MarginControls extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Component {
-  constructor(attr) {
-    super(...arguments);
-    this.parentProps = attr.props;
-    this.spacing = attr !== null && attr !== void 0 && attr.margin ? attr.margin : [{
-      "label": "1",
-      "value": "1"
-    }, {
-      "label": "2",
-      "value": "2"
-    }, {
-      "label": "3",
-      "value": "3"
-    }, {
-      "label": "4",
-      "value": "4"
-    }, {
-      "label": "5",
-      "value": "5"
-    }];
-    if (!this.parentProps.attributes.hasOwnProperty('padding')) {
-      this.parentProps.attributes.padding = {};
-    }
-    if (!this.parentProps.attributes.hasOwnProperty('margin')) {
-      this.parentProps.attributes.margin = {};
-    }
-    this.state = {
-      padding: {},
-      margin: {}
-    };
-    (0,_js_devices_js__WEBPACK_IMPORTED_MODULE_2__.getLayouts)().forEach(layout => {
-      this.state.padding[layout.value] = {
-        all: undefined,
-        top: undefined,
-        bottom: undefined,
-        left: undefined,
-        right: undefined,
-        x: undefined,
-        y: undefined
-      };
-      this.state.margin[layout.value] = {
-        all: undefined,
-        top: undefined,
-        bottom: undefined,
-        left: undefined,
-        right: undefined,
-        x: undefined,
-        y: undefined
-      };
-    });
-    this.state.padding = (0,merge_anything__WEBPACK_IMPORTED_MODULE_3__.merge)(this.state.padding, this.parentProps.attributes.padding);
-    this.state.margin = (0,merge_anything__WEBPACK_IMPORTED_MODULE_3__.merge)(this.state.margin, this.parentProps.attributes.margin);
-  }
-
-  // getPadding( type ) {
-  //     if( this.state.padding[this.props.deviceType.toLowerCase()].hasOwnProperty(type) ) {
-  //         return this.state.padding[this.props.deviceType.toLowerCase()][type];
-  //     }
-
-  //     return null;
-  // }
-
-  // getMargin( type ) {
-  //     if( this.state.margin[this.props.deviceType.toLowerCase()].hasOwnProperty(type) ) {
-  //         return this.state.margin[this.props.deviceType.toLowerCase()][type];
-  //     }
-
-  //     return null;
-  // }
-
-  getLayouts() {
-    return (0,_js_devices_js__WEBPACK_IMPORTED_MODULE_2__.getLayouts)();
-  }
-  setPadding(type, deviceType, value) {
-    const newPadding = (0,merge_anything__WEBPACK_IMPORTED_MODULE_3__.merge)(this.state.padding, {
-      [deviceType]: {
-        [type]: value
-      }
-    });
-    this.setState({
-      padding: newPadding
-    });
-    this.parentProps.setAttributes({
-      padding: newPadding
-    });
-  }
-  setMargin(type, deviceType, value) {
-    const newMargin = (0,merge_anything__WEBPACK_IMPORTED_MODULE_3__.merge)(this.state.margin, {
-      [deviceType]: {
-        [type]: value
-      }
-    });
-    this.setState({
-      margin: newMargin
-    });
-    this.parentProps.setAttributes({
-      margin: newMargin
-    });
-  }
-  resetPadding(deviceType) {
-    let newPadding = {};
-    (0,_js_devices_js__WEBPACK_IMPORTED_MODULE_2__.getLayouts)().forEach(layout => {
-      newPadding[layout.value] = deviceType == layout.value ? {} : this.state.padding[layout.value];
-    });
-    this.setState({
-      padding: newPadding
-    });
-    this.parentProps.setAttributes({
-      padding: newPadding
-    });
-  }
-  resetMargin(deviceType) {
-    let newMargin = {};
-    (0,_js_devices_js__WEBPACK_IMPORTED_MODULE_2__.getLayouts)().forEach(layout => {
-      newMargin[layout.value] = deviceType == layout.value ? {} : this.state.margin[layout.value];
-    });
-    this.setState({
-      margin: newMargin
-    });
-    this.parentProps.setAttributes({
-      margin: newMargin
-    });
-  }
-  renderBtnReset(property, deviceType) {
-    var propertyToTreat = property == 'padding' ? this.state.padding : this.state.margin;
-    var btnResetPadding = [];
-    if (typeof propertyToTreat[deviceType] == 'object' && Object.keys(propertyToTreat).length > 0) {
-      for (const [key, value] of Object.entries(propertyToTreat[deviceType])) {
-        if (typeof value != 'undefined') {
-          btnResetPadding.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-            key: "containerReset-" + property + "-" + deviceType + "-" + this.parentProps.clientId
-          }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.HorizontalRule, null), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
-            variant: "secondary",
-            className: "is-secondary",
-            onClick: () => {
-              if (property == 'padding') {
-                this.resetPadding(deviceType);
-              } else {
-                this.resetMargin(deviceType);
-              }
-            }
-          }, "Reset ", deviceType)));
-          break;
-        }
-      }
-    }
-    return btnResetPadding;
-  }
-  render() {
-    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.PanelBody, {
-      title: 'Padding',
-      initialOpen: false
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.TabPanel, {
-      className: "padding-tab-panel",
-      activeClass: "active-tab",
-      initialTabName: (0,_js_devices_js__WEBPACK_IMPORTED_MODULE_2__.getBodyDevice)(),
-      tabs: (0,_js_devices_js__WEBPACK_IMPORTED_MODULE_2__.getLayouts)().map(layout => {
-        return {
-          name: layout.value,
-          title: layout.label,
-          className: 'tab-' + layout.value
-        };
-      })
-    }, tab => (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.SelectControl, {
-      label: "All",
-      value: this.state.padding[tab.name].all,
-      options: [{
-        label: 'Default',
-        value: ''
-      }].concat(this.spacing),
-      onChange: value => {
-        this.setPadding('all', tab.name, value);
-      }
-    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.HorizontalRule, null), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "child-range-control"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.SelectControl, {
-      label: "Padding Y",
-      value: this.state.padding[tab.name].y,
-      options: [{
-        label: 'Default',
-        value: ''
-      }].concat(this.spacing),
-      onChange: value => {
-        this.setPadding('y', tab.name, value);
-      }
-    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "child-range-control"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.SelectControl, {
-      label: "Top",
-      value: this.state.padding[tab.name].top,
-      options: [{
-        label: 'Default',
-        value: ''
-      }].concat(this.spacing),
-      onChange: value => this.setPadding('top', tab.name, value)
-    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.SelectControl, {
-      label: "Bottom",
-      value: this.state.padding[tab.name].bottom,
-      options: [{
-        label: 'Default',
-        value: ''
-      }].concat(this.spacing),
-      onChange: value => this.setPadding('bottom', tab.name, value)
-    })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.HorizontalRule, null), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.SelectControl, {
-      label: "X",
-      value: this.state.padding[tab.name].x,
-      options: [{
-        label: 'Default',
-        value: ''
-      }].concat(this.spacing),
-      onChange: value => {
-        this.setPadding('x', tab.name, value);
-      }
-    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "child-range-control"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.SelectControl, {
-      label: "Left",
-      value: this.state.padding[tab.name].left,
-      options: [{
-        label: 'Default',
-        value: ''
-      }].concat(this.spacing),
-      onChange: value => this.setPadding('left', tab.name, value)
-    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.SelectControl, {
-      label: "Right",
-      value: this.state.padding[tab.name].right,
-      options: [{
-        label: 'Default',
-        value: ''
-      }].concat(this.spacing),
-      onChange: value => this.setPadding('right', tab.name, value)
-    }))), this.renderBtnReset('padding', tab.name)))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.PanelBody, {
-      title: 'Margin',
-      initialOpen: false
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.TabPanel, {
-      className: "margin-tab-panel",
-      activeClass: "active-tab",
-      initialTabName: (0,_js_devices_js__WEBPACK_IMPORTED_MODULE_2__.getBodyDevice)(),
-      tabs: (0,_js_devices_js__WEBPACK_IMPORTED_MODULE_2__.getLayouts)().map(layout => {
-        return {
-          name: layout.value,
-          title: layout.label,
-          className: 'tab-' + layout.value
-        };
-      })
-    }, tab => (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.SelectControl, {
-      label: "All",
-      value: this.state.margin[tab.name].all,
-      options: [{
-        label: 'Default',
-        value: ''
-      }].concat(this.spacing),
-      onChange: value => {
-        this.setMargin('all', tab.name, value);
-      }
-    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.HorizontalRule, null), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "child-range-control"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.SelectControl, {
-      label: "Y",
-      value: this.state.margin[tab.name].y,
-      options: [{
-        label: 'Default',
-        value: ''
-      }].concat(this.spacing),
-      onChange: value => {
-        this.setMargin('y', tab.name, value);
-      }
-    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "child-range-control"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.SelectControl, {
-      label: "Top",
-      value: this.state.margin[tab.name].top,
-      options: [{
-        label: 'Default',
-        value: ''
-      }].concat(this.spacing),
-      onChange: value => this.setMargin('top', tab.name, value)
-    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.SelectControl, {
-      label: "Bottom",
-      value: this.state.margin[tab.name].bottom,
-      options: [{
-        label: 'Default',
-        value: ''
-      }].concat(this.spacing),
-      onChange: value => this.setMargin('bottom', tab.name, value)
-    })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.HorizontalRule, null), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.SelectControl, {
-      label: "X",
-      value: this.state.margin[tab.name].x,
-      options: [{
-        label: 'Default',
-        value: ''
-      }].concat(this.spacing),
-      onChange: value => {
-        this.setMargin('x', tab.name, value);
-      }
-    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "child-range-control"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.SelectControl, {
-      label: "Left",
-      value: this.state.margin[tab.name].left,
-      options: [{
-        label: 'Default',
-        value: ''
-      }].concat(this.spacing),
-      onChange: value => this.setMargin('left', tab.name, value)
-    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.SelectControl, {
-      label: "Right",
-      value: this.state.margin[tab.name].right,
-      options: [{
-        label: 'Default',
-        value: ''
-      }].concat(this.spacing),
-      onChange: value => this.setMargin('right', tab.name, value)
-    }))), this.renderBtnReset('margin', tab.name)))));
-  }
-}
-function generateMarginClassName(props) {
-  var {
-    attributes,
-    className
-  } = props;
-  if (typeof className == 'undefined') className = '';
-  if (typeof attributes.margin == 'object') {
-    for (const [key, value] of Object.entries(attributes.margin)) {
-      switch (value) {
-        case 0:
-          className += ' ' + key + '-none';
-          break;
-        case 1:
-          className += ' ' + key + '-smaller';
-          break;
-        case 2:
-          className += ' ' + key + '-small';
-          break;
-        case 3:
-          className += ' ' + key + '-medium';
-          break;
-        case 4:
-          className += ' ' + key + '-big';
-          break;
-        case 5:
-          className += ' ' + key + '-bigger';
-          break;
-      }
-    }
-  }
-  return className != '' ? className : false;
-}
-
-/***/ }),
-
 /***/ "./src/edit.js":
 /*!*********************!*\
   !*** ./src/edit.js ***!
@@ -388,14 +15,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_server_side_render__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_server_side_render__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/data */ "@wordpress/data");
 /* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_data__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/block-editor */ "@wordpress/block-editor");
-/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _marginControls_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./_marginControls.js */ "./src/_marginControls.js");
-/* harmony import */ var _js_attributes_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../js/attributes.js */ "../../js/attributes.js");
-
-
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _js_attributes_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../js/attributes.js */ "../../js/attributes.js");
 
 
 
@@ -405,6 +27,9 @@ __webpack_require__.r(__webpack_exports__);
 class WpeComponent extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Component {
   constructor() {
     super(...arguments);
+    this.state = {
+      configMode: this.props.element.screenshot ? 2 : 1
+    };
   }
   getAttribute(key) {
     return this.props.attributes[key];
@@ -422,120 +47,158 @@ class WpeComponent extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Compo
       isSelected,
       clientId,
       element,
-      current_user_can_edit_posts,
-      experimentalDeviceType,
-      theme_spec
+      current_user_can_edit_posts
     } = this.props;
 
     // Because of ID will be not saved to the block’s comment delimiter default attribute, we manually set it.
     if (typeof attributes.id_component == 'undefined') this.setAttributes({
       id_component: element.id
     });
+    let buttonGroup = [];
+    if (parseInt(current_user_can_edit_posts)) {
+      if (element.screenshot) {
+        buttonGroup.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Button, {
+          key: clientId + "-buttonConfigMode2",
+          isPressed: this.state.configMode == 2,
+          onClick: () => {
+            this.setState({
+              configMode: 2
+            });
+          }
+        }, "Screenshot"));
+      }
+      buttonGroup.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Button, {
+        key: clientId + "-buttonConfigMode1",
+        isPressed: this.state.configMode == 1,
+        onClick: () => {
+          this.setState({
+            configMode: 1
+          });
+        }
+      }, "Live content"));
+      if (typeof element.props == 'object' && Object.keys(element.props).length > 0) {
+        buttonGroup.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Button, {
+          key: clientId + "-buttonConfigMode3",
+          isPressed: this.state.configMode == 3,
+          onClick: () => {
+            this.setState({
+              configMode: 3
+            });
+          }
+        }, "Edit"));
+      }
+      buttonGroup = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+        className: "buttonGroupComponentModeContainer"
+      }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.ButtonGroup, {
+        key: clientId + "-buttonGroupComponentMode"
+      }, buttonGroup));
+    }
 
     // Visual mode
-    if (!isSelected || !parseInt(current_user_can_edit_posts)) {
-      return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)((_wordpress_server_side_render__WEBPACK_IMPORTED_MODULE_1___default()), {
-        key: clientId + "-serverSideRender",
-        block: "custom/wpe-component-" + element.id,
-        attributes: Object.assign(attributes, {
-          "editor": true
-        }),
-        httpMethod: "POST"
-      });
-    }
-    var editPlaceHolder = '';
-    if (typeof element.props == 'object' && Object.keys(element.props).length > 0) {
-      // Edition mode
-      let catReOrder = {
-        default: {
-          props: {}
-        }
-      };
-
-      // 1. Loop Props Categories
-      if (typeof element.props_categories != 'undefined' && element.props_categories != null) {
-        for (const [keyCatProps, valueCatProps] of Object.entries(element.props_categories)) {
-          catReOrder[valueCatProps.id] = {
-            name: valueCatProps.name,
-            props: {}
+    switch (this.state.configMode) {
+      case 1:
+        return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, buttonGroup, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)((_wordpress_server_side_render__WEBPACK_IMPORTED_MODULE_1___default()), {
+          key: clientId + "-serverSideRender",
+          block: "custom/wpe-component-" + element.id,
+          attributes: attributes,
+          httpMethod: "POST"
+        }));
+        break;
+      case 2:
+        return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, buttonGroup, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
+          key: clientId + "-serverSideRender",
+          src: element.screenshot
+        }));
+        break;
+      case 3:
+        var editPlaceHolder = '';
+        if (typeof element.props == 'object' && Object.keys(element.props).length > 0) {
+          // Edition mode
+          let catReOrder = {
+            default: {
+              props: {}
+            }
           };
-        }
-      }
 
-      // 2. Loop Props
-      for (const [keyProp, valueProp] of Object.entries(element.props)) {
-        if (typeof valueProp != 'object' || valueProp == null) continue;
-        if (typeof valueProp.category != 'undefined' && valueProp.category != null && valueProp.category in catReOrder) {
-          catReOrder[valueProp.category].props[keyProp] = valueProp;
-        } else {
-          catReOrder.default.props[keyProp] = valueProp;
-        }
-      }
-
-      // 3. Remove empty category
-      for (const [keyProp, valueProp] of Object.entries(catReOrder)) {
-        if (Object.keys(catReOrder[keyProp].props).length == 0) {
-          delete catReOrder[keyProp];
-        }
-      }
-
-      // 4. Render
-      var tabPanel = [];
-      for (const [keyCat, valCat] of Object.entries(catReOrder)) {
-        if (valCat.props.length == 0) continue;
-        let currentEditCat = [];
-        forEachCatProps: for (const [keyProp, prop] of Object.entries(valCat.props)) {
-          // Conditional treatment
-          if (typeof prop.conditional == 'object') {
-            for (const [index, conditionalField] of Object.entries(prop.conditional)) {
-              let conditionalFieldKey = Object.keys(conditionalField)[0];
-              let conditionalFieldValue = conditionalField[conditionalFieldKey];
-              if (this.getAttribute(conditionalFieldKey) != conditionalFieldValue) continue forEachCatProps;
+          // 1. Loop Props Categories
+          if (typeof element.props_categories != 'undefined' && element.props_categories != null) {
+            for (const [keyCatProps, valueCatProps] of Object.entries(element.props_categories)) {
+              catReOrder[valueCatProps.id] = {
+                name: valueCatProps.name,
+                props: {}
+              };
             }
           }
-          let valueProp = this.getAttribute(keyProp);
-          currentEditCat.push((0,_js_attributes_js__WEBPACK_IMPORTED_MODULE_6__.renderControl)(prop, [keyProp], {
-            [keyProp]: valueProp
-          }, clientId));
+
+          // 2. Loop Props
+          for (const [keyProp, valueProp] of Object.entries(element.props)) {
+            if (typeof valueProp != 'object' || valueProp == null) continue;
+            if (typeof valueProp.category != 'undefined' && valueProp.category != null && valueProp.category in catReOrder) {
+              catReOrder[valueProp.category].props[keyProp] = valueProp;
+            } else {
+              catReOrder.default.props[keyProp] = valueProp;
+            }
+          }
+
+          // 3. Remove empty category
+          for (const [keyProp, valueProp] of Object.entries(catReOrder)) {
+            if (Object.keys(catReOrder[keyProp].props).length == 0) {
+              delete catReOrder[keyProp];
+            }
+          }
+
+          // 4. Render
+          var tabPanel = [];
+          for (const [keyCat, valCat] of Object.entries(catReOrder)) {
+            if (valCat.props.length == 0) continue;
+            let currentEditCat = [];
+            forEachCatProps: for (const [keyProp, prop] of Object.entries(valCat.props)) {
+              // Conditional treatment
+              if (typeof prop.conditional == 'object') {
+                for (const [index, conditionalField] of Object.entries(prop.conditional)) {
+                  let conditionalFieldKey = Object.keys(conditionalField)[0];
+                  let conditionalFieldValue = conditionalField[conditionalFieldKey];
+                  if (this.getAttribute(conditionalFieldKey) != conditionalFieldValue) continue forEachCatProps;
+                }
+              }
+              let valueProp = this.getAttribute(keyProp);
+              currentEditCat.push((0,_js_attributes_js__WEBPACK_IMPORTED_MODULE_4__.renderControl)(prop, [keyProp], {
+                [keyProp]: valueProp
+              }, clientId));
+            }
+            if (keyCat == "default") {
+              tabPanel.push({
+                name: keyCat,
+                title: "Default",
+                content: currentEditCat
+              });
+            } else {
+              tabPanel.push({
+                name: keyCat,
+                title: valCat.name,
+                content: currentEditCat
+              });
+            }
+          }
+          if (tabPanel.length > 1) {
+            editPlaceHolder = (0,_js_attributes_js__WEBPACK_IMPORTED_MODULE_4__.renderTabPanelComponent)(clientId, tabPanel, function (tabPanel) {
+              return tabPanel.content;
+            });
+          } else {
+            editPlaceHolder = tabPanel[0].content;
+          }
         }
-        if (keyCat == "default") {
-          tabPanel.push({
-            name: keyCat,
-            title: "Default",
-            content: currentEditCat
-          });
-        } else {
-          tabPanel.push({
-            name: keyCat,
-            title: valCat.name,
-            content: currentEditCat
-          });
-        }
-      }
-      if (tabPanel.length > 1) {
-        editPlaceHolder = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.TabPanel, {
-          key: clientId + "-tabPanel",
-          className: "tab-panel-wpe-component",
-          activeClass: "active-tab",
-          tabs: tabPanel
-        }, tabPanel => tabPanel.content);
-      } else {
-        editPlaceHolder = tabPanel[0].content;
-      }
+        return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, buttonGroup, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Placeholder, {
+          key: clientId + "-placeholder",
+          label: element.name,
+          isColumnLayout: true,
+          className: "wpe-component_edit_placeholder"
+        }, editPlaceHolder));
+        break;
     }
-    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__.InspectorControls, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_marginControls_js__WEBPACK_IMPORTED_MODULE_5__.MarginControls, {
-      props: this.props,
-      deviceType: experimentalDeviceType,
-      margin: theme_spec !== null && theme_spec !== void 0 && theme_spec.margin ? theme_spec === null || theme_spec === void 0 ? void 0 : theme_spec.margin : null
-    })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.Placeholder, {
-      key: clientId + "-placeholder",
-      label: element.name,
-      isColumnLayout: true,
-      className: "wpe-component_edit_placeholder"
-    }, editPlaceHolder));
   }
 }
-/* harmony default export */ __webpack_exports__["default"] = ((element, current_user_can_edit_posts, frontspec_styles, theme_spec) => (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_2__.withSelect)((select, props) => {
+/* harmony default export */ __webpack_exports__["default"] = ((element, current_user_can_edit_posts, frontspec_styles) => (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_2__.withSelect)((select, props) => {
   const {
     getEntityRecords
   } = select('core');
@@ -558,9 +221,7 @@ class WpeComponent extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Compo
     relations: relations,
     element,
     current_user_can_edit_posts: current_user_can_edit_posts,
-    frontspec_styles: frontspec_styles,
-    theme_spec,
-    experimentalDeviceType: __experimentalGetPreviewDeviceType()
+    frontspec_styles: frontspec_styles
   };
 })(WpeComponent));
 
@@ -579,6 +240,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "removeEltRepeatable": function() { return /* binding */ removeEltRepeatable; },
 /* harmony export */   "renderControl": function() { return /* binding */ renderControl; },
 /* harmony export */   "renderPanelComponent": function() { return /* binding */ renderPanelComponent; },
+/* harmony export */   "renderTabPanelComponent": function() { return /* binding */ renderTabPanelComponent; },
 /* harmony export */   "returnStringOrNumber": function() { return /* binding */ returnStringOrNumber; },
 /* harmony export */   "setAttributes": function() { return /* binding */ setAttributes; },
 /* harmony export */   "updateAttributes": function() { return /* binding */ updateAttributes; }
@@ -668,7 +330,7 @@ function renderControl(prop, keys, valueProp, clientId) {
     let fieldId = clientId + "-" + keys.join("-") + "-" + keyLoop;
     switch (prop.type) {
       case 'string':
-        blocReturned.push((0,_controls__WEBPACK_IMPORTED_MODULE_3__.renderTextControl)(fieldId, label, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], false, repeatable, required_field, clientId));
+        blocReturned.push((0,_controls__WEBPACK_IMPORTED_MODULE_3__.renderTextControl)(fieldId, label, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], false, repeatable, required_field, clientId, responsive));
         break;
       case 'number':
         blocReturned.push((0,_controls__WEBPACK_IMPORTED_MODULE_3__.renderTextControl)(fieldId, label, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], true, repeatable, required_field, clientId));
@@ -702,40 +364,34 @@ function renderControl(prop, keys, valueProp, clientId) {
         blocReturned.push((0,_controls__WEBPACK_IMPORTED_MODULE_3__.renderDateTimeControl)(fieldId, label, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, clientId));
         break;
       case 'image':
-        blocReturned.push((0,_controls__WEBPACK_IMPORTED_MODULE_3__.renderImageVideoControl)(prop.type, prop.image && typeof prop.image == 'object' ? prop.image : {}, fieldId, label, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, clientId));
+        blocReturned.push((0,_controls__WEBPACK_IMPORTED_MODULE_3__.renderImageVideoControl)(prop.type, prop.image && typeof prop.image == 'object' ? prop.image : {}, fieldId, label, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, clientId, responsive));
         break;
       case 'video':
         blocReturned.push((0,_controls__WEBPACK_IMPORTED_MODULE_3__.renderImageVideoControl)(prop.type, prop.video && typeof prop.video == 'object' ? prop.video : {}, fieldId, label, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, clientId));
         break;
       case 'file':
       case 'gallery':
-        blocReturned.push((0,_controls__WEBPACK_IMPORTED_MODULE_3__.renderFileControl)(prop.type, fieldId, label, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, clientId));
+        blocReturned.push((0,_controls__WEBPACK_IMPORTED_MODULE_3__.renderFileControl)(prop.type, fieldId, label, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, clientId, responsive));
         break;
       case 'object':
         if (typeof prop.props == "object") {
           let tempKeyObject = repeatable ? keys.concat(keyLoop) : keys;
           let fieldsetObject = [];
           if (responsive) {
-            fieldsetObject.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.TabPanel, {
-              key: fieldId + "-TabPanel",
-              className: "tab-panel-wpe-component",
-              activeClass: "active-tab",
-              initialTabName: (0,_devices__WEBPACK_IMPORTED_MODULE_2__.getBodyDevice)(),
-              tabs: (0,_devices__WEBPACK_IMPORTED_MODULE_2__.getLayouts)().map(layout => {
-                return {
-                  name: layout.value,
-                  title: layout.label,
-                  className: 'tab-' + layout.value
-                };
-              })
-            }, tab => {
+            fieldsetObject.push(renderTabPanelComponent(fieldId, (0,_devices__WEBPACK_IMPORTED_MODULE_2__.getLayouts)().map(layout => {
+              return {
+                name: layout.value,
+                title: layout.label,
+                className: 'tab-' + layout.value
+              };
+            }), function (tab) {
               let tempKeyObjectReponsive = keys.concat(tab.name);
               let fieldsetObjectResponsive = [];
               for (const [keySubProp, valueSubProp] of Object.entries(prop.props)) {
                 fieldsetObjectResponsive.push(renderControl(valueSubProp, tempKeyObjectReponsive.concat(keySubProp), valueProp, clientId));
               }
               return fieldsetObjectResponsive;
-            }));
+            }, (0,_devices__WEBPACK_IMPORTED_MODULE_2__.getBodyDevice)()));
           } else {
             for (const [keySubProp, valueSubProp] of Object.entries(prop.props)) {
               fieldsetObject.push(renderControl(valueSubProp, tempKeyObject.concat(keySubProp), valueProp, clientId));
@@ -793,6 +449,16 @@ function renderPanelComponent(id, label, inner) {
     className: "objectField-content"
   }, inner))));
 }
+function renderTabPanelComponent(id, tabs, inner) {
+  let initialTabName = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
+  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.TabPanel, {
+    key: id + "-tabPanel",
+    className: "tab-panel-wpe-component",
+    activeClass: "active-tab",
+    initialTabName: initialTabName,
+    tabs: tabs
+  }, inner);
+}
 
 /***/ }),
 
@@ -837,14 +503,16 @@ function renderFileControl(type, id, label, keys, valueProp, objectValue) {
   let repeatable = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : false;
   let required = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : false;
   let clientId = arguments.length > 8 ? arguments[8] : undefined;
-  return (0,_controls_File__WEBPACK_IMPORTED_MODULE_1__.renderFile)(type, id, label, keys, valueProp, objectValue, repeatable, required, clientId);
+  let responsive = arguments.length > 9 && arguments[9] !== undefined ? arguments[9] : false;
+  return (0,_controls_File__WEBPACK_IMPORTED_MODULE_1__.renderFile)(type, id, label, keys, valueProp, objectValue, repeatable, required, clientId, responsive);
 }
 
 function renderImageVideoControl(type, args, id, label, keys, valueProp, objectValue) {
   let repeatable = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : false;
   let required = arguments.length > 8 && arguments[8] !== undefined ? arguments[8] : false;
   let clientId = arguments.length > 9 ? arguments[9] : undefined;
-  return (0,_controls_ImageVideo__WEBPACK_IMPORTED_MODULE_2__.renderImageVideo)(type, args, id, label, keys, valueProp, objectValue, repeatable, required, clientId);
+  let responsive = arguments.length > 10 && arguments[10] !== undefined ? arguments[10] : false;
+  return (0,_controls_ImageVideo__WEBPACK_IMPORTED_MODULE_2__.renderImageVideo)(type, args, id, label, keys, valueProp, objectValue, repeatable, required, clientId, responsive);
 }
 
 function renderLinkControl(id, label, keys, valueProp, objectValue) {
@@ -880,7 +548,8 @@ function renderTextControl(id, label, keys, valueProp, objectValue) {
   let repeatable = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : false;
   let required = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : false;
   let clientId = arguments.length > 8 ? arguments[8] : undefined;
-  return (0,_controls_Text__WEBPACK_IMPORTED_MODULE_7__.renderText)(id, label, keys, valueProp, objectValue, isNumber, repeatable, required, clientId);
+  let responsive = arguments.length > 9 && arguments[9] !== undefined ? arguments[9] : false;
+  return (0,_controls_Text__WEBPACK_IMPORTED_MODULE_7__.renderText)(id, label, keys, valueProp, objectValue, isNumber, repeatable, required, clientId, responsive);
 }
 
 function renderTextareaControl(id, label, keys, valueProp, objectValue) {
@@ -988,6 +657,7 @@ function renderFile(type, id, label, keys, valueProp, objectValue) {
   let repeatable = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : false;
   let required = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : false;
   let clientId = arguments.length > 8 ? arguments[8] : undefined;
+  let responsive = arguments.length > 9 && arguments[9] !== undefined ? arguments[9] : false;
   label = label && required ? label + '*' : label;
   let preview = false;
   if (objectValue && typeof objectValue == 'object') {
@@ -1120,6 +790,31 @@ function renderFile(type, id, label, keys, valueProp, objectValue) {
     value: objectValue,
     disableDropZone: true
   }, preview));
+
+  // if( responsive ) {
+
+  //     let newInner = [];
+
+  //     newInner.push(
+  //         renderTabPanelComponent(
+  //             id,
+  //             getLayouts().map( ( layout ) => {
+  //                 return {
+  //                     name: layout.value,
+  //                     title: layout.label,
+  //                     className: 'tab-' + layout.value,
+  //                 };
+  //             } ),
+  //             function ( tab ) {
+  //                 return tab.label;
+  //             },
+  //             getBodyDevice()
+  //         )
+  //     );
+
+  //     inner = newInner;
+  // }
+
   return renderPanelComponent(id, label, inner, false);
 }
 
@@ -1142,6 +837,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _attributes__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../attributes */ "../../js/attributes.js");
+/* harmony import */ var _devices__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../devices */ "../../js/devices.js");
+
 
 
 
@@ -1150,6 +847,7 @@ function renderImageVideo(type, args, id, label, keys, valueProp, objectValue) {
   let repeatable = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : false;
   let required = arguments.length > 8 && arguments[8] !== undefined ? arguments[8] : false;
   let clientId = arguments.length > 9 ? arguments[9] : undefined;
+  let responsive = arguments.length > 10 && arguments[10] !== undefined ? arguments[10] : false;
   label = label && required ? label + '*' : label;
   let videoControl = [];
   var tabPanelResponsive = [];
@@ -1359,6 +1057,31 @@ function renderImageVideo(type, args, id, label, keys, valueProp, objectValue) {
       tabs: tabPanelResponsive
     }, tabPanelResponsive => tabPanelResponsive.content));
   } else videoControl.push(tabPanelResponsive[0].content);
+
+  // if( responsive ) {
+
+  //     let newVideoControl = [];
+
+  //     newVideoControl.push(
+  //         renderTabPanelComponent(
+  //             id,
+  //             getLayouts().map( ( layout ) => {
+  //                 return {
+  //                     name: layout.value,
+  //                     title: layout.label,
+  //                     className: 'tab-' + layout.value,
+  //                 };
+  //             } ),
+  //             function ( tab ) {
+  //                 return videoControl;
+  //             },
+  //             getBodyDevice()
+  //         )
+  //     );
+
+  //     videoControl = newVideoControl;
+  // }
+
   return (0,_attributes__WEBPACK_IMPORTED_MODULE_3__.renderPanelComponent)(id, label, videoControl, false);
 }
 
@@ -1640,6 +1363,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _attributes__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../attributes */ "../../js/attributes.js");
+/* harmony import */ var _devices__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../devices */ "../../js/devices.js");
+
 
 
 
@@ -1648,6 +1373,7 @@ function renderText(id, label, keys, valueProp, objectValue) {
   let repeatable = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : false;
   let required = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : false;
   let clientId = arguments.length > 8 ? arguments[8] : undefined;
+  let responsive = arguments.length > 9 && arguments[9] !== undefined ? arguments[9] : false;
   label = required ? label + '*' : label;
   if (repeatable) {
     label = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, label, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
@@ -1657,12 +1383,27 @@ function renderText(id, label, keys, valueProp, objectValue) {
       onClick: () => (0,_attributes__WEBPACK_IMPORTED_MODULE_2__.removeEltRepeatable)(keys, valueProp)
     }, "Remove"));
   }
+  if (responsive) {
+    let newInner = (0,_attributes__WEBPACK_IMPORTED_MODULE_2__.renderTabPanelComponent)(id, (0,_devices__WEBPACK_IMPORTED_MODULE_3__.getLayouts)().map(layout => {
+      return {
+        name: layout.value,
+        title: layout.label,
+        className: 'tab-' + layout.value
+      };
+    }), function (tab) {
+      return renderTextControl(id + "-" + tab.name, label, isNumber, typeof objectValue[tab.name] == 'string' ? objectValue[tab.name] : '', keys.concat(tab.name), valueProp, clientId);
+    }, (0,_devices__WEBPACK_IMPORTED_MODULE_3__.getBodyDevice)());
+    return newInner;
+  }
+  return renderTextControl(id, label, isNumber, objectValue, keys, valueProp, clientId);
+}
+function renderTextControl(id, label, isNumber, value, keysToUpdate, valueProp, clientId) {
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.TextControl, {
     key: id,
     label: label,
     type: !!isNumber ? "number" : "text",
-    value: objectValue,
-    onChange: newValue => (0,_attributes__WEBPACK_IMPORTED_MODULE_2__.updateAttributes)(keys, valueProp, newValue, isNumber, clientId)
+    value: value,
+    onChange: newValue => (0,_attributes__WEBPACK_IMPORTED_MODULE_2__.updateAttributes)(keysToUpdate, valueProp, newValue, isNumber, clientId)
   });
 }
 
@@ -1909,501 +1650,6 @@ module.exports = window["wp"]["element"];
 
 module.exports = window["wp"]["serverSideRender"];
 
-/***/ }),
-
-/***/ "./node_modules/is-what/dist/index.es.js":
-/*!***********************************************!*\
-  !*** ./node_modules/is-what/dist/index.es.js ***!
-  \***********************************************/
-/***/ (function(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "getType": function() { return /* binding */ getType; },
-/* harmony export */   "isAnyObject": function() { return /* binding */ isAnyObject; },
-/* harmony export */   "isArray": function() { return /* binding */ isArray; },
-/* harmony export */   "isBlob": function() { return /* binding */ isBlob; },
-/* harmony export */   "isBoolean": function() { return /* binding */ isBoolean; },
-/* harmony export */   "isDate": function() { return /* binding */ isDate; },
-/* harmony export */   "isEmptyArray": function() { return /* binding */ isEmptyArray; },
-/* harmony export */   "isEmptyObject": function() { return /* binding */ isEmptyObject; },
-/* harmony export */   "isEmptyString": function() { return /* binding */ isEmptyString; },
-/* harmony export */   "isError": function() { return /* binding */ isError; },
-/* harmony export */   "isFile": function() { return /* binding */ isFile; },
-/* harmony export */   "isFullArray": function() { return /* binding */ isFullArray; },
-/* harmony export */   "isFullObject": function() { return /* binding */ isFullObject; },
-/* harmony export */   "isFullString": function() { return /* binding */ isFullString; },
-/* harmony export */   "isFunction": function() { return /* binding */ isFunction; },
-/* harmony export */   "isMap": function() { return /* binding */ isMap; },
-/* harmony export */   "isNaNValue": function() { return /* binding */ isNaNValue; },
-/* harmony export */   "isNegativeNumber": function() { return /* binding */ isNegativeNumber; },
-/* harmony export */   "isNull": function() { return /* binding */ isNull; },
-/* harmony export */   "isNullOrUndefined": function() { return /* binding */ isNullOrUndefined; },
-/* harmony export */   "isNumber": function() { return /* binding */ isNumber; },
-/* harmony export */   "isObject": function() { return /* binding */ isObject; },
-/* harmony export */   "isObjectLike": function() { return /* binding */ isObjectLike; },
-/* harmony export */   "isOneOf": function() { return /* binding */ isOneOf; },
-/* harmony export */   "isPlainObject": function() { return /* binding */ isPlainObject; },
-/* harmony export */   "isPositiveNumber": function() { return /* binding */ isPositiveNumber; },
-/* harmony export */   "isPrimitive": function() { return /* binding */ isPrimitive; },
-/* harmony export */   "isPromise": function() { return /* binding */ isPromise; },
-/* harmony export */   "isRegExp": function() { return /* binding */ isRegExp; },
-/* harmony export */   "isSet": function() { return /* binding */ isSet; },
-/* harmony export */   "isString": function() { return /* binding */ isString; },
-/* harmony export */   "isSymbol": function() { return /* binding */ isSymbol; },
-/* harmony export */   "isType": function() { return /* binding */ isType; },
-/* harmony export */   "isUndefined": function() { return /* binding */ isUndefined; },
-/* harmony export */   "isWeakMap": function() { return /* binding */ isWeakMap; },
-/* harmony export */   "isWeakSet": function() { return /* binding */ isWeakSet; }
-/* harmony export */ });
-/**
- * Returns the object type of the given payload
- *
- * @param {*} payload
- * @returns {string}
- */
-function getType(payload) {
-    return Object.prototype.toString.call(payload).slice(8, -1);
-}
-/**
- * Returns whether the payload is undefined
- *
- * @param {*} payload
- * @returns {payload is undefined}
- */
-function isUndefined(payload) {
-    return getType(payload) === 'Undefined';
-}
-/**
- * Returns whether the payload is null
- *
- * @param {*} payload
- * @returns {payload is null}
- */
-function isNull(payload) {
-    return getType(payload) === 'Null';
-}
-/**
- * Returns whether the payload is a plain JavaScript object (excluding special classes or objects with other prototypes)
- *
- * @param {*} payload
- * @returns {payload is PlainObject}
- */
-function isPlainObject(payload) {
-    if (getType(payload) !== 'Object')
-        return false;
-    return payload.constructor === Object && Object.getPrototypeOf(payload) === Object.prototype;
-}
-/**
- * Returns whether the payload is a plain JavaScript object (excluding special classes or objects with other prototypes)
- *
- * @param {*} payload
- * @returns {payload is PlainObject}
- */
-function isObject(payload) {
-    return isPlainObject(payload);
-}
-/**
- * Returns whether the payload is a an empty object (excluding special classes or objects with other prototypes)
- *
- * @param {*} payload
- * @returns {payload is { [K in any]: never }}
- */
-function isEmptyObject(payload) {
-    return isPlainObject(payload) && Object.keys(payload).length === 0;
-}
-/**
- * Returns whether the payload is a an empty object (excluding special classes or objects with other prototypes)
- *
- * @param {*} payload
- * @returns {payload is PlainObject}
- */
-function isFullObject(payload) {
-    return isPlainObject(payload) && Object.keys(payload).length > 0;
-}
-/**
- * Returns whether the payload is an any kind of object (including special classes or objects with different prototypes)
- *
- * @param {*} payload
- * @returns {payload is PlainObject}
- */
-function isAnyObject(payload) {
-    return getType(payload) === 'Object';
-}
-/**
- * Returns whether the payload is an object like a type passed in < >
- *
- * Usage: isObjectLike<{id: any}>(payload) // will make sure it's an object and has an `id` prop.
- *
- * @template T this must be passed in < >
- * @param {*} payload
- * @returns {payload is T}
- */
-function isObjectLike(payload) {
-    return isAnyObject(payload);
-}
-/**
- * Returns whether the payload is a function (regular or async)
- *
- * @param {*} payload
- * @returns {payload is AnyFunction}
- */
-function isFunction(payload) {
-    return typeof payload === 'function';
-}
-/**
- * Returns whether the payload is an array
- *
- * @param {any} payload
- * @returns {payload is any[]}
- */
-function isArray(payload) {
-    return getType(payload) === 'Array';
-}
-/**
- * Returns whether the payload is a an array with at least 1 item
- *
- * @param {*} payload
- * @returns {payload is any[]}
- */
-function isFullArray(payload) {
-    return isArray(payload) && payload.length > 0;
-}
-/**
- * Returns whether the payload is a an empty array
- *
- * @param {*} payload
- * @returns {payload is []}
- */
-function isEmptyArray(payload) {
-    return isArray(payload) && payload.length === 0;
-}
-/**
- * Returns whether the payload is a string
- *
- * @param {*} payload
- * @returns {payload is string}
- */
-function isString(payload) {
-    return getType(payload) === 'String';
-}
-/**
- * Returns whether the payload is a string, BUT returns false for ''
- *
- * @param {*} payload
- * @returns {payload is string}
- */
-function isFullString(payload) {
-    return isString(payload) && payload !== '';
-}
-/**
- * Returns whether the payload is ''
- *
- * @param {*} payload
- * @returns {payload is string}
- */
-function isEmptyString(payload) {
-    return payload === '';
-}
-/**
- * Returns whether the payload is a number (but not NaN)
- *
- * This will return `false` for `NaN`!!
- *
- * @param {*} payload
- * @returns {payload is number}
- */
-function isNumber(payload) {
-    return getType(payload) === 'Number' && !isNaN(payload);
-}
-/**
- * Returns whether the payload is a positive number (but not 0)
- *
- * @param {*} payload
- * @returns {payload is number}
- */
-function isPositiveNumber(payload) {
-    return isNumber(payload) && payload > 0;
-}
-/**
- * Returns whether the payload is a negative number (but not 0)
- *
- * @param {*} payload
- * @returns {payload is number}
- */
-function isNegativeNumber(payload) {
-    return isNumber(payload) && payload < 0;
-}
-/**
- * Returns whether the payload is a boolean
- *
- * @param {*} payload
- * @returns {payload is boolean}
- */
-function isBoolean(payload) {
-    return getType(payload) === 'Boolean';
-}
-/**
- * Returns whether the payload is a regular expression (RegExp)
- *
- * @param {*} payload
- * @returns {payload is RegExp}
- */
-function isRegExp(payload) {
-    return getType(payload) === 'RegExp';
-}
-/**
- * Returns whether the payload is a Map
- *
- * @param {*} payload
- * @returns {payload is Map<any, any>}
- */
-function isMap(payload) {
-    return getType(payload) === 'Map';
-}
-/**
- * Returns whether the payload is a WeakMap
- *
- * @param {*} payload
- * @returns {payload is WeakMap<any, any>}
- */
-function isWeakMap(payload) {
-    return getType(payload) === 'WeakMap';
-}
-/**
- * Returns whether the payload is a Set
- *
- * @param {*} payload
- * @returns {payload is Set<any>}
- */
-function isSet(payload) {
-    return getType(payload) === 'Set';
-}
-/**
- * Returns whether the payload is a WeakSet
- *
- * @param {*} payload
- * @returns {payload is WeakSet<any>}
- */
-function isWeakSet(payload) {
-    return getType(payload) === 'WeakSet';
-}
-/**
- * Returns whether the payload is a Symbol
- *
- * @param {*} payload
- * @returns {payload is symbol}
- */
-function isSymbol(payload) {
-    return getType(payload) === 'Symbol';
-}
-/**
- * Returns whether the payload is a Date, and that the date is valid
- *
- * @param {*} payload
- * @returns {payload is Date}
- */
-function isDate(payload) {
-    return getType(payload) === 'Date' && !isNaN(payload);
-}
-/**
- * Returns whether the payload is a Blob
- *
- * @param {*} payload
- * @returns {payload is Blob}
- */
-function isBlob(payload) {
-    return getType(payload) === 'Blob';
-}
-/**
- * Returns whether the payload is a File
- *
- * @param {*} payload
- * @returns {payload is File}
- */
-function isFile(payload) {
-    return getType(payload) === 'File';
-}
-/**
- * Returns whether the payload is a Promise
- *
- * @param {*} payload
- * @returns {payload is Promise<any>}
- */
-function isPromise(payload) {
-    return getType(payload) === 'Promise';
-}
-/**
- * Returns whether the payload is an Error
- *
- * @param {*} payload
- * @returns {payload is Error}
- */
-function isError(payload) {
-    return getType(payload) === 'Error';
-}
-/**
- * Returns whether the payload is literally the value `NaN` (it's `NaN` and also a `number`)
- *
- * @param {*} payload
- * @returns {payload is typeof NaN}
- */
-function isNaNValue(payload) {
-    return getType(payload) === 'Number' && isNaN(payload);
-}
-/**
- * Returns whether the payload is a primitive type (eg. Boolean | Null | Undefined | Number | String | Symbol)
- *
- * @param {*} payload
- * @returns {(payload is boolean | null | undefined | number | string | symbol)}
- */
-function isPrimitive(payload) {
-    return (isBoolean(payload) ||
-        isNull(payload) ||
-        isUndefined(payload) ||
-        isNumber(payload) ||
-        isString(payload) ||
-        isSymbol(payload));
-}
-/**
- * Returns true whether the payload is null or undefined
- *
- * @param {*} payload
- * @returns {(payload is null | undefined)}
- */
-const isNullOrUndefined = isOneOf(isNull, isUndefined);
-function isOneOf(a, b, c, d, e) {
-    return (value) => a(value) || b(value) || (!!c && c(value)) || (!!d && d(value)) || (!!e && e(value));
-}
-/**
- * Does a generic check to check that the given payload is of a given type.
- * In cases like Number, it will return true for NaN as NaN is a Number (thanks javascript!);
- * It will, however, differentiate between object and null
- *
- * @template T
- * @param {*} payload
- * @param {T} type
- * @throws {TypeError} Will throw type error if type is an invalid type
- * @returns {payload is T}
- */
-function isType(payload, type) {
-    if (!(type instanceof Function)) {
-        throw new TypeError('Type must be a function');
-    }
-    if (!Object.prototype.hasOwnProperty.call(type, 'prototype')) {
-        throw new TypeError('Type is not a class');
-    }
-    // Classes usually have names (as functions usually have names)
-    const name = type.name;
-    return getType(payload) === name || Boolean(payload && payload.constructor === type);
-}
-
-
-
-
-/***/ }),
-
-/***/ "./node_modules/merge-anything/dist/index.es.js":
-/*!******************************************************!*\
-  !*** ./node_modules/merge-anything/dist/index.es.js ***!
-  \******************************************************/
-/***/ (function(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "concatArrays": function() { return /* binding */ concatArrays; },
-/* harmony export */   "merge": function() { return /* binding */ merge; },
-/* harmony export */   "mergeAndCompare": function() { return /* binding */ mergeAndCompare; },
-/* harmony export */   "mergeAndConcat": function() { return /* binding */ mergeAndConcat; }
-/* harmony export */ });
-/* harmony import */ var is_what__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! is-what */ "./node_modules/is-what/dist/index.es.js");
-
-
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-function concatArrays(originVal, newVal) {
-    if ((0,is_what__WEBPACK_IMPORTED_MODULE_0__.isArray)(originVal) && (0,is_what__WEBPACK_IMPORTED_MODULE_0__.isArray)(newVal)) {
-        // concat logic
-        return originVal.concat(newVal);
-    }
-    return newVal; // always return newVal as fallback!!
-}
-
-function assignProp(carry, key, newVal, originalObject) {
-    const propType = {}.propertyIsEnumerable.call(originalObject, key)
-        ? 'enumerable'
-        : 'nonenumerable';
-    if (propType === 'enumerable')
-        carry[key] = newVal;
-    if (propType === 'nonenumerable') {
-        Object.defineProperty(carry, key, {
-            value: newVal,
-            enumerable: false,
-            writable: true,
-            configurable: true,
-        });
-    }
-}
-function mergeRecursively(origin, newComer, compareFn) {
-    // always return newComer if its not an object
-    if (!(0,is_what__WEBPACK_IMPORTED_MODULE_0__.isPlainObject)(newComer))
-        return newComer;
-    // define newObject to merge all values upon
-    let newObject = {};
-    if ((0,is_what__WEBPACK_IMPORTED_MODULE_0__.isPlainObject)(origin)) {
-        const props = Object.getOwnPropertyNames(origin);
-        const symbols = Object.getOwnPropertySymbols(origin);
-        newObject = [...props, ...symbols].reduce((carry, key) => {
-            const targetVal = origin[key];
-            if ((!(0,is_what__WEBPACK_IMPORTED_MODULE_0__.isSymbol)(key) && !Object.getOwnPropertyNames(newComer).includes(key)) ||
-                ((0,is_what__WEBPACK_IMPORTED_MODULE_0__.isSymbol)(key) && !Object.getOwnPropertySymbols(newComer).includes(key))) {
-                assignProp(carry, key, targetVal, origin);
-            }
-            return carry;
-        }, {});
-    }
-    // newObject has all properties that newComer hasn't
-    const props = Object.getOwnPropertyNames(newComer);
-    const symbols = Object.getOwnPropertySymbols(newComer);
-    const result = [...props, ...symbols].reduce((carry, key) => {
-        // re-define the origin and newComer as targetVal and newVal
-        let newVal = newComer[key];
-        const targetVal = (0,is_what__WEBPACK_IMPORTED_MODULE_0__.isPlainObject)(origin) ? origin[key] : undefined;
-        // When newVal is an object do the merge recursively
-        if (targetVal !== undefined && (0,is_what__WEBPACK_IMPORTED_MODULE_0__.isPlainObject)(newVal)) {
-            newVal = mergeRecursively(targetVal, newVal, compareFn);
-        }
-        const propToAssign = compareFn ? compareFn(targetVal, newVal, key) : newVal;
-        assignProp(carry, key, propToAssign, newComer);
-        return carry;
-    }, newObject);
-    return result;
-}
-/**
- * Merge anything recursively.
- * Objects get merged, special objects (classes etc.) are re-assigned "as is".
- * Basic types overwrite objects or other basic types.
- * @param object
- * @param otherObjects
- */
-function merge(object, ...otherObjects) {
-    return otherObjects.reduce((result, newComer) => {
-        return mergeRecursively(result, newComer);
-    }, object);
-}
-function mergeAndCompare(compareFn, object, ...otherObjects) {
-    return otherObjects.reduce((result, newComer) => {
-        return mergeRecursively(result, newComer, compareFn);
-    }, object);
-}
-function mergeAndConcat(object, ...otherObjects) {
-    return otherObjects.reduce((result, newComer) => {
-        return mergeRecursively(result, newComer, concatArrays);
-    }, object);
-}
-
-
-
-
 /***/ })
 
 /******/ 	});
@@ -2504,17 +1750,12 @@ Object.values(global_localized.components).forEach(element => {
   var initAttributes = {
     id_component: {
       type: 'string'
-    },
-    padding: {
-      type: 'object'
-    },
-    margin: {
-      type: 'object'
     }
   };
   for (const [key, value] of Object.entries(element.props)) {
     if (typeof value != 'object' || value == null) continue;
     let currentType = typeof value.repeatable != 'undefined' && value.repeatable ? 'array' : value.type.toLowerCase();
+    currentType = typeof value.responsive != 'undefined' && value.responsive ? 'object' : currentType;
     switch (currentType) {
       case 'string':
         initAttributes[key] = {
