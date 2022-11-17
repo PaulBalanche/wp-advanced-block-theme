@@ -61,7 +61,7 @@ class WpeComponent extends Component {
                     onClick={ () => {
                         this.setState( { configMode: 1 } )
                     } }
-                >Live content</Button>
+                >Actual content</Button>
             );
 
             if( typeof element.props == 'object' && Object.keys(element.props).length > 0 ) {

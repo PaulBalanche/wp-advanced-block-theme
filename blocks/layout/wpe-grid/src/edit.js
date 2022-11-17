@@ -213,7 +213,7 @@ class WpeGrid extends Component {
                             onClick={ () => {
                                 this.setState( { configMode: 1 } )
                             } }
-                        >Live content</Button>
+                        >Actual content</Button>
                         <Button
                             key={ clientId + "-buttonConfigMode3" }
                             isPressed={ this.state.configMode == 3 }

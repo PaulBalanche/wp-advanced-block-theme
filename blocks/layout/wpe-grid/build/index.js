@@ -626,7 +626,7 @@ class WpeGrid extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Component 
             configMode: 1
           });
         }
-      }, "Live content"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.Button, {
+      }, "Actual content"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.Button, {
         key: clientId + "-buttonConfigMode3",
         isPressed: this.state.configMode == 3,
         onClick: () => {

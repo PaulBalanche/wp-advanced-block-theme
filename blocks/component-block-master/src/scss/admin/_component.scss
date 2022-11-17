@@ -1,3 +1,54 @@
+// .block-editor-block-list__layout .block-editor-block-list__block::after {
+//     content: "";
+//     pointer-events: none;
+//     position: absolute;
+//     top: 0;
+//     right: 0;
+//     bottom: 0;
+//     left: 0;
+//     border-radius: 2px;
+//     box-shadow: 0 0 0 var(--wp-admin-border-width-focus) transparent;
+// }
+// .block-editor-block-list__layout .block-editor-block-list__block:not([contenteditable]):focus::after {
+//     position: absolute;
+//     z-index: 1;
+//     pointer-events: none;
+//     content: "";
+//     top: 1px;
+//     bottom: 1px;
+//     left: 1px;
+//     right: 1px;
+//     box-shadow: 0 0 0 var(--wp-admin-border-width-focus) var(--wp-admin-theme-color);
+//     border-radius: 1px;
+//     outline: 2px solid transparent;
+// }
+
+
+
+#editor {
+
+    .block-editor-block-list__layout{
+
+        .block-editor-block-list__block {
+    
+            &::after {
+                box-shadow: none;
+                top: 0;
+                right: 0;
+                bottom: 0;
+                left: 0;
+                border-radius: 0;
+            }
+    
+            &:focus::after,
+            &:hover::after,
+            &.is-selected::after {
+                border: 1px dashed rgba(0, 124, 186, 0.5);
+            }
+        }
+    }
+}
+
 .wpe-component_edit_placeholder {
 
     .basicField {
@@ -236,10 +287,18 @@
         padding: 2rem;
         background: rgba(0,124,186,.05);
 
+        &:first-child {
+            margin-top: 0;
+        }
+        &:last-child {
+            margin-bottom: 0;
+        }
+
         &.block-list-appender {
             border: 1px dashed rgba(0,124,186,.5);
             background: none;
             width: 100%;
+            padding: initial;
 
             button {
                 box-shadow: none;
@@ -250,7 +309,7 @@
         }
 
         & > .wp-block {
-            padding: initial;
+            // padding: initial;
             background: initial;
         }
 
@@ -288,6 +347,33 @@
         .active-tab {
             box-shadow: inset 0 var(--wp-admin-border-width-focus) var(--wp-admin-theme-color);
             background: #f0f0f0;
+        }
+    }
+}
+
+
+// Button
+#editor {
+
+    .buttonGroupComponentModeContainer, .deviceButtonGroup{
+        display: flex;
+        justify-content: space-around;
+        padding-bottom: 1rem;
+        opacity: 0.4;
+
+        .components-button {
+    
+            &.is-pressed {
+                background: #007cba;
+                box-shadow: inset 0 0 0 1px #007cba;
+            }
+        }
+    }
+    
+    .block-editor-block-list__block:hover {
+
+        & > .buttonGroupComponentModeContainer, & > .deviceButtonGroup {
+            opacity: 1;
         }
     }
 }

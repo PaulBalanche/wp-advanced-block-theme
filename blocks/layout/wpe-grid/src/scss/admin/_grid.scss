@@ -29,14 +29,14 @@
     }
 
     &:hover::after {
-        border: 1px dashed rgba(0,124,186,.25);
+        border: 1px dashed rgba(0,124,186,.5);
     }
     &:focus::after,
     &:active::after,
     &.is-selected::after,
     &.has-child-selected::after {
         border: none;
-        background: rgba(0, 124, 186, 0.05);
+        border-radius: 0;
         box-shadow: none !important;
     }
 
@@ -62,10 +62,4 @@
     max-width: $max_width_main_column;
     margin: auto;
     margin-top: $base_padding;
-}
-
-.buttonGroupComponentModeContainer {
-    display: flex;
-    justify-content: space-around;
-    padding-bottom: 1rem;
 }

@@ -75,7 +75,7 @@ class WpeComponent extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Compo
             configMode: 1
           });
         }
-      }, "Live content"));
+      }, "Actual content"));
       if (typeof element.props == 'object' && Object.keys(element.props).length > 0) {
         buttonGroup.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Button, {
           key: clientId + "-buttonConfigMode3",

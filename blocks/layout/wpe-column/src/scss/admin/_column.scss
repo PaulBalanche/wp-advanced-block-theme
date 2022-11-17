@@ -21,16 +21,17 @@
     //     left: 1px;
     // }
 
-    .wp-block {
-        margin-bottom: 80px !important;
-    }
+    // .wp-block {
+    //     margin-bottom: 80px !important;
+    // }
 
     .block-list-appender {
-        bottom: 1rem;
-        left: 1rem;
-        right: 1rem;
-        width: auto !important;
-        margin-bottom: 0 !important;
+        position: relative;
+    //     bottom: 1rem;
+    //     left: 1rem;
+    //     right: 1rem;
+    //     width: auto !important;
+    //     margin-bottom: 0 !important;
     }
 
     &:hover > .block-list-appender {
