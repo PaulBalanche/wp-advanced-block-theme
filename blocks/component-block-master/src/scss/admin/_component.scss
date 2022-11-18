@@ -359,7 +359,7 @@
         display: flex;
         justify-content: space-around;
         padding-bottom: 1rem;
-        opacity: 0.4;
+        visibility: hidden;
 
         .components-button {
     
@@ -373,7 +373,7 @@
     .block-editor-block-list__block:hover {
 
         & > .buttonGroupComponentModeContainer, & > .deviceButtonGroup {
-            opacity: 1;
+            visibility: visible;
         }
     }
 }

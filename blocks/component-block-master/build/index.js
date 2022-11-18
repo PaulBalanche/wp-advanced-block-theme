@@ -11,194 +11,39 @@
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _wordpress_server_side_render__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/server-side-render */ "@wordpress/server-side-render");
-/* harmony import */ var _wordpress_server_side_render__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_server_side_render__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/data */ "@wordpress/data");
-/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_data__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _js_attributes_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../js/attributes.js */ "../../js/attributes.js");
+/* harmony import */ var _js_WpeComponentBase__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../js/WpeComponentBase */ "../../js/WpeComponentBase.js");
+/* harmony import */ var _wordpress_server_side_render__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/server-side-render */ "@wordpress/server-side-render");
+/* harmony import */ var _wordpress_server_side_render__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_server_side_render__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/data */ "@wordpress/data");
+/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_data__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _js_attributes_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../js/attributes.js */ "../../js/attributes.js");
 
 
 
 
 
 
-class WpeComponent extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Component {
+class WpeComponent extends _js_WpeComponentBase__WEBPACK_IMPORTED_MODULE_1__.WpeComponentBase {
   constructor() {
     super(...arguments);
-    this.state = {
-      configMode: this.props.element.screenshot ? 2 : 1
-    };
+    this.defineLiveRendering();
   }
-  getAttribute(key) {
-    return this.props.attributes[key];
-  }
-  setAttributes(attributes) {
-    this.props.setAttributes(attributes);
-  }
-
-  /**
-   * Render
-   */
-  render() {
-    const {
-      attributes,
-      isSelected,
-      clientId,
-      element,
-      current_user_can_edit_posts
-    } = this.props;
-
+  defineLiveRendering() {
     // Because of ID will be not saved to the block’s comment delimiter default attribute, we manually set it.
-    if (typeof attributes.id_component == 'undefined') this.setAttributes({
-      id_component: element.id
+    if (typeof this.props.attributes.id_component == 'undefined') this.setAttributes({
+      id_component: block_spec.id
     });
-    let buttonGroup = [];
-    if (parseInt(current_user_can_edit_posts)) {
-      if (element.screenshot) {
-        buttonGroup.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Button, {
-          key: clientId + "-buttonConfigMode2",
-          isPressed: this.state.configMode == 2,
-          onClick: () => {
-            this.setState({
-              configMode: 2
-            });
-          }
-        }, "Screenshot"));
-      }
-      buttonGroup.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Button, {
-        key: clientId + "-buttonConfigMode1",
-        isPressed: this.state.configMode == 1,
-        onClick: () => {
-          this.setState({
-            configMode: 1
-          });
-        }
-      }, "Actual content"));
-      if (typeof element.props == 'object' && Object.keys(element.props).length > 0) {
-        buttonGroup.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Button, {
-          key: clientId + "-buttonConfigMode3",
-          isPressed: this.state.configMode == 3,
-          onClick: () => {
-            this.setState({
-              configMode: 3
-            });
-          }
-        }, "Edit"));
-      }
-      buttonGroup = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-        className: "buttonGroupComponentModeContainer"
-      }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.ButtonGroup, {
-        key: clientId + "-buttonGroupComponentMode"
-      }, buttonGroup));
-    }
-
-    // Visual mode
-    switch (this.state.configMode) {
-      case 1:
-        return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, buttonGroup, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)((_wordpress_server_side_render__WEBPACK_IMPORTED_MODULE_1___default()), {
-          key: clientId + "-serverSideRender",
-          block: "custom/wpe-component-" + element.id,
-          attributes: attributes,
-          httpMethod: "POST"
-        }));
-        break;
-      case 2:
-        return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, buttonGroup, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
-          key: clientId + "-serverSideRender",
-          src: element.screenshot
-        }));
-        break;
-      case 3:
-        var editPlaceHolder = '';
-        if (typeof element.props == 'object' && Object.keys(element.props).length > 0) {
-          // Edition mode
-          let catReOrder = {
-            default: {
-              props: {}
-            }
-          };
-
-          // 1. Loop Props Categories
-          if (typeof element.props_categories != 'undefined' && element.props_categories != null) {
-            for (const [keyCatProps, valueCatProps] of Object.entries(element.props_categories)) {
-              catReOrder[valueCatProps.id] = {
-                name: valueCatProps.name,
-                props: {}
-              };
-            }
-          }
-
-          // 2. Loop Props
-          for (const [keyProp, valueProp] of Object.entries(element.props)) {
-            if (typeof valueProp != 'object' || valueProp == null) continue;
-            if (typeof valueProp.category != 'undefined' && valueProp.category != null && valueProp.category in catReOrder) {
-              catReOrder[valueProp.category].props[keyProp] = valueProp;
-            } else {
-              catReOrder.default.props[keyProp] = valueProp;
-            }
-          }
-
-          // 3. Remove empty category
-          for (const [keyProp, valueProp] of Object.entries(catReOrder)) {
-            if (Object.keys(catReOrder[keyProp].props).length == 0) {
-              delete catReOrder[keyProp];
-            }
-          }
-
-          // 4. Render
-          var tabPanel = [];
-          for (const [keyCat, valCat] of Object.entries(catReOrder)) {
-            if (valCat.props.length == 0) continue;
-            let currentEditCat = [];
-            forEachCatProps: for (const [keyProp, prop] of Object.entries(valCat.props)) {
-              // Conditional treatment
-              if (typeof prop.conditional == 'object') {
-                for (const [index, conditionalField] of Object.entries(prop.conditional)) {
-                  let conditionalFieldKey = Object.keys(conditionalField)[0];
-                  let conditionalFieldValue = conditionalField[conditionalFieldKey];
-                  if (this.getAttribute(conditionalFieldKey) != conditionalFieldValue) continue forEachCatProps;
-                }
-              }
-              let valueProp = this.getAttribute(keyProp);
-              currentEditCat.push((0,_js_attributes_js__WEBPACK_IMPORTED_MODULE_4__.renderControl)(prop, [keyProp], {
-                [keyProp]: valueProp
-              }, clientId));
-            }
-            if (keyCat == "default") {
-              tabPanel.push({
-                name: keyCat,
-                title: "Default",
-                content: currentEditCat
-              });
-            } else {
-              tabPanel.push({
-                name: keyCat,
-                title: valCat.name,
-                content: currentEditCat
-              });
-            }
-          }
-          if (tabPanel.length > 1) {
-            editPlaceHolder = (0,_js_attributes_js__WEBPACK_IMPORTED_MODULE_4__.renderTabPanelComponent)(clientId, tabPanel, function (tabPanel) {
-              return tabPanel.content;
-            });
-          } else {
-            editPlaceHolder = tabPanel[0].content;
-          }
-        }
-        return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, buttonGroup, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Placeholder, {
-          key: clientId + "-placeholder",
-          label: element.name,
-          isColumnLayout: true,
-          className: "wpe-component_edit_placeholder"
-        }, editPlaceHolder));
-        break;
-    }
+    this.blockSpecificRender = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)((_wordpress_server_side_render__WEBPACK_IMPORTED_MODULE_2___default()), {
+      key: this.props.clientId + "-serverSideRender",
+      block: "custom/wpe-component-" + this.props.block_spec.id,
+      attributes: this.props.attributes,
+      httpMethod: "POST"
+    });
   }
 }
-/* harmony default export */ __webpack_exports__["default"] = ((element, current_user_can_edit_posts, frontspec_styles) => (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_2__.withSelect)((select, props) => {
+/* harmony default export */ __webpack_exports__["default"] = ((block_spec, current_user_can_edit_posts, frontspec_styles) => (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_3__.withSelect)((select, props) => {
   const {
     getEntityRecords
   } = select('core');
@@ -206,9 +51,9 @@ class WpeComponent extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Compo
     __experimentalGetPreviewDeviceType
   } = select('core/edit-post');
   let relations = [];
-  if (props.name == "custom/wpe-component-" + element.id) {
+  if (props.name == "custom/wpe-component-" + block_spec.id) {
     // Loop Props
-    for (const [keyProp, valueProp] of Object.entries(element.props)) {
+    for (const [keyProp, valueProp] of Object.entries(block_spec.props)) {
       if (valueProp.type == 'relation' && typeof valueProp.entity != 'undefined' && relations[valueProp.entity] == null) {
         relations[valueProp.entity] = getEntityRecords('postType', valueProp.entity, {
           per_page: -1,
@@ -219,11 +64,215 @@ class WpeComponent extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Compo
   }
   return {
     relations: relations,
-    element,
+    block_spec,
     current_user_can_edit_posts: current_user_can_edit_posts,
     frontspec_styles: frontspec_styles
   };
 })(WpeComponent));
+
+/***/ }),
+
+/***/ "../../js/WpeComponentBase.js":
+/*!************************************!*\
+  !*** ../../js/WpeComponentBase.js ***!
+  \************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "WpeComponentBase": function() { return /* binding */ WpeComponentBase; }
+/* harmony export */ });
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _attributes__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./attributes */ "../../js/attributes.js");
+
+
+
+
+class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Component {
+  constructor() {
+    var _this$props, _this$props$block_spe;
+    super(...arguments);
+    this.state = {
+      configMode: this !== null && this !== void 0 && (_this$props = this.props) !== null && _this$props !== void 0 && (_this$props$block_spe = _this$props.block_spec) !== null && _this$props$block_spe !== void 0 && _this$props$block_spe.screenshot ? 1 : 2
+    };
+    this.initEnabledMode();
+    this.blockSpecificRender = null;
+    this.inspectorControls = 'test';
+  }
+  initEnabledMode() {
+    this.tabEnabledMode = [];
+    if (typeof this.props.current_user_can_edit_posts == 'undefined' || parseInt(this.props.current_user_can_edit_posts)) {
+      if (this.props.block_spec.screenshot) {
+        this.tabEnabledMode.push(1);
+      }
+      this.tabEnabledMode.push(2);
+      if (typeof this.props.block_spec.props == 'object' && Object.keys(this.props.block_spec.props).length > 0) {
+        this.tabEnabledMode.push(3);
+      }
+    }
+  }
+  getAttribute(key) {
+    return this.props.attributes[key];
+  }
+  setAttributes(attributes) {
+    this.props.setAttributes(attributes);
+  }
+  renderButtonGroupMode() {
+    let modeDefinition = {
+      1: 'Screenshot',
+      2: 'Live',
+      3: 'Edit'
+    };
+    if (typeof this.tabEnabledMode == 'object') {
+      let buttons = [];
+      for (var i in modeDefinition) {
+        let index = parseInt(i);
+        if (this.tabEnabledMode.includes(index)) {
+          buttons.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
+            key: this.props.clientId + "-buttonConfigMode_" + index,
+            isPressed: this.state.configMode == index,
+            onClick: () => {
+              this.setState({
+                configMode: index
+              });
+            }
+          }, modeDefinition[index]));
+        }
+      }
+      return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+        className: "buttonGroupComponentModeContainer"
+      }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.ButtonGroup, {
+        key: this.props.clientId + "-buttonGroupComponentMode"
+      }, buttons));
+    }
+    return null;
+  }
+  propsExists() {
+    return typeof this.props.block_spec.props == 'object' && Object.keys(this.props.block_spec.props).length > 0;
+  }
+  renderPlaceholderProps() {
+    if (this.propsExists()) {
+      let catReOrder = {
+        default: {
+          props: {}
+        }
+      };
+
+      // 1. Loop Props Categories
+      if (typeof this.props.block_spec.props_categories != 'undefined' && this.props.block_spec.props_categories != null) {
+        for (const [keyCatProps, valueCatProps] of Object.entries(this.props.block_spec.props_categories)) {
+          catReOrder[valueCatProps.id] = {
+            name: valueCatProps.name,
+            props: {}
+          };
+        }
+      }
+
+      // 2. Loop Props
+      for (const [keyProp, valueProp] of Object.entries(this.props.block_spec.props)) {
+        if (typeof valueProp != 'object' || valueProp == null) continue;
+        if (typeof valueProp.category != 'undefined' && valueProp.category != null && valueProp.category in catReOrder) {
+          catReOrder[valueProp.category].props[keyProp] = valueProp;
+        } else {
+          catReOrder.default.props[keyProp] = valueProp;
+        }
+      }
+
+      // 3. Remove empty category
+      for (const [keyProp, valueProp] of Object.entries(catReOrder)) {
+        if (Object.keys(catReOrder[keyProp].props).length == 0) {
+          delete catReOrder[keyProp];
+        }
+      }
+
+      // 4. Render
+      var tabPanel = [];
+      for (const [keyCat, valCat] of Object.entries(catReOrder)) {
+        if (valCat.props.length == 0) continue;
+        let currentEditCat = [];
+        forEachCatProps: for (const [keyProp, prop] of Object.entries(valCat.props)) {
+          // Conditional treatment
+          if (typeof prop.conditional == 'object') {
+            for (const [index, conditionalField] of Object.entries(prop.conditional)) {
+              let conditionalFieldKey = Object.keys(conditionalField)[0];
+              let conditionalFieldValue = conditionalField[conditionalFieldKey];
+              if (this.getAttribute(conditionalFieldKey) != conditionalFieldValue) continue forEachCatProps;
+            }
+          }
+          let valueProp = this.getAttribute(keyProp);
+          currentEditCat.push((0,_attributes__WEBPACK_IMPORTED_MODULE_2__.renderControl)(prop, [keyProp], {
+            [keyProp]: valueProp
+          }, this.props.clientId));
+        }
+        if (keyCat == "default") {
+          tabPanel.push({
+            name: keyCat,
+            title: "Default",
+            content: currentEditCat
+          });
+        } else {
+          tabPanel.push({
+            name: keyCat,
+            title: valCat.name,
+            content: currentEditCat
+          });
+        }
+      }
+      if (tabPanel.length > 0) {
+        return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Placeholder, {
+          key: this.props.clientId + "-ConfigurationPlaceholder",
+          label: "Configuration",
+          isColumnLayout: true,
+          className: "wpe-component_edit_placeholder"
+        }, tabPanel.length > 1 ? (0,_attributes__WEBPACK_IMPORTED_MODULE_2__.renderTabPanelComponent)(this.props.clientId, tabPanel, function (tabPanel) {
+          return tabPanel.content;
+        }) : tabPanel[0].content);
+      }
+    }
+    return null;
+  }
+  renderInspectorControls() {
+    if (this.inspectorControls !== null) {
+      return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.InspectorControls, null, this.inspectorControls);
+    }
+    return null;
+  }
+  renderConfigMode1() {
+    if (this.props.block_spec.screenshot) {
+      return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
+        key: this.props.clientId + "-serverSideRender",
+        src: this.props.block_spec.screenshot
+      }));
+    }
+    return null;
+  }
+  renderConfigMode2() {
+    return this.blockSpecificRender;
+  }
+  renderConfigMode3() {
+    return this.renderPlaceholderProps();
+  }
+  render() {
+    let render = [];
+    render.push(this.renderInspectorControls());
+    render.push(this.renderButtonGroupMode());
+    switch (this.state.configMode) {
+      case 1:
+        render.push(this.renderConfigMode1());
+        break;
+      case 2:
+        render.push(this.renderConfigMode2());
+        break;
+      case 3:
+        render.push(this.renderConfigMode3());
+        break;
+    }
+    return render;
+  }
+}
 
 /***/ }),
 
@@ -236,6 +285,7 @@ class WpeComponent extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Compo
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "fileSizeFormat": function() { return /* binding */ fileSizeFormat; },
+/* harmony export */   "initComponentAttributes": function() { return /* binding */ initComponentAttributes; },
 /* harmony export */   "recursiveUpdateObjectFromObject": function() { return /* binding */ recursiveUpdateObjectFromObject; },
 /* harmony export */   "removeEltRepeatable": function() { return /* binding */ removeEltRepeatable; },
 /* harmony export */   "renderControl": function() { return /* binding */ renderControl; },
@@ -458,6 +508,105 @@ function renderTabPanelComponent(id, tabs, inner) {
     initialTabName: initialTabName,
     tabs: tabs
   }, inner);
+}
+function initComponentAttributes(attributes, props) {
+  for (const [key, value] of Object.entries(props)) {
+    if (typeof value != 'object' || value == null) continue;
+    let currentType = typeof value.repeatable != 'undefined' && value.repeatable ? 'array' : value.type.toLowerCase();
+    currentType = typeof value.responsive != 'undefined' && value.responsive ? 'object' : currentType;
+    switch (currentType) {
+      case 'string':
+        attributes[key] = {
+          type: 'string'
+        };
+        break;
+      case 'text':
+        attributes[key] = {
+          type: 'string'
+        };
+        break;
+      case 'richText':
+        attributes[key] = {
+          type: 'string'
+        };
+        break;
+      case 'wysiwyg':
+        attributes[key] = {
+          type: 'string'
+        };
+        break;
+      case 'boolean':
+        attributes[key] = {
+          type: 'boolean'
+        };
+        break;
+      case 'select':
+        attributes[key] = {
+          type: 'string'
+        };
+        break;
+      case 'color':
+        attributes[key] = {
+          type: 'string'
+        };
+        break;
+      case 'radio':
+        attributes[key] = {
+          type: 'string'
+        };
+        break;
+      case 'relation':
+        attributes[key] = {
+          type: 'string'
+        };
+        break;
+      case 'array':
+        attributes[key] = {
+          type: 'array'
+        };
+        break;
+      case 'object':
+        attributes[key] = {
+          type: 'object'
+        };
+        break;
+      case 'link':
+        attributes[key] = {
+          type: 'object'
+        };
+        break;
+      case 'number':
+        attributes[key] = {
+          type: 'number'
+        };
+        break;
+      case 'image':
+        attributes[key] = {
+          type: 'object'
+        };
+        break;
+      case 'video':
+        attributes[key] = {
+          type: 'object'
+        };
+        break;
+      case 'file':
+        attributes[key] = {
+          type: 'object'
+        };
+        break;
+      case 'gallery':
+        attributes[key] = {
+          type: 'array'
+        };
+        break;
+      case 'date':
+        attributes[key] = {
+          type: 'string'
+        };
+        break;
+    }
+  }
 }
 
 /***/ }),
@@ -1734,7 +1883,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/block-editor */ "@wordpress/block-editor");
 /* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _edit__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./edit */ "./src/edit.js");
-/* harmony import */ var _js_devices__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../js/devices */ "../../js/devices.js");
+/* harmony import */ var _js_attributes__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../js/attributes */ "../../js/attributes.js");
+/* harmony import */ var _js_devices__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../js/devices */ "../../js/devices.js");
 
 
 
@@ -1744,7 +1894,8 @@ __webpack_require__.r(__webpack_exports__);
  */
 
 
-(0,_js_devices__WEBPACK_IMPORTED_MODULE_4__.initDevice)();
+
+(0,_js_devices__WEBPACK_IMPORTED_MODULE_5__.initDevice)();
 var current_user_can_edit_posts = global_localized.current_user_can_edit_posts;
 Object.values(global_localized.components).forEach(element => {
   var initAttributes = {
@@ -1752,103 +1903,7 @@ Object.values(global_localized.components).forEach(element => {
       type: 'string'
     }
   };
-  for (const [key, value] of Object.entries(element.props)) {
-    if (typeof value != 'object' || value == null) continue;
-    let currentType = typeof value.repeatable != 'undefined' && value.repeatable ? 'array' : value.type.toLowerCase();
-    currentType = typeof value.responsive != 'undefined' && value.responsive ? 'object' : currentType;
-    switch (currentType) {
-      case 'string':
-        initAttributes[key] = {
-          type: 'string'
-        };
-        break;
-      case 'text':
-        initAttributes[key] = {
-          type: 'string'
-        };
-        break;
-      case 'richText':
-        initAttributes[key] = {
-          type: 'string'
-        };
-        break;
-      case 'wysiwyg':
-        initAttributes[key] = {
-          type: 'string'
-        };
-        break;
-      case 'boolean':
-        initAttributes[key] = {
-          type: 'boolean'
-        };
-        break;
-      case 'select':
-        initAttributes[key] = {
-          type: 'string'
-        };
-        break;
-      case 'color':
-        initAttributes[key] = {
-          type: 'string'
-        };
-        break;
-      case 'radio':
-        initAttributes[key] = {
-          type: 'string'
-        };
-        break;
-      case 'relation':
-        initAttributes[key] = {
-          type: 'string'
-        };
-        break;
-      case 'array':
-        initAttributes[key] = {
-          type: 'array'
-        };
-        break;
-      case 'object':
-        initAttributes[key] = {
-          type: 'object'
-        };
-        break;
-      case 'link':
-        initAttributes[key] = {
-          type: 'object'
-        };
-        break;
-      case 'number':
-        initAttributes[key] = {
-          type: 'number'
-        };
-        break;
-      case 'image':
-        initAttributes[key] = {
-          type: 'object'
-        };
-        break;
-      case 'video':
-        initAttributes[key] = {
-          type: 'object'
-        };
-        break;
-      case 'file':
-        initAttributes[key] = {
-          type: 'object'
-        };
-        break;
-      case 'gallery':
-        initAttributes[key] = {
-          type: 'array'
-        };
-        break;
-      case 'date':
-        initAttributes[key] = {
-          type: 'string'
-        };
-        break;
-    }
-  }
+  (0,_js_attributes__WEBPACK_IMPORTED_MODULE_4__.initComponentAttributes)(initAttributes, element.props);
   (0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__.registerBlockType)('custom/wpe-component-' + element.id, {
     title: element.name,
     category: element.category.slug,

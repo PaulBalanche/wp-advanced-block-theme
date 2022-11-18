@@ -2,7 +2,8 @@
  * WordPress dependencies
  */
 import { createBlock } from '@wordpress/blocks';
-import { Component, useState } from '@wordpress/element';
+import { WpeComponentBase } from '../../../../js/WpeComponentBase';
+import { useState } from '@wordpress/element';
 import { compose } from '@wordpress/compose';
 import {
     InspectorControls,
@@ -50,25 +51,21 @@ function createBlocksFromInnerBlocksTemplate ( innerBlocksTemplate ) {
 /**
  * registerBlockType edit function
  */
-class WpeGrid extends Component {
+class WpeGrid extends WpeComponentBase {
 
 	constructor() {
         super( ...arguments );
 
-        this.state = {
-            configMode: 1
-        };
+        this.defineLiveRendering();
     }
 
     componentDidUpdate() {
         initContainer();
     }
 
-    render() {
+    defineLiveRendering() {
 
         var {
-            block_spec,
-            theme_spec,
 			attributes,
             setAttributes,
             clientId,
@@ -77,7 +74,6 @@ class WpeGrid extends Component {
             countColumns,
             blockVariations,
             blockType,
-            experimentalDeviceType,
             isSelectedBlock,
             isParentOfSelectedBlock,
             replaceInnerBlocks
@@ -88,7 +84,7 @@ class WpeGrid extends Component {
          */
         if( typeof(inner_blocks ) != 'object' || ( typeof(inner_blocks ) == 'object' && countColumns == 0 ) ) {
 
-            return (
+            this.blockSpecificRender = <>
                 <div { ...innerBlocksProps }>
                     <__experimentalBlockVariationPicker
                         icon={ get( blockType, [ 'icon', 'src' ] ) }
@@ -108,7 +104,7 @@ class WpeGrid extends Component {
                         } }
                     />
                 </div>
-            );
+            </>;
         }
         else {
 
@@ -161,139 +157,52 @@ class WpeGrid extends Component {
             }
 
 
-            
-
-
+    
             let deviceButtonGroupClassName = ( isSelectedBlock || isParentOfSelectedBlock ) ? ' is-selected' : '';
 
 
 
 
-
-
-
-            /**
-             * Custom layout props
-             * 
-             */
-            let configuration = null;
-            if( typeof block_spec.props == 'object' ) {
-
-                let InspectorControlsCustomProps = [];
-
-                for( const [key, value] of Object.entries(block_spec.props) ) {
-
-                    if( typeof value != 'object' || value == null )
-                        continue;
-
-                    InspectorControlsCustomProps.push( renderControl( value, [ key ], { [key]: attributes[key] }, clientId ) );
-                }
-
-                if( InspectorControlsCustomProps.length > 0 ) {
-
-                    configuration = <Placeholder
-                        key={ clientId + "-placeholder" }
-                        label={ "Grid configuration" }
-                        isColumnLayout={ true }
-                        className="wpe-component_edit_placeholder"
-                    >
-                        { InspectorControlsCustomProps }
-                    </Placeholder>;
-                }
-            }
-
-            const buttonGroup = ( configuration != null ) ?
-                <div className="buttonGroupComponentModeContainer">
-                    <ButtonGroup
-                        key={ clientId + "-buttonGroupComponentMode" }
-                    >
-                        <Button
-                            key={ clientId + "-buttonConfigMode1" }
-                            isPressed={ this.state.configMode == 1 }
-                            onClick={ () => {
-                                this.setState( { configMode: 1 } )
-                            } }
-                        >Actual content</Button>
-                        <Button
-                            key={ clientId + "-buttonConfigMode3" }
-                            isPressed={ this.state.configMode == 3 }
-                            onClick={ () => {
-                                this.setState( { configMode: 3 } )
-                            } }
-                        >Edit</Button>
+            this.blockSpecificRender =  <>
+                <div className={ "deviceButtonGroup" + deviceButtonGroupClassName } >
+                    <ButtonGroup>
+                        { getLayouts().map( ( layout ) => {
+                            return (
+                                <Button
+                                    key={ "layoutButton_" + layout.value + "_" + clientId }
+                                    isPressed={ getBodyDevice() == layout.value }
+                                    onClick={ () => {
+                                        setBodyDevice( layout.value );
+                                        inner_blocks.forEach( ( elt ) => {
+                                            dispatch('core/block-editor').updateBlockAttributes( elt.clientId, { updated: true } );
+                                        });
+                                    } }
+                                >
+                                    { layout.value }
+                                </Button>
+                            );
+                        } ) }
                     </ButtonGroup>
                 </div>
-            :
-            null;
-
-            const EditDisplay = ( configuration != null && this.state.configMode == 3 ) ?
-                configuration
-            :
-                <>
-                    <div className={ "deviceButtonGroup" + deviceButtonGroupClassName } >
-                        <ButtonGroup>
-                            { getLayouts().map( ( layout ) => {
-                                return (
-                                    <Button
-                                        key={ "layoutButton_" + layout.value + "_" + clientId }
-                                        isPressed={ getBodyDevice() == layout.value }
-                                        onClick={ () => {
-                                            setBodyDevice( layout.value );
-                                            inner_blocks.forEach( ( elt ) => {
-                                                dispatch('core/block-editor').updateBlockAttributes( elt.clientId, { updated: true } );
-                                            });
-                                        } }
-                                    >
-                                        { layout.value }
-                                    </Button>
-                                );
-                            } ) }
-                        </ButtonGroup>
-                    </div>
-                    <div { ...innerBlocksProps } />
-                </>
-            ;
-            
-            /**
-             * Render edit
-             */
-            var editDisplay = (
-                <>
-                    { buttonGroup }
-                    { EditDisplay }
-                </>
-            )
+                <div { ...innerBlocksProps } />
+            </>;
         }
 
         // InspectorControls
-        let inspectorControls = '';
         if( ! attributes.gridLocked ) {
 
-            inspectorControls = (
-                <InspectorControls>
-                    <PanelBody>
-                        <RangeControl
-                            label="Number of cells"
-                            value={ attributes.gridCountColumns }
-                            onChange={ ( value ) => setAttributes( { gridCountColumns: value } ) }
-                            min={ 1 }
-                            max={ attributes.gridCountColumns + 1 }
-                        />
-                    </PanelBody>
-                </InspectorControls>
-            );
+            // this.inspectorControls = <>
+            //     <PanelBody>
+            //         <RangeControl
+            //             label="Number of cells"
+            //             value={ attributes.gridCountColumns }
+            //             onChange={ ( value ) => setAttributes( { gridCountColumns: value } ) }
+            //             min={ 1 }
+            //             max={ attributes.gridCountColumns + 1 }
+            //         />
+            //     </PanelBody>
+            // </>;
         }
-
-        /**
-         * Render
-         * 
-         */
-        return (
-            <>
-                { inspectorControls }
-                { editDisplay }
-            </>
-        );
     }
 }
 

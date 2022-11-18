@@ -328,3 +328,108 @@ export function renderTabPanelComponent( id, tabs, inner, initialTabName = null 
         tabs={ tabs }
     >{ inner }</TabPanel>;
 }
+
+export function initComponentAttributes( attributes, props ) {
+
+    for( const [key, value] of Object.entries(props) ) {       
+
+        if( typeof value != 'object' || value == null )
+            continue;
+
+        let currentType = ( typeof value.repeatable != 'undefined' && value.repeatable ) ? 'array' : value.type.toLowerCase();
+        currentType = ( typeof value.responsive != 'undefined' && value.responsive ) ? 'object' : currentType;
+        
+        switch( currentType ) {
+            case 'string':
+                attributes[key] = {
+                    type: 'string'
+                };
+                break;
+            case 'text':
+                attributes[key] = {
+                    type: 'string'
+                };
+                break;
+            case 'richText':
+                attributes[key] = {
+                    type: 'string'
+                };
+                break;
+            case 'wysiwyg':
+                attributes[key] = {
+                    type: 'string'
+                };
+                break;
+            case 'boolean':
+                attributes[key] = {
+                    type: 'boolean'
+                };
+                break;
+            case 'select':
+                attributes[key] = {
+                    type: 'string'
+                };
+                break;
+            case 'color':
+                attributes[key] = {
+                    type: 'string'
+                };
+                break;
+            case 'radio':
+                attributes[key] = {
+                    type: 'string'
+                };
+                break;
+            case 'relation':
+                attributes[key] = {
+                    type: 'string'
+                };
+                break;
+            case 'array':
+                attributes[key] = {
+                    type: 'array'
+                };
+                break;
+            case 'object':
+                attributes[key] = {
+                    type: 'object'
+                };
+                break;
+            case 'link':
+                attributes[key] = {
+                    type: 'object'
+                };
+                break;
+            case 'number':
+                attributes[key] = {
+                    type: 'number'
+                };
+                break;
+            case 'image':
+                attributes[key] = {
+                    type: 'object'
+                };
+                break;
+            case 'video':
+                attributes[key] = {
+                    type: 'object'
+                };
+                break;
+            case 'file':
+                attributes[key] = {
+                    type: 'object'
+                };
+                break;
+            case 'gallery':
+                attributes[key] = {
+                    type: 'array'
+                };
+                break;
+            case 'date':
+                attributes[key] = {
+                    type: 'string'
+                };
+                break;
+        }
+    }
+}

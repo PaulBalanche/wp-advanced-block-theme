@@ -97,6 +97,13 @@
             padding: 0px 10px;
         }
 
+        .block-editor-block-list__layout[data-type="custom/wpe-container"] {
+
+            &::before, &::after {
+                content: none;
+            }
+        }
+
         &:hover::after {
             border: 1px dashed rgba(0,124,186,.5);
         }

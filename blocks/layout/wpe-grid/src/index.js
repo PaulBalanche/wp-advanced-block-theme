@@ -8,7 +8,7 @@ import { Icon } from '@wordpress/icons';
 
 import * as gridIcons from './icons';
 
-// import * as gridConfig from '../config.json';
+import { initComponentAttributes } from '../../../../js/attributes';
 
 /**
  * Internal dependencies
@@ -33,30 +33,11 @@ let attributes = {
     gridLocked: {
         type: 'boolean',
         default: false
-    },
-    padding: {
-        type: 'object'
-    },
-    margin: {
-        type: 'object'
     }
 };
 if( typeof block_spec.props == 'object' ) {
 
-    for( const [key, value] of Object.entries(block_spec.props) ) {       
-
-        if( typeof value != 'object' || value == null )
-            continue;
-
-        switch( value.type ) {
-
-            case 'select':
-                attributes[key] = {
-                    type: 'string'
-                };
-                break;
-        }
-    }
+    initComponentAttributes( attributes, block_spec.props );
 }
 
 registerBlockType( 'custom/wpe-grid', {

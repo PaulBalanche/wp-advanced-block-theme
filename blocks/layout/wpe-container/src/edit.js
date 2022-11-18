@@ -1,7 +1,7 @@
 /**
  * WordPress dependencies
  */
-import { Component } from '@wordpress/element';
+import { WpeComponentBase } from '../../../../js/WpeComponentBase';
 import { compose } from '@wordpress/compose';
 import {
     InnerBlocks,
@@ -15,41 +15,38 @@ import {
 import {
     PanelBody,
     SelectControl,
-    Button
+    Button,
+    ButtonGroup,
+    Placeholder
 } from '@wordpress/components';
 
 import { withSelect } from '@wordpress/data';
 
 import { MarginControls, generateMarginClassName } from '../../../component-block-master/src/_marginControls.js';
 
+import { getLayouts, setBodyDevice, getBodyDevice, initContainer } from '../../../../js/devices';
+import { renderControl } from '../../../../js/attributes';
 
 /**
  * registerBlockType edit function
  */
-class WpeContainer extends Component {
+class WpeContainer extends WpeComponentBase {
 
 	constructor() {
         super( ...arguments );
+
+        this.defineLiveRendering();
     }
 
-    render() {
+    defineLiveRendering() {
 
         var {
 			attributes,
 			setAttributes,
             containerConfig,
             backgroundData,
-            innerBlocksProps,
-            experimentalDeviceType,
-            theme_spec
+            innerBlocksProps
         } = this.props;
-
-        // Padding & Margin
-        // const className = generateMarginClassName(this.props);
-        // if( className ) {
-        //     innerBlocksProps.className += className;
-        // }
-        const className = '';
         
         // Section background
         const titleMediaPlaceholder = ( backgroundData !== null && typeof backgroundData != 'undefined' ) ? backgroundData.media_type == 'image' ? 'Edit image' : backgroundData.title.raw + ' (' + backgroundData.mime_type + ')' : 'Image/Video';
@@ -112,35 +109,33 @@ class WpeContainer extends Component {
                 innerBlocksProps.className += ' st-' + attributes.style;
         }
 
-        /**
-         * Render
-         */
-        return (
-            <>
-                <InspectorControls>
-                    { containerStyleSelect }
-                    <PanelBody title={ 'Background' } initialOpen={ false }>
-                        { mediaPlaceholder }
-                    </PanelBody>
-                    <MarginControls props={ this.props } deviceType={ experimentalDeviceType } margin={ ( theme_spec?.margin ) ? theme_spec?.margin : null } />
-                </InspectorControls>
-                <div { ...innerBlocksProps } />
-            </>
-        );
+
+        // this.inspectorControls = <>
+        //     { containerStyleSelect }
+        //     <PanelBody title={ 'Background' } initialOpen={ false }>
+        //         { mediaPlaceholder }
+        //     </PanelBody>
+        // </>;
+
+        this.blockSpecificRender = <div { ...innerBlocksProps } />;
     }
+
 }
 
-export default ( containerConfig, theme_spec ) => compose( [
+export default ( containerConfig, block_spec, theme_spec ) => compose( [
 	withSelect( ( select, props ) => {
 
         const { __experimentalGetPreviewDeviceType } = select( 'core/edit-post' );
 
         return {
             containerConfig: containerConfig,
+            block_spec,
             theme_spec,
             innerBlocksProps: useInnerBlocksProps( useBlockProps( { className: '' } ), { renderAppender: InnerBlocks.ButtonBlockAppender } ),
             backgroundData: ! props.attributes.backgroundFile ? null : select('core').getEntityRecord('postType', 'attachment', props.attributes.backgroundFile ),
-            experimentalDeviceType: __experimentalGetPreviewDeviceType()
+            experimentalDeviceType: __experimentalGetPreviewDeviceType(),
+            isSelectedBlock: select('core/block-editor').isBlockSelected(props.clientId),
+            isParentOfSelectedBlock: select('core/block-editor').hasSelectedInnerBlock(props.clientId, true)
         };
     } ),
 ] )( WpeContainer );
