@@ -3,7 +3,6 @@ import { Component } from '@wordpress/element';
 import {
     Button,
     ButtonGroup,
-    InspectorControls,
     Placeholder
 } from '@wordpress/components';
 
@@ -20,15 +19,15 @@ export class WpeComponentBase extends Component {
         this.state = {
             configMode: ( this?.props?.block_spec?.screenshot ) ? 1 : 2
         };
-        this.initEnabledMode();
 
-        this.blockSpecificRender = null;
-        this.inspectorControls = 'test';
+        this.tabEnabledMode = [];
+        if( ! ( arguments.length > 2 && typeof arguments[2].disableButtonGroupMode != 'undefined' && arguments[2].disableButtonGroupMode ) ) {
+            this.initEnabledMode();
+        }
     }
 
     initEnabledMode () {
 
-        this.tabEnabledMode = [];
         if( typeof this.props.current_user_can_edit_posts == 'undefined' || parseInt(this.props.current_user_can_edit_posts) ) {
 
             if( this.props.block_spec.screenshot ) {
@@ -59,7 +58,7 @@ export class WpeComponentBase extends Component {
             3: 'Edit'
         }
 
-        if( typeof this.tabEnabledMode == 'object' ) {
+        if( typeof this.tabEnabledMode == 'object' && this.tabEnabledMode.length > 0 ) {
 
             let buttons = [];
             for( var i in modeDefinition ) {
@@ -80,7 +79,10 @@ export class WpeComponentBase extends Component {
             }
 
             return (
-                <div className="buttonGroupComponentModeContainer">
+                <div
+                    className="buttonGroupComponentModeContainer"
+                    key={ this.props.clientId + "-buttonGroupComponentModeContainer" }
+                >
                     <ButtonGroup
                         key={ this.props.clientId + "-buttonGroupComponentMode" }
                     >
@@ -98,7 +100,7 @@ export class WpeComponentBase extends Component {
         return ( typeof this.props.block_spec.props == 'object' && Object.keys(this.props.block_spec.props).length > 0 );
     }
 
-    renderPlaceholderProps() {
+    renderEditMode() {
 
         if( this.propsExists() ) {
 
@@ -200,41 +202,23 @@ export class WpeComponentBase extends Component {
 
     renderInspectorControls() {
 
-        if( this.inspectorControls !== null ) {
-
-            return (
-                <InspectorControls>
-                    { this.inspectorControls }
-                </InspectorControls>
-            );
-        }
-
         return null;
     }
 
-
-    renderConfigMode1 () {
+    renderScreenshot () {
 
         if( this.props.block_spec.screenshot ) {
-            return <>
-                <img
-                    key={ this.props.clientId + "-serverSideRender" }
-                    src={ this.props.block_spec.screenshot }
-                />
-            </>
+            return <img
+                key={ this.props.clientId + "-screen" }
+                src={ this.props.block_spec.screenshot }
+            />
         }
 
         return null;
     }
 
-    renderConfigMode2 () {
-
-        return this.blockSpecificRender;
-    }
-
-    renderConfigMode3 () {
-
-        return this.renderPlaceholderProps();
+    liveRendering() {
+        return null;
     }
 
     render() {
@@ -247,15 +231,15 @@ export class WpeComponentBase extends Component {
         switch( this.state.configMode ) {
 
             case 1:
-                render.push( this.renderConfigMode1() );
+                render.push( this.renderScreenshot() );
                 break;                
 
             case 2:
-                render.push( this.renderConfigMode2() );
+                render.push( this.liveRendering() );
                 break;
 
             case 3:
-                render.push( this.renderConfigMode3() );
+                render.push( this.renderEditMode() );
                 break;
         }
 

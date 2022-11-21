@@ -28,14 +28,13 @@ __webpack_require__.r(__webpack_exports__);
 class WpeComponent extends _js_WpeComponentBase__WEBPACK_IMPORTED_MODULE_1__.WpeComponentBase {
   constructor() {
     super(...arguments);
-    this.defineLiveRendering();
   }
-  defineLiveRendering() {
+  liveRendering() {
     // Because of ID will be not saved to the block’s comment delimiter default attribute, we manually set it.
     if (typeof this.props.attributes.id_component == 'undefined') this.setAttributes({
       id_component: block_spec.id
     });
-    this.blockSpecificRender = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)((_wordpress_server_side_render__WEBPACK_IMPORTED_MODULE_2___default()), {
+    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)((_wordpress_server_side_render__WEBPACK_IMPORTED_MODULE_2___default()), {
       key: this.props.clientId + "-serverSideRender",
       block: "custom/wpe-component-" + this.props.block_spec.id,
       attributes: this.props.attributes,
@@ -98,12 +97,12 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
     this.state = {
       configMode: this !== null && this !== void 0 && (_this$props = this.props) !== null && _this$props !== void 0 && (_this$props$block_spe = _this$props.block_spec) !== null && _this$props$block_spe !== void 0 && _this$props$block_spe.screenshot ? 1 : 2
     };
-    this.initEnabledMode();
-    this.blockSpecificRender = null;
-    this.inspectorControls = 'test';
+    this.tabEnabledMode = [];
+    if (!(arguments.length > 2 && typeof arguments[2].disableButtonGroupMode != 'undefined' && arguments[2].disableButtonGroupMode)) {
+      this.initEnabledMode();
+    }
   }
   initEnabledMode() {
-    this.tabEnabledMode = [];
     if (typeof this.props.current_user_can_edit_posts == 'undefined' || parseInt(this.props.current_user_can_edit_posts)) {
       if (this.props.block_spec.screenshot) {
         this.tabEnabledMode.push(1);
@@ -126,7 +125,7 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
       2: 'Live',
       3: 'Edit'
     };
-    if (typeof this.tabEnabledMode == 'object') {
+    if (typeof this.tabEnabledMode == 'object' && this.tabEnabledMode.length > 0) {
       let buttons = [];
       for (var i in modeDefinition) {
         let index = parseInt(i);
@@ -143,7 +142,8 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
         }
       }
       return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-        className: "buttonGroupComponentModeContainer"
+        className: "buttonGroupComponentModeContainer",
+        key: this.props.clientId + "-buttonGroupComponentModeContainer"
       }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.ButtonGroup, {
         key: this.props.clientId + "-buttonGroupComponentMode"
       }, buttons));
@@ -153,7 +153,7 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
   propsExists() {
     return typeof this.props.block_spec.props == 'object' && Object.keys(this.props.block_spec.props).length > 0;
   }
-  renderPlaceholderProps() {
+  renderEditMode() {
     if (this.propsExists()) {
       let catReOrder = {
         default: {
@@ -235,25 +235,19 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
     return null;
   }
   renderInspectorControls() {
-    if (this.inspectorControls !== null) {
-      return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.InspectorControls, null, this.inspectorControls);
-    }
     return null;
   }
-  renderConfigMode1() {
+  renderScreenshot() {
     if (this.props.block_spec.screenshot) {
-      return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
-        key: this.props.clientId + "-serverSideRender",
+      return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
+        key: this.props.clientId + "-screen",
         src: this.props.block_spec.screenshot
-      }));
+      });
     }
     return null;
   }
-  renderConfigMode2() {
-    return this.blockSpecificRender;
-  }
-  renderConfigMode3() {
-    return this.renderPlaceholderProps();
+  liveRendering() {
+    return null;
   }
   render() {
     let render = [];
@@ -261,13 +255,13 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
     render.push(this.renderButtonGroupMode());
     switch (this.state.configMode) {
       case 1:
-        render.push(this.renderConfigMode1());
+        render.push(this.renderScreenshot());
         break;
       case 2:
-        render.push(this.renderConfigMode2());
+        render.push(this.liveRendering());
         break;
       case 3:
-        render.push(this.renderConfigMode3());
+        render.push(this.renderEditMode());
         break;
     }
     return render;

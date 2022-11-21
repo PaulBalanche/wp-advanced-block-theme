@@ -504,17 +504,36 @@ function createBlocksFromInnerBlocksTemplate(innerBlocksTemplate) {
 class WpeGrid extends _js_WpeComponentBase__WEBPACK_IMPORTED_MODULE_2__.WpeComponentBase {
   constructor() {
     super(...arguments);
-    this.defineLiveRendering();
   }
 
   componentDidUpdate() {
     (0,_js_devices__WEBPACK_IMPORTED_MODULE_9__.initContainer)();
   }
 
-  defineLiveRendering() {
+  renderInspectorControls() {
+    // InspectorControls
+    if (!this.getAttribute('gridLocked')) {
+      let gridCountColumns = parseInt(this.getAttribute('gridCountColumns'));
+      return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_4__.InspectorControls, {
+        key: this.props.clientId + "-InspectorControls"
+      }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_5__.PanelBody, {
+        key: "inspectorControlsPanelBody_" + this.props.clientId
+      }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_5__.RangeControl, {
+        label: "Number of cells",
+        value: gridCountColumns,
+        onChange: value => this.setAttributes({
+          gridCountColumns: value
+        }),
+        min: 1,
+        max: gridCountColumns + 1
+      })));
+    }
+
+    return null;
+  }
+
+  liveRendering() {
     var {
-      attributes,
-      setAttributes,
       clientId,
       inner_blocks,
       innerBlocksProps,
@@ -530,7 +549,7 @@ class WpeGrid extends _js_WpeComponentBase__WEBPACK_IMPORTED_MODULE_2__.WpeCompo
      */
 
     if (typeof inner_blocks != 'object' || typeof inner_blocks == 'object' && countColumns == 0) {
-      this.blockSpecificRender = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", innerBlocksProps, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_4__.__experimentalBlockVariationPicker, {
+      return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", innerBlocksProps, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_4__.__experimentalBlockVariationPicker, {
         icon: (0,lodash__WEBPACK_IMPORTED_MODULE_7__.get)(blockType, ['icon', 'src']),
         label: (0,lodash__WEBPACK_IMPORTED_MODULE_7__.get)(blockType, ['title']),
         variations: blockVariations,
@@ -545,11 +564,13 @@ class WpeGrid extends _js_WpeComponentBase__WEBPACK_IMPORTED_MODULE_2__.WpeCompo
         }
       })));
     } else {
+      let gridCountColumns = parseInt(this.getAttribute('gridCountColumns'));
       /**
        * Add or remove columns
        * 
        */
-      if (attributes.gridCountColumns > countColumns) {
+
+      if (gridCountColumns > countColumns) {
         // Define rowStart fo the new colums added
         let initLayout = {};
         (0,_js_devices__WEBPACK_IMPORTED_MODULE_9__.getLayouts)().forEach(layout => {
@@ -571,22 +592,26 @@ class WpeGrid extends _js_WpeComponentBase__WEBPACK_IMPORTED_MODULE_2__.WpeCompo
             }
           });
         });
-        let numberOfColumnsToAdd = attributes.gridCountColumns - countColumns;
+        let numberOfColumnsToAdd = gridCountColumns - countColumns;
         let inner_blocks_new = [...inner_blocks, ...(0,lodash__WEBPACK_IMPORTED_MODULE_7__.times)(numberOfColumnsToAdd, () => {
           return (0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__.createBlock)('custom/wpe-column', {
             layout: initLayout
           });
         })];
         replaceInnerBlocks(clientId, inner_blocks_new, false);
-      } else if (attributes.gridCountColumns < countColumns) {
-        let inner_blocks_new = inner_blocks.slice(0, attributes.gridCountColumns);
+      } else if (gridCountColumns < countColumns) {
+        let inner_blocks_new = inner_blocks.slice(0, gridCountColumns);
         replaceInnerBlocks(clientId, inner_blocks_new, false);
       }
 
       let deviceButtonGroupClassName = isSelectedBlock || isParentOfSelectedBlock ? ' is-selected' : '';
-      this.blockSpecificRender = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
+        key: "gridRender_" + clientId
+      }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
         className: "deviceButtonGroup" + deviceButtonGroupClassName
-      }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_5__.ButtonGroup, null, (0,_js_devices__WEBPACK_IMPORTED_MODULE_9__.getLayouts)().map(layout => {
+      }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_5__.ButtonGroup, {
+        key: "layoutButtonGroup_" + clientId
+      }, (0,_js_devices__WEBPACK_IMPORTED_MODULE_9__.getLayouts)().map(layout => {
         return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_5__.Button, {
           key: "layoutButton_" + layout.value + "_" + clientId,
           isPressed: (0,_js_devices__WEBPACK_IMPORTED_MODULE_9__.getBodyDevice)() == layout.value,
@@ -600,20 +625,6 @@ class WpeGrid extends _js_WpeComponentBase__WEBPACK_IMPORTED_MODULE_2__.WpeCompo
           }
         }, layout.value);
       }))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", innerBlocksProps));
-    } // InspectorControls
-
-
-    if (!attributes.gridLocked) {// this.inspectorControls = <>
-      //     <PanelBody>
-      //         <RangeControl
-      //             label="Number of cells"
-      //             value={ attributes.gridCountColumns }
-      //             onChange={ ( value ) => setAttributes( { gridCountColumns: value } ) }
-      //             min={ 1 }
-      //             max={ attributes.gridCountColumns + 1 }
-      //         />
-      //     </PanelBody>
-      // </>;
     }
   }
 
@@ -843,14 +854,14 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
     this.state = {
       configMode: this !== null && this !== void 0 && (_this$props = this.props) !== null && _this$props !== void 0 && (_this$props$block_spe = _this$props.block_spec) !== null && _this$props$block_spe !== void 0 && _this$props$block_spe.screenshot ? 1 : 2
     };
-    this.initEnabledMode();
-    this.blockSpecificRender = null;
-    this.inspectorControls = 'test';
+    this.tabEnabledMode = [];
+
+    if (!(arguments.length > 2 && typeof arguments[2].disableButtonGroupMode != 'undefined' && arguments[2].disableButtonGroupMode)) {
+      this.initEnabledMode();
+    }
   }
 
   initEnabledMode() {
-    this.tabEnabledMode = [];
-
     if (typeof this.props.current_user_can_edit_posts == 'undefined' || parseInt(this.props.current_user_can_edit_posts)) {
       if (this.props.block_spec.screenshot) {
         this.tabEnabledMode.push(1);
@@ -879,7 +890,7 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
       3: 'Edit'
     };
 
-    if (typeof this.tabEnabledMode == 'object') {
+    if (typeof this.tabEnabledMode == 'object' && this.tabEnabledMode.length > 0) {
       let buttons = [];
 
       for (var i in modeDefinition) {
@@ -899,7 +910,8 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
       }
 
       return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-        className: "buttonGroupComponentModeContainer"
+        className: "buttonGroupComponentModeContainer",
+        key: this.props.clientId + "-buttonGroupComponentModeContainer"
       }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.ButtonGroup, {
         key: this.props.clientId + "-buttonGroupComponentMode"
       }, buttons));
@@ -912,7 +924,7 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
     return typeof this.props.block_spec.props == 'object' && Object.keys(this.props.block_spec.props).length > 0;
   }
 
-  renderPlaceholderProps() {
+  renderEditMode() {
     if (this.propsExists()) {
       let catReOrder = {
         default: {
@@ -1001,30 +1013,22 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
   }
 
   renderInspectorControls() {
-    if (this.inspectorControls !== null) {
-      return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.InspectorControls, null, this.inspectorControls);
-    }
-
     return null;
   }
 
-  renderConfigMode1() {
+  renderScreenshot() {
     if (this.props.block_spec.screenshot) {
-      return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
-        key: this.props.clientId + "-serverSideRender",
+      return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
+        key: this.props.clientId + "-screen",
         src: this.props.block_spec.screenshot
-      }));
+      });
     }
 
     return null;
   }
 
-  renderConfigMode2() {
-    return this.blockSpecificRender;
-  }
-
-  renderConfigMode3() {
-    return this.renderPlaceholderProps();
+  liveRendering() {
+    return null;
   }
 
   render() {
@@ -1034,15 +1038,15 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
 
     switch (this.state.configMode) {
       case 1:
-        render.push(this.renderConfigMode1());
+        render.push(this.renderScreenshot());
         break;
 
       case 2:
-        render.push(this.renderConfigMode2());
+        render.push(this.liveRendering());
         break;
 
       case 3:
-        render.push(this.renderConfigMode3());
+        render.push(this.renderEditMode());
         break;
     }
 

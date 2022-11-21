@@ -10,17 +10,15 @@ class WpeComponent extends WpeComponentBase {
 
 	constructor() {
         super( ...arguments );
-
-        this.defineLiveRendering();
     }
 
-    defineLiveRendering() {
+    liveRendering() {
 
         // Because of ID will be not saved to the block’s comment delimiter default attribute, we manually set it.
         if( typeof this.props.attributes.id_component == 'undefined' )
             this.setAttributes( { id_component: block_spec.id } );
             
-        this.blockSpecificRender = <ServerSideRender
+        return  <ServerSideRender
             key={ this.props.clientId + "-serverSideRender" }
             block={ "custom/wpe-component-" + this.props.block_spec.id }
             attributes={ this.props.attributes }

@@ -1,7 +1,7 @@
 /**
  * WordPress dependencies
  */
-import { Component } from '@wordpress/element';
+import { WpeComponentBase } from '../../../../js/WpeComponentBase';
 import { compose } from '@wordpress/compose';
 import {
     InnerBlocks,
@@ -18,16 +18,16 @@ import {
 
 import { withSelect } from '@wordpress/data';
 
-import { getBodyDevice } from '../../../../packages/devices.js';
+import { getBodyDevice } from '../../../../js/devices';
 
 /**
  * registerBlockType edit function
  * 
  */
-class WpeColumn extends Component {
+class WpeColumn extends WpeComponentBase {
  
     constructor() {
-        super( ...arguments );
+        super( ...arguments, { disableButtonGroupMode: true } );
     }
 
     getLayout( key, device ) {
@@ -49,24 +49,13 @@ class WpeColumn extends Component {
         this.setAttributes( { layout: curentLayout} );
     }
 
-    setAttributes( attributes ) {
-        this.props.setAttributes( attributes );
-    }
-
-    render() {
-
-        var { innerBlocksProps } = this.props;
+    renderInspectorControls() {
 
         let currentBodyDevice = getBodyDevice();
-        
-        innerBlocksProps.style = {
-            gridColumnStart: this.getLayout( 'columnStart', currentBodyDevice ),
-            gridColumnEnd: this.getLayout( 'columnStart', currentBodyDevice ) + this.getLayout( 'width', currentBodyDevice ),
-            gridRowStart: this.getLayout( 'rowStart', currentBodyDevice ),
-            gridRowEnd: this.getLayout( 'rowStart', currentBodyDevice ) + this.getLayout( 'height', currentBodyDevice )
-        };
-        
-        let panelDeviceLayout = (
+
+        return <InspectorControls
+            key={ this.props.clientId + "-InspectorControls" }
+        >
             <PanelBody title={ 'Layout (' + currentBodyDevice + ')' } initialOpen={ true }>
                 <RangeControl
                     label="Column start"
@@ -97,28 +86,33 @@ class WpeColumn extends Component {
                     max={ this.getLayout( 'height', currentBodyDevice ) + 1 }
                 />
             </PanelBody>
-        );
+        </InspectorControls>;
+    }
 
-        let inspectorControls = (
-            <InspectorControls>
-                { panelDeviceLayout }
-            </InspectorControls>
-        );
+    liveRendering() {
 
-        // Render
-        return (
-            <>
-                { inspectorControls }
-                <div { ...innerBlocksProps } />
-            </>
-        );
+        var { innerBlocksProps } = this.props;
+
+        let currentBodyDevice = getBodyDevice();
+        
+        innerBlocksProps.style = {
+            gridColumnStart: this.getLayout( 'columnStart', currentBodyDevice ),
+            gridColumnEnd: this.getLayout( 'columnStart', currentBodyDevice ) + this.getLayout( 'width', currentBodyDevice ),
+            gridRowStart: this.getLayout( 'rowStart', currentBodyDevice ),
+            gridRowEnd: this.getLayout( 'rowStart', currentBodyDevice ) + this.getLayout( 'height', currentBodyDevice )
+        };
+        
+        innerBlocksProps.key = 'innerBlocksProps_' + this.props.clientId;
+        return <div { ...innerBlocksProps } />;
     }
 }
 
-export default () => compose( [
+export default ( block_spec, theme_spec ) => compose( [
     withSelect( () => {
 
         return {
+            block_spec,
+            theme_spec,
             innerBlocksProps: useInnerBlocksProps( useBlockProps( { className: '' } ), { renderAppender: InnerBlocks.ButtonBlockAppender } ),
         };
     } ),

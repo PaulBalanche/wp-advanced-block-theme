@@ -3,25 +3,25 @@
  */
 import { createBlock } from '@wordpress/blocks';
 import { WpeComponentBase } from '../../../../js/WpeComponentBase';
-import { useState } from '@wordpress/element';
+import {
+    useState,
+    Fragment
+} from '@wordpress/element';
 import { compose } from '@wordpress/compose';
 import {
-    InspectorControls,
     useBlockProps,
     useInnerBlocksProps,
+    InspectorControls,
     __experimentalBlockVariationPicker,
     __experimentalBlock as Block,
     store as blockEditorStore
 } from '@wordpress/block-editor';
 
 import {
-    Panel,
     PanelBody,
     Button,
     ButtonGroup,
-    RangeControl,
-    Placeholder,
-    ToggleControl
+    RangeControl
 } from '@wordpress/components';
 
 import { withSelect, withDispatch, dispatch } from '@wordpress/data';
@@ -55,19 +55,42 @@ class WpeGrid extends WpeComponentBase {
 
 	constructor() {
         super( ...arguments );
-
-        this.defineLiveRendering();
     }
 
     componentDidUpdate() {
         initContainer();
     }
 
-    defineLiveRendering() {
+    renderInspectorControls() {
+
+        // InspectorControls
+        if( ! this.getAttribute('gridLocked') ) {
+
+            let gridCountColumns = parseInt( this.getAttribute('gridCountColumns') );
+
+            return <InspectorControls
+                key={ this.props.clientId + "-InspectorControls" }
+            >
+                <PanelBody
+                    key={ "inspectorControlsPanelBody_" + this.props.clientId }
+                >
+                    <RangeControl
+                        label="Number of cells"
+                        value={ gridCountColumns }
+                        onChange={ ( value ) => this.setAttributes( { gridCountColumns: value } ) }
+                        min={ 1 }
+                        max={ gridCountColumns + 1 }
+                    />
+                </PanelBody>
+            </InspectorControls>;
+        }
+
+        return null;
+    }
+
+    liveRendering() {
 
         var {
-			attributes,
-            setAttributes,
             clientId,
             inner_blocks,
             innerBlocksProps,
@@ -84,7 +107,7 @@ class WpeGrid extends WpeComponentBase {
          */
         if( typeof(inner_blocks ) != 'object' || ( typeof(inner_blocks ) == 'object' && countColumns == 0 ) ) {
 
-            this.blockSpecificRender = <>
+            return <>
                 <div { ...innerBlocksProps }>
                     <__experimentalBlockVariationPicker
                         icon={ get( blockType, [ 'icon', 'src' ] ) }
@@ -106,13 +129,15 @@ class WpeGrid extends WpeComponentBase {
                 </div>
             </>;
         }
-        else {
+        else {           
+
+            let gridCountColumns = parseInt( this.getAttribute('gridCountColumns') );
 
             /**
              * Add or remove columns
              * 
              */
-            if( attributes.gridCountColumns > countColumns ) {
+            if( gridCountColumns > countColumns ) {
 
                 // Define rowStart fo the new colums added
 
@@ -138,7 +163,7 @@ class WpeGrid extends WpeComponentBase {
                     });                    
                 } );
 
-                let numberOfColumnsToAdd = attributes.gridCountColumns - countColumns;
+                let numberOfColumnsToAdd = gridCountColumns - countColumns;
                 let inner_blocks_new = [
                     ...inner_blocks,
                     ...times( numberOfColumnsToAdd, () => {
@@ -150,22 +175,23 @@ class WpeGrid extends WpeComponentBase {
 
                 replaceInnerBlocks( clientId, inner_blocks_new, false );
             }
-            else if( attributes.gridCountColumns < countColumns ) {
+            else if( gridCountColumns < countColumns ) {
             
-                let inner_blocks_new = inner_blocks.slice(0, attributes.gridCountColumns);
+                let inner_blocks_new = inner_blocks.slice( 0, gridCountColumns );
                 replaceInnerBlocks( clientId, inner_blocks_new, false );
             }
 
+            
 
-    
             let deviceButtonGroupClassName = ( isSelectedBlock || isParentOfSelectedBlock ) ? ' is-selected' : '';
 
-
-
-
-            this.blockSpecificRender =  <>
+            return <Fragment
+                key={ "gridRender_" + clientId }
+            >
                 <div className={ "deviceButtonGroup" + deviceButtonGroupClassName } >
-                    <ButtonGroup>
+                    <ButtonGroup
+                        key={ "layoutButtonGroup_" + clientId }
+                    >
                         { getLayouts().map( ( layout ) => {
                             return (
                                 <Button
@@ -185,23 +211,7 @@ class WpeGrid extends WpeComponentBase {
                     </ButtonGroup>
                 </div>
                 <div { ...innerBlocksProps } />
-            </>;
-        }
-
-        // InspectorControls
-        if( ! attributes.gridLocked ) {
-
-            // this.inspectorControls = <>
-            //     <PanelBody>
-            //         <RangeControl
-            //             label="Number of cells"
-            //             value={ attributes.gridCountColumns }
-            //             onChange={ ( value ) => setAttributes( { gridCountColumns: value } ) }
-            //             min={ 1 }
-            //             max={ attributes.gridCountColumns + 1 }
-            //         />
-            //     </PanelBody>
-            // </>;
+            </Fragment>;
         }
     }
 }

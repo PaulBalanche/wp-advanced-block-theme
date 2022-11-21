@@ -3,7 +3,19 @@ import {
     InnerBlocks
 } from '@wordpress/block-editor';
 
+import { initComponentAttributes } from '../../../../js/attributes';
+
 import edit from './edit';
+
+let attributes = {
+    layout: {
+        type: 'object'
+    }
+};
+if( typeof block_spec.props == 'object' ) {
+
+    initComponentAttributes( attributes, block_spec.props );
+}
 
 registerBlockType( 'custom/wpe-column', {
     title: 'Col',
@@ -13,12 +25,8 @@ registerBlockType( 'custom/wpe-column', {
         lightBlockWrapper: true
     },
     parent: [ 'custom/wpe-grid' ],
-    attributes: {
-        layout: {
-            type: 'object'
-        }
-    },
-    edit: edit(),
+    attributes: attributes,
+    edit: edit( block_spec, theme_spec ),
     save: () => {
         return <InnerBlocks.Content />;
     },
