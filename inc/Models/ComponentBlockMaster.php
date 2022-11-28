@@ -63,6 +63,14 @@ class ComponentBlockMaster extends ModelBase {
             array( 'wp-edit-blocks' ),
             filemtime( ABT_PLUGIN_DIR . $this->get_config()->get('componentMasterBlocksLocation') . 'assets/style/editor.min.css' )
         );
+        // wp_register_style(
+        //     $handle,
+        //     ABT_PLUGIN_URL . 'js/controls/WysiwygControl/node_modules/draft-js/dist/Draft.css'
+        // );
+        // wp_register_style(
+        //     $handle,
+        //     ABT_PLUGIN_URL . 'js/controls/WysiwygControl/style.css'
+        // );        
     }
 
 

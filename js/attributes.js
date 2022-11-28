@@ -5,9 +5,11 @@ import {
     PanelBody
 } from '@wordpress/components';
 
-import { getLayouts, setBodyDevice, getBodyDevice } from './devices';
+import { getLayouts, getBodyDevice } from './devices';
 
+import WysiwygControl from './controls/WysiwygControl/WysiwygControl';
 import {
+    renderTextControl,
     renderDateTimeControl,
     renderFileControl,
     renderImageVideoControl,
@@ -15,11 +17,9 @@ import {
     renderRadioControl,
     renderRelationControl,
     renderSelectControl,
-    renderTextControl,
     renderTextareaControl,
-    renderToggleControl,
-    // renderWysiwygControl
-} from './controls';
+    renderToggleControl
+} from './controls'
 
 import { dispatch } from '@wordpress/data';
 
@@ -148,10 +148,21 @@ export function renderControl( prop, keys, valueProp, clientId ) {
                 blocReturned.push( renderTextareaControl( fieldId, label, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, clientId ) );
                 break;
             
-            // case 'richText':
-            // case 'wysiwyg':
-            //     blocReturned.push( renderWysiwygControl( fieldId, label, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, clientId ) );
-            //     break;
+            case 'richText':
+            case 'wysiwyg':
+                blocReturned.push( <WysiwygControl
+                    key={ fieldId + "-WysiwygControl" }
+                    id={ fieldId }
+                    label={ label }
+                    keys={ repeatable ? keys.concat(keyLoop) : keys }
+                    valueProp={ valueProp }
+                    objectValue={ currentValueAttribute[keyLoop] }
+                    repeatable={ repeatable }
+                    required={ required_field }
+                    clientId={ clientId }
+                /> );
+                // blocReturned.push( renderWysiwygControl( fieldId, label, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, clientId ) );
+                break;
 
             case 'boolean':
                 blocReturned.push( renderToggleControl( fieldId, label, prop.help, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, clientId ) );

@@ -370,7 +370,7 @@
         }
     }
     
-    .block-editor-block-list__block:hover {
+    .block-editor-block-list__block:hover, .block-editor-block-list__block.is-selected, .block-editor-block-list__block.has-child-selected {
 
         & > .buttonGroupComponentModeContainer, & > .deviceButtonGroup {
             visibility: visible;

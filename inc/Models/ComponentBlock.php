@@ -384,7 +384,6 @@ class ComponentBlock extends ModelBase {
             // Anchor detection
             $content =  $this->get_content();
             $render_attributes['anchor'] = Anchor::get( $this->get_config()->get('blocksNamespace') . '-' . $this->get_config()->get('componentBlockPrefixName'), $content );
-           
 
             // Filters spacing
             // $render_attributes['margin'] = apply_filters( 'Abt\block_spacing_formatting', ( isset($render_attributes['margin']) ) ? $render_attributes['margin'] : '', 'margin' );

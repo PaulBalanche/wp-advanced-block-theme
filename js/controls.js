@@ -47,8 +47,3 @@ import { renderToggle } from './controls/Toggle';
 export function renderToggleControl( id, label, help, keys, valueProp, objectValue, repeatable = false, required = false, clientId ) {
     return renderToggle( id, label, help, keys, valueProp, objectValue, repeatable, required, clientId );
 }
-
-// import { renderWysiwyg } from './controls/Wysiwyg';
-// export function renderWysiwygControl( id, label, keys, valueProp, objectValue, repeatable = false, required = false, clientId ) {
-//     return renderWysiwyg( id, label, keys, valueProp, objectValue, repeatable, required, clientId );
-// }

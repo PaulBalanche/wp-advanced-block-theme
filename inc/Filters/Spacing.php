@@ -18,7 +18,7 @@ class Spacing extends FiltersBase {
      */
     public function add_filters() {
 
-        add_filter( 'Abt\block_spacing_formatting', [ $this, 'wpe_gutenberg_blocks_spacing_formatting'], 10, 2 );
+        // add_filter( 'Abt\block_spacing_formatting', [ $this, 'wpe_gutenberg_blocks_spacing_formatting'], 10, 2 );
     }
 
 

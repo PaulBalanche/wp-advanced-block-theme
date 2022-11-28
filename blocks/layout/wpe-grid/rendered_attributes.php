@@ -8,7 +8,4 @@ $data = [
     // 'padding' => apply_filters( 'Abt\block_spacing_formatting', ( isset($attributes['padding']) ) ? $attributes['padding'] : '', 'padding' ),
 ];
 
-// unset($attributes['margin']);
-// unset($attributes['padding']);
-
 return array_merge( $data, $attributes );

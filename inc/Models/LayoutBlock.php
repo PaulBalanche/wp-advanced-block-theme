@@ -4,6 +4,7 @@ namespace Abt\Models;
 
 use Abt\Main;
 use Abt\Services\Render as RenderService;
+use Abt\Helpers\Anchor;
 
 class LayoutBlock extends ModelBase {
 
@@ -175,14 +176,13 @@ class LayoutBlock extends ModelBase {
      */
     public function render( $attributes, $content, $block_instance ) {
 
-        if( file_exists( $this->get_block_dir() . '/rendered_attributes.php' ) ) {
+        $attributes = array_merge( $attributes, [
+            'anchor' => Anchor::get( $this->get_ID(), $content ),
+            'content' => $content
+        ] );
+        $attributes = apply_filters( 'Abt\pre_render_attributes_layout_' . $this->get_ID(), $attributes, $content, $block_instance );
 
-            $pre_rendered_attributes = include( $this->get_block_dir() . '/rendered_attributes.php' );
-            $pre_rendered_attributes = apply_filters( 'Abt\pre_render_attributes_layout_' . $this->get_ID(), $pre_rendered_attributes, $attributes, $content, $block_instance );
-            $content = RenderService::render( $this->get_view_path(), $pre_rendered_attributes );
-        }
-
-        return $content;
+        return RenderService::render( $this->get_view_path(), $attributes );
     }
     
 

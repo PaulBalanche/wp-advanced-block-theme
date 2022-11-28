@@ -129,7 +129,7 @@ class WpeGrid extends WpeComponentBase {
                 </div>
             </>;
         }
-        else {           
+        else {
 
             let gridCountColumns = parseInt( this.getAttribute('gridCountColumns') );
 
@@ -181,14 +181,13 @@ class WpeGrid extends WpeComponentBase {
                 replaceInnerBlocks( clientId, inner_blocks_new, false );
             }
 
-            
 
             let deviceButtonGroupClassName = ( isSelectedBlock || isParentOfSelectedBlock ) ? ' is-selected' : '';
 
             return <Fragment
                 key={ "gridRender_" + clientId }
             >
-                <div className={ "deviceButtonGroup" + deviceButtonGroupClassName } >
+                <div className={ "deviceButtonGroup" } >
                     <ButtonGroup
                         key={ "layoutButtonGroup_" + clientId }
                     >
