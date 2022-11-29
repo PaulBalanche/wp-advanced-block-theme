@@ -11,6 +11,7 @@ use Abt\Helpers\Attributes\Relation;
 use Abt\Helpers\Attributes\RecursiveObject;
 use Abt\Helpers\Attributes\Link;
 use Abt\Helpers\Attributes\Date;
+use Abt\Helpers\Attributes\Wysiwyg;
 
 class Attributes {
     
@@ -59,6 +60,10 @@ class Attributes {
 
                     case 'date':
                         Date::format( $attributes, $key_prop, $prop );
+                        break;
+
+                    case 'wysiwyg':
+                        Wysiwyg::format( $attributes, $key_prop, $prop );
                         break;
                 }
             }

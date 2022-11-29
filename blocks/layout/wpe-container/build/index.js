@@ -1,380 +1,6 @@
 /******/ (function() { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "../../component-block-master/src/_marginControls.js":
-/*!***********************************************************!*\
-  !*** ../../component-block-master/src/_marginControls.js ***!
-  \***********************************************************/
-/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "MarginControls": function() { return /* binding */ MarginControls; },
-/* harmony export */   "generateMarginClassName": function() { return /* binding */ generateMarginClassName; }
-/* harmony export */ });
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var merge_anything__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! merge-anything */ "../../component-block-master/node_modules/merge-anything/dist/index.es.js");
-/* harmony import */ var _js_devices_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../js/devices.js */ "../../../js/devices.js");
-
-
-
-
-
-class MarginControls extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Component {
-  constructor(attr) {
-    super(...arguments);
-    this.parentProps = attr.props;
-    this.spacing = attr !== null && attr !== void 0 && attr.margin ? attr.margin : [{
-      "label": "1",
-      "value": "1"
-    }, {
-      "label": "2",
-      "value": "2"
-    }, {
-      "label": "3",
-      "value": "3"
-    }, {
-      "label": "4",
-      "value": "4"
-    }, {
-      "label": "5",
-      "value": "5"
-    }];
-    if (!this.parentProps.attributes.hasOwnProperty('padding')) {
-      this.parentProps.attributes.padding = {};
-    }
-    if (!this.parentProps.attributes.hasOwnProperty('margin')) {
-      this.parentProps.attributes.margin = {};
-    }
-    this.state = {
-      padding: {},
-      margin: {}
-    };
-    (0,_js_devices_js__WEBPACK_IMPORTED_MODULE_2__.getLayouts)().forEach(layout => {
-      this.state.padding[layout.value] = {
-        all: undefined,
-        top: undefined,
-        bottom: undefined,
-        left: undefined,
-        right: undefined,
-        x: undefined,
-        y: undefined
-      };
-      this.state.margin[layout.value] = {
-        all: undefined,
-        top: undefined,
-        bottom: undefined,
-        left: undefined,
-        right: undefined,
-        x: undefined,
-        y: undefined
-      };
-    });
-    this.state.padding = (0,merge_anything__WEBPACK_IMPORTED_MODULE_3__.merge)(this.state.padding, this.parentProps.attributes.padding);
-    this.state.margin = (0,merge_anything__WEBPACK_IMPORTED_MODULE_3__.merge)(this.state.margin, this.parentProps.attributes.margin);
-  }
-
-  // getPadding( type ) {
-  //     if( this.state.padding[this.props.deviceType.toLowerCase()].hasOwnProperty(type) ) {
-  //         return this.state.padding[this.props.deviceType.toLowerCase()][type];
-  //     }
-
-  //     return null;
-  // }
-
-  // getMargin( type ) {
-  //     if( this.state.margin[this.props.deviceType.toLowerCase()].hasOwnProperty(type) ) {
-  //         return this.state.margin[this.props.deviceType.toLowerCase()][type];
-  //     }
-
-  //     return null;
-  // }
-
-  getLayouts() {
-    return (0,_js_devices_js__WEBPACK_IMPORTED_MODULE_2__.getLayouts)();
-  }
-  setPadding(type, deviceType, value) {
-    const newPadding = (0,merge_anything__WEBPACK_IMPORTED_MODULE_3__.merge)(this.state.padding, {
-      [deviceType]: {
-        [type]: value
-      }
-    });
-    this.setState({
-      padding: newPadding
-    });
-    this.parentProps.setAttributes({
-      padding: newPadding
-    });
-  }
-  setMargin(type, deviceType, value) {
-    const newMargin = (0,merge_anything__WEBPACK_IMPORTED_MODULE_3__.merge)(this.state.margin, {
-      [deviceType]: {
-        [type]: value
-      }
-    });
-    this.setState({
-      margin: newMargin
-    });
-    this.parentProps.setAttributes({
-      margin: newMargin
-    });
-  }
-  resetPadding(deviceType) {
-    let newPadding = {};
-    (0,_js_devices_js__WEBPACK_IMPORTED_MODULE_2__.getLayouts)().forEach(layout => {
-      newPadding[layout.value] = deviceType == layout.value ? {} : this.state.padding[layout.value];
-    });
-    this.setState({
-      padding: newPadding
-    });
-    this.parentProps.setAttributes({
-      padding: newPadding
-    });
-  }
-  resetMargin(deviceType) {
-    let newMargin = {};
-    (0,_js_devices_js__WEBPACK_IMPORTED_MODULE_2__.getLayouts)().forEach(layout => {
-      newMargin[layout.value] = deviceType == layout.value ? {} : this.state.margin[layout.value];
-    });
-    this.setState({
-      margin: newMargin
-    });
-    this.parentProps.setAttributes({
-      margin: newMargin
-    });
-  }
-  renderBtnReset(property, deviceType) {
-    var propertyToTreat = property == 'padding' ? this.state.padding : this.state.margin;
-    var btnResetPadding = [];
-    if (typeof propertyToTreat[deviceType] == 'object' && Object.keys(propertyToTreat).length > 0) {
-      for (const [key, value] of Object.entries(propertyToTreat[deviceType])) {
-        if (typeof value != 'undefined') {
-          btnResetPadding.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-            key: "containerReset-" + property + "-" + deviceType + "-" + this.parentProps.clientId
-          }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.HorizontalRule, null), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
-            variant: "secondary",
-            className: "is-secondary",
-            onClick: () => {
-              if (property == 'padding') {
-                this.resetPadding(deviceType);
-              } else {
-                this.resetMargin(deviceType);
-              }
-            }
-          }, "Reset ", deviceType)));
-          break;
-        }
-      }
-    }
-    return btnResetPadding;
-  }
-  render() {
-    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.PanelBody, {
-      title: 'Padding',
-      initialOpen: false
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.TabPanel, {
-      className: "padding-tab-panel",
-      activeClass: "active-tab",
-      initialTabName: (0,_js_devices_js__WEBPACK_IMPORTED_MODULE_2__.getBodyDevice)(),
-      tabs: (0,_js_devices_js__WEBPACK_IMPORTED_MODULE_2__.getLayouts)().map(layout => {
-        return {
-          name: layout.value,
-          title: layout.label,
-          className: 'tab-' + layout.value
-        };
-      })
-    }, tab => (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.SelectControl, {
-      label: "All",
-      value: this.state.padding[tab.name].all,
-      options: [{
-        label: 'Default',
-        value: ''
-      }].concat(this.spacing),
-      onChange: value => {
-        this.setPadding('all', tab.name, value);
-      }
-    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.HorizontalRule, null), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "child-range-control"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.SelectControl, {
-      label: "Padding Y",
-      value: this.state.padding[tab.name].y,
-      options: [{
-        label: 'Default',
-        value: ''
-      }].concat(this.spacing),
-      onChange: value => {
-        this.setPadding('y', tab.name, value);
-      }
-    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "child-range-control"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.SelectControl, {
-      label: "Top",
-      value: this.state.padding[tab.name].top,
-      options: [{
-        label: 'Default',
-        value: ''
-      }].concat(this.spacing),
-      onChange: value => this.setPadding('top', tab.name, value)
-    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.SelectControl, {
-      label: "Bottom",
-      value: this.state.padding[tab.name].bottom,
-      options: [{
-        label: 'Default',
-        value: ''
-      }].concat(this.spacing),
-      onChange: value => this.setPadding('bottom', tab.name, value)
-    })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.HorizontalRule, null), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.SelectControl, {
-      label: "X",
-      value: this.state.padding[tab.name].x,
-      options: [{
-        label: 'Default',
-        value: ''
-      }].concat(this.spacing),
-      onChange: value => {
-        this.setPadding('x', tab.name, value);
-      }
-    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "child-range-control"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.SelectControl, {
-      label: "Left",
-      value: this.state.padding[tab.name].left,
-      options: [{
-        label: 'Default',
-        value: ''
-      }].concat(this.spacing),
-      onChange: value => this.setPadding('left', tab.name, value)
-    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.SelectControl, {
-      label: "Right",
-      value: this.state.padding[tab.name].right,
-      options: [{
-        label: 'Default',
-        value: ''
-      }].concat(this.spacing),
-      onChange: value => this.setPadding('right', tab.name, value)
-    }))), this.renderBtnReset('padding', tab.name)))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.PanelBody, {
-      title: 'Margin',
-      initialOpen: false
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.TabPanel, {
-      className: "margin-tab-panel",
-      activeClass: "active-tab",
-      initialTabName: (0,_js_devices_js__WEBPACK_IMPORTED_MODULE_2__.getBodyDevice)(),
-      tabs: (0,_js_devices_js__WEBPACK_IMPORTED_MODULE_2__.getLayouts)().map(layout => {
-        return {
-          name: layout.value,
-          title: layout.label,
-          className: 'tab-' + layout.value
-        };
-      })
-    }, tab => (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.SelectControl, {
-      label: "All",
-      value: this.state.margin[tab.name].all,
-      options: [{
-        label: 'Default',
-        value: ''
-      }].concat(this.spacing),
-      onChange: value => {
-        this.setMargin('all', tab.name, value);
-      }
-    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.HorizontalRule, null), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "child-range-control"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.SelectControl, {
-      label: "Y",
-      value: this.state.margin[tab.name].y,
-      options: [{
-        label: 'Default',
-        value: ''
-      }].concat(this.spacing),
-      onChange: value => {
-        this.setMargin('y', tab.name, value);
-      }
-    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "child-range-control"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.SelectControl, {
-      label: "Top",
-      value: this.state.margin[tab.name].top,
-      options: [{
-        label: 'Default',
-        value: ''
-      }].concat(this.spacing),
-      onChange: value => this.setMargin('top', tab.name, value)
-    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.SelectControl, {
-      label: "Bottom",
-      value: this.state.margin[tab.name].bottom,
-      options: [{
-        label: 'Default',
-        value: ''
-      }].concat(this.spacing),
-      onChange: value => this.setMargin('bottom', tab.name, value)
-    })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.HorizontalRule, null), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.SelectControl, {
-      label: "X",
-      value: this.state.margin[tab.name].x,
-      options: [{
-        label: 'Default',
-        value: ''
-      }].concat(this.spacing),
-      onChange: value => {
-        this.setMargin('x', tab.name, value);
-      }
-    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "child-range-control"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.SelectControl, {
-      label: "Left",
-      value: this.state.margin[tab.name].left,
-      options: [{
-        label: 'Default',
-        value: ''
-      }].concat(this.spacing),
-      onChange: value => this.setMargin('left', tab.name, value)
-    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.SelectControl, {
-      label: "Right",
-      value: this.state.margin[tab.name].right,
-      options: [{
-        label: 'Default',
-        value: ''
-      }].concat(this.spacing),
-      onChange: value => this.setMargin('right', tab.name, value)
-    }))), this.renderBtnReset('margin', tab.name)))));
-  }
-}
-function generateMarginClassName(props) {
-  var {
-    attributes,
-    className
-  } = props;
-  if (typeof className == 'undefined') className = '';
-  if (typeof attributes.margin == 'object') {
-    for (const [key, value] of Object.entries(attributes.margin)) {
-      switch (value) {
-        case 0:
-          className += ' ' + key + '-none';
-          break;
-        case 1:
-          className += ' ' + key + '-smaller';
-          break;
-        case 2:
-          className += ' ' + key + '-small';
-          break;
-        case 3:
-          className += ' ' + key + '-medium';
-          break;
-        case 4:
-          className += ' ' + key + '-big';
-          break;
-        case 5:
-          className += ' ' + key + '-bigger';
-          break;
-      }
-    }
-  }
-  return className != '' ? className : false;
-}
-
-/***/ }),
-
 /***/ "./src/edit.js":
 /*!*********************!*\
   !*** ./src/edit.js ***!
@@ -390,21 +16,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_compose__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_compose__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/block-editor */ "@wordpress/block-editor");
 /* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @wordpress/data */ "@wordpress/data");
-/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_wordpress_data__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var _component_block_master_src_marginControls_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../component-block-master/src/_marginControls.js */ "../../component-block-master/src/_marginControls.js");
-/* harmony import */ var _js_devices__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../../js/devices */ "../../../js/devices.js");
-/* harmony import */ var _js_attributes__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../../js/attributes */ "../../../js/attributes.js");
+/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/data */ "@wordpress/data");
+/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_wordpress_data__WEBPACK_IMPORTED_MODULE_4__);
 
 /**
  * WordPress dependencies
  */
-
-
-
-
 
 
 
@@ -422,7 +39,7 @@ class WpeContainer extends _js_WpeComponentBase__WEBPACK_IMPORTED_MODULE_1__.Wpe
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", this.props.innerBlocksProps);
   }
 }
-/* harmony default export */ __webpack_exports__["default"] = ((containerConfig, block_spec, theme_spec) => (0,_wordpress_compose__WEBPACK_IMPORTED_MODULE_2__.compose)([(0,_wordpress_data__WEBPACK_IMPORTED_MODULE_5__.withSelect)((select, props) => {
+/* harmony default export */ __webpack_exports__["default"] = ((containerConfig, block_spec, theme_spec) => (0,_wordpress_compose__WEBPACK_IMPORTED_MODULE_2__.compose)([(0,_wordpress_data__WEBPACK_IMPORTED_MODULE_4__.withSelect)((select, props) => {
   const {
     __experimentalGetPreviewDeviceType
   } = select('core/edit-post');
@@ -472,7 +89,7 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
       configMode: this !== null && this !== void 0 && (_this$props = this.props) !== null && _this$props !== void 0 && (_this$props$block_spe = _this$props.block_spec) !== null && _this$props$block_spe !== void 0 && _this$props$block_spe.screenshot ? 1 : 2
     };
     this.tabEnabledMode = [];
-    if (!(arguments.length > 2 && typeof arguments[2].disableButtonGroupMode != 'undefined' && arguments[2].disableButtonGroupMode)) {
+    if (!(typeof this.props.disableButtonGroupMode != 'undefined' && this.props.disableButtonGroupMode)) {
       this.initEnabledMode();
     }
   }
@@ -579,7 +196,7 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
           let valueProp = this.getAttribute(keyProp);
           currentEditCat.push((0,_attributes__WEBPACK_IMPORTED_MODULE_2__.renderControl)(prop, [keyProp], {
             [keyProp]: valueProp
-          }, this.props.clientId));
+          }, this.props.clientId, this.props.theme_spec));
         }
         if (keyCat == "default") {
           tabPanel.push({
@@ -729,6 +346,7 @@ function recursiveUpdateObjectFromObject(arrayKey, fromObject, newValue) {
   return objectReturned;
 }
 function renderControl(prop, keys, valueProp, clientId) {
+  let theme_spec = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : null;
   prop.type = prop.type.toLowerCase();
   let blocReturned = [];
   let repeatable = typeof prop.repeatable != "undefined" && !!prop.repeatable ? true : false;
@@ -770,9 +388,9 @@ function renderControl(prop, keys, valueProp, clientId) {
           objectValue: currentValueAttribute[keyLoop],
           repeatable: repeatable,
           required: required_field,
-          clientId: clientId
+          clientId: clientId,
+          themeSpec: theme_spec
         }));
-        // blocReturned.push( renderWysiwygControl( fieldId, label, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, clientId ) );
         break;
       case 'boolean':
         blocReturned.push((0,_controls__WEBPACK_IMPORTED_MODULE_4__.renderToggleControl)(fieldId, label, prop.help, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, clientId));
@@ -818,13 +436,13 @@ function renderControl(prop, keys, valueProp, clientId) {
               let tempKeyObjectReponsive = keys.concat(tab.name);
               let fieldsetObjectResponsive = [];
               for (const [keySubProp, valueSubProp] of Object.entries(prop.props)) {
-                fieldsetObjectResponsive.push(renderControl(valueSubProp, tempKeyObjectReponsive.concat(keySubProp), valueProp, clientId));
+                fieldsetObjectResponsive.push(renderControl(valueSubProp, tempKeyObjectReponsive.concat(keySubProp), valueProp, clientId, theme_spec));
               }
               return fieldsetObjectResponsive;
             }, (0,_devices__WEBPACK_IMPORTED_MODULE_2__.getBodyDevice)()));
           } else {
             for (const [keySubProp, valueSubProp] of Object.entries(prop.props)) {
-              fieldsetObject.push(renderControl(valueSubProp, tempKeyObject.concat(keySubProp), valueProp, clientId));
+              fieldsetObject.push(renderControl(valueSubProp, tempKeyObject.concat(keySubProp), valueProp, clientId, theme_spec));
             }
           }
           if (repeatable) {
@@ -912,7 +530,7 @@ function initComponentAttributes(attributes, props) {
         break;
       case 'wysiwyg':
         attributes[key] = {
-          type: 'string'
+          type: 'object'
         };
         break;
       case 'boolean':
@@ -2042,32 +1660,68 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var draft_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! draft-js */ "../../../js/controls/WysiwygControl/node_modules/draft-js/lib/Draft.js");
 /* harmony import */ var draft_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(draft_js__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var draftjs_to_html__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! draftjs-to-html */ "../../../js/controls/WysiwygControl/node_modules/draftjs-to-html/lib/draftjs-to-html.js");
-/* harmony import */ var draftjs_to_html__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(draftjs_to_html__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var draft_js_export_html__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! draft-js-export-html */ "../../../js/controls/WysiwygControl/node_modules/draft-js-export-html/esm/main.js");
 
 
 
 
 class DraftEditor extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Component {
   constructor(props) {
+    var _props$initialContent;
     super(props);
-    const blocksFromHTML = (0,draft_js__WEBPACK_IMPORTED_MODULE_1__.convertFromHTML)(props.initialContent);
+    this.rawDraftContentState = props !== null && props !== void 0 && (_props$initialContent = props.initialContent) !== null && _props$initialContent !== void 0 && _props$initialContent.raw ? props.initialContent.raw : null;
     this.state = {
-      editorState: draft_js__WEBPACK_IMPORTED_MODULE_1__.EditorState.createWithContent(draft_js__WEBPACK_IMPORTED_MODULE_1__.ContentState.createFromBlockArray(blocksFromHTML.contentBlocks, blocksFromHTML.entityMap))
+      editorState: this.rawDraftContentState != null ? draft_js__WEBPACK_IMPORTED_MODULE_1__.EditorState.createWithContent((0,draft_js__WEBPACK_IMPORTED_MODULE_1__.convertFromRaw)(this.rawDraftContentState)) : draft_js__WEBPACK_IMPORTED_MODULE_1__.EditorState.createEmpty()
     };
     this.onChange = editorState => this.handleChange(editorState);
     this.toggleBlockType = this._toggleBlockType.bind(this);
     this.toggleInlineStyle = this._toggleInlineStyle.bind(this);
+    this.block_types = [];
+    for (const [key, val] of Object.entries(props.blockTypes)) {
+      this.block_types.push({
+        label: val.label,
+        style: key
+      });
+    }
+    this.blockRenderers = {};
+    for (const [key, val] of Object.entries(props.blockTypes)) {
+      this.blockRenderers[val.label] = block => this._handleBlockRenderers(block);
+    }
+    this.optionsStateToHTML = {
+      // inlineStyles: {
+      //   // Override default element (`strong`).
+      // //   BOLD: {element: 'b'},
+      // //   ITALIC: {
+      // //     // Add custom attributes. You can also use React-style `className`.
+      // //     attributes: {class: 'foo'},
+      // //     // Use camel-case. Units (`px`) will be added where necessary.
+      // //     style: {fontSize: 12}
+      // //   },
+      // //   // Use a custom inline style. Default element is `span`.
+      // //   RED: {style: {color: '#900'}},
+      // },
+      blockRenderers: this.blockRenderers
+    };
+    console.log(props.blockTypes);
+  }
+  _handleBlockRenderers(block) {
+    return '<div class="' + this.props.blockTypes[block.getType()].class + '">' + block.getText() + '</div>';
   }
   handleChange(editorState) {
     this.setState({
       editorState
     });
     let currentContentState = editorState.getCurrentContent();
-    let rawContentState = (0,draft_js__WEBPACK_IMPORTED_MODULE_1__.convertToRaw)(currentContentState);
-    let htmlContent = draftjs_to_html__WEBPACK_IMPORTED_MODULE_2___default()(rawContentState);
-    console.log(htmlContent);
-    this.props.onChange(htmlContent);
+    this.rawDraftContentState = (0,draft_js__WEBPACK_IMPORTED_MODULE_1__.convertToRaw)(currentContentState);
+    let htmlContent = (0,draft_js_export_html__WEBPACK_IMPORTED_MODULE_2__.stateToHTML)(currentContentState, this.optionsStateToHTML);
+    console.log({
+      raw: this.rawDraftContentState,
+      html: htmlContent
+    });
+    this.props.onChange({
+      raw: this.rawDraftContentState,
+      html: htmlContent
+    });
   }
   _onBoldClick() {
     this.onChange(draft_js__WEBPACK_IMPORTED_MODULE_1__.RichUtils.toggleInlineStyle(this.state.editorState, 'BOLD'));
@@ -2079,34 +1733,19 @@ class DraftEditor extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Compon
     this.onChange(draft_js__WEBPACK_IMPORTED_MODULE_1__.RichUtils.toggleInlineStyle(this.state.editorState, inlineStyle));
   }
   render() {
-    const BLOCK_TYPES = [{
-      label: 'H1',
-      style: 'header-one'
-    }, {
-      label: 'H2',
-      style: 'header-two'
-    }, {
-      label: 'H3',
-      style: 'header-three'
-    }, {
-      label: 'H4',
-      style: 'header-four'
-    }, {
-      label: 'H5',
-      style: 'header-five'
-    }, {
-      label: 'H6',
-      style: 'header-six'
-    }, {
-      label: 'Blockquote',
-      style: 'blockquote'
-    }, {
-      label: 'UL',
-      style: 'unordered-list-item'
-    }, {
-      label: 'OL',
-      style: 'ordered-list-item'
-    }];
+    // const BLOCK_TYPES = [
+    //     {label: 'H1', style: 'header-one'},
+    //     {label: 'H2', style: 'header-two'},
+    //     {label: 'H3', style: 'header-three'},
+    //     {label: 'H4', style: 'header-four'},
+    //     {label: 'H5', style: 'header-five'},
+    //     {label: 'H6', style: 'header-six'},
+    //     {label: 'Blockquote', style: 'blockquote'},
+    //     {label: 'UL', style: 'unordered-list-item'},
+    //     {label: 'OL', style: 'ordered-list-item'},
+    //     {label: 'TEST', style: 'test-coffe'},
+    // ];
+
     const BlockStyleControls = props => {
       const {
         editorState
@@ -2115,7 +1754,7 @@ class DraftEditor extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Compon
       const blockType = editorState.getCurrentContent().getBlockForKey(selection.getStartKey()).getType();
       return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
         className: "DraftEditor-controls"
-      }, BLOCK_TYPES.map(type => (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(StyleButton, {
+      }, this.block_types.map(type => (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(StyleButton, {
         key: type.label,
         active: type.style === blockType,
         label: type.label,
@@ -2222,7 +1861,6 @@ class WysiwygControl extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Com
     (0,_attributes__WEBPACK_IMPORTED_MODULE_3__.updateAttributes)(this.props.keys, this.props.valueProp, newContent, false, this.props.clientId);
   }
   render() {
-    var _this$props, _this$props$frontspec, _this$props$frontspec2;
     var {
       id,
       label,
@@ -2231,7 +1869,8 @@ class WysiwygControl extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Com
       objectValue,
       repeatable = false,
       required = false,
-      clientId
+      clientId,
+      themeSpec
     } = this.props;
     label = required ? label + '*' : label;
     if (repeatable) {
@@ -2242,22 +1881,14 @@ class WysiwygControl extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Com
         onClick: () => (0,_attributes__WEBPACK_IMPORTED_MODULE_3__.removeEltRepeatable)(keys, valueProp)
       }, "Remove"));
     }
-    let heading_options = [{
-      model: 'paragraph',
-      title: 'Paragraph'
-    }];
-    if (this !== null && this !== void 0 && (_this$props = this.props) !== null && _this$props !== void 0 && (_this$props$frontspec = _this$props.frontspec_styles) !== null && _this$props$frontspec !== void 0 && (_this$props$frontspec2 = _this$props$frontspec.typo) !== null && _this$props$frontspec2 !== void 0 && _this$props$frontspec2.values && typeof this.props.frontspec_styles.typo.values == 'object') {
-      for (const [key, val] of Object.entries(this.props.frontspec_styles.typo.values)) {
-        if (typeof val.type != 'undefined' && val.type == "block" && key != "paragraph") {
-          heading_options.push({
-            model: key,
-            view: {
-              name: val.tag,
-              classes: val.class
-            },
-            title: val.name
-          });
-        }
+    let blockTypes = {};
+    if (themeSpec !== null && themeSpec !== void 0 && themeSpec.typo && typeof themeSpec.typo == 'object') {
+      for (const [key, val] of Object.entries(themeSpec.typo)) {
+        blockTypes[key] = {
+          label: key,
+          style: key,
+          class: val.class
+        };
       }
     }
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -2274,7 +1905,8 @@ class WysiwygControl extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Com
       key: id + "-label"
     }, label), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_DraftEditor__WEBPACK_IMPORTED_MODULE_2__.DraftEditor, {
       initialContent: objectValue,
-      onChange: this.onChange
+      onChange: this.onChange,
+      blockTypes: blockTypes
     }))));
   }
 }
@@ -2370,6 +2002,1170 @@ function setWidthContainer(width) {
     }
   }, 100); // Checks every 100ms(0.1s)
 }
+
+/***/ }),
+
+/***/ "../../../js/controls/WysiwygControl/node_modules/draft-js-export-html/esm/helpers/combineOrderedStyles.js":
+/*!*****************************************************************************************************************!*\
+  !*** ../../../js/controls/WysiwygControl/node_modules/draft-js-export-html/esm/helpers/combineOrderedStyles.js ***!
+  \*****************************************************************************************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { keys.push.apply(keys, Object.getOwnPropertySymbols(object)); } if (enumerableOnly) keys = keys.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
+
+function _iterableToArrayLimit(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+function combineOrderedStyles(customMap, defaults) {
+  if (customMap == null) {
+    return defaults;
+  }
+
+  var _defaults = _slicedToArray(defaults, 2),
+      defaultStyleMap = _defaults[0],
+      defaultStyleOrder = _defaults[1];
+
+  var styleMap = _objectSpread({}, defaultStyleMap);
+
+  var styleOrder = _toConsumableArray(defaultStyleOrder);
+
+  for (var _i2 = 0, _Object$keys = Object.keys(customMap); _i2 < _Object$keys.length; _i2++) {
+    var _styleName = _Object$keys[_i2];
+
+    if (defaultStyleMap.hasOwnProperty(_styleName)) {
+      var defaultStyles = defaultStyleMap[_styleName];
+      styleMap[_styleName] = _objectSpread({}, defaultStyles, {}, customMap[_styleName]);
+    } else {
+      styleMap[_styleName] = customMap[_styleName];
+      styleOrder.push(_styleName);
+    }
+  }
+
+  return [styleMap, styleOrder];
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (combineOrderedStyles);
+
+/***/ }),
+
+/***/ "../../../js/controls/WysiwygControl/node_modules/draft-js-export-html/esm/helpers/normalizeAttributes.js":
+/*!****************************************************************************************************************!*\
+  !*** ../../../js/controls/WysiwygControl/node_modules/draft-js-export-html/esm/helpers/normalizeAttributes.js ***!
+  \****************************************************************************************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+// Lifted from: https://github.com/facebook/react/blob/master/src/renderers/dom/shared/HTMLDOMPropertyConfig.js
+var ATTR_NAME_MAP = {
+  acceptCharset: 'accept-charset',
+  className: 'class',
+  htmlFor: 'for',
+  httpEquiv: 'http-equiv'
+};
+
+function normalizeAttributes(attributes) {
+  if (attributes == null) {
+    return attributes;
+  }
+
+  var normalized = {};
+  var didNormalize = false;
+
+  for (var _i = 0, _Object$keys = Object.keys(attributes); _i < _Object$keys.length; _i++) {
+    var name = _Object$keys[_i];
+    var newName = name;
+
+    if (ATTR_NAME_MAP.hasOwnProperty(name)) {
+      newName = ATTR_NAME_MAP[name];
+      didNormalize = true;
+    }
+
+    normalized[newName] = attributes[name];
+  }
+
+  return didNormalize ? normalized : attributes;
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (normalizeAttributes);
+
+/***/ }),
+
+/***/ "../../../js/controls/WysiwygControl/node_modules/draft-js-export-html/esm/helpers/styleToCSS.js":
+/*!*******************************************************************************************************!*\
+  !*** ../../../js/controls/WysiwygControl/node_modules/draft-js-export-html/esm/helpers/styleToCSS.js ***!
+  \*******************************************************************************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+var VENDOR_PREFIX = /^(moz|ms|o|webkit)-/;
+var NUMERIC_STRING = /^\d+$/;
+var UPPERCASE_PATTERN = /([A-Z])/g; // Lifted from:
+// https://github.com/facebook/react/blob/ab4ddf64939aebbbc8d31be1022efd56e834c95c/src/renderers/dom/shared/CSSProperty.js
+
+var isUnitlessNumber = {
+  animationIterationCount: true,
+  borderImageOutset: true,
+  borderImageSlice: true,
+  borderImageWidth: true,
+  boxFlex: true,
+  boxFlexGroup: true,
+  boxOrdinalGroup: true,
+  columnCount: true,
+  flex: true,
+  flexGrow: true,
+  flexPositive: true,
+  flexShrink: true,
+  flexNegative: true,
+  flexOrder: true,
+  gridRow: true,
+  gridRowEnd: true,
+  gridRowSpan: true,
+  gridRowStart: true,
+  gridColumn: true,
+  gridColumnEnd: true,
+  gridColumnSpan: true,
+  gridColumnStart: true,
+  fontWeight: true,
+  lineClamp: true,
+  lineHeight: true,
+  opacity: true,
+  order: true,
+  orphans: true,
+  tabSize: true,
+  widows: true,
+  zIndex: true,
+  zoom: true,
+  // SVG-related properties
+  fillOpacity: true,
+  floodOpacity: true,
+  stopOpacity: true,
+  strokeDasharray: true,
+  strokeDashoffset: true,
+  strokeMiterlimit: true,
+  strokeOpacity: true,
+  strokeWidth: true
+}; // Lifted from: https://github.com/facebook/react/blob/master/src/renderers/dom/shared/CSSPropertyOperations.js
+
+function processStyleName(name) {
+  return name.replace(UPPERCASE_PATTERN, '-$1').toLowerCase().replace(VENDOR_PREFIX, '-$1-');
+} // Lifted from: https://github.com/facebook/react/blob/master/src/renderers/dom/shared/dangerousStyleValue.js
+
+
+function processStyleValue(name, value) {
+  var isNumeric;
+
+  if (typeof value === 'string') {
+    isNumeric = NUMERIC_STRING.test(value);
+  } else {
+    isNumeric = true;
+    value = String(value);
+  }
+
+  if (!isNumeric || value === '0' || isUnitlessNumber[name] === true) {
+    return value;
+  } else {
+    return value + 'px';
+  }
+}
+
+function styleToCSS(styleDescr) {
+  return Object.keys(styleDescr).map(function (name) {
+    var styleValue = processStyleValue(name, styleDescr[name]);
+    var styleName = processStyleName(name);
+    return "".concat(styleName, ": ").concat(styleValue);
+  }).join('; ');
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (styleToCSS);
+
+/***/ }),
+
+/***/ "../../../js/controls/WysiwygControl/node_modules/draft-js-export-html/esm/main.js":
+/*!*****************************************************************************************!*\
+  !*** ../../../js/controls/WysiwygControl/node_modules/draft-js-export-html/esm/main.js ***!
+  \*****************************************************************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "stateToHTML": function() { return /* reexport safe */ _stateToHTML__WEBPACK_IMPORTED_MODULE_0__["default"]; }
+/* harmony export */ });
+/* harmony import */ var _stateToHTML__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./stateToHTML */ "../../../js/controls/WysiwygControl/node_modules/draft-js-export-html/esm/stateToHTML.js");
+
+
+/***/ }),
+
+/***/ "../../../js/controls/WysiwygControl/node_modules/draft-js-export-html/esm/stateToHTML.js":
+/*!************************************************************************************************!*\
+  !*** ../../../js/controls/WysiwygControl/node_modules/draft-js-export-html/esm/stateToHTML.js ***!
+  \************************************************************************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": function() { return /* binding */ stateToHTML; }
+/* harmony export */ });
+/* harmony import */ var _helpers_combineOrderedStyles__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./helpers/combineOrderedStyles */ "../../../js/controls/WysiwygControl/node_modules/draft-js-export-html/esm/helpers/combineOrderedStyles.js");
+/* harmony import */ var _helpers_normalizeAttributes__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./helpers/normalizeAttributes */ "../../../js/controls/WysiwygControl/node_modules/draft-js-export-html/esm/helpers/normalizeAttributes.js");
+/* harmony import */ var _helpers_styleToCSS__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./helpers/styleToCSS */ "../../../js/controls/WysiwygControl/node_modules/draft-js-export-html/esm/helpers/styleToCSS.js");
+/* harmony import */ var draft_js_utils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! draft-js-utils */ "../../../js/controls/WysiwygControl/node_modules/draft-js-utils/esm/main.js");
+var _DEFAULT_STYLE_MAP, _ENTITY_ATTR_MAP, _DATA_TO_ATTR;
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { keys.push.apply(keys, Object.getOwnPropertySymbols(object)); } if (enumerableOnly) keys = keys.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
+
+function _iterableToArrayLimit(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+
+
+
+
+var BOLD = draft_js_utils__WEBPACK_IMPORTED_MODULE_3__.INLINE_STYLE.BOLD,
+    CODE = draft_js_utils__WEBPACK_IMPORTED_MODULE_3__.INLINE_STYLE.CODE,
+    ITALIC = draft_js_utils__WEBPACK_IMPORTED_MODULE_3__.INLINE_STYLE.ITALIC,
+    STRIKETHROUGH = draft_js_utils__WEBPACK_IMPORTED_MODULE_3__.INLINE_STYLE.STRIKETHROUGH,
+    UNDERLINE = draft_js_utils__WEBPACK_IMPORTED_MODULE_3__.INLINE_STYLE.UNDERLINE;
+var INDENT = '  ';
+var BREAK = '<br>';
+var DATA_ATTRIBUTE = /^data-([a-z0-9-]+)$/;
+var DEFAULT_STYLE_MAP = (_DEFAULT_STYLE_MAP = {}, _defineProperty(_DEFAULT_STYLE_MAP, BOLD, {
+  element: 'strong'
+}), _defineProperty(_DEFAULT_STYLE_MAP, CODE, {
+  element: 'code'
+}), _defineProperty(_DEFAULT_STYLE_MAP, ITALIC, {
+  element: 'em'
+}), _defineProperty(_DEFAULT_STYLE_MAP, STRIKETHROUGH, {
+  element: 'del'
+}), _defineProperty(_DEFAULT_STYLE_MAP, UNDERLINE, {
+  element: 'u'
+}), _DEFAULT_STYLE_MAP); // Order: inner-most style to outer-most.
+// Examle: <em><strong>foo</strong></em>
+
+var DEFAULT_STYLE_ORDER = [BOLD, ITALIC, UNDERLINE, STRIKETHROUGH, CODE]; // Map entity data to element attributes.
+
+var ENTITY_ATTR_MAP = (_ENTITY_ATTR_MAP = {}, _defineProperty(_ENTITY_ATTR_MAP, draft_js_utils__WEBPACK_IMPORTED_MODULE_3__.ENTITY_TYPE.LINK, {
+  url: 'href',
+  href: 'href',
+  rel: 'rel',
+  target: 'target',
+  title: 'title',
+  className: 'class'
+}), _defineProperty(_ENTITY_ATTR_MAP, draft_js_utils__WEBPACK_IMPORTED_MODULE_3__.ENTITY_TYPE.IMAGE, {
+  src: 'src',
+  height: 'height',
+  width: 'width',
+  alt: 'alt',
+  className: 'class'
+}), _ENTITY_ATTR_MAP); // Map entity data to element attributes.
+
+var DATA_TO_ATTR = (_DATA_TO_ATTR = {}, _defineProperty(_DATA_TO_ATTR, draft_js_utils__WEBPACK_IMPORTED_MODULE_3__.ENTITY_TYPE.LINK, function (entityType, entity) {
+  var attrMap = ENTITY_ATTR_MAP.hasOwnProperty(entityType) ? ENTITY_ATTR_MAP[entityType] : {};
+  var data = entity.getData();
+  var attrs = {};
+
+  for (var _i = 0, _Object$keys = Object.keys(data); _i < _Object$keys.length; _i++) {
+    var dataKey = _Object$keys[_i];
+    var dataValue = data[dataKey];
+
+    if (attrMap.hasOwnProperty(dataKey)) {
+      var attrKey = attrMap[dataKey];
+      attrs[attrKey] = dataValue;
+    } else if (DATA_ATTRIBUTE.test(dataKey)) {
+      attrs[dataKey] = dataValue;
+    }
+  }
+
+  return attrs;
+}), _defineProperty(_DATA_TO_ATTR, draft_js_utils__WEBPACK_IMPORTED_MODULE_3__.ENTITY_TYPE.IMAGE, function (entityType, entity) {
+  var attrMap = ENTITY_ATTR_MAP.hasOwnProperty(entityType) ? ENTITY_ATTR_MAP[entityType] : {};
+  var data = entity.getData();
+  var attrs = {};
+
+  for (var _i2 = 0, _Object$keys2 = Object.keys(data); _i2 < _Object$keys2.length; _i2++) {
+    var dataKey = _Object$keys2[_i2];
+    var dataValue = data[dataKey];
+
+    if (attrMap.hasOwnProperty(dataKey)) {
+      var attrKey = attrMap[dataKey];
+      attrs[attrKey] = dataValue;
+    } else if (DATA_ATTRIBUTE.test(dataKey)) {
+      attrs[dataKey] = dataValue;
+    }
+  }
+
+  return attrs;
+}), _DATA_TO_ATTR); // The reason this returns an array is because a single block might get wrapped
+// in two tags.
+
+function getTags(blockType, defaultBlockTag) {
+  switch (blockType) {
+    case draft_js_utils__WEBPACK_IMPORTED_MODULE_3__.BLOCK_TYPE.HEADER_ONE:
+      return ['h1'];
+
+    case draft_js_utils__WEBPACK_IMPORTED_MODULE_3__.BLOCK_TYPE.HEADER_TWO:
+      return ['h2'];
+
+    case draft_js_utils__WEBPACK_IMPORTED_MODULE_3__.BLOCK_TYPE.HEADER_THREE:
+      return ['h3'];
+
+    case draft_js_utils__WEBPACK_IMPORTED_MODULE_3__.BLOCK_TYPE.HEADER_FOUR:
+      return ['h4'];
+
+    case draft_js_utils__WEBPACK_IMPORTED_MODULE_3__.BLOCK_TYPE.HEADER_FIVE:
+      return ['h5'];
+
+    case draft_js_utils__WEBPACK_IMPORTED_MODULE_3__.BLOCK_TYPE.HEADER_SIX:
+      return ['h6'];
+
+    case draft_js_utils__WEBPACK_IMPORTED_MODULE_3__.BLOCK_TYPE.UNORDERED_LIST_ITEM:
+    case draft_js_utils__WEBPACK_IMPORTED_MODULE_3__.BLOCK_TYPE.ORDERED_LIST_ITEM:
+      return ['li'];
+
+    case draft_js_utils__WEBPACK_IMPORTED_MODULE_3__.BLOCK_TYPE.BLOCKQUOTE:
+      return ['blockquote'];
+
+    case draft_js_utils__WEBPACK_IMPORTED_MODULE_3__.BLOCK_TYPE.CODE:
+      return ['pre', 'code'];
+
+    case draft_js_utils__WEBPACK_IMPORTED_MODULE_3__.BLOCK_TYPE.ATOMIC:
+      return ['figure'];
+
+    default:
+      if (defaultBlockTag === null) {
+        return [];
+      }
+
+      return [defaultBlockTag || 'p'];
+  }
+}
+
+function getWrapperTag(blockType) {
+  switch (blockType) {
+    case draft_js_utils__WEBPACK_IMPORTED_MODULE_3__.BLOCK_TYPE.UNORDERED_LIST_ITEM:
+      return 'ul';
+
+    case draft_js_utils__WEBPACK_IMPORTED_MODULE_3__.BLOCK_TYPE.ORDERED_LIST_ITEM:
+      return 'ol';
+
+    default:
+      return null;
+  }
+}
+
+var MarkupGenerator =
+/*#__PURE__*/
+function () {
+  // These are related to state.
+  // These are related to user-defined options.
+  function MarkupGenerator(contentState, options) {
+    _classCallCheck(this, MarkupGenerator);
+
+    _defineProperty(this, "blocks", void 0);
+
+    _defineProperty(this, "contentState", void 0);
+
+    _defineProperty(this, "currentBlock", void 0);
+
+    _defineProperty(this, "indentLevel", void 0);
+
+    _defineProperty(this, "output", void 0);
+
+    _defineProperty(this, "totalBlocks", void 0);
+
+    _defineProperty(this, "wrapperTag", void 0);
+
+    _defineProperty(this, "options", void 0);
+
+    _defineProperty(this, "inlineStyles", void 0);
+
+    _defineProperty(this, "inlineStyleFn", void 0);
+
+    _defineProperty(this, "styleOrder", void 0);
+
+    if (options == null) {
+      options = {};
+    }
+
+    this.contentState = contentState;
+    this.options = options;
+
+    var _combineOrderedStyles = (0,_helpers_combineOrderedStyles__WEBPACK_IMPORTED_MODULE_0__["default"])(options.inlineStyles, [DEFAULT_STYLE_MAP, DEFAULT_STYLE_ORDER]),
+        _combineOrderedStyles2 = _slicedToArray(_combineOrderedStyles, 2),
+        inlineStyles = _combineOrderedStyles2[0],
+        styleOrder = _combineOrderedStyles2[1];
+
+    this.inlineStyles = inlineStyles;
+    this.inlineStyleFn = options.inlineStyleFn;
+    this.styleOrder = styleOrder;
+  }
+
+  _createClass(MarkupGenerator, [{
+    key: "generate",
+    value: function generate() {
+      this.output = [];
+      this.blocks = this.contentState.getBlocksAsArray();
+      this.totalBlocks = this.blocks.length;
+      this.currentBlock = 0;
+      this.indentLevel = 0;
+      this.wrapperTag = null;
+
+      while (this.currentBlock < this.totalBlocks) {
+        this.processBlock();
+      }
+
+      this.closeWrapperTag();
+      return this.output.join('').trim();
+    }
+  }, {
+    key: "processBlock",
+    value: function processBlock() {
+      var _this$options = this.options,
+          blockRenderers = _this$options.blockRenderers,
+          defaultBlockTag = _this$options.defaultBlockTag;
+      var block = this.blocks[this.currentBlock];
+      var blockType = block.getType();
+      var newWrapperTag = getWrapperTag(blockType);
+
+      if (this.wrapperTag !== newWrapperTag) {
+        if (this.wrapperTag) {
+          this.closeWrapperTag();
+        }
+
+        if (newWrapperTag) {
+          this.openWrapperTag(newWrapperTag);
+        }
+      }
+
+      this.indent(); // Allow blocks to be rendered using a custom renderer.
+
+      var customRenderer = blockRenderers != null && blockRenderers.hasOwnProperty(blockType) ? blockRenderers[blockType] : null;
+      var customRendererOutput = customRenderer ? customRenderer(block) : null; // Renderer can return null, which will cause processing to continue as normal.
+
+      if (customRendererOutput != null) {
+        this.output.push(customRendererOutput);
+        this.output.push('\n');
+        this.currentBlock += 1;
+        return;
+      }
+
+      this.writeStartTag(block, defaultBlockTag);
+      this.output.push(this.renderBlockContent(block)); // Look ahead and see if we will nest list.
+
+      var nextBlock = this.getNextBlock();
+
+      if (canHaveDepth(blockType) && nextBlock && nextBlock.getDepth() === block.getDepth() + 1) {
+        this.output.push('\n'); // This is a litle hacky: temporarily stash our current wrapperTag and
+        // render child list(s).
+
+        var thisWrapperTag = this.wrapperTag;
+        this.wrapperTag = null;
+        this.indentLevel += 1;
+        this.currentBlock += 1;
+        this.processBlocksAtDepth(nextBlock.getDepth());
+        this.wrapperTag = thisWrapperTag;
+        this.indentLevel -= 1;
+        this.indent();
+      } else {
+        this.currentBlock += 1;
+      }
+
+      this.writeEndTag(block, defaultBlockTag);
+    }
+  }, {
+    key: "processBlocksAtDepth",
+    value: function processBlocksAtDepth(depth) {
+      var block = this.blocks[this.currentBlock];
+
+      while (block && block.getDepth() === depth) {
+        this.processBlock();
+        block = this.blocks[this.currentBlock];
+      }
+
+      this.closeWrapperTag();
+    }
+  }, {
+    key: "getNextBlock",
+    value: function getNextBlock() {
+      return this.blocks[this.currentBlock + 1];
+    }
+  }, {
+    key: "writeStartTag",
+    value: function writeStartTag(block, defaultBlockTag) {
+      var tags = getTags(block.getType(), defaultBlockTag);
+      var attrString;
+
+      if (this.options.blockStyleFn) {
+        var _ref = this.options.blockStyleFn(block) || {},
+            attributes = _ref.attributes,
+            _style = _ref.style; // Normalize `className` -> `class`, etc.
+
+
+        attributes = (0,_helpers_normalizeAttributes__WEBPACK_IMPORTED_MODULE_1__["default"])(attributes);
+
+        if (_style != null) {
+          var styleAttr = (0,_helpers_styleToCSS__WEBPACK_IMPORTED_MODULE_2__["default"])(_style);
+          attributes = attributes == null ? {
+            style: styleAttr
+          } : _objectSpread({}, attributes, {
+            style: styleAttr
+          });
+        }
+
+        attrString = stringifyAttrs(attributes);
+      } else {
+        attrString = '';
+      }
+
+      var _iteratorNormalCompletion = true;
+      var _didIteratorError = false;
+      var _iteratorError = undefined;
+
+      try {
+        for (var _iterator = tags[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          var tag = _step.value;
+          this.output.push("<".concat(tag).concat(attrString, ">"));
+        }
+      } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion && _iterator["return"] != null) {
+            _iterator["return"]();
+          }
+        } finally {
+          if (_didIteratorError) {
+            throw _iteratorError;
+          }
+        }
+      }
+    }
+  }, {
+    key: "writeEndTag",
+    value: function writeEndTag(block, defaultBlockTag) {
+      var tags = getTags(block.getType(), defaultBlockTag);
+
+      if (tags.length === 1) {
+        this.output.push("</".concat(tags[0], ">\n"));
+      } else {
+        var output = [];
+        var _iteratorNormalCompletion2 = true;
+        var _didIteratorError2 = false;
+        var _iteratorError2 = undefined;
+
+        try {
+          for (var _iterator2 = tags[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+            var tag = _step2.value;
+            output.unshift("</".concat(tag, ">"));
+          }
+        } catch (err) {
+          _didIteratorError2 = true;
+          _iteratorError2 = err;
+        } finally {
+          try {
+            if (!_iteratorNormalCompletion2 && _iterator2["return"] != null) {
+              _iterator2["return"]();
+            }
+          } finally {
+            if (_didIteratorError2) {
+              throw _iteratorError2;
+            }
+          }
+        }
+
+        this.output.push(output.join('') + '\n');
+      }
+    }
+  }, {
+    key: "openWrapperTag",
+    value: function openWrapperTag(wrapperTag) {
+      this.wrapperTag = wrapperTag;
+      this.indent();
+      this.output.push("<".concat(wrapperTag, ">\n"));
+      this.indentLevel += 1;
+    }
+  }, {
+    key: "closeWrapperTag",
+    value: function closeWrapperTag() {
+      var wrapperTag = this.wrapperTag;
+
+      if (wrapperTag) {
+        this.indentLevel -= 1;
+        this.indent();
+        this.output.push("</".concat(wrapperTag, ">\n"));
+        this.wrapperTag = null;
+      }
+    }
+  }, {
+    key: "indent",
+    value: function indent() {
+      this.output.push(INDENT.repeat(this.indentLevel));
+    }
+  }, {
+    key: "withCustomInlineStyles",
+    value: function withCustomInlineStyles(content, styleSet) {
+      if (!this.inlineStyleFn) {
+        return content;
+      }
+
+      var renderConfig = this.inlineStyleFn(styleSet);
+
+      if (!renderConfig) {
+        return content;
+      }
+
+      var _renderConfig$element = renderConfig.element,
+          element = _renderConfig$element === void 0 ? 'span' : _renderConfig$element,
+          attributes = renderConfig.attributes,
+          style = renderConfig.style;
+      var attrString = stringifyAttrs(_objectSpread({}, attributes, {
+        style: style && (0,_helpers_styleToCSS__WEBPACK_IMPORTED_MODULE_2__["default"])(style)
+      }));
+      return "<".concat(element).concat(attrString, ">").concat(content, "</").concat(element, ">");
+    }
+  }, {
+    key: "renderBlockContent",
+    value: function renderBlockContent(block) {
+      var _this = this;
+
+      var blockType = block.getType();
+      var text = block.getText();
+
+      if (text === '') {
+        // Prevent element collapse if completely empty.
+        return BREAK;
+      }
+
+      text = this.preserveWhitespace(text);
+      var charMetaList = block.getCharacterList();
+      var entityPieces = (0,draft_js_utils__WEBPACK_IMPORTED_MODULE_3__.getEntityRanges)(text, charMetaList);
+      return entityPieces.map(function (_ref2) {
+        var _ref3 = _slicedToArray(_ref2, 2),
+            entityKey = _ref3[0],
+            stylePieces = _ref3[1];
+
+        var content = stylePieces.map(function (_ref4) {
+          var _ref5 = _slicedToArray(_ref4, 2),
+              text = _ref5[0],
+              styleSet = _ref5[1];
+
+          var content = encodeContent(text);
+          var _iteratorNormalCompletion3 = true;
+          var _didIteratorError3 = false;
+          var _iteratorError3 = undefined;
+
+          try {
+            for (var _iterator3 = _this.styleOrder[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+              var _styleName = _step3.value;
+
+              // If our block type is CODE then don't wrap inline code elements.
+              if (_styleName === CODE && blockType === draft_js_utils__WEBPACK_IMPORTED_MODULE_3__.BLOCK_TYPE.CODE) {
+                continue;
+              }
+
+              if (styleSet.has(_styleName)) {
+                var _this$inlineStyles$_s = _this.inlineStyles[_styleName],
+                    element = _this$inlineStyles$_s.element,
+                    attributes = _this$inlineStyles$_s.attributes,
+                    _style2 = _this$inlineStyles$_s.style;
+
+                if (element == null) {
+                  element = 'span';
+                } // Normalize `className` -> `class`, etc.
+
+
+                attributes = (0,_helpers_normalizeAttributes__WEBPACK_IMPORTED_MODULE_1__["default"])(attributes);
+
+                if (_style2 != null) {
+                  var styleAttr = (0,_helpers_styleToCSS__WEBPACK_IMPORTED_MODULE_2__["default"])(_style2);
+                  attributes = attributes == null ? {
+                    style: styleAttr
+                  } : _objectSpread({}, attributes, {
+                    style: styleAttr
+                  });
+                }
+
+                var attrString = stringifyAttrs(attributes);
+                content = "<".concat(element).concat(attrString, ">").concat(content, "</").concat(element, ">");
+              }
+            }
+          } catch (err) {
+            _didIteratorError3 = true;
+            _iteratorError3 = err;
+          } finally {
+            try {
+              if (!_iteratorNormalCompletion3 && _iterator3["return"] != null) {
+                _iterator3["return"]();
+              }
+            } finally {
+              if (_didIteratorError3) {
+                throw _iteratorError3;
+              }
+            }
+          }
+
+          return _this.withCustomInlineStyles(content, styleSet);
+        }).join('');
+        var entity = entityKey ? _this.contentState.getEntity(entityKey) : null; // Note: The `toUpperCase` below is for compatability with some libraries that use lower-case for image blocks.
+
+        var entityType = entity == null ? null : entity.getType().toUpperCase();
+        var entityStyle;
+
+        if (entity != null && _this.options.entityStyleFn && (entityStyle = _this.options.entityStyleFn(entity))) {
+          var _entityStyle = entityStyle,
+              element = _entityStyle.element,
+              attributes = _entityStyle.attributes,
+              _style3 = _entityStyle.style;
+
+          if (element == null) {
+            element = 'span';
+          } // Normalize `className` -> `class`, etc.
+
+
+          attributes = (0,_helpers_normalizeAttributes__WEBPACK_IMPORTED_MODULE_1__["default"])(attributes);
+
+          if (_style3 != null) {
+            var styleAttr = (0,_helpers_styleToCSS__WEBPACK_IMPORTED_MODULE_2__["default"])(_style3);
+            attributes = attributes == null ? {
+              style: styleAttr
+            } : _objectSpread({}, attributes, {
+              style: styleAttr
+            });
+          }
+
+          var attrString = stringifyAttrs(attributes);
+          return "<".concat(element).concat(attrString, ">").concat(content, "</").concat(element, ">");
+        } else if (entityType != null && entityType === draft_js_utils__WEBPACK_IMPORTED_MODULE_3__.ENTITY_TYPE.LINK) {
+          var attrs = DATA_TO_ATTR.hasOwnProperty(entityType) ? DATA_TO_ATTR[entityType](entityType, entity) : null;
+
+          var _attrString = stringifyAttrs(attrs);
+
+          return "<a".concat(_attrString, ">").concat(content, "</a>");
+        } else if (entityType != null && entityType === draft_js_utils__WEBPACK_IMPORTED_MODULE_3__.ENTITY_TYPE.IMAGE) {
+          var _attrs = DATA_TO_ATTR.hasOwnProperty(entityType) ? DATA_TO_ATTR[entityType](entityType, entity) : null;
+
+          var _attrString2 = stringifyAttrs(_attrs);
+
+          return "<img".concat(_attrString2, "/>");
+        } else {
+          return content;
+        }
+      }).join('');
+    }
+  }, {
+    key: "preserveWhitespace",
+    value: function preserveWhitespace(text) {
+      var length = text.length; // Prevent leading/trailing/consecutive whitespace collapse.
+
+      var newText = new Array(length);
+
+      for (var i = 0; i < length; i++) {
+        if (text[i] === ' ' && (i === 0 || i === length - 1 || text[i - 1] === ' ')) {
+          newText[i] = '\xA0';
+        } else {
+          newText[i] = text[i];
+        }
+      }
+
+      return newText.join('');
+    }
+  }]);
+
+  return MarkupGenerator;
+}();
+
+function stringifyAttrs(attrs) {
+  if (attrs == null) {
+    return '';
+  }
+
+  var parts = [];
+
+  for (var _i3 = 0, _Object$keys3 = Object.keys(attrs); _i3 < _Object$keys3.length; _i3++) {
+    var name = _Object$keys3[_i3];
+    var value = attrs[name];
+
+    if (value != null) {
+      parts.push(" ".concat(name, "=\"").concat(encodeAttr(value + ''), "\""));
+    }
+  }
+
+  return parts.join('');
+}
+
+function canHaveDepth(blockType) {
+  switch (blockType) {
+    case draft_js_utils__WEBPACK_IMPORTED_MODULE_3__.BLOCK_TYPE.UNORDERED_LIST_ITEM:
+    case draft_js_utils__WEBPACK_IMPORTED_MODULE_3__.BLOCK_TYPE.ORDERED_LIST_ITEM:
+      return true;
+
+    default:
+      return false;
+  }
+}
+
+function encodeContent(text) {
+  return text.split('&').join('&amp;').split('<').join('&lt;').split('>').join('&gt;').split('\xA0').join('&nbsp;').split('\n').join(BREAK + '\n');
+}
+
+function encodeAttr(text) {
+  return text.split('&').join('&amp;').split('<').join('&lt;').split('>').join('&gt;').split('"').join('&quot;');
+}
+
+function stateToHTML(content, options) {
+  return new MarkupGenerator(content, options).generate();
+}
+
+/***/ }),
+
+/***/ "../../../js/controls/WysiwygControl/node_modules/draft-js-utils/esm/Constants.js":
+/*!****************************************************************************************!*\
+  !*** ../../../js/controls/WysiwygControl/node_modules/draft-js-utils/esm/Constants.js ***!
+  \****************************************************************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "BLOCK_TYPE": function() { return /* binding */ BLOCK_TYPE; },
+/* harmony export */   "ENTITY_TYPE": function() { return /* binding */ ENTITY_TYPE; },
+/* harmony export */   "INLINE_STYLE": function() { return /* binding */ INLINE_STYLE; }
+/* harmony export */ });
+var BLOCK_TYPE = {
+  // This is used to represent a normal text block (paragraph).
+  UNSTYLED: 'unstyled',
+  HEADER_ONE: 'header-one',
+  HEADER_TWO: 'header-two',
+  HEADER_THREE: 'header-three',
+  HEADER_FOUR: 'header-four',
+  HEADER_FIVE: 'header-five',
+  HEADER_SIX: 'header-six',
+  UNORDERED_LIST_ITEM: 'unordered-list-item',
+  ORDERED_LIST_ITEM: 'ordered-list-item',
+  BLOCKQUOTE: 'blockquote',
+  PULLQUOTE: 'pullquote',
+  CODE: 'code-block',
+  ATOMIC: 'atomic'
+};
+var ENTITY_TYPE = {
+  LINK: 'LINK',
+  IMAGE: 'IMAGE',
+  EMBED: 'embed'
+};
+var INLINE_STYLE = {
+  BOLD: 'BOLD',
+  CODE: 'CODE',
+  ITALIC: 'ITALIC',
+  STRIKETHROUGH: 'STRIKETHROUGH',
+  UNDERLINE: 'UNDERLINE'
+};
+/* harmony default export */ __webpack_exports__["default"] = ({
+  BLOCK_TYPE: BLOCK_TYPE,
+  ENTITY_TYPE: ENTITY_TYPE,
+  INLINE_STYLE: INLINE_STYLE
+});
+
+/***/ }),
+
+/***/ "../../../js/controls/WysiwygControl/node_modules/draft-js-utils/esm/callModifierForSelectedBlocks.js":
+/*!************************************************************************************************************!*\
+  !*** ../../../js/controls/WysiwygControl/node_modules/draft-js-utils/esm/callModifierForSelectedBlocks.js ***!
+  \************************************************************************************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var draft_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! draft-js */ "../../../js/controls/WysiwygControl/node_modules/draft-js/lib/Draft.js");
+/* harmony import */ var draft_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(draft_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _getSelectedBlocks__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./getSelectedBlocks */ "../../../js/controls/WysiwygControl/node_modules/draft-js-utils/esm/getSelectedBlocks.js");
+
+
+/**
+ * Calls a provided `modifier` function with a selection for each
+ * selected block in the current editor selection. Passes through additional
+ * arguments to the modifier.
+ *
+ * Note: At the moment it will retain the original selection and override
+ * possible selection changes from modifiers
+ *
+ * @param  {object} editorState The current draft.js editor state object
+ *
+ * @param  {function} modifier  A modifier function to be executed.
+ *                              Must have the signature (editorState, selection, ...)
+ *
+ * @param  {mixed} ...args      Additional arguments to be passed through to the modifier
+ *
+ * @return {object} The new editor state
+ */
+
+/* harmony default export */ __webpack_exports__["default"] = (function (editorState, modifier) {
+  for (var _len = arguments.length, args = new Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
+    args[_key - 2] = arguments[_key];
+  }
+
+  var contentState = editorState.getCurrentContent();
+  var currentSelection = editorState.getSelection();
+  var startKey = currentSelection.getStartKey();
+  var endKey = currentSelection.getEndKey();
+  var startOffset = currentSelection.getStartOffset();
+  var endOffset = currentSelection.getEndOffset();
+  var isSameBlock = startKey === endKey;
+  var selectedBlocks = (0,_getSelectedBlocks__WEBPACK_IMPORTED_MODULE_1__["default"])(contentState, startKey, endKey);
+  var finalEditorState = editorState;
+  selectedBlocks.forEach(function (block) {
+    var currentBlockKey = block.getKey();
+    var selectionStart = startOffset;
+    var selectionEnd = endOffset;
+
+    if (currentBlockKey === startKey) {
+      selectionStart = startOffset;
+      selectionEnd = isSameBlock ? endOffset : block.getText().length;
+    } else if (currentBlockKey === endKey) {
+      selectionStart = isSameBlock ? startOffset : 0;
+      selectionEnd = endOffset;
+    } else {
+      selectionStart = 0;
+      selectionEnd = block.getText().length;
+    }
+
+    var selection = new draft_js__WEBPACK_IMPORTED_MODULE_0__.SelectionState({
+      anchorKey: currentBlockKey,
+      anchorOffset: selectionStart,
+      focusKey: currentBlockKey,
+      focusOffset: selectionEnd
+    });
+    finalEditorState = modifier.apply(void 0, [finalEditorState, selection].concat(args));
+  });
+  return draft_js__WEBPACK_IMPORTED_MODULE_0__.EditorState.forceSelection(finalEditorState, currentSelection);
+});
+
+/***/ }),
+
+/***/ "../../../js/controls/WysiwygControl/node_modules/draft-js-utils/esm/getEntityRanges.js":
+/*!**********************************************************************************************!*\
+  !*** ../../../js/controls/WysiwygControl/node_modules/draft-js-utils/esm/getEntityRanges.js ***!
+  \**********************************************************************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "EMPTY_SET": function() { return /* binding */ EMPTY_SET; },
+/* harmony export */   "default": function() { return /* binding */ getEntityRanges; }
+/* harmony export */ });
+/* harmony import */ var immutable__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! immutable */ "../../../js/controls/WysiwygControl/node_modules/immutable/dist/immutable.js");
+/* harmony import */ var immutable__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(immutable__WEBPACK_IMPORTED_MODULE_0__);
+
+var EMPTY_SET = new immutable__WEBPACK_IMPORTED_MODULE_0__.OrderedSet();
+function getEntityRanges(text, charMetaList) {
+  var charEntity = null;
+  var prevCharEntity = null;
+  var ranges = [];
+  var rangeStart = 0;
+
+  for (var i = 0, len = text.length; i < len; i++) {
+    prevCharEntity = charEntity;
+    var meta = charMetaList.get(i);
+    charEntity = meta ? meta.getEntity() : null;
+
+    if (i > 0 && charEntity !== prevCharEntity) {
+      ranges.push([prevCharEntity, getStyleRanges(text.slice(rangeStart, i), charMetaList.slice(rangeStart, i))]);
+      rangeStart = i;
+    }
+  }
+
+  ranges.push([charEntity, getStyleRanges(text.slice(rangeStart), charMetaList.slice(rangeStart))]);
+  return ranges;
+}
+
+function getStyleRanges(text, charMetaList) {
+  var charStyle = EMPTY_SET;
+  var prevCharStyle = EMPTY_SET;
+  var ranges = [];
+  var rangeStart = 0;
+
+  for (var i = 0, len = text.length; i < len; i++) {
+    prevCharStyle = charStyle;
+    var meta = charMetaList.get(i);
+    charStyle = meta ? meta.getStyle() : EMPTY_SET;
+
+    if (i > 0 && !(0,immutable__WEBPACK_IMPORTED_MODULE_0__.is)(charStyle, prevCharStyle)) {
+      ranges.push([text.slice(rangeStart, i), prevCharStyle]);
+      rangeStart = i;
+    }
+  }
+
+  ranges.push([text.slice(rangeStart), charStyle]);
+  return ranges;
+}
+
+/***/ }),
+
+/***/ "../../../js/controls/WysiwygControl/node_modules/draft-js-utils/esm/getSelectedBlocks.js":
+/*!************************************************************************************************!*\
+  !*** ../../../js/controls/WysiwygControl/node_modules/draft-js-utils/esm/getSelectedBlocks.js ***!
+  \************************************************************************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/**
+ * Returns an array of all `ContentBlock` instances within two block keys
+ *
+ * @param  {object} contentState A draft.js `ContentState` instance
+ * @param  {string} anchorKey    The block key to start searching from
+ * @param  {string} focusKey     The block key until which to search
+ *
+ * @return {array} An array containing the found content blocks
+ */
+/* harmony default export */ __webpack_exports__["default"] = (function (contentState, anchorKey, focusKey) {
+  var isSameBlock = anchorKey === focusKey;
+  var startingBlock = contentState.getBlockForKey(anchorKey);
+
+  if (!startingBlock) {
+    return [];
+  }
+
+  var selectedBlocks = [startingBlock];
+
+  if (!isSameBlock) {
+    var blockKey = anchorKey;
+
+    while (blockKey !== focusKey) {
+      var nextBlock = contentState.getBlockAfter(blockKey);
+
+      if (!nextBlock) {
+        selectedBlocks = [];
+        break;
+      }
+
+      selectedBlocks.push(nextBlock);
+      blockKey = nextBlock.getKey();
+    }
+  }
+
+  return selectedBlocks;
+});
+
+/***/ }),
+
+/***/ "../../../js/controls/WysiwygControl/node_modules/draft-js-utils/esm/main.js":
+/*!***********************************************************************************!*\
+  !*** ../../../js/controls/WysiwygControl/node_modules/draft-js-utils/esm/main.js ***!
+  \***********************************************************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "BLOCK_TYPE": function() { return /* reexport safe */ _Constants__WEBPACK_IMPORTED_MODULE_0__.BLOCK_TYPE; },
+/* harmony export */   "Constants": function() { return /* reexport safe */ _Constants__WEBPACK_IMPORTED_MODULE_0__["default"]; },
+/* harmony export */   "ENTITY_TYPE": function() { return /* reexport safe */ _Constants__WEBPACK_IMPORTED_MODULE_0__.ENTITY_TYPE; },
+/* harmony export */   "INLINE_STYLE": function() { return /* reexport safe */ _Constants__WEBPACK_IMPORTED_MODULE_0__.INLINE_STYLE; },
+/* harmony export */   "callModifierForSelectedBlocks": function() { return /* reexport safe */ _callModifierForSelectedBlocks__WEBPACK_IMPORTED_MODULE_4__["default"]; },
+/* harmony export */   "getEntityRanges": function() { return /* reexport safe */ _getEntityRanges__WEBPACK_IMPORTED_MODULE_1__["default"]; },
+/* harmony export */   "getSelectedBlocks": function() { return /* reexport safe */ _getSelectedBlocks__WEBPACK_IMPORTED_MODULE_2__["default"]; },
+/* harmony export */   "selectionContainsEntity": function() { return /* reexport safe */ _selectionContainsEntity__WEBPACK_IMPORTED_MODULE_3__["default"]; }
+/* harmony export */ });
+/* harmony import */ var _Constants__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Constants */ "../../../js/controls/WysiwygControl/node_modules/draft-js-utils/esm/Constants.js");
+/* harmony import */ var _getEntityRanges__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./getEntityRanges */ "../../../js/controls/WysiwygControl/node_modules/draft-js-utils/esm/getEntityRanges.js");
+/* harmony import */ var _getSelectedBlocks__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./getSelectedBlocks */ "../../../js/controls/WysiwygControl/node_modules/draft-js-utils/esm/getSelectedBlocks.js");
+/* harmony import */ var _selectionContainsEntity__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./selectionContainsEntity */ "../../../js/controls/WysiwygControl/node_modules/draft-js-utils/esm/selectionContainsEntity.js");
+/* harmony import */ var _callModifierForSelectedBlocks__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./callModifierForSelectedBlocks */ "../../../js/controls/WysiwygControl/node_modules/draft-js-utils/esm/callModifierForSelectedBlocks.js");
+
+
+
+
+
+
+
+/***/ }),
+
+/***/ "../../../js/controls/WysiwygControl/node_modules/draft-js-utils/esm/selectionContainsEntity.js":
+/*!******************************************************************************************************!*\
+  !*** ../../../js/controls/WysiwygControl/node_modules/draft-js-utils/esm/selectionContainsEntity.js ***!
+  \******************************************************************************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _getSelectedBlocks__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./getSelectedBlocks */ "../../../js/controls/WysiwygControl/node_modules/draft-js-utils/esm/getSelectedBlocks.js");
+
+/* harmony default export */ __webpack_exports__["default"] = (function (strategy) {
+  return function (editorState, selection) {
+    var contentState = editorState.getCurrentContent();
+    var currentSelection = selection || editorState.getSelection();
+    var startKey = currentSelection.getStartKey();
+    var endKey = currentSelection.getEndKey();
+    var startOffset = currentSelection.getStartOffset();
+    var endOffset = currentSelection.getEndOffset();
+    var isSameBlock = startKey === endKey;
+    var selectedBlocks = (0,_getSelectedBlocks__WEBPACK_IMPORTED_MODULE_0__["default"])(contentState, startKey, endKey);
+    var entityFound = false; // We have to shift the offset to not get false positives when selecting
+    // a character just before or after an entity
+
+    var finalStartOffset = startOffset + 1;
+    var finalEndOffset = endOffset - 1;
+    selectedBlocks.forEach(function (block) {
+      strategy(block, function (start, end) {
+        if (entityFound) {
+          return;
+        }
+
+        var blockKey = block.getKey();
+
+        if (isSameBlock && (end < finalStartOffset || start > finalEndOffset)) {
+          return;
+        } else if (blockKey === startKey && end < finalStartOffset) {
+          return;
+        } else if (blockKey === endKey && start > finalEndOffset) {
+          return;
+        }
+
+        entityFound = true;
+      }, contentState);
+    });
+    return entityFound;
+  };
+});
 
 /***/ }),
 
@@ -16682,737 +17478,6 @@ module.exports = uuid;
 
 /***/ }),
 
-/***/ "../../../js/controls/WysiwygControl/node_modules/draftjs-to-html/lib/draftjs-to-html.js":
-/*!***********************************************************************************************!*\
-  !*** ../../../js/controls/WysiwygControl/node_modules/draftjs-to-html/lib/draftjs-to-html.js ***!
-  \***********************************************************************************************/
-/***/ (function(module) {
-
-(function (global, factory) {
-   true ? module.exports = factory() :
-  0;
-}(this, (function () { 'use strict';
-
-  /**
-  * Utility function to execute callback for eack key->value pair.
-  */
-  function forEach(obj, callback) {
-    if (obj) {
-      for (var key in obj) {
-        // eslint-disable-line no-restricted-syntax
-        if ({}.hasOwnProperty.call(obj, key)) {
-          callback(key, obj[key]);
-        }
-      }
-    }
-  }
-  /**
-  * The function returns true if the string passed to it has no content.
-  */
-
-  function isEmptyString(str) {
-    if (str === undefined || str === null || str.length === 0 || str.trim().length === 0) {
-      return true;
-    }
-
-    return false;
-  }
-
-  /**
-  * Mapping block-type to corresponding html tag.
-  */
-
-  var blockTypesMapping = {
-    unstyled: 'p',
-    'header-one': 'h1',
-    'header-two': 'h2',
-    'header-three': 'h3',
-    'header-four': 'h4',
-    'header-five': 'h5',
-    'header-six': 'h6',
-    'unordered-list-item': 'ul',
-    'ordered-list-item': 'ol',
-    blockquote: 'blockquote',
-    code: 'pre'
-  };
-  /**
-  * Function will return HTML tag for a block.
-  */
-
-  function getBlockTag(type) {
-    return type && blockTypesMapping[type];
-  }
-  /**
-  * Function will return style string for a block.
-  */
-
-  function getBlockStyle(data) {
-    var styles = '';
-    forEach(data, function (key, value) {
-      if (value) {
-        styles += "".concat(key, ":").concat(value, ";");
-      }
-    });
-    return styles;
-  }
-  /**
-  * The function returns an array of hashtag-sections in blocks.
-  * These will be areas in block which have hashtags applicable to them.
-  */
-
-  function getHashtagRanges(blockText, hashtagConfig) {
-    var sections = [];
-
-    if (hashtagConfig) {
-      var counter = 0;
-      var startIndex = 0;
-      var text = blockText;
-      var trigger = hashtagConfig.trigger || '#';
-      var separator = hashtagConfig.separator || ' ';
-
-      for (; text.length > 0 && startIndex >= 0;) {
-        if (text[0] === trigger) {
-          startIndex = 0;
-          counter = 0;
-          text = text.substr(trigger.length);
-        } else {
-          startIndex = text.indexOf(separator + trigger);
-
-          if (startIndex >= 0) {
-            text = text.substr(startIndex + (separator + trigger).length);
-            counter += startIndex + separator.length;
-          }
-        }
-
-        if (startIndex >= 0) {
-          var endIndex = text.indexOf(separator) >= 0 ? text.indexOf(separator) : text.length;
-          var hashtag = text.substr(0, endIndex);
-
-          if (hashtag && hashtag.length > 0) {
-            sections.push({
-              offset: counter,
-              length: hashtag.length + trigger.length,
-              type: 'HASHTAG'
-            });
-          }
-
-          counter += trigger.length;
-        }
-      }
-    }
-
-    return sections;
-  }
-  /**
-  * The function returns an array of entity-sections in blocks.
-  * These will be areas in block which have same entity or no entity applicable to them.
-  */
-
-
-  function getSections(block, hashtagConfig) {
-    var sections = [];
-    var lastOffset = 0;
-    var sectionRanges = block.entityRanges.map(function (range) {
-      var offset = range.offset,
-          length = range.length,
-          key = range.key;
-      return {
-        offset: offset,
-        length: length,
-        key: key,
-        type: 'ENTITY'
-      };
-    });
-    sectionRanges = sectionRanges.concat(getHashtagRanges(block.text, hashtagConfig));
-    sectionRanges = sectionRanges.sort(function (s1, s2) {
-      return s1.offset - s2.offset;
-    });
-    sectionRanges.forEach(function (r) {
-      if (r.offset > lastOffset) {
-        sections.push({
-          start: lastOffset,
-          end: r.offset
-        });
-      }
-
-      sections.push({
-        start: r.offset,
-        end: r.offset + r.length,
-        entityKey: r.key,
-        type: r.type
-      });
-      lastOffset = r.offset + r.length;
-    });
-
-    if (lastOffset < block.text.length) {
-      sections.push({
-        start: lastOffset,
-        end: block.text.length
-      });
-    }
-
-    return sections;
-  }
-  /**
-  * Function to check if the block is an atomic entity block.
-  */
-
-
-  function isAtomicEntityBlock(block) {
-    if (block.entityRanges.length > 0 && (isEmptyString(block.text) || block.type === 'atomic')) {
-      return true;
-    }
-
-    return false;
-  }
-  /**
-  * The function will return array of inline styles applicable to the block.
-  */
-
-
-  function getStyleArrayForBlock(block) {
-    var text = block.text,
-        inlineStyleRanges = block.inlineStyleRanges;
-    var inlineStyles = {
-      BOLD: new Array(text.length),
-      ITALIC: new Array(text.length),
-      UNDERLINE: new Array(text.length),
-      STRIKETHROUGH: new Array(text.length),
-      CODE: new Array(text.length),
-      SUPERSCRIPT: new Array(text.length),
-      SUBSCRIPT: new Array(text.length),
-      COLOR: new Array(text.length),
-      BGCOLOR: new Array(text.length),
-      FONTSIZE: new Array(text.length),
-      FONTFAMILY: new Array(text.length),
-      length: text.length
-    };
-
-    if (inlineStyleRanges && inlineStyleRanges.length > 0) {
-      inlineStyleRanges.forEach(function (range) {
-        var offset = range.offset;
-        var length = offset + range.length;
-
-        for (var i = offset; i < length; i += 1) {
-          if (range.style.indexOf('color-') === 0) {
-            inlineStyles.COLOR[i] = range.style.substring(6);
-          } else if (range.style.indexOf('bgcolor-') === 0) {
-            inlineStyles.BGCOLOR[i] = range.style.substring(8);
-          } else if (range.style.indexOf('fontsize-') === 0) {
-            inlineStyles.FONTSIZE[i] = range.style.substring(9);
-          } else if (range.style.indexOf('fontfamily-') === 0) {
-            inlineStyles.FONTFAMILY[i] = range.style.substring(11);
-          } else if (inlineStyles[range.style]) {
-            inlineStyles[range.style][i] = true;
-          }
-        }
-      });
-    }
-
-    return inlineStyles;
-  }
-  /**
-  * The function will return inline style applicable at some offset within a block.
-  */
-
-
-  function getStylesAtOffset(inlineStyles, offset) {
-    var styles = {};
-
-    if (inlineStyles.COLOR[offset]) {
-      styles.COLOR = inlineStyles.COLOR[offset];
-    }
-
-    if (inlineStyles.BGCOLOR[offset]) {
-      styles.BGCOLOR = inlineStyles.BGCOLOR[offset];
-    }
-
-    if (inlineStyles.FONTSIZE[offset]) {
-      styles.FONTSIZE = inlineStyles.FONTSIZE[offset];
-    }
-
-    if (inlineStyles.FONTFAMILY[offset]) {
-      styles.FONTFAMILY = inlineStyles.FONTFAMILY[offset];
-    }
-
-    if (inlineStyles.UNDERLINE[offset]) {
-      styles.UNDERLINE = true;
-    }
-
-    if (inlineStyles.ITALIC[offset]) {
-      styles.ITALIC = true;
-    }
-
-    if (inlineStyles.BOLD[offset]) {
-      styles.BOLD = true;
-    }
-
-    if (inlineStyles.STRIKETHROUGH[offset]) {
-      styles.STRIKETHROUGH = true;
-    }
-
-    if (inlineStyles.CODE[offset]) {
-      styles.CODE = true;
-    }
-
-    if (inlineStyles.SUBSCRIPT[offset]) {
-      styles.SUBSCRIPT = true;
-    }
-
-    if (inlineStyles.SUPERSCRIPT[offset]) {
-      styles.SUPERSCRIPT = true;
-    }
-
-    return styles;
-  }
-  /**
-  * Function returns true for a set of styles if the value of these styles at an offset
-  * are same as that on the previous offset.
-  */
-
-  function sameStyleAsPrevious(inlineStyles, styles, index) {
-    var sameStyled = true;
-
-    if (index > 0 && index < inlineStyles.length) {
-      styles.forEach(function (style) {
-        sameStyled = sameStyled && inlineStyles[style][index] === inlineStyles[style][index - 1];
-      });
-    } else {
-      sameStyled = false;
-    }
-
-    return sameStyled;
-  }
-  /**
-  * Function returns html for text depending on inline style tags applicable to it.
-  */
-
-  function addInlineStyleMarkup(style, content) {
-    if (style === 'BOLD') {
-      return "<strong>".concat(content, "</strong>");
-    }
-
-    if (style === 'ITALIC') {
-      return "<em>".concat(content, "</em>");
-    }
-
-    if (style === 'UNDERLINE') {
-      return "<ins>".concat(content, "</ins>");
-    }
-
-    if (style === 'STRIKETHROUGH') {
-      return "<del>".concat(content, "</del>");
-    }
-
-    if (style === 'CODE') {
-      return "<code>".concat(content, "</code>");
-    }
-
-    if (style === 'SUPERSCRIPT') {
-      return "<sup>".concat(content, "</sup>");
-    }
-
-    if (style === 'SUBSCRIPT') {
-      return "<sub>".concat(content, "</sub>");
-    }
-
-    return content;
-  }
-  /**
-  * The function returns text for given section of block after doing required character replacements.
-  */
-
-  function getSectionText(text) {
-    if (text && text.length > 0) {
-      var chars = text.map(function (ch) {
-        switch (ch) {
-          case '\n':
-            return '<br>';
-
-          case '&':
-            return '&amp;';
-
-          case '<':
-            return '&lt;';
-
-          case '>':
-            return '&gt;';
-
-          default:
-            return ch;
-        }
-      });
-      return chars.join('');
-    }
-
-    return '';
-  }
-  /**
-  * Function returns html for text depending on inline style tags applicable to it.
-  */
-
-
-  function addStylePropertyMarkup(styles, text) {
-    if (styles && (styles.COLOR || styles.BGCOLOR || styles.FONTSIZE || styles.FONTFAMILY)) {
-      var styleString = 'style="';
-
-      if (styles.COLOR) {
-        styleString += "color: ".concat(styles.COLOR, ";");
-      }
-
-      if (styles.BGCOLOR) {
-        styleString += "background-color: ".concat(styles.BGCOLOR, ";");
-      }
-
-      if (styles.FONTSIZE) {
-        styleString += "font-size: ".concat(styles.FONTSIZE).concat(/^\d+$/.test(styles.FONTSIZE) ? 'px' : '', ";");
-      }
-
-      if (styles.FONTFAMILY) {
-        styleString += "font-family: ".concat(styles.FONTFAMILY, ";");
-      }
-
-      styleString += '"';
-      return "<span ".concat(styleString, ">").concat(text, "</span>");
-    }
-
-    return text;
-  }
-  /**
-  * Function will return markup for Entity.
-  */
-
-  function getEntityMarkup(entityMap, entityKey, text, customEntityTransform) {
-    var entity = entityMap[entityKey];
-
-    if (typeof customEntityTransform === 'function') {
-      var html = customEntityTransform(entity, text);
-
-      if (html) {
-        return html;
-      }
-    }
-
-    if (entity.type === 'MENTION') {
-      return "<a href=\"".concat(entity.data.url, "\" class=\"wysiwyg-mention\" data-mention data-value=\"").concat(entity.data.value, "\">").concat(text, "</a>");
-    }
-
-    if (entity.type === 'LINK') {
-      var targetOption = entity.data.targetOption || '_self';
-      return "<a href=\"".concat(entity.data.url, "\" target=\"").concat(targetOption, "\">").concat(text, "</a>");
-    }
-
-    if (entity.type === 'IMAGE') {
-      var alignment = entity.data.alignment;
-
-      if (alignment && alignment.length) {
-        return "<div style=\"text-align:".concat(alignment, ";\"><img src=\"").concat(entity.data.src, "\" alt=\"").concat(entity.data.alt, "\" style=\"height: ").concat(entity.data.height, ";width: ").concat(entity.data.width, "\"/></div>");
-      }
-
-      return "<img src=\"".concat(entity.data.src, "\" alt=\"").concat(entity.data.alt, "\" style=\"height: ").concat(entity.data.height, ";width: ").concat(entity.data.width, "\"/>");
-    }
-
-    if (entity.type === 'EMBEDDED_LINK') {
-      return "<iframe width=\"".concat(entity.data.width, "\" height=\"").concat(entity.data.height, "\" src=\"").concat(entity.data.src, "\" frameBorder=\"0\"></iframe>");
-    }
-
-    return text;
-  }
-  /**
-  * For a given section in a block the function will return a further list of sections,
-  * with similar inline styles applicable to them.
-  */
-
-
-  function getInlineStyleSections(block, styles, start, end) {
-    var styleSections = [];
-    var text = Array.from(block.text);
-
-    if (text.length > 0) {
-      var inlineStyles = getStyleArrayForBlock(block);
-      var section;
-
-      for (var i = start; i < end; i += 1) {
-        if (i !== start && sameStyleAsPrevious(inlineStyles, styles, i)) {
-          section.text.push(text[i]);
-          section.end = i + 1;
-        } else {
-          section = {
-            styles: getStylesAtOffset(inlineStyles, i),
-            text: [text[i]],
-            start: i,
-            end: i + 1
-          };
-          styleSections.push(section);
-        }
-      }
-    }
-
-    return styleSections;
-  }
-  /**
-  * Replace leading blank spaces by &nbsp;
-  */
-
-
-  function trimLeadingZeros(sectionText) {
-    if (sectionText) {
-      var replacedText = sectionText;
-
-      for (var i = 0; i < replacedText.length; i += 1) {
-        if (sectionText[i] === ' ') {
-          replacedText = replacedText.replace(' ', '&nbsp;');
-        } else {
-          break;
-        }
-      }
-
-      return replacedText;
-    }
-
-    return sectionText;
-  }
-  /**
-  * Replace trailing blank spaces by &nbsp;
-  */
-
-  function trimTrailingZeros(sectionText) {
-    if (sectionText) {
-      var replacedText = sectionText;
-
-      for (var i = replacedText.length - 1; i >= 0; i -= 1) {
-        if (replacedText[i] === ' ') {
-          replacedText = "".concat(replacedText.substring(0, i), "&nbsp;").concat(replacedText.substring(i + 1));
-        } else {
-          break;
-        }
-      }
-
-      return replacedText;
-    }
-
-    return sectionText;
-  }
-  /**
-  * The method returns markup for section to which inline styles
-  * like BOLD, ITALIC, UNDERLINE, STRIKETHROUGH, CODE, SUPERSCRIPT, SUBSCRIPT are applicable.
-  */
-
-  function getStyleTagSectionMarkup(styleSection) {
-    var styles = styleSection.styles,
-        text = styleSection.text;
-    var content = getSectionText(text);
-    forEach(styles, function (style, value) {
-      content = addInlineStyleMarkup(style, content);
-    });
-    return content;
-  }
-  /**
-  * The method returns markup for section to which inline styles
-  like color, background-color, font-size are applicable.
-  */
-
-
-  function getInlineStyleSectionMarkup(block, styleSection) {
-    var styleTagSections = getInlineStyleSections(block, ['BOLD', 'ITALIC', 'UNDERLINE', 'STRIKETHROUGH', 'CODE', 'SUPERSCRIPT', 'SUBSCRIPT'], styleSection.start, styleSection.end);
-    var styleSectionText = '';
-    styleTagSections.forEach(function (stylePropertySection) {
-      styleSectionText += getStyleTagSectionMarkup(stylePropertySection);
-    });
-    styleSectionText = addStylePropertyMarkup(styleSection.styles, styleSectionText);
-    return styleSectionText;
-  }
-  /*
-  * The method returns markup for an entity section.
-  * An entity section is a continuous section in a block
-  * to which same entity or no entity is applicable.
-  */
-
-
-  function getSectionMarkup(block, entityMap, section, customEntityTransform) {
-    var entityInlineMarkup = [];
-    var inlineStyleSections = getInlineStyleSections(block, ['COLOR', 'BGCOLOR', 'FONTSIZE', 'FONTFAMILY'], section.start, section.end);
-    inlineStyleSections.forEach(function (styleSection) {
-      entityInlineMarkup.push(getInlineStyleSectionMarkup(block, styleSection));
-    });
-    var sectionText = entityInlineMarkup.join('');
-
-    if (section.type === 'ENTITY') {
-      if (section.entityKey !== undefined && section.entityKey !== null) {
-        sectionText = getEntityMarkup(entityMap, section.entityKey, sectionText, customEntityTransform); // eslint-disable-line max-len
-      }
-    } else if (section.type === 'HASHTAG') {
-      sectionText = "<a href=\"".concat(sectionText, "\" class=\"wysiwyg-hashtag\">").concat(sectionText, "</a>");
-    }
-
-    return sectionText;
-  }
-  /**
-  * Function will return the markup for block preserving the inline styles and
-  * special characters like newlines or blank spaces.
-  */
-
-
-  function getBlockInnerMarkup(block, entityMap, hashtagConfig, customEntityTransform) {
-    var blockMarkup = [];
-    var sections = getSections(block, hashtagConfig);
-    sections.forEach(function (section, index) {
-      var sectionText = getSectionMarkup(block, entityMap, section, customEntityTransform);
-
-      if (index === 0) {
-        sectionText = trimLeadingZeros(sectionText);
-      }
-
-      if (index === sections.length - 1) {
-        sectionText = trimTrailingZeros(sectionText);
-      }
-
-      blockMarkup.push(sectionText);
-    });
-    return blockMarkup.join('');
-  }
-  /**
-  * Function will return html for the block.
-  */
-
-  function getBlockMarkup(block, entityMap, hashtagConfig, directional, customEntityTransform) {
-    var blockHtml = [];
-
-    if (isAtomicEntityBlock(block)) {
-      blockHtml.push(getEntityMarkup(entityMap, block.entityRanges[0].key, undefined, customEntityTransform));
-    } else {
-      var blockTag = getBlockTag(block.type);
-
-      if (blockTag) {
-        blockHtml.push("<".concat(blockTag));
-        var blockStyle = getBlockStyle(block.data);
-
-        if (blockStyle) {
-          blockHtml.push(" style=\"".concat(blockStyle, "\""));
-        }
-
-        if (directional) {
-          blockHtml.push(' dir = "auto"');
-        }
-
-        blockHtml.push('>');
-        blockHtml.push(getBlockInnerMarkup(block, entityMap, hashtagConfig, customEntityTransform));
-        blockHtml.push("</".concat(blockTag, ">"));
-      }
-    }
-
-    blockHtml.push('\n');
-    return blockHtml.join('');
-  }
-
-  /**
-  * Function to check if a block is of type list.
-  */
-
-  function isList(blockType) {
-    return blockType === 'unordered-list-item' || blockType === 'ordered-list-item';
-  }
-  /**
-  * Function will return html markup for a list block.
-  */
-
-  function getListMarkup(listBlocks, entityMap, hashtagConfig, directional, customEntityTransform) {
-    var listHtml = [];
-    var nestedListBlock = [];
-    var previousBlock;
-    listBlocks.forEach(function (block) {
-      var nestedBlock = false;
-
-      if (!previousBlock) {
-        listHtml.push("<".concat(getBlockTag(block.type), ">\n"));
-      } else if (previousBlock.type !== block.type) {
-        listHtml.push("</".concat(getBlockTag(previousBlock.type), ">\n"));
-        listHtml.push("<".concat(getBlockTag(block.type), ">\n"));
-      } else if (previousBlock.depth === block.depth) {
-        if (nestedListBlock && nestedListBlock.length > 0) {
-          listHtml.push(getListMarkup(nestedListBlock, entityMap, hashtagConfig, directional, customEntityTransform));
-          nestedListBlock = [];
-        }
-      } else {
-        nestedBlock = true;
-        nestedListBlock.push(block);
-      }
-
-      if (!nestedBlock) {
-        listHtml.push('<li');
-        var blockStyle = getBlockStyle(block.data);
-
-        if (blockStyle) {
-          listHtml.push(" style=\"".concat(blockStyle, "\""));
-        }
-
-        if (directional) {
-          listHtml.push(' dir = "auto"');
-        }
-
-        listHtml.push('>');
-        listHtml.push(getBlockInnerMarkup(block, entityMap, hashtagConfig, customEntityTransform));
-        listHtml.push('</li>\n');
-        previousBlock = block;
-      }
-    });
-
-    if (nestedListBlock && nestedListBlock.length > 0) {
-      listHtml.push(getListMarkup(nestedListBlock, entityMap, hashtagConfig, directional, customEntityTransform));
-    }
-
-    listHtml.push("</".concat(getBlockTag(previousBlock.type), ">\n"));
-    return listHtml.join('');
-  }
-
-  /**
-  * The function will generate html markup for given draftjs editorContent.
-  */
-
-  function draftToHtml(editorContent, hashtagConfig, directional, customEntityTransform) {
-    var html = [];
-
-    if (editorContent) {
-      var blocks = editorContent.blocks,
-          entityMap = editorContent.entityMap;
-
-      if (blocks && blocks.length > 0) {
-        var listBlocks = [];
-        blocks.forEach(function (block) {
-          if (isList(block.type)) {
-            listBlocks.push(block);
-          } else {
-            if (listBlocks.length > 0) {
-              var listHtml = getListMarkup(listBlocks, entityMap, hashtagConfig, customEntityTransform); // eslint-disable-line max-len
-
-              html.push(listHtml);
-              listBlocks = [];
-            }
-
-            var blockHtml = getBlockMarkup(block, entityMap, hashtagConfig, directional, customEntityTransform);
-            html.push(blockHtml);
-          }
-        });
-
-        if (listBlocks.length > 0) {
-          var listHtml = getListMarkup(listBlocks, entityMap, hashtagConfig, directional, customEntityTransform); // eslint-disable-line max-len
-
-          html.push(listHtml);
-          listBlocks = [];
-        }
-      }
-    }
-
-    return html.join('');
-  }
-
-  return draftToHtml;
-
-})));
-
-
-/***/ }),
-
 /***/ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/DataTransfer.js":
 /*!*********************************************************************************!*\
   !*** ../../../js/controls/WysiwygControl/node_modules/fbjs/lib/DataTransfer.js ***!
@@ -26792,503 +26857,6 @@ module.exports = window["wp"]["hooks"];
 
 "use strict";
 module.exports = window["wp"]["i18n"];
-
-/***/ }),
-
-/***/ "../../component-block-master/node_modules/is-what/dist/index.es.js":
-/*!**************************************************************************!*\
-  !*** ../../component-block-master/node_modules/is-what/dist/index.es.js ***!
-  \**************************************************************************/
-/***/ (function(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "getType": function() { return /* binding */ getType; },
-/* harmony export */   "isAnyObject": function() { return /* binding */ isAnyObject; },
-/* harmony export */   "isArray": function() { return /* binding */ isArray; },
-/* harmony export */   "isBlob": function() { return /* binding */ isBlob; },
-/* harmony export */   "isBoolean": function() { return /* binding */ isBoolean; },
-/* harmony export */   "isDate": function() { return /* binding */ isDate; },
-/* harmony export */   "isEmptyArray": function() { return /* binding */ isEmptyArray; },
-/* harmony export */   "isEmptyObject": function() { return /* binding */ isEmptyObject; },
-/* harmony export */   "isEmptyString": function() { return /* binding */ isEmptyString; },
-/* harmony export */   "isError": function() { return /* binding */ isError; },
-/* harmony export */   "isFile": function() { return /* binding */ isFile; },
-/* harmony export */   "isFullArray": function() { return /* binding */ isFullArray; },
-/* harmony export */   "isFullObject": function() { return /* binding */ isFullObject; },
-/* harmony export */   "isFullString": function() { return /* binding */ isFullString; },
-/* harmony export */   "isFunction": function() { return /* binding */ isFunction; },
-/* harmony export */   "isMap": function() { return /* binding */ isMap; },
-/* harmony export */   "isNaNValue": function() { return /* binding */ isNaNValue; },
-/* harmony export */   "isNegativeNumber": function() { return /* binding */ isNegativeNumber; },
-/* harmony export */   "isNull": function() { return /* binding */ isNull; },
-/* harmony export */   "isNullOrUndefined": function() { return /* binding */ isNullOrUndefined; },
-/* harmony export */   "isNumber": function() { return /* binding */ isNumber; },
-/* harmony export */   "isObject": function() { return /* binding */ isObject; },
-/* harmony export */   "isObjectLike": function() { return /* binding */ isObjectLike; },
-/* harmony export */   "isOneOf": function() { return /* binding */ isOneOf; },
-/* harmony export */   "isPlainObject": function() { return /* binding */ isPlainObject; },
-/* harmony export */   "isPositiveNumber": function() { return /* binding */ isPositiveNumber; },
-/* harmony export */   "isPrimitive": function() { return /* binding */ isPrimitive; },
-/* harmony export */   "isPromise": function() { return /* binding */ isPromise; },
-/* harmony export */   "isRegExp": function() { return /* binding */ isRegExp; },
-/* harmony export */   "isSet": function() { return /* binding */ isSet; },
-/* harmony export */   "isString": function() { return /* binding */ isString; },
-/* harmony export */   "isSymbol": function() { return /* binding */ isSymbol; },
-/* harmony export */   "isType": function() { return /* binding */ isType; },
-/* harmony export */   "isUndefined": function() { return /* binding */ isUndefined; },
-/* harmony export */   "isWeakMap": function() { return /* binding */ isWeakMap; },
-/* harmony export */   "isWeakSet": function() { return /* binding */ isWeakSet; }
-/* harmony export */ });
-/**
- * Returns the object type of the given payload
- *
- * @param {*} payload
- * @returns {string}
- */
-function getType(payload) {
-    return Object.prototype.toString.call(payload).slice(8, -1);
-}
-/**
- * Returns whether the payload is undefined
- *
- * @param {*} payload
- * @returns {payload is undefined}
- */
-function isUndefined(payload) {
-    return getType(payload) === 'Undefined';
-}
-/**
- * Returns whether the payload is null
- *
- * @param {*} payload
- * @returns {payload is null}
- */
-function isNull(payload) {
-    return getType(payload) === 'Null';
-}
-/**
- * Returns whether the payload is a plain JavaScript object (excluding special classes or objects with other prototypes)
- *
- * @param {*} payload
- * @returns {payload is PlainObject}
- */
-function isPlainObject(payload) {
-    if (getType(payload) !== 'Object')
-        return false;
-    return payload.constructor === Object && Object.getPrototypeOf(payload) === Object.prototype;
-}
-/**
- * Returns whether the payload is a plain JavaScript object (excluding special classes or objects with other prototypes)
- *
- * @param {*} payload
- * @returns {payload is PlainObject}
- */
-function isObject(payload) {
-    return isPlainObject(payload);
-}
-/**
- * Returns whether the payload is a an empty object (excluding special classes or objects with other prototypes)
- *
- * @param {*} payload
- * @returns {payload is { [K in any]: never }}
- */
-function isEmptyObject(payload) {
-    return isPlainObject(payload) && Object.keys(payload).length === 0;
-}
-/**
- * Returns whether the payload is a an empty object (excluding special classes or objects with other prototypes)
- *
- * @param {*} payload
- * @returns {payload is PlainObject}
- */
-function isFullObject(payload) {
-    return isPlainObject(payload) && Object.keys(payload).length > 0;
-}
-/**
- * Returns whether the payload is an any kind of object (including special classes or objects with different prototypes)
- *
- * @param {*} payload
- * @returns {payload is PlainObject}
- */
-function isAnyObject(payload) {
-    return getType(payload) === 'Object';
-}
-/**
- * Returns whether the payload is an object like a type passed in < >
- *
- * Usage: isObjectLike<{id: any}>(payload) // will make sure it's an object and has an `id` prop.
- *
- * @template T this must be passed in < >
- * @param {*} payload
- * @returns {payload is T}
- */
-function isObjectLike(payload) {
-    return isAnyObject(payload);
-}
-/**
- * Returns whether the payload is a function (regular or async)
- *
- * @param {*} payload
- * @returns {payload is AnyFunction}
- */
-function isFunction(payload) {
-    return typeof payload === 'function';
-}
-/**
- * Returns whether the payload is an array
- *
- * @param {any} payload
- * @returns {payload is any[]}
- */
-function isArray(payload) {
-    return getType(payload) === 'Array';
-}
-/**
- * Returns whether the payload is a an array with at least 1 item
- *
- * @param {*} payload
- * @returns {payload is any[]}
- */
-function isFullArray(payload) {
-    return isArray(payload) && payload.length > 0;
-}
-/**
- * Returns whether the payload is a an empty array
- *
- * @param {*} payload
- * @returns {payload is []}
- */
-function isEmptyArray(payload) {
-    return isArray(payload) && payload.length === 0;
-}
-/**
- * Returns whether the payload is a string
- *
- * @param {*} payload
- * @returns {payload is string}
- */
-function isString(payload) {
-    return getType(payload) === 'String';
-}
-/**
- * Returns whether the payload is a string, BUT returns false for ''
- *
- * @param {*} payload
- * @returns {payload is string}
- */
-function isFullString(payload) {
-    return isString(payload) && payload !== '';
-}
-/**
- * Returns whether the payload is ''
- *
- * @param {*} payload
- * @returns {payload is string}
- */
-function isEmptyString(payload) {
-    return payload === '';
-}
-/**
- * Returns whether the payload is a number (but not NaN)
- *
- * This will return `false` for `NaN`!!
- *
- * @param {*} payload
- * @returns {payload is number}
- */
-function isNumber(payload) {
-    return getType(payload) === 'Number' && !isNaN(payload);
-}
-/**
- * Returns whether the payload is a positive number (but not 0)
- *
- * @param {*} payload
- * @returns {payload is number}
- */
-function isPositiveNumber(payload) {
-    return isNumber(payload) && payload > 0;
-}
-/**
- * Returns whether the payload is a negative number (but not 0)
- *
- * @param {*} payload
- * @returns {payload is number}
- */
-function isNegativeNumber(payload) {
-    return isNumber(payload) && payload < 0;
-}
-/**
- * Returns whether the payload is a boolean
- *
- * @param {*} payload
- * @returns {payload is boolean}
- */
-function isBoolean(payload) {
-    return getType(payload) === 'Boolean';
-}
-/**
- * Returns whether the payload is a regular expression (RegExp)
- *
- * @param {*} payload
- * @returns {payload is RegExp}
- */
-function isRegExp(payload) {
-    return getType(payload) === 'RegExp';
-}
-/**
- * Returns whether the payload is a Map
- *
- * @param {*} payload
- * @returns {payload is Map<any, any>}
- */
-function isMap(payload) {
-    return getType(payload) === 'Map';
-}
-/**
- * Returns whether the payload is a WeakMap
- *
- * @param {*} payload
- * @returns {payload is WeakMap<any, any>}
- */
-function isWeakMap(payload) {
-    return getType(payload) === 'WeakMap';
-}
-/**
- * Returns whether the payload is a Set
- *
- * @param {*} payload
- * @returns {payload is Set<any>}
- */
-function isSet(payload) {
-    return getType(payload) === 'Set';
-}
-/**
- * Returns whether the payload is a WeakSet
- *
- * @param {*} payload
- * @returns {payload is WeakSet<any>}
- */
-function isWeakSet(payload) {
-    return getType(payload) === 'WeakSet';
-}
-/**
- * Returns whether the payload is a Symbol
- *
- * @param {*} payload
- * @returns {payload is symbol}
- */
-function isSymbol(payload) {
-    return getType(payload) === 'Symbol';
-}
-/**
- * Returns whether the payload is a Date, and that the date is valid
- *
- * @param {*} payload
- * @returns {payload is Date}
- */
-function isDate(payload) {
-    return getType(payload) === 'Date' && !isNaN(payload);
-}
-/**
- * Returns whether the payload is a Blob
- *
- * @param {*} payload
- * @returns {payload is Blob}
- */
-function isBlob(payload) {
-    return getType(payload) === 'Blob';
-}
-/**
- * Returns whether the payload is a File
- *
- * @param {*} payload
- * @returns {payload is File}
- */
-function isFile(payload) {
-    return getType(payload) === 'File';
-}
-/**
- * Returns whether the payload is a Promise
- *
- * @param {*} payload
- * @returns {payload is Promise<any>}
- */
-function isPromise(payload) {
-    return getType(payload) === 'Promise';
-}
-/**
- * Returns whether the payload is an Error
- *
- * @param {*} payload
- * @returns {payload is Error}
- */
-function isError(payload) {
-    return getType(payload) === 'Error';
-}
-/**
- * Returns whether the payload is literally the value `NaN` (it's `NaN` and also a `number`)
- *
- * @param {*} payload
- * @returns {payload is typeof NaN}
- */
-function isNaNValue(payload) {
-    return getType(payload) === 'Number' && isNaN(payload);
-}
-/**
- * Returns whether the payload is a primitive type (eg. Boolean | Null | Undefined | Number | String | Symbol)
- *
- * @param {*} payload
- * @returns {(payload is boolean | null | undefined | number | string | symbol)}
- */
-function isPrimitive(payload) {
-    return (isBoolean(payload) ||
-        isNull(payload) ||
-        isUndefined(payload) ||
-        isNumber(payload) ||
-        isString(payload) ||
-        isSymbol(payload));
-}
-/**
- * Returns true whether the payload is null or undefined
- *
- * @param {*} payload
- * @returns {(payload is null | undefined)}
- */
-const isNullOrUndefined = isOneOf(isNull, isUndefined);
-function isOneOf(a, b, c, d, e) {
-    return (value) => a(value) || b(value) || (!!c && c(value)) || (!!d && d(value)) || (!!e && e(value));
-}
-/**
- * Does a generic check to check that the given payload is of a given type.
- * In cases like Number, it will return true for NaN as NaN is a Number (thanks javascript!);
- * It will, however, differentiate between object and null
- *
- * @template T
- * @param {*} payload
- * @param {T} type
- * @throws {TypeError} Will throw type error if type is an invalid type
- * @returns {payload is T}
- */
-function isType(payload, type) {
-    if (!(type instanceof Function)) {
-        throw new TypeError('Type must be a function');
-    }
-    if (!Object.prototype.hasOwnProperty.call(type, 'prototype')) {
-        throw new TypeError('Type is not a class');
-    }
-    // Classes usually have names (as functions usually have names)
-    const name = type.name;
-    return getType(payload) === name || Boolean(payload && payload.constructor === type);
-}
-
-
-
-
-/***/ }),
-
-/***/ "../../component-block-master/node_modules/merge-anything/dist/index.es.js":
-/*!*********************************************************************************!*\
-  !*** ../../component-block-master/node_modules/merge-anything/dist/index.es.js ***!
-  \*********************************************************************************/
-/***/ (function(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "concatArrays": function() { return /* binding */ concatArrays; },
-/* harmony export */   "merge": function() { return /* binding */ merge; },
-/* harmony export */   "mergeAndCompare": function() { return /* binding */ mergeAndCompare; },
-/* harmony export */   "mergeAndConcat": function() { return /* binding */ mergeAndConcat; }
-/* harmony export */ });
-/* harmony import */ var is_what__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! is-what */ "../../component-block-master/node_modules/is-what/dist/index.es.js");
-
-
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-function concatArrays(originVal, newVal) {
-    if ((0,is_what__WEBPACK_IMPORTED_MODULE_0__.isArray)(originVal) && (0,is_what__WEBPACK_IMPORTED_MODULE_0__.isArray)(newVal)) {
-        // concat logic
-        return originVal.concat(newVal);
-    }
-    return newVal; // always return newVal as fallback!!
-}
-
-function assignProp(carry, key, newVal, originalObject) {
-    const propType = {}.propertyIsEnumerable.call(originalObject, key)
-        ? 'enumerable'
-        : 'nonenumerable';
-    if (propType === 'enumerable')
-        carry[key] = newVal;
-    if (propType === 'nonenumerable') {
-        Object.defineProperty(carry, key, {
-            value: newVal,
-            enumerable: false,
-            writable: true,
-            configurable: true,
-        });
-    }
-}
-function mergeRecursively(origin, newComer, compareFn) {
-    // always return newComer if its not an object
-    if (!(0,is_what__WEBPACK_IMPORTED_MODULE_0__.isPlainObject)(newComer))
-        return newComer;
-    // define newObject to merge all values upon
-    let newObject = {};
-    if ((0,is_what__WEBPACK_IMPORTED_MODULE_0__.isPlainObject)(origin)) {
-        const props = Object.getOwnPropertyNames(origin);
-        const symbols = Object.getOwnPropertySymbols(origin);
-        newObject = [...props, ...symbols].reduce((carry, key) => {
-            const targetVal = origin[key];
-            if ((!(0,is_what__WEBPACK_IMPORTED_MODULE_0__.isSymbol)(key) && !Object.getOwnPropertyNames(newComer).includes(key)) ||
-                ((0,is_what__WEBPACK_IMPORTED_MODULE_0__.isSymbol)(key) && !Object.getOwnPropertySymbols(newComer).includes(key))) {
-                assignProp(carry, key, targetVal, origin);
-            }
-            return carry;
-        }, {});
-    }
-    // newObject has all properties that newComer hasn't
-    const props = Object.getOwnPropertyNames(newComer);
-    const symbols = Object.getOwnPropertySymbols(newComer);
-    const result = [...props, ...symbols].reduce((carry, key) => {
-        // re-define the origin and newComer as targetVal and newVal
-        let newVal = newComer[key];
-        const targetVal = (0,is_what__WEBPACK_IMPORTED_MODULE_0__.isPlainObject)(origin) ? origin[key] : undefined;
-        // When newVal is an object do the merge recursively
-        if (targetVal !== undefined && (0,is_what__WEBPACK_IMPORTED_MODULE_0__.isPlainObject)(newVal)) {
-            newVal = mergeRecursively(targetVal, newVal, compareFn);
-        }
-        const propToAssign = compareFn ? compareFn(targetVal, newVal, key) : newVal;
-        assignProp(carry, key, propToAssign, newComer);
-        return carry;
-    }, newObject);
-    return result;
-}
-/**
- * Merge anything recursively.
- * Objects get merged, special objects (classes etc.) are re-assigned "as is".
- * Basic types overwrite objects or other basic types.
- * @param object
- * @param otherObjects
- */
-function merge(object, ...otherObjects) {
-    return otherObjects.reduce((result, newComer) => {
-        return mergeRecursively(result, newComer);
-    }, object);
-}
-function mergeAndCompare(compareFn, object, ...otherObjects) {
-    return otherObjects.reduce((result, newComer) => {
-        return mergeRecursively(result, newComer, compareFn);
-    }, object);
-}
-function mergeAndConcat(object, ...otherObjects) {
-    return otherObjects.reduce((result, newComer) => {
-        return mergeRecursively(result, newComer, concatArrays);
-    }, object);
-}
-
-
-
 
 /***/ })
 

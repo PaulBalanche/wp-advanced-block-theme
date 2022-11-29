@@ -1,10 +1,6 @@
 import { WpeComponentBase } from '../../../js/WpeComponentBase';
 import ServerSideRender from '@wordpress/server-side-render';
 import { withSelect } from '@wordpress/data';
-import {
-    Placeholder
-} from '@wordpress/components';
-import { renderControl, renderTabPanelComponent } from '../../../js/attributes.js';
 
 class WpeComponent extends WpeComponentBase {
 
@@ -27,7 +23,7 @@ class WpeComponent extends WpeComponentBase {
     }
 }
 
-export default (block_spec, current_user_can_edit_posts, frontspec_styles ) => withSelect( ( select, props ) => {
+export default (block_spec, current_user_can_edit_posts, theme_spec ) => withSelect( ( select, props ) => {
 
     const { getEntityRecords } = select( 'core' );
     const { __experimentalGetPreviewDeviceType } = select( 'core/edit-post' );
@@ -51,6 +47,6 @@ export default (block_spec, current_user_can_edit_posts, frontspec_styles ) => w
         relations: relations,
         block_spec,
         current_user_can_edit_posts: current_user_can_edit_posts,
-        frontspec_styles: frontspec_styles
+        theme_spec,
     };
 } )( WpeComponent )

@@ -31,7 +31,8 @@ class WysiwygControl extends Component {
             objectValue,
             repeatable = false,
             required = false,
-            clientId
+            clientId,
+            themeSpec
         } = this.props;
 
         label = ( required ) ? label + '*' : label;
@@ -54,20 +55,14 @@ class WysiwygControl extends Component {
             );
         }
 
-        let heading_options = [ { model: 'paragraph', title: 'Paragraph' } ];
-        if( this?.props?.frontspec_styles?.typo?.values && typeof this.props.frontspec_styles.typo.values == 'object') {
-            for( const [key, val] of Object.entries(this.props.frontspec_styles.typo.values) ) {
-
-                if( typeof val.type != 'undefined' && val.type == "block" && key != "paragraph") {
-                    heading_options.push( {
-                        model: key,
-                        view: {
-                            name: val.tag,
-                            classes: val.class
-                        },
-                        title: val.name
-                    } );
-                }
+        let blockTypes = {};
+        if( themeSpec?.typo && typeof themeSpec.typo == 'object') {
+            for( const [key, val] of Object.entries(themeSpec.typo) ) {
+                blockTypes[key] = {
+                    label: key,
+                    style: key,
+                    class: val.class
+                };
             }
         }
 
@@ -85,7 +80,7 @@ class WysiwygControl extends Component {
                         className="wysiwyg-container"
                     >
                         <div className="components-base-control__label" key={ id + "-label" }>{ label }</div>
-                        <DraftEditor initialContent={ objectValue } onChange={ this.onChange } />
+                        <DraftEditor initialContent={ objectValue } onChange={ this.onChange } blockTypes={ blockTypes } />
                     </div>
                 </div>
             </div>

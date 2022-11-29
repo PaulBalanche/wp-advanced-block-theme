@@ -273,7 +273,7 @@ class ComponentBlock extends ModelBase {
                             $currentType = 'string';
                             break;
                         case 'wysiwyg':
-                            $currentType = 'string';
+                            $currentType = 'object';
                             break;
                         case 'boolean':
                             $currentType = 'boolean';

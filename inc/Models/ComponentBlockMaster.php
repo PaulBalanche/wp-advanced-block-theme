@@ -39,8 +39,7 @@ class ComponentBlockMaster extends ModelBase {
         // Localize script
         $data_localized = [
             'current_user_can_edit_posts' => ( current_user_can('edit_posts') ) ? '1' : '0',
-            'components' => $this->componentBlocksService->get_all_blocks_spec(),
-            'styles' => $this->get_config()->get_spec('styles')
+            'components' => $this->componentBlocksService->get_all_blocks_spec()
         ];
         wp_localize_script( $handle, 'global_localized', $data_localized );
 
@@ -107,7 +106,7 @@ class ComponentBlockMaster extends ModelBase {
      * 
      */
     public static function render( $attributes, $content ) {
-
+        
         if( ! isset( $attributes['id_component'] ) )
             return;
 

@@ -5,39 +5,71 @@ import {
   EditorState,
   ContentState,
   RichUtils,
-  convertToRaw,
-  convertFromHTML
+  convertFromRaw,
+  convertToRaw
 } from 'draft-js';
 
-import draftToHtml from 'draftjs-to-html';
+import {stateToHTML} from 'draft-js-export-html';
 
 export class DraftEditor extends Component {
 
     constructor(props) {
         super(props);
 
-        const blocksFromHTML = convertFromHTML(props.initialContent);
+        this.rawDraftContentState = ( props?.initialContent?.raw ) ? props.initialContent.raw : null;
         this.state = {
-            editorState: EditorState.createWithContent( ContentState.createFromBlockArray(
-                blocksFromHTML.contentBlocks,
-                blocksFromHTML.entityMap,
-            ) )
+            editorState: ( this.rawDraftContentState != null ) ? EditorState.createWithContent( convertFromRaw(this.rawDraftContentState) ) : EditorState.createEmpty()
         };
         this.onChange = editorState => this.handleChange(editorState);
         this.toggleBlockType = this._toggleBlockType.bind(this);
         this.toggleInlineStyle = this._toggleInlineStyle.bind(this);
+
+
+        this.block_types = [];
+        for( const [key, val] of Object.entries(props.blockTypes) ) {
+            this.block_types.push( {
+                label: val.label,
+                style: key
+            } );
+        }
+
+        this.blockRenderers = {};
+        for( const [key, val] of Object.entries(props.blockTypes) ) {
+            this.blockRenderers[ val.label ] = (block) => this._handleBlockRenderers(block);
+        }
+        this.optionsStateToHTML = {
+            // inlineStyles: {
+            //   // Override default element (`strong`).
+            // //   BOLD: {element: 'b'},
+            // //   ITALIC: {
+            // //     // Add custom attributes. You can also use React-style `className`.
+            // //     attributes: {class: 'foo'},
+            // //     // Use camel-case. Units (`px`) will be added where necessary.
+            // //     style: {fontSize: 12}
+            // //   },
+            // //   // Use a custom inline style. Default element is `span`.
+            // //   RED: {style: {color: '#900'}},
+            // },
+            blockRenderers: this.blockRenderers
+        };
+
+        console.log(props.blockTypes);
+    }
+
+    _handleBlockRenderers( block ) {
+
+        return '<div class="' + this.props.blockTypes[block.getType()].class + '">' + block.getText() + '</div>';
     }
 
     handleChange( editorState ) {
         this.setState( { editorState } );
 
         let currentContentState = editorState.getCurrentContent();
-        let rawContentState = convertToRaw(currentContentState); 
-        let htmlContent = draftToHtml(
-            rawContentState
-        );
-        console.log(htmlContent);
-        this.props.onChange( htmlContent );
+        this.rawDraftContentState = convertToRaw(currentContentState);
+
+        let htmlContent = stateToHTML( currentContentState, this.optionsStateToHTML );
+        console.log({ raw: this.rawDraftContentState , html: htmlContent });
+        this.props.onChange( { raw: this.rawDraftContentState , html: htmlContent } );
     }
 
     _onBoldClick() {
@@ -64,17 +96,18 @@ export class DraftEditor extends Component {
 
     render() {
 
-        const BLOCK_TYPES = [
-            {label: 'H1', style: 'header-one'},
-            {label: 'H2', style: 'header-two'},
-            {label: 'H3', style: 'header-three'},
-            {label: 'H4', style: 'header-four'},
-            {label: 'H5', style: 'header-five'},
-            {label: 'H6', style: 'header-six'},
-            {label: 'Blockquote', style: 'blockquote'},
-            {label: 'UL', style: 'unordered-list-item'},
-            {label: 'OL', style: 'ordered-list-item'}
-        ];
+        // const BLOCK_TYPES = [
+        //     {label: 'H1', style: 'header-one'},
+        //     {label: 'H2', style: 'header-two'},
+        //     {label: 'H3', style: 'header-three'},
+        //     {label: 'H4', style: 'header-four'},
+        //     {label: 'H5', style: 'header-five'},
+        //     {label: 'H6', style: 'header-six'},
+        //     {label: 'Blockquote', style: 'blockquote'},
+        //     {label: 'UL', style: 'unordered-list-item'},
+        //     {label: 'OL', style: 'ordered-list-item'},
+        //     {label: 'TEST', style: 'test-coffe'},
+        // ];
     
         const BlockStyleControls = (props) => {
         const {editorState} = props;
@@ -86,7 +119,7 @@ export class DraftEditor extends Component {
 
         return (
             <div className="DraftEditor-controls">
-            {BLOCK_TYPES.map((type) =>
+            { this.block_types.map((type) =>
                 <StyleButton
                 key={type.label}
                 active={type.style === blockType}
@@ -94,7 +127,7 @@ export class DraftEditor extends Component {
                 onToggle={props.onToggle}
                 style={type.style}
                 />
-            )}
+            ) }
             </div>
         );
         };

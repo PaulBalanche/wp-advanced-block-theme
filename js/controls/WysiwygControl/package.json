@@ -8,6 +8,7 @@
     "@paulbalanche/ckeditor5-build-classic-with-alignment": "^1.0.2",
     "@tinymce/tinymce-react": "^4.2.0",
     "draft-js": "^0.11.7",
+    "draft-js-export-html": "^1.4.1",
     "raw-loader": "^4.0.2",
     "react-draft-wysiwyg": "^1.15.0",
     "tinymce": "^6.3.0"

@@ -27,10 +27,8 @@ import {
 import { withSelect, withDispatch, dispatch } from '@wordpress/data';
 import { get, map, times } from 'lodash';
 
-import { MarginControls } from '../../../component-block-master/src/_marginControls.js';
 
 import { getLayouts, setBodyDevice, getBodyDevice, initContainer } from '../../../../js/devices';
-import { renderControl } from '../../../../js/attributes';
 
 /**
  * Add some columns in wpe-container based on variation selected

@@ -21,7 +21,7 @@ export class WpeComponentBase extends Component {
         };
 
         this.tabEnabledMode = [];
-        if( ! ( arguments.length > 2 && typeof arguments[2].disableButtonGroupMode != 'undefined' && arguments[2].disableButtonGroupMode ) ) {
+        if( ! ( typeof this.props.disableButtonGroupMode != 'undefined' && this.props.disableButtonGroupMode ) ) {
             this.initEnabledMode();
         }
     }
@@ -161,7 +161,7 @@ export class WpeComponentBase extends Component {
                     }
 
                     let valueProp = this.getAttribute( keyProp );
-                    currentEditCat.push( renderControl( prop, [ keyProp ], { [keyProp]: valueProp }, this.props.clientId ) );
+                    currentEditCat.push( renderControl( prop, [ keyProp ], { [keyProp]: valueProp }, this.props.clientId, this.props.theme_spec ) );
                 }
 
                 if( keyCat == "default" ) {

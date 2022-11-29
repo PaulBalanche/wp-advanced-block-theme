@@ -93,7 +93,7 @@ export function recursiveUpdateObjectFromObject( arrayKey, fromObject, newValue,
     return objectReturned;
 }
 
-export function renderControl( prop, keys, valueProp, clientId ) {
+export function renderControl( prop, keys, valueProp, clientId, theme_spec = null ) {
 
     prop.type = prop.type.toLowerCase();
 
@@ -160,8 +160,8 @@ export function renderControl( prop, keys, valueProp, clientId ) {
                     repeatable={ repeatable }
                     required={ required_field }
                     clientId={ clientId }
+                    themeSpec={ theme_spec }
                 /> );
-                // blocReturned.push( renderWysiwygControl( fieldId, label, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, clientId ) );
                 break;
 
             case 'boolean':
@@ -225,7 +225,7 @@ export function renderControl( prop, keys, valueProp, clientId ) {
                                     let tempKeyObjectReponsive = keys.concat(tab.name);
                                     let fieldsetObjectResponsive = [];
                                     for( const [ keySubProp, valueSubProp ] of Object.entries(prop.props) ) {
-                                        fieldsetObjectResponsive.push( renderControl( valueSubProp, tempKeyObjectReponsive.concat(keySubProp), valueProp, clientId ) );
+                                        fieldsetObjectResponsive.push( renderControl( valueSubProp, tempKeyObjectReponsive.concat(keySubProp), valueProp, clientId, theme_spec ) );
                                     }
                                     return fieldsetObjectResponsive;
                                 },
@@ -235,7 +235,7 @@ export function renderControl( prop, keys, valueProp, clientId ) {
                     }
                     else {
                         for (const [keySubProp, valueSubProp] of Object.entries(prop.props)) {
-                            fieldsetObject.push( renderControl( valueSubProp, tempKeyObject.concat(keySubProp), valueProp, clientId ) );
+                            fieldsetObject.push( renderControl( valueSubProp, tempKeyObject.concat(keySubProp), valueProp, clientId, theme_spec ) );
                         }
                     }
                     
@@ -368,7 +368,7 @@ export function initComponentAttributes( attributes, props ) {
                 break;
             case 'wysiwyg':
                 attributes[key] = {
-                    type: 'string'
+                    type: 'object'
                 };
                 break;
             case 'boolean':

@@ -5,27 +5,14 @@ import { WpeComponentBase } from '../../../../js/WpeComponentBase';
 import { compose } from '@wordpress/compose';
 import {
     InnerBlocks,
-    InspectorControls,
-    MediaPlaceholder,
     useBlockProps,
     useInnerBlocksProps,
     __experimentalBlockVariationPicker
 } from '@wordpress/block-editor';
 
-import {
-    PanelBody,
-    SelectControl,
-    Button,
-    ButtonGroup,
-    Placeholder
-} from '@wordpress/components';
 
 import { withSelect } from '@wordpress/data';
 
-import { MarginControls, generateMarginClassName } from '../../../component-block-master/src/_marginControls.js';
-
-import { getLayouts, setBodyDevice, getBodyDevice, initContainer } from '../../../../js/devices';
-import { renderControl } from '../../../../js/attributes';
 
 /**
  * registerBlockType edit function

@@ -27,7 +27,7 @@ import { getBodyDevice } from '../../../../js/devices';
 class WpeColumn extends WpeComponentBase {
  
     constructor() {
-        super( ...arguments, { disableButtonGroupMode: true } );
+        super( ...arguments );
     }
 
     getLayout( key, device ) {
@@ -114,6 +114,7 @@ export default ( block_spec, theme_spec ) => compose( [
             block_spec,
             theme_spec,
             innerBlocksProps: useInnerBlocksProps( useBlockProps( { className: '' } ), { renderAppender: InnerBlocks.ButtonBlockAppender } ),
+            disableButtonGroupMode: true
         };
     } ),
 ] )( WpeColumn );
