@@ -10,7 +10,6 @@ import {
     __experimentalBlockVariationPicker
 } from '@wordpress/block-editor';
 
-
 import { withSelect } from '@wordpress/data';
 
 
@@ -38,10 +37,10 @@ export default ( containerConfig, block_spec, theme_spec ) => compose( [
             block_spec,
             theme_spec,
             innerBlocksProps: useInnerBlocksProps( useBlockProps( { className: '' } ), { renderAppender: InnerBlocks.ButtonBlockAppender } ),
-            backgroundData: ! props.attributes.backgroundFile ? null : select('core').getEntityRecord('postType', 'attachment', props.attributes.backgroundFile ),
-            experimentalDeviceType: __experimentalGetPreviewDeviceType(),
+            // backgroundData: ! props.attributes.backgroundFile ? null : select('core').getEntityRecord('postType', 'attachment', props.attributes.backgroundFile ),
+            // experimentalDeviceType: __experimentalGetPreviewDeviceType(),
             isSelectedBlock: select('core/block-editor').isBlockSelected(props.clientId),
             isParentOfSelectedBlock: select('core/block-editor').hasSelectedInnerBlock(props.clientId, true)
         };
     } ),
-] )( WpeContainer );
+] )( WpeContainer )

@@ -19,10 +19,10 @@ class Grid extends ControllerBase {
      */
     public function add_filters() {
 
-        add_filter( 'Abt\pre_render_attributes_layout_wpe-grid', [ $this, 'handle_grid' ], 10, 4 );
+        add_filter( 'Abt\pre_render_attributes_layout_wpe-grid', [ $this, 'handle_grid' ], 10, 3 );
     }
 
-    public function handle_grid( $pre_rendered_attributes, $attributes, $content, $block_instance ) {
+    public function handle_grid( $attributes, $content, $block_instance ) {
 
         // Get all cells grid informations
         $cellsLayout = [];
@@ -49,10 +49,10 @@ class Grid extends ControllerBase {
         }
     
         // Generate grid ID
-        $grid_id = ( isset($pre_rendered_attributes['anchor']) && ! empty($pre_rendered_attributes['anchor']) ) ? $pre_rendered_attributes['anchor'] : 'grid_' . mt_rand();
+        $grid_id = ( isset($attributes['anchor']) && ! empty($attributes['anchor']) ) ? $attributes['anchor'] : 'grid_' . mt_rand();
     
         // Prepare data
-        $pre_rendered_attributes = array_merge( $pre_rendered_attributes, [
+        $attributes = array_merge( $attributes, [
             'id' => $grid_id,
             'layout' => [
                 'media' => $layout
@@ -62,12 +62,12 @@ class Grid extends ControllerBase {
             ],
             'container' => true,
             'attributes' => [
-                'class' =>  $pre_rendered_attributes['className'] ?? ''
+                'class' =>  $attributes['className'] ?? ''
             ]
         ] );
 
         // Return
-        return $pre_rendered_attributes;
+        return $attributes;
     }
 
 }

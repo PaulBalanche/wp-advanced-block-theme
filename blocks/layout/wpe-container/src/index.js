@@ -19,19 +19,19 @@ if( global_localized.supports !== null && typeof global_localized.supports.align
 }
 
 let attributes = {
-    style: {
-        type: 'string',
-        default: false
-    },
-    align: {
-        type: 'string'
-    },
-    backgroundFile: {
-        type: 'number'
-    },
-    backgroundType: {
-        type: 'string'
-    }
+    // style: {
+    //     type: 'string',
+    //     default: false
+    // },
+    // align: {
+    //     type: 'string'
+    // },
+    // backgroundFile: {
+    //     type: 'number'
+    // },
+    // backgroundType: {
+    //     type: 'string'
+    // }
 };
 if( typeof block_spec.props == 'object' ) {
 

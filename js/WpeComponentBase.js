@@ -17,7 +17,7 @@ export class WpeComponentBase extends Component {
         super( ...arguments );
 
         this.state = {
-            configMode: ( this?.props?.block_spec?.screenshot ) ? 1 : 2
+            configMode: ( this?.props?.block_spec?.screenshot && this.props.block_spec.screenshot ) ? 1 : 2
         };
 
         this.tabEnabledMode = [];
@@ -30,13 +30,13 @@ export class WpeComponentBase extends Component {
 
         if( typeof this.props.current_user_can_edit_posts == 'undefined' || parseInt(this.props.current_user_can_edit_posts) ) {
 
-            if( this.props.block_spec.screenshot ) {
+            if( this?.props?.block_spec?.screenshot && this.props.block_spec.screenshot ) {
                 this.tabEnabledMode.push(1);
             }
 
             this.tabEnabledMode.push(2);
 
-            if( typeof this.props.block_spec.props == 'object' && Object.keys(this.props.block_spec.props).length > 0 ) {
+            if( this?.props?.block_spec?.props && typeof this.props.block_spec.props == 'object' && Object.keys(this.props.block_spec.props).length > 0 ) {
                 this.tabEnabledMode.push(3);
             }
         }

@@ -20,7 +20,7 @@ class Spacing extends ControllerBase {
      */
     public function add_filters() {
 
-        add_filter( 'Abt\block_spacing_formatting', [ $this, 'coffeekraken_spacing_formatting'], 11, 2 );
+        // add_filter( 'Abt\block_spacing_formatting', [ $this, 'coffeekraken_spacing_formatting'], 11, 2 );
     }
 
 

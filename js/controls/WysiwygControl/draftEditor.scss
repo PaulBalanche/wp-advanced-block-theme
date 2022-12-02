@@ -59,11 +59,19 @@
 .DraftEditor-styleButton {
   color: rgb(100,100,100);
   cursor: pointer;
-  margin-right: 16px;
-  padding: 2px 0;
+  margin-right: 1px;
+  padding: 1px 6px;
   display: inline-block;
+  border: 1px solid #007cba00;
+  border-radius: 8px;
+
+  &:last-child {
+    margin-right: 0;
+  }
 }
 
+.DraftEditor-styleButton:hover,
 .DraftEditor-activeButton {
   color: #007cba;
+  border-color: #007cba;
 }

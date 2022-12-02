@@ -16,6 +16,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_server_side_render__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_server_side_render__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/data */ "@wordpress/data");
 /* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_data__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _wordpress_compose__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/compose */ "@wordpress/compose");
+/* harmony import */ var _wordpress_compose__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_wordpress_compose__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @wordpress/block-editor */ "@wordpress/block-editor");
+/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_5__);
+
+
 
 
 
@@ -25,19 +31,24 @@ class WpeComponent extends _js_WpeComponentBase__WEBPACK_IMPORTED_MODULE_1__.Wpe
     super(...arguments);
   }
   liveRendering() {
+    var _this$props, _this$props$block_spe;
     // Because of ID will be not saved to the block’s comment delimiter default attribute, we manually set it.
     if (typeof this.props.attributes.id_component == 'undefined') this.setAttributes({
-      id_component: block_spec.id
+      id_component: this.props.block_spec.id
     });
-    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)((_wordpress_server_side_render__WEBPACK_IMPORTED_MODULE_2___default()), {
-      key: this.props.clientId + "-serverSideRender",
-      block: "custom/wpe-component-" + this.props.block_spec.id,
-      attributes: this.props.attributes,
-      httpMethod: "POST"
-    });
+    if (this !== null && this !== void 0 && (_this$props = this.props) !== null && _this$props !== void 0 && (_this$props$block_spe = _this$props.block_spec) !== null && _this$props$block_spe !== void 0 && _this$props$block_spe.container && this.props.block_spec.container) {
+      return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", this.props.innerBlocksProps);
+    } else {
+      return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)((_wordpress_server_side_render__WEBPACK_IMPORTED_MODULE_2___default()), {
+        key: this.props.clientId + "-serverSideRender",
+        block: "custom/wpe-component-" + this.props.block_spec.id,
+        attributes: this.props.attributes,
+        httpMethod: "POST"
+      });
+    }
   }
 }
-/* harmony default export */ __webpack_exports__["default"] = ((block_spec, current_user_can_edit_posts, theme_spec) => (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_3__.withSelect)((select, props) => {
+/* harmony default export */ __webpack_exports__["default"] = ((block_spec, current_user_can_edit_posts, theme_spec) => (0,_wordpress_compose__WEBPACK_IMPORTED_MODULE_4__.compose)([(0,_wordpress_data__WEBPACK_IMPORTED_MODULE_3__.withSelect)((select, props) => {
   const {
     getEntityRecords
   } = select('core');
@@ -60,9 +71,14 @@ class WpeComponent extends _js_WpeComponentBase__WEBPACK_IMPORTED_MODULE_1__.Wpe
     relations: relations,
     block_spec,
     current_user_can_edit_posts: current_user_can_edit_posts,
-    theme_spec
+    theme_spec,
+    innerBlocksProps: block_spec !== null && block_spec !== void 0 && block_spec.container && block_spec.container ? (0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_5__.useInnerBlocksProps)((0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_5__.useBlockProps)({
+      className: ''
+    }), {
+      renderAppender: _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_5__.InnerBlocks.ButtonBlockAppender
+    }) : null
   };
-})(WpeComponent));
+})])(WpeComponent));
 
 /***/ }),
 
@@ -91,7 +107,7 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
     var _this$props, _this$props$block_spe;
     super(...arguments);
     this.state = {
-      configMode: this !== null && this !== void 0 && (_this$props = this.props) !== null && _this$props !== void 0 && (_this$props$block_spe = _this$props.block_spec) !== null && _this$props$block_spe !== void 0 && _this$props$block_spe.screenshot ? 1 : 2
+      configMode: this !== null && this !== void 0 && (_this$props = this.props) !== null && _this$props !== void 0 && (_this$props$block_spe = _this$props.block_spec) !== null && _this$props$block_spe !== void 0 && _this$props$block_spe.screenshot && this.props.block_spec.screenshot ? 1 : 2
     };
     this.tabEnabledMode = [];
     if (!(typeof this.props.disableButtonGroupMode != 'undefined' && this.props.disableButtonGroupMode)) {
@@ -100,11 +116,12 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
   }
   initEnabledMode() {
     if (typeof this.props.current_user_can_edit_posts == 'undefined' || parseInt(this.props.current_user_can_edit_posts)) {
-      if (this.props.block_spec.screenshot) {
+      var _this$props2, _this$props2$block_sp, _this$props3, _this$props3$block_sp;
+      if (this !== null && this !== void 0 && (_this$props2 = this.props) !== null && _this$props2 !== void 0 && (_this$props2$block_sp = _this$props2.block_spec) !== null && _this$props2$block_sp !== void 0 && _this$props2$block_sp.screenshot && this.props.block_spec.screenshot) {
         this.tabEnabledMode.push(1);
       }
       this.tabEnabledMode.push(2);
-      if (typeof this.props.block_spec.props == 'object' && Object.keys(this.props.block_spec.props).length > 0) {
+      if (this !== null && this !== void 0 && (_this$props3 = this.props) !== null && _this$props3 !== void 0 && (_this$props3$block_sp = _this$props3.block_spec) !== null && _this$props3$block_sp !== void 0 && _this$props3$block_sp.props && typeof this.props.block_spec.props == 'object' && Object.keys(this.props.block_spec.props).length > 0) {
         this.tabEnabledMode.push(3);
       }
     }
@@ -1663,103 +1680,105 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var draft_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! draft-js */ "../../js/controls/WysiwygControl/node_modules/draft-js/lib/Draft.js");
-/* harmony import */ var draft_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(draft_js__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var draft_js_export_html__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! draft-js-export-html */ "../../js/controls/WysiwygControl/node_modules/draft-js-export-html/esm/main.js");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var draft_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! draft-js */ "../../js/controls/WysiwygControl/node_modules/draft-js/lib/Draft.js");
+/* harmony import */ var draft_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(draft_js__WEBPACK_IMPORTED_MODULE_2__);
 
 
 
+
+
+// import { Map } from 'immutable/dist/immutable';
 
 class DraftEditor extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Component {
   constructor(props) {
-    var _props$initialContent;
     super(props);
-    this.rawDraftContentState = props !== null && props !== void 0 && (_props$initialContent = props.initialContent) !== null && _props$initialContent !== void 0 && _props$initialContent.raw ? props.initialContent.raw : null;
+    this.rawDraftContentState = props !== null && props !== void 0 && props.initialContent ? props.initialContent : null;
     this.state = {
-      editorState: this.rawDraftContentState != null ? draft_js__WEBPACK_IMPORTED_MODULE_1__.EditorState.createWithContent((0,draft_js__WEBPACK_IMPORTED_MODULE_1__.convertFromRaw)(this.rawDraftContentState)) : draft_js__WEBPACK_IMPORTED_MODULE_1__.EditorState.createEmpty()
+      editorState: this.rawDraftContentState != null ? draft_js__WEBPACK_IMPORTED_MODULE_2__.EditorState.createWithContent((0,draft_js__WEBPACK_IMPORTED_MODULE_2__.convertFromRaw)(this.rawDraftContentState)) : draft_js__WEBPACK_IMPORTED_MODULE_2__.EditorState.createEmpty()
     };
     this.onChange = editorState => this.handleChange(editorState);
     this.toggleBlockType = this._toggleBlockType.bind(this);
     this.toggleInlineStyle = this._toggleInlineStyle.bind(this);
-    this.block_types = [];
-    for (const [key, val] of Object.entries(props.blockTypes)) {
-      this.block_types.push({
-        label: val.label,
-        style: key
-      });
-    }
-    this.blockRenderers = {};
-    for (const [key, val] of Object.entries(props.blockTypes)) {
-      this.blockRenderers[val.label] = block => this._handleBlockRenderers(block);
-    }
-    this.optionsStateToHTML = {
-      // inlineStyles: {
-      //   // Override default element (`strong`).
-      // //   BOLD: {element: 'b'},
-      // //   ITALIC: {
-      // //     // Add custom attributes. You can also use React-style `className`.
-      // //     attributes: {class: 'foo'},
-      // //     // Use camel-case. Units (`px`) will be added where necessary.
-      // //     style: {fontSize: 12}
-      // //   },
-      // //   // Use a custom inline style. Default element is `span`.
-      // //   RED: {style: {color: '#900'}},
-      // },
-      blockRenderers: this.blockRenderers
-    };
-    console.log(props.blockTypes);
+    this.defineBlocks();
+    this.defineInlineStyles();
+
+    // this.blockRenderers = {};
+    // for( const [key, val] of Object.entries(props.typo) ) {
+    //     if( val.type == 'block' ) {
+    //         this.blockRenderers[ key] = (block) => this._handleBlockRenderers(block);
+    //     }
+    // }
+    // this.optionsStateToHTML = {
+    //     // inlineStyles: {
+    //     //   // Override default element (`strong`).
+    //     // //   BOLD: {element: 'b'},
+    //     // //   ITALIC: {
+    //     // //     // Add custom attributes. You can also use React-style `className`.
+    //     // //     attributes: {class: 'foo'},
+    //     // //     // Use camel-case. Units (`px`) will be added where necessary.
+    //     // //     style: {fontSize: 12}
+    //     // //   },
+    //     // //   // Use a custom inline style. Default element is `span`.
+    //     // //   RED: {style: {color: '#900'}},
+    //     // },
+    //     blockRenderers: this.blockRenderers
+    // };
   }
-  _handleBlockRenderers(block) {
-    return '<div class="' + this.props.blockTypes[block.getType()].class + '">' + block.getText() + '</div>';
+
+  defineBlocks() {
+    this.blockTypes = [];
+    for (const [key, val] of Object.entries(this.props.typo)) {
+      if (val.type == 'block') {
+        this.blockTypes.push({
+          label: val.label,
+          style: key
+        });
+      }
+    }
   }
+  defineInlineStyles() {
+    this.inlineStyles = [];
+    for (const [key, val] of Object.entries(this.props.typo)) {
+      if (val.type == 'inline') {
+        this.inlineStyles.push({
+          label: val.label,
+          style: key
+        });
+      }
+    }
+  }
+
+  // _handleBlockRenderers( block ) {
+
+  //     return '<div class="' + this.props.typo[block.getType()].class + '">' + block.getText() + '</div>';
+  // }
+
   handleChange(editorState) {
     this.setState({
       editorState
     });
     let currentContentState = editorState.getCurrentContent();
-    this.rawDraftContentState = (0,draft_js__WEBPACK_IMPORTED_MODULE_1__.convertToRaw)(currentContentState);
-    let htmlContent = (0,draft_js_export_html__WEBPACK_IMPORTED_MODULE_2__.stateToHTML)(currentContentState, this.optionsStateToHTML);
-    console.log({
-      raw: this.rawDraftContentState,
-      html: htmlContent
-    });
-    this.props.onChange({
-      raw: this.rawDraftContentState,
-      html: htmlContent
-    });
+    this.rawDraftContentState = (0,draft_js__WEBPACK_IMPORTED_MODULE_2__.convertToRaw)(currentContentState);
+    this.props.onChange(this.rawDraftContentState);
   }
   _onBoldClick() {
-    this.onChange(draft_js__WEBPACK_IMPORTED_MODULE_1__.RichUtils.toggleInlineStyle(this.state.editorState, 'BOLD'));
+    this.onChange(draft_js__WEBPACK_IMPORTED_MODULE_2__.RichUtils.toggleInlineStyle(this.state.editorState, 'BOLD'));
   }
   _toggleBlockType(blockType) {
-    this.onChange(draft_js__WEBPACK_IMPORTED_MODULE_1__.RichUtils.toggleBlockType(this.state.editorState, blockType));
+    this.onChange(draft_js__WEBPACK_IMPORTED_MODULE_2__.RichUtils.toggleBlockType(this.state.editorState, blockType));
   }
   _toggleInlineStyle(inlineStyle) {
-    this.onChange(draft_js__WEBPACK_IMPORTED_MODULE_1__.RichUtils.toggleInlineStyle(this.state.editorState, inlineStyle));
+    this.onChange(draft_js__WEBPACK_IMPORTED_MODULE_2__.RichUtils.toggleInlineStyle(this.state.editorState, inlineStyle));
   }
   render() {
-    // const BLOCK_TYPES = [
-    //     {label: 'H1', style: 'header-one'},
-    //     {label: 'H2', style: 'header-two'},
-    //     {label: 'H3', style: 'header-three'},
-    //     {label: 'H4', style: 'header-four'},
-    //     {label: 'H5', style: 'header-five'},
-    //     {label: 'H6', style: 'header-six'},
-    //     {label: 'Blockquote', style: 'blockquote'},
-    //     {label: 'UL', style: 'unordered-list-item'},
-    //     {label: 'OL', style: 'ordered-list-item'},
-    //     {label: 'TEST', style: 'test-coffe'},
-    // ];
-
     const BlockStyleControls = props => {
-      const {
-        editorState
-      } = props;
-      const selection = editorState.getSelection();
-      const blockType = editorState.getCurrentContent().getBlockForKey(selection.getStartKey()).getType();
+      const selection = props.editorState.getSelection();
+      const blockType = props.editorState.getCurrentContent().getBlockForKey(selection.getStartKey()).getType();
       return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
         className: "DraftEditor-controls"
-      }, this.block_types.map(type => (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(StyleButton, {
+      }, this.blockTypes.map(type => (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(StyleButton, {
         key: type.label,
         active: type.style === blockType,
         label: type.label,
@@ -1767,21 +1786,11 @@ class DraftEditor extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Compon
         style: type.style
       })));
     };
-    var INLINE_STYLES = [{
-      label: 'Bold',
-      style: 'BOLD'
-    }, {
-      label: 'Italic',
-      style: 'ITALIC'
-    }, {
-      label: 'Underline',
-      style: 'UNDERLINE'
-    }];
     const InlineStyleControls = props => {
       const currentStyle = props.editorState.getCurrentInlineStyle();
       return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
         className: "DraftEditor-controls"
-      }, INLINE_STYLES.map(type => (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(StyleButton, {
+      }, this.inlineStyles.map(type => (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(StyleButton, {
         key: type.label,
         active: currentStyle.has(type.style),
         label: type.label,
@@ -1799,6 +1808,17 @@ class DraftEditor extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Compon
         className += ' DraftEditor-hidePlaceholder';
       }
     }
+
+    // const blockRenderMap = Map({
+    //     'lead': {
+    //       element: 'section'
+    //     }
+    //   });
+
+    // Include 'paragraph' as a valid block and updated the unstyled element but
+    // keep support for other draft default block types
+    // const extendedBlockRenderMap = Draft.DefaultDraftBlockRenderMap.merge(blockRenderMap);
+
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "DraftEditor-container"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(BlockStyleControls, {
@@ -1810,7 +1830,7 @@ class DraftEditor extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Compon
     }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: className,
       onClick: this.focus
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(draft_js__WEBPACK_IMPORTED_MODULE_1__.Editor, {
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(draft_js__WEBPACK_IMPORTED_MODULE_2__.Editor, {
       editorState: this.state.editorState,
       onChange: this.onChange
     }))));
@@ -1886,12 +1906,13 @@ class WysiwygControl extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Com
         onClick: () => (0,_attributes__WEBPACK_IMPORTED_MODULE_3__.removeEltRepeatable)(keys, valueProp)
       }, "Remove"));
     }
-    let blockTypes = {};
+    let typo = {};
     if (themeSpec !== null && themeSpec !== void 0 && themeSpec.typo && typeof themeSpec.typo == 'object') {
       for (const [key, val] of Object.entries(themeSpec.typo)) {
-        blockTypes[key] = {
+        typo[key] = {
           label: key,
           style: key,
+          type: val.type,
           class: val.class
         };
       }
@@ -1911,7 +1932,7 @@ class WysiwygControl extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Com
     }, label), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_DraftEditor__WEBPACK_IMPORTED_MODULE_2__.DraftEditor, {
       initialContent: objectValue,
       onChange: this.onChange,
-      blockTypes: blockTypes
+      typo: typo
     }))));
   }
 }
@@ -2007,1170 +2028,6 @@ function setWidthContainer(width) {
     }
   }, 100); // Checks every 100ms(0.1s)
 }
-
-/***/ }),
-
-/***/ "../../js/controls/WysiwygControl/node_modules/draft-js-export-html/esm/helpers/combineOrderedStyles.js":
-/*!**************************************************************************************************************!*\
-  !*** ../../js/controls/WysiwygControl/node_modules/draft-js-export-html/esm/helpers/combineOrderedStyles.js ***!
-  \**************************************************************************************************************/
-/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
-
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
-
-function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
-
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { keys.push.apply(keys, Object.getOwnPropertySymbols(object)); } if (enumerableOnly) keys = keys.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
-
-function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
-
-function _iterableToArrayLimit(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
-
-function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
-
-function combineOrderedStyles(customMap, defaults) {
-  if (customMap == null) {
-    return defaults;
-  }
-
-  var _defaults = _slicedToArray(defaults, 2),
-      defaultStyleMap = _defaults[0],
-      defaultStyleOrder = _defaults[1];
-
-  var styleMap = _objectSpread({}, defaultStyleMap);
-
-  var styleOrder = _toConsumableArray(defaultStyleOrder);
-
-  for (var _i2 = 0, _Object$keys = Object.keys(customMap); _i2 < _Object$keys.length; _i2++) {
-    var _styleName = _Object$keys[_i2];
-
-    if (defaultStyleMap.hasOwnProperty(_styleName)) {
-      var defaultStyles = defaultStyleMap[_styleName];
-      styleMap[_styleName] = _objectSpread({}, defaultStyles, {}, customMap[_styleName]);
-    } else {
-      styleMap[_styleName] = customMap[_styleName];
-      styleOrder.push(_styleName);
-    }
-  }
-
-  return [styleMap, styleOrder];
-}
-
-/* harmony default export */ __webpack_exports__["default"] = (combineOrderedStyles);
-
-/***/ }),
-
-/***/ "../../js/controls/WysiwygControl/node_modules/draft-js-export-html/esm/helpers/normalizeAttributes.js":
-/*!*************************************************************************************************************!*\
-  !*** ../../js/controls/WysiwygControl/node_modules/draft-js-export-html/esm/helpers/normalizeAttributes.js ***!
-  \*************************************************************************************************************/
-/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-// Lifted from: https://github.com/facebook/react/blob/master/src/renderers/dom/shared/HTMLDOMPropertyConfig.js
-var ATTR_NAME_MAP = {
-  acceptCharset: 'accept-charset',
-  className: 'class',
-  htmlFor: 'for',
-  httpEquiv: 'http-equiv'
-};
-
-function normalizeAttributes(attributes) {
-  if (attributes == null) {
-    return attributes;
-  }
-
-  var normalized = {};
-  var didNormalize = false;
-
-  for (var _i = 0, _Object$keys = Object.keys(attributes); _i < _Object$keys.length; _i++) {
-    var name = _Object$keys[_i];
-    var newName = name;
-
-    if (ATTR_NAME_MAP.hasOwnProperty(name)) {
-      newName = ATTR_NAME_MAP[name];
-      didNormalize = true;
-    }
-
-    normalized[newName] = attributes[name];
-  }
-
-  return didNormalize ? normalized : attributes;
-}
-
-/* harmony default export */ __webpack_exports__["default"] = (normalizeAttributes);
-
-/***/ }),
-
-/***/ "../../js/controls/WysiwygControl/node_modules/draft-js-export-html/esm/helpers/styleToCSS.js":
-/*!****************************************************************************************************!*\
-  !*** ../../js/controls/WysiwygControl/node_modules/draft-js-export-html/esm/helpers/styleToCSS.js ***!
-  \****************************************************************************************************/
-/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-var VENDOR_PREFIX = /^(moz|ms|o|webkit)-/;
-var NUMERIC_STRING = /^\d+$/;
-var UPPERCASE_PATTERN = /([A-Z])/g; // Lifted from:
-// https://github.com/facebook/react/blob/ab4ddf64939aebbbc8d31be1022efd56e834c95c/src/renderers/dom/shared/CSSProperty.js
-
-var isUnitlessNumber = {
-  animationIterationCount: true,
-  borderImageOutset: true,
-  borderImageSlice: true,
-  borderImageWidth: true,
-  boxFlex: true,
-  boxFlexGroup: true,
-  boxOrdinalGroup: true,
-  columnCount: true,
-  flex: true,
-  flexGrow: true,
-  flexPositive: true,
-  flexShrink: true,
-  flexNegative: true,
-  flexOrder: true,
-  gridRow: true,
-  gridRowEnd: true,
-  gridRowSpan: true,
-  gridRowStart: true,
-  gridColumn: true,
-  gridColumnEnd: true,
-  gridColumnSpan: true,
-  gridColumnStart: true,
-  fontWeight: true,
-  lineClamp: true,
-  lineHeight: true,
-  opacity: true,
-  order: true,
-  orphans: true,
-  tabSize: true,
-  widows: true,
-  zIndex: true,
-  zoom: true,
-  // SVG-related properties
-  fillOpacity: true,
-  floodOpacity: true,
-  stopOpacity: true,
-  strokeDasharray: true,
-  strokeDashoffset: true,
-  strokeMiterlimit: true,
-  strokeOpacity: true,
-  strokeWidth: true
-}; // Lifted from: https://github.com/facebook/react/blob/master/src/renderers/dom/shared/CSSPropertyOperations.js
-
-function processStyleName(name) {
-  return name.replace(UPPERCASE_PATTERN, '-$1').toLowerCase().replace(VENDOR_PREFIX, '-$1-');
-} // Lifted from: https://github.com/facebook/react/blob/master/src/renderers/dom/shared/dangerousStyleValue.js
-
-
-function processStyleValue(name, value) {
-  var isNumeric;
-
-  if (typeof value === 'string') {
-    isNumeric = NUMERIC_STRING.test(value);
-  } else {
-    isNumeric = true;
-    value = String(value);
-  }
-
-  if (!isNumeric || value === '0' || isUnitlessNumber[name] === true) {
-    return value;
-  } else {
-    return value + 'px';
-  }
-}
-
-function styleToCSS(styleDescr) {
-  return Object.keys(styleDescr).map(function (name) {
-    var styleValue = processStyleValue(name, styleDescr[name]);
-    var styleName = processStyleName(name);
-    return "".concat(styleName, ": ").concat(styleValue);
-  }).join('; ');
-}
-
-/* harmony default export */ __webpack_exports__["default"] = (styleToCSS);
-
-/***/ }),
-
-/***/ "../../js/controls/WysiwygControl/node_modules/draft-js-export-html/esm/main.js":
-/*!**************************************************************************************!*\
-  !*** ../../js/controls/WysiwygControl/node_modules/draft-js-export-html/esm/main.js ***!
-  \**************************************************************************************/
-/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "stateToHTML": function() { return /* reexport safe */ _stateToHTML__WEBPACK_IMPORTED_MODULE_0__["default"]; }
-/* harmony export */ });
-/* harmony import */ var _stateToHTML__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./stateToHTML */ "../../js/controls/WysiwygControl/node_modules/draft-js-export-html/esm/stateToHTML.js");
-
-
-/***/ }),
-
-/***/ "../../js/controls/WysiwygControl/node_modules/draft-js-export-html/esm/stateToHTML.js":
-/*!*********************************************************************************************!*\
-  !*** ../../js/controls/WysiwygControl/node_modules/draft-js-export-html/esm/stateToHTML.js ***!
-  \*********************************************************************************************/
-/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": function() { return /* binding */ stateToHTML; }
-/* harmony export */ });
-/* harmony import */ var _helpers_combineOrderedStyles__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./helpers/combineOrderedStyles */ "../../js/controls/WysiwygControl/node_modules/draft-js-export-html/esm/helpers/combineOrderedStyles.js");
-/* harmony import */ var _helpers_normalizeAttributes__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./helpers/normalizeAttributes */ "../../js/controls/WysiwygControl/node_modules/draft-js-export-html/esm/helpers/normalizeAttributes.js");
-/* harmony import */ var _helpers_styleToCSS__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./helpers/styleToCSS */ "../../js/controls/WysiwygControl/node_modules/draft-js-export-html/esm/helpers/styleToCSS.js");
-/* harmony import */ var draft_js_utils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! draft-js-utils */ "../../js/controls/WysiwygControl/node_modules/draft-js-utils/esm/main.js");
-var _DEFAULT_STYLE_MAP, _ENTITY_ATTR_MAP, _DATA_TO_ATTR;
-
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { keys.push.apply(keys, Object.getOwnPropertySymbols(object)); } if (enumerableOnly) keys = keys.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
-
-function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
-
-function _iterableToArrayLimit(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
-
-function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-
-
-
-
-var BOLD = draft_js_utils__WEBPACK_IMPORTED_MODULE_3__.INLINE_STYLE.BOLD,
-    CODE = draft_js_utils__WEBPACK_IMPORTED_MODULE_3__.INLINE_STYLE.CODE,
-    ITALIC = draft_js_utils__WEBPACK_IMPORTED_MODULE_3__.INLINE_STYLE.ITALIC,
-    STRIKETHROUGH = draft_js_utils__WEBPACK_IMPORTED_MODULE_3__.INLINE_STYLE.STRIKETHROUGH,
-    UNDERLINE = draft_js_utils__WEBPACK_IMPORTED_MODULE_3__.INLINE_STYLE.UNDERLINE;
-var INDENT = '  ';
-var BREAK = '<br>';
-var DATA_ATTRIBUTE = /^data-([a-z0-9-]+)$/;
-var DEFAULT_STYLE_MAP = (_DEFAULT_STYLE_MAP = {}, _defineProperty(_DEFAULT_STYLE_MAP, BOLD, {
-  element: 'strong'
-}), _defineProperty(_DEFAULT_STYLE_MAP, CODE, {
-  element: 'code'
-}), _defineProperty(_DEFAULT_STYLE_MAP, ITALIC, {
-  element: 'em'
-}), _defineProperty(_DEFAULT_STYLE_MAP, STRIKETHROUGH, {
-  element: 'del'
-}), _defineProperty(_DEFAULT_STYLE_MAP, UNDERLINE, {
-  element: 'u'
-}), _DEFAULT_STYLE_MAP); // Order: inner-most style to outer-most.
-// Examle: <em><strong>foo</strong></em>
-
-var DEFAULT_STYLE_ORDER = [BOLD, ITALIC, UNDERLINE, STRIKETHROUGH, CODE]; // Map entity data to element attributes.
-
-var ENTITY_ATTR_MAP = (_ENTITY_ATTR_MAP = {}, _defineProperty(_ENTITY_ATTR_MAP, draft_js_utils__WEBPACK_IMPORTED_MODULE_3__.ENTITY_TYPE.LINK, {
-  url: 'href',
-  href: 'href',
-  rel: 'rel',
-  target: 'target',
-  title: 'title',
-  className: 'class'
-}), _defineProperty(_ENTITY_ATTR_MAP, draft_js_utils__WEBPACK_IMPORTED_MODULE_3__.ENTITY_TYPE.IMAGE, {
-  src: 'src',
-  height: 'height',
-  width: 'width',
-  alt: 'alt',
-  className: 'class'
-}), _ENTITY_ATTR_MAP); // Map entity data to element attributes.
-
-var DATA_TO_ATTR = (_DATA_TO_ATTR = {}, _defineProperty(_DATA_TO_ATTR, draft_js_utils__WEBPACK_IMPORTED_MODULE_3__.ENTITY_TYPE.LINK, function (entityType, entity) {
-  var attrMap = ENTITY_ATTR_MAP.hasOwnProperty(entityType) ? ENTITY_ATTR_MAP[entityType] : {};
-  var data = entity.getData();
-  var attrs = {};
-
-  for (var _i = 0, _Object$keys = Object.keys(data); _i < _Object$keys.length; _i++) {
-    var dataKey = _Object$keys[_i];
-    var dataValue = data[dataKey];
-
-    if (attrMap.hasOwnProperty(dataKey)) {
-      var attrKey = attrMap[dataKey];
-      attrs[attrKey] = dataValue;
-    } else if (DATA_ATTRIBUTE.test(dataKey)) {
-      attrs[dataKey] = dataValue;
-    }
-  }
-
-  return attrs;
-}), _defineProperty(_DATA_TO_ATTR, draft_js_utils__WEBPACK_IMPORTED_MODULE_3__.ENTITY_TYPE.IMAGE, function (entityType, entity) {
-  var attrMap = ENTITY_ATTR_MAP.hasOwnProperty(entityType) ? ENTITY_ATTR_MAP[entityType] : {};
-  var data = entity.getData();
-  var attrs = {};
-
-  for (var _i2 = 0, _Object$keys2 = Object.keys(data); _i2 < _Object$keys2.length; _i2++) {
-    var dataKey = _Object$keys2[_i2];
-    var dataValue = data[dataKey];
-
-    if (attrMap.hasOwnProperty(dataKey)) {
-      var attrKey = attrMap[dataKey];
-      attrs[attrKey] = dataValue;
-    } else if (DATA_ATTRIBUTE.test(dataKey)) {
-      attrs[dataKey] = dataValue;
-    }
-  }
-
-  return attrs;
-}), _DATA_TO_ATTR); // The reason this returns an array is because a single block might get wrapped
-// in two tags.
-
-function getTags(blockType, defaultBlockTag) {
-  switch (blockType) {
-    case draft_js_utils__WEBPACK_IMPORTED_MODULE_3__.BLOCK_TYPE.HEADER_ONE:
-      return ['h1'];
-
-    case draft_js_utils__WEBPACK_IMPORTED_MODULE_3__.BLOCK_TYPE.HEADER_TWO:
-      return ['h2'];
-
-    case draft_js_utils__WEBPACK_IMPORTED_MODULE_3__.BLOCK_TYPE.HEADER_THREE:
-      return ['h3'];
-
-    case draft_js_utils__WEBPACK_IMPORTED_MODULE_3__.BLOCK_TYPE.HEADER_FOUR:
-      return ['h4'];
-
-    case draft_js_utils__WEBPACK_IMPORTED_MODULE_3__.BLOCK_TYPE.HEADER_FIVE:
-      return ['h5'];
-
-    case draft_js_utils__WEBPACK_IMPORTED_MODULE_3__.BLOCK_TYPE.HEADER_SIX:
-      return ['h6'];
-
-    case draft_js_utils__WEBPACK_IMPORTED_MODULE_3__.BLOCK_TYPE.UNORDERED_LIST_ITEM:
-    case draft_js_utils__WEBPACK_IMPORTED_MODULE_3__.BLOCK_TYPE.ORDERED_LIST_ITEM:
-      return ['li'];
-
-    case draft_js_utils__WEBPACK_IMPORTED_MODULE_3__.BLOCK_TYPE.BLOCKQUOTE:
-      return ['blockquote'];
-
-    case draft_js_utils__WEBPACK_IMPORTED_MODULE_3__.BLOCK_TYPE.CODE:
-      return ['pre', 'code'];
-
-    case draft_js_utils__WEBPACK_IMPORTED_MODULE_3__.BLOCK_TYPE.ATOMIC:
-      return ['figure'];
-
-    default:
-      if (defaultBlockTag === null) {
-        return [];
-      }
-
-      return [defaultBlockTag || 'p'];
-  }
-}
-
-function getWrapperTag(blockType) {
-  switch (blockType) {
-    case draft_js_utils__WEBPACK_IMPORTED_MODULE_3__.BLOCK_TYPE.UNORDERED_LIST_ITEM:
-      return 'ul';
-
-    case draft_js_utils__WEBPACK_IMPORTED_MODULE_3__.BLOCK_TYPE.ORDERED_LIST_ITEM:
-      return 'ol';
-
-    default:
-      return null;
-  }
-}
-
-var MarkupGenerator =
-/*#__PURE__*/
-function () {
-  // These are related to state.
-  // These are related to user-defined options.
-  function MarkupGenerator(contentState, options) {
-    _classCallCheck(this, MarkupGenerator);
-
-    _defineProperty(this, "blocks", void 0);
-
-    _defineProperty(this, "contentState", void 0);
-
-    _defineProperty(this, "currentBlock", void 0);
-
-    _defineProperty(this, "indentLevel", void 0);
-
-    _defineProperty(this, "output", void 0);
-
-    _defineProperty(this, "totalBlocks", void 0);
-
-    _defineProperty(this, "wrapperTag", void 0);
-
-    _defineProperty(this, "options", void 0);
-
-    _defineProperty(this, "inlineStyles", void 0);
-
-    _defineProperty(this, "inlineStyleFn", void 0);
-
-    _defineProperty(this, "styleOrder", void 0);
-
-    if (options == null) {
-      options = {};
-    }
-
-    this.contentState = contentState;
-    this.options = options;
-
-    var _combineOrderedStyles = (0,_helpers_combineOrderedStyles__WEBPACK_IMPORTED_MODULE_0__["default"])(options.inlineStyles, [DEFAULT_STYLE_MAP, DEFAULT_STYLE_ORDER]),
-        _combineOrderedStyles2 = _slicedToArray(_combineOrderedStyles, 2),
-        inlineStyles = _combineOrderedStyles2[0],
-        styleOrder = _combineOrderedStyles2[1];
-
-    this.inlineStyles = inlineStyles;
-    this.inlineStyleFn = options.inlineStyleFn;
-    this.styleOrder = styleOrder;
-  }
-
-  _createClass(MarkupGenerator, [{
-    key: "generate",
-    value: function generate() {
-      this.output = [];
-      this.blocks = this.contentState.getBlocksAsArray();
-      this.totalBlocks = this.blocks.length;
-      this.currentBlock = 0;
-      this.indentLevel = 0;
-      this.wrapperTag = null;
-
-      while (this.currentBlock < this.totalBlocks) {
-        this.processBlock();
-      }
-
-      this.closeWrapperTag();
-      return this.output.join('').trim();
-    }
-  }, {
-    key: "processBlock",
-    value: function processBlock() {
-      var _this$options = this.options,
-          blockRenderers = _this$options.blockRenderers,
-          defaultBlockTag = _this$options.defaultBlockTag;
-      var block = this.blocks[this.currentBlock];
-      var blockType = block.getType();
-      var newWrapperTag = getWrapperTag(blockType);
-
-      if (this.wrapperTag !== newWrapperTag) {
-        if (this.wrapperTag) {
-          this.closeWrapperTag();
-        }
-
-        if (newWrapperTag) {
-          this.openWrapperTag(newWrapperTag);
-        }
-      }
-
-      this.indent(); // Allow blocks to be rendered using a custom renderer.
-
-      var customRenderer = blockRenderers != null && blockRenderers.hasOwnProperty(blockType) ? blockRenderers[blockType] : null;
-      var customRendererOutput = customRenderer ? customRenderer(block) : null; // Renderer can return null, which will cause processing to continue as normal.
-
-      if (customRendererOutput != null) {
-        this.output.push(customRendererOutput);
-        this.output.push('\n');
-        this.currentBlock += 1;
-        return;
-      }
-
-      this.writeStartTag(block, defaultBlockTag);
-      this.output.push(this.renderBlockContent(block)); // Look ahead and see if we will nest list.
-
-      var nextBlock = this.getNextBlock();
-
-      if (canHaveDepth(blockType) && nextBlock && nextBlock.getDepth() === block.getDepth() + 1) {
-        this.output.push('\n'); // This is a litle hacky: temporarily stash our current wrapperTag and
-        // render child list(s).
-
-        var thisWrapperTag = this.wrapperTag;
-        this.wrapperTag = null;
-        this.indentLevel += 1;
-        this.currentBlock += 1;
-        this.processBlocksAtDepth(nextBlock.getDepth());
-        this.wrapperTag = thisWrapperTag;
-        this.indentLevel -= 1;
-        this.indent();
-      } else {
-        this.currentBlock += 1;
-      }
-
-      this.writeEndTag(block, defaultBlockTag);
-    }
-  }, {
-    key: "processBlocksAtDepth",
-    value: function processBlocksAtDepth(depth) {
-      var block = this.blocks[this.currentBlock];
-
-      while (block && block.getDepth() === depth) {
-        this.processBlock();
-        block = this.blocks[this.currentBlock];
-      }
-
-      this.closeWrapperTag();
-    }
-  }, {
-    key: "getNextBlock",
-    value: function getNextBlock() {
-      return this.blocks[this.currentBlock + 1];
-    }
-  }, {
-    key: "writeStartTag",
-    value: function writeStartTag(block, defaultBlockTag) {
-      var tags = getTags(block.getType(), defaultBlockTag);
-      var attrString;
-
-      if (this.options.blockStyleFn) {
-        var _ref = this.options.blockStyleFn(block) || {},
-            attributes = _ref.attributes,
-            _style = _ref.style; // Normalize `className` -> `class`, etc.
-
-
-        attributes = (0,_helpers_normalizeAttributes__WEBPACK_IMPORTED_MODULE_1__["default"])(attributes);
-
-        if (_style != null) {
-          var styleAttr = (0,_helpers_styleToCSS__WEBPACK_IMPORTED_MODULE_2__["default"])(_style);
-          attributes = attributes == null ? {
-            style: styleAttr
-          } : _objectSpread({}, attributes, {
-            style: styleAttr
-          });
-        }
-
-        attrString = stringifyAttrs(attributes);
-      } else {
-        attrString = '';
-      }
-
-      var _iteratorNormalCompletion = true;
-      var _didIteratorError = false;
-      var _iteratorError = undefined;
-
-      try {
-        for (var _iterator = tags[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-          var tag = _step.value;
-          this.output.push("<".concat(tag).concat(attrString, ">"));
-        }
-      } catch (err) {
-        _didIteratorError = true;
-        _iteratorError = err;
-      } finally {
-        try {
-          if (!_iteratorNormalCompletion && _iterator["return"] != null) {
-            _iterator["return"]();
-          }
-        } finally {
-          if (_didIteratorError) {
-            throw _iteratorError;
-          }
-        }
-      }
-    }
-  }, {
-    key: "writeEndTag",
-    value: function writeEndTag(block, defaultBlockTag) {
-      var tags = getTags(block.getType(), defaultBlockTag);
-
-      if (tags.length === 1) {
-        this.output.push("</".concat(tags[0], ">\n"));
-      } else {
-        var output = [];
-        var _iteratorNormalCompletion2 = true;
-        var _didIteratorError2 = false;
-        var _iteratorError2 = undefined;
-
-        try {
-          for (var _iterator2 = tags[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-            var tag = _step2.value;
-            output.unshift("</".concat(tag, ">"));
-          }
-        } catch (err) {
-          _didIteratorError2 = true;
-          _iteratorError2 = err;
-        } finally {
-          try {
-            if (!_iteratorNormalCompletion2 && _iterator2["return"] != null) {
-              _iterator2["return"]();
-            }
-          } finally {
-            if (_didIteratorError2) {
-              throw _iteratorError2;
-            }
-          }
-        }
-
-        this.output.push(output.join('') + '\n');
-      }
-    }
-  }, {
-    key: "openWrapperTag",
-    value: function openWrapperTag(wrapperTag) {
-      this.wrapperTag = wrapperTag;
-      this.indent();
-      this.output.push("<".concat(wrapperTag, ">\n"));
-      this.indentLevel += 1;
-    }
-  }, {
-    key: "closeWrapperTag",
-    value: function closeWrapperTag() {
-      var wrapperTag = this.wrapperTag;
-
-      if (wrapperTag) {
-        this.indentLevel -= 1;
-        this.indent();
-        this.output.push("</".concat(wrapperTag, ">\n"));
-        this.wrapperTag = null;
-      }
-    }
-  }, {
-    key: "indent",
-    value: function indent() {
-      this.output.push(INDENT.repeat(this.indentLevel));
-    }
-  }, {
-    key: "withCustomInlineStyles",
-    value: function withCustomInlineStyles(content, styleSet) {
-      if (!this.inlineStyleFn) {
-        return content;
-      }
-
-      var renderConfig = this.inlineStyleFn(styleSet);
-
-      if (!renderConfig) {
-        return content;
-      }
-
-      var _renderConfig$element = renderConfig.element,
-          element = _renderConfig$element === void 0 ? 'span' : _renderConfig$element,
-          attributes = renderConfig.attributes,
-          style = renderConfig.style;
-      var attrString = stringifyAttrs(_objectSpread({}, attributes, {
-        style: style && (0,_helpers_styleToCSS__WEBPACK_IMPORTED_MODULE_2__["default"])(style)
-      }));
-      return "<".concat(element).concat(attrString, ">").concat(content, "</").concat(element, ">");
-    }
-  }, {
-    key: "renderBlockContent",
-    value: function renderBlockContent(block) {
-      var _this = this;
-
-      var blockType = block.getType();
-      var text = block.getText();
-
-      if (text === '') {
-        // Prevent element collapse if completely empty.
-        return BREAK;
-      }
-
-      text = this.preserveWhitespace(text);
-      var charMetaList = block.getCharacterList();
-      var entityPieces = (0,draft_js_utils__WEBPACK_IMPORTED_MODULE_3__.getEntityRanges)(text, charMetaList);
-      return entityPieces.map(function (_ref2) {
-        var _ref3 = _slicedToArray(_ref2, 2),
-            entityKey = _ref3[0],
-            stylePieces = _ref3[1];
-
-        var content = stylePieces.map(function (_ref4) {
-          var _ref5 = _slicedToArray(_ref4, 2),
-              text = _ref5[0],
-              styleSet = _ref5[1];
-
-          var content = encodeContent(text);
-          var _iteratorNormalCompletion3 = true;
-          var _didIteratorError3 = false;
-          var _iteratorError3 = undefined;
-
-          try {
-            for (var _iterator3 = _this.styleOrder[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-              var _styleName = _step3.value;
-
-              // If our block type is CODE then don't wrap inline code elements.
-              if (_styleName === CODE && blockType === draft_js_utils__WEBPACK_IMPORTED_MODULE_3__.BLOCK_TYPE.CODE) {
-                continue;
-              }
-
-              if (styleSet.has(_styleName)) {
-                var _this$inlineStyles$_s = _this.inlineStyles[_styleName],
-                    element = _this$inlineStyles$_s.element,
-                    attributes = _this$inlineStyles$_s.attributes,
-                    _style2 = _this$inlineStyles$_s.style;
-
-                if (element == null) {
-                  element = 'span';
-                } // Normalize `className` -> `class`, etc.
-
-
-                attributes = (0,_helpers_normalizeAttributes__WEBPACK_IMPORTED_MODULE_1__["default"])(attributes);
-
-                if (_style2 != null) {
-                  var styleAttr = (0,_helpers_styleToCSS__WEBPACK_IMPORTED_MODULE_2__["default"])(_style2);
-                  attributes = attributes == null ? {
-                    style: styleAttr
-                  } : _objectSpread({}, attributes, {
-                    style: styleAttr
-                  });
-                }
-
-                var attrString = stringifyAttrs(attributes);
-                content = "<".concat(element).concat(attrString, ">").concat(content, "</").concat(element, ">");
-              }
-            }
-          } catch (err) {
-            _didIteratorError3 = true;
-            _iteratorError3 = err;
-          } finally {
-            try {
-              if (!_iteratorNormalCompletion3 && _iterator3["return"] != null) {
-                _iterator3["return"]();
-              }
-            } finally {
-              if (_didIteratorError3) {
-                throw _iteratorError3;
-              }
-            }
-          }
-
-          return _this.withCustomInlineStyles(content, styleSet);
-        }).join('');
-        var entity = entityKey ? _this.contentState.getEntity(entityKey) : null; // Note: The `toUpperCase` below is for compatability with some libraries that use lower-case for image blocks.
-
-        var entityType = entity == null ? null : entity.getType().toUpperCase();
-        var entityStyle;
-
-        if (entity != null && _this.options.entityStyleFn && (entityStyle = _this.options.entityStyleFn(entity))) {
-          var _entityStyle = entityStyle,
-              element = _entityStyle.element,
-              attributes = _entityStyle.attributes,
-              _style3 = _entityStyle.style;
-
-          if (element == null) {
-            element = 'span';
-          } // Normalize `className` -> `class`, etc.
-
-
-          attributes = (0,_helpers_normalizeAttributes__WEBPACK_IMPORTED_MODULE_1__["default"])(attributes);
-
-          if (_style3 != null) {
-            var styleAttr = (0,_helpers_styleToCSS__WEBPACK_IMPORTED_MODULE_2__["default"])(_style3);
-            attributes = attributes == null ? {
-              style: styleAttr
-            } : _objectSpread({}, attributes, {
-              style: styleAttr
-            });
-          }
-
-          var attrString = stringifyAttrs(attributes);
-          return "<".concat(element).concat(attrString, ">").concat(content, "</").concat(element, ">");
-        } else if (entityType != null && entityType === draft_js_utils__WEBPACK_IMPORTED_MODULE_3__.ENTITY_TYPE.LINK) {
-          var attrs = DATA_TO_ATTR.hasOwnProperty(entityType) ? DATA_TO_ATTR[entityType](entityType, entity) : null;
-
-          var _attrString = stringifyAttrs(attrs);
-
-          return "<a".concat(_attrString, ">").concat(content, "</a>");
-        } else if (entityType != null && entityType === draft_js_utils__WEBPACK_IMPORTED_MODULE_3__.ENTITY_TYPE.IMAGE) {
-          var _attrs = DATA_TO_ATTR.hasOwnProperty(entityType) ? DATA_TO_ATTR[entityType](entityType, entity) : null;
-
-          var _attrString2 = stringifyAttrs(_attrs);
-
-          return "<img".concat(_attrString2, "/>");
-        } else {
-          return content;
-        }
-      }).join('');
-    }
-  }, {
-    key: "preserveWhitespace",
-    value: function preserveWhitespace(text) {
-      var length = text.length; // Prevent leading/trailing/consecutive whitespace collapse.
-
-      var newText = new Array(length);
-
-      for (var i = 0; i < length; i++) {
-        if (text[i] === ' ' && (i === 0 || i === length - 1 || text[i - 1] === ' ')) {
-          newText[i] = '\xA0';
-        } else {
-          newText[i] = text[i];
-        }
-      }
-
-      return newText.join('');
-    }
-  }]);
-
-  return MarkupGenerator;
-}();
-
-function stringifyAttrs(attrs) {
-  if (attrs == null) {
-    return '';
-  }
-
-  var parts = [];
-
-  for (var _i3 = 0, _Object$keys3 = Object.keys(attrs); _i3 < _Object$keys3.length; _i3++) {
-    var name = _Object$keys3[_i3];
-    var value = attrs[name];
-
-    if (value != null) {
-      parts.push(" ".concat(name, "=\"").concat(encodeAttr(value + ''), "\""));
-    }
-  }
-
-  return parts.join('');
-}
-
-function canHaveDepth(blockType) {
-  switch (blockType) {
-    case draft_js_utils__WEBPACK_IMPORTED_MODULE_3__.BLOCK_TYPE.UNORDERED_LIST_ITEM:
-    case draft_js_utils__WEBPACK_IMPORTED_MODULE_3__.BLOCK_TYPE.ORDERED_LIST_ITEM:
-      return true;
-
-    default:
-      return false;
-  }
-}
-
-function encodeContent(text) {
-  return text.split('&').join('&amp;').split('<').join('&lt;').split('>').join('&gt;').split('\xA0').join('&nbsp;').split('\n').join(BREAK + '\n');
-}
-
-function encodeAttr(text) {
-  return text.split('&').join('&amp;').split('<').join('&lt;').split('>').join('&gt;').split('"').join('&quot;');
-}
-
-function stateToHTML(content, options) {
-  return new MarkupGenerator(content, options).generate();
-}
-
-/***/ }),
-
-/***/ "../../js/controls/WysiwygControl/node_modules/draft-js-utils/esm/Constants.js":
-/*!*************************************************************************************!*\
-  !*** ../../js/controls/WysiwygControl/node_modules/draft-js-utils/esm/Constants.js ***!
-  \*************************************************************************************/
-/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "BLOCK_TYPE": function() { return /* binding */ BLOCK_TYPE; },
-/* harmony export */   "ENTITY_TYPE": function() { return /* binding */ ENTITY_TYPE; },
-/* harmony export */   "INLINE_STYLE": function() { return /* binding */ INLINE_STYLE; }
-/* harmony export */ });
-var BLOCK_TYPE = {
-  // This is used to represent a normal text block (paragraph).
-  UNSTYLED: 'unstyled',
-  HEADER_ONE: 'header-one',
-  HEADER_TWO: 'header-two',
-  HEADER_THREE: 'header-three',
-  HEADER_FOUR: 'header-four',
-  HEADER_FIVE: 'header-five',
-  HEADER_SIX: 'header-six',
-  UNORDERED_LIST_ITEM: 'unordered-list-item',
-  ORDERED_LIST_ITEM: 'ordered-list-item',
-  BLOCKQUOTE: 'blockquote',
-  PULLQUOTE: 'pullquote',
-  CODE: 'code-block',
-  ATOMIC: 'atomic'
-};
-var ENTITY_TYPE = {
-  LINK: 'LINK',
-  IMAGE: 'IMAGE',
-  EMBED: 'embed'
-};
-var INLINE_STYLE = {
-  BOLD: 'BOLD',
-  CODE: 'CODE',
-  ITALIC: 'ITALIC',
-  STRIKETHROUGH: 'STRIKETHROUGH',
-  UNDERLINE: 'UNDERLINE'
-};
-/* harmony default export */ __webpack_exports__["default"] = ({
-  BLOCK_TYPE: BLOCK_TYPE,
-  ENTITY_TYPE: ENTITY_TYPE,
-  INLINE_STYLE: INLINE_STYLE
-});
-
-/***/ }),
-
-/***/ "../../js/controls/WysiwygControl/node_modules/draft-js-utils/esm/callModifierForSelectedBlocks.js":
-/*!*********************************************************************************************************!*\
-  !*** ../../js/controls/WysiwygControl/node_modules/draft-js-utils/esm/callModifierForSelectedBlocks.js ***!
-  \*********************************************************************************************************/
-/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var draft_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! draft-js */ "../../js/controls/WysiwygControl/node_modules/draft-js/lib/Draft.js");
-/* harmony import */ var draft_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(draft_js__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _getSelectedBlocks__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./getSelectedBlocks */ "../../js/controls/WysiwygControl/node_modules/draft-js-utils/esm/getSelectedBlocks.js");
-
-
-/**
- * Calls a provided `modifier` function with a selection for each
- * selected block in the current editor selection. Passes through additional
- * arguments to the modifier.
- *
- * Note: At the moment it will retain the original selection and override
- * possible selection changes from modifiers
- *
- * @param  {object} editorState The current draft.js editor state object
- *
- * @param  {function} modifier  A modifier function to be executed.
- *                              Must have the signature (editorState, selection, ...)
- *
- * @param  {mixed} ...args      Additional arguments to be passed through to the modifier
- *
- * @return {object} The new editor state
- */
-
-/* harmony default export */ __webpack_exports__["default"] = (function (editorState, modifier) {
-  for (var _len = arguments.length, args = new Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
-    args[_key - 2] = arguments[_key];
-  }
-
-  var contentState = editorState.getCurrentContent();
-  var currentSelection = editorState.getSelection();
-  var startKey = currentSelection.getStartKey();
-  var endKey = currentSelection.getEndKey();
-  var startOffset = currentSelection.getStartOffset();
-  var endOffset = currentSelection.getEndOffset();
-  var isSameBlock = startKey === endKey;
-  var selectedBlocks = (0,_getSelectedBlocks__WEBPACK_IMPORTED_MODULE_1__["default"])(contentState, startKey, endKey);
-  var finalEditorState = editorState;
-  selectedBlocks.forEach(function (block) {
-    var currentBlockKey = block.getKey();
-    var selectionStart = startOffset;
-    var selectionEnd = endOffset;
-
-    if (currentBlockKey === startKey) {
-      selectionStart = startOffset;
-      selectionEnd = isSameBlock ? endOffset : block.getText().length;
-    } else if (currentBlockKey === endKey) {
-      selectionStart = isSameBlock ? startOffset : 0;
-      selectionEnd = endOffset;
-    } else {
-      selectionStart = 0;
-      selectionEnd = block.getText().length;
-    }
-
-    var selection = new draft_js__WEBPACK_IMPORTED_MODULE_0__.SelectionState({
-      anchorKey: currentBlockKey,
-      anchorOffset: selectionStart,
-      focusKey: currentBlockKey,
-      focusOffset: selectionEnd
-    });
-    finalEditorState = modifier.apply(void 0, [finalEditorState, selection].concat(args));
-  });
-  return draft_js__WEBPACK_IMPORTED_MODULE_0__.EditorState.forceSelection(finalEditorState, currentSelection);
-});
-
-/***/ }),
-
-/***/ "../../js/controls/WysiwygControl/node_modules/draft-js-utils/esm/getEntityRanges.js":
-/*!*******************************************************************************************!*\
-  !*** ../../js/controls/WysiwygControl/node_modules/draft-js-utils/esm/getEntityRanges.js ***!
-  \*******************************************************************************************/
-/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "EMPTY_SET": function() { return /* binding */ EMPTY_SET; },
-/* harmony export */   "default": function() { return /* binding */ getEntityRanges; }
-/* harmony export */ });
-/* harmony import */ var immutable__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! immutable */ "../../js/controls/WysiwygControl/node_modules/immutable/dist/immutable.js");
-/* harmony import */ var immutable__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(immutable__WEBPACK_IMPORTED_MODULE_0__);
-
-var EMPTY_SET = new immutable__WEBPACK_IMPORTED_MODULE_0__.OrderedSet();
-function getEntityRanges(text, charMetaList) {
-  var charEntity = null;
-  var prevCharEntity = null;
-  var ranges = [];
-  var rangeStart = 0;
-
-  for (var i = 0, len = text.length; i < len; i++) {
-    prevCharEntity = charEntity;
-    var meta = charMetaList.get(i);
-    charEntity = meta ? meta.getEntity() : null;
-
-    if (i > 0 && charEntity !== prevCharEntity) {
-      ranges.push([prevCharEntity, getStyleRanges(text.slice(rangeStart, i), charMetaList.slice(rangeStart, i))]);
-      rangeStart = i;
-    }
-  }
-
-  ranges.push([charEntity, getStyleRanges(text.slice(rangeStart), charMetaList.slice(rangeStart))]);
-  return ranges;
-}
-
-function getStyleRanges(text, charMetaList) {
-  var charStyle = EMPTY_SET;
-  var prevCharStyle = EMPTY_SET;
-  var ranges = [];
-  var rangeStart = 0;
-
-  for (var i = 0, len = text.length; i < len; i++) {
-    prevCharStyle = charStyle;
-    var meta = charMetaList.get(i);
-    charStyle = meta ? meta.getStyle() : EMPTY_SET;
-
-    if (i > 0 && !(0,immutable__WEBPACK_IMPORTED_MODULE_0__.is)(charStyle, prevCharStyle)) {
-      ranges.push([text.slice(rangeStart, i), prevCharStyle]);
-      rangeStart = i;
-    }
-  }
-
-  ranges.push([text.slice(rangeStart), charStyle]);
-  return ranges;
-}
-
-/***/ }),
-
-/***/ "../../js/controls/WysiwygControl/node_modules/draft-js-utils/esm/getSelectedBlocks.js":
-/*!*********************************************************************************************!*\
-  !*** ../../js/controls/WysiwygControl/node_modules/draft-js-utils/esm/getSelectedBlocks.js ***!
-  \*********************************************************************************************/
-/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/**
- * Returns an array of all `ContentBlock` instances within two block keys
- *
- * @param  {object} contentState A draft.js `ContentState` instance
- * @param  {string} anchorKey    The block key to start searching from
- * @param  {string} focusKey     The block key until which to search
- *
- * @return {array} An array containing the found content blocks
- */
-/* harmony default export */ __webpack_exports__["default"] = (function (contentState, anchorKey, focusKey) {
-  var isSameBlock = anchorKey === focusKey;
-  var startingBlock = contentState.getBlockForKey(anchorKey);
-
-  if (!startingBlock) {
-    return [];
-  }
-
-  var selectedBlocks = [startingBlock];
-
-  if (!isSameBlock) {
-    var blockKey = anchorKey;
-
-    while (blockKey !== focusKey) {
-      var nextBlock = contentState.getBlockAfter(blockKey);
-
-      if (!nextBlock) {
-        selectedBlocks = [];
-        break;
-      }
-
-      selectedBlocks.push(nextBlock);
-      blockKey = nextBlock.getKey();
-    }
-  }
-
-  return selectedBlocks;
-});
-
-/***/ }),
-
-/***/ "../../js/controls/WysiwygControl/node_modules/draft-js-utils/esm/main.js":
-/*!********************************************************************************!*\
-  !*** ../../js/controls/WysiwygControl/node_modules/draft-js-utils/esm/main.js ***!
-  \********************************************************************************/
-/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "BLOCK_TYPE": function() { return /* reexport safe */ _Constants__WEBPACK_IMPORTED_MODULE_0__.BLOCK_TYPE; },
-/* harmony export */   "Constants": function() { return /* reexport safe */ _Constants__WEBPACK_IMPORTED_MODULE_0__["default"]; },
-/* harmony export */   "ENTITY_TYPE": function() { return /* reexport safe */ _Constants__WEBPACK_IMPORTED_MODULE_0__.ENTITY_TYPE; },
-/* harmony export */   "INLINE_STYLE": function() { return /* reexport safe */ _Constants__WEBPACK_IMPORTED_MODULE_0__.INLINE_STYLE; },
-/* harmony export */   "callModifierForSelectedBlocks": function() { return /* reexport safe */ _callModifierForSelectedBlocks__WEBPACK_IMPORTED_MODULE_4__["default"]; },
-/* harmony export */   "getEntityRanges": function() { return /* reexport safe */ _getEntityRanges__WEBPACK_IMPORTED_MODULE_1__["default"]; },
-/* harmony export */   "getSelectedBlocks": function() { return /* reexport safe */ _getSelectedBlocks__WEBPACK_IMPORTED_MODULE_2__["default"]; },
-/* harmony export */   "selectionContainsEntity": function() { return /* reexport safe */ _selectionContainsEntity__WEBPACK_IMPORTED_MODULE_3__["default"]; }
-/* harmony export */ });
-/* harmony import */ var _Constants__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Constants */ "../../js/controls/WysiwygControl/node_modules/draft-js-utils/esm/Constants.js");
-/* harmony import */ var _getEntityRanges__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./getEntityRanges */ "../../js/controls/WysiwygControl/node_modules/draft-js-utils/esm/getEntityRanges.js");
-/* harmony import */ var _getSelectedBlocks__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./getSelectedBlocks */ "../../js/controls/WysiwygControl/node_modules/draft-js-utils/esm/getSelectedBlocks.js");
-/* harmony import */ var _selectionContainsEntity__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./selectionContainsEntity */ "../../js/controls/WysiwygControl/node_modules/draft-js-utils/esm/selectionContainsEntity.js");
-/* harmony import */ var _callModifierForSelectedBlocks__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./callModifierForSelectedBlocks */ "../../js/controls/WysiwygControl/node_modules/draft-js-utils/esm/callModifierForSelectedBlocks.js");
-
-
-
-
-
-
-
-/***/ }),
-
-/***/ "../../js/controls/WysiwygControl/node_modules/draft-js-utils/esm/selectionContainsEntity.js":
-/*!***************************************************************************************************!*\
-  !*** ../../js/controls/WysiwygControl/node_modules/draft-js-utils/esm/selectionContainsEntity.js ***!
-  \***************************************************************************************************/
-/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _getSelectedBlocks__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./getSelectedBlocks */ "../../js/controls/WysiwygControl/node_modules/draft-js-utils/esm/getSelectedBlocks.js");
-
-/* harmony default export */ __webpack_exports__["default"] = (function (strategy) {
-  return function (editorState, selection) {
-    var contentState = editorState.getCurrentContent();
-    var currentSelection = selection || editorState.getSelection();
-    var startKey = currentSelection.getStartKey();
-    var endKey = currentSelection.getEndKey();
-    var startOffset = currentSelection.getStartOffset();
-    var endOffset = currentSelection.getEndOffset();
-    var isSameBlock = startKey === endKey;
-    var selectedBlocks = (0,_getSelectedBlocks__WEBPACK_IMPORTED_MODULE_0__["default"])(contentState, startKey, endKey);
-    var entityFound = false; // We have to shift the offset to not get false positives when selecting
-    // a character just before or after an entity
-
-    var finalStartOffset = startOffset + 1;
-    var finalEndOffset = endOffset - 1;
-    selectedBlocks.forEach(function (block) {
-      strategy(block, function (start, end) {
-        if (entityFound) {
-          return;
-        }
-
-        var blockKey = block.getKey();
-
-        if (isSameBlock && (end < finalStartOffset || start > finalEndOffset)) {
-          return;
-        } else if (blockKey === startKey && end < finalStartOffset) {
-          return;
-        } else if (blockKey === endKey && start > finalEndOffset) {
-          return;
-        }
-
-        entityFound = true;
-      }, contentState);
-    });
-    return entityFound;
-  };
-});
 
 /***/ }),
 

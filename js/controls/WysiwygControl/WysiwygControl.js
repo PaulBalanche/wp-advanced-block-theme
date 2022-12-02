@@ -55,12 +55,13 @@ class WysiwygControl extends Component {
             );
         }
 
-        let blockTypes = {};
+        let typo = {};
         if( themeSpec?.typo && typeof themeSpec.typo == 'object') {
             for( const [key, val] of Object.entries(themeSpec.typo) ) {
-                blockTypes[key] = {
+                typo[key] = {
                     label: key,
                     style: key,
+                    type: val.type,
                     class: val.class
                 };
             }
@@ -80,7 +81,7 @@ class WysiwygControl extends Component {
                         className="wysiwyg-container"
                     >
                         <div className="components-base-control__label" key={ id + "-label" }>{ label }</div>
-                        <DraftEditor initialContent={ objectValue } onChange={ this.onChange } blockTypes={ blockTypes } />
+                        <DraftEditor initialContent={ objectValue } onChange={ this.onChange } typo={ typo } />
                     </div>
                 </div>
             </div>
