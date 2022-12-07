@@ -58,11 +58,19 @@ class WysiwygControl extends Component {
         let typo = {};
         if( themeSpec?.typo && typeof themeSpec.typo == 'object') {
             for( const [key, val] of Object.entries(themeSpec.typo) ) {
+
+                let editorCss = null;
+                if( val?.style && typeof val.style == 'object' ) {
+                    editorCss = {};
+                    for( const [keyCss, valCss] of Object.entries(val.style) ) {
+                        editorCss[keyCss] = valCss;
+                    }
+                }
+
                 typo[key] = {
                     label: key,
-                    style: key,
-                    type: val.type,
-                    class: val.class
+                    type: ( val?.nestable && val.nestable ) ? 'inline' : 'block',
+                    editor: editorCss
                 };
             }
         }

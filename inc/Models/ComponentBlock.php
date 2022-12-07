@@ -252,6 +252,9 @@ class ComponentBlock extends ModelBase {
             $attributes = [
                 'id_component' => [
                     'type' => 'string'
+                ],
+                'anchor' => [
+                    'type' => 'string'
                 ]
             ];
 

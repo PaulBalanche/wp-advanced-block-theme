@@ -1849,21 +1849,19 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var draft_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! draft-js */ "../../../js/controls/WysiwygControl/node_modules/draft-js/lib/Draft.js");
-/* harmony import */ var draft_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(draft_js__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var draft_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! draft-js */ "../../../js/controls/WysiwygControl/node_modules/draft-js/lib/Draft.js");
+/* harmony import */ var draft_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(draft_js__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var Immutable__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! Immutable */ "../../../js/controls/WysiwygControl/node_modules/Immutable/dist/immutable.es.js");
 
 
 
- // import { Map } from 'immutable/dist/immutable';
 
 class DraftEditor extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Component {
   constructor(props) {
     super(props);
     this.rawDraftContentState = props !== null && props !== void 0 && props.initialContent ? props.initialContent : null;
     this.state = {
-      editorState: this.rawDraftContentState != null ? draft_js__WEBPACK_IMPORTED_MODULE_2__.EditorState.createWithContent((0,draft_js__WEBPACK_IMPORTED_MODULE_2__.convertFromRaw)(this.rawDraftContentState)) : draft_js__WEBPACK_IMPORTED_MODULE_2__.EditorState.createEmpty()
+      editorState: this.rawDraftContentState != null ? draft_js__WEBPACK_IMPORTED_MODULE_1__.EditorState.createWithContent((0,draft_js__WEBPACK_IMPORTED_MODULE_1__.convertFromRaw)(this.rawDraftContentState)) : draft_js__WEBPACK_IMPORTED_MODULE_1__.EditorState.createEmpty()
     };
 
     this.onChange = editorState => this.handleChange(editorState);
@@ -1871,31 +1869,12 @@ class DraftEditor extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Compon
     this.toggleBlockType = this._toggleBlockType.bind(this);
     this.toggleInlineStyle = this._toggleInlineStyle.bind(this);
     this.defineBlocks();
-    this.defineInlineStyles(); // this.blockRenderers = {};
-    // for( const [key, val] of Object.entries(props.typo) ) {
-    //     if( val.type == 'block' ) {
-    //         this.blockRenderers[ key] = (block) => this._handleBlockRenderers(block);
-    //     }
-    // }
-    // this.optionsStateToHTML = {
-    //     // inlineStyles: {
-    //     //   // Override default element (`strong`).
-    //     // //   BOLD: {element: 'b'},
-    //     // //   ITALIC: {
-    //     // //     // Add custom attributes. You can also use React-style `className`.
-    //     // //     attributes: {class: 'foo'},
-    //     // //     // Use camel-case. Units (`px`) will be added where necessary.
-    //     // //     style: {fontSize: 12}
-    //     // //   },
-    //     // //   // Use a custom inline style. Default element is `span`.
-    //     // //   RED: {style: {color: '#900'}},
-    //     // },
-    //     blockRenderers: this.blockRenderers
-    // };
+    this.defineInlineStyles();
   }
 
   defineBlocks() {
     this.blockTypes = [];
+    this.blockRenderMap = {};
 
     for (const [key, val] of Object.entries(this.props.typo)) {
       if (val.type == 'block') {
@@ -1903,12 +1882,21 @@ class DraftEditor extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Compon
           label: val.label,
           style: key
         });
+        this.blockRenderMap[key] = {
+          wrapper: (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(WrapperBlockRendering, {
+            type: key
+          })
+        };
       }
     }
+
+    this.blockRenderMap = (0,Immutable__WEBPACK_IMPORTED_MODULE_2__.Map)(this.blockRenderMap);
+    this.blockRenderMap = draft_js__WEBPACK_IMPORTED_MODULE_1__.DefaultDraftBlockRenderMap.merge(this.blockRenderMap);
   }
 
   defineInlineStyles() {
     this.inlineStyles = [];
+    this.styleMap = {};
 
     for (const [key, val] of Object.entries(this.props.typo)) {
       if (val.type == 'inline') {
@@ -1916,32 +1904,37 @@ class DraftEditor extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Compon
           label: val.label,
           style: key
         });
+
+        if (val !== null && val !== void 0 && val.editor && typeof val.editor == 'object') {
+          this.styleMap[key] = {};
+
+          for (const [keyCss, valCss] of Object.entries(val.editor)) {
+            this.styleMap[key][keyCss] = valCss;
+          }
+        }
       }
     }
-  } // _handleBlockRenderers( block ) {
-  //     return '<div class="' + this.props.typo[block.getType()].class + '">' + block.getText() + '</div>';
-  // }
-
+  }
 
   handleChange(editorState) {
     this.setState({
       editorState
     });
     let currentContentState = editorState.getCurrentContent();
-    this.rawDraftContentState = (0,draft_js__WEBPACK_IMPORTED_MODULE_2__.convertToRaw)(currentContentState);
+    this.rawDraftContentState = (0,draft_js__WEBPACK_IMPORTED_MODULE_1__.convertToRaw)(currentContentState);
     this.props.onChange(this.rawDraftContentState);
   }
 
   _onBoldClick() {
-    this.onChange(draft_js__WEBPACK_IMPORTED_MODULE_2__.RichUtils.toggleInlineStyle(this.state.editorState, 'BOLD'));
+    this.onChange(draft_js__WEBPACK_IMPORTED_MODULE_1__.RichUtils.toggleInlineStyle(this.state.editorState, 'BOLD'));
   }
 
   _toggleBlockType(blockType) {
-    this.onChange(draft_js__WEBPACK_IMPORTED_MODULE_2__.RichUtils.toggleBlockType(this.state.editorState, blockType));
+    this.onChange(draft_js__WEBPACK_IMPORTED_MODULE_1__.RichUtils.toggleBlockType(this.state.editorState, blockType));
   }
 
   _toggleInlineStyle(inlineStyle) {
-    this.onChange(draft_js__WEBPACK_IMPORTED_MODULE_2__.RichUtils.toggleInlineStyle(this.state.editorState, inlineStyle));
+    this.onChange(draft_js__WEBPACK_IMPORTED_MODULE_1__.RichUtils.toggleInlineStyle(this.state.editorState, inlineStyle));
   }
 
   render() {
@@ -1970,26 +1963,7 @@ class DraftEditor extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Compon
         onToggle: props.onToggle,
         style: type.style
       })));
-    }; // If the user changes block type before entering any text, we can
-    // either style the placeholder or hide it. Let's just hide it now.
-
-
-    let className = 'DraftEditor-editor';
-    var contentState = this.state.editorState.getCurrentContent();
-
-    if (!contentState.hasText()) {
-      if (contentState.getBlockMap().first().getType() !== 'unstyled') {
-        className += ' DraftEditor-hidePlaceholder';
-      }
-    } // const blockRenderMap = Map({
-    //     'lead': {
-    //       element: 'section'
-    //     }
-    //   });
-    // Include 'paragraph' as a valid block and updated the unstyled element but
-    // keep support for other draft default block types
-    // const extendedBlockRenderMap = Draft.DefaultDraftBlockRenderMap.merge(blockRenderMap);
-
+    };
 
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "DraftEditor-container"
@@ -1999,13 +1973,12 @@ class DraftEditor extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Compon
     }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(InlineStyleControls, {
       editorState: this.state.editorState,
       onToggle: this.toggleInlineStyle
-    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: className,
-      onClick: this.focus
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(draft_js__WEBPACK_IMPORTED_MODULE_2__.Editor, {
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(draft_js__WEBPACK_IMPORTED_MODULE_1__.Editor, {
       editorState: this.state.editorState,
-      onChange: this.onChange
-    }))));
+      onChange: this.onChange,
+      blockRenderMap: this.blockRenderMap,
+      customStyleMap: this.styleMap
+    })));
   }
 
 }
@@ -2031,6 +2004,20 @@ class StyleButton extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Compon
       className: className,
       onMouseDown: this.onToggle
     }, this.props.label);
+  }
+
+}
+
+class WrapperBlockRendering extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "WrapperBlockRendering",
+      type: this.props.type
+    }, this.props.children);
   }
 
 }
@@ -2095,11 +2082,20 @@ class WysiwygControl extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Com
 
     if (themeSpec !== null && themeSpec !== void 0 && themeSpec.typo && typeof themeSpec.typo == 'object') {
       for (const [key, val] of Object.entries(themeSpec.typo)) {
+        let editorCss = null;
+
+        if (val !== null && val !== void 0 && val.style && typeof val.style == 'object') {
+          editorCss = {};
+
+          for (const [keyCss, valCss] of Object.entries(val.style)) {
+            editorCss[keyCss] = valCss;
+          }
+        }
+
         typo[key] = {
           label: key,
-          style: key,
-          type: val.type,
-          class: val.class
+          type: val !== null && val !== void 0 && val.nestable && val.nestable ? 'inline' : 'block',
+          editor: editorCss
         };
       }
     }
@@ -2226,6 +2222,5997 @@ function setWidthContainer(width) {
 
 /***/ }),
 
+/***/ "../../../js/controls/WysiwygControl/node_modules/Immutable/dist/immutable.es.js":
+/*!***************************************************************************************!*\
+  !*** ../../../js/controls/WysiwygControl/node_modules/Immutable/dist/immutable.es.js ***!
+  \***************************************************************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "Collection": function() { return /* binding */ Collection; },
+/* harmony export */   "Iterable": function() { return /* binding */ Iterable; },
+/* harmony export */   "List": function() { return /* binding */ List; },
+/* harmony export */   "Map": function() { return /* binding */ Map; },
+/* harmony export */   "OrderedMap": function() { return /* binding */ OrderedMap; },
+/* harmony export */   "OrderedSet": function() { return /* binding */ OrderedSet; },
+/* harmony export */   "Range": function() { return /* binding */ Range; },
+/* harmony export */   "Record": function() { return /* binding */ Record; },
+/* harmony export */   "Repeat": function() { return /* binding */ Repeat; },
+/* harmony export */   "Seq": function() { return /* binding */ Seq; },
+/* harmony export */   "Set": function() { return /* binding */ Set; },
+/* harmony export */   "Stack": function() { return /* binding */ Stack; },
+/* harmony export */   "fromJS": function() { return /* binding */ fromJS; },
+/* harmony export */   "get": function() { return /* binding */ get; },
+/* harmony export */   "getIn": function() { return /* binding */ getIn$1; },
+/* harmony export */   "has": function() { return /* binding */ has; },
+/* harmony export */   "hasIn": function() { return /* binding */ hasIn$1; },
+/* harmony export */   "hash": function() { return /* binding */ hash; },
+/* harmony export */   "is": function() { return /* binding */ is; },
+/* harmony export */   "isAssociative": function() { return /* binding */ isAssociative; },
+/* harmony export */   "isCollection": function() { return /* binding */ isCollection; },
+/* harmony export */   "isImmutable": function() { return /* binding */ isImmutable; },
+/* harmony export */   "isIndexed": function() { return /* binding */ isIndexed; },
+/* harmony export */   "isKeyed": function() { return /* binding */ isKeyed; },
+/* harmony export */   "isList": function() { return /* binding */ isList; },
+/* harmony export */   "isMap": function() { return /* binding */ isMap; },
+/* harmony export */   "isOrdered": function() { return /* binding */ isOrdered; },
+/* harmony export */   "isOrderedMap": function() { return /* binding */ isOrderedMap; },
+/* harmony export */   "isOrderedSet": function() { return /* binding */ isOrderedSet; },
+/* harmony export */   "isPlainObject": function() { return /* binding */ isPlainObject; },
+/* harmony export */   "isRecord": function() { return /* binding */ isRecord; },
+/* harmony export */   "isSeq": function() { return /* binding */ isSeq; },
+/* harmony export */   "isSet": function() { return /* binding */ isSet; },
+/* harmony export */   "isStack": function() { return /* binding */ isStack; },
+/* harmony export */   "isValueObject": function() { return /* binding */ isValueObject; },
+/* harmony export */   "merge": function() { return /* binding */ merge; },
+/* harmony export */   "mergeDeep": function() { return /* binding */ mergeDeep$1; },
+/* harmony export */   "mergeDeepWith": function() { return /* binding */ mergeDeepWith$1; },
+/* harmony export */   "mergeWith": function() { return /* binding */ mergeWith; },
+/* harmony export */   "remove": function() { return /* binding */ remove; },
+/* harmony export */   "removeIn": function() { return /* binding */ removeIn; },
+/* harmony export */   "set": function() { return /* binding */ set; },
+/* harmony export */   "setIn": function() { return /* binding */ setIn$1; },
+/* harmony export */   "update": function() { return /* binding */ update$1; },
+/* harmony export */   "updateIn": function() { return /* binding */ updateIn$1; },
+/* harmony export */   "version": function() { return /* binding */ version; }
+/* harmony export */ });
+/**
+ * MIT License
+ * 
+ * Copyright (c) 2014-present, Lee Byron and other contributors.
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+var DELETE = 'delete';
+
+// Constants describing the size of trie nodes.
+var SHIFT = 5; // Resulted in best performance after ______?
+var SIZE = 1 << SHIFT;
+var MASK = SIZE - 1;
+
+// A consistent shared value representing "not set" which equals nothing other
+// than itself, and nothing that could be provided externally.
+var NOT_SET = {};
+
+// Boolean references, Rough equivalent of `bool &`.
+function MakeRef() {
+  return { value: false };
+}
+
+function SetRef(ref) {
+  if (ref) {
+    ref.value = true;
+  }
+}
+
+// A function which returns a value representing an "owner" for transient writes
+// to tries. The return value will only ever equal itself, and will not equal
+// the return of any subsequent call of this function.
+function OwnerID() {}
+
+function ensureSize(iter) {
+  if (iter.size === undefined) {
+    iter.size = iter.__iterate(returnTrue);
+  }
+  return iter.size;
+}
+
+function wrapIndex(iter, index) {
+  // This implements "is array index" which the ECMAString spec defines as:
+  //
+  //     A String property name P is an array index if and only if
+  //     ToString(ToUint32(P)) is equal to P and ToUint32(P) is not equal
+  //     to 2^32−1.
+  //
+  // http://www.ecma-international.org/ecma-262/6.0/#sec-array-exotic-objects
+  if (typeof index !== 'number') {
+    var uint32Index = index >>> 0; // N >>> 0 is shorthand for ToUint32
+    if ('' + uint32Index !== index || uint32Index === 4294967295) {
+      return NaN;
+    }
+    index = uint32Index;
+  }
+  return index < 0 ? ensureSize(iter) + index : index;
+}
+
+function returnTrue() {
+  return true;
+}
+
+function wholeSlice(begin, end, size) {
+  return (
+    ((begin === 0 && !isNeg(begin)) ||
+      (size !== undefined && begin <= -size)) &&
+    (end === undefined || (size !== undefined && end >= size))
+  );
+}
+
+function resolveBegin(begin, size) {
+  return resolveIndex(begin, size, 0);
+}
+
+function resolveEnd(end, size) {
+  return resolveIndex(end, size, size);
+}
+
+function resolveIndex(index, size, defaultIndex) {
+  // Sanitize indices using this shorthand for ToInt32(argument)
+  // http://www.ecma-international.org/ecma-262/6.0/#sec-toint32
+  return index === undefined
+    ? defaultIndex
+    : isNeg(index)
+    ? size === Infinity
+      ? size
+      : Math.max(0, size + index) | 0
+    : size === undefined || size === index
+    ? index
+    : Math.min(size, index) | 0;
+}
+
+function isNeg(value) {
+  // Account for -0 which is negative, but not less than 0.
+  return value < 0 || (value === 0 && 1 / value === -Infinity);
+}
+
+var IS_COLLECTION_SYMBOL = '@@__IMMUTABLE_ITERABLE__@@';
+
+function isCollection(maybeCollection) {
+  return Boolean(maybeCollection && maybeCollection[IS_COLLECTION_SYMBOL]);
+}
+
+var IS_KEYED_SYMBOL = '@@__IMMUTABLE_KEYED__@@';
+
+function isKeyed(maybeKeyed) {
+  return Boolean(maybeKeyed && maybeKeyed[IS_KEYED_SYMBOL]);
+}
+
+var IS_INDEXED_SYMBOL = '@@__IMMUTABLE_INDEXED__@@';
+
+function isIndexed(maybeIndexed) {
+  return Boolean(maybeIndexed && maybeIndexed[IS_INDEXED_SYMBOL]);
+}
+
+function isAssociative(maybeAssociative) {
+  return isKeyed(maybeAssociative) || isIndexed(maybeAssociative);
+}
+
+var Collection = function Collection(value) {
+  return isCollection(value) ? value : Seq(value);
+};
+
+var KeyedCollection = /*@__PURE__*/(function (Collection) {
+  function KeyedCollection(value) {
+    return isKeyed(value) ? value : KeyedSeq(value);
+  }
+
+  if ( Collection ) KeyedCollection.__proto__ = Collection;
+  KeyedCollection.prototype = Object.create( Collection && Collection.prototype );
+  KeyedCollection.prototype.constructor = KeyedCollection;
+
+  return KeyedCollection;
+}(Collection));
+
+var IndexedCollection = /*@__PURE__*/(function (Collection) {
+  function IndexedCollection(value) {
+    return isIndexed(value) ? value : IndexedSeq(value);
+  }
+
+  if ( Collection ) IndexedCollection.__proto__ = Collection;
+  IndexedCollection.prototype = Object.create( Collection && Collection.prototype );
+  IndexedCollection.prototype.constructor = IndexedCollection;
+
+  return IndexedCollection;
+}(Collection));
+
+var SetCollection = /*@__PURE__*/(function (Collection) {
+  function SetCollection(value) {
+    return isCollection(value) && !isAssociative(value) ? value : SetSeq(value);
+  }
+
+  if ( Collection ) SetCollection.__proto__ = Collection;
+  SetCollection.prototype = Object.create( Collection && Collection.prototype );
+  SetCollection.prototype.constructor = SetCollection;
+
+  return SetCollection;
+}(Collection));
+
+Collection.Keyed = KeyedCollection;
+Collection.Indexed = IndexedCollection;
+Collection.Set = SetCollection;
+
+var IS_SEQ_SYMBOL = '@@__IMMUTABLE_SEQ__@@';
+
+function isSeq(maybeSeq) {
+  return Boolean(maybeSeq && maybeSeq[IS_SEQ_SYMBOL]);
+}
+
+var IS_RECORD_SYMBOL = '@@__IMMUTABLE_RECORD__@@';
+
+function isRecord(maybeRecord) {
+  return Boolean(maybeRecord && maybeRecord[IS_RECORD_SYMBOL]);
+}
+
+function isImmutable(maybeImmutable) {
+  return isCollection(maybeImmutable) || isRecord(maybeImmutable);
+}
+
+var IS_ORDERED_SYMBOL = '@@__IMMUTABLE_ORDERED__@@';
+
+function isOrdered(maybeOrdered) {
+  return Boolean(maybeOrdered && maybeOrdered[IS_ORDERED_SYMBOL]);
+}
+
+var ITERATE_KEYS = 0;
+var ITERATE_VALUES = 1;
+var ITERATE_ENTRIES = 2;
+
+var REAL_ITERATOR_SYMBOL = typeof Symbol === 'function' && Symbol.iterator;
+var FAUX_ITERATOR_SYMBOL = '@@iterator';
+
+var ITERATOR_SYMBOL = REAL_ITERATOR_SYMBOL || FAUX_ITERATOR_SYMBOL;
+
+var Iterator = function Iterator(next) {
+  this.next = next;
+};
+
+Iterator.prototype.toString = function toString () {
+  return '[Iterator]';
+};
+
+Iterator.KEYS = ITERATE_KEYS;
+Iterator.VALUES = ITERATE_VALUES;
+Iterator.ENTRIES = ITERATE_ENTRIES;
+
+Iterator.prototype.inspect = Iterator.prototype.toSource = function () {
+  return this.toString();
+};
+Iterator.prototype[ITERATOR_SYMBOL] = function () {
+  return this;
+};
+
+function iteratorValue(type, k, v, iteratorResult) {
+  var value = type === 0 ? k : type === 1 ? v : [k, v];
+  iteratorResult
+    ? (iteratorResult.value = value)
+    : (iteratorResult = {
+        value: value,
+        done: false,
+      });
+  return iteratorResult;
+}
+
+function iteratorDone() {
+  return { value: undefined, done: true };
+}
+
+function hasIterator(maybeIterable) {
+  if (Array.isArray(maybeIterable)) {
+    // IE11 trick as it does not support `Symbol.iterator`
+    return true;
+  }
+
+  return !!getIteratorFn(maybeIterable);
+}
+
+function isIterator(maybeIterator) {
+  return maybeIterator && typeof maybeIterator.next === 'function';
+}
+
+function getIterator(iterable) {
+  var iteratorFn = getIteratorFn(iterable);
+  return iteratorFn && iteratorFn.call(iterable);
+}
+
+function getIteratorFn(iterable) {
+  var iteratorFn =
+    iterable &&
+    ((REAL_ITERATOR_SYMBOL && iterable[REAL_ITERATOR_SYMBOL]) ||
+      iterable[FAUX_ITERATOR_SYMBOL]);
+  if (typeof iteratorFn === 'function') {
+    return iteratorFn;
+  }
+}
+
+function isEntriesIterable(maybeIterable) {
+  var iteratorFn = getIteratorFn(maybeIterable);
+  return iteratorFn && iteratorFn === maybeIterable.entries;
+}
+
+function isKeysIterable(maybeIterable) {
+  var iteratorFn = getIteratorFn(maybeIterable);
+  return iteratorFn && iteratorFn === maybeIterable.keys;
+}
+
+var hasOwnProperty = Object.prototype.hasOwnProperty;
+
+function isArrayLike(value) {
+  if (Array.isArray(value) || typeof value === 'string') {
+    return true;
+  }
+
+  return (
+    value &&
+    typeof value === 'object' &&
+    Number.isInteger(value.length) &&
+    value.length >= 0 &&
+    (value.length === 0
+      ? // Only {length: 0} is considered Array-like.
+        Object.keys(value).length === 1
+      : // An object is only Array-like if it has a property where the last value
+        // in the array-like may be found (which could be undefined).
+        value.hasOwnProperty(value.length - 1))
+  );
+}
+
+var Seq = /*@__PURE__*/(function (Collection) {
+  function Seq(value) {
+    return value === undefined || value === null
+      ? emptySequence()
+      : isImmutable(value)
+      ? value.toSeq()
+      : seqFromValue(value);
+  }
+
+  if ( Collection ) Seq.__proto__ = Collection;
+  Seq.prototype = Object.create( Collection && Collection.prototype );
+  Seq.prototype.constructor = Seq;
+
+  Seq.prototype.toSeq = function toSeq () {
+    return this;
+  };
+
+  Seq.prototype.toString = function toString () {
+    return this.__toString('Seq {', '}');
+  };
+
+  Seq.prototype.cacheResult = function cacheResult () {
+    if (!this._cache && this.__iterateUncached) {
+      this._cache = this.entrySeq().toArray();
+      this.size = this._cache.length;
+    }
+    return this;
+  };
+
+  // abstract __iterateUncached(fn, reverse)
+
+  Seq.prototype.__iterate = function __iterate (fn, reverse) {
+    var cache = this._cache;
+    if (cache) {
+      var size = cache.length;
+      var i = 0;
+      while (i !== size) {
+        var entry = cache[reverse ? size - ++i : i++];
+        if (fn(entry[1], entry[0], this) === false) {
+          break;
+        }
+      }
+      return i;
+    }
+    return this.__iterateUncached(fn, reverse);
+  };
+
+  // abstract __iteratorUncached(type, reverse)
+
+  Seq.prototype.__iterator = function __iterator (type, reverse) {
+    var cache = this._cache;
+    if (cache) {
+      var size = cache.length;
+      var i = 0;
+      return new Iterator(function () {
+        if (i === size) {
+          return iteratorDone();
+        }
+        var entry = cache[reverse ? size - ++i : i++];
+        return iteratorValue(type, entry[0], entry[1]);
+      });
+    }
+    return this.__iteratorUncached(type, reverse);
+  };
+
+  return Seq;
+}(Collection));
+
+var KeyedSeq = /*@__PURE__*/(function (Seq) {
+  function KeyedSeq(value) {
+    return value === undefined || value === null
+      ? emptySequence().toKeyedSeq()
+      : isCollection(value)
+      ? isKeyed(value)
+        ? value.toSeq()
+        : value.fromEntrySeq()
+      : isRecord(value)
+      ? value.toSeq()
+      : keyedSeqFromValue(value);
+  }
+
+  if ( Seq ) KeyedSeq.__proto__ = Seq;
+  KeyedSeq.prototype = Object.create( Seq && Seq.prototype );
+  KeyedSeq.prototype.constructor = KeyedSeq;
+
+  KeyedSeq.prototype.toKeyedSeq = function toKeyedSeq () {
+    return this;
+  };
+
+  return KeyedSeq;
+}(Seq));
+
+var IndexedSeq = /*@__PURE__*/(function (Seq) {
+  function IndexedSeq(value) {
+    return value === undefined || value === null
+      ? emptySequence()
+      : isCollection(value)
+      ? isKeyed(value)
+        ? value.entrySeq()
+        : value.toIndexedSeq()
+      : isRecord(value)
+      ? value.toSeq().entrySeq()
+      : indexedSeqFromValue(value);
+  }
+
+  if ( Seq ) IndexedSeq.__proto__ = Seq;
+  IndexedSeq.prototype = Object.create( Seq && Seq.prototype );
+  IndexedSeq.prototype.constructor = IndexedSeq;
+
+  IndexedSeq.of = function of (/*...values*/) {
+    return IndexedSeq(arguments);
+  };
+
+  IndexedSeq.prototype.toIndexedSeq = function toIndexedSeq () {
+    return this;
+  };
+
+  IndexedSeq.prototype.toString = function toString () {
+    return this.__toString('Seq [', ']');
+  };
+
+  return IndexedSeq;
+}(Seq));
+
+var SetSeq = /*@__PURE__*/(function (Seq) {
+  function SetSeq(value) {
+    return (
+      isCollection(value) && !isAssociative(value) ? value : IndexedSeq(value)
+    ).toSetSeq();
+  }
+
+  if ( Seq ) SetSeq.__proto__ = Seq;
+  SetSeq.prototype = Object.create( Seq && Seq.prototype );
+  SetSeq.prototype.constructor = SetSeq;
+
+  SetSeq.of = function of (/*...values*/) {
+    return SetSeq(arguments);
+  };
+
+  SetSeq.prototype.toSetSeq = function toSetSeq () {
+    return this;
+  };
+
+  return SetSeq;
+}(Seq));
+
+Seq.isSeq = isSeq;
+Seq.Keyed = KeyedSeq;
+Seq.Set = SetSeq;
+Seq.Indexed = IndexedSeq;
+
+Seq.prototype[IS_SEQ_SYMBOL] = true;
+
+// #pragma Root Sequences
+
+var ArraySeq = /*@__PURE__*/(function (IndexedSeq) {
+  function ArraySeq(array) {
+    this._array = array;
+    this.size = array.length;
+  }
+
+  if ( IndexedSeq ) ArraySeq.__proto__ = IndexedSeq;
+  ArraySeq.prototype = Object.create( IndexedSeq && IndexedSeq.prototype );
+  ArraySeq.prototype.constructor = ArraySeq;
+
+  ArraySeq.prototype.get = function get (index, notSetValue) {
+    return this.has(index) ? this._array[wrapIndex(this, index)] : notSetValue;
+  };
+
+  ArraySeq.prototype.__iterate = function __iterate (fn, reverse) {
+    var array = this._array;
+    var size = array.length;
+    var i = 0;
+    while (i !== size) {
+      var ii = reverse ? size - ++i : i++;
+      if (fn(array[ii], ii, this) === false) {
+        break;
+      }
+    }
+    return i;
+  };
+
+  ArraySeq.prototype.__iterator = function __iterator (type, reverse) {
+    var array = this._array;
+    var size = array.length;
+    var i = 0;
+    return new Iterator(function () {
+      if (i === size) {
+        return iteratorDone();
+      }
+      var ii = reverse ? size - ++i : i++;
+      return iteratorValue(type, ii, array[ii]);
+    });
+  };
+
+  return ArraySeq;
+}(IndexedSeq));
+
+var ObjectSeq = /*@__PURE__*/(function (KeyedSeq) {
+  function ObjectSeq(object) {
+    var keys = Object.keys(object).concat(
+      Object.getOwnPropertySymbols ? Object.getOwnPropertySymbols(object) : []
+    );
+    this._object = object;
+    this._keys = keys;
+    this.size = keys.length;
+  }
+
+  if ( KeyedSeq ) ObjectSeq.__proto__ = KeyedSeq;
+  ObjectSeq.prototype = Object.create( KeyedSeq && KeyedSeq.prototype );
+  ObjectSeq.prototype.constructor = ObjectSeq;
+
+  ObjectSeq.prototype.get = function get (key, notSetValue) {
+    if (notSetValue !== undefined && !this.has(key)) {
+      return notSetValue;
+    }
+    return this._object[key];
+  };
+
+  ObjectSeq.prototype.has = function has (key) {
+    return hasOwnProperty.call(this._object, key);
+  };
+
+  ObjectSeq.prototype.__iterate = function __iterate (fn, reverse) {
+    var object = this._object;
+    var keys = this._keys;
+    var size = keys.length;
+    var i = 0;
+    while (i !== size) {
+      var key = keys[reverse ? size - ++i : i++];
+      if (fn(object[key], key, this) === false) {
+        break;
+      }
+    }
+    return i;
+  };
+
+  ObjectSeq.prototype.__iterator = function __iterator (type, reverse) {
+    var object = this._object;
+    var keys = this._keys;
+    var size = keys.length;
+    var i = 0;
+    return new Iterator(function () {
+      if (i === size) {
+        return iteratorDone();
+      }
+      var key = keys[reverse ? size - ++i : i++];
+      return iteratorValue(type, key, object[key]);
+    });
+  };
+
+  return ObjectSeq;
+}(KeyedSeq));
+ObjectSeq.prototype[IS_ORDERED_SYMBOL] = true;
+
+var CollectionSeq = /*@__PURE__*/(function (IndexedSeq) {
+  function CollectionSeq(collection) {
+    this._collection = collection;
+    this.size = collection.length || collection.size;
+  }
+
+  if ( IndexedSeq ) CollectionSeq.__proto__ = IndexedSeq;
+  CollectionSeq.prototype = Object.create( IndexedSeq && IndexedSeq.prototype );
+  CollectionSeq.prototype.constructor = CollectionSeq;
+
+  CollectionSeq.prototype.__iterateUncached = function __iterateUncached (fn, reverse) {
+    if (reverse) {
+      return this.cacheResult().__iterate(fn, reverse);
+    }
+    var collection = this._collection;
+    var iterator = getIterator(collection);
+    var iterations = 0;
+    if (isIterator(iterator)) {
+      var step;
+      while (!(step = iterator.next()).done) {
+        if (fn(step.value, iterations++, this) === false) {
+          break;
+        }
+      }
+    }
+    return iterations;
+  };
+
+  CollectionSeq.prototype.__iteratorUncached = function __iteratorUncached (type, reverse) {
+    if (reverse) {
+      return this.cacheResult().__iterator(type, reverse);
+    }
+    var collection = this._collection;
+    var iterator = getIterator(collection);
+    if (!isIterator(iterator)) {
+      return new Iterator(iteratorDone);
+    }
+    var iterations = 0;
+    return new Iterator(function () {
+      var step = iterator.next();
+      return step.done ? step : iteratorValue(type, iterations++, step.value);
+    });
+  };
+
+  return CollectionSeq;
+}(IndexedSeq));
+
+// # pragma Helper functions
+
+var EMPTY_SEQ;
+
+function emptySequence() {
+  return EMPTY_SEQ || (EMPTY_SEQ = new ArraySeq([]));
+}
+
+function keyedSeqFromValue(value) {
+  var seq = maybeIndexedSeqFromValue(value);
+  if (seq) {
+    return seq.fromEntrySeq();
+  }
+  if (typeof value === 'object') {
+    return new ObjectSeq(value);
+  }
+  throw new TypeError(
+    'Expected Array or collection object of [k, v] entries, or keyed object: ' +
+      value
+  );
+}
+
+function indexedSeqFromValue(value) {
+  var seq = maybeIndexedSeqFromValue(value);
+  if (seq) {
+    return seq;
+  }
+  throw new TypeError(
+    'Expected Array or collection object of values: ' + value
+  );
+}
+
+function seqFromValue(value) {
+  var seq = maybeIndexedSeqFromValue(value);
+  if (seq) {
+    return isEntriesIterable(value)
+      ? seq.fromEntrySeq()
+      : isKeysIterable(value)
+      ? seq.toSetSeq()
+      : seq;
+  }
+  if (typeof value === 'object') {
+    return new ObjectSeq(value);
+  }
+  throw new TypeError(
+    'Expected Array or collection object of values, or keyed object: ' + value
+  );
+}
+
+function maybeIndexedSeqFromValue(value) {
+  return isArrayLike(value)
+    ? new ArraySeq(value)
+    : hasIterator(value)
+    ? new CollectionSeq(value)
+    : undefined;
+}
+
+var IS_MAP_SYMBOL = '@@__IMMUTABLE_MAP__@@';
+
+function isMap(maybeMap) {
+  return Boolean(maybeMap && maybeMap[IS_MAP_SYMBOL]);
+}
+
+function isOrderedMap(maybeOrderedMap) {
+  return isMap(maybeOrderedMap) && isOrdered(maybeOrderedMap);
+}
+
+function isValueObject(maybeValue) {
+  return Boolean(
+    maybeValue &&
+      typeof maybeValue.equals === 'function' &&
+      typeof maybeValue.hashCode === 'function'
+  );
+}
+
+/**
+ * An extension of the "same-value" algorithm as [described for use by ES6 Map
+ * and Set](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map#Key_equality)
+ *
+ * NaN is considered the same as NaN, however -0 and 0 are considered the same
+ * value, which is different from the algorithm described by
+ * [`Object.is`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is).
+ *
+ * This is extended further to allow Objects to describe the values they
+ * represent, by way of `valueOf` or `equals` (and `hashCode`).
+ *
+ * Note: because of this extension, the key equality of Immutable.Map and the
+ * value equality of Immutable.Set will differ from ES6 Map and Set.
+ *
+ * ### Defining custom values
+ *
+ * The easiest way to describe the value an object represents is by implementing
+ * `valueOf`. For example, `Date` represents a value by returning a unix
+ * timestamp for `valueOf`:
+ *
+ *     var date1 = new Date(1234567890000); // Fri Feb 13 2009 ...
+ *     var date2 = new Date(1234567890000);
+ *     date1.valueOf(); // 1234567890000
+ *     assert( date1 !== date2 );
+ *     assert( Immutable.is( date1, date2 ) );
+ *
+ * Note: overriding `valueOf` may have other implications if you use this object
+ * where JavaScript expects a primitive, such as implicit string coercion.
+ *
+ * For more complex types, especially collections, implementing `valueOf` may
+ * not be performant. An alternative is to implement `equals` and `hashCode`.
+ *
+ * `equals` takes another object, presumably of similar type, and returns true
+ * if it is equal. Equality is symmetrical, so the same result should be
+ * returned if this and the argument are flipped.
+ *
+ *     assert( a.equals(b) === b.equals(a) );
+ *
+ * `hashCode` returns a 32bit integer number representing the object which will
+ * be used to determine how to store the value object in a Map or Set. You must
+ * provide both or neither methods, one must not exist without the other.
+ *
+ * Also, an important relationship between these methods must be upheld: if two
+ * values are equal, they *must* return the same hashCode. If the values are not
+ * equal, they might have the same hashCode; this is called a hash collision,
+ * and while undesirable for performance reasons, it is acceptable.
+ *
+ *     if (a.equals(b)) {
+ *       assert( a.hashCode() === b.hashCode() );
+ *     }
+ *
+ * All Immutable collections are Value Objects: they implement `equals()`
+ * and `hashCode()`.
+ */
+function is(valueA, valueB) {
+  if (valueA === valueB || (valueA !== valueA && valueB !== valueB)) {
+    return true;
+  }
+  if (!valueA || !valueB) {
+    return false;
+  }
+  if (
+    typeof valueA.valueOf === 'function' &&
+    typeof valueB.valueOf === 'function'
+  ) {
+    valueA = valueA.valueOf();
+    valueB = valueB.valueOf();
+    if (valueA === valueB || (valueA !== valueA && valueB !== valueB)) {
+      return true;
+    }
+    if (!valueA || !valueB) {
+      return false;
+    }
+  }
+  return !!(
+    isValueObject(valueA) &&
+    isValueObject(valueB) &&
+    valueA.equals(valueB)
+  );
+}
+
+var imul =
+  typeof Math.imul === 'function' && Math.imul(0xffffffff, 2) === -2
+    ? Math.imul
+    : function imul(a, b) {
+        a |= 0; // int
+        b |= 0; // int
+        var c = a & 0xffff;
+        var d = b & 0xffff;
+        // Shift by 0 fixes the sign on the high part.
+        return (c * d + ((((a >>> 16) * d + c * (b >>> 16)) << 16) >>> 0)) | 0; // int
+      };
+
+// v8 has an optimization for storing 31-bit signed numbers.
+// Values which have either 00 or 11 as the high order bits qualify.
+// This function drops the highest order bit in a signed number, maintaining
+// the sign bit.
+function smi(i32) {
+  return ((i32 >>> 1) & 0x40000000) | (i32 & 0xbfffffff);
+}
+
+var defaultValueOf = Object.prototype.valueOf;
+
+function hash(o) {
+  if (o == null) {
+    return hashNullish(o);
+  }
+
+  if (typeof o.hashCode === 'function') {
+    // Drop any high bits from accidentally long hash codes.
+    return smi(o.hashCode(o));
+  }
+
+  var v = valueOf(o);
+
+  if (v == null) {
+    return hashNullish(v);
+  }
+
+  switch (typeof v) {
+    case 'boolean':
+      // The hash values for built-in constants are a 1 value for each 5-byte
+      // shift region expect for the first, which encodes the value. This
+      // reduces the odds of a hash collision for these common values.
+      return v ? 0x42108421 : 0x42108420;
+    case 'number':
+      return hashNumber(v);
+    case 'string':
+      return v.length > STRING_HASH_CACHE_MIN_STRLEN
+        ? cachedHashString(v)
+        : hashString(v);
+    case 'object':
+    case 'function':
+      return hashJSObj(v);
+    case 'symbol':
+      return hashSymbol(v);
+    default:
+      if (typeof v.toString === 'function') {
+        return hashString(v.toString());
+      }
+      throw new Error('Value type ' + typeof v + ' cannot be hashed.');
+  }
+}
+
+function hashNullish(nullish) {
+  return nullish === null ? 0x42108422 : /* undefined */ 0x42108423;
+}
+
+// Compress arbitrarily large numbers into smi hashes.
+function hashNumber(n) {
+  if (n !== n || n === Infinity) {
+    return 0;
+  }
+  var hash = n | 0;
+  if (hash !== n) {
+    hash ^= n * 0xffffffff;
+  }
+  while (n > 0xffffffff) {
+    n /= 0xffffffff;
+    hash ^= n;
+  }
+  return smi(hash);
+}
+
+function cachedHashString(string) {
+  var hashed = stringHashCache[string];
+  if (hashed === undefined) {
+    hashed = hashString(string);
+    if (STRING_HASH_CACHE_SIZE === STRING_HASH_CACHE_MAX_SIZE) {
+      STRING_HASH_CACHE_SIZE = 0;
+      stringHashCache = {};
+    }
+    STRING_HASH_CACHE_SIZE++;
+    stringHashCache[string] = hashed;
+  }
+  return hashed;
+}
+
+// http://jsperf.com/hashing-strings
+function hashString(string) {
+  // This is the hash from JVM
+  // The hash code for a string is computed as
+  // s[0] * 31 ^ (n - 1) + s[1] * 31 ^ (n - 2) + ... + s[n - 1],
+  // where s[i] is the ith character of the string and n is the length of
+  // the string. We "mod" the result to make it between 0 (inclusive) and 2^31
+  // (exclusive) by dropping high bits.
+  var hashed = 0;
+  for (var ii = 0; ii < string.length; ii++) {
+    hashed = (31 * hashed + string.charCodeAt(ii)) | 0;
+  }
+  return smi(hashed);
+}
+
+function hashSymbol(sym) {
+  var hashed = symbolMap[sym];
+  if (hashed !== undefined) {
+    return hashed;
+  }
+
+  hashed = nextHash();
+
+  symbolMap[sym] = hashed;
+
+  return hashed;
+}
+
+function hashJSObj(obj) {
+  var hashed;
+  if (usingWeakMap) {
+    hashed = weakMap.get(obj);
+    if (hashed !== undefined) {
+      return hashed;
+    }
+  }
+
+  hashed = obj[UID_HASH_KEY];
+  if (hashed !== undefined) {
+    return hashed;
+  }
+
+  if (!canDefineProperty) {
+    hashed = obj.propertyIsEnumerable && obj.propertyIsEnumerable[UID_HASH_KEY];
+    if (hashed !== undefined) {
+      return hashed;
+    }
+
+    hashed = getIENodeHash(obj);
+    if (hashed !== undefined) {
+      return hashed;
+    }
+  }
+
+  hashed = nextHash();
+
+  if (usingWeakMap) {
+    weakMap.set(obj, hashed);
+  } else if (isExtensible !== undefined && isExtensible(obj) === false) {
+    throw new Error('Non-extensible objects are not allowed as keys.');
+  } else if (canDefineProperty) {
+    Object.defineProperty(obj, UID_HASH_KEY, {
+      enumerable: false,
+      configurable: false,
+      writable: false,
+      value: hashed,
+    });
+  } else if (
+    obj.propertyIsEnumerable !== undefined &&
+    obj.propertyIsEnumerable === obj.constructor.prototype.propertyIsEnumerable
+  ) {
+    // Since we can't define a non-enumerable property on the object
+    // we'll hijack one of the less-used non-enumerable properties to
+    // save our hash on it. Since this is a function it will not show up in
+    // `JSON.stringify` which is what we want.
+    obj.propertyIsEnumerable = function () {
+      return this.constructor.prototype.propertyIsEnumerable.apply(
+        this,
+        arguments
+      );
+    };
+    obj.propertyIsEnumerable[UID_HASH_KEY] = hashed;
+  } else if (obj.nodeType !== undefined) {
+    // At this point we couldn't get the IE `uniqueID` to use as a hash
+    // and we couldn't use a non-enumerable property to exploit the
+    // dontEnum bug so we simply add the `UID_HASH_KEY` on the node
+    // itself.
+    obj[UID_HASH_KEY] = hashed;
+  } else {
+    throw new Error('Unable to set a non-enumerable property on object.');
+  }
+
+  return hashed;
+}
+
+// Get references to ES5 object methods.
+var isExtensible = Object.isExtensible;
+
+// True if Object.defineProperty works as expected. IE8 fails this test.
+var canDefineProperty = (function () {
+  try {
+    Object.defineProperty({}, '@', {});
+    return true;
+  } catch (e) {
+    return false;
+  }
+})();
+
+// IE has a `uniqueID` property on DOM nodes. We can construct the hash from it
+// and avoid memory leaks from the IE cloneNode bug.
+function getIENodeHash(node) {
+  if (node && node.nodeType > 0) {
+    switch (node.nodeType) {
+      case 1: // Element
+        return node.uniqueID;
+      case 9: // Document
+        return node.documentElement && node.documentElement.uniqueID;
+    }
+  }
+}
+
+function valueOf(obj) {
+  return obj.valueOf !== defaultValueOf && typeof obj.valueOf === 'function'
+    ? obj.valueOf(obj)
+    : obj;
+}
+
+function nextHash() {
+  var nextHash = ++_objHashUID;
+  if (_objHashUID & 0x40000000) {
+    _objHashUID = 0;
+  }
+  return nextHash;
+}
+
+// If possible, use a WeakMap.
+var usingWeakMap = typeof WeakMap === 'function';
+var weakMap;
+if (usingWeakMap) {
+  weakMap = new WeakMap();
+}
+
+var symbolMap = Object.create(null);
+
+var _objHashUID = 0;
+
+var UID_HASH_KEY = '__immutablehash__';
+if (typeof Symbol === 'function') {
+  UID_HASH_KEY = Symbol(UID_HASH_KEY);
+}
+
+var STRING_HASH_CACHE_MIN_STRLEN = 16;
+var STRING_HASH_CACHE_MAX_SIZE = 255;
+var STRING_HASH_CACHE_SIZE = 0;
+var stringHashCache = {};
+
+var ToKeyedSequence = /*@__PURE__*/(function (KeyedSeq) {
+  function ToKeyedSequence(indexed, useKeys) {
+    this._iter = indexed;
+    this._useKeys = useKeys;
+    this.size = indexed.size;
+  }
+
+  if ( KeyedSeq ) ToKeyedSequence.__proto__ = KeyedSeq;
+  ToKeyedSequence.prototype = Object.create( KeyedSeq && KeyedSeq.prototype );
+  ToKeyedSequence.prototype.constructor = ToKeyedSequence;
+
+  ToKeyedSequence.prototype.get = function get (key, notSetValue) {
+    return this._iter.get(key, notSetValue);
+  };
+
+  ToKeyedSequence.prototype.has = function has (key) {
+    return this._iter.has(key);
+  };
+
+  ToKeyedSequence.prototype.valueSeq = function valueSeq () {
+    return this._iter.valueSeq();
+  };
+
+  ToKeyedSequence.prototype.reverse = function reverse () {
+    var this$1$1 = this;
+
+    var reversedSequence = reverseFactory(this, true);
+    if (!this._useKeys) {
+      reversedSequence.valueSeq = function () { return this$1$1._iter.toSeq().reverse(); };
+    }
+    return reversedSequence;
+  };
+
+  ToKeyedSequence.prototype.map = function map (mapper, context) {
+    var this$1$1 = this;
+
+    var mappedSequence = mapFactory(this, mapper, context);
+    if (!this._useKeys) {
+      mappedSequence.valueSeq = function () { return this$1$1._iter.toSeq().map(mapper, context); };
+    }
+    return mappedSequence;
+  };
+
+  ToKeyedSequence.prototype.__iterate = function __iterate (fn, reverse) {
+    var this$1$1 = this;
+
+    return this._iter.__iterate(function (v, k) { return fn(v, k, this$1$1); }, reverse);
+  };
+
+  ToKeyedSequence.prototype.__iterator = function __iterator (type, reverse) {
+    return this._iter.__iterator(type, reverse);
+  };
+
+  return ToKeyedSequence;
+}(KeyedSeq));
+ToKeyedSequence.prototype[IS_ORDERED_SYMBOL] = true;
+
+var ToIndexedSequence = /*@__PURE__*/(function (IndexedSeq) {
+  function ToIndexedSequence(iter) {
+    this._iter = iter;
+    this.size = iter.size;
+  }
+
+  if ( IndexedSeq ) ToIndexedSequence.__proto__ = IndexedSeq;
+  ToIndexedSequence.prototype = Object.create( IndexedSeq && IndexedSeq.prototype );
+  ToIndexedSequence.prototype.constructor = ToIndexedSequence;
+
+  ToIndexedSequence.prototype.includes = function includes (value) {
+    return this._iter.includes(value);
+  };
+
+  ToIndexedSequence.prototype.__iterate = function __iterate (fn, reverse) {
+    var this$1$1 = this;
+
+    var i = 0;
+    reverse && ensureSize(this);
+    return this._iter.__iterate(
+      function (v) { return fn(v, reverse ? this$1$1.size - ++i : i++, this$1$1); },
+      reverse
+    );
+  };
+
+  ToIndexedSequence.prototype.__iterator = function __iterator (type, reverse) {
+    var this$1$1 = this;
+
+    var iterator = this._iter.__iterator(ITERATE_VALUES, reverse);
+    var i = 0;
+    reverse && ensureSize(this);
+    return new Iterator(function () {
+      var step = iterator.next();
+      return step.done
+        ? step
+        : iteratorValue(
+            type,
+            reverse ? this$1$1.size - ++i : i++,
+            step.value,
+            step
+          );
+    });
+  };
+
+  return ToIndexedSequence;
+}(IndexedSeq));
+
+var ToSetSequence = /*@__PURE__*/(function (SetSeq) {
+  function ToSetSequence(iter) {
+    this._iter = iter;
+    this.size = iter.size;
+  }
+
+  if ( SetSeq ) ToSetSequence.__proto__ = SetSeq;
+  ToSetSequence.prototype = Object.create( SetSeq && SetSeq.prototype );
+  ToSetSequence.prototype.constructor = ToSetSequence;
+
+  ToSetSequence.prototype.has = function has (key) {
+    return this._iter.includes(key);
+  };
+
+  ToSetSequence.prototype.__iterate = function __iterate (fn, reverse) {
+    var this$1$1 = this;
+
+    return this._iter.__iterate(function (v) { return fn(v, v, this$1$1); }, reverse);
+  };
+
+  ToSetSequence.prototype.__iterator = function __iterator (type, reverse) {
+    var iterator = this._iter.__iterator(ITERATE_VALUES, reverse);
+    return new Iterator(function () {
+      var step = iterator.next();
+      return step.done
+        ? step
+        : iteratorValue(type, step.value, step.value, step);
+    });
+  };
+
+  return ToSetSequence;
+}(SetSeq));
+
+var FromEntriesSequence = /*@__PURE__*/(function (KeyedSeq) {
+  function FromEntriesSequence(entries) {
+    this._iter = entries;
+    this.size = entries.size;
+  }
+
+  if ( KeyedSeq ) FromEntriesSequence.__proto__ = KeyedSeq;
+  FromEntriesSequence.prototype = Object.create( KeyedSeq && KeyedSeq.prototype );
+  FromEntriesSequence.prototype.constructor = FromEntriesSequence;
+
+  FromEntriesSequence.prototype.entrySeq = function entrySeq () {
+    return this._iter.toSeq();
+  };
+
+  FromEntriesSequence.prototype.__iterate = function __iterate (fn, reverse) {
+    var this$1$1 = this;
+
+    return this._iter.__iterate(function (entry) {
+      // Check if entry exists first so array access doesn't throw for holes
+      // in the parent iteration.
+      if (entry) {
+        validateEntry(entry);
+        var indexedCollection = isCollection(entry);
+        return fn(
+          indexedCollection ? entry.get(1) : entry[1],
+          indexedCollection ? entry.get(0) : entry[0],
+          this$1$1
+        );
+      }
+    }, reverse);
+  };
+
+  FromEntriesSequence.prototype.__iterator = function __iterator (type, reverse) {
+    var iterator = this._iter.__iterator(ITERATE_VALUES, reverse);
+    return new Iterator(function () {
+      while (true) {
+        var step = iterator.next();
+        if (step.done) {
+          return step;
+        }
+        var entry = step.value;
+        // Check if entry exists first so array access doesn't throw for holes
+        // in the parent iteration.
+        if (entry) {
+          validateEntry(entry);
+          var indexedCollection = isCollection(entry);
+          return iteratorValue(
+            type,
+            indexedCollection ? entry.get(0) : entry[0],
+            indexedCollection ? entry.get(1) : entry[1],
+            step
+          );
+        }
+      }
+    });
+  };
+
+  return FromEntriesSequence;
+}(KeyedSeq));
+
+ToIndexedSequence.prototype.cacheResult =
+  ToKeyedSequence.prototype.cacheResult =
+  ToSetSequence.prototype.cacheResult =
+  FromEntriesSequence.prototype.cacheResult =
+    cacheResultThrough;
+
+function flipFactory(collection) {
+  var flipSequence = makeSequence(collection);
+  flipSequence._iter = collection;
+  flipSequence.size = collection.size;
+  flipSequence.flip = function () { return collection; };
+  flipSequence.reverse = function () {
+    var reversedSequence = collection.reverse.apply(this); // super.reverse()
+    reversedSequence.flip = function () { return collection.reverse(); };
+    return reversedSequence;
+  };
+  flipSequence.has = function (key) { return collection.includes(key); };
+  flipSequence.includes = function (key) { return collection.has(key); };
+  flipSequence.cacheResult = cacheResultThrough;
+  flipSequence.__iterateUncached = function (fn, reverse) {
+    var this$1$1 = this;
+
+    return collection.__iterate(function (v, k) { return fn(k, v, this$1$1) !== false; }, reverse);
+  };
+  flipSequence.__iteratorUncached = function (type, reverse) {
+    if (type === ITERATE_ENTRIES) {
+      var iterator = collection.__iterator(type, reverse);
+      return new Iterator(function () {
+        var step = iterator.next();
+        if (!step.done) {
+          var k = step.value[0];
+          step.value[0] = step.value[1];
+          step.value[1] = k;
+        }
+        return step;
+      });
+    }
+    return collection.__iterator(
+      type === ITERATE_VALUES ? ITERATE_KEYS : ITERATE_VALUES,
+      reverse
+    );
+  };
+  return flipSequence;
+}
+
+function mapFactory(collection, mapper, context) {
+  var mappedSequence = makeSequence(collection);
+  mappedSequence.size = collection.size;
+  mappedSequence.has = function (key) { return collection.has(key); };
+  mappedSequence.get = function (key, notSetValue) {
+    var v = collection.get(key, NOT_SET);
+    return v === NOT_SET
+      ? notSetValue
+      : mapper.call(context, v, key, collection);
+  };
+  mappedSequence.__iterateUncached = function (fn, reverse) {
+    var this$1$1 = this;
+
+    return collection.__iterate(
+      function (v, k, c) { return fn(mapper.call(context, v, k, c), k, this$1$1) !== false; },
+      reverse
+    );
+  };
+  mappedSequence.__iteratorUncached = function (type, reverse) {
+    var iterator = collection.__iterator(ITERATE_ENTRIES, reverse);
+    return new Iterator(function () {
+      var step = iterator.next();
+      if (step.done) {
+        return step;
+      }
+      var entry = step.value;
+      var key = entry[0];
+      return iteratorValue(
+        type,
+        key,
+        mapper.call(context, entry[1], key, collection),
+        step
+      );
+    });
+  };
+  return mappedSequence;
+}
+
+function reverseFactory(collection, useKeys) {
+  var this$1$1 = this;
+
+  var reversedSequence = makeSequence(collection);
+  reversedSequence._iter = collection;
+  reversedSequence.size = collection.size;
+  reversedSequence.reverse = function () { return collection; };
+  if (collection.flip) {
+    reversedSequence.flip = function () {
+      var flipSequence = flipFactory(collection);
+      flipSequence.reverse = function () { return collection.flip(); };
+      return flipSequence;
+    };
+  }
+  reversedSequence.get = function (key, notSetValue) { return collection.get(useKeys ? key : -1 - key, notSetValue); };
+  reversedSequence.has = function (key) { return collection.has(useKeys ? key : -1 - key); };
+  reversedSequence.includes = function (value) { return collection.includes(value); };
+  reversedSequence.cacheResult = cacheResultThrough;
+  reversedSequence.__iterate = function (fn, reverse) {
+    var this$1$1 = this;
+
+    var i = 0;
+    reverse && ensureSize(collection);
+    return collection.__iterate(
+      function (v, k) { return fn(v, useKeys ? k : reverse ? this$1$1.size - ++i : i++, this$1$1); },
+      !reverse
+    );
+  };
+  reversedSequence.__iterator = function (type, reverse) {
+    var i = 0;
+    reverse && ensureSize(collection);
+    var iterator = collection.__iterator(ITERATE_ENTRIES, !reverse);
+    return new Iterator(function () {
+      var step = iterator.next();
+      if (step.done) {
+        return step;
+      }
+      var entry = step.value;
+      return iteratorValue(
+        type,
+        useKeys ? entry[0] : reverse ? this$1$1.size - ++i : i++,
+        entry[1],
+        step
+      );
+    });
+  };
+  return reversedSequence;
+}
+
+function filterFactory(collection, predicate, context, useKeys) {
+  var filterSequence = makeSequence(collection);
+  if (useKeys) {
+    filterSequence.has = function (key) {
+      var v = collection.get(key, NOT_SET);
+      return v !== NOT_SET && !!predicate.call(context, v, key, collection);
+    };
+    filterSequence.get = function (key, notSetValue) {
+      var v = collection.get(key, NOT_SET);
+      return v !== NOT_SET && predicate.call(context, v, key, collection)
+        ? v
+        : notSetValue;
+    };
+  }
+  filterSequence.__iterateUncached = function (fn, reverse) {
+    var this$1$1 = this;
+
+    var iterations = 0;
+    collection.__iterate(function (v, k, c) {
+      if (predicate.call(context, v, k, c)) {
+        iterations++;
+        return fn(v, useKeys ? k : iterations - 1, this$1$1);
+      }
+    }, reverse);
+    return iterations;
+  };
+  filterSequence.__iteratorUncached = function (type, reverse) {
+    var iterator = collection.__iterator(ITERATE_ENTRIES, reverse);
+    var iterations = 0;
+    return new Iterator(function () {
+      while (true) {
+        var step = iterator.next();
+        if (step.done) {
+          return step;
+        }
+        var entry = step.value;
+        var key = entry[0];
+        var value = entry[1];
+        if (predicate.call(context, value, key, collection)) {
+          return iteratorValue(type, useKeys ? key : iterations++, value, step);
+        }
+      }
+    });
+  };
+  return filterSequence;
+}
+
+function countByFactory(collection, grouper, context) {
+  var groups = Map().asMutable();
+  collection.__iterate(function (v, k) {
+    groups.update(grouper.call(context, v, k, collection), 0, function (a) { return a + 1; });
+  });
+  return groups.asImmutable();
+}
+
+function groupByFactory(collection, grouper, context) {
+  var isKeyedIter = isKeyed(collection);
+  var groups = (isOrdered(collection) ? OrderedMap() : Map()).asMutable();
+  collection.__iterate(function (v, k) {
+    groups.update(
+      grouper.call(context, v, k, collection),
+      function (a) { return ((a = a || []), a.push(isKeyedIter ? [k, v] : v), a); }
+    );
+  });
+  var coerce = collectionClass(collection);
+  return groups.map(function (arr) { return reify(collection, coerce(arr)); }).asImmutable();
+}
+
+function sliceFactory(collection, begin, end, useKeys) {
+  var originalSize = collection.size;
+
+  if (wholeSlice(begin, end, originalSize)) {
+    return collection;
+  }
+
+  var resolvedBegin = resolveBegin(begin, originalSize);
+  var resolvedEnd = resolveEnd(end, originalSize);
+
+  // begin or end will be NaN if they were provided as negative numbers and
+  // this collection's size is unknown. In that case, cache first so there is
+  // a known size and these do not resolve to NaN.
+  if (resolvedBegin !== resolvedBegin || resolvedEnd !== resolvedEnd) {
+    return sliceFactory(collection.toSeq().cacheResult(), begin, end, useKeys);
+  }
+
+  // Note: resolvedEnd is undefined when the original sequence's length is
+  // unknown and this slice did not supply an end and should contain all
+  // elements after resolvedBegin.
+  // In that case, resolvedSize will be NaN and sliceSize will remain undefined.
+  var resolvedSize = resolvedEnd - resolvedBegin;
+  var sliceSize;
+  if (resolvedSize === resolvedSize) {
+    sliceSize = resolvedSize < 0 ? 0 : resolvedSize;
+  }
+
+  var sliceSeq = makeSequence(collection);
+
+  // If collection.size is undefined, the size of the realized sliceSeq is
+  // unknown at this point unless the number of items to slice is 0
+  sliceSeq.size =
+    sliceSize === 0 ? sliceSize : (collection.size && sliceSize) || undefined;
+
+  if (!useKeys && isSeq(collection) && sliceSize >= 0) {
+    sliceSeq.get = function (index, notSetValue) {
+      index = wrapIndex(this, index);
+      return index >= 0 && index < sliceSize
+        ? collection.get(index + resolvedBegin, notSetValue)
+        : notSetValue;
+    };
+  }
+
+  sliceSeq.__iterateUncached = function (fn, reverse) {
+    var this$1$1 = this;
+
+    if (sliceSize === 0) {
+      return 0;
+    }
+    if (reverse) {
+      return this.cacheResult().__iterate(fn, reverse);
+    }
+    var skipped = 0;
+    var isSkipping = true;
+    var iterations = 0;
+    collection.__iterate(function (v, k) {
+      if (!(isSkipping && (isSkipping = skipped++ < resolvedBegin))) {
+        iterations++;
+        return (
+          fn(v, useKeys ? k : iterations - 1, this$1$1) !== false &&
+          iterations !== sliceSize
+        );
+      }
+    });
+    return iterations;
+  };
+
+  sliceSeq.__iteratorUncached = function (type, reverse) {
+    if (sliceSize !== 0 && reverse) {
+      return this.cacheResult().__iterator(type, reverse);
+    }
+    // Don't bother instantiating parent iterator if taking 0.
+    if (sliceSize === 0) {
+      return new Iterator(iteratorDone);
+    }
+    var iterator = collection.__iterator(type, reverse);
+    var skipped = 0;
+    var iterations = 0;
+    return new Iterator(function () {
+      while (skipped++ < resolvedBegin) {
+        iterator.next();
+      }
+      if (++iterations > sliceSize) {
+        return iteratorDone();
+      }
+      var step = iterator.next();
+      if (useKeys || type === ITERATE_VALUES || step.done) {
+        return step;
+      }
+      if (type === ITERATE_KEYS) {
+        return iteratorValue(type, iterations - 1, undefined, step);
+      }
+      return iteratorValue(type, iterations - 1, step.value[1], step);
+    });
+  };
+
+  return sliceSeq;
+}
+
+function takeWhileFactory(collection, predicate, context) {
+  var takeSequence = makeSequence(collection);
+  takeSequence.__iterateUncached = function (fn, reverse) {
+    var this$1$1 = this;
+
+    if (reverse) {
+      return this.cacheResult().__iterate(fn, reverse);
+    }
+    var iterations = 0;
+    collection.__iterate(
+      function (v, k, c) { return predicate.call(context, v, k, c) && ++iterations && fn(v, k, this$1$1); }
+    );
+    return iterations;
+  };
+  takeSequence.__iteratorUncached = function (type, reverse) {
+    var this$1$1 = this;
+
+    if (reverse) {
+      return this.cacheResult().__iterator(type, reverse);
+    }
+    var iterator = collection.__iterator(ITERATE_ENTRIES, reverse);
+    var iterating = true;
+    return new Iterator(function () {
+      if (!iterating) {
+        return iteratorDone();
+      }
+      var step = iterator.next();
+      if (step.done) {
+        return step;
+      }
+      var entry = step.value;
+      var k = entry[0];
+      var v = entry[1];
+      if (!predicate.call(context, v, k, this$1$1)) {
+        iterating = false;
+        return iteratorDone();
+      }
+      return type === ITERATE_ENTRIES ? step : iteratorValue(type, k, v, step);
+    });
+  };
+  return takeSequence;
+}
+
+function skipWhileFactory(collection, predicate, context, useKeys) {
+  var skipSequence = makeSequence(collection);
+  skipSequence.__iterateUncached = function (fn, reverse) {
+    var this$1$1 = this;
+
+    if (reverse) {
+      return this.cacheResult().__iterate(fn, reverse);
+    }
+    var isSkipping = true;
+    var iterations = 0;
+    collection.__iterate(function (v, k, c) {
+      if (!(isSkipping && (isSkipping = predicate.call(context, v, k, c)))) {
+        iterations++;
+        return fn(v, useKeys ? k : iterations - 1, this$1$1);
+      }
+    });
+    return iterations;
+  };
+  skipSequence.__iteratorUncached = function (type, reverse) {
+    var this$1$1 = this;
+
+    if (reverse) {
+      return this.cacheResult().__iterator(type, reverse);
+    }
+    var iterator = collection.__iterator(ITERATE_ENTRIES, reverse);
+    var skipping = true;
+    var iterations = 0;
+    return new Iterator(function () {
+      var step;
+      var k;
+      var v;
+      do {
+        step = iterator.next();
+        if (step.done) {
+          if (useKeys || type === ITERATE_VALUES) {
+            return step;
+          }
+          if (type === ITERATE_KEYS) {
+            return iteratorValue(type, iterations++, undefined, step);
+          }
+          return iteratorValue(type, iterations++, step.value[1], step);
+        }
+        var entry = step.value;
+        k = entry[0];
+        v = entry[1];
+        skipping && (skipping = predicate.call(context, v, k, this$1$1));
+      } while (skipping);
+      return type === ITERATE_ENTRIES ? step : iteratorValue(type, k, v, step);
+    });
+  };
+  return skipSequence;
+}
+
+function concatFactory(collection, values) {
+  var isKeyedCollection = isKeyed(collection);
+  var iters = [collection]
+    .concat(values)
+    .map(function (v) {
+      if (!isCollection(v)) {
+        v = isKeyedCollection
+          ? keyedSeqFromValue(v)
+          : indexedSeqFromValue(Array.isArray(v) ? v : [v]);
+      } else if (isKeyedCollection) {
+        v = KeyedCollection(v);
+      }
+      return v;
+    })
+    .filter(function (v) { return v.size !== 0; });
+
+  if (iters.length === 0) {
+    return collection;
+  }
+
+  if (iters.length === 1) {
+    var singleton = iters[0];
+    if (
+      singleton === collection ||
+      (isKeyedCollection && isKeyed(singleton)) ||
+      (isIndexed(collection) && isIndexed(singleton))
+    ) {
+      return singleton;
+    }
+  }
+
+  var concatSeq = new ArraySeq(iters);
+  if (isKeyedCollection) {
+    concatSeq = concatSeq.toKeyedSeq();
+  } else if (!isIndexed(collection)) {
+    concatSeq = concatSeq.toSetSeq();
+  }
+  concatSeq = concatSeq.flatten(true);
+  concatSeq.size = iters.reduce(function (sum, seq) {
+    if (sum !== undefined) {
+      var size = seq.size;
+      if (size !== undefined) {
+        return sum + size;
+      }
+    }
+  }, 0);
+  return concatSeq;
+}
+
+function flattenFactory(collection, depth, useKeys) {
+  var flatSequence = makeSequence(collection);
+  flatSequence.__iterateUncached = function (fn, reverse) {
+    if (reverse) {
+      return this.cacheResult().__iterate(fn, reverse);
+    }
+    var iterations = 0;
+    var stopped = false;
+    function flatDeep(iter, currentDepth) {
+      iter.__iterate(function (v, k) {
+        if ((!depth || currentDepth < depth) && isCollection(v)) {
+          flatDeep(v, currentDepth + 1);
+        } else {
+          iterations++;
+          if (fn(v, useKeys ? k : iterations - 1, flatSequence) === false) {
+            stopped = true;
+          }
+        }
+        return !stopped;
+      }, reverse);
+    }
+    flatDeep(collection, 0);
+    return iterations;
+  };
+  flatSequence.__iteratorUncached = function (type, reverse) {
+    if (reverse) {
+      return this.cacheResult().__iterator(type, reverse);
+    }
+    var iterator = collection.__iterator(type, reverse);
+    var stack = [];
+    var iterations = 0;
+    return new Iterator(function () {
+      while (iterator) {
+        var step = iterator.next();
+        if (step.done !== false) {
+          iterator = stack.pop();
+          continue;
+        }
+        var v = step.value;
+        if (type === ITERATE_ENTRIES) {
+          v = v[1];
+        }
+        if ((!depth || stack.length < depth) && isCollection(v)) {
+          stack.push(iterator);
+          iterator = v.__iterator(type, reverse);
+        } else {
+          return useKeys ? step : iteratorValue(type, iterations++, v, step);
+        }
+      }
+      return iteratorDone();
+    });
+  };
+  return flatSequence;
+}
+
+function flatMapFactory(collection, mapper, context) {
+  var coerce = collectionClass(collection);
+  return collection
+    .toSeq()
+    .map(function (v, k) { return coerce(mapper.call(context, v, k, collection)); })
+    .flatten(true);
+}
+
+function interposeFactory(collection, separator) {
+  var interposedSequence = makeSequence(collection);
+  interposedSequence.size = collection.size && collection.size * 2 - 1;
+  interposedSequence.__iterateUncached = function (fn, reverse) {
+    var this$1$1 = this;
+
+    var iterations = 0;
+    collection.__iterate(
+      function (v) { return (!iterations || fn(separator, iterations++, this$1$1) !== false) &&
+        fn(v, iterations++, this$1$1) !== false; },
+      reverse
+    );
+    return iterations;
+  };
+  interposedSequence.__iteratorUncached = function (type, reverse) {
+    var iterator = collection.__iterator(ITERATE_VALUES, reverse);
+    var iterations = 0;
+    var step;
+    return new Iterator(function () {
+      if (!step || iterations % 2) {
+        step = iterator.next();
+        if (step.done) {
+          return step;
+        }
+      }
+      return iterations % 2
+        ? iteratorValue(type, iterations++, separator)
+        : iteratorValue(type, iterations++, step.value, step);
+    });
+  };
+  return interposedSequence;
+}
+
+function sortFactory(collection, comparator, mapper) {
+  if (!comparator) {
+    comparator = defaultComparator;
+  }
+  var isKeyedCollection = isKeyed(collection);
+  var index = 0;
+  var entries = collection
+    .toSeq()
+    .map(function (v, k) { return [k, v, index++, mapper ? mapper(v, k, collection) : v]; })
+    .valueSeq()
+    .toArray();
+  entries
+    .sort(function (a, b) { return comparator(a[3], b[3]) || a[2] - b[2]; })
+    .forEach(
+      isKeyedCollection
+        ? function (v, i) {
+            entries[i].length = 2;
+          }
+        : function (v, i) {
+            entries[i] = v[1];
+          }
+    );
+  return isKeyedCollection
+    ? KeyedSeq(entries)
+    : isIndexed(collection)
+    ? IndexedSeq(entries)
+    : SetSeq(entries);
+}
+
+function maxFactory(collection, comparator, mapper) {
+  if (!comparator) {
+    comparator = defaultComparator;
+  }
+  if (mapper) {
+    var entry = collection
+      .toSeq()
+      .map(function (v, k) { return [v, mapper(v, k, collection)]; })
+      .reduce(function (a, b) { return (maxCompare(comparator, a[1], b[1]) ? b : a); });
+    return entry && entry[0];
+  }
+  return collection.reduce(function (a, b) { return (maxCompare(comparator, a, b) ? b : a); });
+}
+
+function maxCompare(comparator, a, b) {
+  var comp = comparator(b, a);
+  // b is considered the new max if the comparator declares them equal, but
+  // they are not equal and b is in fact a nullish value.
+  return (
+    (comp === 0 && b !== a && (b === undefined || b === null || b !== b)) ||
+    comp > 0
+  );
+}
+
+function zipWithFactory(keyIter, zipper, iters, zipAll) {
+  var zipSequence = makeSequence(keyIter);
+  var sizes = new ArraySeq(iters).map(function (i) { return i.size; });
+  zipSequence.size = zipAll ? sizes.max() : sizes.min();
+  // Note: this a generic base implementation of __iterate in terms of
+  // __iterator which may be more generically useful in the future.
+  zipSequence.__iterate = function (fn, reverse) {
+    /* generic:
+    var iterator = this.__iterator(ITERATE_ENTRIES, reverse);
+    var step;
+    var iterations = 0;
+    while (!(step = iterator.next()).done) {
+      iterations++;
+      if (fn(step.value[1], step.value[0], this) === false) {
+        break;
+      }
+    }
+    return iterations;
+    */
+    // indexed:
+    var iterator = this.__iterator(ITERATE_VALUES, reverse);
+    var step;
+    var iterations = 0;
+    while (!(step = iterator.next()).done) {
+      if (fn(step.value, iterations++, this) === false) {
+        break;
+      }
+    }
+    return iterations;
+  };
+  zipSequence.__iteratorUncached = function (type, reverse) {
+    var iterators = iters.map(
+      function (i) { return ((i = Collection(i)), getIterator(reverse ? i.reverse() : i)); }
+    );
+    var iterations = 0;
+    var isDone = false;
+    return new Iterator(function () {
+      var steps;
+      if (!isDone) {
+        steps = iterators.map(function (i) { return i.next(); });
+        isDone = zipAll ? steps.every(function (s) { return s.done; }) : steps.some(function (s) { return s.done; });
+      }
+      if (isDone) {
+        return iteratorDone();
+      }
+      return iteratorValue(
+        type,
+        iterations++,
+        zipper.apply(
+          null,
+          steps.map(function (s) { return s.value; })
+        )
+      );
+    });
+  };
+  return zipSequence;
+}
+
+// #pragma Helper Functions
+
+function reify(iter, seq) {
+  return iter === seq ? iter : isSeq(iter) ? seq : iter.constructor(seq);
+}
+
+function validateEntry(entry) {
+  if (entry !== Object(entry)) {
+    throw new TypeError('Expected [K, V] tuple: ' + entry);
+  }
+}
+
+function collectionClass(collection) {
+  return isKeyed(collection)
+    ? KeyedCollection
+    : isIndexed(collection)
+    ? IndexedCollection
+    : SetCollection;
+}
+
+function makeSequence(collection) {
+  return Object.create(
+    (isKeyed(collection)
+      ? KeyedSeq
+      : isIndexed(collection)
+      ? IndexedSeq
+      : SetSeq
+    ).prototype
+  );
+}
+
+function cacheResultThrough() {
+  if (this._iter.cacheResult) {
+    this._iter.cacheResult();
+    this.size = this._iter.size;
+    return this;
+  }
+  return Seq.prototype.cacheResult.call(this);
+}
+
+function defaultComparator(a, b) {
+  if (a === undefined && b === undefined) {
+    return 0;
+  }
+
+  if (a === undefined) {
+    return 1;
+  }
+
+  if (b === undefined) {
+    return -1;
+  }
+
+  return a > b ? 1 : a < b ? -1 : 0;
+}
+
+function arrCopy(arr, offset) {
+  offset = offset || 0;
+  var len = Math.max(0, arr.length - offset);
+  var newArr = new Array(len);
+  for (var ii = 0; ii < len; ii++) {
+    newArr[ii] = arr[ii + offset];
+  }
+  return newArr;
+}
+
+function invariant(condition, error) {
+  if (!condition) { throw new Error(error); }
+}
+
+function assertNotInfinite(size) {
+  invariant(
+    size !== Infinity,
+    'Cannot perform this action with an infinite size.'
+  );
+}
+
+function coerceKeyPath(keyPath) {
+  if (isArrayLike(keyPath) && typeof keyPath !== 'string') {
+    return keyPath;
+  }
+  if (isOrdered(keyPath)) {
+    return keyPath.toArray();
+  }
+  throw new TypeError(
+    'Invalid keyPath: expected Ordered Collection or Array: ' + keyPath
+  );
+}
+
+var toString = Object.prototype.toString;
+
+function isPlainObject(value) {
+  // The base prototype's toString deals with Argument objects and native namespaces like Math
+  if (
+    !value ||
+    typeof value !== 'object' ||
+    toString.call(value) !== '[object Object]'
+  ) {
+    return false;
+  }
+
+  var proto = Object.getPrototypeOf(value);
+  if (proto === null) {
+    return true;
+  }
+
+  // Iteratively going up the prototype chain is needed for cross-realm environments (differing contexts, iframes, etc)
+  var parentProto = proto;
+  var nextProto = Object.getPrototypeOf(proto);
+  while (nextProto !== null) {
+    parentProto = nextProto;
+    nextProto = Object.getPrototypeOf(parentProto);
+  }
+  return parentProto === proto;
+}
+
+/**
+ * Returns true if the value is a potentially-persistent data structure, either
+ * provided by Immutable.js or a plain Array or Object.
+ */
+function isDataStructure(value) {
+  return (
+    typeof value === 'object' &&
+    (isImmutable(value) || Array.isArray(value) || isPlainObject(value))
+  );
+}
+
+function quoteString(value) {
+  try {
+    return typeof value === 'string' ? JSON.stringify(value) : String(value);
+  } catch (_ignoreError) {
+    return JSON.stringify(value);
+  }
+}
+
+function has(collection, key) {
+  return isImmutable(collection)
+    ? collection.has(key)
+    : isDataStructure(collection) && hasOwnProperty.call(collection, key);
+}
+
+function get(collection, key, notSetValue) {
+  return isImmutable(collection)
+    ? collection.get(key, notSetValue)
+    : !has(collection, key)
+    ? notSetValue
+    : typeof collection.get === 'function'
+    ? collection.get(key)
+    : collection[key];
+}
+
+function shallowCopy(from) {
+  if (Array.isArray(from)) {
+    return arrCopy(from);
+  }
+  var to = {};
+  for (var key in from) {
+    if (hasOwnProperty.call(from, key)) {
+      to[key] = from[key];
+    }
+  }
+  return to;
+}
+
+function remove(collection, key) {
+  if (!isDataStructure(collection)) {
+    throw new TypeError(
+      'Cannot update non-data-structure value: ' + collection
+    );
+  }
+  if (isImmutable(collection)) {
+    if (!collection.remove) {
+      throw new TypeError(
+        'Cannot update immutable value without .remove() method: ' + collection
+      );
+    }
+    return collection.remove(key);
+  }
+  if (!hasOwnProperty.call(collection, key)) {
+    return collection;
+  }
+  var collectionCopy = shallowCopy(collection);
+  if (Array.isArray(collectionCopy)) {
+    collectionCopy.splice(key, 1);
+  } else {
+    delete collectionCopy[key];
+  }
+  return collectionCopy;
+}
+
+function set(collection, key, value) {
+  if (!isDataStructure(collection)) {
+    throw new TypeError(
+      'Cannot update non-data-structure value: ' + collection
+    );
+  }
+  if (isImmutable(collection)) {
+    if (!collection.set) {
+      throw new TypeError(
+        'Cannot update immutable value without .set() method: ' + collection
+      );
+    }
+    return collection.set(key, value);
+  }
+  if (hasOwnProperty.call(collection, key) && value === collection[key]) {
+    return collection;
+  }
+  var collectionCopy = shallowCopy(collection);
+  collectionCopy[key] = value;
+  return collectionCopy;
+}
+
+function updateIn$1(collection, keyPath, notSetValue, updater) {
+  if (!updater) {
+    updater = notSetValue;
+    notSetValue = undefined;
+  }
+  var updatedValue = updateInDeeply(
+    isImmutable(collection),
+    collection,
+    coerceKeyPath(keyPath),
+    0,
+    notSetValue,
+    updater
+  );
+  return updatedValue === NOT_SET ? notSetValue : updatedValue;
+}
+
+function updateInDeeply(
+  inImmutable,
+  existing,
+  keyPath,
+  i,
+  notSetValue,
+  updater
+) {
+  var wasNotSet = existing === NOT_SET;
+  if (i === keyPath.length) {
+    var existingValue = wasNotSet ? notSetValue : existing;
+    var newValue = updater(existingValue);
+    return newValue === existingValue ? existing : newValue;
+  }
+  if (!wasNotSet && !isDataStructure(existing)) {
+    throw new TypeError(
+      'Cannot update within non-data-structure value in path [' +
+        keyPath.slice(0, i).map(quoteString) +
+        ']: ' +
+        existing
+    );
+  }
+  var key = keyPath[i];
+  var nextExisting = wasNotSet ? NOT_SET : get(existing, key, NOT_SET);
+  var nextUpdated = updateInDeeply(
+    nextExisting === NOT_SET ? inImmutable : isImmutable(nextExisting),
+    nextExisting,
+    keyPath,
+    i + 1,
+    notSetValue,
+    updater
+  );
+  return nextUpdated === nextExisting
+    ? existing
+    : nextUpdated === NOT_SET
+    ? remove(existing, key)
+    : set(
+        wasNotSet ? (inImmutable ? emptyMap() : {}) : existing,
+        key,
+        nextUpdated
+      );
+}
+
+function setIn$1(collection, keyPath, value) {
+  return updateIn$1(collection, keyPath, NOT_SET, function () { return value; });
+}
+
+function setIn(keyPath, v) {
+  return setIn$1(this, keyPath, v);
+}
+
+function removeIn(collection, keyPath) {
+  return updateIn$1(collection, keyPath, function () { return NOT_SET; });
+}
+
+function deleteIn(keyPath) {
+  return removeIn(this, keyPath);
+}
+
+function update$1(collection, key, notSetValue, updater) {
+  return updateIn$1(collection, [key], notSetValue, updater);
+}
+
+function update(key, notSetValue, updater) {
+  return arguments.length === 1
+    ? key(this)
+    : update$1(this, key, notSetValue, updater);
+}
+
+function updateIn(keyPath, notSetValue, updater) {
+  return updateIn$1(this, keyPath, notSetValue, updater);
+}
+
+function merge$1() {
+  var iters = [], len = arguments.length;
+  while ( len-- ) iters[ len ] = arguments[ len ];
+
+  return mergeIntoKeyedWith(this, iters);
+}
+
+function mergeWith$1(merger) {
+  var iters = [], len = arguments.length - 1;
+  while ( len-- > 0 ) iters[ len ] = arguments[ len + 1 ];
+
+  if (typeof merger !== 'function') {
+    throw new TypeError('Invalid merger function: ' + merger);
+  }
+  return mergeIntoKeyedWith(this, iters, merger);
+}
+
+function mergeIntoKeyedWith(collection, collections, merger) {
+  var iters = [];
+  for (var ii = 0; ii < collections.length; ii++) {
+    var collection$1 = KeyedCollection(collections[ii]);
+    if (collection$1.size !== 0) {
+      iters.push(collection$1);
+    }
+  }
+  if (iters.length === 0) {
+    return collection;
+  }
+  if (
+    collection.toSeq().size === 0 &&
+    !collection.__ownerID &&
+    iters.length === 1
+  ) {
+    return collection.constructor(iters[0]);
+  }
+  return collection.withMutations(function (collection) {
+    var mergeIntoCollection = merger
+      ? function (value, key) {
+          update$1(collection, key, NOT_SET, function (oldVal) { return oldVal === NOT_SET ? value : merger(oldVal, value, key); }
+          );
+        }
+      : function (value, key) {
+          collection.set(key, value);
+        };
+    for (var ii = 0; ii < iters.length; ii++) {
+      iters[ii].forEach(mergeIntoCollection);
+    }
+  });
+}
+
+function merge(collection) {
+  var sources = [], len = arguments.length - 1;
+  while ( len-- > 0 ) sources[ len ] = arguments[ len + 1 ];
+
+  return mergeWithSources(collection, sources);
+}
+
+function mergeWith(merger, collection) {
+  var sources = [], len = arguments.length - 2;
+  while ( len-- > 0 ) sources[ len ] = arguments[ len + 2 ];
+
+  return mergeWithSources(collection, sources, merger);
+}
+
+function mergeDeep$1(collection) {
+  var sources = [], len = arguments.length - 1;
+  while ( len-- > 0 ) sources[ len ] = arguments[ len + 1 ];
+
+  return mergeDeepWithSources(collection, sources);
+}
+
+function mergeDeepWith$1(merger, collection) {
+  var sources = [], len = arguments.length - 2;
+  while ( len-- > 0 ) sources[ len ] = arguments[ len + 2 ];
+
+  return mergeDeepWithSources(collection, sources, merger);
+}
+
+function mergeDeepWithSources(collection, sources, merger) {
+  return mergeWithSources(collection, sources, deepMergerWith(merger));
+}
+
+function mergeWithSources(collection, sources, merger) {
+  if (!isDataStructure(collection)) {
+    throw new TypeError(
+      'Cannot merge into non-data-structure value: ' + collection
+    );
+  }
+  if (isImmutable(collection)) {
+    return typeof merger === 'function' && collection.mergeWith
+      ? collection.mergeWith.apply(collection, [ merger ].concat( sources ))
+      : collection.merge
+      ? collection.merge.apply(collection, sources)
+      : collection.concat.apply(collection, sources);
+  }
+  var isArray = Array.isArray(collection);
+  var merged = collection;
+  var Collection = isArray ? IndexedCollection : KeyedCollection;
+  var mergeItem = isArray
+    ? function (value) {
+        // Copy on write
+        if (merged === collection) {
+          merged = shallowCopy(merged);
+        }
+        merged.push(value);
+      }
+    : function (value, key) {
+        var hasVal = hasOwnProperty.call(merged, key);
+        var nextVal =
+          hasVal && merger ? merger(merged[key], value, key) : value;
+        if (!hasVal || nextVal !== merged[key]) {
+          // Copy on write
+          if (merged === collection) {
+            merged = shallowCopy(merged);
+          }
+          merged[key] = nextVal;
+        }
+      };
+  for (var i = 0; i < sources.length; i++) {
+    Collection(sources[i]).forEach(mergeItem);
+  }
+  return merged;
+}
+
+function deepMergerWith(merger) {
+  function deepMerger(oldValue, newValue, key) {
+    return isDataStructure(oldValue) &&
+      isDataStructure(newValue) &&
+      areMergeable(oldValue, newValue)
+      ? mergeWithSources(oldValue, [newValue], deepMerger)
+      : merger
+      ? merger(oldValue, newValue, key)
+      : newValue;
+  }
+  return deepMerger;
+}
+
+/**
+ * It's unclear what the desired behavior is for merging two collections that
+ * fall into separate categories between keyed, indexed, or set-like, so we only
+ * consider them mergeable if they fall into the same category.
+ */
+function areMergeable(oldDataStructure, newDataStructure) {
+  var oldSeq = Seq(oldDataStructure);
+  var newSeq = Seq(newDataStructure);
+  // This logic assumes that a sequence can only fall into one of the three
+  // categories mentioned above (since there's no `isSetLike()` method).
+  return (
+    isIndexed(oldSeq) === isIndexed(newSeq) &&
+    isKeyed(oldSeq) === isKeyed(newSeq)
+  );
+}
+
+function mergeDeep() {
+  var iters = [], len = arguments.length;
+  while ( len-- ) iters[ len ] = arguments[ len ];
+
+  return mergeDeepWithSources(this, iters);
+}
+
+function mergeDeepWith(merger) {
+  var iters = [], len = arguments.length - 1;
+  while ( len-- > 0 ) iters[ len ] = arguments[ len + 1 ];
+
+  return mergeDeepWithSources(this, iters, merger);
+}
+
+function mergeIn(keyPath) {
+  var iters = [], len = arguments.length - 1;
+  while ( len-- > 0 ) iters[ len ] = arguments[ len + 1 ];
+
+  return updateIn$1(this, keyPath, emptyMap(), function (m) { return mergeWithSources(m, iters); });
+}
+
+function mergeDeepIn(keyPath) {
+  var iters = [], len = arguments.length - 1;
+  while ( len-- > 0 ) iters[ len ] = arguments[ len + 1 ];
+
+  return updateIn$1(this, keyPath, emptyMap(), function (m) { return mergeDeepWithSources(m, iters); }
+  );
+}
+
+function withMutations(fn) {
+  var mutable = this.asMutable();
+  fn(mutable);
+  return mutable.wasAltered() ? mutable.__ensureOwner(this.__ownerID) : this;
+}
+
+function asMutable() {
+  return this.__ownerID ? this : this.__ensureOwner(new OwnerID());
+}
+
+function asImmutable() {
+  return this.__ensureOwner();
+}
+
+function wasAltered() {
+  return this.__altered;
+}
+
+var Map = /*@__PURE__*/(function (KeyedCollection) {
+  function Map(value) {
+    return value === undefined || value === null
+      ? emptyMap()
+      : isMap(value) && !isOrdered(value)
+      ? value
+      : emptyMap().withMutations(function (map) {
+          var iter = KeyedCollection(value);
+          assertNotInfinite(iter.size);
+          iter.forEach(function (v, k) { return map.set(k, v); });
+        });
+  }
+
+  if ( KeyedCollection ) Map.__proto__ = KeyedCollection;
+  Map.prototype = Object.create( KeyedCollection && KeyedCollection.prototype );
+  Map.prototype.constructor = Map;
+
+  Map.of = function of () {
+    var keyValues = [], len = arguments.length;
+    while ( len-- ) keyValues[ len ] = arguments[ len ];
+
+    return emptyMap().withMutations(function (map) {
+      for (var i = 0; i < keyValues.length; i += 2) {
+        if (i + 1 >= keyValues.length) {
+          throw new Error('Missing value for key: ' + keyValues[i]);
+        }
+        map.set(keyValues[i], keyValues[i + 1]);
+      }
+    });
+  };
+
+  Map.prototype.toString = function toString () {
+    return this.__toString('Map {', '}');
+  };
+
+  // @pragma Access
+
+  Map.prototype.get = function get (k, notSetValue) {
+    return this._root
+      ? this._root.get(0, undefined, k, notSetValue)
+      : notSetValue;
+  };
+
+  // @pragma Modification
+
+  Map.prototype.set = function set (k, v) {
+    return updateMap(this, k, v);
+  };
+
+  Map.prototype.remove = function remove (k) {
+    return updateMap(this, k, NOT_SET);
+  };
+
+  Map.prototype.deleteAll = function deleteAll (keys) {
+    var collection = Collection(keys);
+
+    if (collection.size === 0) {
+      return this;
+    }
+
+    return this.withMutations(function (map) {
+      collection.forEach(function (key) { return map.remove(key); });
+    });
+  };
+
+  Map.prototype.clear = function clear () {
+    if (this.size === 0) {
+      return this;
+    }
+    if (this.__ownerID) {
+      this.size = 0;
+      this._root = null;
+      this.__hash = undefined;
+      this.__altered = true;
+      return this;
+    }
+    return emptyMap();
+  };
+
+  // @pragma Composition
+
+  Map.prototype.sort = function sort (comparator) {
+    // Late binding
+    return OrderedMap(sortFactory(this, comparator));
+  };
+
+  Map.prototype.sortBy = function sortBy (mapper, comparator) {
+    // Late binding
+    return OrderedMap(sortFactory(this, comparator, mapper));
+  };
+
+  Map.prototype.map = function map (mapper, context) {
+    var this$1$1 = this;
+
+    return this.withMutations(function (map) {
+      map.forEach(function (value, key) {
+        map.set(key, mapper.call(context, value, key, this$1$1));
+      });
+    });
+  };
+
+  // @pragma Mutability
+
+  Map.prototype.__iterator = function __iterator (type, reverse) {
+    return new MapIterator(this, type, reverse);
+  };
+
+  Map.prototype.__iterate = function __iterate (fn, reverse) {
+    var this$1$1 = this;
+
+    var iterations = 0;
+    this._root &&
+      this._root.iterate(function (entry) {
+        iterations++;
+        return fn(entry[1], entry[0], this$1$1);
+      }, reverse);
+    return iterations;
+  };
+
+  Map.prototype.__ensureOwner = function __ensureOwner (ownerID) {
+    if (ownerID === this.__ownerID) {
+      return this;
+    }
+    if (!ownerID) {
+      if (this.size === 0) {
+        return emptyMap();
+      }
+      this.__ownerID = ownerID;
+      this.__altered = false;
+      return this;
+    }
+    return makeMap(this.size, this._root, ownerID, this.__hash);
+  };
+
+  return Map;
+}(KeyedCollection));
+
+Map.isMap = isMap;
+
+var MapPrototype = Map.prototype;
+MapPrototype[IS_MAP_SYMBOL] = true;
+MapPrototype[DELETE] = MapPrototype.remove;
+MapPrototype.removeAll = MapPrototype.deleteAll;
+MapPrototype.setIn = setIn;
+MapPrototype.removeIn = MapPrototype.deleteIn = deleteIn;
+MapPrototype.update = update;
+MapPrototype.updateIn = updateIn;
+MapPrototype.merge = MapPrototype.concat = merge$1;
+MapPrototype.mergeWith = mergeWith$1;
+MapPrototype.mergeDeep = mergeDeep;
+MapPrototype.mergeDeepWith = mergeDeepWith;
+MapPrototype.mergeIn = mergeIn;
+MapPrototype.mergeDeepIn = mergeDeepIn;
+MapPrototype.withMutations = withMutations;
+MapPrototype.wasAltered = wasAltered;
+MapPrototype.asImmutable = asImmutable;
+MapPrototype['@@transducer/init'] = MapPrototype.asMutable = asMutable;
+MapPrototype['@@transducer/step'] = function (result, arr) {
+  return result.set(arr[0], arr[1]);
+};
+MapPrototype['@@transducer/result'] = function (obj) {
+  return obj.asImmutable();
+};
+
+// #pragma Trie Nodes
+
+var ArrayMapNode = function ArrayMapNode(ownerID, entries) {
+  this.ownerID = ownerID;
+  this.entries = entries;
+};
+
+ArrayMapNode.prototype.get = function get (shift, keyHash, key, notSetValue) {
+  var entries = this.entries;
+  for (var ii = 0, len = entries.length; ii < len; ii++) {
+    if (is(key, entries[ii][0])) {
+      return entries[ii][1];
+    }
+  }
+  return notSetValue;
+};
+
+ArrayMapNode.prototype.update = function update (ownerID, shift, keyHash, key, value, didChangeSize, didAlter) {
+  var removed = value === NOT_SET;
+
+  var entries = this.entries;
+  var idx = 0;
+  var len = entries.length;
+  for (; idx < len; idx++) {
+    if (is(key, entries[idx][0])) {
+      break;
+    }
+  }
+  var exists = idx < len;
+
+  if (exists ? entries[idx][1] === value : removed) {
+    return this;
+  }
+
+  SetRef(didAlter);
+  (removed || !exists) && SetRef(didChangeSize);
+
+  if (removed && entries.length === 1) {
+    return; // undefined
+  }
+
+  if (!exists && !removed && entries.length >= MAX_ARRAY_MAP_SIZE) {
+    return createNodes(ownerID, entries, key, value);
+  }
+
+  var isEditable = ownerID && ownerID === this.ownerID;
+  var newEntries = isEditable ? entries : arrCopy(entries);
+
+  if (exists) {
+    if (removed) {
+      idx === len - 1
+        ? newEntries.pop()
+        : (newEntries[idx] = newEntries.pop());
+    } else {
+      newEntries[idx] = [key, value];
+    }
+  } else {
+    newEntries.push([key, value]);
+  }
+
+  if (isEditable) {
+    this.entries = newEntries;
+    return this;
+  }
+
+  return new ArrayMapNode(ownerID, newEntries);
+};
+
+var BitmapIndexedNode = function BitmapIndexedNode(ownerID, bitmap, nodes) {
+  this.ownerID = ownerID;
+  this.bitmap = bitmap;
+  this.nodes = nodes;
+};
+
+BitmapIndexedNode.prototype.get = function get (shift, keyHash, key, notSetValue) {
+  if (keyHash === undefined) {
+    keyHash = hash(key);
+  }
+  var bit = 1 << ((shift === 0 ? keyHash : keyHash >>> shift) & MASK);
+  var bitmap = this.bitmap;
+  return (bitmap & bit) === 0
+    ? notSetValue
+    : this.nodes[popCount(bitmap & (bit - 1))].get(
+        shift + SHIFT,
+        keyHash,
+        key,
+        notSetValue
+      );
+};
+
+BitmapIndexedNode.prototype.update = function update (ownerID, shift, keyHash, key, value, didChangeSize, didAlter) {
+  if (keyHash === undefined) {
+    keyHash = hash(key);
+  }
+  var keyHashFrag = (shift === 0 ? keyHash : keyHash >>> shift) & MASK;
+  var bit = 1 << keyHashFrag;
+  var bitmap = this.bitmap;
+  var exists = (bitmap & bit) !== 0;
+
+  if (!exists && value === NOT_SET) {
+    return this;
+  }
+
+  var idx = popCount(bitmap & (bit - 1));
+  var nodes = this.nodes;
+  var node = exists ? nodes[idx] : undefined;
+  var newNode = updateNode(
+    node,
+    ownerID,
+    shift + SHIFT,
+    keyHash,
+    key,
+    value,
+    didChangeSize,
+    didAlter
+  );
+
+  if (newNode === node) {
+    return this;
+  }
+
+  if (!exists && newNode && nodes.length >= MAX_BITMAP_INDEXED_SIZE) {
+    return expandNodes(ownerID, nodes, bitmap, keyHashFrag, newNode);
+  }
+
+  if (
+    exists &&
+    !newNode &&
+    nodes.length === 2 &&
+    isLeafNode(nodes[idx ^ 1])
+  ) {
+    return nodes[idx ^ 1];
+  }
+
+  if (exists && newNode && nodes.length === 1 && isLeafNode(newNode)) {
+    return newNode;
+  }
+
+  var isEditable = ownerID && ownerID === this.ownerID;
+  var newBitmap = exists ? (newNode ? bitmap : bitmap ^ bit) : bitmap | bit;
+  var newNodes = exists
+    ? newNode
+      ? setAt(nodes, idx, newNode, isEditable)
+      : spliceOut(nodes, idx, isEditable)
+    : spliceIn(nodes, idx, newNode, isEditable);
+
+  if (isEditable) {
+    this.bitmap = newBitmap;
+    this.nodes = newNodes;
+    return this;
+  }
+
+  return new BitmapIndexedNode(ownerID, newBitmap, newNodes);
+};
+
+var HashArrayMapNode = function HashArrayMapNode(ownerID, count, nodes) {
+  this.ownerID = ownerID;
+  this.count = count;
+  this.nodes = nodes;
+};
+
+HashArrayMapNode.prototype.get = function get (shift, keyHash, key, notSetValue) {
+  if (keyHash === undefined) {
+    keyHash = hash(key);
+  }
+  var idx = (shift === 0 ? keyHash : keyHash >>> shift) & MASK;
+  var node = this.nodes[idx];
+  return node
+    ? node.get(shift + SHIFT, keyHash, key, notSetValue)
+    : notSetValue;
+};
+
+HashArrayMapNode.prototype.update = function update (ownerID, shift, keyHash, key, value, didChangeSize, didAlter) {
+  if (keyHash === undefined) {
+    keyHash = hash(key);
+  }
+  var idx = (shift === 0 ? keyHash : keyHash >>> shift) & MASK;
+  var removed = value === NOT_SET;
+  var nodes = this.nodes;
+  var node = nodes[idx];
+
+  if (removed && !node) {
+    return this;
+  }
+
+  var newNode = updateNode(
+    node,
+    ownerID,
+    shift + SHIFT,
+    keyHash,
+    key,
+    value,
+    didChangeSize,
+    didAlter
+  );
+  if (newNode === node) {
+    return this;
+  }
+
+  var newCount = this.count;
+  if (!node) {
+    newCount++;
+  } else if (!newNode) {
+    newCount--;
+    if (newCount < MIN_HASH_ARRAY_MAP_SIZE) {
+      return packNodes(ownerID, nodes, newCount, idx);
+    }
+  }
+
+  var isEditable = ownerID && ownerID === this.ownerID;
+  var newNodes = setAt(nodes, idx, newNode, isEditable);
+
+  if (isEditable) {
+    this.count = newCount;
+    this.nodes = newNodes;
+    return this;
+  }
+
+  return new HashArrayMapNode(ownerID, newCount, newNodes);
+};
+
+var HashCollisionNode = function HashCollisionNode(ownerID, keyHash, entries) {
+  this.ownerID = ownerID;
+  this.keyHash = keyHash;
+  this.entries = entries;
+};
+
+HashCollisionNode.prototype.get = function get (shift, keyHash, key, notSetValue) {
+  var entries = this.entries;
+  for (var ii = 0, len = entries.length; ii < len; ii++) {
+    if (is(key, entries[ii][0])) {
+      return entries[ii][1];
+    }
+  }
+  return notSetValue;
+};
+
+HashCollisionNode.prototype.update = function update (ownerID, shift, keyHash, key, value, didChangeSize, didAlter) {
+  if (keyHash === undefined) {
+    keyHash = hash(key);
+  }
+
+  var removed = value === NOT_SET;
+
+  if (keyHash !== this.keyHash) {
+    if (removed) {
+      return this;
+    }
+    SetRef(didAlter);
+    SetRef(didChangeSize);
+    return mergeIntoNode(this, ownerID, shift, keyHash, [key, value]);
+  }
+
+  var entries = this.entries;
+  var idx = 0;
+  var len = entries.length;
+  for (; idx < len; idx++) {
+    if (is(key, entries[idx][0])) {
+      break;
+    }
+  }
+  var exists = idx < len;
+
+  if (exists ? entries[idx][1] === value : removed) {
+    return this;
+  }
+
+  SetRef(didAlter);
+  (removed || !exists) && SetRef(didChangeSize);
+
+  if (removed && len === 2) {
+    return new ValueNode(ownerID, this.keyHash, entries[idx ^ 1]);
+  }
+
+  var isEditable = ownerID && ownerID === this.ownerID;
+  var newEntries = isEditable ? entries : arrCopy(entries);
+
+  if (exists) {
+    if (removed) {
+      idx === len - 1
+        ? newEntries.pop()
+        : (newEntries[idx] = newEntries.pop());
+    } else {
+      newEntries[idx] = [key, value];
+    }
+  } else {
+    newEntries.push([key, value]);
+  }
+
+  if (isEditable) {
+    this.entries = newEntries;
+    return this;
+  }
+
+  return new HashCollisionNode(ownerID, this.keyHash, newEntries);
+};
+
+var ValueNode = function ValueNode(ownerID, keyHash, entry) {
+  this.ownerID = ownerID;
+  this.keyHash = keyHash;
+  this.entry = entry;
+};
+
+ValueNode.prototype.get = function get (shift, keyHash, key, notSetValue) {
+  return is(key, this.entry[0]) ? this.entry[1] : notSetValue;
+};
+
+ValueNode.prototype.update = function update (ownerID, shift, keyHash, key, value, didChangeSize, didAlter) {
+  var removed = value === NOT_SET;
+  var keyMatch = is(key, this.entry[0]);
+  if (keyMatch ? value === this.entry[1] : removed) {
+    return this;
+  }
+
+  SetRef(didAlter);
+
+  if (removed) {
+    SetRef(didChangeSize);
+    return; // undefined
+  }
+
+  if (keyMatch) {
+    if (ownerID && ownerID === this.ownerID) {
+      this.entry[1] = value;
+      return this;
+    }
+    return new ValueNode(ownerID, this.keyHash, [key, value]);
+  }
+
+  SetRef(didChangeSize);
+  return mergeIntoNode(this, ownerID, shift, hash(key), [key, value]);
+};
+
+// #pragma Iterators
+
+ArrayMapNode.prototype.iterate = HashCollisionNode.prototype.iterate =
+  function (fn, reverse) {
+    var entries = this.entries;
+    for (var ii = 0, maxIndex = entries.length - 1; ii <= maxIndex; ii++) {
+      if (fn(entries[reverse ? maxIndex - ii : ii]) === false) {
+        return false;
+      }
+    }
+  };
+
+BitmapIndexedNode.prototype.iterate = HashArrayMapNode.prototype.iterate =
+  function (fn, reverse) {
+    var nodes = this.nodes;
+    for (var ii = 0, maxIndex = nodes.length - 1; ii <= maxIndex; ii++) {
+      var node = nodes[reverse ? maxIndex - ii : ii];
+      if (node && node.iterate(fn, reverse) === false) {
+        return false;
+      }
+    }
+  };
+
+// eslint-disable-next-line no-unused-vars
+ValueNode.prototype.iterate = function (fn, reverse) {
+  return fn(this.entry);
+};
+
+var MapIterator = /*@__PURE__*/(function (Iterator) {
+  function MapIterator(map, type, reverse) {
+    this._type = type;
+    this._reverse = reverse;
+    this._stack = map._root && mapIteratorFrame(map._root);
+  }
+
+  if ( Iterator ) MapIterator.__proto__ = Iterator;
+  MapIterator.prototype = Object.create( Iterator && Iterator.prototype );
+  MapIterator.prototype.constructor = MapIterator;
+
+  MapIterator.prototype.next = function next () {
+    var type = this._type;
+    var stack = this._stack;
+    while (stack) {
+      var node = stack.node;
+      var index = stack.index++;
+      var maxIndex = (void 0);
+      if (node.entry) {
+        if (index === 0) {
+          return mapIteratorValue(type, node.entry);
+        }
+      } else if (node.entries) {
+        maxIndex = node.entries.length - 1;
+        if (index <= maxIndex) {
+          return mapIteratorValue(
+            type,
+            node.entries[this._reverse ? maxIndex - index : index]
+          );
+        }
+      } else {
+        maxIndex = node.nodes.length - 1;
+        if (index <= maxIndex) {
+          var subNode = node.nodes[this._reverse ? maxIndex - index : index];
+          if (subNode) {
+            if (subNode.entry) {
+              return mapIteratorValue(type, subNode.entry);
+            }
+            stack = this._stack = mapIteratorFrame(subNode, stack);
+          }
+          continue;
+        }
+      }
+      stack = this._stack = this._stack.__prev;
+    }
+    return iteratorDone();
+  };
+
+  return MapIterator;
+}(Iterator));
+
+function mapIteratorValue(type, entry) {
+  return iteratorValue(type, entry[0], entry[1]);
+}
+
+function mapIteratorFrame(node, prev) {
+  return {
+    node: node,
+    index: 0,
+    __prev: prev,
+  };
+}
+
+function makeMap(size, root, ownerID, hash) {
+  var map = Object.create(MapPrototype);
+  map.size = size;
+  map._root = root;
+  map.__ownerID = ownerID;
+  map.__hash = hash;
+  map.__altered = false;
+  return map;
+}
+
+var EMPTY_MAP;
+function emptyMap() {
+  return EMPTY_MAP || (EMPTY_MAP = makeMap(0));
+}
+
+function updateMap(map, k, v) {
+  var newRoot;
+  var newSize;
+  if (!map._root) {
+    if (v === NOT_SET) {
+      return map;
+    }
+    newSize = 1;
+    newRoot = new ArrayMapNode(map.__ownerID, [[k, v]]);
+  } else {
+    var didChangeSize = MakeRef();
+    var didAlter = MakeRef();
+    newRoot = updateNode(
+      map._root,
+      map.__ownerID,
+      0,
+      undefined,
+      k,
+      v,
+      didChangeSize,
+      didAlter
+    );
+    if (!didAlter.value) {
+      return map;
+    }
+    newSize = map.size + (didChangeSize.value ? (v === NOT_SET ? -1 : 1) : 0);
+  }
+  if (map.__ownerID) {
+    map.size = newSize;
+    map._root = newRoot;
+    map.__hash = undefined;
+    map.__altered = true;
+    return map;
+  }
+  return newRoot ? makeMap(newSize, newRoot) : emptyMap();
+}
+
+function updateNode(
+  node,
+  ownerID,
+  shift,
+  keyHash,
+  key,
+  value,
+  didChangeSize,
+  didAlter
+) {
+  if (!node) {
+    if (value === NOT_SET) {
+      return node;
+    }
+    SetRef(didAlter);
+    SetRef(didChangeSize);
+    return new ValueNode(ownerID, keyHash, [key, value]);
+  }
+  return node.update(
+    ownerID,
+    shift,
+    keyHash,
+    key,
+    value,
+    didChangeSize,
+    didAlter
+  );
+}
+
+function isLeafNode(node) {
+  return (
+    node.constructor === ValueNode || node.constructor === HashCollisionNode
+  );
+}
+
+function mergeIntoNode(node, ownerID, shift, keyHash, entry) {
+  if (node.keyHash === keyHash) {
+    return new HashCollisionNode(ownerID, keyHash, [node.entry, entry]);
+  }
+
+  var idx1 = (shift === 0 ? node.keyHash : node.keyHash >>> shift) & MASK;
+  var idx2 = (shift === 0 ? keyHash : keyHash >>> shift) & MASK;
+
+  var newNode;
+  var nodes =
+    idx1 === idx2
+      ? [mergeIntoNode(node, ownerID, shift + SHIFT, keyHash, entry)]
+      : ((newNode = new ValueNode(ownerID, keyHash, entry)),
+        idx1 < idx2 ? [node, newNode] : [newNode, node]);
+
+  return new BitmapIndexedNode(ownerID, (1 << idx1) | (1 << idx2), nodes);
+}
+
+function createNodes(ownerID, entries, key, value) {
+  if (!ownerID) {
+    ownerID = new OwnerID();
+  }
+  var node = new ValueNode(ownerID, hash(key), [key, value]);
+  for (var ii = 0; ii < entries.length; ii++) {
+    var entry = entries[ii];
+    node = node.update(ownerID, 0, undefined, entry[0], entry[1]);
+  }
+  return node;
+}
+
+function packNodes(ownerID, nodes, count, excluding) {
+  var bitmap = 0;
+  var packedII = 0;
+  var packedNodes = new Array(count);
+  for (var ii = 0, bit = 1, len = nodes.length; ii < len; ii++, bit <<= 1) {
+    var node = nodes[ii];
+    if (node !== undefined && ii !== excluding) {
+      bitmap |= bit;
+      packedNodes[packedII++] = node;
+    }
+  }
+  return new BitmapIndexedNode(ownerID, bitmap, packedNodes);
+}
+
+function expandNodes(ownerID, nodes, bitmap, including, node) {
+  var count = 0;
+  var expandedNodes = new Array(SIZE);
+  for (var ii = 0; bitmap !== 0; ii++, bitmap >>>= 1) {
+    expandedNodes[ii] = bitmap & 1 ? nodes[count++] : undefined;
+  }
+  expandedNodes[including] = node;
+  return new HashArrayMapNode(ownerID, count + 1, expandedNodes);
+}
+
+function popCount(x) {
+  x -= (x >> 1) & 0x55555555;
+  x = (x & 0x33333333) + ((x >> 2) & 0x33333333);
+  x = (x + (x >> 4)) & 0x0f0f0f0f;
+  x += x >> 8;
+  x += x >> 16;
+  return x & 0x7f;
+}
+
+function setAt(array, idx, val, canEdit) {
+  var newArray = canEdit ? array : arrCopy(array);
+  newArray[idx] = val;
+  return newArray;
+}
+
+function spliceIn(array, idx, val, canEdit) {
+  var newLen = array.length + 1;
+  if (canEdit && idx + 1 === newLen) {
+    array[idx] = val;
+    return array;
+  }
+  var newArray = new Array(newLen);
+  var after = 0;
+  for (var ii = 0; ii < newLen; ii++) {
+    if (ii === idx) {
+      newArray[ii] = val;
+      after = -1;
+    } else {
+      newArray[ii] = array[ii + after];
+    }
+  }
+  return newArray;
+}
+
+function spliceOut(array, idx, canEdit) {
+  var newLen = array.length - 1;
+  if (canEdit && idx === newLen) {
+    array.pop();
+    return array;
+  }
+  var newArray = new Array(newLen);
+  var after = 0;
+  for (var ii = 0; ii < newLen; ii++) {
+    if (ii === idx) {
+      after = 1;
+    }
+    newArray[ii] = array[ii + after];
+  }
+  return newArray;
+}
+
+var MAX_ARRAY_MAP_SIZE = SIZE / 4;
+var MAX_BITMAP_INDEXED_SIZE = SIZE / 2;
+var MIN_HASH_ARRAY_MAP_SIZE = SIZE / 4;
+
+var IS_LIST_SYMBOL = '@@__IMMUTABLE_LIST__@@';
+
+function isList(maybeList) {
+  return Boolean(maybeList && maybeList[IS_LIST_SYMBOL]);
+}
+
+var List = /*@__PURE__*/(function (IndexedCollection) {
+  function List(value) {
+    var empty = emptyList();
+    if (value === undefined || value === null) {
+      return empty;
+    }
+    if (isList(value)) {
+      return value;
+    }
+    var iter = IndexedCollection(value);
+    var size = iter.size;
+    if (size === 0) {
+      return empty;
+    }
+    assertNotInfinite(size);
+    if (size > 0 && size < SIZE) {
+      return makeList(0, size, SHIFT, null, new VNode(iter.toArray()));
+    }
+    return empty.withMutations(function (list) {
+      list.setSize(size);
+      iter.forEach(function (v, i) { return list.set(i, v); });
+    });
+  }
+
+  if ( IndexedCollection ) List.__proto__ = IndexedCollection;
+  List.prototype = Object.create( IndexedCollection && IndexedCollection.prototype );
+  List.prototype.constructor = List;
+
+  List.of = function of (/*...values*/) {
+    return this(arguments);
+  };
+
+  List.prototype.toString = function toString () {
+    return this.__toString('List [', ']');
+  };
+
+  // @pragma Access
+
+  List.prototype.get = function get (index, notSetValue) {
+    index = wrapIndex(this, index);
+    if (index >= 0 && index < this.size) {
+      index += this._origin;
+      var node = listNodeFor(this, index);
+      return node && node.array[index & MASK];
+    }
+    return notSetValue;
+  };
+
+  // @pragma Modification
+
+  List.prototype.set = function set (index, value) {
+    return updateList(this, index, value);
+  };
+
+  List.prototype.remove = function remove (index) {
+    return !this.has(index)
+      ? this
+      : index === 0
+      ? this.shift()
+      : index === this.size - 1
+      ? this.pop()
+      : this.splice(index, 1);
+  };
+
+  List.prototype.insert = function insert (index, value) {
+    return this.splice(index, 0, value);
+  };
+
+  List.prototype.clear = function clear () {
+    if (this.size === 0) {
+      return this;
+    }
+    if (this.__ownerID) {
+      this.size = this._origin = this._capacity = 0;
+      this._level = SHIFT;
+      this._root = this._tail = this.__hash = undefined;
+      this.__altered = true;
+      return this;
+    }
+    return emptyList();
+  };
+
+  List.prototype.push = function push (/*...values*/) {
+    var values = arguments;
+    var oldSize = this.size;
+    return this.withMutations(function (list) {
+      setListBounds(list, 0, oldSize + values.length);
+      for (var ii = 0; ii < values.length; ii++) {
+        list.set(oldSize + ii, values[ii]);
+      }
+    });
+  };
+
+  List.prototype.pop = function pop () {
+    return setListBounds(this, 0, -1);
+  };
+
+  List.prototype.unshift = function unshift (/*...values*/) {
+    var values = arguments;
+    return this.withMutations(function (list) {
+      setListBounds(list, -values.length);
+      for (var ii = 0; ii < values.length; ii++) {
+        list.set(ii, values[ii]);
+      }
+    });
+  };
+
+  List.prototype.shift = function shift () {
+    return setListBounds(this, 1);
+  };
+
+  // @pragma Composition
+
+  List.prototype.concat = function concat (/*...collections*/) {
+    var arguments$1 = arguments;
+
+    var seqs = [];
+    for (var i = 0; i < arguments.length; i++) {
+      var argument = arguments$1[i];
+      var seq = IndexedCollection(
+        typeof argument !== 'string' && hasIterator(argument)
+          ? argument
+          : [argument]
+      );
+      if (seq.size !== 0) {
+        seqs.push(seq);
+      }
+    }
+    if (seqs.length === 0) {
+      return this;
+    }
+    if (this.size === 0 && !this.__ownerID && seqs.length === 1) {
+      return this.constructor(seqs[0]);
+    }
+    return this.withMutations(function (list) {
+      seqs.forEach(function (seq) { return seq.forEach(function (value) { return list.push(value); }); });
+    });
+  };
+
+  List.prototype.setSize = function setSize (size) {
+    return setListBounds(this, 0, size);
+  };
+
+  List.prototype.map = function map (mapper, context) {
+    var this$1$1 = this;
+
+    return this.withMutations(function (list) {
+      for (var i = 0; i < this$1$1.size; i++) {
+        list.set(i, mapper.call(context, list.get(i), i, this$1$1));
+      }
+    });
+  };
+
+  // @pragma Iteration
+
+  List.prototype.slice = function slice (begin, end) {
+    var size = this.size;
+    if (wholeSlice(begin, end, size)) {
+      return this;
+    }
+    return setListBounds(
+      this,
+      resolveBegin(begin, size),
+      resolveEnd(end, size)
+    );
+  };
+
+  List.prototype.__iterator = function __iterator (type, reverse) {
+    var index = reverse ? this.size : 0;
+    var values = iterateList(this, reverse);
+    return new Iterator(function () {
+      var value = values();
+      return value === DONE
+        ? iteratorDone()
+        : iteratorValue(type, reverse ? --index : index++, value);
+    });
+  };
+
+  List.prototype.__iterate = function __iterate (fn, reverse) {
+    var index = reverse ? this.size : 0;
+    var values = iterateList(this, reverse);
+    var value;
+    while ((value = values()) !== DONE) {
+      if (fn(value, reverse ? --index : index++, this) === false) {
+        break;
+      }
+    }
+    return index;
+  };
+
+  List.prototype.__ensureOwner = function __ensureOwner (ownerID) {
+    if (ownerID === this.__ownerID) {
+      return this;
+    }
+    if (!ownerID) {
+      if (this.size === 0) {
+        return emptyList();
+      }
+      this.__ownerID = ownerID;
+      this.__altered = false;
+      return this;
+    }
+    return makeList(
+      this._origin,
+      this._capacity,
+      this._level,
+      this._root,
+      this._tail,
+      ownerID,
+      this.__hash
+    );
+  };
+
+  return List;
+}(IndexedCollection));
+
+List.isList = isList;
+
+var ListPrototype = List.prototype;
+ListPrototype[IS_LIST_SYMBOL] = true;
+ListPrototype[DELETE] = ListPrototype.remove;
+ListPrototype.merge = ListPrototype.concat;
+ListPrototype.setIn = setIn;
+ListPrototype.deleteIn = ListPrototype.removeIn = deleteIn;
+ListPrototype.update = update;
+ListPrototype.updateIn = updateIn;
+ListPrototype.mergeIn = mergeIn;
+ListPrototype.mergeDeepIn = mergeDeepIn;
+ListPrototype.withMutations = withMutations;
+ListPrototype.wasAltered = wasAltered;
+ListPrototype.asImmutable = asImmutable;
+ListPrototype['@@transducer/init'] = ListPrototype.asMutable = asMutable;
+ListPrototype['@@transducer/step'] = function (result, arr) {
+  return result.push(arr);
+};
+ListPrototype['@@transducer/result'] = function (obj) {
+  return obj.asImmutable();
+};
+
+var VNode = function VNode(array, ownerID) {
+  this.array = array;
+  this.ownerID = ownerID;
+};
+
+// TODO: seems like these methods are very similar
+
+VNode.prototype.removeBefore = function removeBefore (ownerID, level, index) {
+  if (index === level ? 1 << level : this.array.length === 0) {
+    return this;
+  }
+  var originIndex = (index >>> level) & MASK;
+  if (originIndex >= this.array.length) {
+    return new VNode([], ownerID);
+  }
+  var removingFirst = originIndex === 0;
+  var newChild;
+  if (level > 0) {
+    var oldChild = this.array[originIndex];
+    newChild =
+      oldChild && oldChild.removeBefore(ownerID, level - SHIFT, index);
+    if (newChild === oldChild && removingFirst) {
+      return this;
+    }
+  }
+  if (removingFirst && !newChild) {
+    return this;
+  }
+  var editable = editableVNode(this, ownerID);
+  if (!removingFirst) {
+    for (var ii = 0; ii < originIndex; ii++) {
+      editable.array[ii] = undefined;
+    }
+  }
+  if (newChild) {
+    editable.array[originIndex] = newChild;
+  }
+  return editable;
+};
+
+VNode.prototype.removeAfter = function removeAfter (ownerID, level, index) {
+  if (index === (level ? 1 << level : 0) || this.array.length === 0) {
+    return this;
+  }
+  var sizeIndex = ((index - 1) >>> level) & MASK;
+  if (sizeIndex >= this.array.length) {
+    return this;
+  }
+
+  var newChild;
+  if (level > 0) {
+    var oldChild = this.array[sizeIndex];
+    newChild =
+      oldChild && oldChild.removeAfter(ownerID, level - SHIFT, index);
+    if (newChild === oldChild && sizeIndex === this.array.length - 1) {
+      return this;
+    }
+  }
+
+  var editable = editableVNode(this, ownerID);
+  editable.array.splice(sizeIndex + 1);
+  if (newChild) {
+    editable.array[sizeIndex] = newChild;
+  }
+  return editable;
+};
+
+var DONE = {};
+
+function iterateList(list, reverse) {
+  var left = list._origin;
+  var right = list._capacity;
+  var tailPos = getTailOffset(right);
+  var tail = list._tail;
+
+  return iterateNodeOrLeaf(list._root, list._level, 0);
+
+  function iterateNodeOrLeaf(node, level, offset) {
+    return level === 0
+      ? iterateLeaf(node, offset)
+      : iterateNode(node, level, offset);
+  }
+
+  function iterateLeaf(node, offset) {
+    var array = offset === tailPos ? tail && tail.array : node && node.array;
+    var from = offset > left ? 0 : left - offset;
+    var to = right - offset;
+    if (to > SIZE) {
+      to = SIZE;
+    }
+    return function () {
+      if (from === to) {
+        return DONE;
+      }
+      var idx = reverse ? --to : from++;
+      return array && array[idx];
+    };
+  }
+
+  function iterateNode(node, level, offset) {
+    var values;
+    var array = node && node.array;
+    var from = offset > left ? 0 : (left - offset) >> level;
+    var to = ((right - offset) >> level) + 1;
+    if (to > SIZE) {
+      to = SIZE;
+    }
+    return function () {
+      while (true) {
+        if (values) {
+          var value = values();
+          if (value !== DONE) {
+            return value;
+          }
+          values = null;
+        }
+        if (from === to) {
+          return DONE;
+        }
+        var idx = reverse ? --to : from++;
+        values = iterateNodeOrLeaf(
+          array && array[idx],
+          level - SHIFT,
+          offset + (idx << level)
+        );
+      }
+    };
+  }
+}
+
+function makeList(origin, capacity, level, root, tail, ownerID, hash) {
+  var list = Object.create(ListPrototype);
+  list.size = capacity - origin;
+  list._origin = origin;
+  list._capacity = capacity;
+  list._level = level;
+  list._root = root;
+  list._tail = tail;
+  list.__ownerID = ownerID;
+  list.__hash = hash;
+  list.__altered = false;
+  return list;
+}
+
+var EMPTY_LIST;
+function emptyList() {
+  return EMPTY_LIST || (EMPTY_LIST = makeList(0, 0, SHIFT));
+}
+
+function updateList(list, index, value) {
+  index = wrapIndex(list, index);
+
+  if (index !== index) {
+    return list;
+  }
+
+  if (index >= list.size || index < 0) {
+    return list.withMutations(function (list) {
+      index < 0
+        ? setListBounds(list, index).set(0, value)
+        : setListBounds(list, 0, index + 1).set(index, value);
+    });
+  }
+
+  index += list._origin;
+
+  var newTail = list._tail;
+  var newRoot = list._root;
+  var didAlter = MakeRef();
+  if (index >= getTailOffset(list._capacity)) {
+    newTail = updateVNode(newTail, list.__ownerID, 0, index, value, didAlter);
+  } else {
+    newRoot = updateVNode(
+      newRoot,
+      list.__ownerID,
+      list._level,
+      index,
+      value,
+      didAlter
+    );
+  }
+
+  if (!didAlter.value) {
+    return list;
+  }
+
+  if (list.__ownerID) {
+    list._root = newRoot;
+    list._tail = newTail;
+    list.__hash = undefined;
+    list.__altered = true;
+    return list;
+  }
+  return makeList(list._origin, list._capacity, list._level, newRoot, newTail);
+}
+
+function updateVNode(node, ownerID, level, index, value, didAlter) {
+  var idx = (index >>> level) & MASK;
+  var nodeHas = node && idx < node.array.length;
+  if (!nodeHas && value === undefined) {
+    return node;
+  }
+
+  var newNode;
+
+  if (level > 0) {
+    var lowerNode = node && node.array[idx];
+    var newLowerNode = updateVNode(
+      lowerNode,
+      ownerID,
+      level - SHIFT,
+      index,
+      value,
+      didAlter
+    );
+    if (newLowerNode === lowerNode) {
+      return node;
+    }
+    newNode = editableVNode(node, ownerID);
+    newNode.array[idx] = newLowerNode;
+    return newNode;
+  }
+
+  if (nodeHas && node.array[idx] === value) {
+    return node;
+  }
+
+  if (didAlter) {
+    SetRef(didAlter);
+  }
+
+  newNode = editableVNode(node, ownerID);
+  if (value === undefined && idx === newNode.array.length - 1) {
+    newNode.array.pop();
+  } else {
+    newNode.array[idx] = value;
+  }
+  return newNode;
+}
+
+function editableVNode(node, ownerID) {
+  if (ownerID && node && ownerID === node.ownerID) {
+    return node;
+  }
+  return new VNode(node ? node.array.slice() : [], ownerID);
+}
+
+function listNodeFor(list, rawIndex) {
+  if (rawIndex >= getTailOffset(list._capacity)) {
+    return list._tail;
+  }
+  if (rawIndex < 1 << (list._level + SHIFT)) {
+    var node = list._root;
+    var level = list._level;
+    while (node && level > 0) {
+      node = node.array[(rawIndex >>> level) & MASK];
+      level -= SHIFT;
+    }
+    return node;
+  }
+}
+
+function setListBounds(list, begin, end) {
+  // Sanitize begin & end using this shorthand for ToInt32(argument)
+  // http://www.ecma-international.org/ecma-262/6.0/#sec-toint32
+  if (begin !== undefined) {
+    begin |= 0;
+  }
+  if (end !== undefined) {
+    end |= 0;
+  }
+  var owner = list.__ownerID || new OwnerID();
+  var oldOrigin = list._origin;
+  var oldCapacity = list._capacity;
+  var newOrigin = oldOrigin + begin;
+  var newCapacity =
+    end === undefined
+      ? oldCapacity
+      : end < 0
+      ? oldCapacity + end
+      : oldOrigin + end;
+  if (newOrigin === oldOrigin && newCapacity === oldCapacity) {
+    return list;
+  }
+
+  // If it's going to end after it starts, it's empty.
+  if (newOrigin >= newCapacity) {
+    return list.clear();
+  }
+
+  var newLevel = list._level;
+  var newRoot = list._root;
+
+  // New origin might need creating a higher root.
+  var offsetShift = 0;
+  while (newOrigin + offsetShift < 0) {
+    newRoot = new VNode(
+      newRoot && newRoot.array.length ? [undefined, newRoot] : [],
+      owner
+    );
+    newLevel += SHIFT;
+    offsetShift += 1 << newLevel;
+  }
+  if (offsetShift) {
+    newOrigin += offsetShift;
+    oldOrigin += offsetShift;
+    newCapacity += offsetShift;
+    oldCapacity += offsetShift;
+  }
+
+  var oldTailOffset = getTailOffset(oldCapacity);
+  var newTailOffset = getTailOffset(newCapacity);
+
+  // New size might need creating a higher root.
+  while (newTailOffset >= 1 << (newLevel + SHIFT)) {
+    newRoot = new VNode(
+      newRoot && newRoot.array.length ? [newRoot] : [],
+      owner
+    );
+    newLevel += SHIFT;
+  }
+
+  // Locate or create the new tail.
+  var oldTail = list._tail;
+  var newTail =
+    newTailOffset < oldTailOffset
+      ? listNodeFor(list, newCapacity - 1)
+      : newTailOffset > oldTailOffset
+      ? new VNode([], owner)
+      : oldTail;
+
+  // Merge Tail into tree.
+  if (
+    oldTail &&
+    newTailOffset > oldTailOffset &&
+    newOrigin < oldCapacity &&
+    oldTail.array.length
+  ) {
+    newRoot = editableVNode(newRoot, owner);
+    var node = newRoot;
+    for (var level = newLevel; level > SHIFT; level -= SHIFT) {
+      var idx = (oldTailOffset >>> level) & MASK;
+      node = node.array[idx] = editableVNode(node.array[idx], owner);
+    }
+    node.array[(oldTailOffset >>> SHIFT) & MASK] = oldTail;
+  }
+
+  // If the size has been reduced, there's a chance the tail needs to be trimmed.
+  if (newCapacity < oldCapacity) {
+    newTail = newTail && newTail.removeAfter(owner, 0, newCapacity);
+  }
+
+  // If the new origin is within the tail, then we do not need a root.
+  if (newOrigin >= newTailOffset) {
+    newOrigin -= newTailOffset;
+    newCapacity -= newTailOffset;
+    newLevel = SHIFT;
+    newRoot = null;
+    newTail = newTail && newTail.removeBefore(owner, 0, newOrigin);
+
+    // Otherwise, if the root has been trimmed, garbage collect.
+  } else if (newOrigin > oldOrigin || newTailOffset < oldTailOffset) {
+    offsetShift = 0;
+
+    // Identify the new top root node of the subtree of the old root.
+    while (newRoot) {
+      var beginIndex = (newOrigin >>> newLevel) & MASK;
+      if ((beginIndex !== newTailOffset >>> newLevel) & MASK) {
+        break;
+      }
+      if (beginIndex) {
+        offsetShift += (1 << newLevel) * beginIndex;
+      }
+      newLevel -= SHIFT;
+      newRoot = newRoot.array[beginIndex];
+    }
+
+    // Trim the new sides of the new root.
+    if (newRoot && newOrigin > oldOrigin) {
+      newRoot = newRoot.removeBefore(owner, newLevel, newOrigin - offsetShift);
+    }
+    if (newRoot && newTailOffset < oldTailOffset) {
+      newRoot = newRoot.removeAfter(
+        owner,
+        newLevel,
+        newTailOffset - offsetShift
+      );
+    }
+    if (offsetShift) {
+      newOrigin -= offsetShift;
+      newCapacity -= offsetShift;
+    }
+  }
+
+  if (list.__ownerID) {
+    list.size = newCapacity - newOrigin;
+    list._origin = newOrigin;
+    list._capacity = newCapacity;
+    list._level = newLevel;
+    list._root = newRoot;
+    list._tail = newTail;
+    list.__hash = undefined;
+    list.__altered = true;
+    return list;
+  }
+  return makeList(newOrigin, newCapacity, newLevel, newRoot, newTail);
+}
+
+function getTailOffset(size) {
+  return size < SIZE ? 0 : ((size - 1) >>> SHIFT) << SHIFT;
+}
+
+var OrderedMap = /*@__PURE__*/(function (Map) {
+  function OrderedMap(value) {
+    return value === undefined || value === null
+      ? emptyOrderedMap()
+      : isOrderedMap(value)
+      ? value
+      : emptyOrderedMap().withMutations(function (map) {
+          var iter = KeyedCollection(value);
+          assertNotInfinite(iter.size);
+          iter.forEach(function (v, k) { return map.set(k, v); });
+        });
+  }
+
+  if ( Map ) OrderedMap.__proto__ = Map;
+  OrderedMap.prototype = Object.create( Map && Map.prototype );
+  OrderedMap.prototype.constructor = OrderedMap;
+
+  OrderedMap.of = function of (/*...values*/) {
+    return this(arguments);
+  };
+
+  OrderedMap.prototype.toString = function toString () {
+    return this.__toString('OrderedMap {', '}');
+  };
+
+  // @pragma Access
+
+  OrderedMap.prototype.get = function get (k, notSetValue) {
+    var index = this._map.get(k);
+    return index !== undefined ? this._list.get(index)[1] : notSetValue;
+  };
+
+  // @pragma Modification
+
+  OrderedMap.prototype.clear = function clear () {
+    if (this.size === 0) {
+      return this;
+    }
+    if (this.__ownerID) {
+      this.size = 0;
+      this._map.clear();
+      this._list.clear();
+      this.__altered = true;
+      return this;
+    }
+    return emptyOrderedMap();
+  };
+
+  OrderedMap.prototype.set = function set (k, v) {
+    return updateOrderedMap(this, k, v);
+  };
+
+  OrderedMap.prototype.remove = function remove (k) {
+    return updateOrderedMap(this, k, NOT_SET);
+  };
+
+  OrderedMap.prototype.__iterate = function __iterate (fn, reverse) {
+    var this$1$1 = this;
+
+    return this._list.__iterate(
+      function (entry) { return entry && fn(entry[1], entry[0], this$1$1); },
+      reverse
+    );
+  };
+
+  OrderedMap.prototype.__iterator = function __iterator (type, reverse) {
+    return this._list.fromEntrySeq().__iterator(type, reverse);
+  };
+
+  OrderedMap.prototype.__ensureOwner = function __ensureOwner (ownerID) {
+    if (ownerID === this.__ownerID) {
+      return this;
+    }
+    var newMap = this._map.__ensureOwner(ownerID);
+    var newList = this._list.__ensureOwner(ownerID);
+    if (!ownerID) {
+      if (this.size === 0) {
+        return emptyOrderedMap();
+      }
+      this.__ownerID = ownerID;
+      this.__altered = false;
+      this._map = newMap;
+      this._list = newList;
+      return this;
+    }
+    return makeOrderedMap(newMap, newList, ownerID, this.__hash);
+  };
+
+  return OrderedMap;
+}(Map));
+
+OrderedMap.isOrderedMap = isOrderedMap;
+
+OrderedMap.prototype[IS_ORDERED_SYMBOL] = true;
+OrderedMap.prototype[DELETE] = OrderedMap.prototype.remove;
+
+function makeOrderedMap(map, list, ownerID, hash) {
+  var omap = Object.create(OrderedMap.prototype);
+  omap.size = map ? map.size : 0;
+  omap._map = map;
+  omap._list = list;
+  omap.__ownerID = ownerID;
+  omap.__hash = hash;
+  omap.__altered = false;
+  return omap;
+}
+
+var EMPTY_ORDERED_MAP;
+function emptyOrderedMap() {
+  return (
+    EMPTY_ORDERED_MAP ||
+    (EMPTY_ORDERED_MAP = makeOrderedMap(emptyMap(), emptyList()))
+  );
+}
+
+function updateOrderedMap(omap, k, v) {
+  var map = omap._map;
+  var list = omap._list;
+  var i = map.get(k);
+  var has = i !== undefined;
+  var newMap;
+  var newList;
+  if (v === NOT_SET) {
+    // removed
+    if (!has) {
+      return omap;
+    }
+    if (list.size >= SIZE && list.size >= map.size * 2) {
+      newList = list.filter(function (entry, idx) { return entry !== undefined && i !== idx; });
+      newMap = newList
+        .toKeyedSeq()
+        .map(function (entry) { return entry[0]; })
+        .flip()
+        .toMap();
+      if (omap.__ownerID) {
+        newMap.__ownerID = newList.__ownerID = omap.__ownerID;
+      }
+    } else {
+      newMap = map.remove(k);
+      newList = i === list.size - 1 ? list.pop() : list.set(i, undefined);
+    }
+  } else if (has) {
+    if (v === list.get(i)[1]) {
+      return omap;
+    }
+    newMap = map;
+    newList = list.set(i, [k, v]);
+  } else {
+    newMap = map.set(k, list.size);
+    newList = list.set(list.size, [k, v]);
+  }
+  if (omap.__ownerID) {
+    omap.size = newMap.size;
+    omap._map = newMap;
+    omap._list = newList;
+    omap.__hash = undefined;
+    omap.__altered = true;
+    return omap;
+  }
+  return makeOrderedMap(newMap, newList);
+}
+
+var IS_STACK_SYMBOL = '@@__IMMUTABLE_STACK__@@';
+
+function isStack(maybeStack) {
+  return Boolean(maybeStack && maybeStack[IS_STACK_SYMBOL]);
+}
+
+var Stack = /*@__PURE__*/(function (IndexedCollection) {
+  function Stack(value) {
+    return value === undefined || value === null
+      ? emptyStack()
+      : isStack(value)
+      ? value
+      : emptyStack().pushAll(value);
+  }
+
+  if ( IndexedCollection ) Stack.__proto__ = IndexedCollection;
+  Stack.prototype = Object.create( IndexedCollection && IndexedCollection.prototype );
+  Stack.prototype.constructor = Stack;
+
+  Stack.of = function of (/*...values*/) {
+    return this(arguments);
+  };
+
+  Stack.prototype.toString = function toString () {
+    return this.__toString('Stack [', ']');
+  };
+
+  // @pragma Access
+
+  Stack.prototype.get = function get (index, notSetValue) {
+    var head = this._head;
+    index = wrapIndex(this, index);
+    while (head && index--) {
+      head = head.next;
+    }
+    return head ? head.value : notSetValue;
+  };
+
+  Stack.prototype.peek = function peek () {
+    return this._head && this._head.value;
+  };
+
+  // @pragma Modification
+
+  Stack.prototype.push = function push (/*...values*/) {
+    var arguments$1 = arguments;
+
+    if (arguments.length === 0) {
+      return this;
+    }
+    var newSize = this.size + arguments.length;
+    var head = this._head;
+    for (var ii = arguments.length - 1; ii >= 0; ii--) {
+      head = {
+        value: arguments$1[ii],
+        next: head,
+      };
+    }
+    if (this.__ownerID) {
+      this.size = newSize;
+      this._head = head;
+      this.__hash = undefined;
+      this.__altered = true;
+      return this;
+    }
+    return makeStack(newSize, head);
+  };
+
+  Stack.prototype.pushAll = function pushAll (iter) {
+    iter = IndexedCollection(iter);
+    if (iter.size === 0) {
+      return this;
+    }
+    if (this.size === 0 && isStack(iter)) {
+      return iter;
+    }
+    assertNotInfinite(iter.size);
+    var newSize = this.size;
+    var head = this._head;
+    iter.__iterate(function (value) {
+      newSize++;
+      head = {
+        value: value,
+        next: head,
+      };
+    }, /* reverse */ true);
+    if (this.__ownerID) {
+      this.size = newSize;
+      this._head = head;
+      this.__hash = undefined;
+      this.__altered = true;
+      return this;
+    }
+    return makeStack(newSize, head);
+  };
+
+  Stack.prototype.pop = function pop () {
+    return this.slice(1);
+  };
+
+  Stack.prototype.clear = function clear () {
+    if (this.size === 0) {
+      return this;
+    }
+    if (this.__ownerID) {
+      this.size = 0;
+      this._head = undefined;
+      this.__hash = undefined;
+      this.__altered = true;
+      return this;
+    }
+    return emptyStack();
+  };
+
+  Stack.prototype.slice = function slice (begin, end) {
+    if (wholeSlice(begin, end, this.size)) {
+      return this;
+    }
+    var resolvedBegin = resolveBegin(begin, this.size);
+    var resolvedEnd = resolveEnd(end, this.size);
+    if (resolvedEnd !== this.size) {
+      // super.slice(begin, end);
+      return IndexedCollection.prototype.slice.call(this, begin, end);
+    }
+    var newSize = this.size - resolvedBegin;
+    var head = this._head;
+    while (resolvedBegin--) {
+      head = head.next;
+    }
+    if (this.__ownerID) {
+      this.size = newSize;
+      this._head = head;
+      this.__hash = undefined;
+      this.__altered = true;
+      return this;
+    }
+    return makeStack(newSize, head);
+  };
+
+  // @pragma Mutability
+
+  Stack.prototype.__ensureOwner = function __ensureOwner (ownerID) {
+    if (ownerID === this.__ownerID) {
+      return this;
+    }
+    if (!ownerID) {
+      if (this.size === 0) {
+        return emptyStack();
+      }
+      this.__ownerID = ownerID;
+      this.__altered = false;
+      return this;
+    }
+    return makeStack(this.size, this._head, ownerID, this.__hash);
+  };
+
+  // @pragma Iteration
+
+  Stack.prototype.__iterate = function __iterate (fn, reverse) {
+    var this$1$1 = this;
+
+    if (reverse) {
+      return new ArraySeq(this.toArray()).__iterate(
+        function (v, k) { return fn(v, k, this$1$1); },
+        reverse
+      );
+    }
+    var iterations = 0;
+    var node = this._head;
+    while (node) {
+      if (fn(node.value, iterations++, this) === false) {
+        break;
+      }
+      node = node.next;
+    }
+    return iterations;
+  };
+
+  Stack.prototype.__iterator = function __iterator (type, reverse) {
+    if (reverse) {
+      return new ArraySeq(this.toArray()).__iterator(type, reverse);
+    }
+    var iterations = 0;
+    var node = this._head;
+    return new Iterator(function () {
+      if (node) {
+        var value = node.value;
+        node = node.next;
+        return iteratorValue(type, iterations++, value);
+      }
+      return iteratorDone();
+    });
+  };
+
+  return Stack;
+}(IndexedCollection));
+
+Stack.isStack = isStack;
+
+var StackPrototype = Stack.prototype;
+StackPrototype[IS_STACK_SYMBOL] = true;
+StackPrototype.shift = StackPrototype.pop;
+StackPrototype.unshift = StackPrototype.push;
+StackPrototype.unshiftAll = StackPrototype.pushAll;
+StackPrototype.withMutations = withMutations;
+StackPrototype.wasAltered = wasAltered;
+StackPrototype.asImmutable = asImmutable;
+StackPrototype['@@transducer/init'] = StackPrototype.asMutable = asMutable;
+StackPrototype['@@transducer/step'] = function (result, arr) {
+  return result.unshift(arr);
+};
+StackPrototype['@@transducer/result'] = function (obj) {
+  return obj.asImmutable();
+};
+
+function makeStack(size, head, ownerID, hash) {
+  var map = Object.create(StackPrototype);
+  map.size = size;
+  map._head = head;
+  map.__ownerID = ownerID;
+  map.__hash = hash;
+  map.__altered = false;
+  return map;
+}
+
+var EMPTY_STACK;
+function emptyStack() {
+  return EMPTY_STACK || (EMPTY_STACK = makeStack(0));
+}
+
+var IS_SET_SYMBOL = '@@__IMMUTABLE_SET__@@';
+
+function isSet(maybeSet) {
+  return Boolean(maybeSet && maybeSet[IS_SET_SYMBOL]);
+}
+
+function isOrderedSet(maybeOrderedSet) {
+  return isSet(maybeOrderedSet) && isOrdered(maybeOrderedSet);
+}
+
+function deepEqual(a, b) {
+  if (a === b) {
+    return true;
+  }
+
+  if (
+    !isCollection(b) ||
+    (a.size !== undefined && b.size !== undefined && a.size !== b.size) ||
+    (a.__hash !== undefined &&
+      b.__hash !== undefined &&
+      a.__hash !== b.__hash) ||
+    isKeyed(a) !== isKeyed(b) ||
+    isIndexed(a) !== isIndexed(b) ||
+    isOrdered(a) !== isOrdered(b)
+  ) {
+    return false;
+  }
+
+  if (a.size === 0 && b.size === 0) {
+    return true;
+  }
+
+  var notAssociative = !isAssociative(a);
+
+  if (isOrdered(a)) {
+    var entries = a.entries();
+    return (
+      b.every(function (v, k) {
+        var entry = entries.next().value;
+        return entry && is(entry[1], v) && (notAssociative || is(entry[0], k));
+      }) && entries.next().done
+    );
+  }
+
+  var flipped = false;
+
+  if (a.size === undefined) {
+    if (b.size === undefined) {
+      if (typeof a.cacheResult === 'function') {
+        a.cacheResult();
+      }
+    } else {
+      flipped = true;
+      var _ = a;
+      a = b;
+      b = _;
+    }
+  }
+
+  var allEqual = true;
+  var bSize = b.__iterate(function (v, k) {
+    if (
+      notAssociative
+        ? !a.has(v)
+        : flipped
+        ? !is(v, a.get(k, NOT_SET))
+        : !is(a.get(k, NOT_SET), v)
+    ) {
+      allEqual = false;
+      return false;
+    }
+  });
+
+  return allEqual && a.size === bSize;
+}
+
+function mixin(ctor, methods) {
+  var keyCopier = function (key) {
+    ctor.prototype[key] = methods[key];
+  };
+  Object.keys(methods).forEach(keyCopier);
+  Object.getOwnPropertySymbols &&
+    Object.getOwnPropertySymbols(methods).forEach(keyCopier);
+  return ctor;
+}
+
+function toJS(value) {
+  if (!value || typeof value !== 'object') {
+    return value;
+  }
+  if (!isCollection(value)) {
+    if (!isDataStructure(value)) {
+      return value;
+    }
+    value = Seq(value);
+  }
+  if (isKeyed(value)) {
+    var result$1 = {};
+    value.__iterate(function (v, k) {
+      result$1[k] = toJS(v);
+    });
+    return result$1;
+  }
+  var result = [];
+  value.__iterate(function (v) {
+    result.push(toJS(v));
+  });
+  return result;
+}
+
+var Set = /*@__PURE__*/(function (SetCollection) {
+  function Set(value) {
+    return value === undefined || value === null
+      ? emptySet()
+      : isSet(value) && !isOrdered(value)
+      ? value
+      : emptySet().withMutations(function (set) {
+          var iter = SetCollection(value);
+          assertNotInfinite(iter.size);
+          iter.forEach(function (v) { return set.add(v); });
+        });
+  }
+
+  if ( SetCollection ) Set.__proto__ = SetCollection;
+  Set.prototype = Object.create( SetCollection && SetCollection.prototype );
+  Set.prototype.constructor = Set;
+
+  Set.of = function of (/*...values*/) {
+    return this(arguments);
+  };
+
+  Set.fromKeys = function fromKeys (value) {
+    return this(KeyedCollection(value).keySeq());
+  };
+
+  Set.intersect = function intersect (sets) {
+    sets = Collection(sets).toArray();
+    return sets.length
+      ? SetPrototype.intersect.apply(Set(sets.pop()), sets)
+      : emptySet();
+  };
+
+  Set.union = function union (sets) {
+    sets = Collection(sets).toArray();
+    return sets.length
+      ? SetPrototype.union.apply(Set(sets.pop()), sets)
+      : emptySet();
+  };
+
+  Set.prototype.toString = function toString () {
+    return this.__toString('Set {', '}');
+  };
+
+  // @pragma Access
+
+  Set.prototype.has = function has (value) {
+    return this._map.has(value);
+  };
+
+  // @pragma Modification
+
+  Set.prototype.add = function add (value) {
+    return updateSet(this, this._map.set(value, value));
+  };
+
+  Set.prototype.remove = function remove (value) {
+    return updateSet(this, this._map.remove(value));
+  };
+
+  Set.prototype.clear = function clear () {
+    return updateSet(this, this._map.clear());
+  };
+
+  // @pragma Composition
+
+  Set.prototype.map = function map (mapper, context) {
+    var this$1$1 = this;
+
+    // keep track if the set is altered by the map function
+    var didChanges = false;
+
+    var newMap = updateSet(
+      this,
+      this._map.mapEntries(function (ref) {
+        var v = ref[1];
+
+        var mapped = mapper.call(context, v, v, this$1$1);
+
+        if (mapped !== v) {
+          didChanges = true;
+        }
+
+        return [mapped, mapped];
+      }, context)
+    );
+
+    return didChanges ? newMap : this;
+  };
+
+  Set.prototype.union = function union () {
+    var iters = [], len = arguments.length;
+    while ( len-- ) iters[ len ] = arguments[ len ];
+
+    iters = iters.filter(function (x) { return x.size !== 0; });
+    if (iters.length === 0) {
+      return this;
+    }
+    if (this.size === 0 && !this.__ownerID && iters.length === 1) {
+      return this.constructor(iters[0]);
+    }
+    return this.withMutations(function (set) {
+      for (var ii = 0; ii < iters.length; ii++) {
+        SetCollection(iters[ii]).forEach(function (value) { return set.add(value); });
+      }
+    });
+  };
+
+  Set.prototype.intersect = function intersect () {
+    var iters = [], len = arguments.length;
+    while ( len-- ) iters[ len ] = arguments[ len ];
+
+    if (iters.length === 0) {
+      return this;
+    }
+    iters = iters.map(function (iter) { return SetCollection(iter); });
+    var toRemove = [];
+    this.forEach(function (value) {
+      if (!iters.every(function (iter) { return iter.includes(value); })) {
+        toRemove.push(value);
+      }
+    });
+    return this.withMutations(function (set) {
+      toRemove.forEach(function (value) {
+        set.remove(value);
+      });
+    });
+  };
+
+  Set.prototype.subtract = function subtract () {
+    var iters = [], len = arguments.length;
+    while ( len-- ) iters[ len ] = arguments[ len ];
+
+    if (iters.length === 0) {
+      return this;
+    }
+    iters = iters.map(function (iter) { return SetCollection(iter); });
+    var toRemove = [];
+    this.forEach(function (value) {
+      if (iters.some(function (iter) { return iter.includes(value); })) {
+        toRemove.push(value);
+      }
+    });
+    return this.withMutations(function (set) {
+      toRemove.forEach(function (value) {
+        set.remove(value);
+      });
+    });
+  };
+
+  Set.prototype.sort = function sort (comparator) {
+    // Late binding
+    return OrderedSet(sortFactory(this, comparator));
+  };
+
+  Set.prototype.sortBy = function sortBy (mapper, comparator) {
+    // Late binding
+    return OrderedSet(sortFactory(this, comparator, mapper));
+  };
+
+  Set.prototype.wasAltered = function wasAltered () {
+    return this._map.wasAltered();
+  };
+
+  Set.prototype.__iterate = function __iterate (fn, reverse) {
+    var this$1$1 = this;
+
+    return this._map.__iterate(function (k) { return fn(k, k, this$1$1); }, reverse);
+  };
+
+  Set.prototype.__iterator = function __iterator (type, reverse) {
+    return this._map.__iterator(type, reverse);
+  };
+
+  Set.prototype.__ensureOwner = function __ensureOwner (ownerID) {
+    if (ownerID === this.__ownerID) {
+      return this;
+    }
+    var newMap = this._map.__ensureOwner(ownerID);
+    if (!ownerID) {
+      if (this.size === 0) {
+        return this.__empty();
+      }
+      this.__ownerID = ownerID;
+      this._map = newMap;
+      return this;
+    }
+    return this.__make(newMap, ownerID);
+  };
+
+  return Set;
+}(SetCollection));
+
+Set.isSet = isSet;
+
+var SetPrototype = Set.prototype;
+SetPrototype[IS_SET_SYMBOL] = true;
+SetPrototype[DELETE] = SetPrototype.remove;
+SetPrototype.merge = SetPrototype.concat = SetPrototype.union;
+SetPrototype.withMutations = withMutations;
+SetPrototype.asImmutable = asImmutable;
+SetPrototype['@@transducer/init'] = SetPrototype.asMutable = asMutable;
+SetPrototype['@@transducer/step'] = function (result, arr) {
+  return result.add(arr);
+};
+SetPrototype['@@transducer/result'] = function (obj) {
+  return obj.asImmutable();
+};
+
+SetPrototype.__empty = emptySet;
+SetPrototype.__make = makeSet;
+
+function updateSet(set, newMap) {
+  if (set.__ownerID) {
+    set.size = newMap.size;
+    set._map = newMap;
+    return set;
+  }
+  return newMap === set._map
+    ? set
+    : newMap.size === 0
+    ? set.__empty()
+    : set.__make(newMap);
+}
+
+function makeSet(map, ownerID) {
+  var set = Object.create(SetPrototype);
+  set.size = map ? map.size : 0;
+  set._map = map;
+  set.__ownerID = ownerID;
+  return set;
+}
+
+var EMPTY_SET;
+function emptySet() {
+  return EMPTY_SET || (EMPTY_SET = makeSet(emptyMap()));
+}
+
+/**
+ * Returns a lazy seq of nums from start (inclusive) to end
+ * (exclusive), by step, where start defaults to 0, step to 1, and end to
+ * infinity. When start is equal to end, returns empty list.
+ */
+var Range = /*@__PURE__*/(function (IndexedSeq) {
+  function Range(start, end, step) {
+    if (!(this instanceof Range)) {
+      return new Range(start, end, step);
+    }
+    invariant(step !== 0, 'Cannot step a Range by 0');
+    start = start || 0;
+    if (end === undefined) {
+      end = Infinity;
+    }
+    step = step === undefined ? 1 : Math.abs(step);
+    if (end < start) {
+      step = -step;
+    }
+    this._start = start;
+    this._end = end;
+    this._step = step;
+    this.size = Math.max(0, Math.ceil((end - start) / step - 1) + 1);
+    if (this.size === 0) {
+      if (EMPTY_RANGE) {
+        return EMPTY_RANGE;
+      }
+      EMPTY_RANGE = this;
+    }
+  }
+
+  if ( IndexedSeq ) Range.__proto__ = IndexedSeq;
+  Range.prototype = Object.create( IndexedSeq && IndexedSeq.prototype );
+  Range.prototype.constructor = Range;
+
+  Range.prototype.toString = function toString () {
+    if (this.size === 0) {
+      return 'Range []';
+    }
+    return (
+      'Range [ ' +
+      this._start +
+      '...' +
+      this._end +
+      (this._step !== 1 ? ' by ' + this._step : '') +
+      ' ]'
+    );
+  };
+
+  Range.prototype.get = function get (index, notSetValue) {
+    return this.has(index)
+      ? this._start + wrapIndex(this, index) * this._step
+      : notSetValue;
+  };
+
+  Range.prototype.includes = function includes (searchValue) {
+    var possibleIndex = (searchValue - this._start) / this._step;
+    return (
+      possibleIndex >= 0 &&
+      possibleIndex < this.size &&
+      possibleIndex === Math.floor(possibleIndex)
+    );
+  };
+
+  Range.prototype.slice = function slice (begin, end) {
+    if (wholeSlice(begin, end, this.size)) {
+      return this;
+    }
+    begin = resolveBegin(begin, this.size);
+    end = resolveEnd(end, this.size);
+    if (end <= begin) {
+      return new Range(0, 0);
+    }
+    return new Range(
+      this.get(begin, this._end),
+      this.get(end, this._end),
+      this._step
+    );
+  };
+
+  Range.prototype.indexOf = function indexOf (searchValue) {
+    var offsetValue = searchValue - this._start;
+    if (offsetValue % this._step === 0) {
+      var index = offsetValue / this._step;
+      if (index >= 0 && index < this.size) {
+        return index;
+      }
+    }
+    return -1;
+  };
+
+  Range.prototype.lastIndexOf = function lastIndexOf (searchValue) {
+    return this.indexOf(searchValue);
+  };
+
+  Range.prototype.__iterate = function __iterate (fn, reverse) {
+    var size = this.size;
+    var step = this._step;
+    var value = reverse ? this._start + (size - 1) * step : this._start;
+    var i = 0;
+    while (i !== size) {
+      if (fn(value, reverse ? size - ++i : i++, this) === false) {
+        break;
+      }
+      value += reverse ? -step : step;
+    }
+    return i;
+  };
+
+  Range.prototype.__iterator = function __iterator (type, reverse) {
+    var size = this.size;
+    var step = this._step;
+    var value = reverse ? this._start + (size - 1) * step : this._start;
+    var i = 0;
+    return new Iterator(function () {
+      if (i === size) {
+        return iteratorDone();
+      }
+      var v = value;
+      value += reverse ? -step : step;
+      return iteratorValue(type, reverse ? size - ++i : i++, v);
+    });
+  };
+
+  Range.prototype.equals = function equals (other) {
+    return other instanceof Range
+      ? this._start === other._start &&
+          this._end === other._end &&
+          this._step === other._step
+      : deepEqual(this, other);
+  };
+
+  return Range;
+}(IndexedSeq));
+
+var EMPTY_RANGE;
+
+function getIn$1(collection, searchKeyPath, notSetValue) {
+  var keyPath = coerceKeyPath(searchKeyPath);
+  var i = 0;
+  while (i !== keyPath.length) {
+    collection = get(collection, keyPath[i++], NOT_SET);
+    if (collection === NOT_SET) {
+      return notSetValue;
+    }
+  }
+  return collection;
+}
+
+function getIn(searchKeyPath, notSetValue) {
+  return getIn$1(this, searchKeyPath, notSetValue);
+}
+
+function hasIn$1(collection, keyPath) {
+  return getIn$1(collection, keyPath, NOT_SET) !== NOT_SET;
+}
+
+function hasIn(searchKeyPath) {
+  return hasIn$1(this, searchKeyPath);
+}
+
+function toObject() {
+  assertNotInfinite(this.size);
+  var object = {};
+  this.__iterate(function (v, k) {
+    object[k] = v;
+  });
+  return object;
+}
+
+// Note: all of these methods are deprecated.
+Collection.isIterable = isCollection;
+Collection.isKeyed = isKeyed;
+Collection.isIndexed = isIndexed;
+Collection.isAssociative = isAssociative;
+Collection.isOrdered = isOrdered;
+
+Collection.Iterator = Iterator;
+
+mixin(Collection, {
+  // ### Conversion to other types
+
+  toArray: function toArray() {
+    assertNotInfinite(this.size);
+    var array = new Array(this.size || 0);
+    var useTuples = isKeyed(this);
+    var i = 0;
+    this.__iterate(function (v, k) {
+      // Keyed collections produce an array of tuples.
+      array[i++] = useTuples ? [k, v] : v;
+    });
+    return array;
+  },
+
+  toIndexedSeq: function toIndexedSeq() {
+    return new ToIndexedSequence(this);
+  },
+
+  toJS: function toJS$1() {
+    return toJS(this);
+  },
+
+  toKeyedSeq: function toKeyedSeq() {
+    return new ToKeyedSequence(this, true);
+  },
+
+  toMap: function toMap() {
+    // Use Late Binding here to solve the circular dependency.
+    return Map(this.toKeyedSeq());
+  },
+
+  toObject: toObject,
+
+  toOrderedMap: function toOrderedMap() {
+    // Use Late Binding here to solve the circular dependency.
+    return OrderedMap(this.toKeyedSeq());
+  },
+
+  toOrderedSet: function toOrderedSet() {
+    // Use Late Binding here to solve the circular dependency.
+    return OrderedSet(isKeyed(this) ? this.valueSeq() : this);
+  },
+
+  toSet: function toSet() {
+    // Use Late Binding here to solve the circular dependency.
+    return Set(isKeyed(this) ? this.valueSeq() : this);
+  },
+
+  toSetSeq: function toSetSeq() {
+    return new ToSetSequence(this);
+  },
+
+  toSeq: function toSeq() {
+    return isIndexed(this)
+      ? this.toIndexedSeq()
+      : isKeyed(this)
+      ? this.toKeyedSeq()
+      : this.toSetSeq();
+  },
+
+  toStack: function toStack() {
+    // Use Late Binding here to solve the circular dependency.
+    return Stack(isKeyed(this) ? this.valueSeq() : this);
+  },
+
+  toList: function toList() {
+    // Use Late Binding here to solve the circular dependency.
+    return List(isKeyed(this) ? this.valueSeq() : this);
+  },
+
+  // ### Common JavaScript methods and properties
+
+  toString: function toString() {
+    return '[Collection]';
+  },
+
+  __toString: function __toString(head, tail) {
+    if (this.size === 0) {
+      return head + tail;
+    }
+    return (
+      head +
+      ' ' +
+      this.toSeq().map(this.__toStringMapper).join(', ') +
+      ' ' +
+      tail
+    );
+  },
+
+  // ### ES6 Collection methods (ES6 Array and Map)
+
+  concat: function concat() {
+    var values = [], len = arguments.length;
+    while ( len-- ) values[ len ] = arguments[ len ];
+
+    return reify(this, concatFactory(this, values));
+  },
+
+  includes: function includes(searchValue) {
+    return this.some(function (value) { return is(value, searchValue); });
+  },
+
+  entries: function entries() {
+    return this.__iterator(ITERATE_ENTRIES);
+  },
+
+  every: function every(predicate, context) {
+    assertNotInfinite(this.size);
+    var returnValue = true;
+    this.__iterate(function (v, k, c) {
+      if (!predicate.call(context, v, k, c)) {
+        returnValue = false;
+        return false;
+      }
+    });
+    return returnValue;
+  },
+
+  filter: function filter(predicate, context) {
+    return reify(this, filterFactory(this, predicate, context, true));
+  },
+
+  find: function find(predicate, context, notSetValue) {
+    var entry = this.findEntry(predicate, context);
+    return entry ? entry[1] : notSetValue;
+  },
+
+  forEach: function forEach(sideEffect, context) {
+    assertNotInfinite(this.size);
+    return this.__iterate(context ? sideEffect.bind(context) : sideEffect);
+  },
+
+  join: function join(separator) {
+    assertNotInfinite(this.size);
+    separator = separator !== undefined ? '' + separator : ',';
+    var joined = '';
+    var isFirst = true;
+    this.__iterate(function (v) {
+      isFirst ? (isFirst = false) : (joined += separator);
+      joined += v !== null && v !== undefined ? v.toString() : '';
+    });
+    return joined;
+  },
+
+  keys: function keys() {
+    return this.__iterator(ITERATE_KEYS);
+  },
+
+  map: function map(mapper, context) {
+    return reify(this, mapFactory(this, mapper, context));
+  },
+
+  reduce: function reduce$1(reducer, initialReduction, context) {
+    return reduce(
+      this,
+      reducer,
+      initialReduction,
+      context,
+      arguments.length < 2,
+      false
+    );
+  },
+
+  reduceRight: function reduceRight(reducer, initialReduction, context) {
+    return reduce(
+      this,
+      reducer,
+      initialReduction,
+      context,
+      arguments.length < 2,
+      true
+    );
+  },
+
+  reverse: function reverse() {
+    return reify(this, reverseFactory(this, true));
+  },
+
+  slice: function slice(begin, end) {
+    return reify(this, sliceFactory(this, begin, end, true));
+  },
+
+  some: function some(predicate, context) {
+    return !this.every(not(predicate), context);
+  },
+
+  sort: function sort(comparator) {
+    return reify(this, sortFactory(this, comparator));
+  },
+
+  values: function values() {
+    return this.__iterator(ITERATE_VALUES);
+  },
+
+  // ### More sequential methods
+
+  butLast: function butLast() {
+    return this.slice(0, -1);
+  },
+
+  isEmpty: function isEmpty() {
+    return this.size !== undefined ? this.size === 0 : !this.some(function () { return true; });
+  },
+
+  count: function count(predicate, context) {
+    return ensureSize(
+      predicate ? this.toSeq().filter(predicate, context) : this
+    );
+  },
+
+  countBy: function countBy(grouper, context) {
+    return countByFactory(this, grouper, context);
+  },
+
+  equals: function equals(other) {
+    return deepEqual(this, other);
+  },
+
+  entrySeq: function entrySeq() {
+    var collection = this;
+    if (collection._cache) {
+      // We cache as an entries array, so we can just return the cache!
+      return new ArraySeq(collection._cache);
+    }
+    var entriesSequence = collection.toSeq().map(entryMapper).toIndexedSeq();
+    entriesSequence.fromEntrySeq = function () { return collection.toSeq(); };
+    return entriesSequence;
+  },
+
+  filterNot: function filterNot(predicate, context) {
+    return this.filter(not(predicate), context);
+  },
+
+  findEntry: function findEntry(predicate, context, notSetValue) {
+    var found = notSetValue;
+    this.__iterate(function (v, k, c) {
+      if (predicate.call(context, v, k, c)) {
+        found = [k, v];
+        return false;
+      }
+    });
+    return found;
+  },
+
+  findKey: function findKey(predicate, context) {
+    var entry = this.findEntry(predicate, context);
+    return entry && entry[0];
+  },
+
+  findLast: function findLast(predicate, context, notSetValue) {
+    return this.toKeyedSeq().reverse().find(predicate, context, notSetValue);
+  },
+
+  findLastEntry: function findLastEntry(predicate, context, notSetValue) {
+    return this.toKeyedSeq()
+      .reverse()
+      .findEntry(predicate, context, notSetValue);
+  },
+
+  findLastKey: function findLastKey(predicate, context) {
+    return this.toKeyedSeq().reverse().findKey(predicate, context);
+  },
+
+  first: function first(notSetValue) {
+    return this.find(returnTrue, null, notSetValue);
+  },
+
+  flatMap: function flatMap(mapper, context) {
+    return reify(this, flatMapFactory(this, mapper, context));
+  },
+
+  flatten: function flatten(depth) {
+    return reify(this, flattenFactory(this, depth, true));
+  },
+
+  fromEntrySeq: function fromEntrySeq() {
+    return new FromEntriesSequence(this);
+  },
+
+  get: function get(searchKey, notSetValue) {
+    return this.find(function (_, key) { return is(key, searchKey); }, undefined, notSetValue);
+  },
+
+  getIn: getIn,
+
+  groupBy: function groupBy(grouper, context) {
+    return groupByFactory(this, grouper, context);
+  },
+
+  has: function has(searchKey) {
+    return this.get(searchKey, NOT_SET) !== NOT_SET;
+  },
+
+  hasIn: hasIn,
+
+  isSubset: function isSubset(iter) {
+    iter = typeof iter.includes === 'function' ? iter : Collection(iter);
+    return this.every(function (value) { return iter.includes(value); });
+  },
+
+  isSuperset: function isSuperset(iter) {
+    iter = typeof iter.isSubset === 'function' ? iter : Collection(iter);
+    return iter.isSubset(this);
+  },
+
+  keyOf: function keyOf(searchValue) {
+    return this.findKey(function (value) { return is(value, searchValue); });
+  },
+
+  keySeq: function keySeq() {
+    return this.toSeq().map(keyMapper).toIndexedSeq();
+  },
+
+  last: function last(notSetValue) {
+    return this.toSeq().reverse().first(notSetValue);
+  },
+
+  lastKeyOf: function lastKeyOf(searchValue) {
+    return this.toKeyedSeq().reverse().keyOf(searchValue);
+  },
+
+  max: function max(comparator) {
+    return maxFactory(this, comparator);
+  },
+
+  maxBy: function maxBy(mapper, comparator) {
+    return maxFactory(this, comparator, mapper);
+  },
+
+  min: function min(comparator) {
+    return maxFactory(
+      this,
+      comparator ? neg(comparator) : defaultNegComparator
+    );
+  },
+
+  minBy: function minBy(mapper, comparator) {
+    return maxFactory(
+      this,
+      comparator ? neg(comparator) : defaultNegComparator,
+      mapper
+    );
+  },
+
+  rest: function rest() {
+    return this.slice(1);
+  },
+
+  skip: function skip(amount) {
+    return amount === 0 ? this : this.slice(Math.max(0, amount));
+  },
+
+  skipLast: function skipLast(amount) {
+    return amount === 0 ? this : this.slice(0, -Math.max(0, amount));
+  },
+
+  skipWhile: function skipWhile(predicate, context) {
+    return reify(this, skipWhileFactory(this, predicate, context, true));
+  },
+
+  skipUntil: function skipUntil(predicate, context) {
+    return this.skipWhile(not(predicate), context);
+  },
+
+  sortBy: function sortBy(mapper, comparator) {
+    return reify(this, sortFactory(this, comparator, mapper));
+  },
+
+  take: function take(amount) {
+    return this.slice(0, Math.max(0, amount));
+  },
+
+  takeLast: function takeLast(amount) {
+    return this.slice(-Math.max(0, amount));
+  },
+
+  takeWhile: function takeWhile(predicate, context) {
+    return reify(this, takeWhileFactory(this, predicate, context));
+  },
+
+  takeUntil: function takeUntil(predicate, context) {
+    return this.takeWhile(not(predicate), context);
+  },
+
+  update: function update(fn) {
+    return fn(this);
+  },
+
+  valueSeq: function valueSeq() {
+    return this.toIndexedSeq();
+  },
+
+  // ### Hashable Object
+
+  hashCode: function hashCode() {
+    return this.__hash || (this.__hash = hashCollection(this));
+  },
+
+  // ### Internal
+
+  // abstract __iterate(fn, reverse)
+
+  // abstract __iterator(type, reverse)
+});
+
+var CollectionPrototype = Collection.prototype;
+CollectionPrototype[IS_COLLECTION_SYMBOL] = true;
+CollectionPrototype[ITERATOR_SYMBOL] = CollectionPrototype.values;
+CollectionPrototype.toJSON = CollectionPrototype.toArray;
+CollectionPrototype.__toStringMapper = quoteString;
+CollectionPrototype.inspect = CollectionPrototype.toSource = function () {
+  return this.toString();
+};
+CollectionPrototype.chain = CollectionPrototype.flatMap;
+CollectionPrototype.contains = CollectionPrototype.includes;
+
+mixin(KeyedCollection, {
+  // ### More sequential methods
+
+  flip: function flip() {
+    return reify(this, flipFactory(this));
+  },
+
+  mapEntries: function mapEntries(mapper, context) {
+    var this$1$1 = this;
+
+    var iterations = 0;
+    return reify(
+      this,
+      this.toSeq()
+        .map(function (v, k) { return mapper.call(context, [k, v], iterations++, this$1$1); })
+        .fromEntrySeq()
+    );
+  },
+
+  mapKeys: function mapKeys(mapper, context) {
+    var this$1$1 = this;
+
+    return reify(
+      this,
+      this.toSeq()
+        .flip()
+        .map(function (k, v) { return mapper.call(context, k, v, this$1$1); })
+        .flip()
+    );
+  },
+});
+
+var KeyedCollectionPrototype = KeyedCollection.prototype;
+KeyedCollectionPrototype[IS_KEYED_SYMBOL] = true;
+KeyedCollectionPrototype[ITERATOR_SYMBOL] = CollectionPrototype.entries;
+KeyedCollectionPrototype.toJSON = toObject;
+KeyedCollectionPrototype.__toStringMapper = function (v, k) { return quoteString(k) + ': ' + quoteString(v); };
+
+mixin(IndexedCollection, {
+  // ### Conversion to other types
+
+  toKeyedSeq: function toKeyedSeq() {
+    return new ToKeyedSequence(this, false);
+  },
+
+  // ### ES6 Collection methods (ES6 Array and Map)
+
+  filter: function filter(predicate, context) {
+    return reify(this, filterFactory(this, predicate, context, false));
+  },
+
+  findIndex: function findIndex(predicate, context) {
+    var entry = this.findEntry(predicate, context);
+    return entry ? entry[0] : -1;
+  },
+
+  indexOf: function indexOf(searchValue) {
+    var key = this.keyOf(searchValue);
+    return key === undefined ? -1 : key;
+  },
+
+  lastIndexOf: function lastIndexOf(searchValue) {
+    var key = this.lastKeyOf(searchValue);
+    return key === undefined ? -1 : key;
+  },
+
+  reverse: function reverse() {
+    return reify(this, reverseFactory(this, false));
+  },
+
+  slice: function slice(begin, end) {
+    return reify(this, sliceFactory(this, begin, end, false));
+  },
+
+  splice: function splice(index, removeNum /*, ...values*/) {
+    var numArgs = arguments.length;
+    removeNum = Math.max(removeNum || 0, 0);
+    if (numArgs === 0 || (numArgs === 2 && !removeNum)) {
+      return this;
+    }
+    // If index is negative, it should resolve relative to the size of the
+    // collection. However size may be expensive to compute if not cached, so
+    // only call count() if the number is in fact negative.
+    index = resolveBegin(index, index < 0 ? this.count() : this.size);
+    var spliced = this.slice(0, index);
+    return reify(
+      this,
+      numArgs === 1
+        ? spliced
+        : spliced.concat(arrCopy(arguments, 2), this.slice(index + removeNum))
+    );
+  },
+
+  // ### More collection methods
+
+  findLastIndex: function findLastIndex(predicate, context) {
+    var entry = this.findLastEntry(predicate, context);
+    return entry ? entry[0] : -1;
+  },
+
+  first: function first(notSetValue) {
+    return this.get(0, notSetValue);
+  },
+
+  flatten: function flatten(depth) {
+    return reify(this, flattenFactory(this, depth, false));
+  },
+
+  get: function get(index, notSetValue) {
+    index = wrapIndex(this, index);
+    return index < 0 ||
+      this.size === Infinity ||
+      (this.size !== undefined && index > this.size)
+      ? notSetValue
+      : this.find(function (_, key) { return key === index; }, undefined, notSetValue);
+  },
+
+  has: function has(index) {
+    index = wrapIndex(this, index);
+    return (
+      index >= 0 &&
+      (this.size !== undefined
+        ? this.size === Infinity || index < this.size
+        : this.indexOf(index) !== -1)
+    );
+  },
+
+  interpose: function interpose(separator) {
+    return reify(this, interposeFactory(this, separator));
+  },
+
+  interleave: function interleave(/*...collections*/) {
+    var collections = [this].concat(arrCopy(arguments));
+    var zipped = zipWithFactory(this.toSeq(), IndexedSeq.of, collections);
+    var interleaved = zipped.flatten(true);
+    if (zipped.size) {
+      interleaved.size = zipped.size * collections.length;
+    }
+    return reify(this, interleaved);
+  },
+
+  keySeq: function keySeq() {
+    return Range(0, this.size);
+  },
+
+  last: function last(notSetValue) {
+    return this.get(-1, notSetValue);
+  },
+
+  skipWhile: function skipWhile(predicate, context) {
+    return reify(this, skipWhileFactory(this, predicate, context, false));
+  },
+
+  zip: function zip(/*, ...collections */) {
+    var collections = [this].concat(arrCopy(arguments));
+    return reify(this, zipWithFactory(this, defaultZipper, collections));
+  },
+
+  zipAll: function zipAll(/*, ...collections */) {
+    var collections = [this].concat(arrCopy(arguments));
+    return reify(this, zipWithFactory(this, defaultZipper, collections, true));
+  },
+
+  zipWith: function zipWith(zipper /*, ...collections */) {
+    var collections = arrCopy(arguments);
+    collections[0] = this;
+    return reify(this, zipWithFactory(this, zipper, collections));
+  },
+});
+
+var IndexedCollectionPrototype = IndexedCollection.prototype;
+IndexedCollectionPrototype[IS_INDEXED_SYMBOL] = true;
+IndexedCollectionPrototype[IS_ORDERED_SYMBOL] = true;
+
+mixin(SetCollection, {
+  // ### ES6 Collection methods (ES6 Array and Map)
+
+  get: function get(value, notSetValue) {
+    return this.has(value) ? value : notSetValue;
+  },
+
+  includes: function includes(value) {
+    return this.has(value);
+  },
+
+  // ### More sequential methods
+
+  keySeq: function keySeq() {
+    return this.valueSeq();
+  },
+});
+
+var SetCollectionPrototype = SetCollection.prototype;
+SetCollectionPrototype.has = CollectionPrototype.includes;
+SetCollectionPrototype.contains = SetCollectionPrototype.includes;
+SetCollectionPrototype.keys = SetCollectionPrototype.values;
+
+// Mixin subclasses
+
+mixin(KeyedSeq, KeyedCollectionPrototype);
+mixin(IndexedSeq, IndexedCollectionPrototype);
+mixin(SetSeq, SetCollectionPrototype);
+
+// #pragma Helper functions
+
+function reduce(collection, reducer, reduction, context, useFirst, reverse) {
+  assertNotInfinite(collection.size);
+  collection.__iterate(function (v, k, c) {
+    if (useFirst) {
+      useFirst = false;
+      reduction = v;
+    } else {
+      reduction = reducer.call(context, reduction, v, k, c);
+    }
+  }, reverse);
+  return reduction;
+}
+
+function keyMapper(v, k) {
+  return k;
+}
+
+function entryMapper(v, k) {
+  return [k, v];
+}
+
+function not(predicate) {
+  return function () {
+    return !predicate.apply(this, arguments);
+  };
+}
+
+function neg(predicate) {
+  return function () {
+    return -predicate.apply(this, arguments);
+  };
+}
+
+function defaultZipper() {
+  return arrCopy(arguments);
+}
+
+function defaultNegComparator(a, b) {
+  return a < b ? 1 : a > b ? -1 : 0;
+}
+
+function hashCollection(collection) {
+  if (collection.size === Infinity) {
+    return 0;
+  }
+  var ordered = isOrdered(collection);
+  var keyed = isKeyed(collection);
+  var h = ordered ? 1 : 0;
+  var size = collection.__iterate(
+    keyed
+      ? ordered
+        ? function (v, k) {
+            h = (31 * h + hashMerge(hash(v), hash(k))) | 0;
+          }
+        : function (v, k) {
+            h = (h + hashMerge(hash(v), hash(k))) | 0;
+          }
+      : ordered
+      ? function (v) {
+          h = (31 * h + hash(v)) | 0;
+        }
+      : function (v) {
+          h = (h + hash(v)) | 0;
+        }
+  );
+  return murmurHashOfSize(size, h);
+}
+
+function murmurHashOfSize(size, h) {
+  h = imul(h, 0xcc9e2d51);
+  h = imul((h << 15) | (h >>> -15), 0x1b873593);
+  h = imul((h << 13) | (h >>> -13), 5);
+  h = ((h + 0xe6546b64) | 0) ^ size;
+  h = imul(h ^ (h >>> 16), 0x85ebca6b);
+  h = imul(h ^ (h >>> 13), 0xc2b2ae35);
+  h = smi(h ^ (h >>> 16));
+  return h;
+}
+
+function hashMerge(a, b) {
+  return (a ^ (b + 0x9e3779b9 + (a << 6) + (a >> 2))) | 0; // int
+}
+
+var OrderedSet = /*@__PURE__*/(function (Set) {
+  function OrderedSet(value) {
+    return value === undefined || value === null
+      ? emptyOrderedSet()
+      : isOrderedSet(value)
+      ? value
+      : emptyOrderedSet().withMutations(function (set) {
+          var iter = SetCollection(value);
+          assertNotInfinite(iter.size);
+          iter.forEach(function (v) { return set.add(v); });
+        });
+  }
+
+  if ( Set ) OrderedSet.__proto__ = Set;
+  OrderedSet.prototype = Object.create( Set && Set.prototype );
+  OrderedSet.prototype.constructor = OrderedSet;
+
+  OrderedSet.of = function of (/*...values*/) {
+    return this(arguments);
+  };
+
+  OrderedSet.fromKeys = function fromKeys (value) {
+    return this(KeyedCollection(value).keySeq());
+  };
+
+  OrderedSet.prototype.toString = function toString () {
+    return this.__toString('OrderedSet {', '}');
+  };
+
+  return OrderedSet;
+}(Set));
+
+OrderedSet.isOrderedSet = isOrderedSet;
+
+var OrderedSetPrototype = OrderedSet.prototype;
+OrderedSetPrototype[IS_ORDERED_SYMBOL] = true;
+OrderedSetPrototype.zip = IndexedCollectionPrototype.zip;
+OrderedSetPrototype.zipWith = IndexedCollectionPrototype.zipWith;
+OrderedSetPrototype.zipAll = IndexedCollectionPrototype.zipAll;
+
+OrderedSetPrototype.__empty = emptyOrderedSet;
+OrderedSetPrototype.__make = makeOrderedSet;
+
+function makeOrderedSet(map, ownerID) {
+  var set = Object.create(OrderedSetPrototype);
+  set.size = map ? map.size : 0;
+  set._map = map;
+  set.__ownerID = ownerID;
+  return set;
+}
+
+var EMPTY_ORDERED_SET;
+function emptyOrderedSet() {
+  return (
+    EMPTY_ORDERED_SET || (EMPTY_ORDERED_SET = makeOrderedSet(emptyOrderedMap()))
+  );
+}
+
+function throwOnInvalidDefaultValues(defaultValues) {
+  if (isRecord(defaultValues)) {
+    throw new Error(
+      'Can not call `Record` with an immutable Record as default values. Use a plain javascript object instead.'
+    );
+  }
+
+  if (isImmutable(defaultValues)) {
+    throw new Error(
+      'Can not call `Record` with an immutable Collection as default values. Use a plain javascript object instead.'
+    );
+  }
+
+  if (defaultValues === null || typeof defaultValues !== 'object') {
+    throw new Error(
+      'Can not call `Record` with a non-object as default values. Use a plain javascript object instead.'
+    );
+  }
+}
+
+var Record = function Record(defaultValues, name) {
+  var hasInitialized;
+
+  throwOnInvalidDefaultValues(defaultValues);
+
+  var RecordType = function Record(values) {
+    var this$1$1 = this;
+
+    if (values instanceof RecordType) {
+      return values;
+    }
+    if (!(this instanceof RecordType)) {
+      return new RecordType(values);
+    }
+    if (!hasInitialized) {
+      hasInitialized = true;
+      var keys = Object.keys(defaultValues);
+      var indices = (RecordTypePrototype._indices = {});
+      // Deprecated: left to attempt not to break any external code which
+      // relies on a ._name property existing on record instances.
+      // Use Record.getDescriptiveName() instead
+      RecordTypePrototype._name = name;
+      RecordTypePrototype._keys = keys;
+      RecordTypePrototype._defaultValues = defaultValues;
+      for (var i = 0; i < keys.length; i++) {
+        var propName = keys[i];
+        indices[propName] = i;
+        if (RecordTypePrototype[propName]) {
+          /* eslint-disable no-console */
+          typeof console === 'object' &&
+            console.warn &&
+            console.warn(
+              'Cannot define ' +
+                recordName(this) +
+                ' with property "' +
+                propName +
+                '" since that property name is part of the Record API.'
+            );
+          /* eslint-enable no-console */
+        } else {
+          setProp(RecordTypePrototype, propName);
+        }
+      }
+    }
+    this.__ownerID = undefined;
+    this._values = List().withMutations(function (l) {
+      l.setSize(this$1$1._keys.length);
+      KeyedCollection(values).forEach(function (v, k) {
+        l.set(this$1$1._indices[k], v === this$1$1._defaultValues[k] ? undefined : v);
+      });
+    });
+    return this;
+  };
+
+  var RecordTypePrototype = (RecordType.prototype =
+    Object.create(RecordPrototype));
+  RecordTypePrototype.constructor = RecordType;
+
+  if (name) {
+    RecordType.displayName = name;
+  }
+
+  return RecordType;
+};
+
+Record.prototype.toString = function toString () {
+  var str = recordName(this) + ' { ';
+  var keys = this._keys;
+  var k;
+  for (var i = 0, l = keys.length; i !== l; i++) {
+    k = keys[i];
+    str += (i ? ', ' : '') + k + ': ' + quoteString(this.get(k));
+  }
+  return str + ' }';
+};
+
+Record.prototype.equals = function equals (other) {
+  return (
+    this === other ||
+    (isRecord(other) && recordSeq(this).equals(recordSeq(other)))
+  );
+};
+
+Record.prototype.hashCode = function hashCode () {
+  return recordSeq(this).hashCode();
+};
+
+// @pragma Access
+
+Record.prototype.has = function has (k) {
+  return this._indices.hasOwnProperty(k);
+};
+
+Record.prototype.get = function get (k, notSetValue) {
+  if (!this.has(k)) {
+    return notSetValue;
+  }
+  var index = this._indices[k];
+  var value = this._values.get(index);
+  return value === undefined ? this._defaultValues[k] : value;
+};
+
+// @pragma Modification
+
+Record.prototype.set = function set (k, v) {
+  if (this.has(k)) {
+    var newValues = this._values.set(
+      this._indices[k],
+      v === this._defaultValues[k] ? undefined : v
+    );
+    if (newValues !== this._values && !this.__ownerID) {
+      return makeRecord(this, newValues);
+    }
+  }
+  return this;
+};
+
+Record.prototype.remove = function remove (k) {
+  return this.set(k);
+};
+
+Record.prototype.clear = function clear () {
+  var newValues = this._values.clear().setSize(this._keys.length);
+
+  return this.__ownerID ? this : makeRecord(this, newValues);
+};
+
+Record.prototype.wasAltered = function wasAltered () {
+  return this._values.wasAltered();
+};
+
+Record.prototype.toSeq = function toSeq () {
+  return recordSeq(this);
+};
+
+Record.prototype.toJS = function toJS$1 () {
+  return toJS(this);
+};
+
+Record.prototype.entries = function entries () {
+  return this.__iterator(ITERATE_ENTRIES);
+};
+
+Record.prototype.__iterator = function __iterator (type, reverse) {
+  return recordSeq(this).__iterator(type, reverse);
+};
+
+Record.prototype.__iterate = function __iterate (fn, reverse) {
+  return recordSeq(this).__iterate(fn, reverse);
+};
+
+Record.prototype.__ensureOwner = function __ensureOwner (ownerID) {
+  if (ownerID === this.__ownerID) {
+    return this;
+  }
+  var newValues = this._values.__ensureOwner(ownerID);
+  if (!ownerID) {
+    this.__ownerID = ownerID;
+    this._values = newValues;
+    return this;
+  }
+  return makeRecord(this, newValues, ownerID);
+};
+
+Record.isRecord = isRecord;
+Record.getDescriptiveName = recordName;
+var RecordPrototype = Record.prototype;
+RecordPrototype[IS_RECORD_SYMBOL] = true;
+RecordPrototype[DELETE] = RecordPrototype.remove;
+RecordPrototype.deleteIn = RecordPrototype.removeIn = deleteIn;
+RecordPrototype.getIn = getIn;
+RecordPrototype.hasIn = CollectionPrototype.hasIn;
+RecordPrototype.merge = merge$1;
+RecordPrototype.mergeWith = mergeWith$1;
+RecordPrototype.mergeIn = mergeIn;
+RecordPrototype.mergeDeep = mergeDeep;
+RecordPrototype.mergeDeepWith = mergeDeepWith;
+RecordPrototype.mergeDeepIn = mergeDeepIn;
+RecordPrototype.setIn = setIn;
+RecordPrototype.update = update;
+RecordPrototype.updateIn = updateIn;
+RecordPrototype.withMutations = withMutations;
+RecordPrototype.asMutable = asMutable;
+RecordPrototype.asImmutable = asImmutable;
+RecordPrototype[ITERATOR_SYMBOL] = RecordPrototype.entries;
+RecordPrototype.toJSON = RecordPrototype.toObject =
+  CollectionPrototype.toObject;
+RecordPrototype.inspect = RecordPrototype.toSource = function () {
+  return this.toString();
+};
+
+function makeRecord(likeRecord, values, ownerID) {
+  var record = Object.create(Object.getPrototypeOf(likeRecord));
+  record._values = values;
+  record.__ownerID = ownerID;
+  return record;
+}
+
+function recordName(record) {
+  return record.constructor.displayName || record.constructor.name || 'Record';
+}
+
+function recordSeq(record) {
+  return keyedSeqFromValue(record._keys.map(function (k) { return [k, record.get(k)]; }));
+}
+
+function setProp(prototype, name) {
+  try {
+    Object.defineProperty(prototype, name, {
+      get: function () {
+        return this.get(name);
+      },
+      set: function (value) {
+        invariant(this.__ownerID, 'Cannot set on an immutable record.');
+        this.set(name, value);
+      },
+    });
+  } catch (error) {
+    // Object.defineProperty failed. Probably IE8.
+  }
+}
+
+/**
+ * Returns a lazy Seq of `value` repeated `times` times. When `times` is
+ * undefined, returns an infinite sequence of `value`.
+ */
+var Repeat = /*@__PURE__*/(function (IndexedSeq) {
+  function Repeat(value, times) {
+    if (!(this instanceof Repeat)) {
+      return new Repeat(value, times);
+    }
+    this._value = value;
+    this.size = times === undefined ? Infinity : Math.max(0, times);
+    if (this.size === 0) {
+      if (EMPTY_REPEAT) {
+        return EMPTY_REPEAT;
+      }
+      EMPTY_REPEAT = this;
+    }
+  }
+
+  if ( IndexedSeq ) Repeat.__proto__ = IndexedSeq;
+  Repeat.prototype = Object.create( IndexedSeq && IndexedSeq.prototype );
+  Repeat.prototype.constructor = Repeat;
+
+  Repeat.prototype.toString = function toString () {
+    if (this.size === 0) {
+      return 'Repeat []';
+    }
+    return 'Repeat [ ' + this._value + ' ' + this.size + ' times ]';
+  };
+
+  Repeat.prototype.get = function get (index, notSetValue) {
+    return this.has(index) ? this._value : notSetValue;
+  };
+
+  Repeat.prototype.includes = function includes (searchValue) {
+    return is(this._value, searchValue);
+  };
+
+  Repeat.prototype.slice = function slice (begin, end) {
+    var size = this.size;
+    return wholeSlice(begin, end, size)
+      ? this
+      : new Repeat(
+          this._value,
+          resolveEnd(end, size) - resolveBegin(begin, size)
+        );
+  };
+
+  Repeat.prototype.reverse = function reverse () {
+    return this;
+  };
+
+  Repeat.prototype.indexOf = function indexOf (searchValue) {
+    if (is(this._value, searchValue)) {
+      return 0;
+    }
+    return -1;
+  };
+
+  Repeat.prototype.lastIndexOf = function lastIndexOf (searchValue) {
+    if (is(this._value, searchValue)) {
+      return this.size;
+    }
+    return -1;
+  };
+
+  Repeat.prototype.__iterate = function __iterate (fn, reverse) {
+    var size = this.size;
+    var i = 0;
+    while (i !== size) {
+      if (fn(this._value, reverse ? size - ++i : i++, this) === false) {
+        break;
+      }
+    }
+    return i;
+  };
+
+  Repeat.prototype.__iterator = function __iterator (type, reverse) {
+    var this$1$1 = this;
+
+    var size = this.size;
+    var i = 0;
+    return new Iterator(function () { return i === size
+        ? iteratorDone()
+        : iteratorValue(type, reverse ? size - ++i : i++, this$1$1._value); }
+    );
+  };
+
+  Repeat.prototype.equals = function equals (other) {
+    return other instanceof Repeat
+      ? is(this._value, other._value)
+      : deepEqual(other);
+  };
+
+  return Repeat;
+}(IndexedSeq));
+
+var EMPTY_REPEAT;
+
+function fromJS(value, converter) {
+  return fromJSWith(
+    [],
+    converter || defaultConverter,
+    value,
+    '',
+    converter && converter.length > 2 ? [] : undefined,
+    { '': value }
+  );
+}
+
+function fromJSWith(stack, converter, value, key, keyPath, parentValue) {
+  if (
+    typeof value !== 'string' &&
+    !isImmutable(value) &&
+    (isArrayLike(value) || hasIterator(value) || isPlainObject(value))
+  ) {
+    if (~stack.indexOf(value)) {
+      throw new TypeError('Cannot convert circular structure to Immutable');
+    }
+    stack.push(value);
+    keyPath && key !== '' && keyPath.push(key);
+    var converted = converter.call(
+      parentValue,
+      key,
+      Seq(value).map(function (v, k) { return fromJSWith(stack, converter, v, k, keyPath, value); }
+      ),
+      keyPath && keyPath.slice()
+    );
+    stack.pop();
+    keyPath && keyPath.pop();
+    return converted;
+  }
+  return value;
+}
+
+function defaultConverter(k, v) {
+  // Effectively the opposite of "Collection.toSeq()"
+  return isIndexed(v) ? v.toList() : isKeyed(v) ? v.toMap() : v.toSet();
+}
+
+var version = "4.1.0";
+
+var Immutable = {
+  version: version,
+
+  Collection: Collection,
+  // Note: Iterable is deprecated
+  Iterable: Collection,
+
+  Seq: Seq,
+  Map: Map,
+  OrderedMap: OrderedMap,
+  List: List,
+  Stack: Stack,
+  Set: Set,
+  OrderedSet: OrderedSet,
+
+  Record: Record,
+  Range: Range,
+  Repeat: Repeat,
+
+  is: is,
+  fromJS: fromJS,
+  hash: hash,
+
+  isImmutable: isImmutable,
+  isCollection: isCollection,
+  isKeyed: isKeyed,
+  isIndexed: isIndexed,
+  isAssociative: isAssociative,
+  isOrdered: isOrdered,
+  isValueObject: isValueObject,
+  isPlainObject: isPlainObject,
+  isSeq: isSeq,
+  isList: isList,
+  isMap: isMap,
+  isOrderedMap: isOrderedMap,
+  isStack: isStack,
+  isSet: isSet,
+  isOrderedSet: isOrderedSet,
+  isRecord: isRecord,
+
+  get: get,
+  getIn: getIn$1,
+  has: has,
+  hasIn: hasIn$1,
+  merge: merge,
+  mergeDeep: mergeDeep$1,
+  mergeWith: mergeWith,
+  mergeDeepWith: mergeDeepWith$1,
+  remove: remove,
+  removeIn: removeIn,
+  set: set,
+  setIn: setIn$1,
+  update: update$1,
+  updateIn: updateIn$1,
+};
+
+// Note: Iterable is deprecated
+var Iterable = Collection;
+
+/* harmony default export */ __webpack_exports__["default"] = (Immutable);
+
+
+
+/***/ }),
+
 /***/ "../../../js/controls/WysiwygControl/node_modules/draft-js/lib/AtomicBlockUtils.js":
 /*!*****************************************************************************************!*\
   !*** ../../../js/controls/WysiwygControl/node_modules/draft-js/lib/AtomicBlockUtils.js ***!
@@ -2265,7 +8252,7 @@ var generateRandomKey = __webpack_require__(/*! ./generateRandomKey */ "../../..
 
 var gkx = __webpack_require__(/*! ./gkx */ "../../../js/controls/WysiwygControl/node_modules/draft-js/lib/gkx.js");
 
-var Immutable = __webpack_require__(/*! immutable */ "../../../js/controls/WysiwygControl/node_modules/immutable/dist/immutable.js");
+var Immutable = __webpack_require__(/*! immutable */ "../../../js/controls/WysiwygControl/node_modules/draft-js/node_modules/immutable/dist/immutable.js");
 
 var moveBlockInContentState = __webpack_require__(/*! ./moveBlockInContentState */ "../../../js/controls/WysiwygControl/node_modules/draft-js/lib/moveBlockInContentState.js");
 
@@ -2372,7 +8359,7 @@ module.exports = AtomicBlockUtils;
  */
 
 
-var Immutable = __webpack_require__(/*! immutable */ "../../../js/controls/WysiwygControl/node_modules/immutable/dist/immutable.js");
+var Immutable = __webpack_require__(/*! immutable */ "../../../js/controls/WysiwygControl/node_modules/draft-js/node_modules/immutable/dist/immutable.js");
 
 var OrderedMap = Immutable.OrderedMap;
 var BlockMapBuilder = {
@@ -2415,7 +8402,7 @@ var findRangesImmutable = __webpack_require__(/*! ./findRangesImmutable */ "../.
 
 var getOwnObjectValues = __webpack_require__(/*! ./getOwnObjectValues */ "../../../js/controls/WysiwygControl/node_modules/draft-js/lib/getOwnObjectValues.js");
 
-var Immutable = __webpack_require__(/*! immutable */ "../../../js/controls/WysiwygControl/node_modules/immutable/dist/immutable.js");
+var Immutable = __webpack_require__(/*! immutable */ "../../../js/controls/WysiwygControl/node_modules/draft-js/node_modules/immutable/dist/immutable.js");
 
 var List = Immutable.List,
     Repeat = Immutable.Repeat,
@@ -2527,7 +8514,7 @@ module.exports = BlockTree;
 
 function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
 
-var _require = __webpack_require__(/*! immutable */ "../../../js/controls/WysiwygControl/node_modules/immutable/dist/immutable.js"),
+var _require = __webpack_require__(/*! immutable */ "../../../js/controls/WysiwygControl/node_modules/draft-js/node_modules/immutable/dist/immutable.js"),
     Map = _require.Map,
     OrderedSet = _require.OrderedSet,
     Record = _require.Record; // Immutable.map is typed such that the value for every key in the map
@@ -2646,7 +8633,7 @@ module.exports = CharacterMetadata;
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-var Immutable = __webpack_require__(/*! immutable */ "../../../js/controls/WysiwygControl/node_modules/immutable/dist/immutable.js");
+var Immutable = __webpack_require__(/*! immutable */ "../../../js/controls/WysiwygControl/node_modules/draft-js/node_modules/immutable/dist/immutable.js");
 
 var List = Immutable.List;
 var DELIMITER = '.';
@@ -2781,7 +8768,7 @@ var CharacterMetadata = __webpack_require__(/*! ./CharacterMetadata */ "../../..
 
 var findRangesImmutable = __webpack_require__(/*! ./findRangesImmutable */ "../../../js/controls/WysiwygControl/node_modules/draft-js/lib/findRangesImmutable.js");
 
-var Immutable = __webpack_require__(/*! immutable */ "../../../js/controls/WysiwygControl/node_modules/immutable/dist/immutable.js");
+var Immutable = __webpack_require__(/*! immutable */ "../../../js/controls/WysiwygControl/node_modules/draft-js/node_modules/immutable/dist/immutable.js");
 
 var List = Immutable.List,
     Map = Immutable.Map,
@@ -2923,7 +8910,7 @@ var CharacterMetadata = __webpack_require__(/*! ./CharacterMetadata */ "../../..
 
 var findRangesImmutable = __webpack_require__(/*! ./findRangesImmutable */ "../../../js/controls/WysiwygControl/node_modules/draft-js/lib/findRangesImmutable.js");
 
-var Immutable = __webpack_require__(/*! immutable */ "../../../js/controls/WysiwygControl/node_modules/immutable/dist/immutable.js");
+var Immutable = __webpack_require__(/*! immutable */ "../../../js/controls/WysiwygControl/node_modules/draft-js/node_modules/immutable/dist/immutable.js");
 
 var List = Immutable.List,
     Map = Immutable.Map,
@@ -3091,7 +9078,7 @@ var getOwnObjectValues = __webpack_require__(/*! ./getOwnObjectValues */ "../../
 
 var gkx = __webpack_require__(/*! ./gkx */ "../../../js/controls/WysiwygControl/node_modules/draft-js/lib/gkx.js");
 
-var Immutable = __webpack_require__(/*! immutable */ "../../../js/controls/WysiwygControl/node_modules/immutable/dist/immutable.js");
+var Immutable = __webpack_require__(/*! immutable */ "../../../js/controls/WysiwygControl/node_modules/draft-js/node_modules/immutable/dist/immutable.js");
 
 var sanitizeDraftText = __webpack_require__(/*! ./sanitizeDraftText */ "../../../js/controls/WysiwygControl/node_modules/draft-js/lib/sanitizeDraftText.js");
 
@@ -3313,7 +9300,7 @@ module.exports = ContentState;
 
 var CharacterMetadata = __webpack_require__(/*! ./CharacterMetadata */ "../../../js/controls/WysiwygControl/node_modules/draft-js/lib/CharacterMetadata.js");
 
-var _require = __webpack_require__(/*! immutable */ "../../../js/controls/WysiwygControl/node_modules/immutable/dist/immutable.js"),
+var _require = __webpack_require__(/*! immutable */ "../../../js/controls/WysiwygControl/node_modules/draft-js/node_modules/immutable/dist/immutable.js"),
     Map = _require.Map;
 
 var ContentStateInlineStyle = {
@@ -3396,7 +9383,7 @@ var findAncestorOffsetKey = __webpack_require__(/*! ./findAncestorOffsetKey */ "
 
 var getWindowForNode = __webpack_require__(/*! ./getWindowForNode */ "../../../js/controls/WysiwygControl/node_modules/draft-js/lib/getWindowForNode.js");
 
-var Immutable = __webpack_require__(/*! immutable */ "../../../js/controls/WysiwygControl/node_modules/immutable/dist/immutable.js");
+var Immutable = __webpack_require__(/*! immutable */ "../../../js/controls/WysiwygControl/node_modules/draft-js/node_modules/immutable/dist/immutable.js");
 
 var invariant = __webpack_require__(/*! fbjs/lib/invariant */ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/invariant.js");
 
@@ -3560,7 +9547,7 @@ var React = __webpack_require__(/*! react */ "react");
 
 var cx = __webpack_require__(/*! fbjs/lib/cx */ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/cx.js");
 
-var _require = __webpack_require__(/*! immutable */ "../../../js/controls/WysiwygControl/node_modules/immutable/dist/immutable.js"),
+var _require = __webpack_require__(/*! immutable */ "../../../js/controls/WysiwygControl/node_modules/draft-js/node_modules/immutable/dist/immutable.js"),
     Map = _require.Map;
 
 var UL_WRAP = React.createElement("ul", {
@@ -4747,7 +10734,7 @@ var getScrollPosition = __webpack_require__(/*! fbjs/lib/getScrollPosition */ ".
 
 var getViewportDimensions = __webpack_require__(/*! fbjs/lib/getViewportDimensions */ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/getViewportDimensions.js");
 
-var Immutable = __webpack_require__(/*! immutable */ "../../../js/controls/WysiwygControl/node_modules/immutable/dist/immutable.js");
+var Immutable = __webpack_require__(/*! immutable */ "../../../js/controls/WysiwygControl/node_modules/draft-js/node_modules/immutable/dist/immutable.js");
 
 var invariant = __webpack_require__(/*! fbjs/lib/invariant */ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/invariant.js");
 
@@ -6297,7 +12284,7 @@ var DraftEditorLeaf = __webpack_require__(/*! ./DraftEditorLeaf.react */ "../../
 
 var DraftOffsetKey = __webpack_require__(/*! ./DraftOffsetKey */ "../../../js/controls/WysiwygControl/node_modules/draft-js/lib/DraftOffsetKey.js");
 
-var Immutable = __webpack_require__(/*! immutable */ "../../../js/controls/WysiwygControl/node_modules/immutable/dist/immutable.js");
+var Immutable = __webpack_require__(/*! immutable */ "../../../js/controls/WysiwygControl/node_modules/draft-js/node_modules/immutable/dist/immutable.js");
 
 var React = __webpack_require__(/*! react */ "react");
 
@@ -6656,7 +12643,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
  */
 var DraftEntityInstance = __webpack_require__(/*! ./DraftEntityInstance */ "../../../js/controls/WysiwygControl/node_modules/draft-js/lib/DraftEntityInstance.js");
 
-var Immutable = __webpack_require__(/*! immutable */ "../../../js/controls/WysiwygControl/node_modules/immutable/dist/immutable.js");
+var Immutable = __webpack_require__(/*! immutable */ "../../../js/controls/WysiwygControl/node_modules/draft-js/node_modules/immutable/dist/immutable.js");
 
 var invariant = __webpack_require__(/*! fbjs/lib/invariant */ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/invariant.js");
 
@@ -6875,7 +12862,7 @@ module.exports = DraftEntity;
 
 function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
 
-var Immutable = __webpack_require__(/*! immutable */ "../../../js/controls/WysiwygControl/node_modules/immutable/dist/immutable.js");
+var Immutable = __webpack_require__(/*! immutable */ "../../../js/controls/WysiwygControl/node_modules/draft-js/node_modules/immutable/dist/immutable.js");
 
 var Record = Immutable.Record;
 var DraftEntityInstanceRecord = Record({
@@ -7087,7 +13074,7 @@ var getCharacterRemovalRange = __webpack_require__(/*! ./getCharacterRemovalRang
 
 var getContentStateFragment = __webpack_require__(/*! ./getContentStateFragment */ "../../../js/controls/WysiwygControl/node_modules/draft-js/lib/getContentStateFragment.js");
 
-var Immutable = __webpack_require__(/*! immutable */ "../../../js/controls/WysiwygControl/node_modules/immutable/dist/immutable.js");
+var Immutable = __webpack_require__(/*! immutable */ "../../../js/controls/WysiwygControl/node_modules/draft-js/node_modules/immutable/dist/immutable.js");
 
 var insertFragmentIntoContentState = __webpack_require__(/*! ./insertFragmentIntoContentState */ "../../../js/controls/WysiwygControl/node_modules/draft-js/lib/insertFragmentIntoContentState.js");
 
@@ -7293,7 +13280,7 @@ var getSafeBodyFromHTML = __webpack_require__(/*! ./getSafeBodyFromHTML */ "../.
 
 var gkx = __webpack_require__(/*! ./gkx */ "../../../js/controls/WysiwygControl/node_modules/draft-js/lib/gkx.js");
 
-var Immutable = __webpack_require__(/*! immutable */ "../../../js/controls/WysiwygControl/node_modules/immutable/dist/immutable.js");
+var Immutable = __webpack_require__(/*! immutable */ "../../../js/controls/WysiwygControl/node_modules/draft-js/node_modules/immutable/dist/immutable.js");
 
 var sanitizeDraftText = __webpack_require__(/*! ./sanitizeDraftText */ "../../../js/controls/WysiwygControl/node_modules/draft-js/lib/sanitizeDraftText.js");
 
@@ -7796,7 +13783,7 @@ module.exports = DraftTreeInvariants;
 
 var UnicodeBidiService = __webpack_require__(/*! fbjs/lib/UnicodeBidiService */ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/UnicodeBidiService.js");
 
-var Immutable = __webpack_require__(/*! immutable */ "../../../js/controls/WysiwygControl/node_modules/immutable/dist/immutable.js");
+var Immutable = __webpack_require__(/*! immutable */ "../../../js/controls/WysiwygControl/node_modules/draft-js/node_modules/immutable/dist/immutable.js");
 
 var nullthrows = __webpack_require__(/*! fbjs/lib/nullthrows */ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/nullthrows.js");
 
@@ -7858,7 +13845,7 @@ var EditorBidiService = __webpack_require__(/*! ./EditorBidiService */ "../../..
 
 var SelectionState = __webpack_require__(/*! ./SelectionState */ "../../../js/controls/WysiwygControl/node_modules/draft-js/lib/SelectionState.js");
 
-var Immutable = __webpack_require__(/*! immutable */ "../../../js/controls/WysiwygControl/node_modules/immutable/dist/immutable.js");
+var Immutable = __webpack_require__(/*! immutable */ "../../../js/controls/WysiwygControl/node_modules/draft-js/node_modules/immutable/dist/immutable.js");
 
 var OrderedSet = Immutable.OrderedSet,
     Record = Immutable.Record,
@@ -8894,7 +14881,7 @@ module.exports = SecondaryClipboard;
 
 function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
 
-var Immutable = __webpack_require__(/*! immutable */ "../../../js/controls/WysiwygControl/node_modules/immutable/dist/immutable.js");
+var Immutable = __webpack_require__(/*! immutable */ "../../../js/controls/WysiwygControl/node_modules/draft-js/node_modules/immutable/dist/immutable.js");
 
 var Record = Immutable.Record;
 var defaultRecord = {
@@ -9113,7 +15100,7 @@ module.exports = applyEntityToContentBlock;
 
 var applyEntityToContentBlock = __webpack_require__(/*! ./applyEntityToContentBlock */ "../../../js/controls/WysiwygControl/node_modules/draft-js/lib/applyEntityToContentBlock.js");
 
-var Immutable = __webpack_require__(/*! immutable */ "../../../js/controls/WysiwygControl/node_modules/immutable/dist/immutable.js");
+var Immutable = __webpack_require__(/*! immutable */ "../../../js/controls/WysiwygControl/node_modules/draft-js/node_modules/immutable/dist/immutable.js");
 
 function applyEntityToContentState(contentState, selectionState, entityKey) {
   var blockMap = contentState.getBlockMap();
@@ -9325,7 +15312,7 @@ var getSafeBodyFromHTML = __webpack_require__(/*! ./getSafeBodyFromHTML */ "../.
 
 var gkx = __webpack_require__(/*! ./gkx */ "../../../js/controls/WysiwygControl/node_modules/draft-js/lib/gkx.js");
 
-var _require = __webpack_require__(/*! immutable */ "../../../js/controls/WysiwygControl/node_modules/immutable/dist/immutable.js"),
+var _require = __webpack_require__(/*! immutable */ "../../../js/controls/WysiwygControl/node_modules/draft-js/node_modules/immutable/dist/immutable.js"),
     List = _require.List,
     Map = _require.Map,
     OrderedSet = _require.OrderedSet;
@@ -10131,7 +16118,7 @@ var generateRandomKey = __webpack_require__(/*! ./generateRandomKey */ "../../..
 
 var gkx = __webpack_require__(/*! ./gkx */ "../../../js/controls/WysiwygControl/node_modules/draft-js/lib/gkx.js");
 
-var Immutable = __webpack_require__(/*! immutable */ "../../../js/controls/WysiwygControl/node_modules/immutable/dist/immutable.js");
+var Immutable = __webpack_require__(/*! immutable */ "../../../js/controls/WysiwygControl/node_modules/draft-js/node_modules/immutable/dist/immutable.js");
 
 var invariant = __webpack_require__(/*! fbjs/lib/invariant */ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/invariant.js");
 
@@ -10341,7 +16328,7 @@ module.exports = convertFromRawToDraftState;
 
 var CharacterMetadata = __webpack_require__(/*! ./CharacterMetadata */ "../../../js/controls/WysiwygControl/node_modules/draft-js/lib/CharacterMetadata.js");
 
-var Immutable = __webpack_require__(/*! immutable */ "../../../js/controls/WysiwygControl/node_modules/immutable/dist/immutable.js");
+var Immutable = __webpack_require__(/*! immutable */ "../../../js/controls/WysiwygControl/node_modules/draft-js/node_modules/immutable/dist/immutable.js");
 
 var List = Immutable.List;
 
@@ -10430,7 +16417,7 @@ module.exports = decodeEntityRanges;
 
 var UnicodeUtils = __webpack_require__(/*! fbjs/lib/UnicodeUtils */ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/UnicodeUtils.js");
 
-var _require = __webpack_require__(/*! immutable */ "../../../js/controls/WysiwygControl/node_modules/immutable/dist/immutable.js"),
+var _require = __webpack_require__(/*! immutable */ "../../../js/controls/WysiwygControl/node_modules/draft-js/node_modules/immutable/dist/immutable.js"),
     OrderedSet = _require.OrderedSet;
 
 var substr = UnicodeUtils.substr;
@@ -13727,7 +19714,7 @@ var BlockMapBuilder = __webpack_require__(/*! ./BlockMapBuilder */ "../../../js/
 
 var ContentBlockNode = __webpack_require__(/*! ./ContentBlockNode */ "../../../js/controls/WysiwygControl/node_modules/draft-js/lib/ContentBlockNode.js");
 
-var Immutable = __webpack_require__(/*! immutable */ "../../../js/controls/WysiwygControl/node_modules/immutable/dist/immutable.js");
+var Immutable = __webpack_require__(/*! immutable */ "../../../js/controls/WysiwygControl/node_modules/draft-js/node_modules/immutable/dist/immutable.js");
 
 var insertIntoList = __webpack_require__(/*! ./insertIntoList */ "../../../js/controls/WysiwygControl/node_modules/draft-js/lib/insertIntoList.js");
 
@@ -14034,7 +20021,7 @@ module.exports = insertIntoList;
  */
 
 
-var Immutable = __webpack_require__(/*! immutable */ "../../../js/controls/WysiwygControl/node_modules/immutable/dist/immutable.js");
+var Immutable = __webpack_require__(/*! immutable */ "../../../js/controls/WysiwygControl/node_modules/draft-js/node_modules/immutable/dist/immutable.js");
 
 var insertIntoList = __webpack_require__(/*! ./insertIntoList */ "../../../js/controls/WysiwygControl/node_modules/draft-js/lib/insertIntoList.js");
 
@@ -14973,7 +20960,7 @@ module.exports = keyCommandUndo;
  */
 
 
-var Immutable = __webpack_require__(/*! immutable */ "../../../js/controls/WysiwygControl/node_modules/immutable/dist/immutable.js");
+var Immutable = __webpack_require__(/*! immutable */ "../../../js/controls/WysiwygControl/node_modules/draft-js/node_modules/immutable/dist/immutable.js");
 
 var Map = Immutable.Map;
 
@@ -15020,7 +21007,7 @@ var ContentBlockNode = __webpack_require__(/*! ./ContentBlockNode */ "../../../j
 
 var getNextDelimiterBlockKey = __webpack_require__(/*! ./getNextDelimiterBlockKey */ "../../../js/controls/WysiwygControl/node_modules/draft-js/lib/getNextDelimiterBlockKey.js");
 
-var Immutable = __webpack_require__(/*! immutable */ "../../../js/controls/WysiwygControl/node_modules/immutable/dist/immutable.js");
+var Immutable = __webpack_require__(/*! immutable */ "../../../js/controls/WysiwygControl/node_modules/draft-js/node_modules/immutable/dist/immutable.js");
 
 var invariant = __webpack_require__(/*! fbjs/lib/invariant */ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/invariant.js");
 
@@ -15321,7 +21308,7 @@ var ContentBlockNode = __webpack_require__(/*! ./ContentBlockNode */ "../../../j
 
 var generateRandomKey = __webpack_require__(/*! ./generateRandomKey */ "../../../js/controls/WysiwygControl/node_modules/draft-js/lib/generateRandomKey.js");
 
-var Immutable = __webpack_require__(/*! immutable */ "../../../js/controls/WysiwygControl/node_modules/immutable/dist/immutable.js");
+var Immutable = __webpack_require__(/*! immutable */ "../../../js/controls/WysiwygControl/node_modules/draft-js/node_modules/immutable/dist/immutable.js");
 
 var OrderedMap = Immutable.OrderedMap;
 
@@ -15572,7 +21559,7 @@ var ContentBlockNode = __webpack_require__(/*! ./ContentBlockNode */ "../../../j
 
 var getNextDelimiterBlockKey = __webpack_require__(/*! ./getNextDelimiterBlockKey */ "../../../js/controls/WysiwygControl/node_modules/draft-js/lib/getNextDelimiterBlockKey.js");
 
-var Immutable = __webpack_require__(/*! immutable */ "../../../js/controls/WysiwygControl/node_modules/immutable/dist/immutable.js");
+var Immutable = __webpack_require__(/*! immutable */ "../../../js/controls/WysiwygControl/node_modules/draft-js/node_modules/immutable/dist/immutable.js");
 
 var List = Immutable.List,
     Map = Immutable.Map;
@@ -16349,7 +22336,7 @@ var ContentBlockNode = __webpack_require__(/*! ./ContentBlockNode */ "../../../j
 
 var generateRandomKey = __webpack_require__(/*! ./generateRandomKey */ "../../../js/controls/WysiwygControl/node_modules/draft-js/lib/generateRandomKey.js");
 
-var Immutable = __webpack_require__(/*! immutable */ "../../../js/controls/WysiwygControl/node_modules/immutable/dist/immutable.js");
+var Immutable = __webpack_require__(/*! immutable */ "../../../js/controls/WysiwygControl/node_modules/draft-js/node_modules/immutable/dist/immutable.js");
 
 var invariant = __webpack_require__(/*! fbjs/lib/invariant */ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/invariant.js");
 
@@ -16535,3102 +22522,10 @@ module.exports = uuid;
 
 /***/ }),
 
-/***/ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/DataTransfer.js":
-/*!*********************************************************************************!*\
-  !*** ../../../js/controls/WysiwygControl/node_modules/fbjs/lib/DataTransfer.js ***!
-  \*********************************************************************************/
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
-
-"use strict";
-
-
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- *
- * @typechecks
- */
-var PhotosMimeType = __webpack_require__(/*! ./PhotosMimeType */ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/PhotosMimeType.js");
-
-var createArrayFromMixed = __webpack_require__(/*! ./createArrayFromMixed */ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/createArrayFromMixed.js");
-
-var emptyFunction = __webpack_require__(/*! ./emptyFunction */ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/emptyFunction.js");
-
-var CR_LF_REGEX = new RegExp("\r\n", 'g');
-var LF_ONLY = "\n";
-var RICH_TEXT_TYPES = {
-  'text/rtf': 1,
-  'text/html': 1
-};
-/**
- * If DataTransferItem is a file then return the Blob of data.
- *
- * @param {object} item
- * @return {?blob}
- */
-
-function getFileFromDataTransfer(item) {
-  if (item.kind == 'file') {
-    return item.getAsFile();
-  }
-}
-
-var DataTransfer =
-/*#__PURE__*/
-function () {
-  /**
-   * @param {object} data
-   */
-  function DataTransfer(data) {
-    this.data = data; // Types could be DOMStringList or array
-
-    this.types = data.types ? createArrayFromMixed(data.types) : [];
-  }
-  /**
-   * Is this likely to be a rich text data transfer?
-   *
-   * @return {boolean}
-   */
-
-
-  var _proto = DataTransfer.prototype;
-
-  _proto.isRichText = function isRichText() {
-    // If HTML is available, treat this data as rich text. This way, we avoid
-    // using a pasted image if it is packaged with HTML -- this may occur with
-    // pastes from MS Word, for example.  However this is only rich text if
-    // there's accompanying text.
-    if (this.getHTML() && this.getText()) {
-      return true;
-    } // When an image is copied from a preview window, you end up with two
-    // DataTransferItems one of which is a file's metadata as text.  Skip those.
-
-
-    if (this.isImage()) {
-      return false;
-    }
-
-    return this.types.some(function (type) {
-      return RICH_TEXT_TYPES[type];
-    });
-  };
-  /**
-   * Get raw text.
-   *
-   * @return {?string}
-   */
-
-
-  _proto.getText = function getText() {
-    var text;
-
-    if (this.data.getData) {
-      if (!this.types.length) {
-        text = this.data.getData('Text');
-      } else if (this.types.indexOf('text/plain') != -1) {
-        text = this.data.getData('text/plain');
-      }
-    }
-
-    return text ? text.replace(CR_LF_REGEX, LF_ONLY) : null;
-  };
-  /**
-   * Get HTML paste data
-   *
-   * @return {?string}
-   */
-
-
-  _proto.getHTML = function getHTML() {
-    if (this.data.getData) {
-      if (!this.types.length) {
-        return this.data.getData('Text');
-      } else if (this.types.indexOf('text/html') != -1) {
-        return this.data.getData('text/html');
-      }
-    }
-  };
-  /**
-   * Is this a link data transfer?
-   *
-   * @return {boolean}
-   */
-
-
-  _proto.isLink = function isLink() {
-    return this.types.some(function (type) {
-      return type.indexOf('Url') != -1 || type.indexOf('text/uri-list') != -1 || type.indexOf('text/x-moz-url');
-    });
-  };
-  /**
-   * Get a link url.
-   *
-   * @return {?string}
-   */
-
-
-  _proto.getLink = function getLink() {
-    if (this.data.getData) {
-      if (this.types.indexOf('text/x-moz-url') != -1) {
-        var url = this.data.getData('text/x-moz-url').split('\n');
-        return url[0];
-      }
-
-      return this.types.indexOf('text/uri-list') != -1 ? this.data.getData('text/uri-list') : this.data.getData('url');
-    }
-
-    return null;
-  };
-  /**
-   * Is this an image data transfer?
-   *
-   * @return {boolean}
-   */
-
-
-  _proto.isImage = function isImage() {
-    var isImage = this.types.some(function (type) {
-      // Firefox will have a type of application/x-moz-file for images during
-      // dragging
-      return type.indexOf('application/x-moz-file') != -1;
-    });
-
-    if (isImage) {
-      return true;
-    }
-
-    var items = this.getFiles();
-
-    for (var i = 0; i < items.length; i++) {
-      var type = items[i].type;
-
-      if (!PhotosMimeType.isImage(type)) {
-        return false;
-      }
-    }
-
-    return true;
-  };
-
-  _proto.getCount = function getCount() {
-    if (this.data.hasOwnProperty('items')) {
-      return this.data.items.length;
-    } else if (this.data.hasOwnProperty('mozItemCount')) {
-      return this.data.mozItemCount;
-    } else if (this.data.files) {
-      return this.data.files.length;
-    }
-
-    return null;
-  };
-  /**
-   * Get files.
-   *
-   * @return {array}
-   */
-
-
-  _proto.getFiles = function getFiles() {
-    if (this.data.items) {
-      // createArrayFromMixed doesn't properly handle DataTransferItemLists.
-      return Array.prototype.slice.call(this.data.items).map(getFileFromDataTransfer).filter(emptyFunction.thatReturnsArgument);
-    } else if (this.data.files) {
-      return Array.prototype.slice.call(this.data.files);
-    } else {
-      return [];
-    }
-  };
-  /**
-   * Are there any files to fetch?
-   *
-   * @return {boolean}
-   */
-
-
-  _proto.hasFiles = function hasFiles() {
-    return this.getFiles().length > 0;
-  };
-
-  return DataTransfer;
-}();
-
-module.exports = DataTransfer;
-
-/***/ }),
-
-/***/ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/Keys.js":
-/*!*************************************************************************!*\
-  !*** ../../../js/controls/WysiwygControl/node_modules/fbjs/lib/Keys.js ***!
-  \*************************************************************************/
-/***/ (function(module) {
-
-"use strict";
-
-
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- *
- */
-module.exports = {
-  BACKSPACE: 8,
-  TAB: 9,
-  RETURN: 13,
-  ALT: 18,
-  ESC: 27,
-  SPACE: 32,
-  PAGE_UP: 33,
-  PAGE_DOWN: 34,
-  END: 35,
-  HOME: 36,
-  LEFT: 37,
-  UP: 38,
-  RIGHT: 39,
-  DOWN: 40,
-  DELETE: 46,
-  COMMA: 188,
-  PERIOD: 190,
-  A: 65,
-  Z: 90,
-  ZERO: 48,
-  NUMPAD_0: 96,
-  NUMPAD_9: 105
-};
-
-/***/ }),
-
-/***/ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/PhotosMimeType.js":
-/*!***********************************************************************************!*\
-  !*** ../../../js/controls/WysiwygControl/node_modules/fbjs/lib/PhotosMimeType.js ***!
-  \***********************************************************************************/
-/***/ (function(module) {
-
-"use strict";
-
-
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- *
- */
-var PhotosMimeType = {
-  isImage: function isImage(mimeString) {
-    return getParts(mimeString)[0] === 'image';
-  },
-  isJpeg: function isJpeg(mimeString) {
-    var parts = getParts(mimeString);
-    return PhotosMimeType.isImage(mimeString) && ( // see http://fburl.com/10972194
-    parts[1] === 'jpeg' || parts[1] === 'pjpeg');
-  }
-};
-
-function getParts(mimeString) {
-  return mimeString.split('/');
-}
-
-module.exports = PhotosMimeType;
-
-/***/ }),
-
-/***/ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/Scroll.js":
-/*!***************************************************************************!*\
-  !*** ../../../js/controls/WysiwygControl/node_modules/fbjs/lib/Scroll.js ***!
-  \***************************************************************************/
-/***/ (function(module) {
-
-"use strict";
-
-
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- *
- */
-
-/**
- * @param {DOMElement} element
- * @param {DOMDocument} doc
- * @return {boolean}
- */
-function _isViewportScrollElement(element, doc) {
-  return !!doc && (element === doc.documentElement || element === doc.body);
-}
-/**
- * Scroll Module. This class contains 4 simple static functions
- * to be used to access Element.scrollTop/scrollLeft properties.
- * To solve the inconsistencies between browsers when either
- * document.body or document.documentElement is supplied,
- * below logic will be used to alleviate the issue:
- *
- * 1. If 'element' is either 'document.body' or 'document.documentElement,
- *    get whichever element's 'scroll{Top,Left}' is larger.
- * 2. If 'element' is either 'document.body' or 'document.documentElement',
- *    set the 'scroll{Top,Left}' on both elements.
- */
-
-
-var Scroll = {
-  /**
-   * @param {DOMElement} element
-   * @return {number}
-   */
-  getTop: function getTop(element) {
-    var doc = element.ownerDocument;
-    return _isViewportScrollElement(element, doc) ? // In practice, they will either both have the same value,
-    // or one will be zero and the other will be the scroll position
-    // of the viewport. So we can use `X || Y` instead of `Math.max(X, Y)`
-    doc.body.scrollTop || doc.documentElement.scrollTop : element.scrollTop;
-  },
-
-  /**
-   * @param {DOMElement} element
-   * @param {number} newTop
-   */
-  setTop: function setTop(element, newTop) {
-    var doc = element.ownerDocument;
-
-    if (_isViewportScrollElement(element, doc)) {
-      doc.body.scrollTop = doc.documentElement.scrollTop = newTop;
-    } else {
-      element.scrollTop = newTop;
-    }
-  },
-
-  /**
-   * @param {DOMElement} element
-   * @return {number}
-   */
-  getLeft: function getLeft(element) {
-    var doc = element.ownerDocument;
-    return _isViewportScrollElement(element, doc) ? doc.body.scrollLeft || doc.documentElement.scrollLeft : element.scrollLeft;
-  },
-
-  /**
-   * @param {DOMElement} element
-   * @param {number} newLeft
-   */
-  setLeft: function setLeft(element, newLeft) {
-    var doc = element.ownerDocument;
-
-    if (_isViewportScrollElement(element, doc)) {
-      doc.body.scrollLeft = doc.documentElement.scrollLeft = newLeft;
-    } else {
-      element.scrollLeft = newLeft;
-    }
-  }
-};
-module.exports = Scroll;
-
-/***/ }),
-
-/***/ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/Style.js":
-/*!**************************************************************************!*\
-  !*** ../../../js/controls/WysiwygControl/node_modules/fbjs/lib/Style.js ***!
-  \**************************************************************************/
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
-
-"use strict";
-
-
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- *
- * @typechecks
- */
-var getStyleProperty = __webpack_require__(/*! ./getStyleProperty */ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/getStyleProperty.js");
-/**
- * @param {DOMNode} element [description]
- * @param {string} name Overflow style property name.
- * @return {boolean} True if the supplied ndoe is scrollable.
- */
-
-
-function _isNodeScrollable(element, name) {
-  var overflow = Style.get(element, name);
-  return overflow === 'auto' || overflow === 'scroll';
-}
-/**
- * Utilities for querying and mutating style properties.
- */
-
-
-var Style = {
-  /**
-   * Gets the style property for the supplied node. This will return either the
-   * computed style, if available, or the declared style.
-   *
-   * @param {DOMNode} node
-   * @param {string} name Style property name.
-   * @return {?string} Style property value.
-   */
-  get: getStyleProperty,
-
-  /**
-   * Determines the nearest ancestor of a node that is scrollable.
-   *
-   * NOTE: This can be expensive if used repeatedly or on a node nested deeply.
-   *
-   * @param {?DOMNode} node Node from which to start searching.
-   * @return {?DOMWindow|DOMElement} Scroll parent of the supplied node.
-   */
-  getScrollParent: function getScrollParent(node) {
-    if (!node) {
-      return null;
-    }
-
-    var ownerDocument = node.ownerDocument;
-
-    while (node && node !== ownerDocument.body) {
-      if (_isNodeScrollable(node, 'overflow') || _isNodeScrollable(node, 'overflowY') || _isNodeScrollable(node, 'overflowX')) {
-        return node;
-      }
-
-      node = node.parentNode;
-    }
-
-    return ownerDocument.defaultView || ownerDocument.parentWindow;
-  }
-};
-module.exports = Style;
-
-/***/ }),
-
-/***/ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/TokenizeUtil.js":
-/*!*********************************************************************************!*\
-  !*** ../../../js/controls/WysiwygControl/node_modules/fbjs/lib/TokenizeUtil.js ***!
-  \*********************************************************************************/
-/***/ (function(module) {
-
-"use strict";
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- *
- * @typechecks
- * @stub
- * 
- */
- // \u00a1-\u00b1\u00b4-\u00b8\u00ba\u00bb\u00bf
-//             is latin supplement punctuation except fractions and superscript
-//             numbers
-// \u2010-\u2027\u2030-\u205e
-//             is punctuation from the general punctuation block:
-//             weird quotes, commas, bullets, dashes, etc.
-// \u30fb\u3001\u3002\u3008-\u3011\u3014-\u301f
-//             is CJK punctuation
-// \uff1a-\uff1f\uff01-\uff0f\uff3b-\uff40\uff5b-\uff65
-//             is some full-width/half-width punctuation
-// \u2E2E\u061f\u066a-\u066c\u061b\u060c\u060d\uFD3e\uFD3F
-//             is some Arabic punctuation marks
-// \u1801\u0964\u104a\u104b
-//             is misc. other language punctuation marks
-
-var PUNCTUATION = '[.,+*?$|#{}()\'\\^\\-\\[\\]\\\\\\/!@%"~=<>_:;' + "\u30FB\u3001\u3002\u3008-\u3011\u3014-\u301F\uFF1A-\uFF1F\uFF01-\uFF0F" + "\uFF3B-\uFF40\uFF5B-\uFF65\u2E2E\u061F\u066A-\u066C\u061B\u060C\u060D" + "\uFD3E\uFD3F\u1801\u0964\u104A\u104B\u2010-\u2027\u2030-\u205E" + "\xA1-\xB1\xB4-\xB8\xBA\xBB\xBF]";
-module.exports = {
-  getPunctuation: function getPunctuation() {
-    return PUNCTUATION;
-  }
-};
-
-/***/ }),
-
-/***/ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/URI.js":
-/*!************************************************************************!*\
-  !*** ../../../js/controls/WysiwygControl/node_modules/fbjs/lib/URI.js ***!
-  \************************************************************************/
-/***/ (function(module) {
-
-"use strict";
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- *
- * 
- */
-
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-var URI =
-/*#__PURE__*/
-function () {
-  function URI(uri) {
-    _defineProperty(this, "_uri", void 0);
-
-    this._uri = uri;
-  }
-
-  var _proto = URI.prototype;
-
-  _proto.toString = function toString() {
-    return this._uri;
-  };
-
-  return URI;
-}();
-
-module.exports = URI;
-
-/***/ }),
-
-/***/ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/UnicodeBidi.js":
-/*!********************************************************************************!*\
-  !*** ../../../js/controls/WysiwygControl/node_modules/fbjs/lib/UnicodeBidi.js ***!
-  \********************************************************************************/
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
-
-"use strict";
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- *
- * @typechecks
- * 
- */
-
-/**
- * Basic (stateless) API for text direction detection
- *
- * Part of our implementation of Unicode Bidirectional Algorithm (UBA)
- * Unicode Standard Annex #9 (UAX9)
- * http://www.unicode.org/reports/tr9/
- */
-
-
-var UnicodeBidiDirection = __webpack_require__(/*! ./UnicodeBidiDirection */ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/UnicodeBidiDirection.js");
-
-var invariant = __webpack_require__(/*! ./invariant */ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/invariant.js");
-
-/**
- * RegExp ranges of characters with a *Strong* Bidi_Class value.
- *
- * Data is based on DerivedBidiClass.txt in UCD version 7.0.0.
- *
- * NOTE: For performance reasons, we only support Unicode's
- *       Basic Multilingual Plane (BMP) for now.
- */
-var RANGE_BY_BIDI_TYPE = {
-  L: "A-Za-z\xAA\xB5\xBA\xC0-\xD6\xD8-\xF6\xF8-\u01BA\u01BB" + "\u01BC-\u01BF\u01C0-\u01C3\u01C4-\u0293\u0294\u0295-\u02AF\u02B0-\u02B8" + "\u02BB-\u02C1\u02D0-\u02D1\u02E0-\u02E4\u02EE\u0370-\u0373\u0376-\u0377" + "\u037A\u037B-\u037D\u037F\u0386\u0388-\u038A\u038C\u038E-\u03A1" + "\u03A3-\u03F5\u03F7-\u0481\u0482\u048A-\u052F\u0531-\u0556\u0559" + "\u055A-\u055F\u0561-\u0587\u0589\u0903\u0904-\u0939\u093B\u093D" + "\u093E-\u0940\u0949-\u094C\u094E-\u094F\u0950\u0958-\u0961\u0964-\u0965" + "\u0966-\u096F\u0970\u0971\u0972-\u0980\u0982-\u0983\u0985-\u098C" + "\u098F-\u0990\u0993-\u09A8\u09AA-\u09B0\u09B2\u09B6-\u09B9\u09BD" + "\u09BE-\u09C0\u09C7-\u09C8\u09CB-\u09CC\u09CE\u09D7\u09DC-\u09DD" + "\u09DF-\u09E1\u09E6-\u09EF\u09F0-\u09F1\u09F4-\u09F9\u09FA\u0A03" + "\u0A05-\u0A0A\u0A0F-\u0A10\u0A13-\u0A28\u0A2A-\u0A30\u0A32-\u0A33" + "\u0A35-\u0A36\u0A38-\u0A39\u0A3E-\u0A40\u0A59-\u0A5C\u0A5E\u0A66-\u0A6F" + "\u0A72-\u0A74\u0A83\u0A85-\u0A8D\u0A8F-\u0A91\u0A93-\u0AA8\u0AAA-\u0AB0" + "\u0AB2-\u0AB3\u0AB5-\u0AB9\u0ABD\u0ABE-\u0AC0\u0AC9\u0ACB-\u0ACC\u0AD0" + "\u0AE0-\u0AE1\u0AE6-\u0AEF\u0AF0\u0B02-\u0B03\u0B05-\u0B0C\u0B0F-\u0B10" + "\u0B13-\u0B28\u0B2A-\u0B30\u0B32-\u0B33\u0B35-\u0B39\u0B3D\u0B3E\u0B40" + "\u0B47-\u0B48\u0B4B-\u0B4C\u0B57\u0B5C-\u0B5D\u0B5F-\u0B61\u0B66-\u0B6F" + "\u0B70\u0B71\u0B72-\u0B77\u0B83\u0B85-\u0B8A\u0B8E-\u0B90\u0B92-\u0B95" + "\u0B99-\u0B9A\u0B9C\u0B9E-\u0B9F\u0BA3-\u0BA4\u0BA8-\u0BAA\u0BAE-\u0BB9" + "\u0BBE-\u0BBF\u0BC1-\u0BC2\u0BC6-\u0BC8\u0BCA-\u0BCC\u0BD0\u0BD7" + "\u0BE6-\u0BEF\u0BF0-\u0BF2\u0C01-\u0C03\u0C05-\u0C0C\u0C0E-\u0C10" + "\u0C12-\u0C28\u0C2A-\u0C39\u0C3D\u0C41-\u0C44\u0C58-\u0C59\u0C60-\u0C61" + "\u0C66-\u0C6F\u0C7F\u0C82-\u0C83\u0C85-\u0C8C\u0C8E-\u0C90\u0C92-\u0CA8" + "\u0CAA-\u0CB3\u0CB5-\u0CB9\u0CBD\u0CBE\u0CBF\u0CC0-\u0CC4\u0CC6" + "\u0CC7-\u0CC8\u0CCA-\u0CCB\u0CD5-\u0CD6\u0CDE\u0CE0-\u0CE1\u0CE6-\u0CEF" + "\u0CF1-\u0CF2\u0D02-\u0D03\u0D05-\u0D0C\u0D0E-\u0D10\u0D12-\u0D3A\u0D3D" + "\u0D3E-\u0D40\u0D46-\u0D48\u0D4A-\u0D4C\u0D4E\u0D57\u0D60-\u0D61" + "\u0D66-\u0D6F\u0D70-\u0D75\u0D79\u0D7A-\u0D7F\u0D82-\u0D83\u0D85-\u0D96" + "\u0D9A-\u0DB1\u0DB3-\u0DBB\u0DBD\u0DC0-\u0DC6\u0DCF-\u0DD1\u0DD8-\u0DDF" + "\u0DE6-\u0DEF\u0DF2-\u0DF3\u0DF4\u0E01-\u0E30\u0E32-\u0E33\u0E40-\u0E45" + "\u0E46\u0E4F\u0E50-\u0E59\u0E5A-\u0E5B\u0E81-\u0E82\u0E84\u0E87-\u0E88" + "\u0E8A\u0E8D\u0E94-\u0E97\u0E99-\u0E9F\u0EA1-\u0EA3\u0EA5\u0EA7" + "\u0EAA-\u0EAB\u0EAD-\u0EB0\u0EB2-\u0EB3\u0EBD\u0EC0-\u0EC4\u0EC6" + "\u0ED0-\u0ED9\u0EDC-\u0EDF\u0F00\u0F01-\u0F03\u0F04-\u0F12\u0F13\u0F14" + "\u0F15-\u0F17\u0F1A-\u0F1F\u0F20-\u0F29\u0F2A-\u0F33\u0F34\u0F36\u0F38" + "\u0F3E-\u0F3F\u0F40-\u0F47\u0F49-\u0F6C\u0F7F\u0F85\u0F88-\u0F8C" + "\u0FBE-\u0FC5\u0FC7-\u0FCC\u0FCE-\u0FCF\u0FD0-\u0FD4\u0FD5-\u0FD8" + "\u0FD9-\u0FDA\u1000-\u102A\u102B-\u102C\u1031\u1038\u103B-\u103C\u103F" + "\u1040-\u1049\u104A-\u104F\u1050-\u1055\u1056-\u1057\u105A-\u105D\u1061" + "\u1062-\u1064\u1065-\u1066\u1067-\u106D\u106E-\u1070\u1075-\u1081" + "\u1083-\u1084\u1087-\u108C\u108E\u108F\u1090-\u1099\u109A-\u109C" + "\u109E-\u109F\u10A0-\u10C5\u10C7\u10CD\u10D0-\u10FA\u10FB\u10FC" + "\u10FD-\u1248\u124A-\u124D\u1250-\u1256\u1258\u125A-\u125D\u1260-\u1288" + "\u128A-\u128D\u1290-\u12B0\u12B2-\u12B5\u12B8-\u12BE\u12C0\u12C2-\u12C5" + "\u12C8-\u12D6\u12D8-\u1310\u1312-\u1315\u1318-\u135A\u1360-\u1368" + "\u1369-\u137C\u1380-\u138F\u13A0-\u13F4\u1401-\u166C\u166D-\u166E" + "\u166F-\u167F\u1681-\u169A\u16A0-\u16EA\u16EB-\u16ED\u16EE-\u16F0" + "\u16F1-\u16F8\u1700-\u170C\u170E-\u1711\u1720-\u1731\u1735-\u1736" + "\u1740-\u1751\u1760-\u176C\u176E-\u1770\u1780-\u17B3\u17B6\u17BE-\u17C5" + "\u17C7-\u17C8\u17D4-\u17D6\u17D7\u17D8-\u17DA\u17DC\u17E0-\u17E9" + "\u1810-\u1819\u1820-\u1842\u1843\u1844-\u1877\u1880-\u18A8\u18AA" + "\u18B0-\u18F5\u1900-\u191E\u1923-\u1926\u1929-\u192B\u1930-\u1931" + "\u1933-\u1938\u1946-\u194F\u1950-\u196D\u1970-\u1974\u1980-\u19AB" + "\u19B0-\u19C0\u19C1-\u19C7\u19C8-\u19C9\u19D0-\u19D9\u19DA\u1A00-\u1A16" + "\u1A19-\u1A1A\u1A1E-\u1A1F\u1A20-\u1A54\u1A55\u1A57\u1A61\u1A63-\u1A64" + "\u1A6D-\u1A72\u1A80-\u1A89\u1A90-\u1A99\u1AA0-\u1AA6\u1AA7\u1AA8-\u1AAD" + "\u1B04\u1B05-\u1B33\u1B35\u1B3B\u1B3D-\u1B41\u1B43-\u1B44\u1B45-\u1B4B" + "\u1B50-\u1B59\u1B5A-\u1B60\u1B61-\u1B6A\u1B74-\u1B7C\u1B82\u1B83-\u1BA0" + "\u1BA1\u1BA6-\u1BA7\u1BAA\u1BAE-\u1BAF\u1BB0-\u1BB9\u1BBA-\u1BE5\u1BE7" + "\u1BEA-\u1BEC\u1BEE\u1BF2-\u1BF3\u1BFC-\u1BFF\u1C00-\u1C23\u1C24-\u1C2B" + "\u1C34-\u1C35\u1C3B-\u1C3F\u1C40-\u1C49\u1C4D-\u1C4F\u1C50-\u1C59" + "\u1C5A-\u1C77\u1C78-\u1C7D\u1C7E-\u1C7F\u1CC0-\u1CC7\u1CD3\u1CE1" + "\u1CE9-\u1CEC\u1CEE-\u1CF1\u1CF2-\u1CF3\u1CF5-\u1CF6\u1D00-\u1D2B" + "\u1D2C-\u1D6A\u1D6B-\u1D77\u1D78\u1D79-\u1D9A\u1D9B-\u1DBF\u1E00-\u1F15" + "\u1F18-\u1F1D\u1F20-\u1F45\u1F48-\u1F4D\u1F50-\u1F57\u1F59\u1F5B\u1F5D" + "\u1F5F-\u1F7D\u1F80-\u1FB4\u1FB6-\u1FBC\u1FBE\u1FC2-\u1FC4\u1FC6-\u1FCC" + "\u1FD0-\u1FD3\u1FD6-\u1FDB\u1FE0-\u1FEC\u1FF2-\u1FF4\u1FF6-\u1FFC\u200E" + "\u2071\u207F\u2090-\u209C\u2102\u2107\u210A-\u2113\u2115\u2119-\u211D" + "\u2124\u2126\u2128\u212A-\u212D\u212F-\u2134\u2135-\u2138\u2139" + "\u213C-\u213F\u2145-\u2149\u214E\u214F\u2160-\u2182\u2183-\u2184" + "\u2185-\u2188\u2336-\u237A\u2395\u249C-\u24E9\u26AC\u2800-\u28FF" + "\u2C00-\u2C2E\u2C30-\u2C5E\u2C60-\u2C7B\u2C7C-\u2C7D\u2C7E-\u2CE4" + "\u2CEB-\u2CEE\u2CF2-\u2CF3\u2D00-\u2D25\u2D27\u2D2D\u2D30-\u2D67\u2D6F" + "\u2D70\u2D80-\u2D96\u2DA0-\u2DA6\u2DA8-\u2DAE\u2DB0-\u2DB6\u2DB8-\u2DBE" + "\u2DC0-\u2DC6\u2DC8-\u2DCE\u2DD0-\u2DD6\u2DD8-\u2DDE\u3005\u3006\u3007" + "\u3021-\u3029\u302E-\u302F\u3031-\u3035\u3038-\u303A\u303B\u303C" + "\u3041-\u3096\u309D-\u309E\u309F\u30A1-\u30FA\u30FC-\u30FE\u30FF" + "\u3105-\u312D\u3131-\u318E\u3190-\u3191\u3192-\u3195\u3196-\u319F" + "\u31A0-\u31BA\u31F0-\u31FF\u3200-\u321C\u3220-\u3229\u322A-\u3247" + "\u3248-\u324F\u3260-\u327B\u327F\u3280-\u3289\u328A-\u32B0\u32C0-\u32CB" + "\u32D0-\u32FE\u3300-\u3376\u337B-\u33DD\u33E0-\u33FE\u3400-\u4DB5" + "\u4E00-\u9FCC\uA000-\uA014\uA015\uA016-\uA48C\uA4D0-\uA4F7\uA4F8-\uA4FD" + "\uA4FE-\uA4FF\uA500-\uA60B\uA60C\uA610-\uA61F\uA620-\uA629\uA62A-\uA62B" + "\uA640-\uA66D\uA66E\uA680-\uA69B\uA69C-\uA69D\uA6A0-\uA6E5\uA6E6-\uA6EF" + "\uA6F2-\uA6F7\uA722-\uA76F\uA770\uA771-\uA787\uA789-\uA78A\uA78B-\uA78E" + "\uA790-\uA7AD\uA7B0-\uA7B1\uA7F7\uA7F8-\uA7F9\uA7FA\uA7FB-\uA801" + "\uA803-\uA805\uA807-\uA80A\uA80C-\uA822\uA823-\uA824\uA827\uA830-\uA835" + "\uA836-\uA837\uA840-\uA873\uA880-\uA881\uA882-\uA8B3\uA8B4-\uA8C3" + "\uA8CE-\uA8CF\uA8D0-\uA8D9\uA8F2-\uA8F7\uA8F8-\uA8FA\uA8FB\uA900-\uA909" + "\uA90A-\uA925\uA92E-\uA92F\uA930-\uA946\uA952-\uA953\uA95F\uA960-\uA97C" + "\uA983\uA984-\uA9B2\uA9B4-\uA9B5\uA9BA-\uA9BB\uA9BD-\uA9C0\uA9C1-\uA9CD" + "\uA9CF\uA9D0-\uA9D9\uA9DE-\uA9DF\uA9E0-\uA9E4\uA9E6\uA9E7-\uA9EF" + "\uA9F0-\uA9F9\uA9FA-\uA9FE\uAA00-\uAA28\uAA2F-\uAA30\uAA33-\uAA34" + "\uAA40-\uAA42\uAA44-\uAA4B\uAA4D\uAA50-\uAA59\uAA5C-\uAA5F\uAA60-\uAA6F" + "\uAA70\uAA71-\uAA76\uAA77-\uAA79\uAA7A\uAA7B\uAA7D\uAA7E-\uAAAF\uAAB1" + "\uAAB5-\uAAB6\uAAB9-\uAABD\uAAC0\uAAC2\uAADB-\uAADC\uAADD\uAADE-\uAADF" + "\uAAE0-\uAAEA\uAAEB\uAAEE-\uAAEF\uAAF0-\uAAF1\uAAF2\uAAF3-\uAAF4\uAAF5" + "\uAB01-\uAB06\uAB09-\uAB0E\uAB11-\uAB16\uAB20-\uAB26\uAB28-\uAB2E" + "\uAB30-\uAB5A\uAB5B\uAB5C-\uAB5F\uAB64-\uAB65\uABC0-\uABE2\uABE3-\uABE4" + "\uABE6-\uABE7\uABE9-\uABEA\uABEB\uABEC\uABF0-\uABF9\uAC00-\uD7A3" + "\uD7B0-\uD7C6\uD7CB-\uD7FB\uE000-\uF8FF\uF900-\uFA6D\uFA70-\uFAD9" + "\uFB00-\uFB06\uFB13-\uFB17\uFF21-\uFF3A\uFF41-\uFF5A\uFF66-\uFF6F\uFF70" + "\uFF71-\uFF9D\uFF9E-\uFF9F\uFFA0-\uFFBE\uFFC2-\uFFC7\uFFCA-\uFFCF" + "\uFFD2-\uFFD7\uFFDA-\uFFDC",
-  R: "\u0590\u05BE\u05C0\u05C3\u05C6\u05C8-\u05CF\u05D0-\u05EA\u05EB-\u05EF" + "\u05F0-\u05F2\u05F3-\u05F4\u05F5-\u05FF\u07C0-\u07C9\u07CA-\u07EA" + "\u07F4-\u07F5\u07FA\u07FB-\u07FF\u0800-\u0815\u081A\u0824\u0828" + "\u082E-\u082F\u0830-\u083E\u083F\u0840-\u0858\u085C-\u085D\u085E" + "\u085F-\u089F\u200F\uFB1D\uFB1F-\uFB28\uFB2A-\uFB36\uFB37\uFB38-\uFB3C" + "\uFB3D\uFB3E\uFB3F\uFB40-\uFB41\uFB42\uFB43-\uFB44\uFB45\uFB46-\uFB4F",
-  AL: "\u0608\u060B\u060D\u061B\u061C\u061D\u061E-\u061F\u0620-\u063F\u0640" + "\u0641-\u064A\u066D\u066E-\u066F\u0671-\u06D3\u06D4\u06D5\u06E5-\u06E6" + "\u06EE-\u06EF\u06FA-\u06FC\u06FD-\u06FE\u06FF\u0700-\u070D\u070E\u070F" + "\u0710\u0712-\u072F\u074B-\u074C\u074D-\u07A5\u07B1\u07B2-\u07BF" + "\u08A0-\u08B2\u08B3-\u08E3\uFB50-\uFBB1\uFBB2-\uFBC1\uFBC2-\uFBD2" + "\uFBD3-\uFD3D\uFD40-\uFD4F\uFD50-\uFD8F\uFD90-\uFD91\uFD92-\uFDC7" + "\uFDC8-\uFDCF\uFDF0-\uFDFB\uFDFC\uFDFE-\uFDFF\uFE70-\uFE74\uFE75" + "\uFE76-\uFEFC\uFEFD-\uFEFE"
-};
-var REGEX_STRONG = new RegExp('[' + RANGE_BY_BIDI_TYPE.L + RANGE_BY_BIDI_TYPE.R + RANGE_BY_BIDI_TYPE.AL + ']');
-var REGEX_RTL = new RegExp('[' + RANGE_BY_BIDI_TYPE.R + RANGE_BY_BIDI_TYPE.AL + ']');
-/**
- * Returns the first strong character (has Bidi_Class value of L, R, or AL).
- *
- * @param str  A text block; e.g. paragraph, table cell, tag
- * @return     A character with strong bidi direction, or null if not found
- */
-
-function firstStrongChar(str) {
-  var match = REGEX_STRONG.exec(str);
-  return match == null ? null : match[0];
-}
-/**
- * Returns the direction of a block of text, based on the direction of its
- * first strong character (has Bidi_Class value of L, R, or AL).
- *
- * @param str  A text block; e.g. paragraph, table cell, tag
- * @return     The resolved direction
- */
-
-
-function firstStrongCharDir(str) {
-  var strongChar = firstStrongChar(str);
-
-  if (strongChar == null) {
-    return UnicodeBidiDirection.NEUTRAL;
-  }
-
-  return REGEX_RTL.exec(strongChar) ? UnicodeBidiDirection.RTL : UnicodeBidiDirection.LTR;
-}
-/**
- * Returns the direction of a block of text, based on the direction of its
- * first strong character (has Bidi_Class value of L, R, or AL), or a fallback
- * direction, if no strong character is found.
- *
- * This function is supposed to be used in respect to Higher-Level Protocol
- * rule HL1. (http://www.unicode.org/reports/tr9/#HL1)
- *
- * @param str       A text block; e.g. paragraph, table cell, tag
- * @param fallback  Fallback direction, used if no strong direction detected
- *                  for the block (default = NEUTRAL)
- * @return          The resolved direction
- */
-
-
-function resolveBlockDir(str, fallback) {
-  fallback = fallback || UnicodeBidiDirection.NEUTRAL;
-
-  if (!str.length) {
-    return fallback;
-  }
-
-  var blockDir = firstStrongCharDir(str);
-  return blockDir === UnicodeBidiDirection.NEUTRAL ? fallback : blockDir;
-}
-/**
- * Returns the direction of a block of text, based on the direction of its
- * first strong character (has Bidi_Class value of L, R, or AL), or a fallback
- * direction, if no strong character is found.
- *
- * NOTE: This function is similar to resolveBlockDir(), but uses the global
- * direction as the fallback, so it *always* returns a Strong direction,
- * making it useful for integration in places that you need to make the final
- * decision, like setting some CSS class.
- *
- * This function is supposed to be used in respect to Higher-Level Protocol
- * rule HL1. (http://www.unicode.org/reports/tr9/#HL1)
- *
- * @param str             A text block; e.g. paragraph, table cell
- * @param strongFallback  Fallback direction, used if no strong direction
- *                        detected for the block (default = global direction)
- * @return                The resolved Strong direction
- */
-
-
-function getDirection(str, strongFallback) {
-  if (!strongFallback) {
-    strongFallback = UnicodeBidiDirection.getGlobalDir();
-  }
-
-  !UnicodeBidiDirection.isStrong(strongFallback) ?  true ? invariant(false, 'Fallback direction must be a strong direction') : 0 : void 0;
-  return resolveBlockDir(str, strongFallback);
-}
-/**
- * Returns true if getDirection(arguments...) returns LTR.
- *
- * @param str             A text block; e.g. paragraph, table cell
- * @param strongFallback  Fallback direction, used if no strong direction
- *                        detected for the block (default = global direction)
- * @return                True if the resolved direction is LTR
- */
-
-
-function isDirectionLTR(str, strongFallback) {
-  return getDirection(str, strongFallback) === UnicodeBidiDirection.LTR;
-}
-/**
- * Returns true if getDirection(arguments...) returns RTL.
- *
- * @param str             A text block; e.g. paragraph, table cell
- * @param strongFallback  Fallback direction, used if no strong direction
- *                        detected for the block (default = global direction)
- * @return                True if the resolved direction is RTL
- */
-
-
-function isDirectionRTL(str, strongFallback) {
-  return getDirection(str, strongFallback) === UnicodeBidiDirection.RTL;
-}
-
-var UnicodeBidi = {
-  firstStrongChar: firstStrongChar,
-  firstStrongCharDir: firstStrongCharDir,
-  resolveBlockDir: resolveBlockDir,
-  getDirection: getDirection,
-  isDirectionLTR: isDirectionLTR,
-  isDirectionRTL: isDirectionRTL
-};
-module.exports = UnicodeBidi;
-
-/***/ }),
-
-/***/ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/UnicodeBidiDirection.js":
-/*!*****************************************************************************************!*\
-  !*** ../../../js/controls/WysiwygControl/node_modules/fbjs/lib/UnicodeBidiDirection.js ***!
-  \*****************************************************************************************/
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
-
-"use strict";
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- *
- * @typechecks
- * 
- */
-
-/**
- * Constants to represent text directionality
- *
- * Also defines a *global* direciton, to be used in bidi algorithms as a
- * default fallback direciton, when no better direction is found or provided.
- *
- * NOTE: Use `setGlobalDir()`, or update `initGlobalDir()`, to set the initial
- *       global direction value based on the application.
- *
- * Part of the implementation of Unicode Bidirectional Algorithm (UBA)
- * Unicode Standard Annex #9 (UAX9)
- * http://www.unicode.org/reports/tr9/
- */
-
-
-var invariant = __webpack_require__(/*! ./invariant */ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/invariant.js");
-
-var NEUTRAL = 'NEUTRAL'; // No strong direction
-
-var LTR = 'LTR'; // Left-to-Right direction
-
-var RTL = 'RTL'; // Right-to-Left direction
-
-var globalDir = null; // == Helpers ==
-
-/**
- * Check if a directionality value is a Strong one
- */
-
-function isStrong(dir) {
-  return dir === LTR || dir === RTL;
-}
-/**
- * Get string value to be used for `dir` HTML attribute or `direction` CSS
- * property.
- */
-
-
-function getHTMLDir(dir) {
-  !isStrong(dir) ?  true ? invariant(false, '`dir` must be a strong direction to be converted to HTML Direction') : 0 : void 0;
-  return dir === LTR ? 'ltr' : 'rtl';
-}
-/**
- * Get string value to be used for `dir` HTML attribute or `direction` CSS
- * property, but returns null if `dir` has same value as `otherDir`.
- * `null`.
- */
-
-
-function getHTMLDirIfDifferent(dir, otherDir) {
-  !isStrong(dir) ?  true ? invariant(false, '`dir` must be a strong direction to be converted to HTML Direction') : 0 : void 0;
-  !isStrong(otherDir) ?  true ? invariant(false, '`otherDir` must be a strong direction to be converted to HTML Direction') : 0 : void 0;
-  return dir === otherDir ? null : getHTMLDir(dir);
-} // == Global Direction ==
-
-/**
- * Set the global direction.
- */
-
-
-function setGlobalDir(dir) {
-  globalDir = dir;
-}
-/**
- * Initialize the global direction
- */
-
-
-function initGlobalDir() {
-  setGlobalDir(LTR);
-}
-/**
- * Get the global direction
- */
-
-
-function getGlobalDir() {
-  if (!globalDir) {
-    this.initGlobalDir();
-  }
-
-  !globalDir ?  true ? invariant(false, 'Global direction not set.') : 0 : void 0;
-  return globalDir;
-}
-
-var UnicodeBidiDirection = {
-  // Values
-  NEUTRAL: NEUTRAL,
-  LTR: LTR,
-  RTL: RTL,
-  // Helpers
-  isStrong: isStrong,
-  getHTMLDir: getHTMLDir,
-  getHTMLDirIfDifferent: getHTMLDirIfDifferent,
-  // Global Direction
-  setGlobalDir: setGlobalDir,
-  initGlobalDir: initGlobalDir,
-  getGlobalDir: getGlobalDir
-};
-module.exports = UnicodeBidiDirection;
-
-/***/ }),
-
-/***/ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/UnicodeBidiService.js":
-/*!***************************************************************************************!*\
-  !*** ../../../js/controls/WysiwygControl/node_modules/fbjs/lib/UnicodeBidiService.js ***!
-  \***************************************************************************************/
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
-
-"use strict";
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- *
- * @typechecks
- * 
- */
-
-/**
- * Stateful API for text direction detection
- *
- * This class can be used in applications where you need to detect the
- * direction of a sequence of text blocks, where each direction shall be used
- * as the fallback direction for the next one.
- *
- * NOTE: A default direction, if not provided, is set based on the global
- *       direction, as defined by `UnicodeBidiDirection`.
- *
- * == Example ==
- * ```
- * var UnicodeBidiService = require('UnicodeBidiService');
- *
- * var bidiService = new UnicodeBidiService();
- *
- * ...
- *
- * bidiService.reset();
- * for (var para in paragraphs) {
- *   var dir = bidiService.getDirection(para);
- *   ...
- * }
- * ```
- *
- * Part of our implementation of Unicode Bidirectional Algorithm (UBA)
- * Unicode Standard Annex #9 (UAX9)
- * http://www.unicode.org/reports/tr9/
- */
-
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-var UnicodeBidi = __webpack_require__(/*! ./UnicodeBidi */ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/UnicodeBidi.js");
-
-var UnicodeBidiDirection = __webpack_require__(/*! ./UnicodeBidiDirection */ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/UnicodeBidiDirection.js");
-
-var invariant = __webpack_require__(/*! ./invariant */ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/invariant.js");
-
-var UnicodeBidiService =
-/*#__PURE__*/
-function () {
-  /**
-   * Stateful class for paragraph direction detection
-   *
-   * @param defaultDir  Default direction of the service
-   */
-  function UnicodeBidiService(defaultDir) {
-    _defineProperty(this, "_defaultDir", void 0);
-
-    _defineProperty(this, "_lastDir", void 0);
-
-    if (!defaultDir) {
-      defaultDir = UnicodeBidiDirection.getGlobalDir();
-    } else {
-      !UnicodeBidiDirection.isStrong(defaultDir) ?  true ? invariant(false, 'Default direction must be a strong direction (LTR or RTL)') : 0 : void 0;
-    }
-
-    this._defaultDir = defaultDir;
-    this.reset();
-  }
-  /**
-   * Reset the internal state
-   *
-   * Instead of creating a new instance, you can just reset() your instance
-   * everytime you start a new loop.
-   */
-
-
-  var _proto = UnicodeBidiService.prototype;
-
-  _proto.reset = function reset() {
-    this._lastDir = this._defaultDir;
-  };
-  /**
-   * Returns the direction of a block of text, and remembers it as the
-   * fall-back direction for the next paragraph.
-   *
-   * @param str  A text block, e.g. paragraph, table cell, tag
-   * @return     The resolved direction
-   */
-
-
-  _proto.getDirection = function getDirection(str) {
-    this._lastDir = UnicodeBidi.getDirection(str, this._lastDir);
-    return this._lastDir;
-  };
-
-  return UnicodeBidiService;
-}();
-
-module.exports = UnicodeBidiService;
-
-/***/ }),
-
-/***/ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/UnicodeUtils.js":
-/*!*********************************************************************************!*\
-  !*** ../../../js/controls/WysiwygControl/node_modules/fbjs/lib/UnicodeUtils.js ***!
-  \*********************************************************************************/
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
-
-"use strict";
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- *
- * @typechecks
- */
-
-/**
- * Unicode-enabled replacesments for basic String functions.
- *
- * All the functions in this module assume that the input string is a valid
- * UTF-16 encoding of a Unicode sequence. If it's not the case, the behavior
- * will be undefined.
- *
- * WARNING: Since this module is typechecks-enforced, you may find new bugs
- * when replacing normal String functions with ones provided here.
- */
-
-
-var invariant = __webpack_require__(/*! ./invariant */ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/invariant.js"); // These two ranges are consecutive so anything in [HIGH_START, LOW_END] is a
-// surrogate code unit.
-
-
-var SURROGATE_HIGH_START = 0xD800;
-var SURROGATE_HIGH_END = 0xDBFF;
-var SURROGATE_LOW_START = 0xDC00;
-var SURROGATE_LOW_END = 0xDFFF;
-var SURROGATE_UNITS_REGEX = /[\uD800-\uDFFF]/;
-/**
- * @param {number} codeUnit   A Unicode code-unit, in range [0, 0x10FFFF]
- * @return {boolean}          Whether code-unit is in a surrogate (hi/low) range
- */
-
-function isCodeUnitInSurrogateRange(codeUnit) {
-  return SURROGATE_HIGH_START <= codeUnit && codeUnit <= SURROGATE_LOW_END;
-}
-/**
- * Returns whether the two characters starting at `index` form a surrogate pair.
- * For example, given the string s = "\uD83D\uDE0A", (s, 0) returns true and
- * (s, 1) returns false.
- *
- * @param {string} str
- * @param {number} index
- * @return {boolean}
- */
-
-
-function isSurrogatePair(str, index) {
-  !(0 <= index && index < str.length) ?  true ? invariant(false, 'isSurrogatePair: Invalid index %s for string length %s.', index, str.length) : 0 : void 0;
-
-  if (index + 1 === str.length) {
-    return false;
-  }
-
-  var first = str.charCodeAt(index);
-  var second = str.charCodeAt(index + 1);
-  return SURROGATE_HIGH_START <= first && first <= SURROGATE_HIGH_END && SURROGATE_LOW_START <= second && second <= SURROGATE_LOW_END;
-}
-/**
- * @param {string} str  Non-empty string
- * @return {boolean}    True if the input includes any surrogate code units
- */
-
-
-function hasSurrogateUnit(str) {
-  return SURROGATE_UNITS_REGEX.test(str);
-}
-/**
- * Return the length of the original Unicode character at given position in the
- * String by looking into the UTF-16 code unit; that is equal to 1 for any
- * non-surrogate characters in BMP ([U+0000..U+D7FF] and [U+E000, U+FFFF]); and
- * returns 2 for the hi/low surrogates ([U+D800..U+DFFF]), which are in fact
- * representing non-BMP characters ([U+10000..U+10FFFF]).
- *
- * Examples:
- * - '\u0020' => 1
- * - '\u3020' => 1
- * - '\uD835' => 2
- * - '\uD835\uDDEF' => 2
- * - '\uDDEF' => 2
- *
- * @param {string} str  Non-empty string
- * @param {number} pos  Position in the string to look for one code unit
- * @return {number}      Number 1 or 2
- */
-
-
-function getUTF16Length(str, pos) {
-  return 1 + isCodeUnitInSurrogateRange(str.charCodeAt(pos));
-}
-/**
- * Fully Unicode-enabled replacement for String#length
- *
- * @param {string} str  Valid Unicode string
- * @return {number}     The number of Unicode characters in the string
- */
-
-
-function strlen(str) {
-  // Call the native functions if there's no surrogate char
-  if (!hasSurrogateUnit(str)) {
-    return str.length;
-  }
-
-  var len = 0;
-
-  for (var pos = 0; pos < str.length; pos += getUTF16Length(str, pos)) {
-    len++;
-  }
-
-  return len;
-}
-/**
- * Fully Unicode-enabled replacement for String#substr()
- *
- * @param {string} str      Valid Unicode string
- * @param {number} start    Location in Unicode sequence to begin extracting
- * @param {?number} length  The number of Unicode characters to extract
- *                          (default: to the end of the string)
- * @return {string}         Extracted sub-string
- */
-
-
-function substr(str, start, length) {
-  start = start || 0;
-  length = length === undefined ? Infinity : length || 0; // Call the native functions if there's no surrogate char
-
-  if (!hasSurrogateUnit(str)) {
-    return str.substr(start, length);
-  } // Obvious cases
-
-
-  var size = str.length;
-
-  if (size <= 0 || start > size || length <= 0) {
-    return '';
-  } // Find the actual starting position
-
-
-  var posA = 0;
-
-  if (start > 0) {
-    for (; start > 0 && posA < size; start--) {
-      posA += getUTF16Length(str, posA);
-    }
-
-    if (posA >= size) {
-      return '';
-    }
-  } else if (start < 0) {
-    for (posA = size; start < 0 && 0 < posA; start++) {
-      posA -= getUTF16Length(str, posA - 1);
-    }
-
-    if (posA < 0) {
-      posA = 0;
-    }
-  } // Find the actual ending position
-
-
-  var posB = size;
-
-  if (length < size) {
-    for (posB = posA; length > 0 && posB < size; length--) {
-      posB += getUTF16Length(str, posB);
-    }
-  }
-
-  return str.substring(posA, posB);
-}
-/**
- * Fully Unicode-enabled replacement for String#substring()
- *
- * @param {string} str    Valid Unicode string
- * @param {number} start  Location in Unicode sequence to begin extracting
- * @param {?number} end   Location in Unicode sequence to end extracting
- *                        (default: end of the string)
- * @return {string}       Extracted sub-string
- */
-
-
-function substring(str, start, end) {
-  start = start || 0;
-  end = end === undefined ? Infinity : end || 0;
-
-  if (start < 0) {
-    start = 0;
-  }
-
-  if (end < 0) {
-    end = 0;
-  }
-
-  var length = Math.abs(end - start);
-  start = start < end ? start : end;
-  return substr(str, start, length);
-}
-/**
- * Get a list of Unicode code-points from a String
- *
- * @param {string} str        Valid Unicode string
- * @return {array<number>}    A list of code-points in [0..0x10FFFF]
- */
-
-
-function getCodePoints(str) {
-  var codePoints = [];
-
-  for (var pos = 0; pos < str.length; pos += getUTF16Length(str, pos)) {
-    codePoints.push(str.codePointAt(pos));
-  }
-
-  return codePoints;
-}
-
-var UnicodeUtils = {
-  getCodePoints: getCodePoints,
-  getUTF16Length: getUTF16Length,
-  hasSurrogateUnit: hasSurrogateUnit,
-  isCodeUnitInSurrogateRange: isCodeUnitInSurrogateRange,
-  isSurrogatePair: isSurrogatePair,
-  strlen: strlen,
-  substring: substring,
-  substr: substr
-};
-module.exports = UnicodeUtils;
-
-/***/ }),
-
-/***/ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/UserAgent.js":
-/*!******************************************************************************!*\
-  !*** ../../../js/controls/WysiwygControl/node_modules/fbjs/lib/UserAgent.js ***!
-  \******************************************************************************/
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
-
-"use strict";
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- *
- */
-
-
-var UserAgentData = __webpack_require__(/*! ./UserAgentData */ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/UserAgentData.js");
-
-var VersionRange = __webpack_require__(/*! ./VersionRange */ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/VersionRange.js");
-
-var mapObject = __webpack_require__(/*! ./mapObject */ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/mapObject.js");
-
-var memoizeStringOnly = __webpack_require__(/*! ./memoizeStringOnly */ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/memoizeStringOnly.js");
-/**
- * Checks to see whether `name` and `version` satisfy `query`.
- *
- * @param {string} name Name of the browser, device, engine or platform
- * @param {?string} version Version of the browser, engine or platform
- * @param {string} query Query of form "Name [range expression]"
- * @param {?function} normalizer Optional pre-processor for range expression
- * @return {boolean}
- */
-
-
-function compare(name, version, query, normalizer) {
-  // check for exact match with no version
-  if (name === query) {
-    return true;
-  } // check for non-matching names
-
-
-  if (!query.startsWith(name)) {
-    return false;
-  } // full comparison with version
-
-
-  var range = query.slice(name.length);
-
-  if (version) {
-    range = normalizer ? normalizer(range) : range;
-    return VersionRange.contains(range, version);
-  }
-
-  return false;
-}
-/**
- * Normalizes `version` by stripping any "NT" prefix, but only on the Windows
- * platform.
- *
- * Mimics the stripping performed by the `UserAgentWindowsPlatform` PHP class.
- *
- * @param {string} version
- * @return {string}
- */
-
-
-function normalizePlatformVersion(version) {
-  if (UserAgentData.platformName === 'Windows') {
-    return version.replace(/^\s*NT/, '');
-  }
-
-  return version;
-}
-/**
- * Provides client-side access to the authoritative PHP-generated User Agent
- * information supplied by the server.
- */
-
-
-var UserAgent = {
-  /**
-   * Check if the User Agent browser matches `query`.
-   *
-   * `query` should be a string like "Chrome" or "Chrome > 33".
-   *
-   * Valid browser names include:
-   *
-   * - ACCESS NetFront
-   * - AOL
-   * - Amazon Silk
-   * - Android
-   * - BlackBerry
-   * - BlackBerry PlayBook
-   * - Chrome
-   * - Chrome for iOS
-   * - Chrome frame
-   * - Facebook PHP SDK
-   * - Facebook for iOS
-   * - Firefox
-   * - IE
-   * - IE Mobile
-   * - Mobile Safari
-   * - Motorola Internet Browser
-   * - Nokia
-   * - Openwave Mobile Browser
-   * - Opera
-   * - Opera Mini
-   * - Opera Mobile
-   * - Safari
-   * - UIWebView
-   * - Unknown
-   * - webOS
-   * - etc...
-   *
-   * An authoritative list can be found in the PHP `BrowserDetector` class and
-   * related classes in the same file (see calls to `new UserAgentBrowser` here:
-   * https://fburl.com/50728104).
-   *
-   * @note Function results are memoized
-   *
-   * @param {string} query Query of the form "Name [range expression]"
-   * @return {boolean}
-   */
-  isBrowser: function isBrowser(query) {
-    return compare(UserAgentData.browserName, UserAgentData.browserFullVersion, query);
-  },
-
-  /**
-   * Check if the User Agent browser uses a 32 or 64 bit architecture.
-   *
-   * @note Function results are memoized
-   *
-   * @param {string} query Query of the form "32" or "64".
-   * @return {boolean}
-   */
-  isBrowserArchitecture: function isBrowserArchitecture(query) {
-    return compare(UserAgentData.browserArchitecture, null, query);
-  },
-
-  /**
-   * Check if the User Agent device matches `query`.
-   *
-   * `query` should be a string like "iPhone" or "iPad".
-   *
-   * Valid device names include:
-   *
-   * - Kindle
-   * - Kindle Fire
-   * - Unknown
-   * - iPad
-   * - iPhone
-   * - iPod
-   * - etc...
-   *
-   * An authoritative list can be found in the PHP `DeviceDetector` class and
-   * related classes in the same file (see calls to `new UserAgentDevice` here:
-   * https://fburl.com/50728332).
-   *
-   * @note Function results are memoized
-   *
-   * @param {string} query Query of the form "Name"
-   * @return {boolean}
-   */
-  isDevice: function isDevice(query) {
-    return compare(UserAgentData.deviceName, null, query);
-  },
-
-  /**
-   * Check if the User Agent rendering engine matches `query`.
-   *
-   * `query` should be a string like "WebKit" or "WebKit >= 537".
-   *
-   * Valid engine names include:
-   *
-   * - Gecko
-   * - Presto
-   * - Trident
-   * - WebKit
-   * - etc...
-   *
-   * An authoritative list can be found in the PHP `RenderingEngineDetector`
-   * class related classes in the same file (see calls to `new
-   * UserAgentRenderingEngine` here: https://fburl.com/50728617).
-   *
-   * @note Function results are memoized
-   *
-   * @param {string} query Query of the form "Name [range expression]"
-   * @return {boolean}
-   */
-  isEngine: function isEngine(query) {
-    return compare(UserAgentData.engineName, UserAgentData.engineVersion, query);
-  },
-
-  /**
-   * Check if the User Agent platform matches `query`.
-   *
-   * `query` should be a string like "Windows" or "iOS 5 - 6".
-   *
-   * Valid platform names include:
-   *
-   * - Android
-   * - BlackBerry OS
-   * - Java ME
-   * - Linux
-   * - Mac OS X
-   * - Mac OS X Calendar
-   * - Mac OS X Internet Account
-   * - Symbian
-   * - SymbianOS
-   * - Windows
-   * - Windows Mobile
-   * - Windows Phone
-   * - iOS
-   * - iOS Facebook Integration Account
-   * - iOS Facebook Social Sharing UI
-   * - webOS
-   * - Chrome OS
-   * - etc...
-   *
-   * An authoritative list can be found in the PHP `PlatformDetector` class and
-   * related classes in the same file (see calls to `new UserAgentPlatform`
-   * here: https://fburl.com/50729226).
-   *
-   * @note Function results are memoized
-   *
-   * @param {string} query Query of the form "Name [range expression]"
-   * @return {boolean}
-   */
-  isPlatform: function isPlatform(query) {
-    return compare(UserAgentData.platformName, UserAgentData.platformFullVersion, query, normalizePlatformVersion);
-  },
-
-  /**
-   * Check if the User Agent platform is a 32 or 64 bit architecture.
-   *
-   * @note Function results are memoized
-   *
-   * @param {string} query Query of the form "32" or "64".
-   * @return {boolean}
-   */
-  isPlatformArchitecture: function isPlatformArchitecture(query) {
-    return compare(UserAgentData.platformArchitecture, null, query);
-  }
-};
-module.exports = mapObject(UserAgent, memoizeStringOnly);
-
-/***/ }),
-
-/***/ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/UserAgentData.js":
-/*!**********************************************************************************!*\
-  !*** ../../../js/controls/WysiwygControl/node_modules/fbjs/lib/UserAgentData.js ***!
-  \**********************************************************************************/
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
-
-"use strict";
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- *
- */
-
-/**
- * Usage note:
- * This module makes a best effort to export the same data we would internally.
- * At Facebook we use a server-generated module that does the parsing and
- * exports the data for the client to use. We can't rely on a server-side
- * implementation in open source so instead we make use of an open source
- * library to do the heavy lifting and then make some adjustments as necessary.
- * It's likely there will be some differences. Some we can smooth over.
- * Others are going to be harder.
- */
-
-
-var UAParser = __webpack_require__(/*! ua-parser-js */ "../../../js/controls/WysiwygControl/node_modules/ua-parser-js/src/ua-parser.js");
-
-var UNKNOWN = 'Unknown';
-var PLATFORM_MAP = {
-  'Mac OS': 'Mac OS X'
-};
-/**
- * Convert from UAParser platform name to what we expect.
- */
-
-function convertPlatformName(name) {
-  return PLATFORM_MAP[name] || name;
-}
-/**
- * Get the version number in parts. This is very naive. We actually get major
- * version as a part of UAParser already, which is generally good enough, but
- * let's get the minor just in case.
- */
-
-
-function getBrowserVersion(version) {
-  if (!version) {
-    return {
-      major: '',
-      minor: ''
-    };
-  }
-
-  var parts = version.split('.');
-  return {
-    major: parts[0],
-    minor: parts[1]
-  };
-}
-/**
- * Get the UA data fom UAParser and then convert it to the format we're
- * expecting for our APIS.
- */
-
-
-var parser = new UAParser();
-var results = parser.getResult(); // Do some conversion first.
-
-var browserVersionData = getBrowserVersion(results.browser.version);
-var uaData = {
-  browserArchitecture: results.cpu.architecture || UNKNOWN,
-  browserFullVersion: results.browser.version || UNKNOWN,
-  browserMinorVersion: browserVersionData.minor || UNKNOWN,
-  browserName: results.browser.name || UNKNOWN,
-  browserVersion: results.browser.major || UNKNOWN,
-  deviceName: results.device.model || UNKNOWN,
-  engineName: results.engine.name || UNKNOWN,
-  engineVersion: results.engine.version || UNKNOWN,
-  platformArchitecture: results.cpu.architecture || UNKNOWN,
-  platformName: convertPlatformName(results.os.name) || UNKNOWN,
-  platformVersion: results.os.version || UNKNOWN,
-  platformFullVersion: results.os.version || UNKNOWN
-};
-module.exports = uaData;
-
-/***/ }),
-
-/***/ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/VersionRange.js":
-/*!*********************************************************************************!*\
-  !*** ../../../js/controls/WysiwygControl/node_modules/fbjs/lib/VersionRange.js ***!
-  \*********************************************************************************/
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
-
-"use strict";
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- *
- */
-
-
-var invariant = __webpack_require__(/*! ./invariant */ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/invariant.js");
-
-var componentRegex = /\./;
-var orRegex = /\|\|/;
-var rangeRegex = /\s+\-\s+/;
-var modifierRegex = /^(<=|<|=|>=|~>|~|>|)?\s*(.+)/;
-var numericRegex = /^(\d*)(.*)/;
-/**
- * Splits input `range` on "||" and returns true if any subrange matches
- * `version`.
- *
- * @param {string} range
- * @param {string} version
- * @returns {boolean}
- */
-
-function checkOrExpression(range, version) {
-  var expressions = range.split(orRegex);
-
-  if (expressions.length > 1) {
-    return expressions.some(function (range) {
-      return VersionRange.contains(range, version);
-    });
-  } else {
-    range = expressions[0].trim();
-    return checkRangeExpression(range, version);
-  }
-}
-/**
- * Splits input `range` on " - " (the surrounding whitespace is required) and
- * returns true if version falls between the two operands.
- *
- * @param {string} range
- * @param {string} version
- * @returns {boolean}
- */
-
-
-function checkRangeExpression(range, version) {
-  var expressions = range.split(rangeRegex);
-  !(expressions.length > 0 && expressions.length <= 2) ?  true ? invariant(false, 'the "-" operator expects exactly 2 operands') : 0 : void 0;
-
-  if (expressions.length === 1) {
-    return checkSimpleExpression(expressions[0], version);
-  } else {
-    var startVersion = expressions[0],
-        endVersion = expressions[1];
-    !(isSimpleVersion(startVersion) && isSimpleVersion(endVersion)) ?  true ? invariant(false, 'operands to the "-" operator must be simple (no modifiers)') : 0 : void 0;
-    return checkSimpleExpression('>=' + startVersion, version) && checkSimpleExpression('<=' + endVersion, version);
-  }
-}
-/**
- * Checks if `range` matches `version`. `range` should be a "simple" range (ie.
- * not a compound range using the " - " or "||" operators).
- *
- * @param {string} range
- * @param {string} version
- * @returns {boolean}
- */
-
-
-function checkSimpleExpression(range, version) {
-  range = range.trim();
-
-  if (range === '') {
-    return true;
-  }
-
-  var versionComponents = version.split(componentRegex);
-
-  var _getModifierAndCompon = getModifierAndComponents(range),
-      modifier = _getModifierAndCompon.modifier,
-      rangeComponents = _getModifierAndCompon.rangeComponents;
-
-  switch (modifier) {
-    case '<':
-      return checkLessThan(versionComponents, rangeComponents);
-
-    case '<=':
-      return checkLessThanOrEqual(versionComponents, rangeComponents);
-
-    case '>=':
-      return checkGreaterThanOrEqual(versionComponents, rangeComponents);
-
-    case '>':
-      return checkGreaterThan(versionComponents, rangeComponents);
-
-    case '~':
-    case '~>':
-      return checkApproximateVersion(versionComponents, rangeComponents);
-
-    default:
-      return checkEqual(versionComponents, rangeComponents);
-  }
-}
-/**
- * Checks whether `a` is less than `b`.
- *
- * @param {array<string>} a
- * @param {array<string>} b
- * @returns {boolean}
- */
-
-
-function checkLessThan(a, b) {
-  return compareComponents(a, b) === -1;
-}
-/**
- * Checks whether `a` is less than or equal to `b`.
- *
- * @param {array<string>} a
- * @param {array<string>} b
- * @returns {boolean}
- */
-
-
-function checkLessThanOrEqual(a, b) {
-  var result = compareComponents(a, b);
-  return result === -1 || result === 0;
-}
-/**
- * Checks whether `a` is equal to `b`.
- *
- * @param {array<string>} a
- * @param {array<string>} b
- * @returns {boolean}
- */
-
-
-function checkEqual(a, b) {
-  return compareComponents(a, b) === 0;
-}
-/**
- * Checks whether `a` is greater than or equal to `b`.
- *
- * @param {array<string>} a
- * @param {array<string>} b
- * @returns {boolean}
- */
-
-
-function checkGreaterThanOrEqual(a, b) {
-  var result = compareComponents(a, b);
-  return result === 1 || result === 0;
-}
-/**
- * Checks whether `a` is greater than `b`.
- *
- * @param {array<string>} a
- * @param {array<string>} b
- * @returns {boolean}
- */
-
-
-function checkGreaterThan(a, b) {
-  return compareComponents(a, b) === 1;
-}
-/**
- * Checks whether `a` is "reasonably close" to `b` (as described in
- * https://www.npmjs.org/doc/misc/semver.html). For example, if `b` is "1.3.1"
- * then "reasonably close" is defined as ">= 1.3.1 and < 1.4".
- *
- * @param {array<string>} a
- * @param {array<string>} b
- * @returns {boolean}
- */
-
-
-function checkApproximateVersion(a, b) {
-  var lowerBound = b.slice();
-  var upperBound = b.slice();
-
-  if (upperBound.length > 1) {
-    upperBound.pop();
-  }
-
-  var lastIndex = upperBound.length - 1;
-  var numeric = parseInt(upperBound[lastIndex], 10);
-
-  if (isNumber(numeric)) {
-    upperBound[lastIndex] = numeric + 1 + '';
-  }
-
-  return checkGreaterThanOrEqual(a, lowerBound) && checkLessThan(a, upperBound);
-}
-/**
- * Extracts the optional modifier (<, <=, =, >=, >, ~, ~>) and version
- * components from `range`.
- *
- * For example, given `range` ">= 1.2.3" returns an object with a `modifier` of
- * `">="` and `components` of `[1, 2, 3]`.
- *
- * @param {string} range
- * @returns {object}
- */
-
-
-function getModifierAndComponents(range) {
-  var rangeComponents = range.split(componentRegex);
-  var matches = rangeComponents[0].match(modifierRegex);
-  !matches ?  true ? invariant(false, 'expected regex to match but it did not') : 0 : void 0;
-  return {
-    modifier: matches[1],
-    rangeComponents: [matches[2]].concat(rangeComponents.slice(1))
-  };
-}
-/**
- * Determines if `number` is a number.
- *
- * @param {mixed} number
- * @returns {boolean}
- */
-
-
-function isNumber(number) {
-  return !isNaN(number) && isFinite(number);
-}
-/**
- * Tests whether `range` is a "simple" version number without any modifiers
- * (">", "~" etc).
- *
- * @param {string} range
- * @returns {boolean}
- */
-
-
-function isSimpleVersion(range) {
-  return !getModifierAndComponents(range).modifier;
-}
-/**
- * Zero-pads array `array` until it is at least `length` long.
- *
- * @param {array} array
- * @param {number} length
- */
-
-
-function zeroPad(array, length) {
-  for (var i = array.length; i < length; i++) {
-    array[i] = '0';
-  }
-}
-/**
- * Normalizes `a` and `b` in preparation for comparison by doing the following:
- *
- * - zero-pads `a` and `b`
- * - marks any "x", "X" or "*" component in `b` as equivalent by zero-ing it out
- *   in both `a` and `b`
- * - marks any final "*" component in `b` as a greedy wildcard by zero-ing it
- *   and all of its successors in `a`
- *
- * @param {array<string>} a
- * @param {array<string>} b
- * @returns {array<array<string>>}
- */
-
-
-function normalizeVersions(a, b) {
-  a = a.slice();
-  b = b.slice();
-  zeroPad(a, b.length); // mark "x" and "*" components as equal
-
-  for (var i = 0; i < b.length; i++) {
-    var matches = b[i].match(/^[x*]$/i);
-
-    if (matches) {
-      b[i] = a[i] = '0'; // final "*" greedily zeros all remaining components
-
-      if (matches[0] === '*' && i === b.length - 1) {
-        for (var j = i; j < a.length; j++) {
-          a[j] = '0';
-        }
-      }
-    }
-  }
-
-  zeroPad(b, a.length);
-  return [a, b];
-}
-/**
- * Returns the numerical -- not the lexicographical -- ordering of `a` and `b`.
- *
- * For example, `10-alpha` is greater than `2-beta`.
- *
- * @param {string} a
- * @param {string} b
- * @returns {number} -1, 0 or 1 to indicate whether `a` is less than, equal to,
- * or greater than `b`, respectively
- */
-
-
-function compareNumeric(a, b) {
-  var aPrefix = a.match(numericRegex)[1];
-  var bPrefix = b.match(numericRegex)[1];
-  var aNumeric = parseInt(aPrefix, 10);
-  var bNumeric = parseInt(bPrefix, 10);
-
-  if (isNumber(aNumeric) && isNumber(bNumeric) && aNumeric !== bNumeric) {
-    return compare(aNumeric, bNumeric);
-  } else {
-    return compare(a, b);
-  }
-}
-/**
- * Returns the ordering of `a` and `b`.
- *
- * @param {string|number} a
- * @param {string|number} b
- * @returns {number} -1, 0 or 1 to indicate whether `a` is less than, equal to,
- * or greater than `b`, respectively
- */
-
-
-function compare(a, b) {
-  !(typeof a === typeof b) ?  true ? invariant(false, '"a" and "b" must be of the same type') : 0 : void 0;
-
-  if (a > b) {
-    return 1;
-  } else if (a < b) {
-    return -1;
-  } else {
-    return 0;
-  }
-}
-/**
- * Compares arrays of version components.
- *
- * @param {array<string>} a
- * @param {array<string>} b
- * @returns {number} -1, 0 or 1 to indicate whether `a` is less than, equal to,
- * or greater than `b`, respectively
- */
-
-
-function compareComponents(a, b) {
-  var _normalizeVersions = normalizeVersions(a, b),
-      aNormalized = _normalizeVersions[0],
-      bNormalized = _normalizeVersions[1];
-
-  for (var i = 0; i < bNormalized.length; i++) {
-    var result = compareNumeric(aNormalized[i], bNormalized[i]);
-
-    if (result) {
-      return result;
-    }
-  }
-
-  return 0;
-}
-
-var VersionRange = {
-  /**
-   * Checks whether `version` satisfies the `range` specification.
-   *
-   * We support a subset of the expressions defined in
-   * https://www.npmjs.org/doc/misc/semver.html:
-   *
-   *    version   Must match version exactly
-   *    =version  Same as just version
-   *    >version  Must be greater than version
-   *    >=version Must be greater than or equal to version
-   *    <version  Must be less than version
-   *    <=version Must be less than or equal to version
-   *    ~version  Must be at least version, but less than the next significant
-   *              revision above version:
-   *              "~1.2.3" is equivalent to ">= 1.2.3 and < 1.3"
-   *    ~>version Equivalent to ~version
-   *    1.2.x     Must match "1.2.x", where "x" is a wildcard that matches
-   *              anything
-   *    1.2.*     Similar to "1.2.x", but "*" in the trailing position is a
-   *              "greedy" wildcard, so will match any number of additional
-   *              components:
-   *              "1.2.*" will match "1.2.1", "1.2.1.1", "1.2.1.1.1" etc
-   *    *         Any version
-   *    ""        (Empty string) Same as *
-   *    v1 - v2   Equivalent to ">= v1 and <= v2"
-   *    r1 || r2  Passes if either r1 or r2 are satisfied
-   *
-   * @param {string} range
-   * @param {string} version
-   * @returns {boolean}
-   */
-  contains: function contains(range, version) {
-    return checkOrExpression(range.trim(), version.trim());
-  }
-};
-module.exports = VersionRange;
-
-/***/ }),
-
-/***/ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/camelize.js":
-/*!*****************************************************************************!*\
-  !*** ../../../js/controls/WysiwygControl/node_modules/fbjs/lib/camelize.js ***!
-  \*****************************************************************************/
-/***/ (function(module) {
-
-"use strict";
-
-
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- *
- * @typechecks
- */
-var _hyphenPattern = /-(.)/g;
-/**
- * Camelcases a hyphenated string, for example:
- *
- *   > camelize('background-color')
- *   < "backgroundColor"
- *
- * @param {string} string
- * @return {string}
- */
-
-function camelize(string) {
-  return string.replace(_hyphenPattern, function (_, character) {
-    return character.toUpperCase();
-  });
-}
-
-module.exports = camelize;
-
-/***/ }),
-
-/***/ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/containsNode.js":
-/*!*********************************************************************************!*\
-  !*** ../../../js/controls/WysiwygControl/node_modules/fbjs/lib/containsNode.js ***!
-  \*********************************************************************************/
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
-
-"use strict";
-
-
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- *
- * 
- */
-var isTextNode = __webpack_require__(/*! ./isTextNode */ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/isTextNode.js");
-/*eslint-disable no-bitwise */
-
-/**
- * Checks if a given DOM node contains or is another DOM node.
- */
-
-
-function containsNode(outerNode, innerNode) {
-  if (!outerNode || !innerNode) {
-    return false;
-  } else if (outerNode === innerNode) {
-    return true;
-  } else if (isTextNode(outerNode)) {
-    return false;
-  } else if (isTextNode(innerNode)) {
-    return containsNode(outerNode, innerNode.parentNode);
-  } else if ('contains' in outerNode) {
-    return outerNode.contains(innerNode);
-  } else if (outerNode.compareDocumentPosition) {
-    return !!(outerNode.compareDocumentPosition(innerNode) & 16);
-  } else {
-    return false;
-  }
-}
-
-module.exports = containsNode;
-
-/***/ }),
-
-/***/ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/createArrayFromMixed.js":
-/*!*****************************************************************************************!*\
-  !*** ../../../js/controls/WysiwygControl/node_modules/fbjs/lib/createArrayFromMixed.js ***!
-  \*****************************************************************************************/
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
-
-"use strict";
-
-
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- *
- * @typechecks
- */
-var invariant = __webpack_require__(/*! ./invariant */ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/invariant.js");
-/**
- * Convert array-like objects to arrays.
- *
- * This API assumes the caller knows the contents of the data type. For less
- * well defined inputs use createArrayFromMixed.
- *
- * @param {object|function|filelist} obj
- * @return {array}
- */
-
-
-function toArray(obj) {
-  var length = obj.length; // Some browsers builtin objects can report typeof 'function' (e.g. NodeList
-  // in old versions of Safari).
-
-  !(!Array.isArray(obj) && (typeof obj === 'object' || typeof obj === 'function')) ?  true ? invariant(false, 'toArray: Array-like object expected') : 0 : void 0;
-  !(typeof length === 'number') ?  true ? invariant(false, 'toArray: Object needs a length property') : 0 : void 0;
-  !(length === 0 || length - 1 in obj) ?  true ? invariant(false, 'toArray: Object should have keys for indices') : 0 : void 0;
-  !(typeof obj.callee !== 'function') ?  true ? invariant(false, 'toArray: Object can\'t be `arguments`. Use rest params ' + '(function(...args) {}) or Array.from() instead.') : 0 : void 0; // Old IE doesn't give collections access to hasOwnProperty. Assume inputs
-  // without method will throw during the slice call and skip straight to the
-  // fallback.
-
-  if (obj.hasOwnProperty) {
-    try {
-      return Array.prototype.slice.call(obj);
-    } catch (e) {// IE < 9 does not support Array#slice on collections objects
-    }
-  } // Fall back to copying key by key. This assumes all keys have a value,
-  // so will not preserve sparsely populated inputs.
-
-
-  var ret = Array(length);
-
-  for (var ii = 0; ii < length; ii++) {
-    ret[ii] = obj[ii];
-  }
-
-  return ret;
-}
-/**
- * Perform a heuristic test to determine if an object is "array-like".
- *
- *   A monk asked Joshu, a Zen master, "Has a dog Buddha nature?"
- *   Joshu replied: "Mu."
- *
- * This function determines if its argument has "array nature": it returns
- * true if the argument is an actual array, an `arguments' object, or an
- * HTMLCollection (e.g. node.childNodes or node.getElementsByTagName()).
- *
- * It will return false for other array-like objects like Filelist.
- *
- * @param {*} obj
- * @return {boolean}
- */
-
-
-function hasArrayNature(obj) {
-  return (// not null/false
-    !!obj && ( // arrays are objects, NodeLists are functions in Safari
-    typeof obj == 'object' || typeof obj == 'function') && // quacks like an array
-    'length' in obj && // not window
-    !('setInterval' in obj) && // no DOM node should be considered an array-like
-    // a 'select' element has 'length' and 'item' properties on IE8
-    typeof obj.nodeType != 'number' && ( // a real array
-    Array.isArray(obj) || // arguments
-    'callee' in obj || // HTMLCollection/NodeList
-    'item' in obj)
-  );
-}
-/**
- * Ensure that the argument is an array by wrapping it in an array if it is not.
- * Creates a copy of the argument if it is already an array.
- *
- * This is mostly useful idiomatically:
- *
- *   var createArrayFromMixed = require('createArrayFromMixed');
- *
- *   function takesOneOrMoreThings(things) {
- *     things = createArrayFromMixed(things);
- *     ...
- *   }
- *
- * This allows you to treat `things' as an array, but accept scalars in the API.
- *
- * If you need to convert an array-like object, like `arguments`, into an array
- * use toArray instead.
- *
- * @param {*} obj
- * @return {array}
- */
-
-
-function createArrayFromMixed(obj) {
-  if (!hasArrayNature(obj)) {
-    return [obj];
-  } else if (Array.isArray(obj)) {
-    return obj.slice();
-  } else {
-    return toArray(obj);
-  }
-}
-
-module.exports = createArrayFromMixed;
-
-/***/ }),
-
-/***/ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/cx.js":
-/*!***********************************************************************!*\
-  !*** ../../../js/controls/WysiwygControl/node_modules/fbjs/lib/cx.js ***!
-  \***********************************************************************/
-/***/ (function(module) {
-
-"use strict";
-
-
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- *
- */
-
-/**
- * This function is used to mark string literals representing CSS class names
- * so that they can be transformed statically. This allows for modularization
- * and minification of CSS class names.
- *
- * In static_upstream, this function is actually implemented, but it should
- * eventually be replaced with something more descriptive, and the transform
- * that is used in the main stack should be ported for use elsewhere.
- *
- * @param string|object className to modularize, or an object of key/values.
- *                      In the object case, the values are conditions that
- *                      determine if the className keys should be included.
- * @param [string ...]  Variable list of classNames in the string case.
- * @return string       Renderable space-separated CSS className.
- */
-function cx(classNames) {
-  if (typeof classNames == 'object') {
-    return Object.keys(classNames).filter(function (className) {
-      return classNames[className];
-    }).map(replace).join(' ');
-  }
-
-  return Array.prototype.map.call(arguments, replace).join(' ');
-}
-
-function replace(str) {
-  return str.replace(/\//g, '-');
-}
-
-module.exports = cx;
-
-/***/ }),
-
-/***/ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/emptyFunction.js":
-/*!**********************************************************************************!*\
-  !*** ../../../js/controls/WysiwygControl/node_modules/fbjs/lib/emptyFunction.js ***!
-  \**********************************************************************************/
-/***/ (function(module) {
-
-"use strict";
-
-
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- *
- * 
- */
-function makeEmptyFunction(arg) {
-  return function () {
-    return arg;
-  };
-}
-/**
- * This function accepts and discards inputs; it has no side effects. This is
- * primarily useful idiomatically for overridable function endpoints which
- * always need to be callable, since JS lacks a null-call idiom ala Cocoa.
- */
-
-
-var emptyFunction = function emptyFunction() {};
-
-emptyFunction.thatReturns = makeEmptyFunction;
-emptyFunction.thatReturnsFalse = makeEmptyFunction(false);
-emptyFunction.thatReturnsTrue = makeEmptyFunction(true);
-emptyFunction.thatReturnsNull = makeEmptyFunction(null);
-
-emptyFunction.thatReturnsThis = function () {
-  return this;
-};
-
-emptyFunction.thatReturnsArgument = function (arg) {
-  return arg;
-};
-
-module.exports = emptyFunction;
-
-/***/ }),
-
-/***/ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/getActiveElement.js":
-/*!*************************************************************************************!*\
-  !*** ../../../js/controls/WysiwygControl/node_modules/fbjs/lib/getActiveElement.js ***!
-  \*************************************************************************************/
-/***/ (function(module) {
-
-"use strict";
-
-
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- *
- * @typechecks
- */
-
-/* eslint-disable fb-www/typeof-undefined */
-
-/**
- * Same as document.activeElement but wraps in a try-catch block. In IE it is
- * not safe to call document.activeElement if there is nothing focused.
- *
- * The activeElement will be null only if the document or document body is not
- * yet defined.
- *
- * @param {?DOMDocument} doc Defaults to current document.
- * @return {?DOMElement}
- */
-function getActiveElement(doc)
-/*?DOMElement*/
-{
-  doc = doc || (typeof document !== 'undefined' ? document : undefined);
-
-  if (typeof doc === 'undefined') {
-    return null;
-  }
-
-  try {
-    return doc.activeElement || doc.body;
-  } catch (e) {
-    return doc.body;
-  }
-}
-
-module.exports = getActiveElement;
-
-/***/ }),
-
-/***/ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/getDocumentScrollElement.js":
-/*!*********************************************************************************************!*\
-  !*** ../../../js/controls/WysiwygControl/node_modules/fbjs/lib/getDocumentScrollElement.js ***!
-  \*********************************************************************************************/
-/***/ (function(module) {
-
-"use strict";
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- *
- * @typechecks
- */
-
-
-var isWebkit = typeof navigator !== 'undefined' && navigator.userAgent.indexOf('AppleWebKit') > -1;
-/**
- * Gets the element with the document scroll properties such as `scrollLeft` and
- * `scrollHeight`. This may differ across different browsers.
- *
- * NOTE: The return value can be null if the DOM is not yet ready.
- *
- * @param {?DOMDocument} doc Defaults to current document.
- * @return {?DOMElement}
- */
-
-function getDocumentScrollElement(doc) {
-  doc = doc || document;
-
-  if (doc.scrollingElement) {
-    return doc.scrollingElement;
-  }
-
-  return !isWebkit && doc.compatMode === 'CSS1Compat' ? doc.documentElement : doc.body;
-}
-
-module.exports = getDocumentScrollElement;
-
-/***/ }),
-
-/***/ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/getElementPosition.js":
-/*!***************************************************************************************!*\
-  !*** ../../../js/controls/WysiwygControl/node_modules/fbjs/lib/getElementPosition.js ***!
-  \***************************************************************************************/
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
-
-"use strict";
-
-
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- *
- * @typechecks
- */
-var getElementRect = __webpack_require__(/*! ./getElementRect */ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/getElementRect.js");
-/**
- * Gets an element's position in pixels relative to the viewport. The returned
- * object represents the position of the element's top left corner.
- *
- * @param {DOMElement} element
- * @return {object}
- */
-
-
-function getElementPosition(element) {
-  var rect = getElementRect(element);
-  return {
-    x: rect.left,
-    y: rect.top,
-    width: rect.right - rect.left,
-    height: rect.bottom - rect.top
-  };
-}
-
-module.exports = getElementPosition;
-
-/***/ }),
-
-/***/ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/getElementRect.js":
-/*!***********************************************************************************!*\
-  !*** ../../../js/controls/WysiwygControl/node_modules/fbjs/lib/getElementRect.js ***!
-  \***********************************************************************************/
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
-
-"use strict";
-
-
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- *
- * @typechecks
- */
-var containsNode = __webpack_require__(/*! ./containsNode */ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/containsNode.js");
-/**
- * Gets an element's bounding rect in pixels relative to the viewport.
- *
- * @param {DOMElement} elem
- * @return {object}
- */
-
-
-function getElementRect(elem) {
-  var docElem = elem.ownerDocument.documentElement; // FF 2, Safari 3 and Opera 9.5- do not support getBoundingClientRect().
-  // IE9- will throw if the element is not in the document.
-
-  if (!('getBoundingClientRect' in elem) || !containsNode(docElem, elem)) {
-    return {
-      left: 0,
-      right: 0,
-      top: 0,
-      bottom: 0
-    };
-  } // Subtracts clientTop/Left because IE8- added a 2px border to the
-  // <html> element (see http://fburl.com/1493213). IE 7 in
-  // Quicksmode does not report clientLeft/clientTop so there
-  // will be an unaccounted offset of 2px when in quirksmode
-
-
-  var rect = elem.getBoundingClientRect();
-  return {
-    left: Math.round(rect.left) - docElem.clientLeft,
-    right: Math.round(rect.right) - docElem.clientLeft,
-    top: Math.round(rect.top) - docElem.clientTop,
-    bottom: Math.round(rect.bottom) - docElem.clientTop
-  };
-}
-
-module.exports = getElementRect;
-
-/***/ }),
-
-/***/ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/getScrollPosition.js":
-/*!**************************************************************************************!*\
-  !*** ../../../js/controls/WysiwygControl/node_modules/fbjs/lib/getScrollPosition.js ***!
-  \**************************************************************************************/
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
-
-"use strict";
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- *
- * @typechecks
- */
-
-
-var getDocumentScrollElement = __webpack_require__(/*! ./getDocumentScrollElement */ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/getDocumentScrollElement.js");
-
-var getUnboundedScrollPosition = __webpack_require__(/*! ./getUnboundedScrollPosition */ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/getUnboundedScrollPosition.js");
-/**
- * Gets the scroll position of the supplied element or window.
- *
- * The return values are bounded. This means that if the scroll position is
- * negative or exceeds the element boundaries (which is possible using inertial
- * scrolling), you will get zero or the maximum scroll position, respectively.
- *
- * If you need the unbound scroll position, use `getUnboundedScrollPosition`.
- *
- * @param {DOMWindow|DOMElement} scrollable
- * @return {object} Map with `x` and `y` keys.
- */
-
-
-function getScrollPosition(scrollable) {
-  var documentScrollElement = getDocumentScrollElement(scrollable.ownerDocument || scrollable.document);
-
-  if (scrollable.Window && scrollable instanceof scrollable.Window) {
-    scrollable = documentScrollElement;
-  }
-
-  var scrollPosition = getUnboundedScrollPosition(scrollable);
-  var viewport = scrollable === documentScrollElement ? scrollable.ownerDocument.documentElement : scrollable;
-  var xMax = scrollable.scrollWidth - viewport.clientWidth;
-  var yMax = scrollable.scrollHeight - viewport.clientHeight;
-  scrollPosition.x = Math.max(0, Math.min(scrollPosition.x, xMax));
-  scrollPosition.y = Math.max(0, Math.min(scrollPosition.y, yMax));
-  return scrollPosition;
-}
-
-module.exports = getScrollPosition;
-
-/***/ }),
-
-/***/ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/getStyleProperty.js":
-/*!*************************************************************************************!*\
-  !*** ../../../js/controls/WysiwygControl/node_modules/fbjs/lib/getStyleProperty.js ***!
-  \*************************************************************************************/
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
-
-"use strict";
-
-
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- *
- * @typechecks
- */
-var camelize = __webpack_require__(/*! ./camelize */ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/camelize.js");
-
-var hyphenate = __webpack_require__(/*! ./hyphenate */ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/hyphenate.js");
-
-function asString(value)
-/*?string*/
-{
-  return value == null ? value : String(value);
-}
-
-function getStyleProperty(
-/*DOMNode*/
-node,
-/*string*/
-name)
-/*?string*/
-{
-  var computedStyle; // W3C Standard
-
-  if (window.getComputedStyle) {
-    // In certain cases such as within an iframe in FF3, this returns null.
-    computedStyle = window.getComputedStyle(node, null);
-
-    if (computedStyle) {
-      return asString(computedStyle.getPropertyValue(hyphenate(name)));
-    }
-  } // Safari
-
-
-  if (document.defaultView && document.defaultView.getComputedStyle) {
-    computedStyle = document.defaultView.getComputedStyle(node, null); // A Safari bug causes this to return null for `display: none` elements.
-
-    if (computedStyle) {
-      return asString(computedStyle.getPropertyValue(hyphenate(name)));
-    }
-
-    if (name === 'display') {
-      return 'none';
-    }
-  } // Internet Explorer
-
-
-  if (node.currentStyle) {
-    if (name === 'float') {
-      return asString(node.currentStyle.cssFloat || node.currentStyle.styleFloat);
-    }
-
-    return asString(node.currentStyle[camelize(name)]);
-  }
-
-  return asString(node.style && node.style[camelize(name)]);
-}
-
-module.exports = getStyleProperty;
-
-/***/ }),
-
-/***/ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/getUnboundedScrollPosition.js":
-/*!***********************************************************************************************!*\
-  !*** ../../../js/controls/WysiwygControl/node_modules/fbjs/lib/getUnboundedScrollPosition.js ***!
-  \***********************************************************************************************/
-/***/ (function(module) {
-
-"use strict";
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- *
- * @typechecks
- */
-
-/**
- * Gets the scroll position of the supplied element or window.
- *
- * The return values are unbounded, unlike `getScrollPosition`. This means they
- * may be negative or exceed the element boundaries (which is possible using
- * inertial scrolling).
- *
- * @param {DOMWindow|DOMElement} scrollable
- * @return {object} Map with `x` and `y` keys.
- */
-
-function getUnboundedScrollPosition(scrollable) {
-  if (scrollable.Window && scrollable instanceof scrollable.Window) {
-    return {
-      x: scrollable.pageXOffset || scrollable.document.documentElement.scrollLeft,
-      y: scrollable.pageYOffset || scrollable.document.documentElement.scrollTop
-    };
-  }
-
-  return {
-    x: scrollable.scrollLeft,
-    y: scrollable.scrollTop
-  };
-}
-
-module.exports = getUnboundedScrollPosition;
-
-/***/ }),
-
-/***/ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/getViewportDimensions.js":
-/*!******************************************************************************************!*\
-  !*** ../../../js/controls/WysiwygControl/node_modules/fbjs/lib/getViewportDimensions.js ***!
-  \******************************************************************************************/
-/***/ (function(module) {
-
-"use strict";
-
-
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- *
- * 
- * @typechecks
- */
-function getViewportWidth() {
-  var width;
-
-  if (document.documentElement) {
-    width = document.documentElement.clientWidth;
-  }
-
-  if (!width && document.body) {
-    width = document.body.clientWidth;
-  }
-
-  return width || 0;
-}
-
-function getViewportHeight() {
-  var height;
-
-  if (document.documentElement) {
-    height = document.documentElement.clientHeight;
-  }
-
-  if (!height && document.body) {
-    height = document.body.clientHeight;
-  }
-
-  return height || 0;
-}
-/**
- * Gets the viewport dimensions including any scrollbars.
- */
-
-
-function getViewportDimensions() {
-  return {
-    width: window.innerWidth || getViewportWidth(),
-    height: window.innerHeight || getViewportHeight()
-  };
-}
-/**
- * Gets the viewport dimensions excluding any scrollbars.
- */
-
-
-getViewportDimensions.withoutScrollbars = function () {
-  return {
-    width: getViewportWidth(),
-    height: getViewportHeight()
-  };
-};
-
-module.exports = getViewportDimensions;
-
-/***/ }),
-
-/***/ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/hyphenate.js":
-/*!******************************************************************************!*\
-  !*** ../../../js/controls/WysiwygControl/node_modules/fbjs/lib/hyphenate.js ***!
-  \******************************************************************************/
-/***/ (function(module) {
-
-"use strict";
-
-
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- *
- * @typechecks
- */
-var _uppercasePattern = /([A-Z])/g;
-/**
- * Hyphenates a camelcased string, for example:
- *
- *   > hyphenate('backgroundColor')
- *   < "background-color"
- *
- * For CSS style names, use `hyphenateStyleName` instead which works properly
- * with all vendor prefixes, including `ms`.
- *
- * @param {string} string
- * @return {string}
- */
-
-function hyphenate(string) {
-  return string.replace(_uppercasePattern, '-$1').toLowerCase();
-}
-
-module.exports = hyphenate;
-
-/***/ }),
-
-/***/ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/invariant.js":
-/*!******************************************************************************!*\
-  !*** ../../../js/controls/WysiwygControl/node_modules/fbjs/lib/invariant.js ***!
-  \******************************************************************************/
-/***/ (function(module) {
-
-"use strict";
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- *
- * 
- */
-
-
-var validateFormat =  true ? function (format) {
-  if (format === undefined) {
-    throw new Error('invariant(...): Second argument must be a string.');
-  }
-} : 0;
-/**
- * Use invariant() to assert state which your program assumes to be true.
- *
- * Provide sprintf-style format (only %s is supported) and arguments to provide
- * information about what broke and what you were expecting.
- *
- * The invariant message will be stripped in production, but the invariant will
- * remain to ensure logic does not differ in production.
- */
-
-function invariant(condition, format) {
-  for (var _len = arguments.length, args = new Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
-    args[_key - 2] = arguments[_key];
-  }
-
-  validateFormat(format);
-
-  if (!condition) {
-    var error;
-
-    if (format === undefined) {
-      error = new Error('Minified exception occurred; use the non-minified dev environment ' + 'for the full error message and additional helpful warnings.');
-    } else {
-      var argIndex = 0;
-      error = new Error(format.replace(/%s/g, function () {
-        return String(args[argIndex++]);
-      }));
-      error.name = 'Invariant Violation';
-    }
-
-    error.framesToPop = 1; // Skip invariant's own stack frame.
-
-    throw error;
-  }
-}
-
-module.exports = invariant;
-
-/***/ }),
-
-/***/ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/isNode.js":
-/*!***************************************************************************!*\
-  !*** ../../../js/controls/WysiwygControl/node_modules/fbjs/lib/isNode.js ***!
-  \***************************************************************************/
-/***/ (function(module) {
-
-"use strict";
-
-
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- *
- * @typechecks
- */
-
-/**
- * @param {*} object The object to check.
- * @return {boolean} Whether or not the object is a DOM node.
- */
-function isNode(object) {
-  var doc = object ? object.ownerDocument || object : document;
-  var defaultView = doc.defaultView || window;
-  return !!(object && (typeof defaultView.Node === 'function' ? object instanceof defaultView.Node : typeof object === 'object' && typeof object.nodeType === 'number' && typeof object.nodeName === 'string'));
-}
-
-module.exports = isNode;
-
-/***/ }),
-
-/***/ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/isTextNode.js":
-/*!*******************************************************************************!*\
-  !*** ../../../js/controls/WysiwygControl/node_modules/fbjs/lib/isTextNode.js ***!
-  \*******************************************************************************/
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
-
-"use strict";
-
-
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- *
- * @typechecks
- */
-var isNode = __webpack_require__(/*! ./isNode */ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/isNode.js");
-/**
- * @param {*} object The object to check.
- * @return {boolean} Whether or not the object is a DOM text node.
- */
-
-
-function isTextNode(object) {
-  return isNode(object) && object.nodeType == 3;
-}
-
-module.exports = isTextNode;
-
-/***/ }),
-
-/***/ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/joinClasses.js":
-/*!********************************************************************************!*\
-  !*** ../../../js/controls/WysiwygControl/node_modules/fbjs/lib/joinClasses.js ***!
-  \********************************************************************************/
-/***/ (function(module) {
-
-"use strict";
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- *
- * 
- * @typechecks static-only
- */
-
-/**
- * Combines multiple className strings into one.
- */
-
-function joinClasses(className) {
-  var newClassName = className || '';
-  var argLength = arguments.length;
-
-  if (argLength > 1) {
-    for (var index = 1; index < argLength; index++) {
-      var nextClass = arguments[index];
-
-      if (nextClass) {
-        newClassName = (newClassName ? newClassName + ' ' : '') + nextClass;
-      }
-    }
-  }
-
-  return newClassName;
-}
-
-module.exports = joinClasses;
-
-/***/ }),
-
-/***/ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/mapObject.js":
-/*!******************************************************************************!*\
-  !*** ../../../js/controls/WysiwygControl/node_modules/fbjs/lib/mapObject.js ***!
-  \******************************************************************************/
-/***/ (function(module) {
-
-"use strict";
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- *
- */
-
-
-var hasOwnProperty = Object.prototype.hasOwnProperty;
-/**
- * Executes the provided `callback` once for each enumerable own property in the
- * object and constructs a new object from the results. The `callback` is
- * invoked with three arguments:
- *
- *  - the property value
- *  - the property name
- *  - the object being traversed
- *
- * Properties that are added after the call to `mapObject` will not be visited
- * by `callback`. If the values of existing properties are changed, the value
- * passed to `callback` will be the value at the time `mapObject` visits them.
- * Properties that are deleted before being visited are not visited.
- *
- * @grep function objectMap()
- * @grep function objMap()
- *
- * @param {?object} object
- * @param {function} callback
- * @param {*} context
- * @return {?object}
- */
-
-function mapObject(object, callback, context) {
-  if (!object) {
-    return null;
-  }
-
-  var result = {};
-
-  for (var name in object) {
-    if (hasOwnProperty.call(object, name)) {
-      result[name] = callback.call(context, object[name], name, object);
-    }
-  }
-
-  return result;
-}
-
-module.exports = mapObject;
-
-/***/ }),
-
-/***/ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/memoizeStringOnly.js":
-/*!**************************************************************************************!*\
-  !*** ../../../js/controls/WysiwygControl/node_modules/fbjs/lib/memoizeStringOnly.js ***!
-  \**************************************************************************************/
-/***/ (function(module) {
-
-"use strict";
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- *
- * 
- * @typechecks static-only
- */
-
-/**
- * Memoizes the return value of a function that accepts one string argument.
- */
-
-function memoizeStringOnly(callback) {
-  var cache = {};
-  return function (string) {
-    if (!cache.hasOwnProperty(string)) {
-      cache[string] = callback.call(this, string);
-    }
-
-    return cache[string];
-  };
-}
-
-module.exports = memoizeStringOnly;
-
-/***/ }),
-
-/***/ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/nullthrows.js":
-/*!*******************************************************************************!*\
-  !*** ../../../js/controls/WysiwygControl/node_modules/fbjs/lib/nullthrows.js ***!
-  \*******************************************************************************/
-/***/ (function(module) {
-
-"use strict";
-
-
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- *
- * 
- */
-var nullthrows = function nullthrows(x) {
-  if (x != null) {
-    return x;
-  }
-
-  throw new Error("Got unexpected null or undefined");
-};
-
-module.exports = nullthrows;
-
-/***/ }),
-
-/***/ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/setImmediate.js":
-/*!*********************************************************************************!*\
-  !*** ../../../js/controls/WysiwygControl/node_modules/fbjs/lib/setImmediate.js ***!
-  \*********************************************************************************/
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
-
-"use strict";
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- *
- */
- // setimmediate adds setImmediate to the global. We want to make sure we export
-// the actual function.
-
-__webpack_require__(/*! setimmediate */ "../../../js/controls/WysiwygControl/node_modules/setimmediate/setImmediate.js");
-
-module.exports = __webpack_require__.g.setImmediate;
-
-/***/ }),
-
-/***/ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/warning.js":
-/*!****************************************************************************!*\
-  !*** ../../../js/controls/WysiwygControl/node_modules/fbjs/lib/warning.js ***!
-  \****************************************************************************/
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
-
-"use strict";
-/**
- * Copyright (c) 2014-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- *
- */
-
-
-var emptyFunction = __webpack_require__(/*! ./emptyFunction */ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/emptyFunction.js");
-/**
- * Similar to invariant but only logs a warning if the condition is not met.
- * This can be used to log issues in development environments in critical
- * paths. Removing the logging code for production environments will keep the
- * same logic and follow the same code paths.
- */
-
-
-function printWarning(format) {
-  for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-    args[_key - 1] = arguments[_key];
-  }
-
-  var argIndex = 0;
-  var message = 'Warning: ' + format.replace(/%s/g, function () {
-    return args[argIndex++];
-  });
-
-  if (typeof console !== 'undefined') {
-    console.error(message);
-  }
-
-  try {
-    // --- Welcome to debugging React ---
-    // This error was thrown as a convenience so that you can use this stack
-    // to find the callsite that caused this warning to fire.
-    throw new Error(message);
-  } catch (x) {}
-}
-
-var warning =  true ? function (condition, format) {
-  if (format === undefined) {
-    throw new Error('`warning(condition, format, ...args)` requires a warning ' + 'message argument');
-  }
-
-  if (!condition) {
-    for (var _len2 = arguments.length, args = new Array(_len2 > 2 ? _len2 - 2 : 0), _key2 = 2; _key2 < _len2; _key2++) {
-      args[_key2 - 2] = arguments[_key2];
-    }
-
-    printWarning.apply(void 0, [format].concat(args));
-  }
-} : 0;
-module.exports = warning;
-
-/***/ }),
-
-/***/ "../../../js/controls/WysiwygControl/node_modules/immutable/dist/immutable.js":
-/*!************************************************************************************!*\
-  !*** ../../../js/controls/WysiwygControl/node_modules/immutable/dist/immutable.js ***!
-  \************************************************************************************/
+/***/ "../../../js/controls/WysiwygControl/node_modules/draft-js/node_modules/immutable/dist/immutable.js":
+/*!**********************************************************************************************************!*\
+  !*** ../../../js/controls/WysiwygControl/node_modules/draft-js/node_modules/immutable/dist/immutable.js ***!
+  \**********************************************************************************************************/
 /***/ (function(module) {
 
 /**
@@ -24614,6 +27509,3098 @@ module.exports = warning;
   return Immutable;
 
 }));
+
+/***/ }),
+
+/***/ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/DataTransfer.js":
+/*!*********************************************************************************!*\
+  !*** ../../../js/controls/WysiwygControl/node_modules/fbjs/lib/DataTransfer.js ***!
+  \*********************************************************************************/
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+"use strict";
+
+
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ * @typechecks
+ */
+var PhotosMimeType = __webpack_require__(/*! ./PhotosMimeType */ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/PhotosMimeType.js");
+
+var createArrayFromMixed = __webpack_require__(/*! ./createArrayFromMixed */ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/createArrayFromMixed.js");
+
+var emptyFunction = __webpack_require__(/*! ./emptyFunction */ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/emptyFunction.js");
+
+var CR_LF_REGEX = new RegExp("\r\n", 'g');
+var LF_ONLY = "\n";
+var RICH_TEXT_TYPES = {
+  'text/rtf': 1,
+  'text/html': 1
+};
+/**
+ * If DataTransferItem is a file then return the Blob of data.
+ *
+ * @param {object} item
+ * @return {?blob}
+ */
+
+function getFileFromDataTransfer(item) {
+  if (item.kind == 'file') {
+    return item.getAsFile();
+  }
+}
+
+var DataTransfer =
+/*#__PURE__*/
+function () {
+  /**
+   * @param {object} data
+   */
+  function DataTransfer(data) {
+    this.data = data; // Types could be DOMStringList or array
+
+    this.types = data.types ? createArrayFromMixed(data.types) : [];
+  }
+  /**
+   * Is this likely to be a rich text data transfer?
+   *
+   * @return {boolean}
+   */
+
+
+  var _proto = DataTransfer.prototype;
+
+  _proto.isRichText = function isRichText() {
+    // If HTML is available, treat this data as rich text. This way, we avoid
+    // using a pasted image if it is packaged with HTML -- this may occur with
+    // pastes from MS Word, for example.  However this is only rich text if
+    // there's accompanying text.
+    if (this.getHTML() && this.getText()) {
+      return true;
+    } // When an image is copied from a preview window, you end up with two
+    // DataTransferItems one of which is a file's metadata as text.  Skip those.
+
+
+    if (this.isImage()) {
+      return false;
+    }
+
+    return this.types.some(function (type) {
+      return RICH_TEXT_TYPES[type];
+    });
+  };
+  /**
+   * Get raw text.
+   *
+   * @return {?string}
+   */
+
+
+  _proto.getText = function getText() {
+    var text;
+
+    if (this.data.getData) {
+      if (!this.types.length) {
+        text = this.data.getData('Text');
+      } else if (this.types.indexOf('text/plain') != -1) {
+        text = this.data.getData('text/plain');
+      }
+    }
+
+    return text ? text.replace(CR_LF_REGEX, LF_ONLY) : null;
+  };
+  /**
+   * Get HTML paste data
+   *
+   * @return {?string}
+   */
+
+
+  _proto.getHTML = function getHTML() {
+    if (this.data.getData) {
+      if (!this.types.length) {
+        return this.data.getData('Text');
+      } else if (this.types.indexOf('text/html') != -1) {
+        return this.data.getData('text/html');
+      }
+    }
+  };
+  /**
+   * Is this a link data transfer?
+   *
+   * @return {boolean}
+   */
+
+
+  _proto.isLink = function isLink() {
+    return this.types.some(function (type) {
+      return type.indexOf('Url') != -1 || type.indexOf('text/uri-list') != -1 || type.indexOf('text/x-moz-url');
+    });
+  };
+  /**
+   * Get a link url.
+   *
+   * @return {?string}
+   */
+
+
+  _proto.getLink = function getLink() {
+    if (this.data.getData) {
+      if (this.types.indexOf('text/x-moz-url') != -1) {
+        var url = this.data.getData('text/x-moz-url').split('\n');
+        return url[0];
+      }
+
+      return this.types.indexOf('text/uri-list') != -1 ? this.data.getData('text/uri-list') : this.data.getData('url');
+    }
+
+    return null;
+  };
+  /**
+   * Is this an image data transfer?
+   *
+   * @return {boolean}
+   */
+
+
+  _proto.isImage = function isImage() {
+    var isImage = this.types.some(function (type) {
+      // Firefox will have a type of application/x-moz-file for images during
+      // dragging
+      return type.indexOf('application/x-moz-file') != -1;
+    });
+
+    if (isImage) {
+      return true;
+    }
+
+    var items = this.getFiles();
+
+    for (var i = 0; i < items.length; i++) {
+      var type = items[i].type;
+
+      if (!PhotosMimeType.isImage(type)) {
+        return false;
+      }
+    }
+
+    return true;
+  };
+
+  _proto.getCount = function getCount() {
+    if (this.data.hasOwnProperty('items')) {
+      return this.data.items.length;
+    } else if (this.data.hasOwnProperty('mozItemCount')) {
+      return this.data.mozItemCount;
+    } else if (this.data.files) {
+      return this.data.files.length;
+    }
+
+    return null;
+  };
+  /**
+   * Get files.
+   *
+   * @return {array}
+   */
+
+
+  _proto.getFiles = function getFiles() {
+    if (this.data.items) {
+      // createArrayFromMixed doesn't properly handle DataTransferItemLists.
+      return Array.prototype.slice.call(this.data.items).map(getFileFromDataTransfer).filter(emptyFunction.thatReturnsArgument);
+    } else if (this.data.files) {
+      return Array.prototype.slice.call(this.data.files);
+    } else {
+      return [];
+    }
+  };
+  /**
+   * Are there any files to fetch?
+   *
+   * @return {boolean}
+   */
+
+
+  _proto.hasFiles = function hasFiles() {
+    return this.getFiles().length > 0;
+  };
+
+  return DataTransfer;
+}();
+
+module.exports = DataTransfer;
+
+/***/ }),
+
+/***/ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/Keys.js":
+/*!*************************************************************************!*\
+  !*** ../../../js/controls/WysiwygControl/node_modules/fbjs/lib/Keys.js ***!
+  \*************************************************************************/
+/***/ (function(module) {
+
+"use strict";
+
+
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ */
+module.exports = {
+  BACKSPACE: 8,
+  TAB: 9,
+  RETURN: 13,
+  ALT: 18,
+  ESC: 27,
+  SPACE: 32,
+  PAGE_UP: 33,
+  PAGE_DOWN: 34,
+  END: 35,
+  HOME: 36,
+  LEFT: 37,
+  UP: 38,
+  RIGHT: 39,
+  DOWN: 40,
+  DELETE: 46,
+  COMMA: 188,
+  PERIOD: 190,
+  A: 65,
+  Z: 90,
+  ZERO: 48,
+  NUMPAD_0: 96,
+  NUMPAD_9: 105
+};
+
+/***/ }),
+
+/***/ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/PhotosMimeType.js":
+/*!***********************************************************************************!*\
+  !*** ../../../js/controls/WysiwygControl/node_modules/fbjs/lib/PhotosMimeType.js ***!
+  \***********************************************************************************/
+/***/ (function(module) {
+
+"use strict";
+
+
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ */
+var PhotosMimeType = {
+  isImage: function isImage(mimeString) {
+    return getParts(mimeString)[0] === 'image';
+  },
+  isJpeg: function isJpeg(mimeString) {
+    var parts = getParts(mimeString);
+    return PhotosMimeType.isImage(mimeString) && ( // see http://fburl.com/10972194
+    parts[1] === 'jpeg' || parts[1] === 'pjpeg');
+  }
+};
+
+function getParts(mimeString) {
+  return mimeString.split('/');
+}
+
+module.exports = PhotosMimeType;
+
+/***/ }),
+
+/***/ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/Scroll.js":
+/*!***************************************************************************!*\
+  !*** ../../../js/controls/WysiwygControl/node_modules/fbjs/lib/Scroll.js ***!
+  \***************************************************************************/
+/***/ (function(module) {
+
+"use strict";
+
+
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ */
+
+/**
+ * @param {DOMElement} element
+ * @param {DOMDocument} doc
+ * @return {boolean}
+ */
+function _isViewportScrollElement(element, doc) {
+  return !!doc && (element === doc.documentElement || element === doc.body);
+}
+/**
+ * Scroll Module. This class contains 4 simple static functions
+ * to be used to access Element.scrollTop/scrollLeft properties.
+ * To solve the inconsistencies between browsers when either
+ * document.body or document.documentElement is supplied,
+ * below logic will be used to alleviate the issue:
+ *
+ * 1. If 'element' is either 'document.body' or 'document.documentElement,
+ *    get whichever element's 'scroll{Top,Left}' is larger.
+ * 2. If 'element' is either 'document.body' or 'document.documentElement',
+ *    set the 'scroll{Top,Left}' on both elements.
+ */
+
+
+var Scroll = {
+  /**
+   * @param {DOMElement} element
+   * @return {number}
+   */
+  getTop: function getTop(element) {
+    var doc = element.ownerDocument;
+    return _isViewportScrollElement(element, doc) ? // In practice, they will either both have the same value,
+    // or one will be zero and the other will be the scroll position
+    // of the viewport. So we can use `X || Y` instead of `Math.max(X, Y)`
+    doc.body.scrollTop || doc.documentElement.scrollTop : element.scrollTop;
+  },
+
+  /**
+   * @param {DOMElement} element
+   * @param {number} newTop
+   */
+  setTop: function setTop(element, newTop) {
+    var doc = element.ownerDocument;
+
+    if (_isViewportScrollElement(element, doc)) {
+      doc.body.scrollTop = doc.documentElement.scrollTop = newTop;
+    } else {
+      element.scrollTop = newTop;
+    }
+  },
+
+  /**
+   * @param {DOMElement} element
+   * @return {number}
+   */
+  getLeft: function getLeft(element) {
+    var doc = element.ownerDocument;
+    return _isViewportScrollElement(element, doc) ? doc.body.scrollLeft || doc.documentElement.scrollLeft : element.scrollLeft;
+  },
+
+  /**
+   * @param {DOMElement} element
+   * @param {number} newLeft
+   */
+  setLeft: function setLeft(element, newLeft) {
+    var doc = element.ownerDocument;
+
+    if (_isViewportScrollElement(element, doc)) {
+      doc.body.scrollLeft = doc.documentElement.scrollLeft = newLeft;
+    } else {
+      element.scrollLeft = newLeft;
+    }
+  }
+};
+module.exports = Scroll;
+
+/***/ }),
+
+/***/ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/Style.js":
+/*!**************************************************************************!*\
+  !*** ../../../js/controls/WysiwygControl/node_modules/fbjs/lib/Style.js ***!
+  \**************************************************************************/
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+"use strict";
+
+
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ * @typechecks
+ */
+var getStyleProperty = __webpack_require__(/*! ./getStyleProperty */ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/getStyleProperty.js");
+/**
+ * @param {DOMNode} element [description]
+ * @param {string} name Overflow style property name.
+ * @return {boolean} True if the supplied ndoe is scrollable.
+ */
+
+
+function _isNodeScrollable(element, name) {
+  var overflow = Style.get(element, name);
+  return overflow === 'auto' || overflow === 'scroll';
+}
+/**
+ * Utilities for querying and mutating style properties.
+ */
+
+
+var Style = {
+  /**
+   * Gets the style property for the supplied node. This will return either the
+   * computed style, if available, or the declared style.
+   *
+   * @param {DOMNode} node
+   * @param {string} name Style property name.
+   * @return {?string} Style property value.
+   */
+  get: getStyleProperty,
+
+  /**
+   * Determines the nearest ancestor of a node that is scrollable.
+   *
+   * NOTE: This can be expensive if used repeatedly or on a node nested deeply.
+   *
+   * @param {?DOMNode} node Node from which to start searching.
+   * @return {?DOMWindow|DOMElement} Scroll parent of the supplied node.
+   */
+  getScrollParent: function getScrollParent(node) {
+    if (!node) {
+      return null;
+    }
+
+    var ownerDocument = node.ownerDocument;
+
+    while (node && node !== ownerDocument.body) {
+      if (_isNodeScrollable(node, 'overflow') || _isNodeScrollable(node, 'overflowY') || _isNodeScrollable(node, 'overflowX')) {
+        return node;
+      }
+
+      node = node.parentNode;
+    }
+
+    return ownerDocument.defaultView || ownerDocument.parentWindow;
+  }
+};
+module.exports = Style;
+
+/***/ }),
+
+/***/ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/TokenizeUtil.js":
+/*!*********************************************************************************!*\
+  !*** ../../../js/controls/WysiwygControl/node_modules/fbjs/lib/TokenizeUtil.js ***!
+  \*********************************************************************************/
+/***/ (function(module) {
+
+"use strict";
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ * @typechecks
+ * @stub
+ * 
+ */
+ // \u00a1-\u00b1\u00b4-\u00b8\u00ba\u00bb\u00bf
+//             is latin supplement punctuation except fractions and superscript
+//             numbers
+// \u2010-\u2027\u2030-\u205e
+//             is punctuation from the general punctuation block:
+//             weird quotes, commas, bullets, dashes, etc.
+// \u30fb\u3001\u3002\u3008-\u3011\u3014-\u301f
+//             is CJK punctuation
+// \uff1a-\uff1f\uff01-\uff0f\uff3b-\uff40\uff5b-\uff65
+//             is some full-width/half-width punctuation
+// \u2E2E\u061f\u066a-\u066c\u061b\u060c\u060d\uFD3e\uFD3F
+//             is some Arabic punctuation marks
+// \u1801\u0964\u104a\u104b
+//             is misc. other language punctuation marks
+
+var PUNCTUATION = '[.,+*?$|#{}()\'\\^\\-\\[\\]\\\\\\/!@%"~=<>_:;' + "\u30FB\u3001\u3002\u3008-\u3011\u3014-\u301F\uFF1A-\uFF1F\uFF01-\uFF0F" + "\uFF3B-\uFF40\uFF5B-\uFF65\u2E2E\u061F\u066A-\u066C\u061B\u060C\u060D" + "\uFD3E\uFD3F\u1801\u0964\u104A\u104B\u2010-\u2027\u2030-\u205E" + "\xA1-\xB1\xB4-\xB8\xBA\xBB\xBF]";
+module.exports = {
+  getPunctuation: function getPunctuation() {
+    return PUNCTUATION;
+  }
+};
+
+/***/ }),
+
+/***/ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/URI.js":
+/*!************************************************************************!*\
+  !*** ../../../js/controls/WysiwygControl/node_modules/fbjs/lib/URI.js ***!
+  \************************************************************************/
+/***/ (function(module) {
+
+"use strict";
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ * 
+ */
+
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var URI =
+/*#__PURE__*/
+function () {
+  function URI(uri) {
+    _defineProperty(this, "_uri", void 0);
+
+    this._uri = uri;
+  }
+
+  var _proto = URI.prototype;
+
+  _proto.toString = function toString() {
+    return this._uri;
+  };
+
+  return URI;
+}();
+
+module.exports = URI;
+
+/***/ }),
+
+/***/ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/UnicodeBidi.js":
+/*!********************************************************************************!*\
+  !*** ../../../js/controls/WysiwygControl/node_modules/fbjs/lib/UnicodeBidi.js ***!
+  \********************************************************************************/
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+"use strict";
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ * @typechecks
+ * 
+ */
+
+/**
+ * Basic (stateless) API for text direction detection
+ *
+ * Part of our implementation of Unicode Bidirectional Algorithm (UBA)
+ * Unicode Standard Annex #9 (UAX9)
+ * http://www.unicode.org/reports/tr9/
+ */
+
+
+var UnicodeBidiDirection = __webpack_require__(/*! ./UnicodeBidiDirection */ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/UnicodeBidiDirection.js");
+
+var invariant = __webpack_require__(/*! ./invariant */ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/invariant.js");
+
+/**
+ * RegExp ranges of characters with a *Strong* Bidi_Class value.
+ *
+ * Data is based on DerivedBidiClass.txt in UCD version 7.0.0.
+ *
+ * NOTE: For performance reasons, we only support Unicode's
+ *       Basic Multilingual Plane (BMP) for now.
+ */
+var RANGE_BY_BIDI_TYPE = {
+  L: "A-Za-z\xAA\xB5\xBA\xC0-\xD6\xD8-\xF6\xF8-\u01BA\u01BB" + "\u01BC-\u01BF\u01C0-\u01C3\u01C4-\u0293\u0294\u0295-\u02AF\u02B0-\u02B8" + "\u02BB-\u02C1\u02D0-\u02D1\u02E0-\u02E4\u02EE\u0370-\u0373\u0376-\u0377" + "\u037A\u037B-\u037D\u037F\u0386\u0388-\u038A\u038C\u038E-\u03A1" + "\u03A3-\u03F5\u03F7-\u0481\u0482\u048A-\u052F\u0531-\u0556\u0559" + "\u055A-\u055F\u0561-\u0587\u0589\u0903\u0904-\u0939\u093B\u093D" + "\u093E-\u0940\u0949-\u094C\u094E-\u094F\u0950\u0958-\u0961\u0964-\u0965" + "\u0966-\u096F\u0970\u0971\u0972-\u0980\u0982-\u0983\u0985-\u098C" + "\u098F-\u0990\u0993-\u09A8\u09AA-\u09B0\u09B2\u09B6-\u09B9\u09BD" + "\u09BE-\u09C0\u09C7-\u09C8\u09CB-\u09CC\u09CE\u09D7\u09DC-\u09DD" + "\u09DF-\u09E1\u09E6-\u09EF\u09F0-\u09F1\u09F4-\u09F9\u09FA\u0A03" + "\u0A05-\u0A0A\u0A0F-\u0A10\u0A13-\u0A28\u0A2A-\u0A30\u0A32-\u0A33" + "\u0A35-\u0A36\u0A38-\u0A39\u0A3E-\u0A40\u0A59-\u0A5C\u0A5E\u0A66-\u0A6F" + "\u0A72-\u0A74\u0A83\u0A85-\u0A8D\u0A8F-\u0A91\u0A93-\u0AA8\u0AAA-\u0AB0" + "\u0AB2-\u0AB3\u0AB5-\u0AB9\u0ABD\u0ABE-\u0AC0\u0AC9\u0ACB-\u0ACC\u0AD0" + "\u0AE0-\u0AE1\u0AE6-\u0AEF\u0AF0\u0B02-\u0B03\u0B05-\u0B0C\u0B0F-\u0B10" + "\u0B13-\u0B28\u0B2A-\u0B30\u0B32-\u0B33\u0B35-\u0B39\u0B3D\u0B3E\u0B40" + "\u0B47-\u0B48\u0B4B-\u0B4C\u0B57\u0B5C-\u0B5D\u0B5F-\u0B61\u0B66-\u0B6F" + "\u0B70\u0B71\u0B72-\u0B77\u0B83\u0B85-\u0B8A\u0B8E-\u0B90\u0B92-\u0B95" + "\u0B99-\u0B9A\u0B9C\u0B9E-\u0B9F\u0BA3-\u0BA4\u0BA8-\u0BAA\u0BAE-\u0BB9" + "\u0BBE-\u0BBF\u0BC1-\u0BC2\u0BC6-\u0BC8\u0BCA-\u0BCC\u0BD0\u0BD7" + "\u0BE6-\u0BEF\u0BF0-\u0BF2\u0C01-\u0C03\u0C05-\u0C0C\u0C0E-\u0C10" + "\u0C12-\u0C28\u0C2A-\u0C39\u0C3D\u0C41-\u0C44\u0C58-\u0C59\u0C60-\u0C61" + "\u0C66-\u0C6F\u0C7F\u0C82-\u0C83\u0C85-\u0C8C\u0C8E-\u0C90\u0C92-\u0CA8" + "\u0CAA-\u0CB3\u0CB5-\u0CB9\u0CBD\u0CBE\u0CBF\u0CC0-\u0CC4\u0CC6" + "\u0CC7-\u0CC8\u0CCA-\u0CCB\u0CD5-\u0CD6\u0CDE\u0CE0-\u0CE1\u0CE6-\u0CEF" + "\u0CF1-\u0CF2\u0D02-\u0D03\u0D05-\u0D0C\u0D0E-\u0D10\u0D12-\u0D3A\u0D3D" + "\u0D3E-\u0D40\u0D46-\u0D48\u0D4A-\u0D4C\u0D4E\u0D57\u0D60-\u0D61" + "\u0D66-\u0D6F\u0D70-\u0D75\u0D79\u0D7A-\u0D7F\u0D82-\u0D83\u0D85-\u0D96" + "\u0D9A-\u0DB1\u0DB3-\u0DBB\u0DBD\u0DC0-\u0DC6\u0DCF-\u0DD1\u0DD8-\u0DDF" + "\u0DE6-\u0DEF\u0DF2-\u0DF3\u0DF4\u0E01-\u0E30\u0E32-\u0E33\u0E40-\u0E45" + "\u0E46\u0E4F\u0E50-\u0E59\u0E5A-\u0E5B\u0E81-\u0E82\u0E84\u0E87-\u0E88" + "\u0E8A\u0E8D\u0E94-\u0E97\u0E99-\u0E9F\u0EA1-\u0EA3\u0EA5\u0EA7" + "\u0EAA-\u0EAB\u0EAD-\u0EB0\u0EB2-\u0EB3\u0EBD\u0EC0-\u0EC4\u0EC6" + "\u0ED0-\u0ED9\u0EDC-\u0EDF\u0F00\u0F01-\u0F03\u0F04-\u0F12\u0F13\u0F14" + "\u0F15-\u0F17\u0F1A-\u0F1F\u0F20-\u0F29\u0F2A-\u0F33\u0F34\u0F36\u0F38" + "\u0F3E-\u0F3F\u0F40-\u0F47\u0F49-\u0F6C\u0F7F\u0F85\u0F88-\u0F8C" + "\u0FBE-\u0FC5\u0FC7-\u0FCC\u0FCE-\u0FCF\u0FD0-\u0FD4\u0FD5-\u0FD8" + "\u0FD9-\u0FDA\u1000-\u102A\u102B-\u102C\u1031\u1038\u103B-\u103C\u103F" + "\u1040-\u1049\u104A-\u104F\u1050-\u1055\u1056-\u1057\u105A-\u105D\u1061" + "\u1062-\u1064\u1065-\u1066\u1067-\u106D\u106E-\u1070\u1075-\u1081" + "\u1083-\u1084\u1087-\u108C\u108E\u108F\u1090-\u1099\u109A-\u109C" + "\u109E-\u109F\u10A0-\u10C5\u10C7\u10CD\u10D0-\u10FA\u10FB\u10FC" + "\u10FD-\u1248\u124A-\u124D\u1250-\u1256\u1258\u125A-\u125D\u1260-\u1288" + "\u128A-\u128D\u1290-\u12B0\u12B2-\u12B5\u12B8-\u12BE\u12C0\u12C2-\u12C5" + "\u12C8-\u12D6\u12D8-\u1310\u1312-\u1315\u1318-\u135A\u1360-\u1368" + "\u1369-\u137C\u1380-\u138F\u13A0-\u13F4\u1401-\u166C\u166D-\u166E" + "\u166F-\u167F\u1681-\u169A\u16A0-\u16EA\u16EB-\u16ED\u16EE-\u16F0" + "\u16F1-\u16F8\u1700-\u170C\u170E-\u1711\u1720-\u1731\u1735-\u1736" + "\u1740-\u1751\u1760-\u176C\u176E-\u1770\u1780-\u17B3\u17B6\u17BE-\u17C5" + "\u17C7-\u17C8\u17D4-\u17D6\u17D7\u17D8-\u17DA\u17DC\u17E0-\u17E9" + "\u1810-\u1819\u1820-\u1842\u1843\u1844-\u1877\u1880-\u18A8\u18AA" + "\u18B0-\u18F5\u1900-\u191E\u1923-\u1926\u1929-\u192B\u1930-\u1931" + "\u1933-\u1938\u1946-\u194F\u1950-\u196D\u1970-\u1974\u1980-\u19AB" + "\u19B0-\u19C0\u19C1-\u19C7\u19C8-\u19C9\u19D0-\u19D9\u19DA\u1A00-\u1A16" + "\u1A19-\u1A1A\u1A1E-\u1A1F\u1A20-\u1A54\u1A55\u1A57\u1A61\u1A63-\u1A64" + "\u1A6D-\u1A72\u1A80-\u1A89\u1A90-\u1A99\u1AA0-\u1AA6\u1AA7\u1AA8-\u1AAD" + "\u1B04\u1B05-\u1B33\u1B35\u1B3B\u1B3D-\u1B41\u1B43-\u1B44\u1B45-\u1B4B" + "\u1B50-\u1B59\u1B5A-\u1B60\u1B61-\u1B6A\u1B74-\u1B7C\u1B82\u1B83-\u1BA0" + "\u1BA1\u1BA6-\u1BA7\u1BAA\u1BAE-\u1BAF\u1BB0-\u1BB9\u1BBA-\u1BE5\u1BE7" + "\u1BEA-\u1BEC\u1BEE\u1BF2-\u1BF3\u1BFC-\u1BFF\u1C00-\u1C23\u1C24-\u1C2B" + "\u1C34-\u1C35\u1C3B-\u1C3F\u1C40-\u1C49\u1C4D-\u1C4F\u1C50-\u1C59" + "\u1C5A-\u1C77\u1C78-\u1C7D\u1C7E-\u1C7F\u1CC0-\u1CC7\u1CD3\u1CE1" + "\u1CE9-\u1CEC\u1CEE-\u1CF1\u1CF2-\u1CF3\u1CF5-\u1CF6\u1D00-\u1D2B" + "\u1D2C-\u1D6A\u1D6B-\u1D77\u1D78\u1D79-\u1D9A\u1D9B-\u1DBF\u1E00-\u1F15" + "\u1F18-\u1F1D\u1F20-\u1F45\u1F48-\u1F4D\u1F50-\u1F57\u1F59\u1F5B\u1F5D" + "\u1F5F-\u1F7D\u1F80-\u1FB4\u1FB6-\u1FBC\u1FBE\u1FC2-\u1FC4\u1FC6-\u1FCC" + "\u1FD0-\u1FD3\u1FD6-\u1FDB\u1FE0-\u1FEC\u1FF2-\u1FF4\u1FF6-\u1FFC\u200E" + "\u2071\u207F\u2090-\u209C\u2102\u2107\u210A-\u2113\u2115\u2119-\u211D" + "\u2124\u2126\u2128\u212A-\u212D\u212F-\u2134\u2135-\u2138\u2139" + "\u213C-\u213F\u2145-\u2149\u214E\u214F\u2160-\u2182\u2183-\u2184" + "\u2185-\u2188\u2336-\u237A\u2395\u249C-\u24E9\u26AC\u2800-\u28FF" + "\u2C00-\u2C2E\u2C30-\u2C5E\u2C60-\u2C7B\u2C7C-\u2C7D\u2C7E-\u2CE4" + "\u2CEB-\u2CEE\u2CF2-\u2CF3\u2D00-\u2D25\u2D27\u2D2D\u2D30-\u2D67\u2D6F" + "\u2D70\u2D80-\u2D96\u2DA0-\u2DA6\u2DA8-\u2DAE\u2DB0-\u2DB6\u2DB8-\u2DBE" + "\u2DC0-\u2DC6\u2DC8-\u2DCE\u2DD0-\u2DD6\u2DD8-\u2DDE\u3005\u3006\u3007" + "\u3021-\u3029\u302E-\u302F\u3031-\u3035\u3038-\u303A\u303B\u303C" + "\u3041-\u3096\u309D-\u309E\u309F\u30A1-\u30FA\u30FC-\u30FE\u30FF" + "\u3105-\u312D\u3131-\u318E\u3190-\u3191\u3192-\u3195\u3196-\u319F" + "\u31A0-\u31BA\u31F0-\u31FF\u3200-\u321C\u3220-\u3229\u322A-\u3247" + "\u3248-\u324F\u3260-\u327B\u327F\u3280-\u3289\u328A-\u32B0\u32C0-\u32CB" + "\u32D0-\u32FE\u3300-\u3376\u337B-\u33DD\u33E0-\u33FE\u3400-\u4DB5" + "\u4E00-\u9FCC\uA000-\uA014\uA015\uA016-\uA48C\uA4D0-\uA4F7\uA4F8-\uA4FD" + "\uA4FE-\uA4FF\uA500-\uA60B\uA60C\uA610-\uA61F\uA620-\uA629\uA62A-\uA62B" + "\uA640-\uA66D\uA66E\uA680-\uA69B\uA69C-\uA69D\uA6A0-\uA6E5\uA6E6-\uA6EF" + "\uA6F2-\uA6F7\uA722-\uA76F\uA770\uA771-\uA787\uA789-\uA78A\uA78B-\uA78E" + "\uA790-\uA7AD\uA7B0-\uA7B1\uA7F7\uA7F8-\uA7F9\uA7FA\uA7FB-\uA801" + "\uA803-\uA805\uA807-\uA80A\uA80C-\uA822\uA823-\uA824\uA827\uA830-\uA835" + "\uA836-\uA837\uA840-\uA873\uA880-\uA881\uA882-\uA8B3\uA8B4-\uA8C3" + "\uA8CE-\uA8CF\uA8D0-\uA8D9\uA8F2-\uA8F7\uA8F8-\uA8FA\uA8FB\uA900-\uA909" + "\uA90A-\uA925\uA92E-\uA92F\uA930-\uA946\uA952-\uA953\uA95F\uA960-\uA97C" + "\uA983\uA984-\uA9B2\uA9B4-\uA9B5\uA9BA-\uA9BB\uA9BD-\uA9C0\uA9C1-\uA9CD" + "\uA9CF\uA9D0-\uA9D9\uA9DE-\uA9DF\uA9E0-\uA9E4\uA9E6\uA9E7-\uA9EF" + "\uA9F0-\uA9F9\uA9FA-\uA9FE\uAA00-\uAA28\uAA2F-\uAA30\uAA33-\uAA34" + "\uAA40-\uAA42\uAA44-\uAA4B\uAA4D\uAA50-\uAA59\uAA5C-\uAA5F\uAA60-\uAA6F" + "\uAA70\uAA71-\uAA76\uAA77-\uAA79\uAA7A\uAA7B\uAA7D\uAA7E-\uAAAF\uAAB1" + "\uAAB5-\uAAB6\uAAB9-\uAABD\uAAC0\uAAC2\uAADB-\uAADC\uAADD\uAADE-\uAADF" + "\uAAE0-\uAAEA\uAAEB\uAAEE-\uAAEF\uAAF0-\uAAF1\uAAF2\uAAF3-\uAAF4\uAAF5" + "\uAB01-\uAB06\uAB09-\uAB0E\uAB11-\uAB16\uAB20-\uAB26\uAB28-\uAB2E" + "\uAB30-\uAB5A\uAB5B\uAB5C-\uAB5F\uAB64-\uAB65\uABC0-\uABE2\uABE3-\uABE4" + "\uABE6-\uABE7\uABE9-\uABEA\uABEB\uABEC\uABF0-\uABF9\uAC00-\uD7A3" + "\uD7B0-\uD7C6\uD7CB-\uD7FB\uE000-\uF8FF\uF900-\uFA6D\uFA70-\uFAD9" + "\uFB00-\uFB06\uFB13-\uFB17\uFF21-\uFF3A\uFF41-\uFF5A\uFF66-\uFF6F\uFF70" + "\uFF71-\uFF9D\uFF9E-\uFF9F\uFFA0-\uFFBE\uFFC2-\uFFC7\uFFCA-\uFFCF" + "\uFFD2-\uFFD7\uFFDA-\uFFDC",
+  R: "\u0590\u05BE\u05C0\u05C3\u05C6\u05C8-\u05CF\u05D0-\u05EA\u05EB-\u05EF" + "\u05F0-\u05F2\u05F3-\u05F4\u05F5-\u05FF\u07C0-\u07C9\u07CA-\u07EA" + "\u07F4-\u07F5\u07FA\u07FB-\u07FF\u0800-\u0815\u081A\u0824\u0828" + "\u082E-\u082F\u0830-\u083E\u083F\u0840-\u0858\u085C-\u085D\u085E" + "\u085F-\u089F\u200F\uFB1D\uFB1F-\uFB28\uFB2A-\uFB36\uFB37\uFB38-\uFB3C" + "\uFB3D\uFB3E\uFB3F\uFB40-\uFB41\uFB42\uFB43-\uFB44\uFB45\uFB46-\uFB4F",
+  AL: "\u0608\u060B\u060D\u061B\u061C\u061D\u061E-\u061F\u0620-\u063F\u0640" + "\u0641-\u064A\u066D\u066E-\u066F\u0671-\u06D3\u06D4\u06D5\u06E5-\u06E6" + "\u06EE-\u06EF\u06FA-\u06FC\u06FD-\u06FE\u06FF\u0700-\u070D\u070E\u070F" + "\u0710\u0712-\u072F\u074B-\u074C\u074D-\u07A5\u07B1\u07B2-\u07BF" + "\u08A0-\u08B2\u08B3-\u08E3\uFB50-\uFBB1\uFBB2-\uFBC1\uFBC2-\uFBD2" + "\uFBD3-\uFD3D\uFD40-\uFD4F\uFD50-\uFD8F\uFD90-\uFD91\uFD92-\uFDC7" + "\uFDC8-\uFDCF\uFDF0-\uFDFB\uFDFC\uFDFE-\uFDFF\uFE70-\uFE74\uFE75" + "\uFE76-\uFEFC\uFEFD-\uFEFE"
+};
+var REGEX_STRONG = new RegExp('[' + RANGE_BY_BIDI_TYPE.L + RANGE_BY_BIDI_TYPE.R + RANGE_BY_BIDI_TYPE.AL + ']');
+var REGEX_RTL = new RegExp('[' + RANGE_BY_BIDI_TYPE.R + RANGE_BY_BIDI_TYPE.AL + ']');
+/**
+ * Returns the first strong character (has Bidi_Class value of L, R, or AL).
+ *
+ * @param str  A text block; e.g. paragraph, table cell, tag
+ * @return     A character with strong bidi direction, or null if not found
+ */
+
+function firstStrongChar(str) {
+  var match = REGEX_STRONG.exec(str);
+  return match == null ? null : match[0];
+}
+/**
+ * Returns the direction of a block of text, based on the direction of its
+ * first strong character (has Bidi_Class value of L, R, or AL).
+ *
+ * @param str  A text block; e.g. paragraph, table cell, tag
+ * @return     The resolved direction
+ */
+
+
+function firstStrongCharDir(str) {
+  var strongChar = firstStrongChar(str);
+
+  if (strongChar == null) {
+    return UnicodeBidiDirection.NEUTRAL;
+  }
+
+  return REGEX_RTL.exec(strongChar) ? UnicodeBidiDirection.RTL : UnicodeBidiDirection.LTR;
+}
+/**
+ * Returns the direction of a block of text, based on the direction of its
+ * first strong character (has Bidi_Class value of L, R, or AL), or a fallback
+ * direction, if no strong character is found.
+ *
+ * This function is supposed to be used in respect to Higher-Level Protocol
+ * rule HL1. (http://www.unicode.org/reports/tr9/#HL1)
+ *
+ * @param str       A text block; e.g. paragraph, table cell, tag
+ * @param fallback  Fallback direction, used if no strong direction detected
+ *                  for the block (default = NEUTRAL)
+ * @return          The resolved direction
+ */
+
+
+function resolveBlockDir(str, fallback) {
+  fallback = fallback || UnicodeBidiDirection.NEUTRAL;
+
+  if (!str.length) {
+    return fallback;
+  }
+
+  var blockDir = firstStrongCharDir(str);
+  return blockDir === UnicodeBidiDirection.NEUTRAL ? fallback : blockDir;
+}
+/**
+ * Returns the direction of a block of text, based on the direction of its
+ * first strong character (has Bidi_Class value of L, R, or AL), or a fallback
+ * direction, if no strong character is found.
+ *
+ * NOTE: This function is similar to resolveBlockDir(), but uses the global
+ * direction as the fallback, so it *always* returns a Strong direction,
+ * making it useful for integration in places that you need to make the final
+ * decision, like setting some CSS class.
+ *
+ * This function is supposed to be used in respect to Higher-Level Protocol
+ * rule HL1. (http://www.unicode.org/reports/tr9/#HL1)
+ *
+ * @param str             A text block; e.g. paragraph, table cell
+ * @param strongFallback  Fallback direction, used if no strong direction
+ *                        detected for the block (default = global direction)
+ * @return                The resolved Strong direction
+ */
+
+
+function getDirection(str, strongFallback) {
+  if (!strongFallback) {
+    strongFallback = UnicodeBidiDirection.getGlobalDir();
+  }
+
+  !UnicodeBidiDirection.isStrong(strongFallback) ?  true ? invariant(false, 'Fallback direction must be a strong direction') : 0 : void 0;
+  return resolveBlockDir(str, strongFallback);
+}
+/**
+ * Returns true if getDirection(arguments...) returns LTR.
+ *
+ * @param str             A text block; e.g. paragraph, table cell
+ * @param strongFallback  Fallback direction, used if no strong direction
+ *                        detected for the block (default = global direction)
+ * @return                True if the resolved direction is LTR
+ */
+
+
+function isDirectionLTR(str, strongFallback) {
+  return getDirection(str, strongFallback) === UnicodeBidiDirection.LTR;
+}
+/**
+ * Returns true if getDirection(arguments...) returns RTL.
+ *
+ * @param str             A text block; e.g. paragraph, table cell
+ * @param strongFallback  Fallback direction, used if no strong direction
+ *                        detected for the block (default = global direction)
+ * @return                True if the resolved direction is RTL
+ */
+
+
+function isDirectionRTL(str, strongFallback) {
+  return getDirection(str, strongFallback) === UnicodeBidiDirection.RTL;
+}
+
+var UnicodeBidi = {
+  firstStrongChar: firstStrongChar,
+  firstStrongCharDir: firstStrongCharDir,
+  resolveBlockDir: resolveBlockDir,
+  getDirection: getDirection,
+  isDirectionLTR: isDirectionLTR,
+  isDirectionRTL: isDirectionRTL
+};
+module.exports = UnicodeBidi;
+
+/***/ }),
+
+/***/ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/UnicodeBidiDirection.js":
+/*!*****************************************************************************************!*\
+  !*** ../../../js/controls/WysiwygControl/node_modules/fbjs/lib/UnicodeBidiDirection.js ***!
+  \*****************************************************************************************/
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+"use strict";
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ * @typechecks
+ * 
+ */
+
+/**
+ * Constants to represent text directionality
+ *
+ * Also defines a *global* direciton, to be used in bidi algorithms as a
+ * default fallback direciton, when no better direction is found or provided.
+ *
+ * NOTE: Use `setGlobalDir()`, or update `initGlobalDir()`, to set the initial
+ *       global direction value based on the application.
+ *
+ * Part of the implementation of Unicode Bidirectional Algorithm (UBA)
+ * Unicode Standard Annex #9 (UAX9)
+ * http://www.unicode.org/reports/tr9/
+ */
+
+
+var invariant = __webpack_require__(/*! ./invariant */ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/invariant.js");
+
+var NEUTRAL = 'NEUTRAL'; // No strong direction
+
+var LTR = 'LTR'; // Left-to-Right direction
+
+var RTL = 'RTL'; // Right-to-Left direction
+
+var globalDir = null; // == Helpers ==
+
+/**
+ * Check if a directionality value is a Strong one
+ */
+
+function isStrong(dir) {
+  return dir === LTR || dir === RTL;
+}
+/**
+ * Get string value to be used for `dir` HTML attribute or `direction` CSS
+ * property.
+ */
+
+
+function getHTMLDir(dir) {
+  !isStrong(dir) ?  true ? invariant(false, '`dir` must be a strong direction to be converted to HTML Direction') : 0 : void 0;
+  return dir === LTR ? 'ltr' : 'rtl';
+}
+/**
+ * Get string value to be used for `dir` HTML attribute or `direction` CSS
+ * property, but returns null if `dir` has same value as `otherDir`.
+ * `null`.
+ */
+
+
+function getHTMLDirIfDifferent(dir, otherDir) {
+  !isStrong(dir) ?  true ? invariant(false, '`dir` must be a strong direction to be converted to HTML Direction') : 0 : void 0;
+  !isStrong(otherDir) ?  true ? invariant(false, '`otherDir` must be a strong direction to be converted to HTML Direction') : 0 : void 0;
+  return dir === otherDir ? null : getHTMLDir(dir);
+} // == Global Direction ==
+
+/**
+ * Set the global direction.
+ */
+
+
+function setGlobalDir(dir) {
+  globalDir = dir;
+}
+/**
+ * Initialize the global direction
+ */
+
+
+function initGlobalDir() {
+  setGlobalDir(LTR);
+}
+/**
+ * Get the global direction
+ */
+
+
+function getGlobalDir() {
+  if (!globalDir) {
+    this.initGlobalDir();
+  }
+
+  !globalDir ?  true ? invariant(false, 'Global direction not set.') : 0 : void 0;
+  return globalDir;
+}
+
+var UnicodeBidiDirection = {
+  // Values
+  NEUTRAL: NEUTRAL,
+  LTR: LTR,
+  RTL: RTL,
+  // Helpers
+  isStrong: isStrong,
+  getHTMLDir: getHTMLDir,
+  getHTMLDirIfDifferent: getHTMLDirIfDifferent,
+  // Global Direction
+  setGlobalDir: setGlobalDir,
+  initGlobalDir: initGlobalDir,
+  getGlobalDir: getGlobalDir
+};
+module.exports = UnicodeBidiDirection;
+
+/***/ }),
+
+/***/ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/UnicodeBidiService.js":
+/*!***************************************************************************************!*\
+  !*** ../../../js/controls/WysiwygControl/node_modules/fbjs/lib/UnicodeBidiService.js ***!
+  \***************************************************************************************/
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+"use strict";
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ * @typechecks
+ * 
+ */
+
+/**
+ * Stateful API for text direction detection
+ *
+ * This class can be used in applications where you need to detect the
+ * direction of a sequence of text blocks, where each direction shall be used
+ * as the fallback direction for the next one.
+ *
+ * NOTE: A default direction, if not provided, is set based on the global
+ *       direction, as defined by `UnicodeBidiDirection`.
+ *
+ * == Example ==
+ * ```
+ * var UnicodeBidiService = require('UnicodeBidiService');
+ *
+ * var bidiService = new UnicodeBidiService();
+ *
+ * ...
+ *
+ * bidiService.reset();
+ * for (var para in paragraphs) {
+ *   var dir = bidiService.getDirection(para);
+ *   ...
+ * }
+ * ```
+ *
+ * Part of our implementation of Unicode Bidirectional Algorithm (UBA)
+ * Unicode Standard Annex #9 (UAX9)
+ * http://www.unicode.org/reports/tr9/
+ */
+
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var UnicodeBidi = __webpack_require__(/*! ./UnicodeBidi */ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/UnicodeBidi.js");
+
+var UnicodeBidiDirection = __webpack_require__(/*! ./UnicodeBidiDirection */ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/UnicodeBidiDirection.js");
+
+var invariant = __webpack_require__(/*! ./invariant */ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/invariant.js");
+
+var UnicodeBidiService =
+/*#__PURE__*/
+function () {
+  /**
+   * Stateful class for paragraph direction detection
+   *
+   * @param defaultDir  Default direction of the service
+   */
+  function UnicodeBidiService(defaultDir) {
+    _defineProperty(this, "_defaultDir", void 0);
+
+    _defineProperty(this, "_lastDir", void 0);
+
+    if (!defaultDir) {
+      defaultDir = UnicodeBidiDirection.getGlobalDir();
+    } else {
+      !UnicodeBidiDirection.isStrong(defaultDir) ?  true ? invariant(false, 'Default direction must be a strong direction (LTR or RTL)') : 0 : void 0;
+    }
+
+    this._defaultDir = defaultDir;
+    this.reset();
+  }
+  /**
+   * Reset the internal state
+   *
+   * Instead of creating a new instance, you can just reset() your instance
+   * everytime you start a new loop.
+   */
+
+
+  var _proto = UnicodeBidiService.prototype;
+
+  _proto.reset = function reset() {
+    this._lastDir = this._defaultDir;
+  };
+  /**
+   * Returns the direction of a block of text, and remembers it as the
+   * fall-back direction for the next paragraph.
+   *
+   * @param str  A text block, e.g. paragraph, table cell, tag
+   * @return     The resolved direction
+   */
+
+
+  _proto.getDirection = function getDirection(str) {
+    this._lastDir = UnicodeBidi.getDirection(str, this._lastDir);
+    return this._lastDir;
+  };
+
+  return UnicodeBidiService;
+}();
+
+module.exports = UnicodeBidiService;
+
+/***/ }),
+
+/***/ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/UnicodeUtils.js":
+/*!*********************************************************************************!*\
+  !*** ../../../js/controls/WysiwygControl/node_modules/fbjs/lib/UnicodeUtils.js ***!
+  \*********************************************************************************/
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+"use strict";
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ * @typechecks
+ */
+
+/**
+ * Unicode-enabled replacesments for basic String functions.
+ *
+ * All the functions in this module assume that the input string is a valid
+ * UTF-16 encoding of a Unicode sequence. If it's not the case, the behavior
+ * will be undefined.
+ *
+ * WARNING: Since this module is typechecks-enforced, you may find new bugs
+ * when replacing normal String functions with ones provided here.
+ */
+
+
+var invariant = __webpack_require__(/*! ./invariant */ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/invariant.js"); // These two ranges are consecutive so anything in [HIGH_START, LOW_END] is a
+// surrogate code unit.
+
+
+var SURROGATE_HIGH_START = 0xD800;
+var SURROGATE_HIGH_END = 0xDBFF;
+var SURROGATE_LOW_START = 0xDC00;
+var SURROGATE_LOW_END = 0xDFFF;
+var SURROGATE_UNITS_REGEX = /[\uD800-\uDFFF]/;
+/**
+ * @param {number} codeUnit   A Unicode code-unit, in range [0, 0x10FFFF]
+ * @return {boolean}          Whether code-unit is in a surrogate (hi/low) range
+ */
+
+function isCodeUnitInSurrogateRange(codeUnit) {
+  return SURROGATE_HIGH_START <= codeUnit && codeUnit <= SURROGATE_LOW_END;
+}
+/**
+ * Returns whether the two characters starting at `index` form a surrogate pair.
+ * For example, given the string s = "\uD83D\uDE0A", (s, 0) returns true and
+ * (s, 1) returns false.
+ *
+ * @param {string} str
+ * @param {number} index
+ * @return {boolean}
+ */
+
+
+function isSurrogatePair(str, index) {
+  !(0 <= index && index < str.length) ?  true ? invariant(false, 'isSurrogatePair: Invalid index %s for string length %s.', index, str.length) : 0 : void 0;
+
+  if (index + 1 === str.length) {
+    return false;
+  }
+
+  var first = str.charCodeAt(index);
+  var second = str.charCodeAt(index + 1);
+  return SURROGATE_HIGH_START <= first && first <= SURROGATE_HIGH_END && SURROGATE_LOW_START <= second && second <= SURROGATE_LOW_END;
+}
+/**
+ * @param {string} str  Non-empty string
+ * @return {boolean}    True if the input includes any surrogate code units
+ */
+
+
+function hasSurrogateUnit(str) {
+  return SURROGATE_UNITS_REGEX.test(str);
+}
+/**
+ * Return the length of the original Unicode character at given position in the
+ * String by looking into the UTF-16 code unit; that is equal to 1 for any
+ * non-surrogate characters in BMP ([U+0000..U+D7FF] and [U+E000, U+FFFF]); and
+ * returns 2 for the hi/low surrogates ([U+D800..U+DFFF]), which are in fact
+ * representing non-BMP characters ([U+10000..U+10FFFF]).
+ *
+ * Examples:
+ * - '\u0020' => 1
+ * - '\u3020' => 1
+ * - '\uD835' => 2
+ * - '\uD835\uDDEF' => 2
+ * - '\uDDEF' => 2
+ *
+ * @param {string} str  Non-empty string
+ * @param {number} pos  Position in the string to look for one code unit
+ * @return {number}      Number 1 or 2
+ */
+
+
+function getUTF16Length(str, pos) {
+  return 1 + isCodeUnitInSurrogateRange(str.charCodeAt(pos));
+}
+/**
+ * Fully Unicode-enabled replacement for String#length
+ *
+ * @param {string} str  Valid Unicode string
+ * @return {number}     The number of Unicode characters in the string
+ */
+
+
+function strlen(str) {
+  // Call the native functions if there's no surrogate char
+  if (!hasSurrogateUnit(str)) {
+    return str.length;
+  }
+
+  var len = 0;
+
+  for (var pos = 0; pos < str.length; pos += getUTF16Length(str, pos)) {
+    len++;
+  }
+
+  return len;
+}
+/**
+ * Fully Unicode-enabled replacement for String#substr()
+ *
+ * @param {string} str      Valid Unicode string
+ * @param {number} start    Location in Unicode sequence to begin extracting
+ * @param {?number} length  The number of Unicode characters to extract
+ *                          (default: to the end of the string)
+ * @return {string}         Extracted sub-string
+ */
+
+
+function substr(str, start, length) {
+  start = start || 0;
+  length = length === undefined ? Infinity : length || 0; // Call the native functions if there's no surrogate char
+
+  if (!hasSurrogateUnit(str)) {
+    return str.substr(start, length);
+  } // Obvious cases
+
+
+  var size = str.length;
+
+  if (size <= 0 || start > size || length <= 0) {
+    return '';
+  } // Find the actual starting position
+
+
+  var posA = 0;
+
+  if (start > 0) {
+    for (; start > 0 && posA < size; start--) {
+      posA += getUTF16Length(str, posA);
+    }
+
+    if (posA >= size) {
+      return '';
+    }
+  } else if (start < 0) {
+    for (posA = size; start < 0 && 0 < posA; start++) {
+      posA -= getUTF16Length(str, posA - 1);
+    }
+
+    if (posA < 0) {
+      posA = 0;
+    }
+  } // Find the actual ending position
+
+
+  var posB = size;
+
+  if (length < size) {
+    for (posB = posA; length > 0 && posB < size; length--) {
+      posB += getUTF16Length(str, posB);
+    }
+  }
+
+  return str.substring(posA, posB);
+}
+/**
+ * Fully Unicode-enabled replacement for String#substring()
+ *
+ * @param {string} str    Valid Unicode string
+ * @param {number} start  Location in Unicode sequence to begin extracting
+ * @param {?number} end   Location in Unicode sequence to end extracting
+ *                        (default: end of the string)
+ * @return {string}       Extracted sub-string
+ */
+
+
+function substring(str, start, end) {
+  start = start || 0;
+  end = end === undefined ? Infinity : end || 0;
+
+  if (start < 0) {
+    start = 0;
+  }
+
+  if (end < 0) {
+    end = 0;
+  }
+
+  var length = Math.abs(end - start);
+  start = start < end ? start : end;
+  return substr(str, start, length);
+}
+/**
+ * Get a list of Unicode code-points from a String
+ *
+ * @param {string} str        Valid Unicode string
+ * @return {array<number>}    A list of code-points in [0..0x10FFFF]
+ */
+
+
+function getCodePoints(str) {
+  var codePoints = [];
+
+  for (var pos = 0; pos < str.length; pos += getUTF16Length(str, pos)) {
+    codePoints.push(str.codePointAt(pos));
+  }
+
+  return codePoints;
+}
+
+var UnicodeUtils = {
+  getCodePoints: getCodePoints,
+  getUTF16Length: getUTF16Length,
+  hasSurrogateUnit: hasSurrogateUnit,
+  isCodeUnitInSurrogateRange: isCodeUnitInSurrogateRange,
+  isSurrogatePair: isSurrogatePair,
+  strlen: strlen,
+  substring: substring,
+  substr: substr
+};
+module.exports = UnicodeUtils;
+
+/***/ }),
+
+/***/ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/UserAgent.js":
+/*!******************************************************************************!*\
+  !*** ../../../js/controls/WysiwygControl/node_modules/fbjs/lib/UserAgent.js ***!
+  \******************************************************************************/
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+"use strict";
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ */
+
+
+var UserAgentData = __webpack_require__(/*! ./UserAgentData */ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/UserAgentData.js");
+
+var VersionRange = __webpack_require__(/*! ./VersionRange */ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/VersionRange.js");
+
+var mapObject = __webpack_require__(/*! ./mapObject */ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/mapObject.js");
+
+var memoizeStringOnly = __webpack_require__(/*! ./memoizeStringOnly */ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/memoizeStringOnly.js");
+/**
+ * Checks to see whether `name` and `version` satisfy `query`.
+ *
+ * @param {string} name Name of the browser, device, engine or platform
+ * @param {?string} version Version of the browser, engine or platform
+ * @param {string} query Query of form "Name [range expression]"
+ * @param {?function} normalizer Optional pre-processor for range expression
+ * @return {boolean}
+ */
+
+
+function compare(name, version, query, normalizer) {
+  // check for exact match with no version
+  if (name === query) {
+    return true;
+  } // check for non-matching names
+
+
+  if (!query.startsWith(name)) {
+    return false;
+  } // full comparison with version
+
+
+  var range = query.slice(name.length);
+
+  if (version) {
+    range = normalizer ? normalizer(range) : range;
+    return VersionRange.contains(range, version);
+  }
+
+  return false;
+}
+/**
+ * Normalizes `version` by stripping any "NT" prefix, but only on the Windows
+ * platform.
+ *
+ * Mimics the stripping performed by the `UserAgentWindowsPlatform` PHP class.
+ *
+ * @param {string} version
+ * @return {string}
+ */
+
+
+function normalizePlatformVersion(version) {
+  if (UserAgentData.platformName === 'Windows') {
+    return version.replace(/^\s*NT/, '');
+  }
+
+  return version;
+}
+/**
+ * Provides client-side access to the authoritative PHP-generated User Agent
+ * information supplied by the server.
+ */
+
+
+var UserAgent = {
+  /**
+   * Check if the User Agent browser matches `query`.
+   *
+   * `query` should be a string like "Chrome" or "Chrome > 33".
+   *
+   * Valid browser names include:
+   *
+   * - ACCESS NetFront
+   * - AOL
+   * - Amazon Silk
+   * - Android
+   * - BlackBerry
+   * - BlackBerry PlayBook
+   * - Chrome
+   * - Chrome for iOS
+   * - Chrome frame
+   * - Facebook PHP SDK
+   * - Facebook for iOS
+   * - Firefox
+   * - IE
+   * - IE Mobile
+   * - Mobile Safari
+   * - Motorola Internet Browser
+   * - Nokia
+   * - Openwave Mobile Browser
+   * - Opera
+   * - Opera Mini
+   * - Opera Mobile
+   * - Safari
+   * - UIWebView
+   * - Unknown
+   * - webOS
+   * - etc...
+   *
+   * An authoritative list can be found in the PHP `BrowserDetector` class and
+   * related classes in the same file (see calls to `new UserAgentBrowser` here:
+   * https://fburl.com/50728104).
+   *
+   * @note Function results are memoized
+   *
+   * @param {string} query Query of the form "Name [range expression]"
+   * @return {boolean}
+   */
+  isBrowser: function isBrowser(query) {
+    return compare(UserAgentData.browserName, UserAgentData.browserFullVersion, query);
+  },
+
+  /**
+   * Check if the User Agent browser uses a 32 or 64 bit architecture.
+   *
+   * @note Function results are memoized
+   *
+   * @param {string} query Query of the form "32" or "64".
+   * @return {boolean}
+   */
+  isBrowserArchitecture: function isBrowserArchitecture(query) {
+    return compare(UserAgentData.browserArchitecture, null, query);
+  },
+
+  /**
+   * Check if the User Agent device matches `query`.
+   *
+   * `query` should be a string like "iPhone" or "iPad".
+   *
+   * Valid device names include:
+   *
+   * - Kindle
+   * - Kindle Fire
+   * - Unknown
+   * - iPad
+   * - iPhone
+   * - iPod
+   * - etc...
+   *
+   * An authoritative list can be found in the PHP `DeviceDetector` class and
+   * related classes in the same file (see calls to `new UserAgentDevice` here:
+   * https://fburl.com/50728332).
+   *
+   * @note Function results are memoized
+   *
+   * @param {string} query Query of the form "Name"
+   * @return {boolean}
+   */
+  isDevice: function isDevice(query) {
+    return compare(UserAgentData.deviceName, null, query);
+  },
+
+  /**
+   * Check if the User Agent rendering engine matches `query`.
+   *
+   * `query` should be a string like "WebKit" or "WebKit >= 537".
+   *
+   * Valid engine names include:
+   *
+   * - Gecko
+   * - Presto
+   * - Trident
+   * - WebKit
+   * - etc...
+   *
+   * An authoritative list can be found in the PHP `RenderingEngineDetector`
+   * class related classes in the same file (see calls to `new
+   * UserAgentRenderingEngine` here: https://fburl.com/50728617).
+   *
+   * @note Function results are memoized
+   *
+   * @param {string} query Query of the form "Name [range expression]"
+   * @return {boolean}
+   */
+  isEngine: function isEngine(query) {
+    return compare(UserAgentData.engineName, UserAgentData.engineVersion, query);
+  },
+
+  /**
+   * Check if the User Agent platform matches `query`.
+   *
+   * `query` should be a string like "Windows" or "iOS 5 - 6".
+   *
+   * Valid platform names include:
+   *
+   * - Android
+   * - BlackBerry OS
+   * - Java ME
+   * - Linux
+   * - Mac OS X
+   * - Mac OS X Calendar
+   * - Mac OS X Internet Account
+   * - Symbian
+   * - SymbianOS
+   * - Windows
+   * - Windows Mobile
+   * - Windows Phone
+   * - iOS
+   * - iOS Facebook Integration Account
+   * - iOS Facebook Social Sharing UI
+   * - webOS
+   * - Chrome OS
+   * - etc...
+   *
+   * An authoritative list can be found in the PHP `PlatformDetector` class and
+   * related classes in the same file (see calls to `new UserAgentPlatform`
+   * here: https://fburl.com/50729226).
+   *
+   * @note Function results are memoized
+   *
+   * @param {string} query Query of the form "Name [range expression]"
+   * @return {boolean}
+   */
+  isPlatform: function isPlatform(query) {
+    return compare(UserAgentData.platformName, UserAgentData.platformFullVersion, query, normalizePlatformVersion);
+  },
+
+  /**
+   * Check if the User Agent platform is a 32 or 64 bit architecture.
+   *
+   * @note Function results are memoized
+   *
+   * @param {string} query Query of the form "32" or "64".
+   * @return {boolean}
+   */
+  isPlatformArchitecture: function isPlatformArchitecture(query) {
+    return compare(UserAgentData.platformArchitecture, null, query);
+  }
+};
+module.exports = mapObject(UserAgent, memoizeStringOnly);
+
+/***/ }),
+
+/***/ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/UserAgentData.js":
+/*!**********************************************************************************!*\
+  !*** ../../../js/controls/WysiwygControl/node_modules/fbjs/lib/UserAgentData.js ***!
+  \**********************************************************************************/
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+"use strict";
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ */
+
+/**
+ * Usage note:
+ * This module makes a best effort to export the same data we would internally.
+ * At Facebook we use a server-generated module that does the parsing and
+ * exports the data for the client to use. We can't rely on a server-side
+ * implementation in open source so instead we make use of an open source
+ * library to do the heavy lifting and then make some adjustments as necessary.
+ * It's likely there will be some differences. Some we can smooth over.
+ * Others are going to be harder.
+ */
+
+
+var UAParser = __webpack_require__(/*! ua-parser-js */ "../../../js/controls/WysiwygControl/node_modules/ua-parser-js/src/ua-parser.js");
+
+var UNKNOWN = 'Unknown';
+var PLATFORM_MAP = {
+  'Mac OS': 'Mac OS X'
+};
+/**
+ * Convert from UAParser platform name to what we expect.
+ */
+
+function convertPlatformName(name) {
+  return PLATFORM_MAP[name] || name;
+}
+/**
+ * Get the version number in parts. This is very naive. We actually get major
+ * version as a part of UAParser already, which is generally good enough, but
+ * let's get the minor just in case.
+ */
+
+
+function getBrowserVersion(version) {
+  if (!version) {
+    return {
+      major: '',
+      minor: ''
+    };
+  }
+
+  var parts = version.split('.');
+  return {
+    major: parts[0],
+    minor: parts[1]
+  };
+}
+/**
+ * Get the UA data fom UAParser and then convert it to the format we're
+ * expecting for our APIS.
+ */
+
+
+var parser = new UAParser();
+var results = parser.getResult(); // Do some conversion first.
+
+var browserVersionData = getBrowserVersion(results.browser.version);
+var uaData = {
+  browserArchitecture: results.cpu.architecture || UNKNOWN,
+  browserFullVersion: results.browser.version || UNKNOWN,
+  browserMinorVersion: browserVersionData.minor || UNKNOWN,
+  browserName: results.browser.name || UNKNOWN,
+  browserVersion: results.browser.major || UNKNOWN,
+  deviceName: results.device.model || UNKNOWN,
+  engineName: results.engine.name || UNKNOWN,
+  engineVersion: results.engine.version || UNKNOWN,
+  platformArchitecture: results.cpu.architecture || UNKNOWN,
+  platformName: convertPlatformName(results.os.name) || UNKNOWN,
+  platformVersion: results.os.version || UNKNOWN,
+  platformFullVersion: results.os.version || UNKNOWN
+};
+module.exports = uaData;
+
+/***/ }),
+
+/***/ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/VersionRange.js":
+/*!*********************************************************************************!*\
+  !*** ../../../js/controls/WysiwygControl/node_modules/fbjs/lib/VersionRange.js ***!
+  \*********************************************************************************/
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+"use strict";
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ */
+
+
+var invariant = __webpack_require__(/*! ./invariant */ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/invariant.js");
+
+var componentRegex = /\./;
+var orRegex = /\|\|/;
+var rangeRegex = /\s+\-\s+/;
+var modifierRegex = /^(<=|<|=|>=|~>|~|>|)?\s*(.+)/;
+var numericRegex = /^(\d*)(.*)/;
+/**
+ * Splits input `range` on "||" and returns true if any subrange matches
+ * `version`.
+ *
+ * @param {string} range
+ * @param {string} version
+ * @returns {boolean}
+ */
+
+function checkOrExpression(range, version) {
+  var expressions = range.split(orRegex);
+
+  if (expressions.length > 1) {
+    return expressions.some(function (range) {
+      return VersionRange.contains(range, version);
+    });
+  } else {
+    range = expressions[0].trim();
+    return checkRangeExpression(range, version);
+  }
+}
+/**
+ * Splits input `range` on " - " (the surrounding whitespace is required) and
+ * returns true if version falls between the two operands.
+ *
+ * @param {string} range
+ * @param {string} version
+ * @returns {boolean}
+ */
+
+
+function checkRangeExpression(range, version) {
+  var expressions = range.split(rangeRegex);
+  !(expressions.length > 0 && expressions.length <= 2) ?  true ? invariant(false, 'the "-" operator expects exactly 2 operands') : 0 : void 0;
+
+  if (expressions.length === 1) {
+    return checkSimpleExpression(expressions[0], version);
+  } else {
+    var startVersion = expressions[0],
+        endVersion = expressions[1];
+    !(isSimpleVersion(startVersion) && isSimpleVersion(endVersion)) ?  true ? invariant(false, 'operands to the "-" operator must be simple (no modifiers)') : 0 : void 0;
+    return checkSimpleExpression('>=' + startVersion, version) && checkSimpleExpression('<=' + endVersion, version);
+  }
+}
+/**
+ * Checks if `range` matches `version`. `range` should be a "simple" range (ie.
+ * not a compound range using the " - " or "||" operators).
+ *
+ * @param {string} range
+ * @param {string} version
+ * @returns {boolean}
+ */
+
+
+function checkSimpleExpression(range, version) {
+  range = range.trim();
+
+  if (range === '') {
+    return true;
+  }
+
+  var versionComponents = version.split(componentRegex);
+
+  var _getModifierAndCompon = getModifierAndComponents(range),
+      modifier = _getModifierAndCompon.modifier,
+      rangeComponents = _getModifierAndCompon.rangeComponents;
+
+  switch (modifier) {
+    case '<':
+      return checkLessThan(versionComponents, rangeComponents);
+
+    case '<=':
+      return checkLessThanOrEqual(versionComponents, rangeComponents);
+
+    case '>=':
+      return checkGreaterThanOrEqual(versionComponents, rangeComponents);
+
+    case '>':
+      return checkGreaterThan(versionComponents, rangeComponents);
+
+    case '~':
+    case '~>':
+      return checkApproximateVersion(versionComponents, rangeComponents);
+
+    default:
+      return checkEqual(versionComponents, rangeComponents);
+  }
+}
+/**
+ * Checks whether `a` is less than `b`.
+ *
+ * @param {array<string>} a
+ * @param {array<string>} b
+ * @returns {boolean}
+ */
+
+
+function checkLessThan(a, b) {
+  return compareComponents(a, b) === -1;
+}
+/**
+ * Checks whether `a` is less than or equal to `b`.
+ *
+ * @param {array<string>} a
+ * @param {array<string>} b
+ * @returns {boolean}
+ */
+
+
+function checkLessThanOrEqual(a, b) {
+  var result = compareComponents(a, b);
+  return result === -1 || result === 0;
+}
+/**
+ * Checks whether `a` is equal to `b`.
+ *
+ * @param {array<string>} a
+ * @param {array<string>} b
+ * @returns {boolean}
+ */
+
+
+function checkEqual(a, b) {
+  return compareComponents(a, b) === 0;
+}
+/**
+ * Checks whether `a` is greater than or equal to `b`.
+ *
+ * @param {array<string>} a
+ * @param {array<string>} b
+ * @returns {boolean}
+ */
+
+
+function checkGreaterThanOrEqual(a, b) {
+  var result = compareComponents(a, b);
+  return result === 1 || result === 0;
+}
+/**
+ * Checks whether `a` is greater than `b`.
+ *
+ * @param {array<string>} a
+ * @param {array<string>} b
+ * @returns {boolean}
+ */
+
+
+function checkGreaterThan(a, b) {
+  return compareComponents(a, b) === 1;
+}
+/**
+ * Checks whether `a` is "reasonably close" to `b` (as described in
+ * https://www.npmjs.org/doc/misc/semver.html). For example, if `b` is "1.3.1"
+ * then "reasonably close" is defined as ">= 1.3.1 and < 1.4".
+ *
+ * @param {array<string>} a
+ * @param {array<string>} b
+ * @returns {boolean}
+ */
+
+
+function checkApproximateVersion(a, b) {
+  var lowerBound = b.slice();
+  var upperBound = b.slice();
+
+  if (upperBound.length > 1) {
+    upperBound.pop();
+  }
+
+  var lastIndex = upperBound.length - 1;
+  var numeric = parseInt(upperBound[lastIndex], 10);
+
+  if (isNumber(numeric)) {
+    upperBound[lastIndex] = numeric + 1 + '';
+  }
+
+  return checkGreaterThanOrEqual(a, lowerBound) && checkLessThan(a, upperBound);
+}
+/**
+ * Extracts the optional modifier (<, <=, =, >=, >, ~, ~>) and version
+ * components from `range`.
+ *
+ * For example, given `range` ">= 1.2.3" returns an object with a `modifier` of
+ * `">="` and `components` of `[1, 2, 3]`.
+ *
+ * @param {string} range
+ * @returns {object}
+ */
+
+
+function getModifierAndComponents(range) {
+  var rangeComponents = range.split(componentRegex);
+  var matches = rangeComponents[0].match(modifierRegex);
+  !matches ?  true ? invariant(false, 'expected regex to match but it did not') : 0 : void 0;
+  return {
+    modifier: matches[1],
+    rangeComponents: [matches[2]].concat(rangeComponents.slice(1))
+  };
+}
+/**
+ * Determines if `number` is a number.
+ *
+ * @param {mixed} number
+ * @returns {boolean}
+ */
+
+
+function isNumber(number) {
+  return !isNaN(number) && isFinite(number);
+}
+/**
+ * Tests whether `range` is a "simple" version number without any modifiers
+ * (">", "~" etc).
+ *
+ * @param {string} range
+ * @returns {boolean}
+ */
+
+
+function isSimpleVersion(range) {
+  return !getModifierAndComponents(range).modifier;
+}
+/**
+ * Zero-pads array `array` until it is at least `length` long.
+ *
+ * @param {array} array
+ * @param {number} length
+ */
+
+
+function zeroPad(array, length) {
+  for (var i = array.length; i < length; i++) {
+    array[i] = '0';
+  }
+}
+/**
+ * Normalizes `a` and `b` in preparation for comparison by doing the following:
+ *
+ * - zero-pads `a` and `b`
+ * - marks any "x", "X" or "*" component in `b` as equivalent by zero-ing it out
+ *   in both `a` and `b`
+ * - marks any final "*" component in `b` as a greedy wildcard by zero-ing it
+ *   and all of its successors in `a`
+ *
+ * @param {array<string>} a
+ * @param {array<string>} b
+ * @returns {array<array<string>>}
+ */
+
+
+function normalizeVersions(a, b) {
+  a = a.slice();
+  b = b.slice();
+  zeroPad(a, b.length); // mark "x" and "*" components as equal
+
+  for (var i = 0; i < b.length; i++) {
+    var matches = b[i].match(/^[x*]$/i);
+
+    if (matches) {
+      b[i] = a[i] = '0'; // final "*" greedily zeros all remaining components
+
+      if (matches[0] === '*' && i === b.length - 1) {
+        for (var j = i; j < a.length; j++) {
+          a[j] = '0';
+        }
+      }
+    }
+  }
+
+  zeroPad(b, a.length);
+  return [a, b];
+}
+/**
+ * Returns the numerical -- not the lexicographical -- ordering of `a` and `b`.
+ *
+ * For example, `10-alpha` is greater than `2-beta`.
+ *
+ * @param {string} a
+ * @param {string} b
+ * @returns {number} -1, 0 or 1 to indicate whether `a` is less than, equal to,
+ * or greater than `b`, respectively
+ */
+
+
+function compareNumeric(a, b) {
+  var aPrefix = a.match(numericRegex)[1];
+  var bPrefix = b.match(numericRegex)[1];
+  var aNumeric = parseInt(aPrefix, 10);
+  var bNumeric = parseInt(bPrefix, 10);
+
+  if (isNumber(aNumeric) && isNumber(bNumeric) && aNumeric !== bNumeric) {
+    return compare(aNumeric, bNumeric);
+  } else {
+    return compare(a, b);
+  }
+}
+/**
+ * Returns the ordering of `a` and `b`.
+ *
+ * @param {string|number} a
+ * @param {string|number} b
+ * @returns {number} -1, 0 or 1 to indicate whether `a` is less than, equal to,
+ * or greater than `b`, respectively
+ */
+
+
+function compare(a, b) {
+  !(typeof a === typeof b) ?  true ? invariant(false, '"a" and "b" must be of the same type') : 0 : void 0;
+
+  if (a > b) {
+    return 1;
+  } else if (a < b) {
+    return -1;
+  } else {
+    return 0;
+  }
+}
+/**
+ * Compares arrays of version components.
+ *
+ * @param {array<string>} a
+ * @param {array<string>} b
+ * @returns {number} -1, 0 or 1 to indicate whether `a` is less than, equal to,
+ * or greater than `b`, respectively
+ */
+
+
+function compareComponents(a, b) {
+  var _normalizeVersions = normalizeVersions(a, b),
+      aNormalized = _normalizeVersions[0],
+      bNormalized = _normalizeVersions[1];
+
+  for (var i = 0; i < bNormalized.length; i++) {
+    var result = compareNumeric(aNormalized[i], bNormalized[i]);
+
+    if (result) {
+      return result;
+    }
+  }
+
+  return 0;
+}
+
+var VersionRange = {
+  /**
+   * Checks whether `version` satisfies the `range` specification.
+   *
+   * We support a subset of the expressions defined in
+   * https://www.npmjs.org/doc/misc/semver.html:
+   *
+   *    version   Must match version exactly
+   *    =version  Same as just version
+   *    >version  Must be greater than version
+   *    >=version Must be greater than or equal to version
+   *    <version  Must be less than version
+   *    <=version Must be less than or equal to version
+   *    ~version  Must be at least version, but less than the next significant
+   *              revision above version:
+   *              "~1.2.3" is equivalent to ">= 1.2.3 and < 1.3"
+   *    ~>version Equivalent to ~version
+   *    1.2.x     Must match "1.2.x", where "x" is a wildcard that matches
+   *              anything
+   *    1.2.*     Similar to "1.2.x", but "*" in the trailing position is a
+   *              "greedy" wildcard, so will match any number of additional
+   *              components:
+   *              "1.2.*" will match "1.2.1", "1.2.1.1", "1.2.1.1.1" etc
+   *    *         Any version
+   *    ""        (Empty string) Same as *
+   *    v1 - v2   Equivalent to ">= v1 and <= v2"
+   *    r1 || r2  Passes if either r1 or r2 are satisfied
+   *
+   * @param {string} range
+   * @param {string} version
+   * @returns {boolean}
+   */
+  contains: function contains(range, version) {
+    return checkOrExpression(range.trim(), version.trim());
+  }
+};
+module.exports = VersionRange;
+
+/***/ }),
+
+/***/ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/camelize.js":
+/*!*****************************************************************************!*\
+  !*** ../../../js/controls/WysiwygControl/node_modules/fbjs/lib/camelize.js ***!
+  \*****************************************************************************/
+/***/ (function(module) {
+
+"use strict";
+
+
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ * @typechecks
+ */
+var _hyphenPattern = /-(.)/g;
+/**
+ * Camelcases a hyphenated string, for example:
+ *
+ *   > camelize('background-color')
+ *   < "backgroundColor"
+ *
+ * @param {string} string
+ * @return {string}
+ */
+
+function camelize(string) {
+  return string.replace(_hyphenPattern, function (_, character) {
+    return character.toUpperCase();
+  });
+}
+
+module.exports = camelize;
+
+/***/ }),
+
+/***/ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/containsNode.js":
+/*!*********************************************************************************!*\
+  !*** ../../../js/controls/WysiwygControl/node_modules/fbjs/lib/containsNode.js ***!
+  \*********************************************************************************/
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+"use strict";
+
+
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ * 
+ */
+var isTextNode = __webpack_require__(/*! ./isTextNode */ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/isTextNode.js");
+/*eslint-disable no-bitwise */
+
+/**
+ * Checks if a given DOM node contains or is another DOM node.
+ */
+
+
+function containsNode(outerNode, innerNode) {
+  if (!outerNode || !innerNode) {
+    return false;
+  } else if (outerNode === innerNode) {
+    return true;
+  } else if (isTextNode(outerNode)) {
+    return false;
+  } else if (isTextNode(innerNode)) {
+    return containsNode(outerNode, innerNode.parentNode);
+  } else if ('contains' in outerNode) {
+    return outerNode.contains(innerNode);
+  } else if (outerNode.compareDocumentPosition) {
+    return !!(outerNode.compareDocumentPosition(innerNode) & 16);
+  } else {
+    return false;
+  }
+}
+
+module.exports = containsNode;
+
+/***/ }),
+
+/***/ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/createArrayFromMixed.js":
+/*!*****************************************************************************************!*\
+  !*** ../../../js/controls/WysiwygControl/node_modules/fbjs/lib/createArrayFromMixed.js ***!
+  \*****************************************************************************************/
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+"use strict";
+
+
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ * @typechecks
+ */
+var invariant = __webpack_require__(/*! ./invariant */ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/invariant.js");
+/**
+ * Convert array-like objects to arrays.
+ *
+ * This API assumes the caller knows the contents of the data type. For less
+ * well defined inputs use createArrayFromMixed.
+ *
+ * @param {object|function|filelist} obj
+ * @return {array}
+ */
+
+
+function toArray(obj) {
+  var length = obj.length; // Some browsers builtin objects can report typeof 'function' (e.g. NodeList
+  // in old versions of Safari).
+
+  !(!Array.isArray(obj) && (typeof obj === 'object' || typeof obj === 'function')) ?  true ? invariant(false, 'toArray: Array-like object expected') : 0 : void 0;
+  !(typeof length === 'number') ?  true ? invariant(false, 'toArray: Object needs a length property') : 0 : void 0;
+  !(length === 0 || length - 1 in obj) ?  true ? invariant(false, 'toArray: Object should have keys for indices') : 0 : void 0;
+  !(typeof obj.callee !== 'function') ?  true ? invariant(false, 'toArray: Object can\'t be `arguments`. Use rest params ' + '(function(...args) {}) or Array.from() instead.') : 0 : void 0; // Old IE doesn't give collections access to hasOwnProperty. Assume inputs
+  // without method will throw during the slice call and skip straight to the
+  // fallback.
+
+  if (obj.hasOwnProperty) {
+    try {
+      return Array.prototype.slice.call(obj);
+    } catch (e) {// IE < 9 does not support Array#slice on collections objects
+    }
+  } // Fall back to copying key by key. This assumes all keys have a value,
+  // so will not preserve sparsely populated inputs.
+
+
+  var ret = Array(length);
+
+  for (var ii = 0; ii < length; ii++) {
+    ret[ii] = obj[ii];
+  }
+
+  return ret;
+}
+/**
+ * Perform a heuristic test to determine if an object is "array-like".
+ *
+ *   A monk asked Joshu, a Zen master, "Has a dog Buddha nature?"
+ *   Joshu replied: "Mu."
+ *
+ * This function determines if its argument has "array nature": it returns
+ * true if the argument is an actual array, an `arguments' object, or an
+ * HTMLCollection (e.g. node.childNodes or node.getElementsByTagName()).
+ *
+ * It will return false for other array-like objects like Filelist.
+ *
+ * @param {*} obj
+ * @return {boolean}
+ */
+
+
+function hasArrayNature(obj) {
+  return (// not null/false
+    !!obj && ( // arrays are objects, NodeLists are functions in Safari
+    typeof obj == 'object' || typeof obj == 'function') && // quacks like an array
+    'length' in obj && // not window
+    !('setInterval' in obj) && // no DOM node should be considered an array-like
+    // a 'select' element has 'length' and 'item' properties on IE8
+    typeof obj.nodeType != 'number' && ( // a real array
+    Array.isArray(obj) || // arguments
+    'callee' in obj || // HTMLCollection/NodeList
+    'item' in obj)
+  );
+}
+/**
+ * Ensure that the argument is an array by wrapping it in an array if it is not.
+ * Creates a copy of the argument if it is already an array.
+ *
+ * This is mostly useful idiomatically:
+ *
+ *   var createArrayFromMixed = require('createArrayFromMixed');
+ *
+ *   function takesOneOrMoreThings(things) {
+ *     things = createArrayFromMixed(things);
+ *     ...
+ *   }
+ *
+ * This allows you to treat `things' as an array, but accept scalars in the API.
+ *
+ * If you need to convert an array-like object, like `arguments`, into an array
+ * use toArray instead.
+ *
+ * @param {*} obj
+ * @return {array}
+ */
+
+
+function createArrayFromMixed(obj) {
+  if (!hasArrayNature(obj)) {
+    return [obj];
+  } else if (Array.isArray(obj)) {
+    return obj.slice();
+  } else {
+    return toArray(obj);
+  }
+}
+
+module.exports = createArrayFromMixed;
+
+/***/ }),
+
+/***/ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/cx.js":
+/*!***********************************************************************!*\
+  !*** ../../../js/controls/WysiwygControl/node_modules/fbjs/lib/cx.js ***!
+  \***********************************************************************/
+/***/ (function(module) {
+
+"use strict";
+
+
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ */
+
+/**
+ * This function is used to mark string literals representing CSS class names
+ * so that they can be transformed statically. This allows for modularization
+ * and minification of CSS class names.
+ *
+ * In static_upstream, this function is actually implemented, but it should
+ * eventually be replaced with something more descriptive, and the transform
+ * that is used in the main stack should be ported for use elsewhere.
+ *
+ * @param string|object className to modularize, or an object of key/values.
+ *                      In the object case, the values are conditions that
+ *                      determine if the className keys should be included.
+ * @param [string ...]  Variable list of classNames in the string case.
+ * @return string       Renderable space-separated CSS className.
+ */
+function cx(classNames) {
+  if (typeof classNames == 'object') {
+    return Object.keys(classNames).filter(function (className) {
+      return classNames[className];
+    }).map(replace).join(' ');
+  }
+
+  return Array.prototype.map.call(arguments, replace).join(' ');
+}
+
+function replace(str) {
+  return str.replace(/\//g, '-');
+}
+
+module.exports = cx;
+
+/***/ }),
+
+/***/ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/emptyFunction.js":
+/*!**********************************************************************************!*\
+  !*** ../../../js/controls/WysiwygControl/node_modules/fbjs/lib/emptyFunction.js ***!
+  \**********************************************************************************/
+/***/ (function(module) {
+
+"use strict";
+
+
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ * 
+ */
+function makeEmptyFunction(arg) {
+  return function () {
+    return arg;
+  };
+}
+/**
+ * This function accepts and discards inputs; it has no side effects. This is
+ * primarily useful idiomatically for overridable function endpoints which
+ * always need to be callable, since JS lacks a null-call idiom ala Cocoa.
+ */
+
+
+var emptyFunction = function emptyFunction() {};
+
+emptyFunction.thatReturns = makeEmptyFunction;
+emptyFunction.thatReturnsFalse = makeEmptyFunction(false);
+emptyFunction.thatReturnsTrue = makeEmptyFunction(true);
+emptyFunction.thatReturnsNull = makeEmptyFunction(null);
+
+emptyFunction.thatReturnsThis = function () {
+  return this;
+};
+
+emptyFunction.thatReturnsArgument = function (arg) {
+  return arg;
+};
+
+module.exports = emptyFunction;
+
+/***/ }),
+
+/***/ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/getActiveElement.js":
+/*!*************************************************************************************!*\
+  !*** ../../../js/controls/WysiwygControl/node_modules/fbjs/lib/getActiveElement.js ***!
+  \*************************************************************************************/
+/***/ (function(module) {
+
+"use strict";
+
+
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ * @typechecks
+ */
+
+/* eslint-disable fb-www/typeof-undefined */
+
+/**
+ * Same as document.activeElement but wraps in a try-catch block. In IE it is
+ * not safe to call document.activeElement if there is nothing focused.
+ *
+ * The activeElement will be null only if the document or document body is not
+ * yet defined.
+ *
+ * @param {?DOMDocument} doc Defaults to current document.
+ * @return {?DOMElement}
+ */
+function getActiveElement(doc)
+/*?DOMElement*/
+{
+  doc = doc || (typeof document !== 'undefined' ? document : undefined);
+
+  if (typeof doc === 'undefined') {
+    return null;
+  }
+
+  try {
+    return doc.activeElement || doc.body;
+  } catch (e) {
+    return doc.body;
+  }
+}
+
+module.exports = getActiveElement;
+
+/***/ }),
+
+/***/ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/getDocumentScrollElement.js":
+/*!*********************************************************************************************!*\
+  !*** ../../../js/controls/WysiwygControl/node_modules/fbjs/lib/getDocumentScrollElement.js ***!
+  \*********************************************************************************************/
+/***/ (function(module) {
+
+"use strict";
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ * @typechecks
+ */
+
+
+var isWebkit = typeof navigator !== 'undefined' && navigator.userAgent.indexOf('AppleWebKit') > -1;
+/**
+ * Gets the element with the document scroll properties such as `scrollLeft` and
+ * `scrollHeight`. This may differ across different browsers.
+ *
+ * NOTE: The return value can be null if the DOM is not yet ready.
+ *
+ * @param {?DOMDocument} doc Defaults to current document.
+ * @return {?DOMElement}
+ */
+
+function getDocumentScrollElement(doc) {
+  doc = doc || document;
+
+  if (doc.scrollingElement) {
+    return doc.scrollingElement;
+  }
+
+  return !isWebkit && doc.compatMode === 'CSS1Compat' ? doc.documentElement : doc.body;
+}
+
+module.exports = getDocumentScrollElement;
+
+/***/ }),
+
+/***/ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/getElementPosition.js":
+/*!***************************************************************************************!*\
+  !*** ../../../js/controls/WysiwygControl/node_modules/fbjs/lib/getElementPosition.js ***!
+  \***************************************************************************************/
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+"use strict";
+
+
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ * @typechecks
+ */
+var getElementRect = __webpack_require__(/*! ./getElementRect */ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/getElementRect.js");
+/**
+ * Gets an element's position in pixels relative to the viewport. The returned
+ * object represents the position of the element's top left corner.
+ *
+ * @param {DOMElement} element
+ * @return {object}
+ */
+
+
+function getElementPosition(element) {
+  var rect = getElementRect(element);
+  return {
+    x: rect.left,
+    y: rect.top,
+    width: rect.right - rect.left,
+    height: rect.bottom - rect.top
+  };
+}
+
+module.exports = getElementPosition;
+
+/***/ }),
+
+/***/ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/getElementRect.js":
+/*!***********************************************************************************!*\
+  !*** ../../../js/controls/WysiwygControl/node_modules/fbjs/lib/getElementRect.js ***!
+  \***********************************************************************************/
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+"use strict";
+
+
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ * @typechecks
+ */
+var containsNode = __webpack_require__(/*! ./containsNode */ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/containsNode.js");
+/**
+ * Gets an element's bounding rect in pixels relative to the viewport.
+ *
+ * @param {DOMElement} elem
+ * @return {object}
+ */
+
+
+function getElementRect(elem) {
+  var docElem = elem.ownerDocument.documentElement; // FF 2, Safari 3 and Opera 9.5- do not support getBoundingClientRect().
+  // IE9- will throw if the element is not in the document.
+
+  if (!('getBoundingClientRect' in elem) || !containsNode(docElem, elem)) {
+    return {
+      left: 0,
+      right: 0,
+      top: 0,
+      bottom: 0
+    };
+  } // Subtracts clientTop/Left because IE8- added a 2px border to the
+  // <html> element (see http://fburl.com/1493213). IE 7 in
+  // Quicksmode does not report clientLeft/clientTop so there
+  // will be an unaccounted offset of 2px when in quirksmode
+
+
+  var rect = elem.getBoundingClientRect();
+  return {
+    left: Math.round(rect.left) - docElem.clientLeft,
+    right: Math.round(rect.right) - docElem.clientLeft,
+    top: Math.round(rect.top) - docElem.clientTop,
+    bottom: Math.round(rect.bottom) - docElem.clientTop
+  };
+}
+
+module.exports = getElementRect;
+
+/***/ }),
+
+/***/ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/getScrollPosition.js":
+/*!**************************************************************************************!*\
+  !*** ../../../js/controls/WysiwygControl/node_modules/fbjs/lib/getScrollPosition.js ***!
+  \**************************************************************************************/
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+"use strict";
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ * @typechecks
+ */
+
+
+var getDocumentScrollElement = __webpack_require__(/*! ./getDocumentScrollElement */ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/getDocumentScrollElement.js");
+
+var getUnboundedScrollPosition = __webpack_require__(/*! ./getUnboundedScrollPosition */ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/getUnboundedScrollPosition.js");
+/**
+ * Gets the scroll position of the supplied element or window.
+ *
+ * The return values are bounded. This means that if the scroll position is
+ * negative or exceeds the element boundaries (which is possible using inertial
+ * scrolling), you will get zero or the maximum scroll position, respectively.
+ *
+ * If you need the unbound scroll position, use `getUnboundedScrollPosition`.
+ *
+ * @param {DOMWindow|DOMElement} scrollable
+ * @return {object} Map with `x` and `y` keys.
+ */
+
+
+function getScrollPosition(scrollable) {
+  var documentScrollElement = getDocumentScrollElement(scrollable.ownerDocument || scrollable.document);
+
+  if (scrollable.Window && scrollable instanceof scrollable.Window) {
+    scrollable = documentScrollElement;
+  }
+
+  var scrollPosition = getUnboundedScrollPosition(scrollable);
+  var viewport = scrollable === documentScrollElement ? scrollable.ownerDocument.documentElement : scrollable;
+  var xMax = scrollable.scrollWidth - viewport.clientWidth;
+  var yMax = scrollable.scrollHeight - viewport.clientHeight;
+  scrollPosition.x = Math.max(0, Math.min(scrollPosition.x, xMax));
+  scrollPosition.y = Math.max(0, Math.min(scrollPosition.y, yMax));
+  return scrollPosition;
+}
+
+module.exports = getScrollPosition;
+
+/***/ }),
+
+/***/ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/getStyleProperty.js":
+/*!*************************************************************************************!*\
+  !*** ../../../js/controls/WysiwygControl/node_modules/fbjs/lib/getStyleProperty.js ***!
+  \*************************************************************************************/
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+"use strict";
+
+
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ * @typechecks
+ */
+var camelize = __webpack_require__(/*! ./camelize */ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/camelize.js");
+
+var hyphenate = __webpack_require__(/*! ./hyphenate */ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/hyphenate.js");
+
+function asString(value)
+/*?string*/
+{
+  return value == null ? value : String(value);
+}
+
+function getStyleProperty(
+/*DOMNode*/
+node,
+/*string*/
+name)
+/*?string*/
+{
+  var computedStyle; // W3C Standard
+
+  if (window.getComputedStyle) {
+    // In certain cases such as within an iframe in FF3, this returns null.
+    computedStyle = window.getComputedStyle(node, null);
+
+    if (computedStyle) {
+      return asString(computedStyle.getPropertyValue(hyphenate(name)));
+    }
+  } // Safari
+
+
+  if (document.defaultView && document.defaultView.getComputedStyle) {
+    computedStyle = document.defaultView.getComputedStyle(node, null); // A Safari bug causes this to return null for `display: none` elements.
+
+    if (computedStyle) {
+      return asString(computedStyle.getPropertyValue(hyphenate(name)));
+    }
+
+    if (name === 'display') {
+      return 'none';
+    }
+  } // Internet Explorer
+
+
+  if (node.currentStyle) {
+    if (name === 'float') {
+      return asString(node.currentStyle.cssFloat || node.currentStyle.styleFloat);
+    }
+
+    return asString(node.currentStyle[camelize(name)]);
+  }
+
+  return asString(node.style && node.style[camelize(name)]);
+}
+
+module.exports = getStyleProperty;
+
+/***/ }),
+
+/***/ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/getUnboundedScrollPosition.js":
+/*!***********************************************************************************************!*\
+  !*** ../../../js/controls/WysiwygControl/node_modules/fbjs/lib/getUnboundedScrollPosition.js ***!
+  \***********************************************************************************************/
+/***/ (function(module) {
+
+"use strict";
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ * @typechecks
+ */
+
+/**
+ * Gets the scroll position of the supplied element or window.
+ *
+ * The return values are unbounded, unlike `getScrollPosition`. This means they
+ * may be negative or exceed the element boundaries (which is possible using
+ * inertial scrolling).
+ *
+ * @param {DOMWindow|DOMElement} scrollable
+ * @return {object} Map with `x` and `y` keys.
+ */
+
+function getUnboundedScrollPosition(scrollable) {
+  if (scrollable.Window && scrollable instanceof scrollable.Window) {
+    return {
+      x: scrollable.pageXOffset || scrollable.document.documentElement.scrollLeft,
+      y: scrollable.pageYOffset || scrollable.document.documentElement.scrollTop
+    };
+  }
+
+  return {
+    x: scrollable.scrollLeft,
+    y: scrollable.scrollTop
+  };
+}
+
+module.exports = getUnboundedScrollPosition;
+
+/***/ }),
+
+/***/ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/getViewportDimensions.js":
+/*!******************************************************************************************!*\
+  !*** ../../../js/controls/WysiwygControl/node_modules/fbjs/lib/getViewportDimensions.js ***!
+  \******************************************************************************************/
+/***/ (function(module) {
+
+"use strict";
+
+
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ * 
+ * @typechecks
+ */
+function getViewportWidth() {
+  var width;
+
+  if (document.documentElement) {
+    width = document.documentElement.clientWidth;
+  }
+
+  if (!width && document.body) {
+    width = document.body.clientWidth;
+  }
+
+  return width || 0;
+}
+
+function getViewportHeight() {
+  var height;
+
+  if (document.documentElement) {
+    height = document.documentElement.clientHeight;
+  }
+
+  if (!height && document.body) {
+    height = document.body.clientHeight;
+  }
+
+  return height || 0;
+}
+/**
+ * Gets the viewport dimensions including any scrollbars.
+ */
+
+
+function getViewportDimensions() {
+  return {
+    width: window.innerWidth || getViewportWidth(),
+    height: window.innerHeight || getViewportHeight()
+  };
+}
+/**
+ * Gets the viewport dimensions excluding any scrollbars.
+ */
+
+
+getViewportDimensions.withoutScrollbars = function () {
+  return {
+    width: getViewportWidth(),
+    height: getViewportHeight()
+  };
+};
+
+module.exports = getViewportDimensions;
+
+/***/ }),
+
+/***/ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/hyphenate.js":
+/*!******************************************************************************!*\
+  !*** ../../../js/controls/WysiwygControl/node_modules/fbjs/lib/hyphenate.js ***!
+  \******************************************************************************/
+/***/ (function(module) {
+
+"use strict";
+
+
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ * @typechecks
+ */
+var _uppercasePattern = /([A-Z])/g;
+/**
+ * Hyphenates a camelcased string, for example:
+ *
+ *   > hyphenate('backgroundColor')
+ *   < "background-color"
+ *
+ * For CSS style names, use `hyphenateStyleName` instead which works properly
+ * with all vendor prefixes, including `ms`.
+ *
+ * @param {string} string
+ * @return {string}
+ */
+
+function hyphenate(string) {
+  return string.replace(_uppercasePattern, '-$1').toLowerCase();
+}
+
+module.exports = hyphenate;
+
+/***/ }),
+
+/***/ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/invariant.js":
+/*!******************************************************************************!*\
+  !*** ../../../js/controls/WysiwygControl/node_modules/fbjs/lib/invariant.js ***!
+  \******************************************************************************/
+/***/ (function(module) {
+
+"use strict";
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ * 
+ */
+
+
+var validateFormat =  true ? function (format) {
+  if (format === undefined) {
+    throw new Error('invariant(...): Second argument must be a string.');
+  }
+} : 0;
+/**
+ * Use invariant() to assert state which your program assumes to be true.
+ *
+ * Provide sprintf-style format (only %s is supported) and arguments to provide
+ * information about what broke and what you were expecting.
+ *
+ * The invariant message will be stripped in production, but the invariant will
+ * remain to ensure logic does not differ in production.
+ */
+
+function invariant(condition, format) {
+  for (var _len = arguments.length, args = new Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
+    args[_key - 2] = arguments[_key];
+  }
+
+  validateFormat(format);
+
+  if (!condition) {
+    var error;
+
+    if (format === undefined) {
+      error = new Error('Minified exception occurred; use the non-minified dev environment ' + 'for the full error message and additional helpful warnings.');
+    } else {
+      var argIndex = 0;
+      error = new Error(format.replace(/%s/g, function () {
+        return String(args[argIndex++]);
+      }));
+      error.name = 'Invariant Violation';
+    }
+
+    error.framesToPop = 1; // Skip invariant's own stack frame.
+
+    throw error;
+  }
+}
+
+module.exports = invariant;
+
+/***/ }),
+
+/***/ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/isNode.js":
+/*!***************************************************************************!*\
+  !*** ../../../js/controls/WysiwygControl/node_modules/fbjs/lib/isNode.js ***!
+  \***************************************************************************/
+/***/ (function(module) {
+
+"use strict";
+
+
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ * @typechecks
+ */
+
+/**
+ * @param {*} object The object to check.
+ * @return {boolean} Whether or not the object is a DOM node.
+ */
+function isNode(object) {
+  var doc = object ? object.ownerDocument || object : document;
+  var defaultView = doc.defaultView || window;
+  return !!(object && (typeof defaultView.Node === 'function' ? object instanceof defaultView.Node : typeof object === 'object' && typeof object.nodeType === 'number' && typeof object.nodeName === 'string'));
+}
+
+module.exports = isNode;
+
+/***/ }),
+
+/***/ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/isTextNode.js":
+/*!*******************************************************************************!*\
+  !*** ../../../js/controls/WysiwygControl/node_modules/fbjs/lib/isTextNode.js ***!
+  \*******************************************************************************/
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+"use strict";
+
+
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ * @typechecks
+ */
+var isNode = __webpack_require__(/*! ./isNode */ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/isNode.js");
+/**
+ * @param {*} object The object to check.
+ * @return {boolean} Whether or not the object is a DOM text node.
+ */
+
+
+function isTextNode(object) {
+  return isNode(object) && object.nodeType == 3;
+}
+
+module.exports = isTextNode;
+
+/***/ }),
+
+/***/ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/joinClasses.js":
+/*!********************************************************************************!*\
+  !*** ../../../js/controls/WysiwygControl/node_modules/fbjs/lib/joinClasses.js ***!
+  \********************************************************************************/
+/***/ (function(module) {
+
+"use strict";
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ * 
+ * @typechecks static-only
+ */
+
+/**
+ * Combines multiple className strings into one.
+ */
+
+function joinClasses(className) {
+  var newClassName = className || '';
+  var argLength = arguments.length;
+
+  if (argLength > 1) {
+    for (var index = 1; index < argLength; index++) {
+      var nextClass = arguments[index];
+
+      if (nextClass) {
+        newClassName = (newClassName ? newClassName + ' ' : '') + nextClass;
+      }
+    }
+  }
+
+  return newClassName;
+}
+
+module.exports = joinClasses;
+
+/***/ }),
+
+/***/ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/mapObject.js":
+/*!******************************************************************************!*\
+  !*** ../../../js/controls/WysiwygControl/node_modules/fbjs/lib/mapObject.js ***!
+  \******************************************************************************/
+/***/ (function(module) {
+
+"use strict";
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ */
+
+
+var hasOwnProperty = Object.prototype.hasOwnProperty;
+/**
+ * Executes the provided `callback` once for each enumerable own property in the
+ * object and constructs a new object from the results. The `callback` is
+ * invoked with three arguments:
+ *
+ *  - the property value
+ *  - the property name
+ *  - the object being traversed
+ *
+ * Properties that are added after the call to `mapObject` will not be visited
+ * by `callback`. If the values of existing properties are changed, the value
+ * passed to `callback` will be the value at the time `mapObject` visits them.
+ * Properties that are deleted before being visited are not visited.
+ *
+ * @grep function objectMap()
+ * @grep function objMap()
+ *
+ * @param {?object} object
+ * @param {function} callback
+ * @param {*} context
+ * @return {?object}
+ */
+
+function mapObject(object, callback, context) {
+  if (!object) {
+    return null;
+  }
+
+  var result = {};
+
+  for (var name in object) {
+    if (hasOwnProperty.call(object, name)) {
+      result[name] = callback.call(context, object[name], name, object);
+    }
+  }
+
+  return result;
+}
+
+module.exports = mapObject;
+
+/***/ }),
+
+/***/ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/memoizeStringOnly.js":
+/*!**************************************************************************************!*\
+  !*** ../../../js/controls/WysiwygControl/node_modules/fbjs/lib/memoizeStringOnly.js ***!
+  \**************************************************************************************/
+/***/ (function(module) {
+
+"use strict";
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ * 
+ * @typechecks static-only
+ */
+
+/**
+ * Memoizes the return value of a function that accepts one string argument.
+ */
+
+function memoizeStringOnly(callback) {
+  var cache = {};
+  return function (string) {
+    if (!cache.hasOwnProperty(string)) {
+      cache[string] = callback.call(this, string);
+    }
+
+    return cache[string];
+  };
+}
+
+module.exports = memoizeStringOnly;
+
+/***/ }),
+
+/***/ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/nullthrows.js":
+/*!*******************************************************************************!*\
+  !*** ../../../js/controls/WysiwygControl/node_modules/fbjs/lib/nullthrows.js ***!
+  \*******************************************************************************/
+/***/ (function(module) {
+
+"use strict";
+
+
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ * 
+ */
+var nullthrows = function nullthrows(x) {
+  if (x != null) {
+    return x;
+  }
+
+  throw new Error("Got unexpected null or undefined");
+};
+
+module.exports = nullthrows;
+
+/***/ }),
+
+/***/ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/setImmediate.js":
+/*!*********************************************************************************!*\
+  !*** ../../../js/controls/WysiwygControl/node_modules/fbjs/lib/setImmediate.js ***!
+  \*********************************************************************************/
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+"use strict";
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ */
+ // setimmediate adds setImmediate to the global. We want to make sure we export
+// the actual function.
+
+__webpack_require__(/*! setimmediate */ "../../../js/controls/WysiwygControl/node_modules/setimmediate/setImmediate.js");
+
+module.exports = __webpack_require__.g.setImmediate;
+
+/***/ }),
+
+/***/ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/warning.js":
+/*!****************************************************************************!*\
+  !*** ../../../js/controls/WysiwygControl/node_modules/fbjs/lib/warning.js ***!
+  \****************************************************************************/
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+"use strict";
+/**
+ * Copyright (c) 2014-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ */
+
+
+var emptyFunction = __webpack_require__(/*! ./emptyFunction */ "../../../js/controls/WysiwygControl/node_modules/fbjs/lib/emptyFunction.js");
+/**
+ * Similar to invariant but only logs a warning if the condition is not met.
+ * This can be used to log issues in development environments in critical
+ * paths. Removing the logging code for production environments will keep the
+ * same logic and follow the same code paths.
+ */
+
+
+function printWarning(format) {
+  for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+    args[_key - 1] = arguments[_key];
+  }
+
+  var argIndex = 0;
+  var message = 'Warning: ' + format.replace(/%s/g, function () {
+    return args[argIndex++];
+  });
+
+  if (typeof console !== 'undefined') {
+    console.error(message);
+  }
+
+  try {
+    // --- Welcome to debugging React ---
+    // This error was thrown as a convenience so that you can use this stack
+    // to find the callsite that caused this warning to fire.
+    throw new Error(message);
+  } catch (x) {}
+}
+
+var warning =  true ? function (condition, format) {
+  if (format === undefined) {
+    throw new Error('`warning(condition, format, ...args)` requires a warning ' + 'message argument');
+  }
+
+  if (!condition) {
+    for (var _len2 = arguments.length, args = new Array(_len2 > 2 ? _len2 - 2 : 0), _key2 = 2; _key2 < _len2; _key2++) {
+      args[_key2 - 2] = arguments[_key2];
+    }
+
+    printWarning.apply(void 0, [format].concat(args));
+  }
+} : 0;
+module.exports = warning;
 
 /***/ }),
 

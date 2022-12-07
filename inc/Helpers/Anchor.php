@@ -12,7 +12,7 @@ class Anchor {
 
         $anchor = null;
 
-        if( preg_match( '/<div(.*)class="wp-block-custom-' . $className . '[^"]*"([^>]*)>(.*)<\/div>/s', $content, $content_transformed ) === 1 ) {
+        if( preg_match( '/<div(.*)class="wp-block-' . $className . '[^"]*"([^>]*)>(.*)<\/div>/s', $content, $content_transformed ) === 1 ) {
 
             $class_prev = $content_transformed[1];
             $class_next = $content_transformed[2];

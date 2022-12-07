@@ -1,18 +1,15 @@
 import { Component, Fragment } from '@wordpress/element';
 
 import {
-    SelectControl
-} from '@wordpress/components';
-
-import {
   Editor,
   EditorState,
   RichUtils,
   convertFromRaw,
-  convertToRaw
+  convertToRaw,
+  DefaultDraftBlockRenderMap
 } from 'draft-js';
 
-// import { Map } from 'immutable/dist/immutable';
+import { Map } from 'Immutable';
 
 export class DraftEditor extends Component {
 
@@ -29,60 +26,51 @@ export class DraftEditor extends Component {
 
         this.defineBlocks();
         this.defineInlineStyles();
-
-        // this.blockRenderers = {};
-        // for( const [key, val] of Object.entries(props.typo) ) {
-        //     if( val.type == 'block' ) {
-        //         this.blockRenderers[ key] = (block) => this._handleBlockRenderers(block);
-        //     }
-        // }
-        // this.optionsStateToHTML = {
-        //     // inlineStyles: {
-        //     //   // Override default element (`strong`).
-        //     // //   BOLD: {element: 'b'},
-        //     // //   ITALIC: {
-        //     // //     // Add custom attributes. You can also use React-style `className`.
-        //     // //     attributes: {class: 'foo'},
-        //     // //     // Use camel-case. Units (`px`) will be added where necessary.
-        //     // //     style: {fontSize: 12}
-        //     // //   },
-        //     // //   // Use a custom inline style. Default element is `span`.
-        //     // //   RED: {style: {color: '#900'}},
-        //     // },
-        //     blockRenderers: this.blockRenderers
-        // };
     }
 
     defineBlocks() {
 
         this.blockTypes = [];
+        this.blockRenderMap = {};
         for( const [key, val] of Object.entries(this.props.typo) ) {
             if( val.type == 'block' ) {
                 this.blockTypes.push( {
                     label: val.label,
                     style: key
                 } );
+
+                this.blockRenderMap[key] = {
+                    wrapper: <WrapperBlockRendering type={key} />
+                };
             }
         }
+
+        this.blockRenderMap = Map( this.blockRenderMap );
+        this.blockRenderMap = DefaultDraftBlockRenderMap.merge( this.blockRenderMap );
+        
     }
 
     defineInlineStyles() {
 
         this.inlineStyles = [];
+        this.styleMap = {};
         for( const [key, val] of Object.entries(this.props.typo) ) {
             if( val.type == 'inline' ) {
                 this.inlineStyles.push( {
                     label: val.label,
                     style: key
                 } );
+
+                if( val?.editor && typeof val.editor == 'object' ) {
+                    this.styleMap[key] = {};
+                    for( const [keyCss, valCss] of Object.entries(val.editor) ) {
+                        this.styleMap[key][keyCss] = valCss;
+                    }
+                }
+                
             }
         }
     }
-
-    // _handleBlockRenderers( block ) {
-
-    //     return '<div class="' + this.props.typo[block.getType()].class + '">' + block.getText() + '</div>';
-    // }
 
     handleChange( editorState ) {
 
@@ -159,35 +147,7 @@ export class DraftEditor extends Component {
                 </div>
             );
         };
-
-
-
-
-
-        // If the user changes block type before entering any text, we can
-        // either style the placeholder or hide it. Let's just hide it now.
-        let className = 'DraftEditor-editor';
-        var contentState = this.state.editorState.getCurrentContent();
-        if (!contentState.hasText()) {
-            if (contentState.getBlockMap().first().getType() !== 'unstyled') {
-                className += ' DraftEditor-hidePlaceholder';
-            }
-        }
-
-
-
-
-        // const blockRenderMap = Map({
-        //     'lead': {
-        //       element: 'section'
-        //     }
-        //   });
-
-        // Include 'paragraph' as a valid block and updated the unstyled element but
-        // keep support for other draft default block types
-        // const extendedBlockRenderMap = Draft.DefaultDraftBlockRenderMap.merge(blockRenderMap);
-
-
+          
         return <Fragment>
             <div className="DraftEditor-container">
                 <BlockStyleControls
@@ -198,14 +158,14 @@ export class DraftEditor extends Component {
                     editorState={this.state.editorState}
                     onToggle={this.toggleInlineStyle}
                 />
-                <div className={className} onClick={this.focus}>
                 <Editor
                     editorState={this.state.editorState}
                     onChange={this.onChange}
+                    blockRenderMap={this.blockRenderMap}
+                    customStyleMap={this.styleMap}
                 />
-                </div>
             </div>
-        </Fragment>;
+        </Fragment>
     }
 }
 
@@ -231,4 +191,19 @@ class StyleButton extends Component {
             </span>
         );
     }
-  }
+}
+
+class WrapperBlockRendering extends Component {
+
+    constructor(props) {
+      super(props);
+    }
+  
+    render() {
+        return (
+            <div className='WrapperBlockRendering' type={this.props.type} >
+                {this.props.children}
+            </div>
+        );
+    }
+}
