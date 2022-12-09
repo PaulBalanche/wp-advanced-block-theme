@@ -2,48 +2,43 @@
 
 namespace Abt\Helpers;
 
-use Abt\Singleton\Config as Config;
-use Composer\Installers\OsclassInstaller;
+use Abt\Services\Render as RenderService;
 
 class DraftJsToHtml {
     
     public static function rawToHtml( $raw ) {
 
-        $blocks = [];
+        $content = [];
 
         if( is_array($raw) && isset($raw['blocks']) && is_array($raw['blocks']) ) {
             foreach( $raw['blocks'] as $block ) {
 
-                $blocks[] = self::blocFormatting( $block );
+                if( is_array($block) && isset($block['text']) && ! empty($block['text']) && isset($block['type']) ) {
+                    $content[] = self::generateDeepStyleObject( $block );
+                }
             }
         }
 
-
-
-        $html = '';
-        foreach( $blocks as $key => $block ) {
-
-            $html .= self::renderHtml( $block );
-        }
-echo htmlentities($html);
-echo '<pre>'; print_r($blocks);
-die;
-        return $html;
+        return self::getContentHtml( $content );
     }
 
 
-    public static function renderHtml( $blocks ) {
-        // RenderService::render( $block_spec['path'], $render_attributes ) );s
+    public static function getContentHtml( $content ) {
+
         $html = '';
-        if( is_array($blocks) && isset($blocks['content']) ) {
+        if( is_array($content) ) {
 
-            foreach( $blocks['content'] as $content ) {
+            foreach( $content as $subContent ) {
+                
+                if( is_array($subContent) && isset($subContent['content']) ) {
 
-                if( is_array($content) ) {
-                    $html .= self::renderHtml( $content );
+                    $html .= RenderService::render( 'sugar/bare/typo/typo.twig', [
+                        'type' => ( isset($subContent['type']) && $subContent['type'] != null ) ? $subContent['type'] : null,
+                        'html' => self::getContentHtml($subContent['content'])
+                    ] );
                 }
                 else {
-                    $html .= $content;
+                    $html .= $subContent;
                 }
             }
         }
@@ -52,7 +47,11 @@ die;
     }
 
 
-    public static function contentFormatting( $block, &$char_position, $style = null, $keyInlineStyleToPass = null ) {
+    /**
+     * Take DraftJs raw blocks and create a deep object with style and contents
+     * 
+     */
+    public static function generateDeepStyleObject( $block, &$char_position = 0, &$keyInlineStylePosition = -1, $style = null, &$breakPoint = [] ) {
 
         $content = [ '' ];
 
@@ -63,174 +62,48 @@ die;
                 continue;
             }
 
+            if( isset($breakPoint[$key]) && $breakPoint[$key] > 0 ) {
+                $breakPoint[$key]--;
+                break;
+            }
+
+            // Opening sub-style
             foreach( $block['inlineStyleRanges'] as $keyInlineStyle => $inlineStyle ) {
 
-                // Opening
-                if( $inlineStyle['offset'] == $key && ( $keyInlineStyleToPass === null || ( $keyInlineStyleToPass !== null && $keyInlineStyle != $keyInlineStyleToPass ) ) ) {
-
-                    $content[] = self::contentFormatting( $block, $char_position, null, $keyInlineStyle );
+                if( $inlineStyle['offset'] == $key && $keyInlineStyle > $keyInlineStylePosition ) {
+                    
+                    $keyInlineStylePosition = $keyInlineStyle;
+                    $content[] = self::generateDeepStyleObject( $block, $char_position, $keyInlineStyle, $inlineStyle['style'], $breakPoint );
                     $content[] = '';
                     continue 2;
-                }
-                // Closing
-                else if( $inlineStyle['offset'] + $inlineStyle['length']  == $key ) {
-
-                    $content[ count($content) - 1 ] .= $character;
-                    $char_position++;
-                    break 2;
                 }
             }
 
             $content[ count($content) - 1 ] .= $character;
             $char_position++;
+
+            // Closing sub-style
+            foreach( $block['inlineStyleRanges'] as $keyInlineStyle => $inlineStyle ) {
+
+                if( $inlineStyle['offset'] + $inlineStyle['length'] == $key + 1 ) {
+
+                    $breakPoint[$key + 1] = ( isset($breakPoint[$key + 1]) ) ? $breakPoint[$key + 1] + 1: 1;
+                }
+            }
         }
 
+        if( empty( $content[0] ) ) {
+            array_shift($content);
+        }
+        
         if( empty( $content[ count($content) - 1 ] ) ) {
             unset($content[ count($content) - 1 ]);
-        } 
+        }
 
         return [
             'type' => $style,
             'content' => $content
         ];
     }
-
-    public static function blocFormatting( $block ) {
-
-        if( ! is_array($block) || ! isset($block['text']) || empty($block['text']) || ! isset($block['type']) ) {
-            return;
-        }
-
-        $char_position = 0;
-        $content = self::contentFormatting( $block, $char_position );
-
-        
-        
-        echo '<pre>';print_r($content);
-        echo '<pre>';print_r($block);die;
-
-        return $content;
-
-
-
-
-
-
-
-
-
-
-        // $current_index = 0;
-
-        // $content[] = [
-        //     'type' => 'unstyled',
-        //     'content' => []
-        // ];
-        
-        // $textSplitted = str_split($block['text']);
-        // foreach( $textSplitted as $key => $character ) {
-
-        //     foreach( $block['inlineStyleRanges'] as $inlineStyle ) {
-
-        //         // Opening
-        //         if( $inlineStyle['offset'] == $key ) {
-
-        //             $current_index++;
-
-        //             // $content[ $current_index ] = [
-        //             //     'type' => $inlineStyle['style'],
-        //             //     'content' => [ $character ]
-        //             // ];
-        //         }
-        //         else if( $inlineStyle['offset'] + $inlineStyle['length']  == $key ) {
-
-        //             $current_index++;
-        //             // $content[] = self::outputInlineStyle( $inlineStyle['style'], false );
-        //         }
-        //     }
-
-        //     if( ! isset($content[0]['content'][$current_index]) ) {
-        //         $content[0]['content'][$current_index] = [
-        //             'type' => 'unstyled',
-        //             'content' => ''
-        //         ];
-        //     }
-        //     $content[0]['content'][$current_index]['content'] .= $character;
-        // }
-
-
-
-
-
-
-
-
-
-        // $theme_spec = Config::getInstance()->get_spec();
-
-        // $div = ( $block['type'] != 'unstyled' ) ? 'div' : 'p';
-
-        // $html = [];
-        
-        // $html[] = '<' . $div;
-        // if( $block['type'] != 'unstyled' && isset($theme_spec['typo']) && is_array($theme_spec['typo']) && isset($theme_spec['typo'][ $block['type'] ]) && is_array($theme_spec['typo'][ $block['type'] ]) && isset($theme_spec['typo'][ $block['type'] ]['class']) ) {
-        //     $html[] =  ' class="' . $theme_spec['typo'][ $block['type'] ]['class'] . '"';
-        // }
-        // $html[] = '>';
-
-        // $html[] = self::inlineFormatting( $block );
-
-        // $html[] = '</' . $div . '>';
-
-        // return implode( '', $html);
-    }
-
-    // public static function inlineFormatting( $block ) {
-
-    //     if( ! is_array($block) || ! isset($block['text']) || empty($block['text']) ) {
-    //         return;
-    //     }
-
-    //     $html = [];
-
-    //     if( is_array($block['inlineStyleRanges']) && count($block['inlineStyleRanges']) > 0 ) {
-
-    //         $textSplitted = str_split($block['text']);
-
-    //         foreach( $textSplitted as $key => $character ) {
-
-    //             foreach( $block['inlineStyleRanges'] as $inlineStyle ) {
-
-    //                 // Opening
-    //                 if( $inlineStyle['offset'] == $key ) {
-    //                     $html[] = self::outputInlineStyle( $inlineStyle['style'] );
-    //                 }
-    //                 else if( $inlineStyle['offset'] + $inlineStyle['length']  == $key ) {
-    //                     $html[] = self::outputInlineStyle( $inlineStyle['style'], false );
-    //                 }
-    //             }
-
-    //             $html[] = $character;
-    //         }
-    //     }
-    //     else {
-    //         $html[] = $block['text'];
-    //     }
-
-    //     return implode( '', $html);
-    // }
-
-    // public static function outputInlineStyle( $style, $opening = true ) {
-
-    //     $output = '';
-
-    //     $theme_spec = Config::getInstance()->get_spec();
-
-    //     if( isset($theme_spec['typo']) && is_array($theme_spec['typo']) && isset($theme_spec['typo'][$style]) && is_array($theme_spec['typo'][$style]) && isset($theme_spec['typo'][$style]['class']) ) {
-    //         $output = ( $opening ) ? '<span class="' . $theme_spec['typo'][$style]['class'] . '">' : '</span>';
-    //     }
-
-    //     return $output;
-    // }
 
 }

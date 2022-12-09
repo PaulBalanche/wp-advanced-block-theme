@@ -178,7 +178,7 @@ class LayoutBlock extends ModelBase {
 
         $attributes = array_merge( $attributes, [
             'anchor' => Anchor::get( $this->get_ID(), $content ),
-            'content' => $content
+            'html' => $content
         ] );
         $attributes = apply_filters( 'Abt\pre_render_attributes_layout_' . $this->get_ID(), $attributes, $content, $block_instance );
 
