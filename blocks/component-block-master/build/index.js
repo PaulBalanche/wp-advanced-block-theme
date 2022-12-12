@@ -1880,16 +1880,33 @@ class WysiwygControl extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Com
     let typo = {};
     if (themeSpec !== null && themeSpec !== void 0 && themeSpec.typo && typeof themeSpec.typo == 'object') {
       for (const [key, val] of Object.entries(themeSpec.typo)) {
+        if (val !== null && val !== void 0 && val.default && !!val.default) {
+          continue;
+        }
+        let typeStyle = 'inline';
         let editorCss = null;
         if (val !== null && val !== void 0 && val.style && typeof val.style == 'object') {
           editorCss = {};
           for (const [keyCss, valCss] of Object.entries(val.style)) {
-            editorCss[keyCss] = valCss;
+            if (keyCss != 'display') {
+              editorCss[keyCss] = valCss;
+            } else if (valCss == 'block') {
+              typeStyle = 'block';
+            }
+          }
+        }
+        if (val !== null && val !== void 0 && val.editorStyle && typeof val.editorStyle == 'object') {
+          for (const [keyCss, valCss] of Object.entries(val.editorStyle)) {
+            if (keyCss != 'display') {
+              editorCss[keyCss] = valCss;
+            } else if (valCss == 'block') {
+              typeStyle = 'block';
+            }
           }
         }
         typo[key] = {
           label: key,
-          type: val !== null && val !== void 0 && val.nestable && val.nestable ? 'inline' : 'block',
+          type: typeStyle,
           editor: editorCss
         };
       }
