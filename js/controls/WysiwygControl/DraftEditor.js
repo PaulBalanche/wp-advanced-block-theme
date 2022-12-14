@@ -1,12 +1,17 @@
 import { Component, Fragment } from '@wordpress/element';
 
 import {
+    SelectControl
+} from '@wordpress/components';
+
+import {
   Editor,
   EditorState,
   RichUtils,
   convertFromRaw,
   convertToRaw,
-  DefaultDraftBlockRenderMap
+  DefaultDraftBlockRenderMap,
+  getDefaultKeyBinding
 } from 'draft-js';
 
 import { Map } from 'Immutable';
@@ -23,6 +28,7 @@ export class DraftEditor extends Component {
         this.onChange = editorState => this.handleChange(editorState);
         this.toggleBlockType = this._toggleBlockType.bind(this);
         this.toggleInlineStyle = this._toggleInlineStyle.bind(this);
+        this.handleKeyCommand = this.handleKeyCommand.bind(this);
 
         this.defineBlocks();
         this.defineInlineStyles();
@@ -30,46 +36,81 @@ export class DraftEditor extends Component {
 
     defineBlocks() {
 
-        this.blockTypes = [];
+        this.blockTypes = {};
         this.blockRenderMap = {};
         for( const [key, val] of Object.entries(this.props.typo) ) {
-            if( val.type == 'block' ) {
-                this.blockTypes.push( {
+            
+            if( ! val.isBlock ) {
+                continue;
+            }
+
+            let style = [];
+            if( val?.editor && typeof val.editor == 'object' ) {
+                for( const [keyCss, valCss] of Object.entries(val.editor) ) {
+                    style[keyCss] = valCss;
+                }
+            }
+
+            if( val.isDefault ) {
+
+                this.blockRenderMap.unstyled = {
+                    element: 'div',
+                    wrapper: <WrapperBlockRendering style={style} />
+                };
+            }
+            else {
+
+                let groupToAdd = ( val.group == 'null' ) ? 'default' : val.group;
+                if( typeof this.blockTypes[groupToAdd] != 'object' ) {
+                    this.blockTypes[groupToAdd] = [];
+                }
+
+                this.blockTypes[groupToAdd].push( {
                     label: val.label,
                     style: key
                 } );
 
                 this.blockRenderMap[key] = {
-                    wrapper: <WrapperBlockRendering type={key} />
+                    wrapper: <WrapperBlockRendering style={style} />
                 };
             }
         }
 
         this.blockRenderMap = Map( this.blockRenderMap );
         this.blockRenderMap = DefaultDraftBlockRenderMap.merge( this.blockRenderMap );
-        
     }
 
     defineInlineStyles() {
 
-        this.inlineStyles = [];
+        this.inlineStyles = {};
         this.styleMap = {};
         for( const [key, val] of Object.entries(this.props.typo) ) {
-            if( val.type == 'inline' ) {
-                this.inlineStyles.push( {
-                    label: val.label,
-                    style: key
-                } );
 
-                if( val?.editor && typeof val.editor == 'object' ) {
-                    this.styleMap[key] = {};
-                    for( const [keyCss, valCss] of Object.entries(val.editor) ) {
-                        this.styleMap[key][keyCss] = valCss;
-                    }
+            if( val.isBlock ) {
+                continue;
+            }
+
+            let groupToAdd = ( val.group == 'null' ) ? 'default' : val.group;
+            if( typeof this.inlineStyles[groupToAdd] != 'object' ) {
+                this.inlineStyles[groupToAdd] = [];
+            }
+
+            this.inlineStyles[groupToAdd].push( {
+                label: val.label,
+                style: key
+            } );
+
+            if( val?.editor && typeof val.editor == 'object' ) {
+                this.styleMap[key] = {};
+                for( const [keyCss, valCss] of Object.entries(val.editor) ) {
+                    this.styleMap[key][keyCss] = valCss;
                 }
-                
             }
         }
+    }
+
+    handleSoftNewLine(e) {
+        return ( e.keyCode === 13 && e.shiftKey ) ? 'soft-new-line' : getDefaultKeyBinding(e);
     }
 
     handleChange( editorState ) {
@@ -82,10 +123,6 @@ export class DraftEditor extends Component {
         this.props.onChange( this.rawDraftContentState );
     }
 
-    _onBoldClick() {
-        this.onChange( RichUtils.toggleInlineStyle(this.state.editorState, 'BOLD') );
-    }
-
     _toggleBlockType(blockType) {
         this.onChange(
           RichUtils.toggleBlockType(
@@ -96,13 +133,42 @@ export class DraftEditor extends Component {
     }
 
     _toggleInlineStyle(inlineStyle) {
-        this.onChange(
-          RichUtils.toggleInlineStyle(
-            this.state.editorState,
+
+        let curentEditorState = this.state.editorState;
+        const currentInlineStyle = curentEditorState.getCurrentInlineStyle();
+
+        for( const [key, val] of Object.entries(this.props.typo) ) {
+
+            if( val.isBlock || val.type != 'color' || key == inlineStyle ) {
+                continue;
+            }
+
+            if( currentInlineStyle.has(key) ) {
+
+                curentEditorState = RichUtils.toggleInlineStyle(
+                    curentEditorState,
+                    key
+                );
+            }
+        }
+
+        const newEditorState = RichUtils.toggleInlineStyle(
+            curentEditorState,
             inlineStyle
-          )
         );
+
+        this.onChange(newEditorState);
     }
+
+    handleKeyCommand(command, editorState) {
+
+        if (command === 'soft-new-line') {
+            this.handleChange( RichUtils.insertSoftNewline(editorState) );
+            return 'handled';
+        }
+
+        return 'not-handled';
+      }
 
     render() {
     
@@ -114,40 +180,57 @@ export class DraftEditor extends Component {
                 .getBlockForKey(selection.getStartKey())
                 .getType();
 
-            return (
-                <div className="DraftEditor-controls">
-                { this.blockTypes.map((type) =>
-                    <StyleButton
-                        key={type.label}
-                        active={type.style === blockType}
-                        label={type.label}
-                        onToggle={props.onToggle}
-                        style={type.style}
-                    />
-                ) }
-                </div>
-            );
-        };
+            let optgroup = [];
+            for( const [key, val] of Object.entries(this.blockTypes) ) {
+
+                let options = [];
+                val.forEach( type => options.push(<option value={ type.style }>{ type.label }</option>) );
+                optgroup.push(<optgroup
+                        label={ key }
+                    >
+                        { options }
+                    </optgroup>
+                );
+            }
+
+            return <SelectControl
+                key={ this.props.id +'-selectControl-blockTypes' }
+                label={ 'Paragraph style' }
+                value={ blockType }
+                onChange={ ( newValue ) =>
+                    this._toggleBlockType(newValue) 
+                }
+            >
+                <option value="">Default</option>
+                { optgroup }
+            </SelectControl>
+        }
 
         const InlineStyleControls = (props) => {
 
             const currentStyle = props.editorState.getCurrentInlineStyle();
+
+            let groupControls = [];
+            for( const [key, val] of Object.entries(this.inlineStyles) ) {
+
+                groupControls.push(
+                    <div className="DraftEditor-controls">
+                        { val.map((type) =>
+                            <StyleButton
+                                key={ this.props.id +'-StyleButton-inlineStyles-' + type.style }
+                                active={currentStyle.has(type.style)}
+                                label={type.label}
+                                onToggle={props.onToggle}
+                                style={type.style}
+                            />
+                        ) }
+                        </div>
+                );
+            };
             
-            return (
-                <div className="DraftEditor-controls">
-                { this.inlineStyles.map((type) =>
-                    <StyleButton
-                        key={type.label}
-                        active={currentStyle.has(type.style)}
-                        label={type.label}
-                        onToggle={props.onToggle}
-                        style={type.style}
-                    />
-                ) }
-                </div>
-            );
-        };
-          
+            return groupControls
+        }
+
         return <Fragment>
             <div className="DraftEditor-container">
                 <BlockStyleControls
@@ -163,6 +246,8 @@ export class DraftEditor extends Component {
                     onChange={this.onChange}
                     blockRenderMap={this.blockRenderMap}
                     customStyleMap={this.styleMap}
+                    handleKeyCommand={this.handleKeyCommand}
+                    keyBindingFn={this.handleSoftNewLine}
                 />
             </div>
         </Fragment>
@@ -200,8 +285,9 @@ class WrapperBlockRendering extends Component {
     }
   
     render() {
+
         return (
-            <div className='WrapperBlockRendering' type={this.props.type} >
+            <div style={this.props.style} >
                 {this.props.children}
             </div>
         );
