@@ -28,6 +28,7 @@ export class DraftEditor extends Component {
         this.onChange = editorState => this.handleChange(editorState);
         this.toggleBlockType = this._toggleBlockType.bind(this);
         this.toggleInlineStyle = this._toggleInlineStyle.bind(this);
+        this.toggleColorStyle = this._toggleColorStyle.bind(this);
         this.handleKeyCommand = this.handleKeyCommand.bind(this);
 
         this.defineBlocks();
@@ -83,6 +84,7 @@ export class DraftEditor extends Component {
     defineInlineStyles() {
 
         this.inlineStyles = {};
+        this.colorOptions = [];
         this.styleMap = {};
         for( const [key, val] of Object.entries(this.props.typo) ) {
 
@@ -90,23 +92,35 @@ export class DraftEditor extends Component {
                 continue;
             }
 
-            let groupToAdd = ( val.group == 'null' ) ? 'default' : val.group;
-            if( typeof this.inlineStyles[groupToAdd] != 'object' ) {
-                this.inlineStyles[groupToAdd] = [];
+            let inlineCss = [];
+            if( val?.editor && typeof val.editor == 'object' ) {
+                for( const [keyCss, valCss] of Object.entries(val.editor) ) {
+                    inlineCss[keyCss] = valCss;
+                }
+                this.styleMap[key] = inlineCss
             }
 
-            this.inlineStyles[groupToAdd].push( {
-                label: val.label,
-                style: key
-            } );
-
-            if( val?.editor && typeof val.editor == 'object' ) {
-                this.styleMap[key] = {};
-                for( const [keyCss, valCss] of Object.entries(val.editor) ) {
-                    this.styleMap[key][keyCss] = valCss;
+            if( val.type != 'color' ) {
+                let groupToAdd = ( val.group == 'null' ) ? 'default' : val.group;
+                if( typeof this.inlineStyles[groupToAdd] != 'object' ) {
+                    this.inlineStyles[groupToAdd] = [];
                 }
+
+                this.inlineStyles[groupToAdd].push( {
+                    label: val.label,
+                    style: key,
+                    buttonStyle: inlineCss
+                } );
+            }
+            else {
+                this.colorOptions.push( {
+                    label: val.label,
+                    style: key,
+                    buttonStyle: inlineCss
+                } );
             }
         }
+
     }
 
     handleSoftNewLine(e) {
@@ -125,14 +139,23 @@ export class DraftEditor extends Component {
 
     _toggleBlockType(blockType) {
         this.onChange(
-          RichUtils.toggleBlockType(
-            this.state.editorState,
-            blockType
-          )
+            RichUtils.toggleBlockType(
+                this.state.editorState,
+                blockType
+            )
         );
     }
 
     _toggleInlineStyle(inlineStyle) {
+        this.onChange(
+            RichUtils.toggleInlineStyle(
+                this.state.editorState,
+                inlineStyle
+            )
+        );
+    }
+
+    _toggleColorStyle(inlineStyle) {
 
         let curentEditorState = this.state.editorState;
         const currentInlineStyle = curentEditorState.getCurrentInlineStyle();
@@ -222,6 +245,7 @@ export class DraftEditor extends Component {
                                 label={type.label}
                                 onToggle={props.onToggle}
                                 style={type.style}
+                                buttonStyle={type.buttonStyle}
                             />
                         ) }
                         </div>
@@ -229,6 +253,36 @@ export class DraftEditor extends Component {
             };
             
             return groupControls
+        }
+
+        const ColorStyleControls = (props) => {
+
+            const currentStyle = props.editorState.getCurrentInlineStyle();
+
+            let currentColor = 'Choose color...'
+            let colorButtons = [];
+            this.colorOptions.forEach( function(type) {
+
+                currentColor = ( currentStyle.has(type.style) ) ? type.label : currentColor;
+
+                colorButtons.push(
+                    <StyleButton
+                        key={ 'StyleButton-inlineStyles-' + type.style }
+                        active={currentStyle.has(type.style)}
+                        label={type.label}
+                        onToggle={props.onToggle}
+                        style={type.style}
+                        buttonStyle={type.buttonStyle}
+                    />
+                );
+            });
+
+            return (
+                <div className="DraftEditor-controls colors-container">
+                    <span className="currentColor">{ currentColor }</span>
+                    <div className="colors-innerContainer">{ colorButtons }</div>
+                </div>
+            );
         }
 
         return <Fragment>
@@ -240,6 +294,10 @@ export class DraftEditor extends Component {
                 <InlineStyleControls
                     editorState={this.state.editorState}
                     onToggle={this.toggleInlineStyle}
+                />
+                <ColorStyleControls
+                    editorState={this.state.editorState}
+                    onToggle={this.toggleColorStyle}
                 />
                 <Editor
                     editorState={this.state.editorState}
@@ -269,9 +327,9 @@ class StyleButton extends Component {
         if (this.props.active) {
          className += ' DraftEditor-activeButton';
         }
-
+    
         return (
-            <span className={className} onMouseDown={this.onToggle}>
+            <span className={className} onMouseDown={this.onToggle} style={this.props.buttonStyle} >
                 {this.props.label}
             </span>
         );

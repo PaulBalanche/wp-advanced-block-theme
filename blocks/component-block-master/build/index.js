@@ -1680,9 +1680,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var draft_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! draft-js */ "../../js/controls/WysiwygControl/node_modules/draft-js/lib/Draft.js");
-/* harmony import */ var draft_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(draft_js__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var Immutable__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! Immutable */ "../../js/controls/WysiwygControl/node_modules/Immutable/dist/immutable.es.js");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var draft_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! draft-js */ "../../js/controls/WysiwygControl/node_modules/draft-js/lib/Draft.js");
+/* harmony import */ var draft_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(draft_js__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var Immutable__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! Immutable */ "../../js/controls/WysiwygControl/node_modules/Immutable/dist/immutable.es.js");
+
 
 
 
@@ -1692,93 +1695,190 @@ class DraftEditor extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Compon
     super(props);
     this.rawDraftContentState = props !== null && props !== void 0 && props.initialContent ? props.initialContent : null;
     this.state = {
-      editorState: this.rawDraftContentState != null ? draft_js__WEBPACK_IMPORTED_MODULE_1__.EditorState.createWithContent((0,draft_js__WEBPACK_IMPORTED_MODULE_1__.convertFromRaw)(this.rawDraftContentState)) : draft_js__WEBPACK_IMPORTED_MODULE_1__.EditorState.createEmpty()
+      editorState: this.rawDraftContentState != null ? draft_js__WEBPACK_IMPORTED_MODULE_2__.EditorState.createWithContent((0,draft_js__WEBPACK_IMPORTED_MODULE_2__.convertFromRaw)(this.rawDraftContentState)) : draft_js__WEBPACK_IMPORTED_MODULE_2__.EditorState.createEmpty()
     };
     this.onChange = editorState => this.handleChange(editorState);
     this.toggleBlockType = this._toggleBlockType.bind(this);
     this.toggleInlineStyle = this._toggleInlineStyle.bind(this);
+    this.toggleColorStyle = this._toggleColorStyle.bind(this);
+    this.handleKeyCommand = this.handleKeyCommand.bind(this);
     this.defineBlocks();
     this.defineInlineStyles();
   }
   defineBlocks() {
-    this.blockTypes = [];
+    this.blockTypes = {};
     this.blockRenderMap = {};
     for (const [key, val] of Object.entries(this.props.typo)) {
-      if (val.type == 'block') {
-        this.blockTypes.push({
+      if (!val.isBlock) {
+        continue;
+      }
+      let style = [];
+      if (val !== null && val !== void 0 && val.editor && typeof val.editor == 'object') {
+        for (const [keyCss, valCss] of Object.entries(val.editor)) {
+          style[keyCss] = valCss;
+        }
+      }
+      if (val.isDefault) {
+        this.blockRenderMap.unstyled = {
+          element: 'div',
+          wrapper: (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(WrapperBlockRendering, {
+            style: style
+          })
+        };
+      } else {
+        let groupToAdd = val.group == 'null' ? 'default' : val.group;
+        if (typeof this.blockTypes[groupToAdd] != 'object') {
+          this.blockTypes[groupToAdd] = [];
+        }
+        this.blockTypes[groupToAdd].push({
           label: val.label,
           style: key
         });
         this.blockRenderMap[key] = {
           wrapper: (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(WrapperBlockRendering, {
-            type: key
+            style: style
           })
         };
       }
     }
-    this.blockRenderMap = (0,Immutable__WEBPACK_IMPORTED_MODULE_2__.Map)(this.blockRenderMap);
-    this.blockRenderMap = draft_js__WEBPACK_IMPORTED_MODULE_1__.DefaultDraftBlockRenderMap.merge(this.blockRenderMap);
+    this.blockRenderMap = (0,Immutable__WEBPACK_IMPORTED_MODULE_3__.Map)(this.blockRenderMap);
+    this.blockRenderMap = draft_js__WEBPACK_IMPORTED_MODULE_2__.DefaultDraftBlockRenderMap.merge(this.blockRenderMap);
   }
   defineInlineStyles() {
-    this.inlineStyles = [];
+    this.inlineStyles = {};
+    this.colorOptions = [];
     this.styleMap = {};
     for (const [key, val] of Object.entries(this.props.typo)) {
-      if (val.type == 'inline') {
-        this.inlineStyles.push({
-          label: val.label,
-          style: key
-        });
-        if (val !== null && val !== void 0 && val.editor && typeof val.editor == 'object') {
-          this.styleMap[key] = {};
-          for (const [keyCss, valCss] of Object.entries(val.editor)) {
-            this.styleMap[key][keyCss] = valCss;
-          }
+      if (val.isBlock) {
+        continue;
+      }
+      let inlineCss = [];
+      if (val !== null && val !== void 0 && val.editor && typeof val.editor == 'object') {
+        for (const [keyCss, valCss] of Object.entries(val.editor)) {
+          inlineCss[keyCss] = valCss;
         }
+        this.styleMap[key] = inlineCss;
+      }
+      if (val.type != 'color') {
+        let groupToAdd = val.group == 'null' ? 'default' : val.group;
+        if (typeof this.inlineStyles[groupToAdd] != 'object') {
+          this.inlineStyles[groupToAdd] = [];
+        }
+        this.inlineStyles[groupToAdd].push({
+          label: val.label,
+          style: key,
+          buttonStyle: inlineCss
+        });
+      } else {
+        this.colorOptions.push({
+          label: val.label,
+          style: key,
+          buttonStyle: inlineCss
+        });
       }
     }
+  }
+  handleSoftNewLine(e) {
+    return e.keyCode === 13 && e.shiftKey ? 'soft-new-line' : (0,draft_js__WEBPACK_IMPORTED_MODULE_2__.getDefaultKeyBinding)(e);
   }
   handleChange(editorState) {
     this.setState({
       editorState
     });
     let currentContentState = editorState.getCurrentContent();
-    this.rawDraftContentState = (0,draft_js__WEBPACK_IMPORTED_MODULE_1__.convertToRaw)(currentContentState);
+    this.rawDraftContentState = (0,draft_js__WEBPACK_IMPORTED_MODULE_2__.convertToRaw)(currentContentState);
     this.props.onChange(this.rawDraftContentState);
   }
-  _onBoldClick() {
-    this.onChange(draft_js__WEBPACK_IMPORTED_MODULE_1__.RichUtils.toggleInlineStyle(this.state.editorState, 'BOLD'));
-  }
   _toggleBlockType(blockType) {
-    this.onChange(draft_js__WEBPACK_IMPORTED_MODULE_1__.RichUtils.toggleBlockType(this.state.editorState, blockType));
+    this.onChange(draft_js__WEBPACK_IMPORTED_MODULE_2__.RichUtils.toggleBlockType(this.state.editorState, blockType));
   }
   _toggleInlineStyle(inlineStyle) {
-    this.onChange(draft_js__WEBPACK_IMPORTED_MODULE_1__.RichUtils.toggleInlineStyle(this.state.editorState, inlineStyle));
+    this.onChange(draft_js__WEBPACK_IMPORTED_MODULE_2__.RichUtils.toggleInlineStyle(this.state.editorState, inlineStyle));
+  }
+  _toggleColorStyle(inlineStyle) {
+    let curentEditorState = this.state.editorState;
+    const currentInlineStyle = curentEditorState.getCurrentInlineStyle();
+    for (const [key, val] of Object.entries(this.props.typo)) {
+      if (val.isBlock || val.type != 'color' || key == inlineStyle) {
+        continue;
+      }
+      if (currentInlineStyle.has(key)) {
+        curentEditorState = draft_js__WEBPACK_IMPORTED_MODULE_2__.RichUtils.toggleInlineStyle(curentEditorState, key);
+      }
+    }
+    const newEditorState = draft_js__WEBPACK_IMPORTED_MODULE_2__.RichUtils.toggleInlineStyle(curentEditorState, inlineStyle);
+    this.onChange(newEditorState);
+  }
+  handleKeyCommand(command, editorState) {
+    if (command === 'soft-new-line') {
+      this.handleChange(draft_js__WEBPACK_IMPORTED_MODULE_2__.RichUtils.insertSoftNewline(editorState));
+      return 'handled';
+    }
+    return 'not-handled';
   }
   render() {
     const BlockStyleControls = props => {
       const selection = props.editorState.getSelection();
       const blockType = props.editorState.getCurrentContent().getBlockForKey(selection.getStartKey()).getType();
-      return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-        className: "DraftEditor-controls"
-      }, this.blockTypes.map(type => (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(StyleButton, {
-        key: type.label,
-        active: type.style === blockType,
-        label: type.label,
-        onToggle: props.onToggle,
-        style: type.style
-      })));
+      let optgroup = [];
+      for (const [key, val] of Object.entries(this.blockTypes)) {
+        let options = [];
+        val.forEach(type => options.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+          value: type.style
+        }, type.label)));
+        optgroup.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("optgroup", {
+          label: key
+        }, options));
+      }
+      return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.SelectControl, {
+        key: this.props.id + '-selectControl-blockTypes',
+        label: 'Paragraph style',
+        value: blockType,
+        onChange: newValue => this._toggleBlockType(newValue)
+      }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+        value: ""
+      }, "Default"), optgroup);
     };
     const InlineStyleControls = props => {
       const currentStyle = props.editorState.getCurrentInlineStyle();
+      let groupControls = [];
+      for (const [key, val] of Object.entries(this.inlineStyles)) {
+        groupControls.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+          className: "DraftEditor-controls"
+        }, val.map(type => (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(StyleButton, {
+          key: this.props.id + '-StyleButton-inlineStyles-' + type.style,
+          active: currentStyle.has(type.style),
+          label: type.label,
+          onToggle: props.onToggle,
+          style: type.style,
+          buttonStyle: type.buttonStyle
+        }))));
+      }
+      ;
+      return groupControls;
+    };
+    const ColorStyleControls = props => {
+      const currentStyle = props.editorState.getCurrentInlineStyle();
+      let currentColor = 'Choose color...';
+      let colorButtons = [];
+      this.colorOptions.forEach(function (type) {
+        currentColor = currentStyle.has(type.style) ? type.label : currentColor;
+        colorButtons.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(StyleButton, {
+          key: 'StyleButton-inlineStyles-' + type.style,
+          active: currentStyle.has(type.style),
+          label: type.label,
+          onToggle: props.onToggle,
+          style: type.style,
+          buttonStyle: type.buttonStyle
+        }));
+      });
       return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-        className: "DraftEditor-controls"
-      }, this.inlineStyles.map(type => (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(StyleButton, {
-        key: type.label,
-        active: currentStyle.has(type.style),
-        label: type.label,
-        onToggle: props.onToggle,
-        style: type.style
-      })));
+        className: "DraftEditor-controls colors-container"
+      }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+        className: "currentColor"
+      }, currentColor), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+        className: "colors-innerContainer"
+      }, colorButtons));
     };
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "DraftEditor-container"
@@ -1788,11 +1888,16 @@ class DraftEditor extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Compon
     }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(InlineStyleControls, {
       editorState: this.state.editorState,
       onToggle: this.toggleInlineStyle
-    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(draft_js__WEBPACK_IMPORTED_MODULE_1__.Editor, {
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(ColorStyleControls, {
+      editorState: this.state.editorState,
+      onToggle: this.toggleColorStyle
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(draft_js__WEBPACK_IMPORTED_MODULE_2__.Editor, {
       editorState: this.state.editorState,
       onChange: this.onChange,
       blockRenderMap: this.blockRenderMap,
-      customStyleMap: this.styleMap
+      customStyleMap: this.styleMap,
+      handleKeyCommand: this.handleKeyCommand,
+      keyBindingFn: this.handleSoftNewLine
     })));
   }
 }
@@ -1811,7 +1916,8 @@ class StyleButton extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Compon
     }
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
       className: className,
-      onMouseDown: this.onToggle
+      onMouseDown: this.onToggle,
+      style: this.props.buttonStyle
     }, this.props.label);
   }
 }
@@ -1821,8 +1927,7 @@ class WrapperBlockRendering extends _wordpress_element__WEBPACK_IMPORTED_MODULE_
   }
   render() {
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "WrapperBlockRendering",
-      type: this.props.type
+      style: this.props.style
     }, this.props.children);
   }
 }
@@ -1856,6 +1961,44 @@ class WysiwygControl extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Com
   handleChange(newContent) {
     (0,_attributes__WEBPACK_IMPORTED_MODULE_3__.updateAttributes)(this.props.keys, this.props.valueProp, newContent, false, this.props.clientId);
   }
+  getToolbox() {
+    var _this$props, _this$props$themeSpec;
+    let toolbox = {};
+    if ((_this$props = this.props) !== null && _this$props !== void 0 && (_this$props$themeSpec = _this$props.themeSpec) !== null && _this$props$themeSpec !== void 0 && _this$props$themeSpec.typo && typeof this.props.themeSpec.typo == 'object') {
+      for (const [key, val] of Object.entries(this.props.themeSpec.typo)) {
+        let isBlock = false;
+        let editorCss = null;
+        if (val !== null && val !== void 0 && val.style && typeof val.style == 'object') {
+          editorCss = {};
+          for (const [keyCss, valCss] of Object.entries(val.style)) {
+            if (keyCss != 'display') {
+              editorCss[keyCss] = valCss;
+            } else if (valCss == 'block') {
+              isBlock = true;
+            }
+          }
+        }
+        if (val !== null && val !== void 0 && val.editorStyle && typeof val.editorStyle == 'object') {
+          for (const [keyCss, valCss] of Object.entries(val.editorStyle)) {
+            if (keyCss != 'display') {
+              editorCss[keyCss] = valCss;
+            } else if (valCss == 'block') {
+              isBlock = true;
+            }
+          }
+        }
+        toolbox[key] = {
+          label: val.label,
+          isBlock: isBlock,
+          editor: editorCss,
+          group: val !== null && val !== void 0 && val.group ? val.group : null,
+          type: val !== null && val !== void 0 && val.type ? val.type : null,
+          isDefault: val !== null && val !== void 0 && val.default && !!val.default ? true : false
+        };
+      }
+    }
+    return toolbox;
+  }
   render() {
     var {
       id,
@@ -1864,9 +2007,7 @@ class WysiwygControl extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Com
       valueProp,
       objectValue,
       repeatable = false,
-      required = false,
-      clientId,
-      themeSpec
+      required = false
     } = this.props;
     label = required ? label + '*' : label;
     if (repeatable) {
@@ -1876,40 +2017,6 @@ class WysiwygControl extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Com
         className: "removeRepeatable",
         onClick: () => (0,_attributes__WEBPACK_IMPORTED_MODULE_3__.removeEltRepeatable)(keys, valueProp)
       }, "Remove"));
-    }
-    let typo = {};
-    if (themeSpec !== null && themeSpec !== void 0 && themeSpec.typo && typeof themeSpec.typo == 'object') {
-      for (const [key, val] of Object.entries(themeSpec.typo)) {
-        if (val !== null && val !== void 0 && val.default && !!val.default) {
-          continue;
-        }
-        let typeStyle = 'inline';
-        let editorCss = null;
-        if (val !== null && val !== void 0 && val.style && typeof val.style == 'object') {
-          editorCss = {};
-          for (const [keyCss, valCss] of Object.entries(val.style)) {
-            if (keyCss != 'display') {
-              editorCss[keyCss] = valCss;
-            } else if (valCss == 'block') {
-              typeStyle = 'block';
-            }
-          }
-        }
-        if (val !== null && val !== void 0 && val.editorStyle && typeof val.editorStyle == 'object') {
-          for (const [keyCss, valCss] of Object.entries(val.editorStyle)) {
-            if (keyCss != 'display') {
-              editorCss[keyCss] = valCss;
-            } else if (valCss == 'block') {
-              typeStyle = 'block';
-            }
-          }
-        }
-        typo[key] = {
-          label: key,
-          type: typeStyle,
-          editor: editorCss
-        };
-      }
     }
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       key: id + "-WysiwygComponentsBaseControl",
@@ -1924,9 +2031,10 @@ class WysiwygControl extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Com
       className: "components-base-control__label",
       key: id + "-label"
     }, label), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_DraftEditor__WEBPACK_IMPORTED_MODULE_2__.DraftEditor, {
+      id: id,
       initialContent: objectValue,
       onChange: this.onChange,
-      typo: typo
+      typo: this.getToolbox()
     }))));
   }
 }
