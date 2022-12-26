@@ -41,6 +41,8 @@ class LayoutBlocks extends ControllerBase {
 
         // If needed, override layout block spec juste before generate it
         add_filter( 'Abt\generate_layout_block_spec', [ $this->layoutBlocksService, 'override_block_spec' ], 10, 2 );
+
+        add_filter( 'Abt\editor_script_localize_blocks_spec', [ $this->layoutBlocksService, 'get_blocks_spec' ] );
     }
 
 }

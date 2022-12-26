@@ -4,11 +4,11 @@
 import { registerBlockType } from '@wordpress/blocks';
 import { useBlockProps, useInnerBlocksProps } from '@wordpress/block-editor';
 import { __ } from '@wordpress/i18n';
-import { Icon } from '@wordpress/icons';
+// import { Icon, check } from '@wordpress/icons';
 
 import * as gridIcons from './icons';
 
-import { initComponentAttributes } from '../../../../js/attributes';
+import { initComponentAttributes } from '../../../../src/js/attributes';
 
 /**
  * Internal dependencies
@@ -21,9 +21,9 @@ variations.forEach( function (elt, index){
         variations[index].scope = [ "block" ];
     }
     
-    if( typeof elt.icon == 'string' ) {
-        variations[index].icon = <Icon icon={ gridIcons[elt.icon] } />
-    }
+    // if( typeof elt.icon == 'string' ) {
+    //     variations[index].icon = <Icon icon={ gridIcons[elt.icon] } />
+    // }
 });
 
 let attributes = {
@@ -35,9 +35,9 @@ let attributes = {
         default: false
     }
 };
-if( typeof block_spec.props == 'object' ) {
+if( typeof blocks_spec['wpe-grid'] == 'object' && typeof blocks_spec['wpe-grid'].props == 'object' ) {
 
-    initComponentAttributes( attributes, block_spec.props );
+    initComponentAttributes( attributes, blocks_spec['wpe-grid'].props );
 }
 
 registerBlockType( 'custom/wpe-grid', {
@@ -50,7 +50,7 @@ registerBlockType( 'custom/wpe-grid', {
     // parent: [ 'custom/wpe-container' ],
     attributes: attributes,
     variations,
-    edit: edit( block_spec, theme_spec ),
+    edit: edit( blocks_spec['wpe-grid'], theme_spec ),
     save: () => {
 
         const blockProps = useBlockProps.save();

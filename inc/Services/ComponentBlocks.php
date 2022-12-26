@@ -4,10 +4,9 @@ namespace Abt\Services;
 
 use Abt\Models\ComponentBlockMaster;
 use Abt\Main;
+use Abt\Singleton\Config;
 
 class ComponentBlocks extends ServiceBase {
-
-    private $blocks_spec = null;
 
     function __construct() {
         parent::__construct();
@@ -37,7 +36,7 @@ class ComponentBlocks extends ServiceBase {
 
             // Add component blocks categories
             $new_block_categories = [];
-            foreach( $this->get_all_blocks_spec() as $block_spec ) {
+            foreach( self::get_all_blocks_spec() as $block_spec ) {
                 if( isset($block_spec['category']) && is_array($block_spec['category']) && isset($block_spec['category']['slug'], $block_spec['category']['title']) ) {
 
                     if( ! isset( $new_block_categories[ $block_spec['category']['slug'] ]) ) {
@@ -62,33 +61,30 @@ class ComponentBlocks extends ServiceBase {
      * Get all the back-end blocks spec
      * 
      */
-    public function get_all_blocks_spec() {
+    public static function get_all_blocks_spec() {
 
-        if( is_null( $this->blocks_spec ) ) {
+        $all_blocks_spec= [];
 
-            $this->blocks_spec = [];
+        $blocks_dir = get_stylesheet_directory() . '/' . Config::getInstance()->get('componentBlocksLocation') . Config::getInstance()->get('blocksNamespace');
+        if( file_exists($blocks_dir) ) {
 
-            $blocks_dir = get_stylesheet_directory() . '/' . $this->get_config()->get('componentBlocksLocation') . $this->get_config()->get('blocksNamespace');
-            if( file_exists($blocks_dir) ) {
+            // Scan blocks dir and loop each block
+            $blocks_scan = scandir( $blocks_dir );
+            foreach( $blocks_scan as $block ) {
 
-                // Scan blocks dir and loop each block
-                $blocks_scan = scandir( $blocks_dir );
-                foreach( $blocks_scan as $block ) {
+                if( is_dir( $blocks_dir . '/' . $block ) && $block != '..' && $block != '.' ) {
 
-                    if( is_dir( $blocks_dir . '/' . $block ) && $block != '..' && $block != '.' ) {
-
-                        // ComponentBlock instanciation && get block spec
-                        $componentBlockInstance = Main::getInstance()->get_component_block_instance( $block );
-                        $block_spec = $componentBlockInstance->get_block_spec();
-                        if( $block_spec && is_array($block_spec) ) {
-                            $this->blocks_spec[] = $block_spec;
-                        }
+                    // ComponentBlock instanciation && get block spec
+                    $componentBlockInstance = Main::getInstance()->get_component_block_instance( $block );
+                    $block_spec = $componentBlockInstance->get_block_spec();
+                    if( $block_spec && is_array($block_spec) ) {
+                        $all_blocks_spec[] = $block_spec;
                     }
                 }
             }
         }
 
-        return $this->blocks_spec;
+        return $all_blocks_spec;
     }
 
 

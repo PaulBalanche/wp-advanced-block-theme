@@ -2,7 +2,7 @@
  * WordPress dependencies
  */
 import { createBlock } from '@wordpress/blocks';
-import { WpeComponentBase } from '../../../../js/WpeComponentBase';
+import { WpeComponentBase } from '../../../../src/js/WpeComponentBase';
 import {
     useState,
     Fragment
@@ -28,7 +28,7 @@ import { withSelect, withDispatch, dispatch } from '@wordpress/data';
 import { get, map, times } from 'lodash';
 
 
-import { getLayouts, setBodyDevice, getBodyDevice, initContainer } from '../../../../js/devices';
+import { getLayouts, setBodyDevice, getBodyDevice, initContainer } from '../../../../src/js/devices';
 
 /**
  * Add some columns in wpe-container based on variation selected

@@ -3,14 +3,14 @@ import {
     InnerBlocks
 } from '@wordpress/block-editor';
 
-import { initComponentAttributes } from '../../../../js/attributes';
+import { initComponentAttributes } from '../../../../src/js/attributes';
 
 import edit from './edit';
 
 let attributes = {};
-if( typeof block_spec.props == 'object' ) {
+if( typeof blocks_spec['wpe-slide'] == 'object' && typeof blocks_spec['wpe-slide'].props == 'object' ) {
 
-    initComponentAttributes( attributes, block_spec.props );
+    initComponentAttributes( attributes, blocks_spec['wpe-slide'].props );
 }
 
 registerBlockType( 'custom/wpe-slide', {
@@ -22,7 +22,7 @@ registerBlockType( 'custom/wpe-slide', {
     },
     parent: [ 'custom/wpe-slider' ],
     attributes: attributes,
-    edit: edit( block_spec, theme_spec ),
+    edit: edit( blocks_spec['wpe-slide'], theme_spec ),
     save: () => {
         return <InnerBlocks.Content />;
     },

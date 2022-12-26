@@ -1,0 +1,22 @@
+{
+  "name": "wp-advanced-block-theme",
+  "version": "1.0.0",
+  "description": "",
+  "main": "wp-advanced-block-theme",
+  "scripts": {
+    "start": "wp-scripts start --config webpack.config.js",
+    "build": "wp-scripts build --config webpack.config.js"
+  },
+  "author": "Paul Balanche <pb@buzzbrothers.ch>",
+  "license": "ISC",
+  "devDependencies": {
+    "@wordpress/scripts": "25.0.0",
+    "@wordpress/icons": "^9.14.0",
+    "@wordpress/server-side-render": "^4.0.0",
+    "merge-anything": "^5.1.4",
+    "css-loader": "^6.7.3",
+    "raw-loader": "^4.0.2",
+    "postcss": "^8.4.20",
+    "postcss-loader": "^7.0.2"
+  }
+}

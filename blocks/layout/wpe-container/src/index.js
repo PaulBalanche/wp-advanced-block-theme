@@ -6,7 +6,7 @@ import { useBlockProps, useInnerBlocksProps } from '@wordpress/block-editor';
 import { __ } from '@wordpress/i18n';
 import { addFilter } from '@wordpress/hooks';
 
-import { initComponentAttributes } from '../../../../js/attributes';
+import { initComponentAttributes } from '../../../../src/js/attributes';
 
 /**
  * Internal dependencies
@@ -33,9 +33,9 @@ let attributes = {
     //     type: 'string'
     // }
 };
-if( typeof block_spec.props == 'object' ) {
+if( typeof blocks_spec['wpe-container'] == 'object' && typeof blocks_spec['wpe-container'].props == 'object' ) {
 
-    initComponentAttributes( attributes, block_spec.props );
+    initComponentAttributes( attributes, blocks_spec['wpe-container'].props );
 }
 
 registerBlockType( 'custom/wpe-container', {
@@ -48,7 +48,7 @@ registerBlockType( 'custom/wpe-container', {
         anchor: true
     },
     attributes: attributes,
-    edit: edit( global_localized.container, block_spec, theme_spec ),
+    edit: edit( global_localized.container, blocks_spec['wpe-container'], theme_spec ),
     save: () => {
 
         const blockProps = useBlockProps.save();

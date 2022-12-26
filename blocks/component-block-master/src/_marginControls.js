@@ -10,7 +10,7 @@ import {
 
 import { merge } from 'merge-anything';
 
-import { getLayouts, setBodyDevice, getBodyDevice } from '../../../js/devices.js';
+import { getLayouts, setBodyDevice, getBodyDevice } from '../../../src/js/devices.js';
 
 export class MarginControls extends Component {
 

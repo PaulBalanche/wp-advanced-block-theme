@@ -1,7 +1,7 @@
 /**
  * WordPress dependencies
  */
-import { WpeComponentBase } from '../../../../js/WpeComponentBase';
+import { WpeComponentBase } from '../../../../src/js/WpeComponentBase';
 import { compose } from '@wordpress/compose';
 import {
     InnerBlocks,
@@ -18,7 +18,7 @@ import {
 
 import { withSelect } from '@wordpress/data';
 
-import { getBodyDevice } from '../../../../js/devices';
+import { getBodyDevice } from '../../../../src/js/devices';
 
 /**
  * registerBlockType edit function

@@ -1,0 +1,9 @@
+{
+  "name": "wysiwyg-control",
+  "devDependencies": {
+    "draft-js": "^0.11.7",
+    "immutable": "^4.1.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  }
+}

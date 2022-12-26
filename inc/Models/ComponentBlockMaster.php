@@ -13,65 +13,7 @@ class ComponentBlockMaster extends ModelBase {
         parent::__construct();
 
         $this->componentBlocksService = new ComponentBlocksService();
-
-        $this->register_script();
-        $this->register_style();
     }
-
-
-
-    /**
-     * Register component editor script
-     * 
-     */
-    public function register_script() {
-
-        $handle = $this->get_config()->get('blocksNamespace') . '/' . $this->get_config()->get('componentBlockPrefixName') . '-editor-script';
-        $asset_file = include( ABT_PLUGIN_DIR . $this->get_config()->get('componentMasterBlocksLocation') . '/build/index.asset.php' );
-
-        wp_register_script(
-            $handle,
-            ABT_PLUGIN_URL . $this->get_config()->get('componentMasterBlocksLocation') . 'build/index.js',
-            $asset_file['dependencies'],
-            $asset_file['version']
-        );
-
-        // Localize script
-        $data_localized = [
-            'current_user_can_edit_posts' => ( current_user_can('edit_posts') ) ? '1' : '0',
-            'components' => $this->componentBlocksService->get_all_blocks_spec()
-        ];
-        wp_localize_script( $handle, 'global_localized', $data_localized );
-
-        wp_localize_script( $handle, 'theme_spec', apply_filters( 'Abt\localize_editor_script', $this->get_config()->get_spec(), $this->get_config()->get('componentBlockPrefixName'), 'theme_spec' ) );
-    }
-
-
-
-    /**
-     * Register component editor style
-     * 
-     */
-    public function register_style() {
-        
-        $handle = $this->get_config()->get('blocksNamespace') . '/' . $this->get_config()->get('componentBlockPrefixName') . '-editor-style';
-        
-        wp_register_style(
-            $handle,
-            ABT_PLUGIN_URL . $this->get_config()->get('componentMasterBlocksLocation') . 'assets/style/editor.min.css',
-            array( 'wp-edit-blocks' ),
-            filemtime( ABT_PLUGIN_DIR . $this->get_config()->get('componentMasterBlocksLocation') . 'assets/style/editor.min.css' )
-        );
-        // wp_register_style(
-        //     $handle,
-        //     ABT_PLUGIN_URL . 'js/controls/WysiwygControl/node_modules/draft-js/dist/Draft.css'
-        // );
-        // wp_register_style(
-        //     $handle,
-        //     ABT_PLUGIN_URL . 'js/controls/WysiwygControl/style.css'
-        // );        
-    }
-
 
 
     /**
@@ -80,18 +22,12 @@ class ComponentBlockMaster extends ModelBase {
      */
     public function register_components() {
 
-        $args = [
-            'editor_script' => $this->get_config()->get('blocksNamespace') . '/' . $this->get_config()->get('componentBlockPrefixName') . '-editor-script',
-            'editor_style' => $this->get_config()->get('blocksNamespace') . '/' . $this->get_config()->get('componentBlockPrefixName') . '-editor-style',
-            'render_callback' => '\Abt\Models\ComponentBlockMaster::render'
-        ];
-
         $blocks_metadata = $this->componentBlocksService->get_all_blocks_metadata();
         if( is_array($blocks_metadata) && count($blocks_metadata) > 0 ) {
             foreach( $blocks_metadata as $metadata_json_file ) {
 
                 // Registers a block type. The recommended way is to register a block type using the metadata stored in the block.json file.
-                $WP_Block_Type = register_block_type( $metadata_json_file, $args );
+                $WP_Block_Type = register_block_type(  $metadata_json_file, [ 'render_callback' => '\Abt\Models\ComponentBlockMaster::render' ] );
                 if( $WP_Block_Type && $WP_Block_Type instanceof \WP_Block_Type ) {
                     Main::getInstance()->add_block_registered( $WP_Block_Type->name );
                 }

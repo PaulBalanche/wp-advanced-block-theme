@@ -2,7 +2,7 @@
  * WordPress dependencies
  */
 import { createBlock } from '@wordpress/blocks';
-import { WpeComponentBase } from '../../../../js/WpeComponentBase';
+import { WpeComponentBase } from '../../../../src/js/WpeComponentBase';
 import { compose } from '@wordpress/compose';
 import {
     useBlockProps,

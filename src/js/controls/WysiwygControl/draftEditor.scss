@@ -1,0 +1,129 @@
+@import './dropDown';
+
+.DraftEditor-Container {
+    background-color: rgb(248,248,248);
+    border: 1px solid #ddd;
+    font-family: 'Georgia', serif;
+    font-size: 14px;
+    padding: 15px;
+
+    .DraftEditor-controls-row {
+        
+        margin-bottom: 10px;
+
+        .label {
+            font-size: 13px;
+
+            &.label-background {
+                display: inline-block;
+                background: #ddd;
+                padding: 1px 7px 0px 7px;
+                border-radius: 6px 6px 0px 0px;
+                border: 1px solid #ddd;
+            }
+        }
+
+        .DraftEditor-controls-row-inner {
+
+            display: flex;
+            align-items: flex-start;
+
+            &.border-style {
+                border: 1px solid #ddd;
+                padding: 6px;
+            }
+
+            .DraftEditor-styleButton {
+
+                cursor: pointer;
+                margin: 0 1px 0 0 !important;
+                padding: 2px 8px !important;
+                display: inline-block;
+                border: 1px solid #007cba00;
+                border-radius: 6px;
+                line-height: 20px !important;
+              
+                &:last-child {
+                    margin-right: 0;
+                }
+              }
+              
+              .DraftEditor-styleButton:hover,
+              .DraftEditor-activeButton {
+                    color: #007cba;
+                    border-color: #007cba;
+              }
+              
+        }
+    }
+}
+
+.DraftEditor-root {
+  background: #fff;
+  border: 1px solid #ddd;
+  padding: 15px;
+}
+
+.DraftEditor-editor {
+  /* border-top: 1px solid #ddd; */
+  cursor: text;
+  font-size: 16px;
+  margin-top: 10px;
+}
+
+.DraftEditor-editor .public-DraftEditorPlaceholder-root,
+.DraftEditor-editor .public-DraftEditor-content {
+  margin: 0 -15px -15px;
+  padding: 15px;
+}
+
+.DraftEditor-editor .public-DraftEditor-content {
+  min-height: 100px;
+}
+
+.DraftEditor-hidePlaceholder .public-DraftEditorPlaceholder-root {
+  display: none;
+}
+
+.DraftEditor-editor .DraftEditor-blockquote {
+  border-left: 5px solid #eee;
+  color: #666;
+  font-family: 'Hoefler Text', 'Georgia', serif;
+  font-style: italic;
+  margin: 16px 0;
+  padding: 10px 20px;
+}
+
+.DraftEditor-editor .public-DraftStyleDefault-pre {
+  background-color: rgba(0, 0, 0, 0.05);
+  font-family: 'Inconsolata', 'Menlo', 'Consolas', monospace;
+  font-size: 16px;
+  padding: 20px;
+}
+
+.DraftEditor-controls {
+
+    font-family: 'Helvetica', sans-serif;
+    font-size: 14px;
+    margin-bottom: 5px;
+    user-select: none;
+}
+
+.WrapperBlockRendering {
+    position: relative;
+    padding: 20px 10px 10px 10px;
+    border: 1px dashed rgba(0,124,186,.5);
+    margin: 10px 0;
+
+    &::before{
+        content: attr(type);
+        display: block;
+        position: absolute;
+        left: -1px;
+        top: -1px;
+        font-size: .6rem;
+        background: #007cba;
+        color: #fff;
+        padding: 0px 10px;
+    }
+}

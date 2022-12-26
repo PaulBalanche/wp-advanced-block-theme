@@ -1,4 +1,4 @@
-import { WpeComponentBase } from '../../../js/WpeComponentBase';
+import { WpeComponentBase } from '../../../src/js/WpeComponentBase';
 import ServerSideRender from '@wordpress/server-side-render';
 import { withSelect } from '@wordpress/data';
 import { compose } from '@wordpress/compose';

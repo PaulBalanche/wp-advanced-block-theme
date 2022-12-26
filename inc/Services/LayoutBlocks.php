@@ -85,4 +85,16 @@ class LayoutBlocks extends ServiceBase {
         return ( $override_spec ) ? array_replace_recursive( $block_spec, $override_spec ) : $block_spec;
     }
 
+
+
+    public function get_blocks_spec( $blocks_spec ) {
+
+        foreach( $this->get_layout_blocks() as $layout_block ) {
+
+            $layoutBlockInstance = Main::getInstance()->get_layout_block_instance( $layout_block );
+            $blocks_spec[ $layoutBlockInstance->get_ID() ] = $layoutBlockInstance->get_block_spec();
+        }
+
+        return $blocks_spec;
+    }
 }

@@ -5,7 +5,7 @@ import { registerBlockType } from '@wordpress/blocks';
 import { useBlockProps, useInnerBlocksProps } from '@wordpress/block-editor';
 import { __ } from '@wordpress/i18n';
 
-import { initComponentAttributes } from '../../../../js/attributes';
+import { initComponentAttributes } from '../../../../src/js/attributes';
 
 /**
  * Internal dependencies
@@ -13,9 +13,9 @@ import { initComponentAttributes } from '../../../../js/attributes';
 import edit from './edit';
 
 let attributes = {};
-if( typeof block_spec.props == 'object' ) {
+if( typeof blocks_spec['wpe-slider'] == 'object' && typeof blocks_spec['wpe-slider'].props == 'object' ) {
 
-    initComponentAttributes( attributes, block_spec.props );
+    initComponentAttributes( attributes, blocks_spec['wpe-slider'].props );
 }
 
 registerBlockType( 'custom/wpe-slider', {
@@ -27,7 +27,7 @@ registerBlockType( 'custom/wpe-slider', {
     },
     // parent: [ 'custom/wpe-container' ],
     attributes: attributes,
-    edit: edit( block_spec, theme_spec ),
+    edit: edit( blocks_spec['wpe-slider'], theme_spec ),
     save: () => {
 
         const blockProps = useBlockProps.save();

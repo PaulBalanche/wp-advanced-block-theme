@@ -10,6 +10,7 @@ use Abt\Controllers\ComponentBlocks as ComponentBlocksController;
 use Abt\Controllers\CoreBlocks as CoreBlocksController;
 use Abt\Controllers\BlockPatterns as BlockPatternsController;
 use Abt\Controllers\AddOns as AddOnsController;
+use Abt\Controllers\BlockEditor as BlockEditorController;
 use Abt\Services\CliCommand;
 use Abt\Models\ComponentBlock;
 use Abt\Models\CoreBlock;
@@ -41,6 +42,7 @@ class Main {
         new CoreBlocksController();
         new BlockPatternsController();
         new AddOnsController();
+        new BlockEditorController();
 
         // WP-CLI
         if ( defined( 'WP_CLI' ) && \WP_CLI ) {
