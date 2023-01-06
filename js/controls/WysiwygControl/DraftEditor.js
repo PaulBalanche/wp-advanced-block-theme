@@ -1,7 +1,10 @@
-import { Component, Fragment } from '@wordpress/element';
+import { Component, Fragment, createRef, useState } from '@wordpress/element';
 
 import {
-    SelectControl
+    SelectControl,
+    ToggleControl,
+    __experimentalInputControl as InputControl,
+    Button
 } from '@wordpress/components';
 
 import {
@@ -11,10 +14,14 @@ import {
   convertFromRaw,
   convertToRaw,
   DefaultDraftBlockRenderMap,
-  getDefaultKeyBinding
+  getDefaultKeyBinding,
+  CompositeDecorator,
+  Modifier
 } from 'draft-js';
 
 import { Map } from 'Immutable';
+
+import { DropDown } from './DropDown';
 
 export class DraftEditor extends Component {
 
@@ -23,7 +30,7 @@ export class DraftEditor extends Component {
 
         this.rawDraftContentState = ( props?.initialContent ) ? props.initialContent : null;
         this.state = {
-            editorState: ( this.rawDraftContentState != null ) ? EditorState.createWithContent( convertFromRaw(this.rawDraftContentState) ) : EditorState.createEmpty()
+            editorState: ( this.rawDraftContentState != null ) ? EditorState.createWithContent( convertFromRaw(this.rawDraftContentState), new CompositeDecorator([ { strategy: this.findLinkEntities, component: this.Link, } ]) ) : EditorState.createEmpty()
         };
         this.onChange = editorState => this.handleChange(editorState);
         this.toggleBlockType = this._toggleBlockType.bind(this);
@@ -33,6 +40,68 @@ export class DraftEditor extends Component {
 
         this.defineBlocks();
         this.defineInlineStyles();
+
+        this.inputLink = createRef();
+        this.removeLink = this._removeLink.bind(this);
+    }
+
+    Link = (props) => {
+        const {url} = props.contentState.getEntity(props.entityKey).getData();
+        return (
+            <a href={url}>
+                {props.children}
+            </a>
+        );
+    };     
+
+    confirmLink( value ) {
+
+        if( value && typeof value == 'object' ) {
+
+            const { editorState } = this.state;
+            const selection = editorState.getSelection();
+            const contentState = editorState.getCurrentContent();
+            const contentStateWithEntity = contentState.createEntity(
+                'LINK',
+                'MUTABLE',
+                value
+            );
+            const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
+            const newEditorState = EditorState.set(editorState, { currentContent: contentStateWithEntity });
+            
+            this.onChange(
+                RichUtils.toggleLink(
+                    newEditorState,
+                    selection,
+                    entityKey
+                )
+            );
+        }
+    }
+
+    _removeLink(e) {
+        e.preventDefault();
+
+        const { editorState } = this.state;
+        const selection = editorState.getSelection();
+        if( ! selection.isCollapsed() ) {
+            this.onChange(
+                RichUtils.toggleLink( editorState, selection, null )
+            );
+        }
+    }
+
+    findLinkEntities(contentBlock, callback, contentState) {
+        contentBlock.findEntityRanges(
+          (character) => {
+            const entityKey = character.getEntity();
+            return (
+              entityKey !== null &&
+              contentState.getEntity(entityKey).getType() === 'LINK'
+            );
+          },
+          callback
+        );
     }
 
     defineBlocks() {
@@ -56,7 +125,7 @@ export class DraftEditor extends Component {
 
                 this.blockRenderMap.unstyled = {
                     element: 'div',
-                    wrapper: <WrapperBlockRendering style={style} />
+                    wrapper: <WrapperBlockRendering id={ this.props.id +'-WrapperBlockRendering-' + key } key={ this.props.id +'-WrapperBlockRendering-' + key } style={style} />
                 };
             }
             else {
@@ -72,7 +141,7 @@ export class DraftEditor extends Component {
                 } );
 
                 this.blockRenderMap[key] = {
-                    wrapper: <WrapperBlockRendering style={style} />
+                    wrapper: <WrapperBlockRendering id={ this.props.id +'-WrapperBlockRendering-' + key } key={ this.props.id +'-WrapperBlockRendering-' + key } style={style} />
                 };
             }
         }
@@ -203,30 +272,37 @@ export class DraftEditor extends Component {
                 .getBlockForKey(selection.getStartKey())
                 .getType();
 
-            let optgroup = [];
+            let currentBlockStyle = 'Default';
+            let dropDownItems = [];
             for( const [key, val] of Object.entries(this.blockTypes) ) {
 
-                let options = [];
-                val.forEach( type => options.push(<option value={ type.style }>{ type.label }</option>) );
-                optgroup.push(<optgroup
-                        label={ key }
-                    >
-                        { options }
-                    </optgroup>
-                );
+                let children = [];
+                val.forEach( type =>  {
+                    currentBlockStyle = ( blockType == type.style ) ? type.label : currentBlockStyle;
+                    children.push(
+                        {
+                            label: type.label,
+                            style: type.style,
+                            buttonStyle: null
+                        }
+                    )
+                } );
+
+                dropDownItems.push( {
+                    label: key,
+                    style: key,
+                    children: children
+                } );
             }
 
-            return <SelectControl
-                key={ this.props.id +'-selectControl-blockTypes' }
-                label={ 'Paragraph style' }
-                value={ blockType }
-                onChange={ ( newValue ) =>
-                    this._toggleBlockType(newValue) 
-                }
-            >
-                <option value="">Default</option>
-                { optgroup }
-            </SelectControl>
+            return <DropDown
+                key={ this.props.id +'-DropDown-BlockStyle' }
+                id={ this.props.id +'-DropDown-BlockStyle' }
+                label="Block style"
+                headerTitle={currentBlockStyle}
+                items={dropDownItems}
+                onToggle={this.toggleBlockType}
+            />
         }
 
         const InlineStyleControls = (props) => {
@@ -237,18 +313,20 @@ export class DraftEditor extends Component {
             for( const [key, val] of Object.entries(this.inlineStyles) ) {
 
                 groupControls.push(
-                    <div className="DraftEditor-controls">
-                        { val.map((type) =>
-                            <StyleButton
-                                key={ this.props.id +'-StyleButton-inlineStyles-' + type.style }
-                                active={currentStyle.has(type.style)}
-                                label={type.label}
-                                onToggle={props.onToggle}
-                                style={type.style}
-                                buttonStyle={type.buttonStyle}
-                            />
-                        ) }
+                    <div key={"DraftEditor-controls-row-line" + key} className="DraftEditor-controls-row">
+                        <div className="DraftEditor-controls-row-title label label-background">{key.charAt(0).toUpperCase() + key.slice(1)}</div>
+                        <div className="DraftEditor-controls-row-inner border-style">
+                        { val.map( type => <StyleButton
+                            key={ this.props.id +'-StyleButton-inlineStyles-' + type.style }
+                            id={ this.props.id +'-StyleButton-inlineStyles-' + type.style }
+                            active={currentStyle.has(type.style)}
+                            label={type.label}
+                            onToggle={props.onToggle}
+                            style={type.style}
+                            buttonStyle={type.buttonStyle}
+                        /> ) }
                         </div>
+                    </div>
                 );
             };
             
@@ -259,46 +337,85 @@ export class DraftEditor extends Component {
 
             const currentStyle = props.editorState.getCurrentInlineStyle();
 
-            let currentColor = 'Choose color...'
-            let colorButtons = [];
+            let currentColor = 'Choose color...';
+            let dropDownItems = [];
             this.colorOptions.forEach( function(type) {
 
                 currentColor = ( currentStyle.has(type.style) ) ? type.label : currentColor;
-
-                colorButtons.push(
-                    <StyleButton
-                        key={ 'StyleButton-inlineStyles-' + type.style }
-                        active={currentStyle.has(type.style)}
-                        label={type.label}
-                        onToggle={props.onToggle}
-                        style={type.style}
-                        buttonStyle={type.buttonStyle}
-                    />
+                dropDownItems.push(
+                    {
+                        label: type.label,
+                        style: type.style,
+                        buttonStyle: type.buttonStyle
+                    }
                 );
             });
 
-            return (
-                <div className="DraftEditor-controls colors-container">
-                    <span className="currentColor">{ currentColor }</span>
-                    <div className="colors-innerContainer">{ colorButtons }</div>
-                </div>
-            );
+            return <DropDown
+                key={ this.props.id +'-DropDown-Color' }
+                id={ this.props.id +'-DropDown-Color' }
+                label="Color"
+                headerTitle={currentColor}
+                items={dropDownItems}
+                onToggle={props.onToggle}
+            />
+        }
+
+        const LinkControl = (props) => {
+
+            const selectionState = props.editorState.getSelection();
+            const anchorKey = selectionState.getAnchorKey();
+
+            const contentState = props.editorState.getCurrentContent();
+            const blockWithLinkAtBeginning = contentState.getBlockForKey(anchorKey);
+
+            const linkKey = blockWithLinkAtBeginning.getEntityAt(selectionState.getStartOffset());
+            const linkData = ( linkKey ) ? contentState.getEntity(linkKey).getData() : null;
+
+            const [ value, setValue ] = useState( linkData );
+
+            return <div ref={ this.inputLink } >
+                <InputControl
+                    label="URL"
+                    value={ ( value ) ? value.url : "" }
+                    onChange={ ( newUrl ) => setValue( preValue => ( {
+                            url: newUrl,
+                            openInNewTab: ( preValue && preValue.openInNewTab ) ? true : false
+                        } )
+                    ) }
+                />
+                <ToggleControl
+                    label="Open in new tab ?"
+                    checked={ ( value && value.openInNewTab ) ? true : false }
+                    onChange={ () => setValue( preValue => ( {
+                        url: preValue.url,
+                        openInNewTab: ( preValue && preValue.openInNewTab ) ? false : true
+                    } )
+                ) }
+                />
+                <Button onClick={ () => this.confirmLink( value ) } >Confirm</Button>
+            </div>
         }
 
         return <Fragment>
-            <div className="DraftEditor-container">
-                <BlockStyleControls
-                    editorState={this.state.editorState}
-                    onToggle={this.toggleBlockType}
-                />
+            <div className="DraftEditor-Container">
+                <div key="DraftEditor-controls-row-line1" className="DraftEditor-controls-row">
+                    <div className="DraftEditor-controls-row-inner">
+                        <BlockStyleControls
+                            editorState={this.state.editorState}
+                            onToggle={this.toggleBlockType}
+                        />
+                        <ColorStyleControls
+                            editorState={this.state.editorState}
+                            onToggle={this.toggleColorStyle}
+                        />
+                    </div>
+                </div>
                 <InlineStyleControls
                     editorState={this.state.editorState}
                     onToggle={this.toggleInlineStyle}
                 />
-                <ColorStyleControls
-                    editorState={this.state.editorState}
-                    onToggle={this.toggleColorStyle}
-                />
+                <LinkControl editorState={this.state.editorState} />
                 <Editor
                     editorState={this.state.editorState}
                     onChange={this.onChange}
@@ -315,21 +432,22 @@ export class DraftEditor extends Component {
 class StyleButton extends Component {
 
     constructor() {
-        super();
+        super( ...arguments );
+
         this.onToggle = (e) => {
             e.preventDefault();
             this.props.onToggle(this.props.style);
         };
     }
-
+    
     render() {
         let className = 'DraftEditor-styleButton';
         if (this.props.active) {
-         className += ' DraftEditor-activeButton';
+            className += ' DraftEditor-activeButton';
         }
     
         return (
-            <span className={className} onMouseDown={this.onToggle} style={this.props.buttonStyle} >
+            <span key={this.props.id} className={className} onMouseDown={this.onToggle} style={this.props.buttonStyle} >
                 {this.props.label}
             </span>
         );
@@ -338,14 +456,14 @@ class StyleButton extends Component {
 
 class WrapperBlockRendering extends Component {
 
-    constructor(props) {
-      super(props);
+    constructor() {
+        super( ...arguments );
     }
   
     render() {
 
         return (
-            <div style={this.props.style} >
+            <div key={this.props.id} style={this.props.style} >
                 {this.props.children}
             </div>
         );

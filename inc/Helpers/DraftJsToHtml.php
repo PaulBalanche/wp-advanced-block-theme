@@ -27,6 +27,8 @@ class DraftJsToHtml {
 
         if( is_array($raw) && isset($raw['blocks']) && is_array($raw['blocks']) ) {
             foreach( $raw['blocks'] as $block ) {
+                
+                self::mergeEntityWithInlineStyle( $block['inlineStyleRanges'], $block['entityRanges'], $raw['entityMap'] );
 
                 if( is_array($block) && isset($block['text']) && ! empty($block['text']) ) {
                     
@@ -45,9 +47,57 @@ class DraftJsToHtml {
     }
 
 
+
     public static function renderContent( $args ) {
 
         return RenderService::render( 'sugar/bare/typo/typo.twig', $args );
+    }
+
+
+
+    public static function mergeEntityWithInlineStyle( &$inlineStyleRanges, $entityRanges, $entityMap ) {
+
+        while( count($entityRanges) > 0 ) {
+            foreach( $entityRanges as $keyEntityRange => $entityRange ) {
+
+                self::mapEntity( $entityRange, $entityMap );
+
+                $index_to_put = count( $inlineStyleRanges );
+                    
+                foreach( $inlineStyleRanges as $keyInlineStyle => $inlineStyle ) {
+
+                    if( $entityRange['offset'] > $inlineStyle['offset'] )
+                        continue;
+
+                    $index_to_put = $keyInlineStyle + 1;
+
+                    break;
+                }
+
+                $prev_tab = array_slice( $inlineStyleRanges, 0, $index_to_put, true );
+                $next_tab = array_slice( $inlineStyleRanges, $index_to_put, count($inlineStyleRanges), true );
+                $inlineStyleRanges = array_values( $prev_tab + [ $index_to_put . '_entity_' . $keyEntityRange => $entityRange ] + $next_tab  );
+                    
+                unset( $entityRanges[$keyEntityRange] );
+            }
+        }
+    }
+
+    public static function mapEntity( &$entityRange, $entityMap ) {
+
+        $entity = $entityMap[ $entityRange['key'] ];
+        switch( $entity['type'] ) {
+            case 'LINK':
+
+                $entityRange['style'] = 'a';
+                $entityRange['data'] = [
+                    'url' => $entity['data']['url'],
+                    'target' => ( isset($entity['data']['openInNewTab']) && $entity['data']['openInNewTab'] ) ? '_blank' : null
+                ];
+                break;
+        }
+        
+        unset( $entityRange['key'] );
     }
 
 }
