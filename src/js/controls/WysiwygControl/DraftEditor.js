@@ -1,23 +1,22 @@
 import { Component, Fragment } from '@wordpress/element';
 
 import {
-    SelectControl
-} from '@wordpress/components';
-
-import {
   Editor,
   EditorState,
+  SelectionState,
   RichUtils,
   convertFromRaw,
   convertToRaw,
   DefaultDraftBlockRenderMap,
   getDefaultKeyBinding,
-  CompositeDecorator
+  CompositeDecorator,
+  Modifier
 } from 'draft-js';
 
 import { Map } from 'Immutable';
 
 import { DropDown } from './DropDown';
+import { LinkControl } from './LinkControl';
 
 export class DraftEditor extends Component {
 
@@ -26,7 +25,7 @@ export class DraftEditor extends Component {
 
         this.rawDraftContentState = ( props?.initialContent ) ? props.initialContent : null;
         this.state = {
-            editorState: ( this.rawDraftContentState != null ) ? EditorState.createWithContent( convertFromRaw(this.rawDraftContentState) ) : EditorState.createEmpty()
+            editorState: ( this.rawDraftContentState != null ) ? EditorState.createWithContent( convertFromRaw(this.rawDraftContentState), new CompositeDecorator([ { strategy: this.findLinkEntities, component: this.Link, } ]) ) : EditorState.createEmpty()
         };
         this.onChange = editorState => this.handleChange(editorState);
         this.toggleBlockType = this._toggleBlockType.bind(this);
@@ -38,31 +37,99 @@ export class DraftEditor extends Component {
         this.defineInlineStyles();
 
         this.confirmLink = this._confirmLink.bind(this);
+        this.removeLink = this._removeLink.bind(this);
     }
 
-    _confirmLink(e) {
-        e.preventDefault();
-        const {editorState} = this.state;
-        const urlValue = 'http://google.fr';
-        const contentState = editorState.getCurrentContent();
-        const contentStateWithEntity = contentState.createEntity(
-          'LINK',
-          'MUTABLE',
-          {url: urlValue}
+    Link = (props) => {
+        const {url} = props.contentState.getEntity(props.entityKey).getData();
+        return (
+            <a href={url}>
+                {props.children}
+            </a>
         );
-        const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
-        const newEditorState = EditorState.set(editorState, { currentContent: contentStateWithEntity });
-        this.setState({
-          editorState: RichUtils.toggleLink(
-            newEditorState,
-            newEditorState.getSelection(),
-            entityKey
-          ),
-          showURLInput: false,
-          urlValue: '',
-        }, () => {
-          setTimeout(() => this.refs.editor.focus(), 0);
-        });
+    };
+
+    _confirmLink( value ) {
+
+        if( value && typeof value == 'object' ) {
+
+            if( value.url != '' ) {
+                
+                const { editorState } = this.state;
+
+                const selection = editorState.getSelection();
+                const anchorKey = selection.getAnchorKey();
+
+                const contentState = editorState.getCurrentContent();
+                const blockWithLink = contentState.getBlockForKey(anchorKey);
+                const linkKey = blockWithLink.getEntityAt( selection.getStartOffset() );
+
+                const contentStateWithEntity = ( linkKey ) ?
+                    contentState.replaceEntityData(
+                        linkKey,
+                        value
+                    ) :
+                    contentState.createEntity(
+                        'LINK',
+                        'MUTABLE',
+                        value
+                    );
+
+                const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
+                const newEditorState = EditorState.set(editorState, { currentContent: contentStateWithEntity });
+
+                this.onChange(
+                    RichUtils.toggleLink(
+                        newEditorState,
+                        selection,
+                        entityKey
+                    )
+                );
+            }
+            else {
+                this._removeLink();
+            }
+        }
+    }
+
+    _removeLink() {
+
+        const { editorState } = this.state;
+        const selection = editorState.getSelection();
+        if( ! selection.isCollapsed() ) {
+
+            const anchorKey = selection.getAnchorKey();
+
+            var contentState = editorState.getCurrentContent();
+            const blockWithLink = contentState.getBlockForKey(anchorKey);
+
+            const linkKey = blockWithLink.getEntityAt( selection.getStartOffset() );
+            
+            blockWithLink.findEntityRanges(element => {
+    
+                const charEntity = element.getEntity();
+                if( ! charEntity ) return false;
+                return charEntity === linkKey;
+            }, (start, end) => {
+                const entitySelection = new SelectionState({
+                    anchorKey: blockWithLink.getKey(),
+                    focusKey: blockWithLink.getKey(),
+                    anchorOffset: start,
+                    focusOffset: end
+                });
+
+                contentState = Modifier.applyEntity(contentState, entitySelection, null)
+                return;
+            })
+    
+            const newEditorState = EditorState.set(editorState, { currentContent: contentState });
+            
+            // return;
+
+            this.onChange(
+                RichUtils.toggleLink( newEditorState, selection, null )
+            );
+        }
     }
 
     findLinkEntities(contentBlock, callback, contentState) {
@@ -335,25 +402,6 @@ export class DraftEditor extends Component {
             />
         }
 
-
-        const Link = (props) => {
-            const {url} = props.contentState.getEntity(props.entityKey).getData();
-            return (
-                <a href={url} style={styles.link}>
-                    {props.children}
-                </a>
-            );
-        };
-
-        const decorator = new CompositeDecorator([
-            {
-                strategy: this.findLinkEntities,
-                component: Link,
-            },
-        ]);
-
-        
-
         return <Fragment>
             <div className="DraftEditor-Container">
                 <div key="DraftEditor-controls-row-line1" className="DraftEditor-controls-row">
@@ -372,13 +420,15 @@ export class DraftEditor extends Component {
                     editorState={this.state.editorState}
                     onToggle={this.toggleInlineStyle}
                 />
-                <div>
-                    <input
-                        type="text"
-                    />
-                    <button onMouseDown={this.confirmLink}>
-                        Confirm
-                    </button>
+                <div key={"DraftEditor-controls-row-line-tools"} className="DraftEditor-controls-row">
+                    <div className="DraftEditor-controls-row-title label label-background">Tools</div>
+                    <div className="DraftEditor-controls-row-inner border-style">
+                        <LinkControl
+                            editorState={this.state.editorState}
+                            onSubmit={this.confirmLink}
+                            onRemove={this.removeLink}
+                        />
+                    </div>
                 </div>
                 <Editor
                     editorState={this.state.editorState}

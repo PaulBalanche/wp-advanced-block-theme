@@ -1,4 +1,4 @@
-import { Component, useRef } from '@wordpress/element';
+import { Component } from '@wordpress/element';
 
 import {
     Button

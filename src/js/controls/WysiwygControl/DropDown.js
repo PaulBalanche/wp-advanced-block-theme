@@ -1,6 +1,4 @@
-import { Component, useState, createRef } from '@wordpress/element';
-import { compose } from '@wordpress/compose';
-import { withSelect } from '@wordpress/data';
+import { Component, createRef } from '@wordpress/element';
 import { Icon } from '@wordpress/components';
 
 export class DropDown extends Component {

@@ -69,11 +69,11 @@ class DraftJsToHtml {
                     if( $entityRange['offset'] > $inlineStyle['offset'] )
                         continue;
 
-                    $index_to_put = $keyInlineStyle + 1;
+                    $index_to_put = $keyInlineStyle;
 
                     break;
                 }
-
+                
                 $prev_tab = array_slice( $inlineStyleRanges, 0, $index_to_put, true );
                 $next_tab = array_slice( $inlineStyleRanges, $index_to_put, count($inlineStyleRanges), true );
                 $inlineStyleRanges = array_values( $prev_tab + [ $index_to_put . '_entity_' . $keyEntityRange => $entityRange ] + $next_tab  );
