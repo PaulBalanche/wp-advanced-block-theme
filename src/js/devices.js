@@ -58,9 +58,9 @@ export function setBodyDevice( device ) {
 
                 if( device == item ) {
 
-                    if( theme_spec.media.queries[item]['max-width'] != null && theme_spec.media.queries[item]['max-width'] <= editor_area[0].offsetWidth ) {
+                    if( theme_spec.media.queries[item]['maxWidth'] != null && theme_spec.media.queries[item]['maxWidth'] <= editor_area[0].offsetWidth ) {
 
-                        editor_area[0].style.width = theme_spec.media.queries[item]['max-width'] + 'px';
+                        editor_area[0].style.width = theme_spec.media.queries[item]['maxWidth'] + 'px';
                     }
                     else {
                         editor_area[0].style.removeProperty('width');

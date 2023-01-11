@@ -11,8 +11,8 @@ class CoreBlocks extends ControllerBase {
         
         $this->coreBlocksService = new CoreBlocksService();
 
-        $this->add_actions();
-        $this->add_filters();
+        // $this->add_actions();
+        // $this->add_filters();
     }
 
 

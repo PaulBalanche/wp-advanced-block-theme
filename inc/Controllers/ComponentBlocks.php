@@ -29,7 +29,23 @@ class ComponentBlocks extends ControllerBase {
     public function add_actions() {
 
         add_action( 'init', [ $this->componentBlocksService, 'register_component_blocks' ], 99 );
+
+        add_action( 'admin_post_wpe-component-block-renderer', [ $this->componentBlocksService, 'admin_render' ] );
+
+        // add_action( 'wp_ajax_wpe-component-edit', [ $this->componentBlocksService, 'wpe_component_edit' ] );
+
+        add_action( 'rest_api_init', [ $this, 'register_rest_route' ] );
     }
+
+    public function register_rest_route() {
+
+        register_rest_route( 'wp/v2', '/wpe-component-edit', array(
+            'methods' => 'POST',
+            'callback' => [ $this->componentBlocksService, 'wpe_component_edit' ],
+            'permission_callback' => function() { return ''; }
+        ) );
+    }
+    
 
 
 

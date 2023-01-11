@@ -24,7 +24,8 @@ class Theme extends ControllerBase {
 
         $template = pathinfo($template_file)['filename'];
 
-        $view = 'layouts/main.twig';
+        // $view = 'layouts/main.twig';
+        $view = 'layouts/nude.twig';
 
         $menus = [];
         $menu_locations = $this->get_config()->get_spec('menus');

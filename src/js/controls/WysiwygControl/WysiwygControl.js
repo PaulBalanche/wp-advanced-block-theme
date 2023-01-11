@@ -21,13 +21,17 @@ class WysiwygControl extends Component {
         updateAttributes( this.props.keys, this.props.valueProp, newContent, false, this.props.clientId  );
     }
 
-    getToolbox() {
+    getTypo() {
 
-        let toolbox = {};
+        let typo = {};
 
         if( this.props?.themeSpec?.typo && typeof this.props.themeSpec.typo == 'object') {
 
             for( const [key, val] of Object.entries(this.props.themeSpec.typo) ) {
+
+                if( key == 'a' ) {
+                    continue;
+                }
 
                 let isBlock = false;
 
@@ -55,7 +59,7 @@ class WysiwygControl extends Component {
                     }
                 }
 
-                toolbox[key] = {
+                typo[key] = {
                     label: val.label,
                     isBlock: isBlock,
                     editor: editorCss,
@@ -66,7 +70,52 @@ class WysiwygControl extends Component {
             }
         }
 
-        return toolbox;
+        return typo;
+    }
+
+    getTools() {
+
+        let tools = { 
+            a: {
+                style: {
+                    textDecoration: 'underline'
+                }
+            }
+        };
+
+        if( this.props?.themeSpec?.typo && typeof this.props.themeSpec.typo == 'object') {
+
+            for( const [key, val] of Object.entries(this.props.themeSpec.typo) ) {
+
+                let editorCss = null;
+
+                if( key == 'a' ) {
+
+                    if( val?.style && typeof val.style == 'object' ) {
+                        editorCss = {};
+                        for( const [keyCss, valCss] of Object.entries(val.style) ) {
+                            if( keyCss != 'display' ) {
+                                editorCss[keyCss] = valCss;
+                            }
+                        }
+                    }
+    
+                    if( val?.editorStyle && typeof val.editorStyle == 'object' ) {
+                        for( const [keyCss, valCss] of Object.entries(val.editorStyle) ) {
+                            if( keyCss != 'display' ) {
+                                editorCss[keyCss] = valCss;
+                            }
+                        }
+                    }
+    
+                    tools.a = {
+                        style: editorCss
+                    };   
+                }
+            }
+        }
+
+        return tools;
     }
         
     render() {
@@ -115,7 +164,7 @@ class WysiwygControl extends Component {
                         className="wysiwyg-container"
                     >
                         <div className="components-base-control__label" key={ id + "-label" }>{ label }</div>
-                        <DraftEditor id={ id } initialContent={ objectValue } onChange={ this.onChange } typo={ this.getToolbox() } />
+                        <DraftEditor id={ id } initialContent={ objectValue } onChange={ this.onChange } typo={ this.getTypo() } tools={ this.getTools() } />
                     </div>
                 </div>
             </div>

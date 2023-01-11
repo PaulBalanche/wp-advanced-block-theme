@@ -41,13 +41,15 @@ export class DraftEditor extends Component {
     }
 
     Link = (props) => {
+
         const {url} = props.contentState.getEntity(props.entityKey).getData();
+
         return (
-            <a href={url}>
+            <a href={url} style={this.props.tools.a.style}>
                 {props.children}
             </a>
         );
-    };
+    }
 
     _confirmLink( value ) {
 
@@ -96,40 +98,35 @@ export class DraftEditor extends Component {
 
         const { editorState } = this.state;
         const selection = editorState.getSelection();
-        if( ! selection.isCollapsed() ) {
+        const anchorKey = selection.getAnchorKey();
 
-            const anchorKey = selection.getAnchorKey();
+        var contentState = editorState.getCurrentContent();
+        const blockWithLink = contentState.getBlockForKey(anchorKey);
 
-            var contentState = editorState.getCurrentContent();
-            const blockWithLink = contentState.getBlockForKey(anchorKey);
+        const linkKey = blockWithLink.getEntityAt( selection.getStartOffset() );
+        
+        blockWithLink.findEntityRanges(element => {
 
-            const linkKey = blockWithLink.getEntityAt( selection.getStartOffset() );
-            
-            blockWithLink.findEntityRanges(element => {
-    
-                const charEntity = element.getEntity();
-                if( ! charEntity ) return false;
-                return charEntity === linkKey;
-            }, (start, end) => {
-                const entitySelection = new SelectionState({
-                    anchorKey: blockWithLink.getKey(),
-                    focusKey: blockWithLink.getKey(),
-                    anchorOffset: start,
-                    focusOffset: end
-                });
+            const charEntity = element.getEntity();
+            if( ! charEntity ) return false;
+            return charEntity === linkKey;
+        }, (start, end) => {
+            const entitySelection = new SelectionState({
+                anchorKey: blockWithLink.getKey(),
+                focusKey: blockWithLink.getKey(),
+                anchorOffset: start,
+                focusOffset: end
+            });
 
-                contentState = Modifier.applyEntity(contentState, entitySelection, null)
-                return;
-            })
-    
-            const newEditorState = EditorState.set(editorState, { currentContent: contentState });
-            
-            // return;
+            contentState = Modifier.applyEntity(contentState, entitySelection, null)
+            return;
+        })
 
-            this.onChange(
-                RichUtils.toggleLink( newEditorState, selection, null )
-            );
-        }
+        const newEditorState = EditorState.set(editorState, { currentContent: contentState });
+
+        this.onChange(
+            RichUtils.toggleLink( newEditorState, selection, null )
+        );
     }
 
     findLinkEntities(contentBlock, callback, contentState) {
@@ -230,7 +227,6 @@ export class DraftEditor extends Component {
                 } );
             }
         }
-
     }
 
     handleSoftNewLine(e) {
@@ -354,9 +350,7 @@ export class DraftEditor extends Component {
             for( const [key, val] of Object.entries(this.inlineStyles) ) {
 
                 groupControls.push(
-                    <div key={"DraftEditor-controls-row-line" + key} className="DraftEditor-controls-row">
-                        <div className="DraftEditor-controls-row-title label label-background">{key.charAt(0).toUpperCase() + key.slice(1)}</div>
-                        <div className="DraftEditor-controls-row-inner border-style">
+                    <div className="border-style">
                         { val.map( type => <StyleButton
                             key={ this.props.id +'-StyleButton-inlineStyles-' + type.style }
                             id={ this.props.id +'-StyleButton-inlineStyles-' + type.style }
@@ -366,7 +360,6 @@ export class DraftEditor extends Component {
                             style={type.style}
                             buttonStyle={type.buttonStyle}
                         /> ) }
-                        </div>
                     </div>
                 );
             };
@@ -414,19 +407,20 @@ export class DraftEditor extends Component {
                             editorState={this.state.editorState}
                             onToggle={this.toggleColorStyle}
                         />
+                        <div className="border-style">
+                            <LinkControl
+                                editorState={this.state.editorState}
+                                onSubmit={this.confirmLink}
+                                onRemove={this.removeLink}
+                            />
+                        </div>
                     </div>
                 </div>
-                <InlineStyleControls
-                    editorState={this.state.editorState}
-                    onToggle={this.toggleInlineStyle}
-                />
-                <div key={"DraftEditor-controls-row-line-tools"} className="DraftEditor-controls-row">
-                    <div className="DraftEditor-controls-row-title label label-background">Tools</div>
-                    <div className="DraftEditor-controls-row-inner border-style">
-                        <LinkControl
+                <div key={"DraftEditor-controls-row-line2"} className="DraftEditor-controls-row">
+                    <div className="DraftEditor-controls-row-inner">
+                        <InlineStyleControls
                             editorState={this.state.editorState}
-                            onSubmit={this.confirmLink}
-                            onRemove={this.removeLink}
+                            onToggle={this.toggleInlineStyle}
                         />
                     </div>
                 </div>

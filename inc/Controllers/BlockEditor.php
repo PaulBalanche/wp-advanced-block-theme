@@ -60,6 +60,12 @@ class BlockEditor extends ControllerBase {
         wp_localize_script( $handle, 'blocks_spec', apply_filters( 'Abt\localize_editor_script', apply_filters( 'Abt\editor_script_localize_blocks_spec', [] ), $this->get_config()->get('componentBlockPrefixName'), 'block_spec' ) );
 
         wp_enqueue_script( $handle );
+
+        wp_register_script(
+            'testasdasdadsa',
+            ABT_PLUGIN_URL . 'src/js/test.js'
+        );
+        wp_enqueue_script( 'testasdasdadsa' );
     }
 
 
@@ -75,7 +81,7 @@ class BlockEditor extends ControllerBase {
             ABT_PLUGIN_URL . $this->css_filename,
             ['wp-edit-blocks'],
             filemtime( ABT_PLUGIN_DIR . $this->css_filename )
-        );     
+        );  
     }
 
 }

@@ -98,7 +98,7 @@ export class DropDown extends Component {
 
         return (
             <div id={ "dropdown-" + this.props.id} className="wpe-dropdown-container">
-                <div className="wpe-dropdown-label label label-background">{this.props.label}</div>
+                {/* <div className="wpe-dropdown-label label label-background">{this.props.label}</div> */}
                 <div ref={this.wrapperRef} key={this.props.id} className="wpe-dropdown-wrapper">
                     <div className="wpe-dropdown-header" onMouseDown={this.toggle} >
                         <div className="wpe-dropdown-header-title">{this.state.headerTitle}</div>

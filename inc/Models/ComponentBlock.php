@@ -204,7 +204,7 @@ class ComponentBlock extends ModelBase {
             'props_categories' => $component_frontspec['props_categories'] ?? null,
             'path' => $component_frontspec['path'] ?? null,
             'parent' => $component_frontspec['parent'] ?? $default_parent,
-            'screenshot' => $this->get_screenshot_src()
+            // 'screenshot' => $this->get_screenshot_src()
         ], $this );
 
         $block_spec_json_filename = $block_dir . '/' . $this->get_config()->get('viewspecJsonFilename');
@@ -401,9 +401,21 @@ class ComponentBlock extends ModelBase {
                 // Check missing required attributes
                 $missing_required_attributes = $this->get_missing_required_attributes( $render_attributes );
                 if( count($missing_required_attributes) == 0 ) {
-                    $render_attributes['attributes']['id'] = 'test';
 
-                    $render = apply_filters( 'Abt\render_component_block_' . $this->get_ID(), RenderService::render( $block_spec['path'], $render_attributes ) );
+                    if( Request::is_admin_editor_request() ) {
+
+                        $id_json_file = uniqid();
+                        file_put_contents( ABSPATH . '/../../tmp/' . $id_json_file . '.json' , json_encode( $render_attributes, JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES ) );
+
+                        // echo '<pre>';print_r($render_attributes);die;
+                        $render = '<iframe style="width:100%" id="' . $id_json_file . '_iframe" src="'. add_query_arg( [
+                            'action' => 'wpe-component-block-renderer',
+                            'id' => $id_json_file
+                        ], admin_url( 'admin-post.php' ) ) . '" onload="window.iframeLoaded(\'' . $id_json_file . '_iframe\');"></iframe>';
+                    }
+                    else {
+                        $render = apply_filters( 'Abt\render_component_block_' . $this->get_ID(), RenderService::render( $block_spec['path'], $render_attributes ) );
+                    }
                 }
                 else if( Request::is_admin_editor_request() ) {
 

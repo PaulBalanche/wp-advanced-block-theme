@@ -33,13 +33,6 @@ export class LinkControl extends Component {
         const end = selectionState.getEndOffset();
         const selectedText = blockWithLink.getText().slice(start, end);
 
-        if( selectedText == '' ) {
-            this.isValid = false;
-            return;
-        }
-        this.isValid = true;
-
-
         const linkKey = blockWithLink.getEntityAt(start);
         const linkData = ( linkKey ) ? contentState.getEntity(linkKey).getData() : null;
 
@@ -50,7 +43,12 @@ export class LinkControl extends Component {
         } );
 
         this.editionMode = ( linkData && linkData.url ) ? true : false;
-        
+
+        if( ! this.editionMode && selectedText == '' ) {
+            this.isValid = false;
+            return;
+        }
+        this.isValid = true;
     }
 
     open = () => {

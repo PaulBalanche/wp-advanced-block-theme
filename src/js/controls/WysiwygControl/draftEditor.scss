@@ -29,11 +29,6 @@
             display: flex;
             align-items: flex-start;
 
-            &.border-style {
-                border: 1px solid #ddd;
-                padding: 6px;
-            }
-
             .DraftEditor-styleButton {
 
                 cursor: pointer;
@@ -57,6 +52,11 @@
               
         }
     }
+
+    .border-style {
+      border: 1px solid #ddd;
+      padding: 6px;
+  }
 }
 
 .DraftEditor-root {

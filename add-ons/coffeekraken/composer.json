@@ -14,7 +14,8 @@
         "php": ">=7.4",
         "coffeekraken/s-specs": "^2.0@alpha",
         "coffeekraken/s-frontspec": "^2.0@alpha",
-        "coffeekraken/sugar": "^2.0@alpha"
+        "coffeekraken/sugar": "^2.0@alpha",
+        "coffeekraken/s-classmap": "^2.0@alpha"
     },
     "autoload": {
         "psr-4": {
@@ -44,6 +45,13 @@
         {
             "type": "path",
             "url": "~/www/github.com/coffeekraken/packages/tools/sugar",
+            "options": {
+                "symlink": false
+            }
+        },
+        {
+            "type": "path",
+            "url": "~/www/github.com/coffeekraken/packages/tools/s-classmap",
             "options": {
                 "symlink": false
             }

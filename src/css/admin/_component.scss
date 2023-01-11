@@ -31,6 +31,9 @@
 
         .block-editor-block-list__block {
     
+            width: 90% !important;
+            max-width: 90% !important;
+
             &::after {
                 box-shadow: none;
                 top: 0;

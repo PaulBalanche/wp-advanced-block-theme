@@ -13,6 +13,36 @@ class ComponentBlocks extends ServiceBase {
     }
 
 
+    /**
+     * Static render method
+     * 
+     */
+    public static function admin_render() {
+        
+        if( ! isset( $_GET['id'] ) )
+            return;
+
+        $json_filename = ABSPATH . '/../../tmp/' . $_GET['id'] . '.json';
+
+        if( ! file_exists($json_filename) )
+            return;
+
+        $attributes = json_decode( file_get_contents( $json_filename ), true );
+
+        $componentBlockInstance = Main::getInstance()->get_component_block_instance( $attributes['id_component'] );
+        $componentBlockInstance->set_attributes($attributes);
+
+        Main::getInstance()->get_theme_controller()->render( __FILE__, $componentBlockInstance->render() );
+    }
+
+    public static function wpe_component_edit($request ) {
+
+        $id_json_file = uniqid();
+        file_put_contents( ABSPATH . '/../../tmp/' . $id_json_file . '.json' , json_encode( $request->get_json_params(), JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES ) );
+
+        wp_send_json_success($id_json_file);
+    }
+
 
     /**
      * Register dynamic component block

@@ -70,7 +70,7 @@ export class WpeComponentBase extends Component {
                         <Button
                             key={ this.props.clientId + "-buttonConfigMode_" + index }
                             isPressed={ this.state.configMode == index }
-                            onClick={ () => {
+                            onMouseDown={ () => {
                                 this.setState( { configMode: index } )
                             } }
                         >{ modeDefinition[index] }</Button>
