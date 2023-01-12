@@ -1,4 +1,4 @@
-import { Component } from '@wordpress/element';
+import { Component, createPortal } from '@wordpress/element';
 
 import {
     Button,
@@ -186,7 +186,7 @@ export class WpeComponentBase extends Component {
 
             if( tabPanel.length > 0 ) {
 
-                return (
+                const placeholed = 
                     <Placeholder
                         key={ this.props.clientId + "-ConfigurationPlaceholder" }
                         label={ "Configuration" }
@@ -195,6 +195,10 @@ export class WpeComponentBase extends Component {
                     >
                         { ( tabPanel.length > 1 ) ? renderTabPanelComponent( this.props.clientId, tabPanel, function ( tabPanel ) { return tabPanel.content } ) : tabPanel[0].content }
                     </Placeholder>
+
+                return createPortal(
+                    placeholed,
+                    document.getElementById("editZone")
                 );
             }
         }
