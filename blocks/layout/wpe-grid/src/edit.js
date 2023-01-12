@@ -194,7 +194,7 @@ class WpeGrid extends WpeComponentBase {
                                 <Button
                                     key={ "layoutButton_" + layout.value + "_" + clientId }
                                     isPressed={ getBodyDevice() == layout.value }
-                                    onClick={ () => {
+                                    onMouseDown={ () => {
                                         setBodyDevice( layout.value );
                                         inner_blocks.forEach( ( elt ) => {
                                             dispatch('core/block-editor').updateBlockAttributes( elt.clientId, { updated: true } );

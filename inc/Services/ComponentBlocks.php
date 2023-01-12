@@ -13,36 +13,6 @@ class ComponentBlocks extends ServiceBase {
     }
 
 
-    /**
-     * Static render method
-     * 
-     */
-    public static function admin_render() {
-        
-        if( ! isset( $_GET['id'] ) )
-            return;
-
-        $json_filename = ABSPATH . '/../../tmp/' . $_GET['id'] . '.json';
-
-        if( ! file_exists($json_filename) )
-            return;
-
-        $attributes = json_decode( file_get_contents( $json_filename ), true );
-
-        $componentBlockInstance = Main::getInstance()->get_component_block_instance( $attributes['id_component'] );
-        $componentBlockInstance->set_attributes($attributes);
-
-        Main::getInstance()->get_theme_controller()->render( __FILE__, $componentBlockInstance->render() );
-    }
-
-    public static function wpe_component_edit($request ) {
-
-        $id_json_file = uniqid();
-        file_put_contents( ABSPATH . '/../../tmp/' . $id_json_file . '.json' , json_encode( $request->get_json_params(), JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES ) );
-
-        wp_send_json_success($id_json_file);
-    }
-
 
     /**
      * Register dynamic component block
@@ -174,6 +144,112 @@ class ComponentBlocks extends ServiceBase {
         }
 
         return $allowed_block_types;
+    }
+
+
+
+    /**
+     * 
+     * 
+     */
+    public static function get_attributes_autosaves_rest_api_resource_path() {
+
+        return '/component-blocks/autosaves';
+    }
+
+
+
+    /**
+     *  Attributes auto-saves GET used for live-rendering
+     * 
+     */
+    public static function attributes_autosaves_get( $request ) {
+    
+        if( ! $request || ! $request instanceof \WP_REST_Request ) {
+            wp_send_json_error( 'Invalid request' );
+        }
+
+        if( ! isset($request['post_id']) || ! isset($request['component_id']) || ! isset($request['client_id']) ) {
+            wp_send_json_error( 'PostId, componentId or clientId missing' );
+        }
+
+        $post_id = $request['post_id'];
+        $client_id = $request['client_id'];
+        $component_id = $request['component_id'];
+
+        $componentBlockInstance = Main::getInstance()->get_component_block_instance( $component_id );
+        $attributes = $componentBlockInstance->attributes_autosaves_get($post_id, $client_id);
+        $componentBlockInstance->set_attributes($attributes);
+
+        header( 'Content-Type: ' . get_option( 'html_type' ) . '; charset=' . get_option( 'blog_charset' ) );
+        Main::getInstance()->get_theme_controller()->render( __FILE__, $componentBlockInstance->render() );
+        die;
+    }
+
+
+
+    /**
+     *  Attributes auto-saves POST used for live-rendering
+     * 
+     */
+    public static function attributes_autosaves_post( $request ) {
+
+        if( ! $request || ! $request instanceof \WP_REST_Request ) {
+            wp_send_json_error( 'Invalid request' );
+        }
+
+        if( ! isset($request['post_id']) || ! isset($request['component_id']) || ! isset($request['client_id']) ) {
+            wp_send_json_error( 'PostId, componentId or clientId missing' );
+        }
+
+        $post_id = $request['post_id'];
+        $client_id = $request['client_id'];
+
+        $attributes = $request->get_json_params();
+        if( ! $attributes || ! is_array($attributes) ) {
+            wp_send_json_error( 'Attributes missing' );
+        }
+
+        $componentBlockInstance = Main::getInstance()->get_component_block_instance( $request['component_id'] );
+        if( $componentBlockInstance->attributes_autosaves_post( $attributes, $post_id, $client_id ) ) {
+            wp_send_json_success();
+        }
+        
+        wp_send_json_error( 'Error during attributes_autosaves_post' );
+    }
+
+
+
+    /**
+     * This is our callback function that embeds our resource in a WP_REST_Response
+     * 
+     */
+    public static function attributes_autosaves_get_permissions_check() {
+
+        // Restrict endpoint to only users who have the edit_posts capability.
+        // if ( ! current_user_can( 'edit_posts' ) ) {
+        //     return new \WP_Error( 'rest_forbidden', 'Silence is golden.', array( 'status' => 401 ) );
+        // }
+
+        // This is a black-listing approach. You could alternatively do this via white-listing, by returning false here and changing the permissions check.
+        return true;
+    }
+
+
+
+    /**
+     * This is our callback function that embeds our resource in a WP_REST_Response
+     * 
+     */
+    public static function attributes_autosaves_post_permissions_check() {
+
+        // Restrict endpoint to only users who have the edit_posts capability.
+        if ( ! current_user_can( 'edit_posts' ) ) {
+            return new \WP_Error( 'rest_forbidden', 'Silence is golden.', array( 'status' => 401 ) );
+        }
+
+        // This is a black-listing approach. You could alternatively do this via white-listing, by returning false here and changing the permissions check.
+        return true;
     }
 
 }

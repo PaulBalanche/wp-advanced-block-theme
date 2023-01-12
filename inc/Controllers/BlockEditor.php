@@ -58,14 +58,15 @@ class BlockEditor extends ControllerBase {
         wp_localize_script( $handle, 'global_localized', $data_localized );
         wp_localize_script( $handle, 'theme_spec', apply_filters( 'Abt\localize_editor_script', $this->get_config()->get_spec(), $this->get_config()->get('componentBlockPrefixName'), 'theme_spec' ) );
         wp_localize_script( $handle, 'blocks_spec', apply_filters( 'Abt\localize_editor_script', apply_filters( 'Abt\editor_script_localize_blocks_spec', [] ), $this->get_config()->get('componentBlockPrefixName'), 'block_spec' ) );
+        wp_localize_script( $handle, 'js_const', [
+            'admin_post' => admin_url( 'admin-post.php' ),
+            'post_id' => get_the_ID(),
+            'rest_api_url' => home_url() . '/wp-json/',
+            'rest_api_namespace' => $this->get_config()->get('rest_api_namespace'),
+            'componentblock_attr_autosaves_rest_api_resource_path' => ComponentBlocksService::get_attributes_autosaves_rest_api_resource_path()
+        ] );
 
         wp_enqueue_script( $handle );
-
-        wp_register_script(
-            'testasdasdadsa',
-            ABT_PLUGIN_URL . 'src/js/test.js'
-        );
-        wp_enqueue_script( 'testasdasdadsa' );
     }
 
 

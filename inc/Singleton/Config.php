@@ -27,8 +27,10 @@ class Config {
         $componentBlockPrefixName           = 'wpe-component',
         $componentBlockDefaultCategory      = 'WPE Custom',
         $containerClassName                 = ABT_CONTAINER_CLASS_NAME,
-        $specData = null,
-        $addOnsLocation = 'add-ons';
+        $specData                           = null,
+        $addOnsLocation                     = 'add-ons',
+        $rest_api_namespace                 = 'abt/v2',
+        $componentBlocksAutoSaveLocation    = ABSPATH . '../../abt-tmp/';
         
 
 

@@ -7,11 +7,42 @@ import {
     useBlockProps,
     useInnerBlocksProps
 } from '@wordpress/block-editor';
+import apiFetch from '@wordpress/api-fetch';
 
 class WpeComponent extends WpeComponentBase {
 
 	constructor() {
         super( ...arguments );
+
+        this.state = {
+            error: null,
+            isLoaded: false,
+            configMode: ( this?.props?.block_spec?.screenshot && this.props.block_spec.screenshot ) ? 1 : 2
+        };
+    }
+
+    componentDidMount() {
+console.log('apiFetch');
+        apiFetch( {
+            path: js_const.rest_api_namespace + js_const.componentblock_attr_autosaves_rest_api_resource_path + '/' + js_const.post_id + '/' + this.props.attributes.id_component + '/' + this.props.clientId,
+            method: 'POST',
+            data: this.props.attributes
+        } ).then( ( res ) => {
+            if( res.success ) {
+
+                this.setState({
+                    isLoaded: true
+                });
+            }
+            else {
+                this.setState({
+                    isLoaded: false,
+                    error: "Sorry an error occurs..."
+                });
+
+                console.log( js_const.rest_api_namespace + js_const.componentblock_attr_autosaves_rest_api_resource_path + '/' + js_const.post_id + '/' + this.props.clientId + ' error: ' + res.data);
+            }
+        } );
     }
 
     liveRendering() {
@@ -25,12 +56,24 @@ class WpeComponent extends WpeComponentBase {
             return <div { ...this.props.innerBlocksProps } />
         }
         else {
-            return  <ServerSideRender
-                key={ this.props.clientId + "-serverSideRender" }
-                block={ "custom/wpe-component-" + this.props.block_spec.id }
-                attributes={ this.props.attributes }
-                httpMethod={ "POST" }
-            />
+
+            const { error, isLoaded } = this.state;
+
+            if( error ){
+                return <div>{error}</div>;
+            } else if( ! isLoaded ) {
+                return <div>Loading...</div>;
+            } else {
+                return <iframe style={ { width: '100%' } } src={ js_const.rest_api_url + js_const.rest_api_namespace + js_const.componentblock_attr_autosaves_rest_api_resource_path + '/' + js_const.post_id + '/' + this.props.attributes.id_component + '/' + this.props.clientId }></iframe>
+            }
+            
+
+            // return  <ServerSideRender
+            //     key={ this.props.clientId + "-serverSideRender" }
+            //     block={ "custom/wpe-component-" + this.props.block_spec.id }
+            //     attributes={ this.props.attributes }
+            //     httpMethod={ "POST" }
+            // />
         }
     }
 }

@@ -402,20 +402,7 @@ class ComponentBlock extends ModelBase {
                 $missing_required_attributes = $this->get_missing_required_attributes( $render_attributes );
                 if( count($missing_required_attributes) == 0 ) {
 
-                    if( Request::is_admin_editor_request() ) {
-
-                        $id_json_file = uniqid();
-                        file_put_contents( ABSPATH . '/../../tmp/' . $id_json_file . '.json' , json_encode( $render_attributes, JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES ) );
-
-                        // echo '<pre>';print_r($render_attributes);die;
-                        $render = '<iframe style="width:100%" id="' . $id_json_file . '_iframe" src="'. add_query_arg( [
-                            'action' => 'wpe-component-block-renderer',
-                            'id' => $id_json_file
-                        ], admin_url( 'admin-post.php' ) ) . '" onload="window.iframeLoaded(\'' . $id_json_file . '_iframe\');"></iframe>';
-                    }
-                    else {
-                        $render = apply_filters( 'Abt\render_component_block_' . $this->get_ID(), RenderService::render( $block_spec['path'], $render_attributes ) );
-                    }
+                    $render = apply_filters( 'Abt\render_component_block_' . $this->get_ID(), RenderService::render( $block_spec['path'], $render_attributes ) );
                 }
                 else if( Request::is_admin_editor_request() ) {
 
@@ -453,6 +440,41 @@ class ComponentBlock extends ModelBase {
         }
 
         return $missing_required_attributes;
+    }
+
+
+
+    /**
+     * Save liverendering attributes into JSON file
+     * 
+     */
+    public function attributes_autosaves_post( $attributes, $post_id, $client_id ) {
+
+        if( ! file_exists( $this->get_config()->get('componentBlocksAutoSaveLocation')  . $post_id . '/' . $this->get_ID() ) ) {
+
+            mkdir( $this->get_config()->get('componentBlocksAutoSaveLocation') . $post_id . '/' . $this->get_ID(), 0700, true );
+        }
+
+        if( file_put_contents( $this->get_config()->get('componentBlocksAutoSaveLocation') . $post_id . '/' . $this->get_ID() . '/' . $client_id . '.json' , json_encode( $attributes, JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES ) ) ) {
+            return true;
+        }
+
+        return false;
+    }
+
+
+    /**
+     * Get liverendering attributes
+     * 
+     */
+    public function attributes_autosaves_get( $post_id, $client_id ) {
+
+        $json_filename = $this->get_config()->get('componentBlocksAutoSaveLocation') . $post_id . '/' . $this->get_ID() . '/' . $client_id . '.json';
+
+        if( ! file_exists($json_filename) )
+            return [];
+
+        return json_decode( file_get_contents( $json_filename ), true );
     }
 
 }
