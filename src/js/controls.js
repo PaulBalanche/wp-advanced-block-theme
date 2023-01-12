@@ -1,49 +1,49 @@
 import { renderDateTime } from './controls/DateTime';
-export function renderDateTimeControl( id, label, keys, valueProp, objectValue, repeatable = false, required = false, clientId ) {
-    return renderDateTime( id, label, keys, valueProp, objectValue, repeatable, required, clientId );
+export function renderDateTimeControl( componentInstance, id, label, keys, valueProp, objectValue, repeatable = false, required = false ) {
+    return renderDateTime( componentInstance, id, label, keys, valueProp, objectValue, repeatable, required );
 }
 
 import { renderFile } from './controls/File';
-export function renderFileControl( type, id, label, keys, valueProp, objectValue, repeatable = false, required = false, clientId, responsive = false ) {
-    return renderFile( type, id, label, keys, valueProp, objectValue, repeatable, required, clientId, responsive );
+export function renderFileControl( componentInstance, type, id, label, keys, valueProp, objectValue, repeatable = false, required = false, responsive = false ) {
+    return renderFile( componentInstance, type, id, label, keys, valueProp, objectValue, repeatable, required, responsive );
 }
 
 import { renderImageVideo } from './controls/ImageVideo';
-export function renderImageVideoControl( type, args, id, label, keys, valueProp, objectValue, repeatable = false, required = false, clientId, responsive = false ) {
-    return renderImageVideo( type, args, id, label, keys, valueProp, objectValue, repeatable, required, clientId, responsive );
+export function renderImageVideoControl( componentInstance, type, args, id, label, keys, valueProp, objectValue, repeatable = false, required = false, responsive = false ) {
+    return renderImageVideo( componentInstance, type, args, id, label, keys, valueProp, objectValue, repeatable, required, responsive );
 }
 
 import { renderLink } from './controls/Link';
-export function renderLinkControl( id, label, keys, valueProp, objectValue, repeatable = false, required = false, clientId ) {
-    return renderLink( id, label, keys, valueProp, objectValue, repeatable, required, clientId );
+export function renderLinkControl( componentInstance, id, label, keys, valueProp, objectValue, repeatable = false, required = false ) {
+    return renderLink( componentInstance, id, label, keys, valueProp, objectValue, repeatable, required );
 }
 
 import { renderRadio } from './controls/Radio';
-export function renderRadioControl( id, label, options, keys, valueProp, objectValue, repeatable = false, required = false, clientId ) {
-    return renderRadio( id, label, options, keys, valueProp, objectValue, repeatable, required, clientId );
+export function renderRadioControl( componentInstance, id, label, options, keys, valueProp, objectValue, repeatable = false, required = false ) {
+    return renderRadio( componentInstance, id, label, options, keys, valueProp, objectValue, repeatable, required );
 }
 
 import { renderRelation } from './controls/Relation';
-export function renderRelationControl( id, label, entity, keys, valueProp, objectValue, repeatable = false, required = false, clientId ) {
-    return renderRelation( id, label, entity, keys, valueProp, objectValue, repeatable, required, clientId );
+export function renderRelationControl( componentInstance, id, label, entity, keys, valueProp, objectValue, repeatable = false, required = false ) {
+    return renderRelation( componentInstance, id, label, entity, keys, valueProp, objectValue, repeatable, required );
 }
 
 import { renderSelect } from './controls/Select';
-export function renderSelectControl( id, label, options, keys, valueProp, attributeValue, repeatable = false, required = false, clientId ) {
-    return renderSelect( id, label, options, keys, valueProp, attributeValue, repeatable, required, clientId );
+export function renderSelectControl( componentInstance, id, label, options, keys, valueProp, attributeValue, repeatable = false, required = false ) {
+    return renderSelect( componentInstance, id, label, options, keys, valueProp, attributeValue, repeatable, required );
 }
 
 import { renderText } from './controls/Text';
-export function renderTextControl( id, label, keys, valueProp, objectValue, isNumber = false, repeatable = false, required = false, clientId, responsive = false ) {
-    return renderText( id, label, keys, valueProp, objectValue, isNumber, repeatable, required, clientId, responsive );
+export function renderTextControl( componentInstance, id, label, keys, valueProp, objectValue, isNumber = false, repeatable = false, required = false, responsive = false ) {
+    return renderText( componentInstance, id, label, keys, valueProp, objectValue, isNumber, repeatable, required, responsive );
 }
 
 import { renderTextarea } from './controls/Textarea';
-export function renderTextareaControl( id, label, keys, valueProp, objectValue, repeatable = false, required = false, clientId ) {
-    return renderTextarea( id, label, keys, valueProp, objectValue, repeatable, required, clientId );
+export function renderTextareaControl( componentInstance, id, label, keys, valueProp, objectValue, repeatable = false, required = false ) {
+    return renderTextarea( componentInstance, id, label, keys, valueProp, objectValue, repeatable, required );
 }
 
 import { renderToggle } from './controls/Toggle';
-export function renderToggleControl( id, label, help, keys, valueProp, objectValue, repeatable = false, required = false, clientId ) {
-    return renderToggle( id, label, help, keys, valueProp, objectValue, repeatable, required, clientId );
+export function renderToggleControl( componentInstance, id, label, help, keys, valueProp, objectValue, repeatable = false, required = false ) {
+    return renderToggle( componentInstance, id, label, help, keys, valueProp, objectValue, repeatable, required );
 }

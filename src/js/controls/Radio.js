@@ -7,7 +7,7 @@ import { updateAttributes, removeEltRepeatable } from '../attributes';
 
 import { withState } from '@wordpress/compose';
 
-export function renderRadio( id, label, options, keys, valueProp, objectValue, repeatable = false, required = false, clientId ) {
+export function renderRadio( componentInstance, id, label, options, keys, valueProp, objectValue, repeatable = false, required = false ) {
 
     if( typeof options == 'undefined' )
         return null;
@@ -44,7 +44,7 @@ export function renderRadio( id, label, options, keys, valueProp, objectValue, r
             } ) }
             onChange={ ( newValue ) => {
                 setState( { newValue } );
-                updateAttributes( keys, valueProp, newValue, false, clientId );
+                updateAttributes( keys, valueProp, newValue, false, componentInstance );
             } }
         />
     ) );

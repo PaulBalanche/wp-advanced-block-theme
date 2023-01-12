@@ -5,7 +5,7 @@ import {
 
 import { updateAttributes, removeEltRepeatable } from '../attributes';
 
-export function renderTextarea( id, label, keys, valueProp, objectValue, repeatable = false, required = false, clientId ) {
+export function renderTextarea( componentInstance, id, label, keys, valueProp, objectValue, repeatable = false, required = false ) {
 
     label = ( required ) ? label + '*' : label;
 
@@ -33,7 +33,7 @@ export function renderTextarea( id, label, keys, valueProp, objectValue, repeata
             label={ label }
             value={ objectValue }
             onChange={ ( newValue ) =>
-                updateAttributes( keys, valueProp, newValue, false, clientId )
+                updateAttributes( keys, valueProp, newValue, false, componentInstance )
             }
         />
     );

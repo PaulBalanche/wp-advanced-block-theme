@@ -3,7 +3,7 @@ import {
     DateTimePicker
 } from '@wordpress/components';
 
-export function renderDateTime( id, label, keys, valueProp, objectValue, repeatable = false, required = false, clientId ) {
+export function renderDateTime( componentInstance, id, label, keys, valueProp, objectValue, repeatable = false, required = false ) {
 
     label = ( required ) ? label + '*' : label;
 
@@ -33,7 +33,7 @@ export function renderDateTime( id, label, keys, valueProp, objectValue, repeata
             currentDate={ date }
             onChange={ ( newDate ) => {
                 setState( { date: newDate } );
-                updateAttributes( keys, valueProp, newDate, false, clientId );
+                updateAttributes( keys, valueProp, newDate, false, componentInstance );
             } }
             is12Hour={ false }
         />

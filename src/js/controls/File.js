@@ -6,9 +6,9 @@ import {
     Button
 } from '@wordpress/components';
 
-import { updateAttributes, removeEltRepeatable, fileSizeFormat, setAttributes } from '../attributes';
+import { updateAttributes, removeEltRepeatable, fileSizeFormat } from '../attributes';
 
-export function renderFile( type, id, label, keys, valueProp, objectValue, repeatable = false, required = false, clientId, responsive = false ) {
+export function renderFile( componentInstance, type, id, label, keys, valueProp, objectValue, repeatable = false, required = false, responsive = false ) {
 
     label = ( label && required ) ? label + '*' : label;
     
@@ -117,11 +117,11 @@ export function renderFile( type, id, label, keys, valueProp, objectValue, repea
                     className="reset-button"
                     onClick={ () => {
                             if( type == "gallery" && objectValue.length > 1 )
-                                setAttributes( { [keys]: objectValue.slice(0, objectValue.length - 1) }, clientId );
+                            componentInstance.setAttributes( { [keys]: objectValue.slice(0, objectValue.length - 1) } );
                             else if( repeatable )
-                                removeEltRepeatable( keys, valueProp );
+                                removeEltRepeatable( keys, valueProp, componentInstance );
                             else
-                                setAttributes( { [keys]: undefined }, clientId );
+                            componentInstance.setAttributes( { [keys]: undefined } );
                         }
                     }
                 >Remove</Button>
@@ -186,7 +186,7 @@ export function renderFile( type, id, label, keys, valueProp, objectValue, repea
                     }
 
                     if( typeof newValue != 'undefined' && ( typeof newValue != 'object' || Object.keys(newValue).length > 0 ) )
-                        updateAttributes( keys, valueProp, newValue, false, clientId );
+                        updateAttributes( keys, valueProp, newValue, false, componentInstance );
                 } }
                 multiple= { type == 'gallery' }
                 addToGallery= { type == 'gallery' && !! objectValue }

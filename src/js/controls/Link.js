@@ -9,7 +9,7 @@ import {
 
 import { updateAttributes, removeEltRepeatable, renderPanelComponent } from '../attributes';
 
-export function renderLink( id, label, keys, valueProp, objectValue, repeatable = false, required = false, clientId ) {
+export function renderLink( componentInstance, id, label, keys, valueProp, objectValue, repeatable = false, required = false ) {
         
     if( typeof objectValue == 'undefined' ) {
         objectValue = {};
@@ -58,7 +58,7 @@ export function renderLink( id, label, keys, valueProp, objectValue, repeatable 
                             type={ "text" }
                             value={ objectValue.text }
                             onChange={ ( newValue ) => {
-                                updateAttributes( keys.concat('text'), valueProp, newValue, false, clientId );
+                                updateAttributes( keys.concat('text'), valueProp, newValue, false, componentInstance );
                             } }
                         />
                         <LinkControl
@@ -80,7 +80,7 @@ export function renderLink( id, label, keys, valueProp, objectValue, repeatable 
                                 opensInNewTab: newOpensInNewTab,
                             } ) => {
                                 let newObjectValue = ( typeof newURL == 'string' ) ? { text: objectValue.text, url: newURL, opensInNewTab: newOpensInNewTab } : { text: objectValue.text };
-                                updateAttributes( keys, valueProp, newObjectValue, false, clientId );
+                                updateAttributes( keys, valueProp, newObjectValue, false, componentInstance );
                             } }
                         />
                     </div>

@@ -7,7 +7,7 @@ import { updateAttributes, removeEltRepeatable, renderTabPanelComponent } from '
 
 import { getLayouts, setBodyDevice, getBodyDevice } from '../devices';
 
-export function renderText( id, label, keys, valueProp, objectValue, isNumber = false, repeatable = false, required = false, clientId, responsive = false ) {
+export function renderText( componentInstance, id, label, keys, valueProp, objectValue, isNumber = false, repeatable = false, required = false, responsive = false ) {
 
     label = ( required ) ? label + '*' : label;
 
@@ -43,13 +43,13 @@ export function renderText( id, label, keys, valueProp, objectValue, isNumber = 
                 function ( tab ) {
 
                     return renderTextControl(
+                        componentInstance,
                         id + "-" + tab.name,
                         label,
                         isNumber,
                         ( typeof objectValue[tab.name] == 'string' ) ? objectValue[tab.name] : '',
                         keys.concat(tab.name),
-                        valueProp,
-                        clientId
+                        valueProp
                     );
                 },
                 getBodyDevice()
@@ -59,17 +59,17 @@ export function renderText( id, label, keys, valueProp, objectValue, isNumber = 
     }
 
     return renderTextControl(
+        componentInstance,
         id,
         label,
         isNumber,
         objectValue,
         keys,
-        valueProp,
-        clientId
+        valueProp
     );
 }
 
-function renderTextControl( id, label, isNumber, value, keysToUpdate, valueProp, clientId ) {
+function renderTextControl( componentInstance, id, label, isNumber, value, keysToUpdate, valueProp ) {
 
     return <TextControl
         key={ id }
@@ -77,7 +77,7 @@ function renderTextControl( id, label, isNumber, value, keysToUpdate, valueProp,
         type={ !! isNumber ? "number" : "text" }
         value={ value }
         onChange={ ( newValue ) =>
-            updateAttributes( keysToUpdate, valueProp, newValue, isNumber, clientId )
+            updateAttributes( keysToUpdate, valueProp, newValue, isNumber, componentInstance )
         }
     />
 }

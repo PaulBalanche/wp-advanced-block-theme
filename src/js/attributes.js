@@ -27,12 +27,12 @@ export function returnStringOrNumber( value, isNumber = false ) {
     return !! isNumber ? parseInt( value, 10 ) : value;
 }
 
-function addEltToRepeatable( arrayKey, currentValueProp, currentValueRepeatableField, isNumber = false, clientId ) {
-    updateAttributes( arrayKey, currentValueProp, currentValueRepeatableField.concat(""), isNumber, clientId );
+function addEltToRepeatable( arrayKey, currentValueProp, currentValueRepeatableField, isNumber = false, componentInstance ) {
+    updateAttributes( arrayKey, currentValueProp, currentValueRepeatableField.concat(""), isNumber, componentInstance );
 }
 
-export function removeEltRepeatable( arrayKey, currentValueProp ) {
-    updateAttributes( arrayKey, currentValueProp, false, false, clientId );
+export function removeEltRepeatable( arrayKey, currentValueProp, componentInstance ) {
+    updateAttributes( arrayKey, currentValueProp, false, false, componentInstance );
 }
 
 export function fileSizeFormat( filesizeInBytes ) {
@@ -43,15 +43,15 @@ export function fileSizeFormat( filesizeInBytes ) {
         return Math.round(filesizeInBytes / 1000) + " Ko";
 }
 
-export function setAttributes( attributes, clientId ) {
-    dispatch('core/block-editor').updateBlockAttributes( clientId, attributes );
-}
+// export function setAttributes( attributes, clientId ) {
+//     dispatch('core/block-editor').updateBlockAttributes( clientId, attributes );
+// }
 
-export function updateAttributes( arrayKey, currentValue, newValue, isNumber = false, clientId ) {
+export function updateAttributes( arrayKey, currentValue, newValue, isNumber = false, componentInstance ) {
     let keyToUpdate = arrayKey[0];
     let newValueToUpdate = recursiveUpdateObjectFromObject(arrayKey, currentValue, newValue, isNumber);
 
-    setAttributes( { [keyToUpdate]: newValueToUpdate[keyToUpdate] }, clientId );
+    componentInstance.setAttributes( { [keyToUpdate]: newValueToUpdate[keyToUpdate] } );
 }
 
 export function recursiveUpdateObjectFromObject( arrayKey, fromObject, newValue, isNumber = false ) {
@@ -93,7 +93,9 @@ export function recursiveUpdateObjectFromObject( arrayKey, fromObject, newValue,
     return objectReturned;
 }
 
-export function renderControl( prop, keys, valueProp, clientId, theme_spec = null ) {
+export function renderControl( prop, keys, valueProp, componentInstance ) {
+
+    const clientId = componentInstance.props.clientId;
 
     prop.type = prop.type.toLowerCase();
 
@@ -137,15 +139,15 @@ export function renderControl( prop, keys, valueProp, clientId, theme_spec = nul
         switch( prop.type ) {
 
             case 'string':
-                blocReturned.push( renderTextControl( fieldId, label, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], false, repeatable, required_field, clientId, responsive ) );
+                blocReturned.push( renderTextControl( componentInstance, fieldId, label, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], false, repeatable, required_field, responsive ) );
                 break;
 
             case 'number':
-                blocReturned.push( renderTextControl( fieldId, label, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], true, repeatable, required_field, clientId ) );
+                blocReturned.push( renderTextControl( componentInstance, fieldId, label, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], true, repeatable, required_field ) );
                 break;
 
             case 'text':
-                blocReturned.push( renderTextareaControl( fieldId, label, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, clientId ) );
+                blocReturned.push( renderTextareaControl( componentInstance, fieldId, label, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field ) );
                 break;
             
             case 'richText':
@@ -159,47 +161,46 @@ export function renderControl( prop, keys, valueProp, clientId, theme_spec = nul
                     objectValue={ currentValueAttribute[keyLoop] }
                     repeatable={ repeatable }
                     required={ required_field }
-                    clientId={ clientId }
-                    themeSpec={ theme_spec }
+                    componentInstance={ componentInstance }
                 /> );
                 break;
 
             case 'boolean':
-                blocReturned.push( renderToggleControl( fieldId, label, prop.help, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, clientId ) );
+                blocReturned.push( renderToggleControl( componentInstance, fieldId, label, prop.help, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field ) );
                 break;
 
             case 'select':
             case 'color':
-                blocReturned.push( renderSelectControl( fieldId, label, prop.options, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, clientId ) );
+                blocReturned.push( renderSelectControl( componentInstance, fieldId, label, prop.options, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field ) );
                 break;
             
             case 'radio':
-                blocReturned.push( renderRadioControl( fieldId, label, prop.options, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, clientId ) );
+                blocReturned.push( renderRadioControl( componentInstance, fieldId, label, prop.options, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field ) );
                 break;
 
             case 'link':
-                blocReturned.push( renderLinkControl( fieldId, label, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, clientId ) );
+                blocReturned.push( renderLinkControl( componentInstance, fieldId, label, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field ) );
                 break;
 
             case 'relation':
-                blocReturned.push( renderRelationControl( fieldId, label, prop.entity, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, clientId ) );
+                blocReturned.push( renderRelationControl( componentInstance, fieldId, label, prop.entity, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field ) );
                 break;
             
             case 'date':
-                blocReturned.push( renderDateTimeControl( fieldId, label, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, clientId ) );
+                blocReturned.push( renderDateTimeControl( componentInstance, fieldId, label, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field ) );
                 break;
 
             case 'image':
-                blocReturned.push( renderImageVideoControl( prop.type, ( prop.image && typeof prop.image == 'object' ) ? prop.image : {}, fieldId, label, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, clientId, responsive ) );
+                blocReturned.push( renderImageVideoControl( componentInstance, prop.type, ( prop.image && typeof prop.image == 'object' ) ? prop.image : {}, fieldId, label, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, responsive ) );
                 break;
 
             case 'video':
-                blocReturned.push( renderImageVideoControl( prop.type, ( prop.video && typeof prop.video == 'object' ) ? prop.video : {}, fieldId, label, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, clientId ) );
+                blocReturned.push( renderImageVideoControl( componentInstance, prop.type, ( prop.video && typeof prop.video == 'object' ) ? prop.video : {}, fieldId, label, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field ) );
                 break;
             
             case 'file':
             case 'gallery':
-                blocReturned.push( renderFileControl( prop.type, fieldId, label, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, clientId, responsive ) );
+                blocReturned.push( renderFileControl( componentInstance, prop.type, fieldId, label, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, responsive ) );
                 break;
 
             case 'object':
@@ -225,7 +226,7 @@ export function renderControl( prop, keys, valueProp, clientId, theme_spec = nul
                                     let tempKeyObjectReponsive = keys.concat(tab.name);
                                     let fieldsetObjectResponsive = [];
                                     for( const [ keySubProp, valueSubProp ] of Object.entries(prop.props) ) {
-                                        fieldsetObjectResponsive.push( renderControl( valueSubProp, tempKeyObjectReponsive.concat(keySubProp), valueProp, clientId, theme_spec ) );
+                                        fieldsetObjectResponsive.push( renderControl( valueSubProp, tempKeyObjectReponsive.concat(keySubProp), valueProp, componentInstance ) );
                                     }
                                     return fieldsetObjectResponsive;
                                 },
@@ -235,7 +236,7 @@ export function renderControl( prop, keys, valueProp, clientId, theme_spec = nul
                     }
                     else {
                         for (const [keySubProp, valueSubProp] of Object.entries(prop.props)) {
-                            fieldsetObject.push( renderControl( valueSubProp, tempKeyObject.concat(keySubProp), valueProp, clientId, theme_spec ) );
+                            fieldsetObject.push( renderControl( valueSubProp, tempKeyObject.concat(keySubProp), valueProp, componentInstance ) );
                         }
                     }
                     
@@ -248,7 +249,7 @@ export function renderControl( prop, keys, valueProp, clientId, theme_spec = nul
                                     isLink={true}
                                     className="removeRepeatable"
                                     onClick={ () =>
-                                        removeEltRepeatable(tempKeyObject, valueProp)
+                                        removeEltRepeatable( tempKeyObject, valueProp, componentInstance )
                                     }
                                 >
                                     Remove
@@ -273,7 +274,7 @@ export function renderControl( prop, keys, valueProp, clientId, theme_spec = nul
                 isSecondary
                 isSmall
                 onClick={ () => 
-                    addEltToRepeatable( keys, valueProp, currentValueAttribute, false, clientId )
+                    addEltToRepeatable( keys, valueProp, currentValueAttribute, false, componentInstance )
                 }
             >Add</Button>
         );

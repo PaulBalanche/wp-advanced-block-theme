@@ -17,7 +17,8 @@ export class WpeComponentBase extends Component {
         super( ...arguments );
 
         this.state = {
-            configMode: ( this?.props?.block_spec?.screenshot && this.props.block_spec.screenshot ) ? 1 : 2
+            configMode: ( this?.props?.block_spec?.screenshot && this.props.block_spec.screenshot ) ? 1 : 2,
+            updated: false
         };
 
         this.tabEnabledMode = [];
@@ -48,6 +49,7 @@ export class WpeComponentBase extends Component {
 
     setAttributes( attributes ) {
         this.props.setAttributes( attributes );
+        this.setState( { updated: true } )
     }
 
     renderButtonGroupMode() {
@@ -161,7 +163,7 @@ export class WpeComponentBase extends Component {
                     }
 
                     let valueProp = this.getAttribute( keyProp );
-                    currentEditCat.push( renderControl( prop, [ keyProp ], { [keyProp]: valueProp }, this.props.clientId, this.props.theme_spec ) );
+                    currentEditCat.push( renderControl( prop, [ keyProp ], { [keyProp]: valueProp }, this ) );
                 }
 
                 if( keyCat == "default" ) {

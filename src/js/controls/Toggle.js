@@ -5,7 +5,7 @@ import {
 
 import { updateAttributes, removeEltRepeatable } from '../attributes';
 
-export function renderToggle( id, label, help, keys, valueProp, objectValue, repeatable = false, required = false, clientId ) {
+export function renderToggle( componentInstance, id, label, help, keys, valueProp, objectValue, repeatable = false, required = false ) {
 
     label = ( required ) ? label + '*' : label;
 
@@ -34,7 +34,7 @@ export function renderToggle( id, label, help, keys, valueProp, objectValue, rep
             help={ ( typeof help == 'object' && Array.isArray(help) && help.length == 2 ) ? ( !! objectValue ? help[1] : help[0] ) : false }
             checked={ objectValue }
             onChange={ ( newValue ) =>
-                updateAttributes( keys, valueProp, newValue, false, clientId )
+                updateAttributes( keys, valueProp, newValue, false, componentInstance )
             }
         />
     );

@@ -5,7 +5,7 @@ import {
 
 import { updateAttributes, removeEltRepeatable } from '../attributes';
 
-export function renderSelect( id, label, options, keys, valueProp, attributeValue, repeatable = false, required = false, clientId ) {
+export function renderSelect( componentInstance, id, label, options, keys, valueProp, attributeValue, repeatable = false, required = false ) {
 
     if( typeof options == 'undefined' )
         return null;
@@ -41,7 +41,7 @@ export function renderSelect( id, label, options, keys, valueProp, attributeValu
                 } ) )
             }
             onChange={ ( newValue ) =>
-                updateAttributes( keys, valueProp, newValue, false, clientId )
+                updateAttributes( keys, valueProp, newValue, false, componentInstance )
             }
         />
     );

@@ -14,35 +14,61 @@ class WpeComponent extends WpeComponentBase {
 	constructor() {
         super( ...arguments );
 
-        this.state = {
-            error: null,
-            isLoaded: false,
-            configMode: ( this?.props?.block_spec?.screenshot && this.props.block_spec.screenshot ) ? 1 : 2
-        };
+        this.iframeResize = this._iframeResize.bind(this);
     }
 
     componentDidMount() {
-console.log('apiFetch');
+
+        this.apiFetch();
+    }
+
+    shouldComponentUpdate(nextProps, nextState) {
+
+        if( ! this.state.updated && nextState.updated ) {
+            this.apiFetch( nextProps.attributes );
+        }
+
+        return true;
+      }
+
+    apiFetch( attributes = null ) {
+
+        this.setState({
+            isLoaded: false,
+            error: null
+        });
+
+        console.log('apiFetch');
+        
         apiFetch( {
             path: js_const.rest_api_namespace + js_const.componentblock_attr_autosaves_rest_api_resource_path + '/' + js_const.post_id + '/' + this.props.attributes.id_component + '/' + this.props.clientId,
             method: 'POST',
-            data: this.props.attributes
+            data: ( attributes == null ) ? this.props.attributes : attributes
         } ).then( ( res ) => {
             if( res.success ) {
 
                 this.setState({
-                    isLoaded: true
+                    isLoaded: true,
+                    updated: false
                 });
             }
             else {
                 this.setState({
-                    isLoaded: false,
-                    error: "Sorry an error occurs..."
+                    error: "Sorry an error occurs...",
+                    updated: false
                 });
 
                 console.log( js_const.rest_api_namespace + js_const.componentblock_attr_autosaves_rest_api_resource_path + '/' + js_const.post_id + '/' + this.props.clientId + ' error: ' + res.data);
             }
         } );
+    }
+
+    _iframeResize() {
+
+        var iFrameID = document.getElementById( this.props.clientId + "-LiveRenderingIframe" );
+        if(iFrameID) {
+            iFrameID.height = iFrameID.contentWindow.document.body.scrollHeight + "px";
+        }
     }
 
     liveRendering() {
@@ -57,16 +83,22 @@ console.log('apiFetch');
         }
         else {
 
-            const { error, isLoaded } = this.state;
+            const { error, isLoaded, updated } = this.state;
 
-            if( error ){
+            if( error != null ){
                 return <div>{error}</div>;
             } else if( ! isLoaded ) {
                 return <div>Loading...</div>;
             } else {
-                return <iframe style={ { width: '100%' } } src={ js_const.rest_api_url + js_const.rest_api_namespace + js_const.componentblock_attr_autosaves_rest_api_resource_path + '/' + js_const.post_id + '/' + this.props.attributes.id_component + '/' + this.props.clientId }></iframe>
+
+                return <iframe
+                    key={ this.props.clientId + "-LiveRenderingIframe" }
+                    id={ this.props.clientId + "-LiveRenderingIframe" }
+                    style={ { width: '100%' } }
+                    src={ js_const.rest_api_url + js_const.rest_api_namespace + js_const.componentblock_attr_autosaves_rest_api_resource_path + '/' + js_const.post_id + '/' + this.props.attributes.id_component + '/' + this.props.clientId }
+                    onLoad={this.iframeResize}
+                ></iframe>
             }
-            
 
             // return  <ServerSideRender
             //     key={ this.props.clientId + "-serverSideRender" }

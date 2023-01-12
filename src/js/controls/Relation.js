@@ -5,7 +5,7 @@ import {
 
 import { updateAttributes, removeEltRepeatable } from '../attributes';
 
-export function renderRelation( id, label, entity, keys, valueProp, objectValue, repeatable = false, required = false, clientId ) {
+export function renderRelation( componentInstance, id, label, entity, keys, valueProp, objectValue, repeatable = false, required = false ) {
 
     if( typeof entity == 'undefined' || typeof this.props.relations[entity] == 'undefined' || this.props.relations[entity] == null || Object.keys(this.props.relations[entity]).length == 0 )
         return null;
@@ -40,7 +40,7 @@ export function renderRelation( id, label, entity, keys, valueProp, objectValue,
                 } )
             }
             onChange={ ( newValue ) =>
-                updateAttributes( keys, valueProp, newValue, false, clientId )
+                updateAttributes( keys, valueProp, newValue, false, componentInstance )
             }
         />
     );

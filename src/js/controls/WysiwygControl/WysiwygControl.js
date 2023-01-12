@@ -18,16 +18,16 @@ class WysiwygControl extends Component {
 
     handleChange( newContent) {
 
-        updateAttributes( this.props.keys, this.props.valueProp, newContent, false, this.props.clientId  );
+        updateAttributes( this.props.keys, this.props.valueProp, newContent, false, this.props.componentInstance  );
     }
 
     getTypo() {
 
         let typo = {};
+        
+        if( this.props?.componentInstance?.props?.theme_spec?.typo && typeof this.props.componentInstance.props.theme_spec.typo == 'object') {
 
-        if( this.props?.themeSpec?.typo && typeof this.props.themeSpec.typo == 'object') {
-
-            for( const [key, val] of Object.entries(this.props.themeSpec.typo) ) {
+            for( const [key, val] of Object.entries(this.props.componentInstance.props.theme_spec.typo) ) {
 
                 if( key == 'a' ) {
                     continue;
@@ -83,9 +83,9 @@ class WysiwygControl extends Component {
             }
         };
 
-        if( this.props?.themeSpec?.typo && typeof this.props.themeSpec.typo == 'object') {
+        if( this.props?.componentInstance?.props?.theme_spec?.typo && typeof this.props.componentInstance.props.theme_spec.typo == 'object') {
 
-            for( const [key, val] of Object.entries(this.props.themeSpec.typo) ) {
+            for( const [key, val] of Object.entries(this.props.componentInstance.props.theme_spec.typo) ) {
 
                 let editorCss = null;
 
