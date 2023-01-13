@@ -194,14 +194,6 @@ export class WpeComponentBase extends Component {
                     <div key={ this.props.clientId + "-editZone" } className='edit-zone__inner'>
                         <div className='edit-zone__header'>
                             { this.props.attributes.id_component }
-                            <Button
-                                key={ this.props.clientId + "-buttonCloseEditZone" }
-                                className="abtButtonCloseEditZone"
-                                variant="primary"
-                                onMouseDown={ () => {
-                                    EditZone.getInstance().hide();
-                                } }
-                            ><Dashicon icon="no-alt" /></Button>
                         </div>
                         <div className='edit-zone__body'>
                             <Placeholder
@@ -211,6 +203,24 @@ export class WpeComponentBase extends Component {
                             >
                                 { ( tabPanel.length > 1 ) ? renderTabPanelComponent( this.props.clientId, tabPanel, function ( tabPanel ) { return tabPanel.content } ) : tabPanel[0].content }
                             </Placeholder>
+                        </div>
+                        <div className='edit-zone__footer'>
+                            <Button
+                                key={ this.props.clientId + "-buttonCloseEditZone" }
+                                className="abtButtonCloseEditZone"
+                                variant="primary"
+                                onMouseDown={ () => {
+                                    EditZone.getInstance().hide();
+                                } }
+                            ><Dashicon icon="saved" />Apply</Button>
+                            <Button
+                                key={ this.props.clientId + "-buttonCloseEditZone" }
+                                className="abtButtonCloseEditZone"
+                                variant="primary"
+                                onMouseDown={ () => {
+                                    EditZone.getInstance().hide();
+                                } }
+                            ><Dashicon icon="no-alt" />Close</Button>
                         </div>
                     </div>
 

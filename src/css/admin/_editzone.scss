@@ -1,5 +1,6 @@
 .abtButtonEditZone {
     display: none;
+    margin-bottom: 10px;
 }
 
 #abt-component-edit-zone{
@@ -22,16 +23,29 @@
 
     .edit-zone__header {
 
-        padding: 16px 20px;
+        padding: 20px 20px 0 20px;
         background: #007cba;
         color: white;
         font-size: 16px;
         font-weight: 500;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 75px;
+        box-sizing: border-box;
     }
 
     .edit-zone__body {
 
         padding: 20px;
+        overflow: auto;
+        position: absolute;
+        left: 0;
+        bottom: 75px;
+        width: 100%;
+        box-sizing: border-box;
+        top: 75px;
 
         .wpe-component_edit_placeholder {
 
@@ -256,6 +270,32 @@
                         align-items: flex-end;
                     }
                 }
+            }
+        }
+    }
+
+    .edit-zone__footer {
+        display: flex;
+        justify-content: space-between;
+        padding: 20px 20px 0 20px;
+        background: #007cba;
+        color: white;
+        font-size: 16px;
+        font-weight: 500;
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        height: 75px;
+        box-sizing: border-box;
+
+        .components-button.is-primary {
+            color: var(--wp-admin-theme-color);
+            background: white;
+
+            &:hover {
+                background: var(--wp-admin-theme-color-darker-10);
+                color: #fff;
             }
         }
     }
