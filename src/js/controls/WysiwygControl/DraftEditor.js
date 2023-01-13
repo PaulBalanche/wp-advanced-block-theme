@@ -350,7 +350,7 @@ export class DraftEditor extends Component {
             for( const [key, val] of Object.entries(this.inlineStyles) ) {
 
                 groupControls.push(
-                    <div className="border-style">
+                    <div key={ this.props.id +'-inlineStylesContainer' } className="border-style">
                         { val.map( type => <StyleButton
                             key={ this.props.id +'-StyleButton-inlineStyles-' + type.style }
                             id={ this.props.id +'-StyleButton-inlineStyles-' + type.style }
@@ -395,7 +395,7 @@ export class DraftEditor extends Component {
             />
         }
 
-        return <Fragment>
+        return <Fragment key={ this.props.id +'-draftEditor' }>
             <div className="DraftEditor-Container">
                 <div key="DraftEditor-controls-row-line1" className="DraftEditor-controls-row">
                     <div className="DraftEditor-controls-row-inner">

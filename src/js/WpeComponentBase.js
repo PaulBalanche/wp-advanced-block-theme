@@ -22,7 +22,7 @@ export class WpeComponentBase extends Component {
         this.state = {
             editZone: false,
             configMode: ( this?.props?.block_spec?.screenshot && this.props.block_spec.screenshot ) ? 1 : 2,
-            updated: false
+            needPreviewUpdate: false
         };
 
         this.tabEnabledMode = [];
@@ -53,7 +53,6 @@ export class WpeComponentBase extends Component {
 
     setAttributes( attributes ) {
         this.props.setAttributes( attributes );
-        this.setState( { updated: true } )
     }
 
     renderButtonGroupMode() {
@@ -206,19 +205,19 @@ export class WpeComponentBase extends Component {
                         </div>
                         <div className='edit-zone__footer'>
                             <Button
-                                key={ this.props.clientId + "-buttonCloseEditZone" }
-                                className="abtButtonCloseEditZone"
+                                key={ this.props.clientId + "-buttonUpdatePreview" }
+                                className="abtButtonUpdatePreview"
                                 variant="primary"
                                 onMouseDown={ () => {
-                                    EditZone.getInstance().hide();
+                                    this.setState( { needPreviewUpdate: true } )
                                 } }
-                            ><Dashicon icon="saved" />Apply</Button>
+                            ><Dashicon icon="saved" />Update preview</Button>
                             <Button
                                 key={ this.props.clientId + "-buttonCloseEditZone" }
                                 className="abtButtonCloseEditZone"
                                 variant="primary"
                                 onMouseDown={ () => {
-                                    EditZone.getInstance().hide();
+                                    EditZone.getInstance().removeComponent(this);
                                 } }
                             ><Dashicon icon="no-alt" />Close</Button>
                         </div>
@@ -261,8 +260,12 @@ export class WpeComponentBase extends Component {
             className="abtButtonEditZone"
             variant="primary"
             onMouseDown={ () => {
-                EditZone.getInstance().addComponent(this);
-                // this.setState( { editZone: ! this.state.editZone } )
+                if( EditZone.getInstance().hasComponent(this) ) {
+                    EditZone.getInstance().removeComponent(this);
+                }
+                else {
+                    EditZone.getInstance().addComponent(this);
+                }
             } }
         ><Dashicon icon="edit" /></Button>);
 

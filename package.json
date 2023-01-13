@@ -22,5 +22,8 @@
     "immutable": "^4.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
+  },
+  "dependencies": {
+    "@wordpress/api-fetch": "^6.21.0"
   }
 }

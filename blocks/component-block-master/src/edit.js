@@ -24,7 +24,7 @@ class WpeComponent extends WpeComponentBase {
 
     shouldComponentUpdate(nextProps, nextState) {
 
-        if( ! this.state.updated && nextState.updated ) {
+        if( ! this.state.needPreviewUpdate && nextState.needPreviewUpdate ) {
             this.apiFetch( nextProps.attributes );
         }
 
@@ -47,13 +47,13 @@ class WpeComponent extends WpeComponentBase {
 
                 this.setState({
                     isLoaded: true,
-                    updated: false
+                    needPreviewUpdate: false
                 });
             }
             else {
                 this.setState({
                     error: "Sorry an error occurs...",
-                    updated: false
+                    needPreviewUpdate: false
                 });
 
                 console.log( js_const.rest_api_namespace + js_const.componentblock_attr_autosaves_rest_api_resource_path + '/' + js_const.post_id + '/' + this.props.clientId + ' error: ' + res.data);
