@@ -37,8 +37,6 @@ class WpeComponent extends WpeComponentBase {
             isLoaded: false,
             error: null
         });
-
-        console.log('apiFetch');
         
         apiFetch( {
             path: js_const.rest_api_namespace + js_const.componentblock_attr_autosaves_rest_api_resource_path + '/' + js_const.post_id + '/' + this.props.attributes.id_component + '/' + this.props.clientId,
@@ -83,12 +81,12 @@ class WpeComponent extends WpeComponentBase {
         }
         else {
 
-            const { error, isLoaded, updated } = this.state;
+            const { error, isLoaded } = this.state;
 
             if( error != null ){
-                return <div>{error}</div>;
+                return {error};
             } else if( ! isLoaded ) {
-                return <div>Loading...</div>;
+                return 'Loading...';
             } else {
 
                 return <iframe

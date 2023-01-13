@@ -8,23 +8,19 @@ import layoutGrid               from '../../blocks/layout/wpe-grid/src/index'
 import layoutSlide              from '../../blocks/layout/wpe-slide/src/index'
 import layoutSlider             from '../../blocks/layout/wpe-slider/src/index'
 
-
-import { Component, createElement } from '@wordpress/element';
-
-class TestModal extends Component {
-
-	constructor() {
-        super( ...arguments );
-    }
-
-    render() {
-        return <div className='test-modal'></div>
-    }
-}
-
 window.onload = (event) => {
-    const editor = document.getElementsByClassName('edit-post-visual-editor')[0];
-    let editZone = document.createElement("div");
-    editZone.setAttribute("id", "editZone");
-    editor.append(editZone);
+
+    const componentEditZone = document.createElement("div");
+    componentEditZone.setAttribute("id", "abt-component-edit-zone");
+    componentEditZone.setAttribute("class", "hide");
+    // const componentEditZoneInner = document.createElement("div");
+    // componentEditZoneInner.setAttribute("id", "abt-component-edit-zone__inner");
+    // componentEditZone.appendChild(componentEditZoneInner);
+
+    document.getElementsByClassName('interface-interface-skeleton__body')[0].appendChild(componentEditZone);
+
+    Array.prototype.forEach.call( document.getElementsByClassName('abtButtonEditZone') , function(el) {
+        el.style.display = 'inline-block';
+    });
+
 };

@@ -1,9 +1,10 @@
-import { Component, createPortal } from '@wordpress/element';
+import { Component } from '@wordpress/element';
 
 import {
     Button,
     ButtonGroup,
-    Placeholder
+    Placeholder,
+    Dashicon
 } from '@wordpress/components';
 
 import {
@@ -11,12 +12,15 @@ import {
     renderTabPanelComponent
 } from './attributes';
 
+import { EditZone } from './EditZone';
+
 export class WpeComponentBase extends Component {
 
 	constructor() {
         super( ...arguments );
 
         this.state = {
+            editZone: false,
             configMode: ( this?.props?.block_spec?.screenshot && this.props.block_spec.screenshot ) ? 1 : 2,
             updated: false
         };
@@ -186,20 +190,31 @@ export class WpeComponentBase extends Component {
 
             if( tabPanel.length > 0 ) {
 
-                const placeholed = 
-                    <Placeholder
-                        key={ this.props.clientId + "-ConfigurationPlaceholder" }
-                        label={ "Configuration" }
-                        isColumnLayout={ true }
-                        className="wpe-component_edit_placeholder"
-                    >
-                        { ( tabPanel.length > 1 ) ? renderTabPanelComponent( this.props.clientId, tabPanel, function ( tabPanel ) { return tabPanel.content } ) : tabPanel[0].content }
-                    </Placeholder>
+                const editZoneChild = 
+                    <div key={ this.props.clientId + "-editZone" } className='edit-zone__inner'>
+                        <div className='edit-zone__header'>
+                            { this.props.attributes.id_component }
+                            <Button
+                                key={ this.props.clientId + "-buttonCloseEditZone" }
+                                className="abtButtonCloseEditZone"
+                                variant="primary"
+                                onMouseDown={ () => {
+                                    EditZone.getInstance().hide();
+                                } }
+                            ><Dashicon icon="no-alt" /></Button>
+                        </div>
+                        <div className='edit-zone__body'>
+                            <Placeholder
+                                key={ this.props.clientId + "-ConfigurationPlaceholder" }
+                                isColumnLayout={ true }
+                                className="wpe-component_edit_placeholder"
+                            >
+                                { ( tabPanel.length > 1 ) ? renderTabPanelComponent( this.props.clientId, tabPanel, function ( tabPanel ) { return tabPanel.content } ) : tabPanel[0].content }
+                            </Placeholder>
+                        </div>
+                    </div>
 
-                return createPortal(
-                    placeholed,
-                    document.getElementById("editZone")
-                );
+                return editZoneChild;
             }
         }
 
@@ -227,27 +242,49 @@ export class WpeComponentBase extends Component {
         return null;
     }
 
+    renderEditZone() {
+
+        let  editZone = [];
+
+        editZone.push(<Button
+            key={ this.props.clientId + "-buttonEditZone" }
+            className="abtButtonEditZone"
+            variant="primary"
+            onMouseDown={ () => {
+                EditZone.getInstance().addComponent(this);
+                // this.setState( { editZone: ! this.state.editZone } )
+            } }
+        ><Dashicon icon="edit" /></Button>);
+
+        if( EditZone.getInstance().hasComponent(this) ) {
+            editZone.push( EditZone.getInstance().render() );
+        }
+
+        return editZone;
+    }
+
     render() {
         
         let render = [];
 
+        render.push( this.renderEditZone() );
         render.push( this.renderInspectorControls() );
-        render.push( this.renderButtonGroupMode() );
+        render.push( this.liveRendering() );
 
-        switch( this.state.configMode ) {
+        // switch( this.state.configMode ) {
 
-            case 1:
-                render.push( this.renderScreenshot() );
-                break;                
+        //     case 1:
+        //         render.push( this.renderScreenshot() );
+        //         break;                
 
-            case 2:
-                render.push( this.liveRendering() );
-                break;
+        //     case 2:
+        //         render.push( this.liveRendering() );
+        //         break;
 
-            case 3:
-                render.push( this.renderEditMode() );
-                break;
-        }
+        //     case 3:
+        //         render.push( this.renderEditMode() );
+        //         break;
+        // }
 
         return render;
     }
