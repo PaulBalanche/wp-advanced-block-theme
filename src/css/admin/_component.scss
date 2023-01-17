@@ -27,27 +27,17 @@
 
 #editor {
 
+    .editor-styles-wrapper.block-editor-writing-flow {
+
+        background: #2c323a;
+    }
+
     .block-editor-block-list__layout{
 
         .block-editor-block-list__block {
     
             width: 90% !important;
             max-width: 90% !important;
-
-            &::after {
-                box-shadow: none;
-                top: 0;
-                right: 0;
-                bottom: 0;
-                left: 0;
-                border-radius: 0;
-            }
-    
-            &:focus::after,
-            &:hover::after,
-            &.is-selected::after {
-                border: 1px dashed rgba(0, 124, 186, 0.5);
-            }
         }
     }
 }
@@ -65,8 +55,6 @@
 
         margin-top: 2rem;
         margin-bottom: 2rem;
-        padding: 2rem;
-        background: rgba(0,124,186,.05);
 
         &:first-child {
             margin-top: 0;
@@ -76,7 +64,7 @@
         }
 
         &.block-list-appender {
-            border: 1px dashed rgba(0,124,186,.5);
+            border: 1px dashed white;
             background: none;
             width: 100%;
             padding: initial;
@@ -128,33 +116,6 @@
         .active-tab {
             box-shadow: inset 0 var(--wp-admin-border-width-focus) var(--wp-admin-theme-color);
             background: #f0f0f0;
-        }
-    }
-}
-
-
-// Button
-#editor {
-
-    .buttonGroupComponentModeContainer, .deviceButtonGroup{
-        display: flex;
-        justify-content: space-around;
-        padding-bottom: 1rem;
-        visibility: hidden;
-
-        .components-button {
-    
-            &.is-pressed {
-                background: #007cba;
-                box-shadow: inset 0 0 0 1px #007cba;
-            }
-        }
-    }
-    
-    .block-editor-block-list__block:hover, .block-editor-block-list__block.is-selected, .block-editor-block-list__block.has-child-selected {
-
-        & > .buttonGroupComponentModeContainer, & > .deviceButtonGroup {
-            visibility: visible;
         }
     }
 }

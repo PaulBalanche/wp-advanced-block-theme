@@ -81,7 +81,7 @@ export function setWidthContainer( width ) {
 
     var loading = setInterval(function () {
 
-        var wp_block_elements = document.getElementsByClassName('wp-block');
+        var wp_block_elements = document.getElementsByClassName('block-editor-block-list__block');
         if( wp_block_elements ) {
             
             for( var i=0; i < wp_block_elements.length; i++ ) {

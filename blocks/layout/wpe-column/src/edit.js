@@ -53,7 +53,7 @@ class WpeColumn extends WpeComponentBase {
 
         let currentBodyDevice = getBodyDevice();
 
-        return <InspectorControls
+        return <div
             key={ this.props.clientId + "-InspectorControls" }
         >
             <PanelBody title={ 'Layout (' + currentBodyDevice + ')' } initialOpen={ true }>
@@ -86,12 +86,12 @@ class WpeColumn extends WpeComponentBase {
                     max={ this.getLayout( 'height', currentBodyDevice ) + 1 }
                 />
             </PanelBody>
-        </InspectorControls>;
+        </div>;
     }
 
     liveRendering() {
 
-        var { innerBlocksProps } = this.props;
+        const { children, ...innerBlocksProps } = this.props.innerBlocksProps;
 
         let currentBodyDevice = getBodyDevice();
         
@@ -101,9 +101,12 @@ class WpeColumn extends WpeComponentBase {
             gridRowStart: this.getLayout( 'rowStart', currentBodyDevice ),
             gridRowEnd: this.getLayout( 'rowStart', currentBodyDevice ) + this.getLayout( 'height', currentBodyDevice )
         };
-        
+
         innerBlocksProps.key = 'innerBlocksProps_' + this.props.clientId;
-        return <div { ...innerBlocksProps } />;
+        return <div {...innerBlocksProps}>
+            { this.renderEditZone() }
+            { children }
+        </div>
     }
 }
 

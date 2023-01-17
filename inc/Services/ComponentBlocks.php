@@ -182,7 +182,7 @@ class ComponentBlocks extends ServiceBase {
         $componentBlockInstance->set_attributes($attributes);
 
         header( 'Content-Type: ' . get_option( 'html_type' ) . '; charset=' . get_option( 'blog_charset' ) );
-        Main::getInstance()->get_theme_controller()->render( __FILE__, $componentBlockInstance->render() );
+        Main::getInstance()->get_theme_controller()->render_content_only( 'nude', $componentBlockInstance->render() );
         die;
     }
 

@@ -22,8 +22,15 @@ class WpeContainer extends WpeComponentBase {
         super( ...arguments );
     }
     liveRendering() {
-        this.props.innerBlocksProps.key = 'innerBlocksProps_' + this.props.clientId;
-        return <div { ...this.props.innerBlocksProps } />;
+
+        const { children, ...innerBlocksProps } = this.props.innerBlocksProps;
+
+        innerBlocksProps.key = 'innerBlocksProps_' + this.props.clientId;
+
+        return <div {...innerBlocksProps}>
+            { this.renderEditZone() }
+            { children }
+        </div>
     }
 }
 

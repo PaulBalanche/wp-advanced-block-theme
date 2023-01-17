@@ -47,9 +47,10 @@ class WpeSlider extends WpeComponentBase {
 
         var {
             clientId,
-            inner_blocks,
-            innerBlocksProps
+            inner_blocks
         } = this.props;
+
+        const { children, ...innerBlocksProps } = this.props.innerBlocksProps;
 
         let inlineCss = '';
         let buttons = [];
@@ -84,21 +85,18 @@ class WpeSlider extends WpeComponentBase {
             >New slide</Button>
         );
 
-        return (<Fragment key={ clientId + "-WpeSliderFragment" }>
-                <div
-                    className="buttonGroupComponentModeContainer"
-                    key={ clientId + "-buttonGroupComponentModeContainer" }
-                >
-                    <ButtonGroup
-                        key={ clientId + "-buttonGroupComponentMode" }
-                    >
-                        { buttons }
-                    </ButtonGroup>
-                </div>
-                <style>{inlineCss}</style>
-                <div { ...innerBlocksProps } />
-            </Fragment>
-        );
+        const buttonGroupComponentModeContainer = <ButtonGroup
+            key={ clientId + "-buttonGroupComponentMode" }
+            className="buttonGroupComponentModeContainer"
+        >
+            { buttons }
+        </ButtonGroup>
+        
+        return <div {...innerBlocksProps}>
+            <style>{inlineCss}</style>
+            { this.renderEditZone(buttonGroupComponentModeContainer) }
+            { children }
+        </div>
     }
 }
 

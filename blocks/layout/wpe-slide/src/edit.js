@@ -23,11 +23,15 @@ class WpeSlide extends WpeComponentBase {
     }
 
     liveRendering() {
-
-        var { innerBlocksProps } = this.props;
         
+        const { children, ...innerBlocksProps } = this.props.innerBlocksProps;
+
         innerBlocksProps.key = 'innerBlocksProps_' + this.props.clientId;
-        return <div { ...innerBlocksProps } />
+
+        return <div {...innerBlocksProps}>
+            { this.renderEditZone() }
+            { children }
+        </div>
     }
 }
 

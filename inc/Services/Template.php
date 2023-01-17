@@ -41,7 +41,6 @@ class Template extends ServiceBase {
         return $template;
     }
 
-
     public function render_template_context( $context ) {
 
         if( is_array($context) && isset($context['frontspec']) && is_array($context['frontspec']) && isset($context['frontspec']['metas']) && is_array($context['frontspec']['metas']) ) {

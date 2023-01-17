@@ -20,6 +20,7 @@ export class EditZone {
         this.componentInstance[componentInstance.props.clientId] = componentInstance;
         this.clean();
         document.getElementById("abt-component-edit-zone").classList.remove("hide");
+        // document.getElementsByClassName("is-root-container")[0].classList.add("editZoneEnabled");
     } 
     
     removeComponent( componentInstance ) {
@@ -54,6 +55,7 @@ export class EditZone {
 
     hide() {
         document.getElementById("abt-component-edit-zone").classList.add("hide");
+        // document.getElementsByClassName("is-root-container")[0].classList.remove("editZoneEnabled");
     }
   
     render() {

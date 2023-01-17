@@ -1,6 +1,57 @@
-.abtButtonEditZone {
-    display: none;
-    margin-bottom: 10px;
+#editor {
+
+    .block-editor-block-list__block {
+
+        .abtButtonGroupEditZone {
+            display: none;
+            align-items: center;
+            position: absolute;
+            top: 0;
+            left: 0;
+            justify-content: center;
+            background: white;
+            padding: 6px 25px;
+            border-radius: 0 0 2px 0;
+
+            .separator {
+                margin: 0 25px;
+                width: 1px;
+                height: 30px;
+                background: rgb(220 220 220);
+            }
+            .title {
+                font-size: 0.7em;
+                font-weight: 500;
+                color: #007cba;
+            }
+
+            .is-primary {
+                box-shadow: none;
+                font-weight: 500;
+
+                .dashicon {
+                    margin-right: 4px;
+                }
+            }
+        }
+
+        &:hover > .abtButtonGroupEditZone,
+        &:focus > .abtButtonGroupEditZone,
+        &.is-selected > .abtButtonGroupEditZone,
+        &.has-child-selected > .abtButtonGroupEditZone {
+            display: flex;
+        }
+
+        .loaderLiveRenderingIframe {
+            display: none;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background: rgb(242 248 251) center no-repeat url('../../img/svg-loaders/oval.svg');
+        }
+    }
 }
 
 #abt-component-edit-zone{
@@ -23,7 +74,9 @@
 
     .edit-zone__header {
 
-        padding: 20px 20px 0 20px;
+        display: flex;
+        align-items: center;
+        padding: 0 20px;
         background: #007cba;
         color: white;
         font-size: 16px;
@@ -32,8 +85,7 @@
         left: 0;
         top: 0;
         width: 100%;
-        height: 75px;
-        box-sizing: border-box;
+        height: 50px;
     }
 
     .edit-zone__body {
@@ -45,7 +97,7 @@
         bottom: 75px;
         width: 100%;
         box-sizing: border-box;
-        top: 75px;
+        top: 50px;
 
         .wpe-component_edit_placeholder {
 
@@ -296,6 +348,10 @@
             &:hover {
                 background: var(--wp-admin-theme-color-darker-10);
                 color: #fff;
+            }
+
+            .dashicon {
+                margin-right: 4px;
             }
         }
     }

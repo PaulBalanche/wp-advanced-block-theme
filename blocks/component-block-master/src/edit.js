@@ -34,7 +34,8 @@ class WpeComponent extends WpeComponentBase {
     apiFetch( attributes = null ) {
 
         this.setState({
-            isLoaded: false,
+            previewReady: false,
+            iframeLoaded: false,
             error: null
         });
         
@@ -46,7 +47,7 @@ class WpeComponent extends WpeComponentBase {
             if( res.success ) {
 
                 this.setState({
-                    isLoaded: true,
+                    previewReady: true,
                     needPreviewUpdate: false
                 });
             }
@@ -62,11 +63,37 @@ class WpeComponent extends WpeComponentBase {
     }
 
     _iframeResize() {
-
-        var iFrameID = document.getElementById( this.props.clientId + "-LiveRenderingIframe" );
-        if(iFrameID) {
-            iFrameID.height = iFrameID.contentWindow.document.body.scrollHeight + "px";
+        
+        this.setState({
+            iframeLoaded: true
+        });
+        
+        var iFrame = document.getElementById( this.props.clientId + "-LiveRenderingIframe" );
+        if(iFrame) {
+            const heightIframe = iFrame.contentWindow.document.body.scrollHeight + "px";
+            iFrame.height = heightIframe;
+            iFrame.parentNode.style.height = heightIframe;
         }
+    }
+
+    renderLoaderPreview() {
+        
+        return <div
+            key={ this.props.clientId + "-loaderLiveRenderingIframe" }
+            className="loaderLiveRenderingIframe"
+            style={ ( ! this.state.iframeLoaded ) ? { display: 'block' } : {} }
+        ></div>
+    }
+
+    renderIframePreview() {
+        
+        return <iframe
+            key={ this.props.clientId + "-LiveRenderingIframe" }
+            id={ this.props.clientId + "-LiveRenderingIframe" }
+            style={ { width: '100%' } }
+            src={ js_const.rest_api_url + js_const.rest_api_namespace + js_const.componentblock_attr_autosaves_rest_api_resource_path + '/' + js_const.post_id + '/' + this.props.attributes.id_component + '/' + this.props.clientId }
+            onLoad={this.iframeResize}
+        ></iframe>
     }
 
     liveRendering() {
@@ -81,22 +108,20 @@ class WpeComponent extends WpeComponentBase {
         }
         else {
 
-            const { error, isLoaded } = this.state;
+            const { error, previewReady } = this.state;
+
+            var render = [ this.renderEditZone() ];
 
             if( error != null ){
-                return {error};
-            } else if( ! isLoaded ) {
-                return 'Loading...';
+                render.push(error);
+            } else if( ! previewReady ) {
+                render.push(this.renderLoaderPreview());
             } else {
-
-                return <iframe
-                    key={ this.props.clientId + "-LiveRenderingIframe" }
-                    id={ this.props.clientId + "-LiveRenderingIframe" }
-                    style={ { width: '100%' } }
-                    src={ js_const.rest_api_url + js_const.rest_api_namespace + js_const.componentblock_attr_autosaves_rest_api_resource_path + '/' + js_const.post_id + '/' + this.props.attributes.id_component + '/' + this.props.clientId }
-                    onLoad={this.iframeResize}
-                ></iframe>
+                render.push(this.renderLoaderPreview());
+                render.push(this.renderIframePreview());
             }
+
+            return render;
 
             // return  <ServerSideRender
             //     key={ this.props.clientId + "-serverSideRender" }

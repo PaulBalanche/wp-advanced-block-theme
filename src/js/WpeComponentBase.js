@@ -12,6 +12,8 @@ import {
     renderTabPanelComponent
 } from './attributes';
 
+import { getBlockType } from '@wordpress/blocks';
+
 import { EditZone } from './EditZone';
 
 export class WpeComponentBase extends Component {
@@ -29,6 +31,8 @@ export class WpeComponentBase extends Component {
         if( ! ( typeof this.props.disableButtonGroupMode != 'undefined' && this.props.disableButtonGroupMode ) ) {
             this.initEnabledMode();
         }
+
+        this.title = getBlockType(this.props.name).title;
     }
 
     initEnabledMode () {
@@ -187,12 +191,21 @@ export class WpeComponentBase extends Component {
                 }
             }
 
+            const inspectorContent = this.renderInspectorControls();
+            if( inspectorContent != null ) {
+                tabPanel.push( {
+                    name: 'config',
+                    title: "Config",
+                    content: inspectorContent
+                } );
+            }
+
             if( tabPanel.length > 0 ) {
 
                 const editZoneChild = 
                     <div key={ this.props.clientId + "-editZone" } className='edit-zone__inner'>
                         <div className='edit-zone__header'>
-                            { this.props.attributes.id_component }
+                            { this.title }
                         </div>
                         <div className='edit-zone__body'>
                             <Placeholder
@@ -251,10 +264,17 @@ export class WpeComponentBase extends Component {
         return null;
     }
 
-    renderEditZone() {
+    renderEditZone( content = null ) {
 
         let  editZone = [];
 
+        // Title
+        editZone.push(<div className="title">{ this.title }</div>);
+        
+        // Separator
+        editZone.push(<div className="separator"></div>);
+
+        // Edit button
         editZone.push(<Button
             key={ this.props.clientId + "-buttonEditZone" }
             className="abtButtonEditZone"
@@ -267,39 +287,30 @@ export class WpeComponentBase extends Component {
                     EditZone.getInstance().addComponent(this);
                 }
             } }
-        ><Dashicon icon="edit" /></Button>);
+        ><Dashicon icon="edit" /> Edit content</Button>);
+
+        // Additionnal content
+        if( content != null ) {
+
+            // Separator
+            editZone.push(<div className="separator"></div>);
+            
+            // Additionnal content
+            editZone.push(content);
+        }
 
         if( EditZone.getInstance().hasComponent(this) ) {
             editZone.push( EditZone.getInstance().render() );
         }
 
-        return editZone;
+        return <ButtonGroup
+                key={ this.props.clientId + "-buttonGroupEditZone" }
+                className="abtButtonGroupEditZone"
+            >{ editZone }</ButtonGroup>
     }
 
     render() {
-        
-        let render = [];
-
-        render.push( this.renderEditZone() );
-        render.push( this.renderInspectorControls() );
-        render.push( this.liveRendering() );
-
-        // switch( this.state.configMode ) {
-
-        //     case 1:
-        //         render.push( this.renderScreenshot() );
-        //         break;                
-
-        //     case 2:
-        //         render.push( this.liveRendering() );
-        //         break;
-
-        //     case 3:
-        //         render.push( this.renderEditMode() );
-        //         break;
-        // }
-
-        return render;
+        return this.liveRendering()
     }
 
 

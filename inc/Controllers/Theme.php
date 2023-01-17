@@ -22,10 +22,8 @@ class Theme extends ControllerBase {
 
     public function render( $template_file, $content ) {
 
-        $template = pathinfo($template_file)['filename'];
-
-        // $view = 'layouts/main.twig';
-        $view = 'layouts/nude.twig';
+        // $template = pathinfo($template_file)['filename'];
+        $view = 'layouts/main.twig';
 
         $menus = [];
         $menu_locations = $this->get_config()->get_spec('menus');
@@ -40,6 +38,26 @@ class Theme extends ControllerBase {
             apply_filters( 'Abt\render_template_context', [
                 'body' => $content,
                 'menus' => $menus,
+                'frontspec' => $this->get_config()->get_spec()
+            ] )
+        );
+    }
+    
+    
+    
+    /**
+     * Render page without header and footer
+     * 
+     */
+    public function render_content_only( $template_file, $content ) {
+
+        // $template = pathinfo($template_file)['filename'];
+        $view = 'layouts/nude.twig';
+        
+        echo RenderService::render(
+            $view,
+            apply_filters( 'Abt\render_template_context', [
+                'body' => $content,
                 'frontspec' => $this->get_config()->get_spec()
             ] )
         );

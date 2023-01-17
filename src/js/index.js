@@ -19,8 +19,8 @@ window.onload = (event) => {
 
     document.getElementsByClassName('interface-interface-skeleton__body')[0].appendChild(componentEditZone);
 
-    Array.prototype.forEach.call( document.getElementsByClassName('abtButtonEditZone') , function(el) {
-        el.style.display = 'inline-block';
-    });
+    // Array.prototype.forEach.call( document.getElementsByClassName('abtButtonEditZone') , function(el) {
+    //     el.style.display = 'inline-block';
+    // });
 
 };

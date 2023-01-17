@@ -66,7 +66,7 @@ class WpeGrid extends WpeComponentBase {
 
             let gridCountColumns = parseInt( this.getAttribute('gridCountColumns') );
 
-            return <InspectorControls
+            return <div
                 key={ this.props.clientId + "-InspectorControls" }
             >
                 <PanelBody
@@ -80,7 +80,7 @@ class WpeGrid extends WpeComponentBase {
                         max={ gridCountColumns + 1 }
                     />
                 </PanelBody>
-            </InspectorControls>;
+            </div>;
         }
 
         return null;
@@ -91,7 +91,6 @@ class WpeGrid extends WpeComponentBase {
         var {
             clientId,
             inner_blocks,
-            innerBlocksProps,
             countColumns,
             blockVariations,
             blockType,
@@ -99,6 +98,8 @@ class WpeGrid extends WpeComponentBase {
             isParentOfSelectedBlock,
             replaceInnerBlocks
         } = this.props;
+
+        const { children, ...innerBlocksProps } = this.props.innerBlocksProps;
 
         /**
          * Define innerBlocks
@@ -182,33 +183,32 @@ class WpeGrid extends WpeComponentBase {
 
             let deviceButtonGroupClassName = ( isSelectedBlock || isParentOfSelectedBlock ) ? ' is-selected' : '';
 
-            return <Fragment
-                key={ "gridRender_" + clientId }
+            const deviceButtonGroup = <ButtonGroup
+                key={ "layoutButtonGroup_" + clientId }
+                className="deviceButtonGroup"
             >
-                <div className={ "deviceButtonGroup" } >
-                    <ButtonGroup
-                        key={ "layoutButtonGroup_" + clientId }
-                    >
-                        { getLayouts().map( ( layout ) => {
-                            return (
-                                <Button
-                                    key={ "layoutButton_" + layout.value + "_" + clientId }
-                                    isPressed={ getBodyDevice() == layout.value }
-                                    onMouseDown={ () => {
-                                        setBodyDevice( layout.value );
-                                        inner_blocks.forEach( ( elt ) => {
-                                            dispatch('core/block-editor').updateBlockAttributes( elt.clientId, { updated: true } );
-                                        });
-                                    } }
-                                >
-                                    { layout.value }
-                                </Button>
-                            );
-                        } ) }
-                    </ButtonGroup>
-                </div>
-                <div { ...innerBlocksProps } />
-            </Fragment>;
+                { getLayouts().map( ( layout ) => {
+                    return (
+                        <Button
+                            key={ "layoutButton_" + layout.value + "_" + clientId }
+                            isPressed={ getBodyDevice() == layout.value }
+                            onMouseDown={ () => {
+                                setBodyDevice( layout.value );
+                                inner_blocks.forEach( ( elt ) => {
+                                    dispatch('core/block-editor').updateBlockAttributes( elt.clientId, { updated: true } );
+                                });
+                            } }
+                        >
+                            { layout.value }
+                        </Button>
+                    );
+                } ) }
+            </ButtonGroup>
+
+            return <div {...innerBlocksProps}>
+                { this.renderEditZone(deviceButtonGroup) }
+                <div className='gridContainer'>{ children }</div>
+            </div>
         }
     }
 }
