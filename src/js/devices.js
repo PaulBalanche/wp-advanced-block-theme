@@ -1,93 +1,141 @@
-export function initDevice() {
+import { createPortal } from '@wordpress/element';
 
-    document.addEventListener("DOMContentLoaded", function(event) {
-        if( theme_spec?.media?.defaultMedia != 'undefined' ) {
-            setBodyDevice( theme_spec.media.defaultMedia );
-        }
+import {
+    Button,
+    ButtonGroup
+} from '@wordpress/components';
 
-        if( theme_spec?.layout?.container?.default != 'undefined' ) {
-            setWidthContainer( theme_spec.layout.container.default );
-        }
-     });
-}
+export class Devices {
+    
+    constructor() {
+        this.componentInstance = {};
+        this.layouts = [];
+        this.currentDevice = null;
+        this.alreadyRendered = false;
 
-export function initContainer() {
-
-    if( theme_spec?.layout?.container?.default != 'undefined' ) {
-        setWidthContainer( theme_spec.layout.container.default );
+        this.init();
     }
-}
 
-export function getLayouts() {
-    
-    var layout = [];
-    Object.keys(theme_spec.media.queries).forEach(function( key, index ) {
-        layout.push( {
-            value: key,
-            label: key.charAt(0).toUpperCase() + key.slice(1),
-            attributeName: key.charAt(0).toUpperCase() + key.slice(1)
-        });
-    });
-
-    return layout;
-}
-
-export function getBodyDevice() {
-
-    let currentDevice = 'desktop';
-
-    getLayouts().forEach( ( layout ) => {
-        if( document.body.classList.contains(layout.value) ) {
-            currentDevice = layout.value;
-            return;
+    static getInstance() {
+        
+        if( ! this.instance ) {
+          this.instance = new Devices();
         }
-    });
 
-    return currentDevice;
-}
+        return this.instance;
+    }
 
-export function setBodyDevice( device ) {
+    init() {
+
+        if( theme_spec?.media?.queries && typeof theme_spec.media.queries == 'object' ) {
+
+            Object.keys(theme_spec.media.queries).forEach( ( key, index ) => {
+                this.layouts.push( {
+                    value: key,
+                    label: key.charAt(0).toUpperCase() + key.slice(1),
+                    attributeName: key.charAt(0).toUpperCase() + key.slice(1)
+                });
+
+                if( this.currentDevice == null || ( theme_spec?.media?.defaultMedia && theme_spec.media.defaultMedia == key ) ) {
+                    this.currentDevice = key;
+                }
+            });
+        }
+
+        // Device button group
+        const devicesButtonGroupContainer = document.createElement("div");
+        devicesButtonGroupContainer.setAttribute("id", "devicesButtonGroupContainer");
+        document.querySelector('.edit-post-header__toolbar').appendChild(devicesButtonGroupContainer);
+    }
+
+    addComponent( componentInstance ) {
+
+        this.componentInstance[componentInstance.props.clientId] = componentInstance;
+
+        componentInstance.setState({
+            currentBodyDevice: this.getCurrentDevice()
+        });
+    }
+
+    getCurrentDevice() {
+        return this.currentDevice;
+    }
     
-    var loading = setInterval(function () {
+    setCurrentDevice( newDevice ) {
 
-        var editor_area = document.getElementsByClassName('edit-post-visual-editor__content-area');
+        this.currentDevice = newDevice;
+        this.applyToCompoments();
+
+        var editor_area = document.querySelector('.edit-post-visual-editor__content-area');
         if( editor_area ) {
             
-            editor_area[0].style.margin = 'auto';
+            editor_area.style.margin = 'auto';
             Object.keys(theme_spec.media.queries).forEach((item) => {
-
-                if( device == item ) {
-
-                    if( theme_spec.media.queries[item]['maxWidth'] != null && theme_spec.media.queries[item]['maxWidth'] <= editor_area[0].offsetWidth ) {
-
-                        editor_area[0].style.width = theme_spec.media.queries[item]['maxWidth'] + 'px';
+    
+                if( newDevice == item ) {
+    
+                    if( theme_spec.media.queries[item]['maxWidth'] != null && theme_spec.media.queries[item]['maxWidth'] <= editor_area.offsetWidth ) {
+    
+                        editor_area.style.width = theme_spec.media.queries[item]['maxWidth'] + 'px';
                     }
                     else {
-                        editor_area[0].style.removeProperty('width');
+                        editor_area.style.removeProperty('width');
                     }
                 }
             });
-            clearInterval(loading);
         }
-    }, 100); // Checks every 100ms(0.1s)
+    }
 
-    getLayouts().forEach( ( layout ) => {
-        document.body.classList.remove(layout.value);
-    });
-    document.body.classList.add(device);
-}
-
-export function setWidthContainer( width ) {
-
-    var loading = setInterval(function () {
-
-        var wp_block_elements = document.getElementsByClassName('block-editor-block-list__block');
-        if( wp_block_elements ) {
-            
-            for( var i=0; i < wp_block_elements.length; i++ ) {
-                wp_block_elements[i].style.maxWidth = width;
-            }
-            clearInterval(loading);
+    applyToCompoments() {
+        for( const [key, value] of Object.entries(this.getComponents()) ) {
+            value.setState({
+                currentBodyDevice: this.getCurrentDevice()
+            });
         }
-    }, 100); // Checks every 100ms(0.1s)
+    }
+
+    getLayouts() {
+        return this.layouts;
+    }
+
+    getComponents() {
+        return this.componentInstance;
+    }
+
+    getButtonGroup() {
+
+        return <ButtonGroup
+            key="devicesButtonGroup"
+            className="devicesButtonGroup"
+        >
+            { this.getLayouts().map( ( layout ) => {
+                return (
+                    <Button
+                        key={ "layoutButton_" + layout.value }
+                        isPressed={ this.getCurrentDevice() == layout.value }
+                        onMouseDown={ () => {
+                            this.setCurrentDevice( layout.value );
+                        } }
+                    >
+                        { layout.value }
+                    </Button>
+                );
+            } ) }
+        </ButtonGroup>
+    }
+
+    isFirstComponent( componentInstance ) {
+
+        for( const [key, value] of Object.entries(this.getComponents()) ) {   
+            return ( key == componentInstance );
+        }
+    }
+
+    render() {
+
+        return createPortal(
+            this.getButtonGroup(),
+            document.getElementById("devicesButtonGroupContainer")
+        );
+    }
 }

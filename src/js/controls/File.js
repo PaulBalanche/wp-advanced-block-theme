@@ -196,33 +196,5 @@ export function renderFile( componentInstance, type, id, label, keys, valueProp,
         </div>
     );
 
-
-    // if( responsive ) {
-
-    //     let newInner = [];
-
-    //     newInner.push(
-    //         renderTabPanelComponent(
-    //             id,
-    //             getLayouts().map( ( layout ) => {
-    //                 return {
-    //                     name: layout.value,
-    //                     title: layout.label,
-    //                     className: 'tab-' + layout.value,
-    //                 };
-    //             } ),
-    //             function ( tab ) {
-    //                 return tab.label;
-    //             },
-    //             getBodyDevice()
-    //         )
-    //     );
-        
-    //     inner = newInner;
-    // }
-
-
-
-
     return renderPanelComponent( id, label, inner, false );
 }

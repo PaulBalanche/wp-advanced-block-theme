@@ -34,8 +34,15 @@
   bottom: 0;
 }
 
-#editor .editor-styles-wrapper.block-editor-writing-flow {
-  background: #2c323a;
+html :where(.editor-styles-wrapper) {
+  background: none !important;
+}
+
+#editor .is-desktop-preview {
+  background: none !important;
+}
+#editor .edit-post-visual-editor {
+  background: var(--abt-background-editor, "white");
 }
 #editor .block-editor-block-list__layout .block-editor-block-list__block {
   width: 90% !important;
@@ -667,6 +674,10 @@
 }
 #abt-component-edit-zone .edit-zone__footer .components-button.is-primary .dashicon {
   margin-right: 4px;
+}
+
+#editor .interface-interface-skeleton__header #devicesButtonGroupContainer {
+  flex-grow: 1;
 }
 
 .wpe-dropdown-container {

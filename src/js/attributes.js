@@ -5,7 +5,7 @@ import {
     PanelBody
 } from '@wordpress/components';
 
-import { getLayouts, getBodyDevice } from './devices';
+import { Devices } from './Devices';
 
 import WysiwygControl from './controls/WysiwygControl/WysiwygControl';
 import {
@@ -215,7 +215,7 @@ export function renderControl( prop, keys, valueProp, componentInstance ) {
                         fieldsetObject.push(
                             renderTabPanelComponent(
                                 fieldId,
-                                getLayouts().map( ( layout ) => {
+                                Devices.getInstance().getLayouts().map( ( layout ) => {
                                     return {
                                         name: layout.value,
                                         title: layout.label,
@@ -230,7 +230,7 @@ export function renderControl( prop, keys, valueProp, componentInstance ) {
                                     }
                                     return fieldsetObjectResponsive;
                                 },
-                                getBodyDevice()
+                                Devices.getInstance().getCurrentDevice()
                             )
                         );
                     }

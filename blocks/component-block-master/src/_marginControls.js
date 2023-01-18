@@ -10,7 +10,7 @@ import {
 
 import { merge } from 'merge-anything';
 
-import { getLayouts, setBodyDevice, getBodyDevice } from '../../../src/js/devices.js';
+import { Devices } from '../../../src/js/Devices';
 
 export class MarginControls extends Component {
 
@@ -53,7 +53,7 @@ export class MarginControls extends Component {
             margin: {}
         };
 
-        getLayouts().forEach( ( layout ) => {
+        Devices.getInstance().getLayouts().forEach( ( layout ) => {
 
             this.state.padding[ layout.value ] = { all: undefined, top: undefined, bottom: undefined, left: undefined, right: undefined, x: undefined, y: undefined };
             this.state.margin[ layout.value ] = { all: undefined, top: undefined, bottom: undefined, left: undefined, right: undefined, x: undefined, y: undefined };
@@ -79,11 +79,6 @@ export class MarginControls extends Component {
     //     return null;
     // }
 
-    getLayouts() {
-
-        return getLayouts();
-    }
-
     setPadding( type, deviceType, value ) {
 
         const newPadding = merge(this.state.padding, { [deviceType]: { [type]: value } } );
@@ -101,7 +96,7 @@ export class MarginControls extends Component {
     resetPadding( deviceType ) {
 
         let newPadding = {};
-        getLayouts().forEach( ( layout ) => {
+        Devices.getInstance().getLayouts().forEach( ( layout ) => {
 
             newPadding[ layout.value ] = ( deviceType == layout.value ) ? {} : this.state.padding[ layout.value ];
         } );
@@ -113,7 +108,7 @@ export class MarginControls extends Component {
     resetMargin( deviceType ) {
         
         let newMargin = {};
-        getLayouts().forEach( ( layout ) => {
+        Devices.getInstance().getLayouts().forEach( ( layout ) => {
 
             newMargin[ layout.value ] = ( deviceType == layout.value ) ? {} : this.state.margin[ layout.value ];
         } );
@@ -171,8 +166,8 @@ export class MarginControls extends Component {
                     <TabPanel
                         className="padding-tab-panel"
                         activeClass="active-tab"
-                        initialTabName={ getBodyDevice() }
-                        tabs={ getLayouts().map( ( layout ) => {
+                        initialTabName={ Devices.getInstance().getCurrentDevice() }
+                        tabs={ Devices.getInstance().getLayouts().map( ( layout ) => {
                             return {
                                 name: layout.value,
                                 title: layout.label,
@@ -255,8 +250,8 @@ export class MarginControls extends Component {
                     <TabPanel
                         className="margin-tab-panel"
                         activeClass="active-tab"
-                        initialTabName={ getBodyDevice() }
-                        tabs={ getLayouts().map( ( layout ) => {
+                        initialTabName={ Devices.getInstance().getCurrentDevice() }
+                        tabs={ Devices.getInstance().getLayouts().map( ( layout ) => {
                             return {
                                 name: layout.value,
                                 title: layout.label,

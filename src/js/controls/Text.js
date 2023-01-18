@@ -5,7 +5,7 @@ import {
 
 import { updateAttributes, removeEltRepeatable, renderTabPanelComponent } from '../attributes';
 
-import { getLayouts, setBodyDevice, getBodyDevice } from '../devices';
+import { Devices } from '../Devices';
 
 export function renderText( componentInstance, id, label, keys, valueProp, objectValue, isNumber = false, repeatable = false, required = false, responsive = false ) {
 
@@ -33,7 +33,7 @@ export function renderText( componentInstance, id, label, keys, valueProp, objec
 
         let newInner = renderTabPanelComponent(
                 id,
-                getLayouts().map( ( layout ) => {
+                Devices.getInstance().getLayouts().map( ( layout ) => {
                     return {
                         name: layout.value,
                         title: layout.label,
@@ -52,7 +52,7 @@ export function renderText( componentInstance, id, label, keys, valueProp, objec
                         valueProp
                     );
                 },
-                getBodyDevice()
+                Devices.getInstance().getCurrentDevice()
             );
         
         return newInner;

@@ -11,8 +11,6 @@ import {
 
 import { updateAttributes, removeEltRepeatable, fileSizeFormat, renderPanelComponent, renderTabPanelComponent } from '../attributes';
 
-import { getLayouts, setBodyDevice, getBodyDevice } from '../devices';
-
 export function renderImageVideo( componentInstance, type, args, id, label, keys, valueProp, objectValue, repeatable = false, required = false, responsive = false ) {
 
     label = ( label && required ) ? label + '*' : label;
@@ -274,30 +272,6 @@ export function renderImageVideo( componentInstance, type, args, id, label, keys
     }
     else 
         videoControl.push( tabPanelResponsive[0].content );
-
-    // if( responsive ) {
-
-    //     let newVideoControl = [];
-
-    //     newVideoControl.push(
-    //         renderTabPanelComponent(
-    //             id,
-    //             getLayouts().map( ( layout ) => {
-    //                 return {
-    //                     name: layout.value,
-    //                     title: layout.label,
-    //                     className: 'tab-' + layout.value,
-    //                 };
-    //             } ),
-    //             function ( tab ) {
-    //                 return videoControl;
-    //             },
-    //             getBodyDevice()
-    //         )
-    //     );
-        
-    //     videoControl = newVideoControl;
-    // }
     
     return renderPanelComponent( id, label, videoControl, false );
 }

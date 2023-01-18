@@ -28,7 +28,7 @@ import { withSelect, withDispatch, dispatch } from '@wordpress/data';
 import { get, map, times } from 'lodash';
 
 
-import { getLayouts, setBodyDevice, getBodyDevice, initContainer } from '../../../../src/js/devices';
+import { Devices } from '../../../../src/js/Devices';
 
 /**
  * Add some columns in wpe-container based on variation selected
@@ -53,10 +53,6 @@ class WpeGrid extends WpeComponentBase {
 
 	constructor() {
         super( ...arguments );
-    }
-
-    componentDidUpdate() {
-        initContainer();
     }
 
     renderInspectorControls() {
@@ -141,7 +137,7 @@ class WpeGrid extends WpeComponentBase {
                 // Define rowStart fo the new colums added
 
                 let initLayout = {};
-                getLayouts().forEach( ( layout ) => {
+                Devices.getInstance().getLayouts().forEach( ( layout ) => {
 
                     initLayout[ layout.value ] = {
                         columnStart: 1,
@@ -180,33 +176,8 @@ class WpeGrid extends WpeComponentBase {
                 replaceInnerBlocks( clientId, inner_blocks_new, false );
             }
 
-
-            let deviceButtonGroupClassName = ( isSelectedBlock || isParentOfSelectedBlock ) ? ' is-selected' : '';
-
-            const deviceButtonGroup = <ButtonGroup
-                key={ "layoutButtonGroup_" + clientId }
-                className="deviceButtonGroup"
-            >
-                { getLayouts().map( ( layout ) => {
-                    return (
-                        <Button
-                            key={ "layoutButton_" + layout.value + "_" + clientId }
-                            isPressed={ getBodyDevice() == layout.value }
-                            onMouseDown={ () => {
-                                setBodyDevice( layout.value );
-                                inner_blocks.forEach( ( elt ) => {
-                                    dispatch('core/block-editor').updateBlockAttributes( elt.clientId, { updated: true } );
-                                });
-                            } }
-                        >
-                            { layout.value }
-                        </Button>
-                    );
-                } ) }
-            </ButtonGroup>
-
             return <div {...innerBlocksProps}>
-                { this.renderEditZone(deviceButtonGroup) }
+                { this.renderEditZone() }
                 <div className='gridContainer'>{ children }</div>
             </div>
         }

@@ -18,7 +18,7 @@ import {
 
 import { withSelect } from '@wordpress/data';
 
-import { getBodyDevice } from '../../../../src/js/devices';
+import { Devices } from '../../../../src/js/Devices';
 
 /**
  * registerBlockType edit function
@@ -28,6 +28,10 @@ class WpeColumn extends WpeComponentBase {
  
     constructor() {
         super( ...arguments );
+    }
+
+    componentDidMount() {
+        Devices.getInstance().addComponent(this);
     }
 
     getLayout( key, device ) {
@@ -51,60 +55,59 @@ class WpeColumn extends WpeComponentBase {
 
     renderInspectorControls() {
 
-        let currentBodyDevice = getBodyDevice();
-
         return <div
             key={ this.props.clientId + "-InspectorControls" }
         >
-            <PanelBody title={ 'Layout (' + currentBodyDevice + ')' } initialOpen={ true }>
+            <PanelBody title={ 'Layout (' + this.state.currentBodyDevice + ')' } initialOpen={ true }>
                 <RangeControl
                     label="Column start"
-                    value={ this.getLayout( 'columnStart', currentBodyDevice ) }
-                    onChange={ ( value ) => this.setLayout( 'columnStart', Number.parseInt(value), currentBodyDevice ) }
+                    value={ this.getLayout( 'columnStart', this.state.currentBodyDevice ) }
+                    onChange={ ( value ) => this.setLayout( 'columnStart', Number.parseInt(value), this.state.currentBodyDevice ) }
                     min={ 1 }
-                    max={ this.getLayout( 'columnStart', currentBodyDevice ) + 1 }
+                    max={ this.getLayout( 'columnStart', this.state.currentBodyDevice ) + 1 }
                 />
                 <RangeControl
                     label="Width"
-                    value={ this.getLayout( 'width', currentBodyDevice ) }
-                    onChange={ ( value ) => this.setLayout( 'width', Number.parseInt(value), currentBodyDevice ) }
+                    value={ this.getLayout( 'width', this.state.currentBodyDevice ) }
+                    onChange={ ( value ) => this.setLayout( 'width', Number.parseInt(value), this.state.currentBodyDevice ) }
                     min={ 1 }
-                    max={ this.getLayout( 'width', currentBodyDevice ) + 1 }
+                    max={ this.getLayout( 'width', this.state.currentBodyDevice ) + 1 }
                 />
                 <RangeControl
                     label="Row start"
-                    value={ this.getLayout( 'rowStart', currentBodyDevice ) }
-                    onChange={ ( value ) => this.setLayout( 'rowStart', Number.parseInt(value), currentBodyDevice ) }
+                    value={ this.getLayout( 'rowStart', this.state.currentBodyDevice ) }
+                    onChange={ ( value ) => this.setLayout( 'rowStart', Number.parseInt(value), this.state.currentBodyDevice ) }
                     min={ 1 }
-                    max={ this.getLayout( 'rowStart', currentBodyDevice ) + 1 }
+                    max={ this.getLayout( 'rowStart', this.state.currentBodyDevice ) + 1 }
                 />
                 <RangeControl
                     label="Height"
-                    value={ this.getLayout( 'height', currentBodyDevice ) }
-                    onChange={ ( value ) => this.setLayout( 'height', Number.parseInt(value), currentBodyDevice ) }
+                    value={ this.getLayout( 'height', this.state.currentBodyDevice ) }
+                    onChange={ ( value ) => this.setLayout( 'height', Number.parseInt(value), this.state.currentBodyDevice ) }
                     min={ 1 }
-                    max={ this.getLayout( 'height', currentBodyDevice ) + 1 }
+                    max={ this.getLayout( 'height', this.state.currentBodyDevice ) + 1 }
                 />
             </PanelBody>
         </div>;
     }
 
     liveRendering() {
-
-        const { children, ...innerBlocksProps } = this.props.innerBlocksProps;
-
-        let currentBodyDevice = getBodyDevice();
         
+        const { children, ...innerBlocksProps } = this.props.innerBlocksProps;
+        
+        console.log( this.state.currentBodyDevice );
+
         innerBlocksProps.style = {
-            gridColumnStart: this.getLayout( 'columnStart', currentBodyDevice ),
-            gridColumnEnd: this.getLayout( 'columnStart', currentBodyDevice ) + this.getLayout( 'width', currentBodyDevice ),
-            gridRowStart: this.getLayout( 'rowStart', currentBodyDevice ),
-            gridRowEnd: this.getLayout( 'rowStart', currentBodyDevice ) + this.getLayout( 'height', currentBodyDevice )
+            gridColumnStart: this.getLayout( 'columnStart', this.state.currentBodyDevice ),
+            gridColumnEnd: this.getLayout( 'columnStart', this.state.currentBodyDevice ) + this.getLayout( 'width', this.state.currentBodyDevice ),
+            gridRowStart: this.getLayout( 'rowStart', this.state.currentBodyDevice ),
+            gridRowEnd: this.getLayout( 'rowStart', this.state.currentBodyDevice ) + this.getLayout( 'height', this.state.currentBodyDevice )
         };
 
         innerBlocksProps.key = 'innerBlocksProps_' + this.props.clientId;
         return <div {...innerBlocksProps}>
             { this.renderEditZone() }
+            { ( Devices.getInstance().isFirstComponent(this.props.clientId) ) ? Devices.getInstance().render() : null }
             { children }
         </div>
     }

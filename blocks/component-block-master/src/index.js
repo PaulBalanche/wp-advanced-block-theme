@@ -9,9 +9,6 @@ import edit from './edit';
 
 import { initComponentAttributes } from '../../../src/js/attributes';
 
-import { initDevice } from '../../../src/js/devices';
-initDevice();
-
 var current_user_can_edit_posts = global_localized.current_user_can_edit_posts;
 
 Object.values(global_localized.components).forEach( ( element ) => {
