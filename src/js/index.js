@@ -16,12 +16,6 @@ import {
     RangeControl
 } from '@wordpress/components';
 
-
-window.addEventListener('load', () => {
-    
-    // Component edit zone
-    const componentEditZone = document.createElement("div");
-    componentEditZone.setAttribute("id", "abt-component-edit-zone");
-    componentEditZone.setAttribute("class", "hide");
-    document.querySelector('.interface-interface-skeleton__body').appendChild(componentEditZone);
-});
+if( theme_spec?.metas?.backgroundColor ) {
+    document.documentElement.style.setProperty('--abt-background-editor', theme_spec.metas.backgroundColor);
+}

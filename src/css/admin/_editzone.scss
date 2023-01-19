@@ -9,20 +9,21 @@
             top: 0;
             left: 0;
             justify-content: center;
-            background: white;
             padding: 6px 25px;
             border-radius: 0 0 2px 0;
+            border-right: 1px dashed white;
+            border-bottom: 1px dashed white;
 
             .separator {
                 margin: 0 25px;
                 width: 1px;
                 height: 30px;
-                background: rgb(220 220 220);
+                background: rgb(220 220 220 / 25%);
             }
             .title {
                 font-size: 0.7em;
                 font-weight: 500;
-                color: #007cba;
+                color: white;
             }
 
             .is-primary {

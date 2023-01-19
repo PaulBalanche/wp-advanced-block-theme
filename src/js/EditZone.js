@@ -4,6 +4,8 @@ export class EditZone {
     
     constructor() {
         this.componentInstance = {};
+
+        this.init();
     }
 
     static getInstance() {
@@ -13,6 +15,14 @@ export class EditZone {
         }
 
         return this.instance;
+    }
+
+    init() {
+        
+        const componentEditZone = document.createElement("div");
+        componentEditZone.setAttribute("id", "abt-component-edit-zone");
+        componentEditZone.setAttribute("class", "hide");
+        document.querySelector('.interface-interface-skeleton__body').appendChild(componentEditZone);
     }
 
     addComponent( componentInstance ) {

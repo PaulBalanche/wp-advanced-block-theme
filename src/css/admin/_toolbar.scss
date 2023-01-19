@@ -4,6 +4,16 @@
 
         #devicesButtonGroupContainer {
             flex-grow: 1;
+
+            .devicesButtonGroup {
+
+                button {
+
+                    &.is-pressed {
+                        background: var(--wp-admin-theme-color);
+                    }
+                }
+            }
         }
     }
 }

@@ -40,12 +40,11 @@ export class Devices {
                     this.currentDevice = key;
                 }
             });
-        }
 
-        // Device button group
-        const devicesButtonGroupContainer = document.createElement("div");
-        devicesButtonGroupContainer.setAttribute("id", "devicesButtonGroupContainer");
-        document.querySelector('.edit-post-header__toolbar').appendChild(devicesButtonGroupContainer);
+            const devicesButtonGroupContainer = document.createElement("div");
+            devicesButtonGroupContainer.setAttribute("id", "devicesButtonGroupContainer");
+            document.querySelector('.edit-post-header__toolbar').appendChild(devicesButtonGroupContainer);
+        }
     }
 
     addComponent( componentInstance ) {

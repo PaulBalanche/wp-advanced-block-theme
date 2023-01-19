@@ -6093,7 +6093,6 @@ class WpeComponent extends _src_js_WpeComponentBase__WEBPACK_IMPORTED_MODULE_1__
       const heightIframe = iFrame.contentWindow.document.body.scrollHeight + "px";
       iFrame.height = heightIframe;
       iFrame.parentNode.style.height = heightIframe;
-      document.querySelector('.edit-post-visual-editor').style.background = iFrame.contentWindow.document.body.style.background;
     }
   }
   renderLoaderPreview() {
@@ -7476,12 +7475,10 @@ class Devices {
           this.currentDevice = key;
         }
       });
+      const devicesButtonGroupContainer = document.createElement("div");
+      devicesButtonGroupContainer.setAttribute("id", "devicesButtonGroupContainer");
+      document.querySelector('.edit-post-header__toolbar').appendChild(devicesButtonGroupContainer);
     }
-
-    // Device button group
-    const devicesButtonGroupContainer = document.createElement("div");
-    devicesButtonGroupContainer.setAttribute("id", "devicesButtonGroupContainer");
-    document.querySelector('.edit-post-header__toolbar').appendChild(devicesButtonGroupContainer);
   }
   addComponent(componentInstance) {
     this.componentInstance[componentInstance.props.clientId] = componentInstance;
@@ -7565,12 +7562,19 @@ __webpack_require__.r(__webpack_exports__);
 class EditZone {
   constructor() {
     this.componentInstance = {};
+    this.init();
   }
   static getInstance() {
     if (!this.instance) {
       this.instance = new EditZone();
     }
     return this.instance;
+  }
+  init() {
+    const componentEditZone = document.createElement("div");
+    componentEditZone.setAttribute("id", "abt-component-edit-zone");
+    componentEditZone.setAttribute("class", "hide");
+    document.querySelector('.interface-interface-skeleton__body').appendChild(componentEditZone);
   }
   addComponent(componentInstance) {
     this.componentInstance[componentInstance.props.clientId] = componentInstance;
@@ -33831,13 +33835,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-window.addEventListener('load', () => {
-  // Component edit zone
-  const componentEditZone = document.createElement("div");
-  componentEditZone.setAttribute("id", "abt-component-edit-zone");
-  componentEditZone.setAttribute("class", "hide");
-  document.querySelector('.interface-interface-skeleton__body').appendChild(componentEditZone);
-});
+if (theme_spec?.metas?.backgroundColor) {
+  document.documentElement.style.setProperty('--abt-background-editor', theme_spec.metas.backgroundColor);
+}
 })();
 
 /******/ })()

@@ -73,8 +73,6 @@ class WpeComponent extends WpeComponentBase {
             const heightIframe = iFrame.contentWindow.document.body.scrollHeight + "px";
             iFrame.height = heightIframe;
             iFrame.parentNode.style.height = heightIframe;
-
-            document.querySelector('.edit-post-visual-editor').style.background = iFrame.contentWindow.document.body.style.background;
         }
     }
 
