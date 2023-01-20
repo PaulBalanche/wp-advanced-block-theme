@@ -53,10 +53,10 @@ export class MarginControls extends Component {
             margin: {}
         };
 
-        Devices.getInstance().getLayouts().forEach( ( layout ) => {
+        Object.keys( Devices.getInstance().getMediaQueries() ).forEach( ( layout ) => {
 
-            this.state.padding[ layout.value ] = { all: undefined, top: undefined, bottom: undefined, left: undefined, right: undefined, x: undefined, y: undefined };
-            this.state.margin[ layout.value ] = { all: undefined, top: undefined, bottom: undefined, left: undefined, right: undefined, x: undefined, y: undefined };
+            this.state.padding[ layout ] = { all: undefined, top: undefined, bottom: undefined, left: undefined, right: undefined, x: undefined, y: undefined };
+            this.state.margin[ layout ] = { all: undefined, top: undefined, bottom: undefined, left: undefined, right: undefined, x: undefined, y: undefined };
         } );
 
         this.state.padding = merge( this.state.padding, this.parentProps.attributes.padding );
@@ -96,9 +96,9 @@ export class MarginControls extends Component {
     resetPadding( deviceType ) {
 
         let newPadding = {};
-        Devices.getInstance().getLayouts().forEach( ( layout ) => {
+        Object.keys( Devices.getInstance().getMediaQueries() ).forEach( ( layout ) => {
 
-            newPadding[ layout.value ] = ( deviceType == layout.value ) ? {} : this.state.padding[ layout.value ];
+            newPadding[ layout ] = ( deviceType == layout ) ? {} : this.state.padding[ layout ];
         } );
 
         this.setState( { padding: newPadding } );
@@ -108,9 +108,9 @@ export class MarginControls extends Component {
     resetMargin( deviceType ) {
         
         let newMargin = {};
-        Devices.getInstance().getLayouts().forEach( ( layout ) => {
+        Object.keys( Devices.getInstance().getMediaQueries() ).forEach( ( layout ) => {
 
-            newMargin[ layout.value ] = ( deviceType == layout.value ) ? {} : this.state.margin[ layout.value ];
+            newMargin[ layout ] = ( deviceType == layout ) ? {} : this.state.margin[ layout ];
         } );
 
         this.setState( { margin: newMargin } );
@@ -167,11 +167,11 @@ export class MarginControls extends Component {
                         className="padding-tab-panel"
                         activeClass="active-tab"
                         initialTabName={ Devices.getInstance().getCurrentDevice() }
-                        tabs={ Devices.getInstance().getLayouts().map( ( layout ) => {
+                        tabs={ Object.keys( Devices.getInstance().getMediaQueries() ).map( ( layout ) => {
                             return {
-                                name: layout.value,
-                                title: layout.label,
-                                className: 'tab-' + layout.value,
+                                name: layout,
+                                title: layout.charAt(0).toUpperCase() + layout.slice(1),
+                                className: 'tab-' + layout
                             };
                         } ) }
                     >
@@ -251,11 +251,11 @@ export class MarginControls extends Component {
                         className="margin-tab-panel"
                         activeClass="active-tab"
                         initialTabName={ Devices.getInstance().getCurrentDevice() }
-                        tabs={ Devices.getInstance().getLayouts().map( ( layout ) => {
+                        tabs={ Object.keys( Devices.getInstance().getMediaQueries() ).map( ( layout ) => {
                             return {
-                                name: layout.value,
-                                title: layout.label,
-                                className: 'tab-' + layout.value,
+                                name: layout,
+                                title: layout.charAt(0).toUpperCase() + layout.slice(1),
+                                className: 'tab-' + layout
                             };
                         } ) }
                     >

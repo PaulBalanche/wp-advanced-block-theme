@@ -34,21 +34,6 @@
   bottom: 0;
 }
 
-html :where(.editor-styles-wrapper) {
-  background: none !important;
-}
-
-#editor .is-desktop-preview {
-  background: none !important;
-}
-#editor .edit-post-visual-editor {
-  background: var(--abt-background-editor, "white");
-}
-#editor .block-editor-block-list__layout .block-editor-block-list__block {
-  width: 90% !important;
-  max-width: 90% !important;
-}
-
 .block-editor-block-inspector .child-range-control {
   padding-left: 10px;
 }
@@ -69,8 +54,11 @@ html :where(.editor-styles-wrapper) {
   width: 100%;
   padding: initial;
 }
-.block-editor-block-list__layout > .wp-block.block-list-appender button {
+.block-editor-block-list__layout > .wp-block.block-list-appender .components-button {
   box-shadow: none;
+}
+.block-editor-block-list__layout > .wp-block.block-list-appender .components-button svg {
+  color: white;
 }
 .block-editor-block-list__layout > .wp-block .block-list-appender {
   visibility: hidden;
@@ -83,20 +71,6 @@ html :where(.editor-styles-wrapper) {
   border: 2px solid red;
   padding: 4em 0;
   text-align: center;
-}
-
-.interface-interface-skeleton__sidebar .components-panel__body.is-opened .components-panel__body-title {
-  background: #f0f0f0;
-}
-.interface-interface-skeleton__sidebar .components-panel__body .components-button.components-panel__body-toggle {
-  box-shadow: none;
-}
-.interface-interface-skeleton__sidebar .components-tab-panel__tabs {
-  margin: -5px -16px 20px -16px;
-}
-.interface-interface-skeleton__sidebar .components-tab-panel__tabs .active-tab {
-  box-shadow: inset 0 var(--wp-admin-border-width-focus) var(--wp-admin-theme-color);
-  background: #f0f0f0;
 }
 
 #editor .block-editor-block-list__block::after {
@@ -116,7 +90,8 @@ html :where(.editor-styles-wrapper) {
   visibility: visible;
 }
 #editor .block-editor-block-list__block:hover::after, #editor .block-editor-block-list__block:focus::after, #editor .block-editor-block-list__block.is-selected::after, #editor .block-editor-block-list__block.has-child-selected::after {
-  border: 1px dashed white;
+  border: 1px solid rgba(0, 124, 186, 0.5);
+  box-shadow: 0px 0px 1.7px rgba(0, 0, 0, 0.112), 0px 0px 4px rgba(0, 0, 0, 0.162), 0px 0px 7.5px rgba(0, 0, 0, 0.2), 0px 0px 13.4px rgba(0, 0, 0, 0.238), 0px 0px 25.1px rgba(0, 0, 0, 0.288), 0px 0px 60px rgba(0, 0, 0, 0.4);
 }
 
 #editor .wp-block[data-align=full] {
@@ -225,14 +200,6 @@ html :where(.editor-styles-wrapper) {
 }
 #editor .block-editor-block-list__block[data-type="custom/wpe-container"].has-child-selected::before {
   visibility: visible;
-}
-#editor .block-editor-block-list__block[data-type="custom/wpe-container"] .block-editor-block-list__layout[data-type="custom/wpe-container"]::before, #editor .block-editor-block-list__block[data-type="custom/wpe-container"] .block-editor-block-list__layout[data-type="custom/wpe-container"]::after {
-  content: none;
-}
-#editor .block-editor-block-list__block[data-type="custom/wpe-container"]:focus::after, #editor .block-editor-block-list__block[data-type="custom/wpe-container"]:active::after, #editor .block-editor-block-list__block[data-type="custom/wpe-container"].is-selected::after, #editor .block-editor-block-list__block[data-type="custom/wpe-container"].has-child-selected::after {
-  box-shadow: none;
-  border-radius: 0;
-  border: 1px solid rgba(0, 124, 186, 0.5);
 }
 #editor .block-editor-block-list__block[data-type="custom/wpe-container"] .block-list-appender {
   position: relative;
@@ -425,18 +392,20 @@ html :where(.editor-styles-wrapper) {
   justify-content: center;
   padding: 6px 25px;
   border-radius: 0 0 2px 0;
-  border-right: 1px dashed white;
-  border-bottom: 1px dashed white;
+  border-right: 1px solid rgba(0, 124, 186, 0.5);
+  border-bottom: 1px solid rgba(0, 124, 186, 0.5);
+  background: rgba(0, 0, 0, 0.5);
+  box-shadow: 0px 0px 1.7px rgba(0, 0, 0, 0.112), 0px 0px 4px rgba(0, 0, 0, 0.162), 0px 0px 7.5px rgba(0, 0, 0, 0.2), 0px 0px 13.4px rgba(0, 0, 0, 0.238), 0px 0px 25.1px rgba(0, 0, 0, 0.288), 0px 0px 60px rgba(0, 0, 0, 0.4);
 }
 #editor .block-editor-block-list__block .abtButtonGroupEditZone .separator {
   margin: 0 25px;
   width: 1px;
   height: 30px;
-  background: rgba(220, 220, 220, 0.25);
+  background: rgba(0, 124, 186, 0.5);
 }
 #editor .block-editor-block-list__block .abtButtonGroupEditZone .title {
-  font-size: 0.7em;
-  font-weight: 500;
+  font-size: 0.75em;
+  font-weight: 600;
   color: white;
 }
 #editor .block-editor-block-list__block .abtButtonGroupEditZone .is-primary {
@@ -480,7 +449,8 @@ html :where(.editor-styles-wrapper) {
   display: flex;
   align-items: center;
   padding: 0 20px;
-  background: #007cba;
+  background: var(--wp-admin-theme-color);
+  border-bottom: var(--wp-admin-theme-color-darker-10);
   color: white;
   font-size: 16px;
   font-weight: 500;
@@ -488,17 +458,17 @@ html :where(.editor-styles-wrapper) {
   left: 0;
   top: 0;
   width: 100%;
-  height: 50px;
+  height: 60px;
 }
 #abt-component-edit-zone .edit-zone__body {
   padding: 20px;
   overflow: auto;
   position: absolute;
   left: 0;
-  bottom: 75px;
+  bottom: 76px;
   width: 100%;
   box-sizing: border-box;
-  top: 50px;
+  top: 61px;
 }
 #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder {
   padding: 0;
@@ -658,7 +628,8 @@ html :where(.editor-styles-wrapper) {
   display: flex;
   justify-content: space-between;
   padding: 20px 20px 0 20px;
-  background: #007cba;
+  background: var(--wp-admin-theme-color);
+  border-top: var(--wp-admin-theme-color-darker-10);
   color: white;
   font-size: 16px;
   font-weight: 500;
@@ -688,18 +659,61 @@ html :where(.editor-styles-wrapper) {
   background: var(--wp-admin-theme-color);
 }
 
+html :where(.editor-styles-wrapper) {
+  background: none !important;
+}
+
 #editor .edit-post-visual-editor__post-title-wrapper {
-  margin-top: 0;
-  margin-bottom: 0;
-  background: white;
-  padding-top: 1rem;
-  padding-bottom: 1rem;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+#editor .edit-post-visual-editor__post-title-wrapper h1 {
+  margin: 0 auto;
+}
+#editor .edit-post-visual-editor__post-title-wrapper h1:after {
+  content: none;
 }
 #editor .editor-styles-wrapper.block-editor-writing-flow {
   padding: 0;
 }
-#editor .block-editor-block-list__layout {
-  padding-top: 4rem;
+#editor .editor-styles-wrapper.block-editor-writing-flow .is-root-container.is-layout-flow {
+  padding: 4rem 0;
+  background: var(--abt-background-editor, "white");
+}
+#editor .editor-styles-wrapper.block-editor-writing-flow .is-root-container.is-layout-flow:before {
+  content: attr(data-size);
+  position: absolute;
+  right: 0;
+  top: -40px;
+  height: 40px;
+  background: var(--wp-admin-theme-color);
+  font-size: 0.7em;
+  font-weight: 500;
+  color: white;
+  padding: 0 30px;
+  display: flex;
+  align-items: center;
+}
+#editor .editor-styles-wrapper.block-editor-writing-flow .is-root-container.is-layout-flow .block-editor-block-list__block {
+  width: 90% !important;
+  max-width: 90% !important;
+}
+#editor .editor-styles-wrapper.block-editor-writing-flow .is-root-container.is-layout-flow > .block-list-appender {
+  width: 90% !important;
+  max-width: 90% !important;
+}
+#editor .editor-styles-wrapper.block-editor-writing-flow .is-root-container.is-layout-flow > .block-list-appender .block-editor-default-block-appender__content {
+  display: none;
+}
+#editor .editor-styles-wrapper.block-editor-writing-flow .is-root-container.is-layout-flow > .block-list-appender .block-editor-inserter {
+  position: relative;
+  display: block;
+}
+#editor .editor-styles-wrapper.block-editor-writing-flow .is-root-container.is-layout-flow > .block-list-appender .block-editor-inserter .components-button {
+  width: 100%;
+  height: auto;
+  padding: 12px;
+  background: none;
 }
 
 .wpe-dropdown-container {

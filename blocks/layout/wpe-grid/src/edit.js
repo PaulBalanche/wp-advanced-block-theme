@@ -137,22 +137,22 @@ class WpeGrid extends WpeComponentBase {
                 // Define rowStart fo the new colums added
 
                 let initLayout = {};
-                Devices.getInstance().getLayouts().forEach( ( layout ) => {
+                Object.keys( Devices.getInstance().getMediaQueries() ).forEach( ( layout ) => {
 
-                    initLayout[ layout.value ] = {
+                    initLayout[ layout ] = {
                         columnStart: 1,
                         width: 1,
                         rowStart: 2,
                         height: 1
                     };
                     inner_blocks.forEach(element => {
-                        if( element.attributes.layout && element.attributes.layout[ layout.value ] ) {
+                        if( element.attributes.layout && element.attributes.layout[ layout ] ) {
 
-                            let currentRowStart = ( element.attributes.layout[ layout.value ].rowStart && element.attributes.layout[ layout.value ].rowStart ) ? element.attributes.layout[ layout.value ].rowStart : 1
-                            let currentHeight = ( element.attributes.layout[ layout.value ].height && element.attributes.layout[ layout.value ].height ) ? element.attributes.layout[ layout.value ].height : 1;
+                            let currentRowStart = ( element.attributes.layout[ layout ].rowStart && element.attributes.layout[ layout ].rowStart ) ? element.attributes.layout[ layout ].rowStart : 1
+                            let currentHeight = ( element.attributes.layout[ layout ].height && element.attributes.layout[ layout ].height ) ? element.attributes.layout[ layout ].height : 1;
                             let currentRowEnd = currentRowStart + currentHeight;
-                            if( currentRowEnd > initLayout[ layout.value ].rowStart ) {
-                                initLayout[ layout.value ].rowStart = currentRowEnd;
+                            if( currentRowEnd > initLayout[ layout ].rowStart ) {
+                                initLayout[ layout ].rowStart = currentRowEnd;
                             }
                         }
                     });                    

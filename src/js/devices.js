@@ -9,7 +9,8 @@ export class Devices {
     
     constructor() {
         this.componentInstance = {};
-        this.layouts = [];
+        this.mediaQueries = {};
+        this.defaultMediaQuery = null;
         this.currentDevice = null;
         this.alreadyRendered = false;
 
@@ -29,22 +30,43 @@ export class Devices {
 
         if( theme_spec?.media?.queries && typeof theme_spec.media.queries == 'object' ) {
 
-            Object.keys(theme_spec.media.queries).forEach( ( key, index ) => {
-                this.layouts.push( {
-                    value: key,
-                    label: key.charAt(0).toUpperCase() + key.slice(1),
-                    attributeName: key.charAt(0).toUpperCase() + key.slice(1)
-                });
+            this.mediaQueries = this.sortMediaQueries( theme_spec.media.queries );
 
-                if( this.currentDevice == null || ( theme_spec?.media?.defaultMedia && theme_spec.media.defaultMedia == key ) ) {
-                    this.currentDevice = key;
-                }
-            });
+            if( this.currentDevice == null || ( theme_spec?.media?.defaultMedia && typeof this.mediaQueries[ theme_spec.media.defaultMedia ] != 'undefined' ) ) {
+                
+                this.currentDevice = theme_spec.media.defaultMedia;
+                this.defaultMediaQuery = theme_spec.media.defaultMedia;
+                
+                setTimeout( () => { this.setCurrentDevice(theme_spec.media.defaultMedia) }, 0 );
+            }
 
             const devicesButtonGroupContainer = document.createElement("div");
             devicesButtonGroupContainer.setAttribute("id", "devicesButtonGroupContainer");
             document.querySelector('.edit-post-header__toolbar').appendChild(devicesButtonGroupContainer);
         }
+    }
+
+    sortMediaQueries ( mediaQueries ) {
+
+        var mediaQueriesSorted = {};
+
+        while ( Object.keys( mediaQueries ).length > 0 ) {
+
+            var min = 0;
+            var keyMin = null;
+            Object.keys( mediaQueries ).forEach( ( layout ) => {
+
+                if( keyMin == null || mediaQueries[layout].minWidth < min ) {
+                    keyMin = layout;
+                    min = mediaQueries[layout].minWidth;
+                }
+            });
+
+            mediaQueriesSorted[ keyMin] = mediaQueries[keyMin];
+            delete mediaQueries[keyMin];
+        }
+
+        return mediaQueriesSorted;
     }
 
     addComponent( componentInstance ) {
@@ -65,23 +87,26 @@ export class Devices {
         this.currentDevice = newDevice;
         this.applyToCompoments();
 
-        var editor_area = document.querySelector('.edit-post-visual-editor__content-area');
-        if( editor_area ) {
+        var editor_area = document.querySelector('#editor');
+        var layout_flow_area = document.querySelector('.is-root-container.is-layout-flow');
+        if( editor_area && layout_flow_area ) {
             
-            editor_area.style.margin = 'auto';
-            Object.keys(theme_spec.media.queries).forEach((item) => {
-    
-                if( newDevice == item ) {
-    
-                    if( theme_spec.media.queries[item]['maxWidth'] != null && theme_spec.media.queries[item]['maxWidth'] <= editor_area.offsetWidth ) {
-    
-                        editor_area.style.width = theme_spec.media.queries[item]['maxWidth'] + 'px';
-                    }
-                    else {
-                        editor_area.style.removeProperty('width');
-                    }
+            layout_flow_area.style.margin = 'auto';
+
+            if( typeof this.getMediaQueries()[ newDevice ] != 'undefined' ) {
+
+                if( this.getMediaQueries()[ newDevice ]['maxWidth'] != null && this.getMediaQueries()[ newDevice ]['maxWidth'] <= editor_area.offsetWidth ) {
+
+                    layout_flow_area.style.width = this.getMediaQueries()[ newDevice ]['maxWidth'] + 'px';
                 }
-            });
+                else {
+                    layout_flow_area.style.removeProperty('width');
+                }
+
+                const minText = ( this.getMediaQueries()[ newDevice ]['minWidth'] != null && this.getMediaQueries()[ newDevice ]['minWidth'] > 0 ) ? this.getMediaQueries()[ newDevice ]['minWidth'] + 'px < ' : '';
+                const maxText = ( this.getMediaQueries()[ newDevice ]['maxWidth'] != null ) ?  ' < ' + this.getMediaQueries()[ newDevice ]['maxWidth'] + 'px' : '';
+                layout_flow_area.setAttribute('data-size', minText + newDevice.charAt(0).toUpperCase() + newDevice.slice(1) + maxText);
+            }
         }
     }
 
@@ -93,8 +118,8 @@ export class Devices {
         }
     }
 
-    getLayouts() {
-        return this.layouts;
+    getMediaQueries() {
+        return this.mediaQueries;
     }
 
     getComponents() {
@@ -107,16 +132,16 @@ export class Devices {
             key="devicesButtonGroup"
             className="devicesButtonGroup"
         >
-            { this.getLayouts().map( ( layout ) => {
+            { Object.keys( this.getMediaQueries() ).map( ( layout ) => {
                 return (
                     <Button
-                        key={ "layoutButton_" + layout.value }
-                        isPressed={ this.getCurrentDevice() == layout.value }
+                        key={ "layoutButton_" + layout }
+                        isPressed={ this.getCurrentDevice() == layout }
                         onMouseDown={ () => {
-                            this.setCurrentDevice( layout.value );
+                            this.setCurrentDevice( layout )
                         } }
                     >
-                        { layout.value }
+                        { layout.charAt(0).toUpperCase() + layout.slice(1) }
                     </Button>
                 );
             } ) }

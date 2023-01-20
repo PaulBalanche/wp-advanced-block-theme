@@ -1,53 +1,3 @@
-// .block-editor-block-list__layout .block-editor-block-list__block::after {
-//     content: "";
-//     pointer-events: none;
-//     position: absolute;
-//     top: 0;
-//     right: 0;
-//     bottom: 0;
-//     left: 0;
-//     border-radius: 2px;
-//     box-shadow: 0 0 0 var(--wp-admin-border-width-focus) transparent;
-// }
-// .block-editor-block-list__layout .block-editor-block-list__block:not([contenteditable]):focus::after {
-//     position: absolute;
-//     z-index: 1;
-//     pointer-events: none;
-//     content: "";
-//     top: 1px;
-//     bottom: 1px;
-//     left: 1px;
-//     right: 1px;
-//     box-shadow: 0 0 0 var(--wp-admin-border-width-focus) var(--wp-admin-theme-color);
-//     border-radius: 1px;
-//     outline: 2px solid transparent;
-// }
-
-
-html :where(.editor-styles-wrapper) {
-    background: none !important;
-}
-
-#editor {
-
-    .is-desktop-preview {
-        background: none !important;
-    }
-
-    .edit-post-visual-editor {
-        background: var(--abt-background-editor, 'white');
-    }
-
-    .block-editor-block-list__layout{
-
-        .block-editor-block-list__block {
-    
-            width: 90% !important;
-            max-width: 90% !important;
-        }
-    }
-}
-
 .block-editor-block-inspector {
 
     .child-range-control {
@@ -75,8 +25,13 @@ html :where(.editor-styles-wrapper) {
             width: 100%;
             padding: initial;
 
-            button {
+            .components-button {
+
                 box-shadow: none;
+                
+                svg {
+                    color: white;
+                }
             }
         }
         .block-list-appender {
@@ -93,35 +48,6 @@ html :where(.editor-styles-wrapper) {
             border: 2px solid red;
             padding: 4em  0;
             text-align: center;
-        }
-
-        
-    }
-}
-
-.interface-interface-skeleton__sidebar {
-
-    .components-panel__body {
-
-        &.is-opened {
-
-            .components-panel__body-title {
-                background: #f0f0f0;
-            }
-        }
-
-        .components-button.components-panel__body-toggle {
-            box-shadow: none;
-        }
-    }
-
-    .components-tab-panel__tabs {
-
-        margin: -5px -16px 20px -16px;
-        
-        .active-tab {
-            box-shadow: inset 0 var(--wp-admin-border-width-focus) var(--wp-admin-theme-color);
-            background: #f0f0f0;
         }
     }
 }

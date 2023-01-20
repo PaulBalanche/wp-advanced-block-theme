@@ -6802,20 +6802,20 @@ class WpeGrid extends _src_js_WpeComponentBase__WEBPACK_IMPORTED_MODULE_2__.WpeC
         // Define rowStart fo the new colums added
 
         let initLayout = {};
-        _src_js_Devices__WEBPACK_IMPORTED_MODULE_8__.Devices.getInstance().getLayouts().forEach(layout => {
-          initLayout[layout.value] = {
+        Object.keys(_src_js_Devices__WEBPACK_IMPORTED_MODULE_8__.Devices.getInstance().getMediaQueries()).forEach(layout => {
+          initLayout[layout] = {
             columnStart: 1,
             width: 1,
             rowStart: 2,
             height: 1
           };
           inner_blocks.forEach(element => {
-            if (element.attributes.layout && element.attributes.layout[layout.value]) {
-              let currentRowStart = element.attributes.layout[layout.value].rowStart && element.attributes.layout[layout.value].rowStart ? element.attributes.layout[layout.value].rowStart : 1;
-              let currentHeight = element.attributes.layout[layout.value].height && element.attributes.layout[layout.value].height ? element.attributes.layout[layout.value].height : 1;
+            if (element.attributes.layout && element.attributes.layout[layout]) {
+              let currentRowStart = element.attributes.layout[layout].rowStart && element.attributes.layout[layout].rowStart ? element.attributes.layout[layout].rowStart : 1;
+              let currentHeight = element.attributes.layout[layout].height && element.attributes.layout[layout].height ? element.attributes.layout[layout].height : 1;
               let currentRowEnd = currentRowStart + currentHeight;
-              if (currentRowEnd > initLayout[layout.value].rowStart) {
-                initLayout[layout.value].rowStart = currentRowEnd;
+              if (currentRowEnd > initLayout[layout].rowStart) {
+                initLayout[layout].rowStart = currentRowEnd;
               }
             }
           });
@@ -7452,7 +7452,8 @@ __webpack_require__.r(__webpack_exports__);
 class Devices {
   constructor() {
     this.componentInstance = {};
-    this.layouts = [];
+    this.mediaQueries = {};
+    this.defaultMediaQuery = null;
     this.currentDevice = null;
     this.alreadyRendered = false;
     this.init();
@@ -7465,20 +7466,34 @@ class Devices {
   }
   init() {
     if (theme_spec?.media?.queries && typeof theme_spec.media.queries == 'object') {
-      Object.keys(theme_spec.media.queries).forEach((key, index) => {
-        this.layouts.push({
-          value: key,
-          label: key.charAt(0).toUpperCase() + key.slice(1),
-          attributeName: key.charAt(0).toUpperCase() + key.slice(1)
-        });
-        if (this.currentDevice == null || theme_spec?.media?.defaultMedia && theme_spec.media.defaultMedia == key) {
-          this.currentDevice = key;
-        }
-      });
+      this.mediaQueries = this.sortMediaQueries(theme_spec.media.queries);
+      if (this.currentDevice == null || theme_spec?.media?.defaultMedia && typeof this.mediaQueries[theme_spec.media.defaultMedia] != 'undefined') {
+        this.currentDevice = theme_spec.media.defaultMedia;
+        this.defaultMediaQuery = theme_spec.media.defaultMedia;
+        setTimeout(() => {
+          this.setCurrentDevice(theme_spec.media.defaultMedia);
+        }, 0);
+      }
       const devicesButtonGroupContainer = document.createElement("div");
       devicesButtonGroupContainer.setAttribute("id", "devicesButtonGroupContainer");
       document.querySelector('.edit-post-header__toolbar').appendChild(devicesButtonGroupContainer);
     }
+  }
+  sortMediaQueries(mediaQueries) {
+    var mediaQueriesSorted = {};
+    while (Object.keys(mediaQueries).length > 0) {
+      var min = 0;
+      var keyMin = null;
+      Object.keys(mediaQueries).forEach(layout => {
+        if (keyMin == null || mediaQueries[layout].minWidth < min) {
+          keyMin = layout;
+          min = mediaQueries[layout].minWidth;
+        }
+      });
+      mediaQueriesSorted[keyMin] = mediaQueries[keyMin];
+      delete mediaQueries[keyMin];
+    }
+    return mediaQueriesSorted;
   }
   addComponent(componentInstance) {
     this.componentInstance[componentInstance.props.clientId] = componentInstance;
@@ -7492,18 +7507,20 @@ class Devices {
   setCurrentDevice(newDevice) {
     this.currentDevice = newDevice;
     this.applyToCompoments();
-    var editor_area = document.querySelector('.edit-post-visual-editor__content-area');
-    if (editor_area) {
-      editor_area.style.margin = 'auto';
-      Object.keys(theme_spec.media.queries).forEach(item => {
-        if (newDevice == item) {
-          if (theme_spec.media.queries[item]['maxWidth'] != null && theme_spec.media.queries[item]['maxWidth'] <= editor_area.offsetWidth) {
-            editor_area.style.width = theme_spec.media.queries[item]['maxWidth'] + 'px';
-          } else {
-            editor_area.style.removeProperty('width');
-          }
+    var editor_area = document.querySelector('#editor');
+    var layout_flow_area = document.querySelector('.is-root-container.is-layout-flow');
+    if (editor_area && layout_flow_area) {
+      layout_flow_area.style.margin = 'auto';
+      if (typeof this.getMediaQueries()[newDevice] != 'undefined') {
+        if (this.getMediaQueries()[newDevice]['maxWidth'] != null && this.getMediaQueries()[newDevice]['maxWidth'] <= editor_area.offsetWidth) {
+          layout_flow_area.style.width = this.getMediaQueries()[newDevice]['maxWidth'] + 'px';
+        } else {
+          layout_flow_area.style.removeProperty('width');
         }
-      });
+        const minText = this.getMediaQueries()[newDevice]['minWidth'] != null && this.getMediaQueries()[newDevice]['minWidth'] > 0 ? this.getMediaQueries()[newDevice]['minWidth'] + 'px < ' : '';
+        const maxText = this.getMediaQueries()[newDevice]['maxWidth'] != null ? ' < ' + this.getMediaQueries()[newDevice]['maxWidth'] + 'px' : '';
+        layout_flow_area.setAttribute('data-size', minText + newDevice.charAt(0).toUpperCase() + newDevice.slice(1) + maxText);
+      }
     }
   }
   applyToCompoments() {
@@ -7513,8 +7530,8 @@ class Devices {
       });
     }
   }
-  getLayouts() {
-    return this.layouts;
+  getMediaQueries() {
+    return this.mediaQueries;
   }
   getComponents() {
     return this.componentInstance;
@@ -7523,14 +7540,14 @@ class Devices {
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.ButtonGroup, {
       key: "devicesButtonGroup",
       className: "devicesButtonGroup"
-    }, this.getLayouts().map(layout => {
+    }, Object.keys(this.getMediaQueries()).map(layout => {
       return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
-        key: "layoutButton_" + layout.value,
-        isPressed: this.getCurrentDevice() == layout.value,
+        key: "layoutButton_" + layout,
+        isPressed: this.getCurrentDevice() == layout,
         onMouseDown: () => {
-          this.setCurrentDevice(layout.value);
+          this.setCurrentDevice(layout);
         }
-      }, layout.value);
+      }, layout.charAt(0).toUpperCase() + layout.slice(1));
     }));
   }
   isFirstComponent(componentInstance) {
@@ -8064,11 +8081,11 @@ function renderControl(prop, keys, valueProp, componentInstance) {
           let tempKeyObject = repeatable ? keys.concat(keyLoop) : keys;
           let fieldsetObject = [];
           if (responsive) {
-            fieldsetObject.push(renderTabPanelComponent(fieldId, _Devices__WEBPACK_IMPORTED_MODULE_2__.Devices.getInstance().getLayouts().map(layout => {
+            fieldsetObject.push(renderTabPanelComponent(fieldId, Object.keys(_Devices__WEBPACK_IMPORTED_MODULE_2__.Devices.getInstance().getMediaQueries()).map(layout => {
               return {
-                name: layout.value,
-                title: layout.label,
-                className: 'tab-' + layout.value
+                name: layout,
+                title: layout.charAt(0).toUpperCase() + layout.slice(1),
+                className: 'tab-' + layout
               };
             }), function (tab) {
               let tempKeyObjectReponsive = keys.concat(tab.name);
@@ -9103,11 +9120,11 @@ function renderText(componentInstance, id, label, keys, valueProp, objectValue) 
     }, "Remove"));
   }
   if (responsive) {
-    let newInner = (0,_attributes__WEBPACK_IMPORTED_MODULE_2__.renderTabPanelComponent)(id, _Devices__WEBPACK_IMPORTED_MODULE_3__.Devices.getInstance().getLayouts().map(layout => {
+    let newInner = (0,_attributes__WEBPACK_IMPORTED_MODULE_2__.renderTabPanelComponent)(id, Object.keys(_Devices__WEBPACK_IMPORTED_MODULE_3__.Devices.getInstance().getMediaQueries()).map(layout => {
       return {
-        name: layout.value,
-        title: layout.label,
-        className: 'tab-' + layout.value
+        name: layout,
+        title: layout.charAt(0).toUpperCase() + layout.slice(1),
+        className: 'tab-' + layout
       };
     }), function (tab) {
       return renderTextControl(componentInstance, id + "-" + tab.name, label, isNumber, typeof objectValue[tab.name] == 'string' ? objectValue[tab.name] : '', keys.concat(tab.name), valueProp);

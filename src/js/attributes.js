@@ -215,11 +215,11 @@ export function renderControl( prop, keys, valueProp, componentInstance ) {
                         fieldsetObject.push(
                             renderTabPanelComponent(
                                 fieldId,
-                                Devices.getInstance().getLayouts().map( ( layout ) => {
+                                Object.keys( Devices.getInstance().getMediaQueries() ).map( ( layout ) => {
                                     return {
-                                        name: layout.value,
-                                        title: layout.label,
-                                        className: 'tab-' + layout.value,
+                                        name: layout,
+                                        title: layout.charAt(0).toUpperCase() + layout.slice(1),
+                                        className: 'tab-' + layout
                                     };
                                 } ),
                                 function ( tab ) {

@@ -24,6 +24,7 @@
     "react-dom": "^18.2.0"
   },
   "dependencies": {
-    "@wordpress/api-fetch": "^6.21.0"
+    "@wordpress/api-fetch": "^6.21.0",
+    "@wordpress/blocks": "^12.1.0"
   }
 }
