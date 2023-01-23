@@ -3,9 +3,9 @@ import {
     SelectControl
 } from '@wordpress/components';
 
-import { updateAttributes, removeEltRepeatable } from '../attributes';
+import { Attributes } from '../Static/Attributes';
 
-export function renderSelect( componentInstance, id, label, options, keys, valueProp, attributeValue, repeatable = false, required = false ) {
+export function renderSelect( componentInstance, id, label, options, keys, valueProp, objectValue, repeatable = false, required = false ) {
 
     if( typeof options == 'undefined' )
         return null;
@@ -21,7 +21,7 @@ export function renderSelect( componentInstance, id, label, options, keys, value
                     isLink={true}
                     className="removeRepeatable"
                     onClick={ () =>
-                        removeEltRepeatable( keys, valueProp )
+                        Attributes.removeEltRepeatable( keys, valueProp )
                     }
                 >
                     Remove
@@ -34,14 +34,14 @@ export function renderSelect( componentInstance, id, label, options, keys, value
         <SelectControl
             key={ id }
             label={ label }
-            value={ attributeValue }
+            value={ objectValue }
             options={
                [ { label: 'Choose...', value: '' } ].concat( options.map( function(value) {
                     return { label: value.name, value: value.value }
                 } ) )
             }
             onChange={ ( newValue ) =>
-                updateAttributes( keys, valueProp, newValue, false, componentInstance )
+                Attributes.updateAttributes( keys, valueProp, newValue, false, componentInstance )
             }
         />
     );

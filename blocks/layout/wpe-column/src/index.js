@@ -3,7 +3,7 @@ import {
     InnerBlocks
 } from '@wordpress/block-editor';
 
-import { initComponentAttributes } from '../../../../src/js/attributes';
+import { Attributes } from '../../../../src/js/Static/Attributes';
 
 import edit from './edit';
 
@@ -14,7 +14,7 @@ let attributes = {
 };
 if( typeof blocks_spec['wpe-column'] == 'object' && typeof blocks_spec['wpe-column'].props == 'object' ) {
 
-    initComponentAttributes( attributes, blocks_spec['wpe-column'].props );
+    Attributes.initComponentAttributes( attributes, blocks_spec['wpe-column'].props );
 }
 
 registerBlockType( 'custom/wpe-column', {

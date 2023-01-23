@@ -2,7 +2,7 @@
  * WordPress dependencies
  */
 import { createBlock } from '@wordpress/blocks';
-import { WpeComponentBase } from '../../../../src/js/WpeComponentBase';
+import { WpeComponentBase } from '../../../../src/js/Models/WpeComponentBase';
 import { compose } from '@wordpress/compose';
 import {
     useBlockProps,
@@ -16,11 +16,6 @@ import {
     Button,
     ButtonGroup
 } from '@wordpress/components';
-
-import {
-    Fragment
-} from '@wordpress/element';
-
 
 /**
  * registerBlockType edit function

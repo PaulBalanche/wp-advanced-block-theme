@@ -3,7 +3,7 @@ import {
     ToggleControl
 } from '@wordpress/components';
 
-import { updateAttributes, removeEltRepeatable } from '../attributes';
+import { Attributes } from '../Static/Attributes';
 
 export function renderToggle( componentInstance, id, label, help, keys, valueProp, objectValue, repeatable = false, required = false ) {
 
@@ -18,7 +18,7 @@ export function renderToggle( componentInstance, id, label, help, keys, valuePro
                     isLink={true}
                     className="removeRepeatable"
                     onClick={ () =>
-                        removeEltRepeatable( keys, valueProp )
+                        Attributes.removeEltRepeatable( keys, valueProp )
                     }
                 >
                     Remove
@@ -34,7 +34,7 @@ export function renderToggle( componentInstance, id, label, help, keys, valuePro
             help={ ( typeof help == 'object' && Array.isArray(help) && help.length == 2 ) ? ( !! objectValue ? help[1] : help[0] ) : false }
             checked={ objectValue }
             onChange={ ( newValue ) =>
-                updateAttributes( keys, valueProp, newValue, false, componentInstance )
+                Attributes.updateAttributes( keys, valueProp, newValue, false, componentInstance )
             }
         />
     );

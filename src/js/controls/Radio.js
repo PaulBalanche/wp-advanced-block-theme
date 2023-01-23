@@ -3,7 +3,7 @@ import {
     RadioControl
 } from '@wordpress/components';
 
-import { updateAttributes, removeEltRepeatable } from '../attributes';
+import { Attributes } from '../Static/Attributes';
 
 import { withState } from '@wordpress/compose';
 
@@ -23,7 +23,7 @@ export function renderRadio( componentInstance, id, label, options, keys, valueP
                     isLink={true}
                     className="removeRepeatable"
                     onClick={ () =>
-                        removeEltRepeatable( keys, valueProp )
+                        Attributes.removeEltRepeatable( keys, valueProp )
                     }
                 >
                     Remove
@@ -44,7 +44,7 @@ export function renderRadio( componentInstance, id, label, options, keys, valueP
             } ) }
             onChange={ ( newValue ) => {
                 setState( { newValue } );
-                updateAttributes( keys, valueProp, newValue, false, componentInstance );
+                Attributes.updateAttributes( keys, valueProp, newValue, false, componentInstance );
             } }
         />
     ) );

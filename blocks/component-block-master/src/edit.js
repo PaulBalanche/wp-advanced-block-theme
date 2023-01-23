@@ -1,4 +1,4 @@
-import { WpeComponentBase } from '../../../src/js/WpeComponentBase';
+import { WpeComponentBase } from '../../../src/js/Models/WpeComponentBase';
 import ServerSideRender from '@wordpress/server-side-render';
 import { withSelect } from '@wordpress/data';
 import { compose } from '@wordpress/compose';
@@ -24,6 +24,8 @@ class WpeComponent extends WpeComponentBase {
 
     shouldComponentUpdate(nextProps, nextState) {
 
+        this._iframeResize.bind(this);
+        
         if( ! this.state.needPreviewUpdate && nextState.needPreviewUpdate ) {
             this.apiFetch( nextProps.attributes );
         }
@@ -73,6 +75,7 @@ class WpeComponent extends WpeComponentBase {
             const heightIframe = iFrame.contentWindow.document.body.scrollHeight + "px";
             iFrame.height = heightIframe;
             iFrame.parentNode.style.height = heightIframe;
+            iFrame.contentWindow.document.body.style.overflowY = 'hidden';
         }
     }
 

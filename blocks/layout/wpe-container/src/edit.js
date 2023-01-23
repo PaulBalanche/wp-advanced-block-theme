@@ -1,7 +1,7 @@
 /**
  * WordPress dependencies
  */
-import { WpeComponentBase } from '../../../../src/js/WpeComponentBase';
+import { WpeComponentBase } from '../../../../src/js/Models/WpeComponentBase';
 import { compose } from '@wordpress/compose';
 import {
     InnerBlocks,

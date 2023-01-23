@@ -7,7 +7,7 @@ import { InnerBlocks, useBlockProps } from '@wordpress/block-editor';
  */
 import edit from './edit';
 
-import { initComponentAttributes } from '../../../src/js/attributes';
+import { Attributes } from '../../../src/js/Static/Attributes';
 
 var current_user_can_edit_posts = global_localized.current_user_can_edit_posts;
 
@@ -18,7 +18,7 @@ Object.values(global_localized.components).forEach( ( element ) => {
             type: 'string'
         }
     };
-    initComponentAttributes( initAttributes, element.props );
+    Attributes.initComponentAttributes( initAttributes, element.props );
 
     registerBlockType( 'custom/wpe-component-' + element.id, {
         title: element.name,

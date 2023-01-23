@@ -3,6 +3,8 @@ import {
     DateTimePicker
 } from '@wordpress/components';
 
+import { Attributes } from '../Static/Attributes';
+
 export function renderDateTime( componentInstance, id, label, keys, valueProp, objectValue, repeatable = false, required = false ) {
 
     label = ( required ) ? label + '*' : label;
@@ -16,7 +18,7 @@ export function renderDateTime( componentInstance, id, label, keys, valueProp, o
                     isLink={true}
                     className="removeRepeatable"
                     onClick={ () =>
-                        removeEltRepeatable( keys, valueProp )
+                        Attributes.removeEltRepeatable( keys, valueProp )
                     }
                 >
                     Remove
@@ -33,7 +35,7 @@ export function renderDateTime( componentInstance, id, label, keys, valueProp, o
             currentDate={ date }
             onChange={ ( newDate ) => {
                 setState( { date: newDate } );
-                updateAttributes( keys, valueProp, newDate, false, componentInstance );
+                Attributes.updateAttributes( keys, valueProp, newDate, false, componentInstance );
             } }
             is12Hour={ false }
         />

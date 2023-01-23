@@ -6,7 +6,7 @@ import { useBlockProps, useInnerBlocksProps } from '@wordpress/block-editor';
 import { __ } from '@wordpress/i18n';
 import { addFilter } from '@wordpress/hooks';
 
-import { initComponentAttributes } from '../../../../src/js/attributes';
+import { Attributes } from '../../../../src/js/Static/Attributes';
 
 /**
  * Internal dependencies
@@ -35,7 +35,7 @@ let attributes = {
 };
 if( typeof blocks_spec['wpe-container'] == 'object' && typeof blocks_spec['wpe-container'].props == 'object' ) {
 
-    initComponentAttributes( attributes, blocks_spec['wpe-container'].props );
+    Attributes.initComponentAttributes( attributes, blocks_spec['wpe-container'].props );
 }
 
 registerBlockType( 'custom/wpe-container', {

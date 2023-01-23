@@ -7,7 +7,7 @@ import {
     __experimentalLinkControl as LinkControl
 } from '@wordpress/block-editor';
 
-import { updateAttributes, removeEltRepeatable, renderPanelComponent } from '../attributes';
+import { Attributes } from '../Static/Attributes';
 
 export function renderLink( componentInstance, id, label, keys, valueProp, objectValue, repeatable = false, required = false ) {
         
@@ -26,7 +26,7 @@ export function renderLink( componentInstance, id, label, keys, valueProp, objec
                     isLink={true}
                     className="removeRepeatable"
                     onClick={ () =>
-                        removeEltRepeatable( keys, valueProp )
+                        Attributes.removeEltRepeatable( keys, valueProp )
                     }
                 >
                     Remove
@@ -58,7 +58,7 @@ export function renderLink( componentInstance, id, label, keys, valueProp, objec
                             type={ "text" }
                             value={ objectValue.text }
                             onChange={ ( newValue ) => {
-                                updateAttributes( keys.concat('text'), valueProp, newValue, false, componentInstance );
+                                Attributes.updateAttributes( keys.concat('text'), valueProp, newValue, false, componentInstance );
                             } }
                         />
                         <LinkControl
@@ -80,7 +80,7 @@ export function renderLink( componentInstance, id, label, keys, valueProp, objec
                                 opensInNewTab: newOpensInNewTab,
                             } ) => {
                                 let newObjectValue = ( typeof newURL == 'string' ) ? { text: objectValue.text, url: newURL, opensInNewTab: newOpensInNewTab } : { text: objectValue.text };
-                                updateAttributes( keys, valueProp, newObjectValue, false, componentInstance );
+                                Attributes.updateAttributes( keys, valueProp, newObjectValue, false, componentInstance );
                             } }
                         />
                     </div>
@@ -89,5 +89,5 @@ export function renderLink( componentInstance, id, label, keys, valueProp, objec
         </div>
     );
 
-    return renderPanelComponent( id, label, inner, false );
+    return Attributes.renderPanelComponent( id, label, inner, false );
 }

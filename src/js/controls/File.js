@@ -6,7 +6,7 @@ import {
     Button
 } from '@wordpress/components';
 
-import { updateAttributes, removeEltRepeatable, fileSizeFormat } from '../attributes';
+import { Attributes } from '../Static/Attributes';
 
 export function renderFile( componentInstance, type, id, label, keys, valueProp, objectValue, repeatable = false, required = false, responsive = false ) {
 
@@ -44,7 +44,7 @@ export function renderFile( componentInstance, type, id, label, keys, valueProp,
                         >
                             { objectValue.name }<br />
                             { objectValue.mime}<br />
-                            { fileSizeFormat(objectValue.size) }
+                            { Attributes.fileSizeFormat(objectValue.size) }
                         </div>
                     </>
                 );
@@ -66,7 +66,7 @@ export function renderFile( componentInstance, type, id, label, keys, valueProp,
                         >
                             { objectValue.name }<br />
                             { objectValue.mime}<br />
-                            { fileSizeFormat(objectValue.size) }
+                            { Attributes.fileSizeFormat(objectValue.size) }
                         </div>
                     </>
                 );
@@ -119,7 +119,7 @@ export function renderFile( componentInstance, type, id, label, keys, valueProp,
                             if( type == "gallery" && objectValue.length > 1 )
                             componentInstance.setAttributes( { [keys]: objectValue.slice(0, objectValue.length - 1) } );
                             else if( repeatable )
-                                removeEltRepeatable( keys, valueProp, componentInstance );
+                                Attributes.removeEltRepeatable( keys, valueProp, componentInstance );
                             else
                             componentInstance.setAttributes( { [keys]: undefined } );
                         }
@@ -186,7 +186,7 @@ export function renderFile( componentInstance, type, id, label, keys, valueProp,
                     }
 
                     if( typeof newValue != 'undefined' && ( typeof newValue != 'object' || Object.keys(newValue).length > 0 ) )
-                        updateAttributes( keys, valueProp, newValue, false, componentInstance );
+                    Attributes.updateAttributes( keys, valueProp, newValue, false, componentInstance );
                 } }
                 multiple= { type == 'gallery' }
                 addToGallery= { type == 'gallery' && !! objectValue }
@@ -196,5 +196,5 @@ export function renderFile( componentInstance, type, id, label, keys, valueProp,
         </div>
     );
 
-    return renderPanelComponent( id, label, inner, false );
+    return Attributes.renderPanelComponent( id, label, inner, false );
 }

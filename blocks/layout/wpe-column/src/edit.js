@@ -1,11 +1,10 @@
 /**
  * WordPress dependencies
  */
-import { WpeComponentBase } from '../../../../src/js/WpeComponentBase';
+import { WpeComponentBase } from '../../../../src/js/Models/WpeComponentBase';
 import { compose } from '@wordpress/compose';
 import {
     InnerBlocks,
-    InspectorControls,
     useBlockProps,
     useInnerBlocksProps,
     __experimentalBlockVariationPicker
@@ -18,7 +17,7 @@ import {
 
 import { withSelect } from '@wordpress/data';
 
-import { Devices } from '../../../../src/js/Devices';
+import { Devices } from '../../../../src/js/Singleton/Devices';
 
 /**
  * registerBlockType edit function
@@ -94,8 +93,6 @@ class WpeColumn extends WpeComponentBase {
     liveRendering() {
         
         const { children, ...innerBlocksProps } = this.props.innerBlocksProps;
-        
-        console.log( this.state.currentBodyDevice );
 
         innerBlocksProps.style = {
             gridColumnStart: this.getLayout( 'columnStart', this.state.currentBodyDevice ),

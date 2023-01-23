@@ -3,7 +3,7 @@ import {
     TextareaControl
 } from '@wordpress/components';
 
-import { updateAttributes, removeEltRepeatable } from '../attributes';
+import { Attributes } from '../Static/Attributes';
 
 export function renderTextarea( componentInstance, id, label, keys, valueProp, objectValue, repeatable = false, required = false ) {
 
@@ -18,7 +18,7 @@ export function renderTextarea( componentInstance, id, label, keys, valueProp, o
                     isLink={true}
                     className="removeRepeatable"
                     onClick={ () =>
-                        removeEltRepeatable( keys, valueProp )
+                        Attributes.removeEltRepeatable( keys, valueProp )
                     }
                 >
                     Remove
@@ -33,7 +33,7 @@ export function renderTextarea( componentInstance, id, label, keys, valueProp, o
             label={ label }
             value={ objectValue }
             onChange={ ( newValue ) =>
-                updateAttributes( keys, valueProp, newValue, false, componentInstance )
+                Attributes.updateAttributes( keys, valueProp, newValue, false, componentInstance )
             }
         />
     );

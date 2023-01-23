@@ -2,16 +2,11 @@
  * WordPress dependencies
  */
 import { createBlock } from '@wordpress/blocks';
-import { WpeComponentBase } from '../../../../src/js/WpeComponentBase';
-import {
-    useState,
-    Fragment
-} from '@wordpress/element';
+import { WpeComponentBase } from '../../../../src/js/Models/WpeComponentBase';
 import { compose } from '@wordpress/compose';
 import {
     useBlockProps,
     useInnerBlocksProps,
-    InspectorControls,
     __experimentalBlockVariationPicker,
     __experimentalBlock as Block,
     store as blockEditorStore
@@ -19,8 +14,6 @@ import {
 
 import {
     PanelBody,
-    Button,
-    ButtonGroup,
     RangeControl
 } from '@wordpress/components';
 
@@ -28,7 +21,7 @@ import { withSelect, withDispatch, dispatch } from '@wordpress/data';
 import { get, map, times } from 'lodash';
 
 
-import { Devices } from '../../../../src/js/Devices';
+import { Devices } from '../../../../src/js/Singleton/Devices';
 
 /**
  * Add some columns in wpe-container based on variation selected

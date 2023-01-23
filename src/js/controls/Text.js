@@ -3,9 +3,9 @@ import {
     TextControl
 } from '@wordpress/components';
 
-import { updateAttributes, removeEltRepeatable, renderTabPanelComponent } from '../attributes';
+import { Attributes } from '../Static/Attributes';
 
-import { Devices } from '../Devices';
+import { Devices } from '../Singleton/Devices';
 
 export function renderText( componentInstance, id, label, keys, valueProp, objectValue, isNumber = false, repeatable = false, required = false, responsive = false ) {
 
@@ -20,7 +20,7 @@ export function renderText( componentInstance, id, label, keys, valueProp, objec
                     isLink={true}
                     className="removeRepeatable"
                     onClick={ () =>
-                        removeEltRepeatable( keys, valueProp )
+                        Attributes.removeEltRepeatable( keys, valueProp )
                     }
                 >
                     Remove
@@ -31,7 +31,7 @@ export function renderText( componentInstance, id, label, keys, valueProp, objec
 
     if( responsive ) {
 
-        let newInner = renderTabPanelComponent(
+        let newInner = Attributes.renderTabPanelComponent(
                 id,
                 Object.keys( Devices.getInstance().getMediaQueries() ).map( ( layout ) => {
                     return {
@@ -77,7 +77,7 @@ function renderTextControl( componentInstance, id, label, isNumber, value, keysT
         type={ !! isNumber ? "number" : "text" }
         value={ value }
         onChange={ ( newValue ) =>
-            updateAttributes( keysToUpdate, valueProp, newValue, isNumber, componentInstance )
+            Attributes.updateAttributes( keysToUpdate, valueProp, newValue, isNumber, componentInstance )
         }
     />
 }

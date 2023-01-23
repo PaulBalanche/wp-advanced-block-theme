@@ -8,7 +8,7 @@ import layoutGrid               from '../../blocks/layout/wpe-grid/src/index'
 import layoutSlide              from '../../blocks/layout/wpe-slide/src/index'
 import layoutSlider             from '../../blocks/layout/wpe-slider/src/index'
 
-import { Devices } from './Devices';
+import { Devices } from './Singleton/Devices';
 import {
     PanelBody,
     Button,
@@ -19,3 +19,10 @@ import {
 if( theme_spec?.metas?.backgroundColor ) {
     document.documentElement.style.setProperty('--abt-background-editor', theme_spec.metas.backgroundColor);
 }
+
+window.addEventListener('load', function () {
+    let postTitle = document.querySelector('.edit-post-visual-editor__post-title-wrapper');
+    let headerToolbar = document.querySelector('.edit-post-header__toolbar > .edit-post-header-toolbar');
+    headerToolbar.after(postTitle);
+})
+

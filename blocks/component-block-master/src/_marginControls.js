@@ -10,7 +10,7 @@ import {
 
 import { merge } from 'merge-anything';
 
-import { Devices } from '../../../src/js/Devices';
+import { Devices } from '../../../src/js/Singleton/Devices';
 
 export class MarginControls extends Component {
 

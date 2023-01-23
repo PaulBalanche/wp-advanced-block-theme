@@ -8,7 +8,7 @@ import { __ } from '@wordpress/i18n';
 
 import * as gridIcons from './icons';
 
-import { initComponentAttributes } from '../../../../src/js/attributes';
+import { Attributes } from '../../../../src/js/Static/Attributes';
 
 /**
  * Internal dependencies
@@ -37,7 +37,7 @@ let attributes = {
 };
 if( typeof blocks_spec['wpe-grid'] == 'object' && typeof blocks_spec['wpe-grid'].props == 'object' ) {
 
-    initComponentAttributes( attributes, blocks_spec['wpe-grid'].props );
+    Attributes.initComponentAttributes( attributes, blocks_spec['wpe-grid'].props );
 }
 
 registerBlockType( 'custom/wpe-grid', {

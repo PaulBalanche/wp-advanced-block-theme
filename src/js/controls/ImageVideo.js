@@ -9,7 +9,7 @@ import {
     RadioControl,
 } from '@wordpress/components';
 
-import { updateAttributes, removeEltRepeatable, fileSizeFormat, renderPanelComponent, renderTabPanelComponent } from '../attributes';
+import { Attributes } from '../Static/Attributes';
 
 export function renderImageVideo( componentInstance, type, args, id, label, keys, valueProp, objectValue, repeatable = false, required = false, responsive = false ) {
 
@@ -39,9 +39,9 @@ export function renderImageVideo( componentInstance, type, args, id, label, keys
         // Update component attribute if empty 
         if( ! objectValue[responsive_id] ) {
             if( typeof objectValue != 'object' )
-                updateAttributes( keys, valueProp, { [responsive_id]: {} }, false, componentInstance );
+                Attributes.updateAttributes( keys, valueProp, { [responsive_id]: {} }, false, componentInstance );
             else
-                updateAttributes( keys.concat(responsive_id), valueProp, {}, false, componentInstance );
+                Attributes.updateAttributes( keys.concat(responsive_id), valueProp, {}, false, componentInstance );
         }
 
         if( type == 'image' ) {
@@ -66,7 +66,7 @@ export function renderImageVideo( componentInstance, type, args, id, label, keys
                             isSmall
                             className="reset-button"
                             onClick={ () => {
-                                    updateAttributes( keys.concat(responsive_id), valueProp, undefined, false, componentInstance )
+                                    Attributes.updateAttributes( keys.concat(responsive_id), valueProp, undefined, false, componentInstance )
                                 }
                             }
                         >Remove</Button>
@@ -101,7 +101,7 @@ export function renderImageVideo( componentInstance, type, args, id, label, keys
                             }
 
                             if( typeof newValue != 'undefined' && ( typeof newValue != 'object' || Object.keys(newValue).length > 0 ) )
-                                updateAttributes( keys.concat(responsive_id), valueProp, newValue, false, componentInstance );
+                                Attributes.updateAttributes( keys.concat(responsive_id), valueProp, newValue, false, componentInstance );
                         } }
                         value={ ( objectValue[responsive_id] ) ? objectValue[responsive_id] : false }
                         disableDropZone={ true }
@@ -134,7 +134,7 @@ export function renderImageVideo( componentInstance, type, args, id, label, keys
                     options={ options_video_type }
                     onChange={ ( newValue ) => {
                         setState( { newValue } );
-                        updateAttributes( keys.concat(responsive_id), valueProp, { type: newValue }, false, componentInstance );
+                        Attributes.updateAttributes( keys.concat(responsive_id), valueProp, { type: newValue }, false, componentInstance );
                     } }
                 />
             ) );
@@ -170,7 +170,7 @@ export function renderImageVideo( componentInstance, type, args, id, label, keys
                             >
                                 { objectValue[responsive_id].file.name }<br />
                                 { objectValue[responsive_id].file.mime}<br />
-                                { fileSizeFormat(objectValue[responsive_id].file.size) }
+                                { Attributes.fileSizeFormat(objectValue[responsive_id].file.size) }
                             </div>
                         </>
                     );
@@ -187,7 +187,7 @@ export function renderImageVideo( componentInstance, type, args, id, label, keys
                                 isSmall
                                 className="reset-button"
                                 onClick={ () => 
-                                    updateAttributes( keys.concat(responsive_id), valueProp, {  type: 'file' }, false, componentInstance )
+                                    Attributes.updateAttributes( keys.concat(responsive_id), valueProp, {  type: 'file' }, false, componentInstance )
                                 }
                             >Remove</Button>
                         </div>
@@ -214,8 +214,9 @@ export function renderImageVideo( componentInstance, type, args, id, label, keys
                                     };
                                 }
 
-                                if( typeof newValue != 'undefined' && ( typeof newValue != 'object' || Object.keys(newValue).length > 0 ) )
-                                    updateAttributes( keys.concat(responsive_id), valueProp, { type: 'file', file: newValue }, false, componentInstance );
+                                if( typeof newValue != 'undefined' && ( typeof newValue != 'object' || Object.keys(newValue).length > 0 ) ) {
+                                    Attributes.updateAttributes( keys.concat(responsive_id), valueProp, { type: 'file', file: newValue }, false, componentInstance );
+                                }
                             } }
                             value={ ( objectValue[responsive_id] && objectValue[responsive_id].file ) ? objectValue[responsive_id].file : false }
                             disableDropZone={ true }
@@ -239,7 +240,7 @@ export function renderImageVideo( componentInstance, type, args, id, label, keys
                             type={ 'text' }
                             value={ ( objectValue[responsive_id] && objectValue[responsive_id].embed ) ? objectValue[responsive_id].embed.url : '' }
                             onChange={ ( newValue ) =>
-                                updateAttributes( keys.concat(responsive_id), valueProp, { type: 'embed', embed: { url: newValue} }, false, componentInstance )
+                                Attributes.updateAttributes( keys.concat(responsive_id), valueProp, { type: 'embed', embed: { url: newValue} }, false, componentInstance )
                             }
                         />
                     </div>
@@ -273,5 +274,5 @@ export function renderImageVideo( componentInstance, type, args, id, label, keys
     else 
         videoControl.push( tabPanelResponsive[0].content );
     
-    return renderPanelComponent( id, label, videoControl, false );
+    return Attributes.renderPanelComponent( id, label, videoControl, false );
 }

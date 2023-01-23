@@ -1,28 +1,43 @@
 #editor {
 
-    .block-editor-block-list__block[data-type="custom/wpe-grid"] {
+    .editor-styles-wrapper.block-editor-writing-flow {
 
-        padding-top: 80px;
-        padding-bottom: 2rem;
+        .is-root-container.is-layout-flow {
 
-        .gridContainer {
+            .block-editor-block-list__block[data-type="custom/wpe-grid"] {
 
-            display: grid;
-            column-gap: 4px;
-            row-gap: 4px;
-            grid-auto-columns: 1fr;
-            grid-auto-flow: column;
+                padding-top: 50px;
+        
+                .gridContainer {
+        
+                    display: grid;
+                    padding: 4px;
+                    column-gap: 4px;
+                    row-gap: 4px;
+                    grid-auto-columns: 1fr;
+                    grid-auto-flow: column;
+        
+                    & > .block-editor-block-list__block[data-type="custom/wpe-column"] {
+                        width: 100% !important;
+                        max-width: 100% !important;
 
-            & > .block-editor-block-list__block[data-type="custom/wpe-column"] {
-                width: 100% !important;
-                max-width: 100% !important;
+                        .block-editor-block-list__block {
+                            width: 100% !important;
+                            max-width: 100% !important;
+                        }
+
+                        &:nth-child(2) {
+                            margin-top: 0;
+                        }
+                    }
+                }
+            }
+        
+            .block-editor-block-list__layout.is-root-container > .block-editor-block-variation-picker {
+                max-width: $max_width_main_column;
+                margin: auto;
+                margin-top: $base_padding;
             }
         }
-    }
-
-    .block-editor-block-list__layout.is-root-container > .block-editor-block-variation-picker {
-        max-width: $max_width_main_column;
-        margin: auto;
-        margin-top: $base_padding;
     }
 }

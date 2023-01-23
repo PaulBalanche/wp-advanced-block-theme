@@ -3,7 +3,7 @@ import {
     SelectControl
 } from '@wordpress/components';
 
-import { updateAttributes, removeEltRepeatable } from '../attributes';
+import { Attributes } from '../Static/Attributes';
 
 export function renderRelation( componentInstance, id, label, entity, keys, valueProp, objectValue, repeatable = false, required = false ) {
 
@@ -21,7 +21,7 @@ export function renderRelation( componentInstance, id, label, entity, keys, valu
                     isLink={true}
                     className="removeRepeatable"
                     onClick={ () =>
-                        removeEltRepeatable( keys, valueProp )
+                        Attributes.removeEltRepeatable( keys, valueProp )
                     }
                 >
                     Remove
@@ -40,7 +40,7 @@ export function renderRelation( componentInstance, id, label, entity, keys, valu
                 } )
             }
             onChange={ ( newValue ) =>
-                updateAttributes( keys, valueProp, newValue, false, componentInstance )
+                Attributes.updateAttributes( keys, valueProp, newValue, false, componentInstance )
             }
         />
     );

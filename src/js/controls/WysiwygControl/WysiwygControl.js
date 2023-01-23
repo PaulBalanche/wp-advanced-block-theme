@@ -5,8 +5,7 @@ import {
 } from '@wordpress/components';
 
 import { DraftEditor } from './DraftEditor'
-
-import { updateAttributes, removeEltRepeatable } from '../../attributes';
+import { Attributes } from '../../Static/Attributes';
 
 class WysiwygControl extends Component {
 
@@ -18,7 +17,7 @@ class WysiwygControl extends Component {
 
     handleChange( newContent) {
 
-        updateAttributes( this.props.keys, this.props.valueProp, newContent, false, this.props.componentInstance  );
+        Attributes.updateAttributes( this.props.keys, this.props.valueProp, newContent, false, this.props.componentInstance  );
     }
 
     getTypo() {
@@ -141,7 +140,7 @@ class WysiwygControl extends Component {
                         isLink={true}
                         className="removeRepeatable"
                         onClick={ () =>
-                            removeEltRepeatable( keys, valueProp )
+                            Attributes.removeEltRepeatable( keys, valueProp )
                         }
                     >
                         Remove
