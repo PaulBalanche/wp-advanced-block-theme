@@ -8,6 +8,7 @@ import {
 } from '@wordpress/block-editor';
 
 import { Attributes } from '../Static/Attributes';
+import { Render } from '../Static/Render';
 
 export function renderLink( componentInstance, id, label, keys, valueProp, objectValue, repeatable = false, required = false ) {
         
@@ -35,59 +36,54 @@ export function renderLink( componentInstance, id, label, keys, valueProp, objec
         );
     }
 
-    let inner = (
+    let inner = Render.fieldContainer( id,
         <div
-            key={ id + "-LinkControlBasicContainer"}
-            className="basicField"
+            key={ id + "-LinkControlComponentsBaseControl" }
+            className="components-base-control"
         >
             <div
-                key={ id + "-LinkControlComponentsBaseControl" }
-                className="components-base-control"
+                key={ id + "-LinkControlComponentsBaseControlField" }
+                className="components-base-control__field"
             >
                 <div
-                    key={ id + "-LinkControlComponentsBaseControlField" }
-                    className="components-base-control__field"
+                    key={ id + "-LinkControlContainer" }
+                    className="link-control-container"
                 >
-                    <div
-                        key={ id + "-LinkControlContainer" }
-                        className="link-control-container"
-                    >
-                        <TextControl
-                            key={ id + "-text" }
-                            label={ "Text" }
-                            type={ "text" }
-                            value={ objectValue.text }
-                            onChange={ ( newValue ) => {
-                                Attributes.updateAttributes( keys.concat('text'), valueProp, newValue, false, componentInstance );
-                            } }
-                        />
-                        <LinkControl
-                            key={ id + "-LinkControl" }
-                            className="wp-block-navigation-link__inline-link-input"
-                            value={ objectValue }
-                            settings={ [
-                                {
-                                    id: 'url',
-                                    title: 'URL ...',
-                                },
-                                {
-                                    id: 'opensInNewTab',
-                                    title: 'Open in new tab',
-                                }                        
-                            ] }
-                            onChange={ ( {
-                                url: newURL,
-                                opensInNewTab: newOpensInNewTab,
-                            } ) => {
-                                let newObjectValue = ( typeof newURL == 'string' ) ? { text: objectValue.text, url: newURL, opensInNewTab: newOpensInNewTab } : { text: objectValue.text };
-                                Attributes.updateAttributes( keys, valueProp, newObjectValue, false, componentInstance );
-                            } }
-                        />
-                    </div>
+                    <TextControl
+                        key={ id + "-text" }
+                        label={ "Text" }
+                        type={ "text" }
+                        value={ objectValue.text }
+                        onChange={ ( newValue ) => {
+                            Attributes.updateAttributes( keys.concat('text'), valueProp, newValue, false, componentInstance );
+                        } }
+                    />
+                    <LinkControl
+                        key={ id + "-LinkControl" }
+                        className="wp-block-navigation-link__inline-link-input"
+                        value={ objectValue }
+                        settings={ [
+                            {
+                                id: 'url',
+                                title: 'URL ...',
+                            },
+                            {
+                                id: 'opensInNewTab',
+                                title: 'Open in new tab',
+                            }                        
+                        ] }
+                        onChange={ ( {
+                            url: newURL,
+                            opensInNewTab: newOpensInNewTab,
+                        } ) => {
+                            let newObjectValue = ( typeof newURL == 'string' ) ? { text: objectValue.text, url: newURL, opensInNewTab: newOpensInNewTab } : { text: objectValue.text };
+                            Attributes.updateAttributes( keys, valueProp, newObjectValue, false, componentInstance );
+                        } }
+                    />
                 </div>
             </div>
         </div>
     );
 
-    return Attributes.renderPanelComponent( id, label, inner, false );
+    return Render.panelComponent( id, label, inner, false );
 }

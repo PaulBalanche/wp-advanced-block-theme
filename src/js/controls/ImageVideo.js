@@ -10,6 +10,7 @@ import {
 } from '@wordpress/components';
 
 import { Attributes } from '../Static/Attributes';
+import { Render } from '../Static/Render';
 
 export function renderImageVideo( componentInstance, type, args, id, label, keys, valueProp, objectValue, repeatable = false, required = false, responsive = false ) {
 
@@ -82,11 +83,7 @@ export function renderImageVideo( componentInstance, type, args, id, label, keys
                 labels.instructions = args.instructions[responsive_id]
             }
 
-            responsiveContent.push (
-                <div
-                    key={ id + "-MediaPlaceholderBasicContainer-" + responsive_id }
-                    className="basicField"
-                >
+            responsiveContent.push( Render.fieldContainer( id + "_" + responsive_id,
                     <MediaPlaceholder
                         key={ id + "-MediaPlaceholder-" + responsive_id }
                         onSelect={ ( value ) => {
@@ -107,7 +104,7 @@ export function renderImageVideo( componentInstance, type, args, id, label, keys
                         disableDropZone={ true }
                         labels={ labels }
                     >{ preview }</MediaPlaceholder>
-                </div>
+                )
             );
         }
         else if( type == 'video' ) {
@@ -139,14 +136,7 @@ export function renderImageVideo( componentInstance, type, args, id, label, keys
                 />
             ) );
 
-            responsiveContent.push(
-                <div
-                    key={ id + "-videoTypeBasicContainer-" + responsive_id }
-                    className="basicField"
-                >
-                    <VideoRadioControl />
-                </div>
-            );
+            responsiveContent.push( Render.fieldContainer( id + "_" + responsive_id, <VideoRadioControl /> ) );
 
             /**
              * File
@@ -194,11 +184,7 @@ export function renderImageVideo( componentInstance, type, args, id, label, keys
                     );
                 }
                 
-                responsiveContent.push (
-                    <div
-                        key={ id + "-MediaPlaceholderBasicContainer-" + responsive_id }
-                        className="basicField"
-                    >
+                responsiveContent.push ( Render.fieldContainer( id + "_" + responsive_id,
                         <MediaPlaceholder
                             key={ id + "-MediaPlaceholder-" + responsive_id }
                             onSelect={ ( value ) => {
@@ -221,7 +207,7 @@ export function renderImageVideo( componentInstance, type, args, id, label, keys
                             value={ ( objectValue[responsive_id] && objectValue[responsive_id].file ) ? objectValue[responsive_id].file : false }
                             disableDropZone={ true }
                         >{ preview }</MediaPlaceholder>
-                    </div>
+                    )
                 );
             }
 
@@ -229,11 +215,7 @@ export function renderImageVideo( componentInstance, type, args, id, label, keys
              * Embed
              */
             if( selected_option == 'embed' ) {
-                responsiveContent.push (
-                    <div
-                        key={ id + "-embedLinkBasicContainer-" + responsive_id }
-                        className="basicField"
-                    >
+                responsiveContent.push ( Render.fieldContainer( id + "_" + responsive_id,
                         <TextControl
                             key={ id + "-embedLink"}
                             label={ 'Embed link' }
@@ -243,7 +225,7 @@ export function renderImageVideo( componentInstance, type, args, id, label, keys
                                 Attributes.updateAttributes( keys.concat(responsive_id), valueProp, { type: 'embed', embed: { url: newValue} }, false, componentInstance )
                             }
                         />
-                    </div>
+                    )
                 );
             }
         }
@@ -274,5 +256,5 @@ export function renderImageVideo( componentInstance, type, args, id, label, keys
     else 
         videoControl.push( tabPanelResponsive[0].content );
     
-    return Attributes.renderPanelComponent( id, label, videoControl, false );
+    return Render.panelComponent( id, label, videoControl, false );
 }

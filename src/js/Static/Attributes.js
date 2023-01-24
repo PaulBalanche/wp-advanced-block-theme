@@ -1,12 +1,10 @@
 import {
-    Button,
-    TabPanel,
-    Panel,
-    PanelBody
+    Button
 } from '@wordpress/components';
 
 import { Devices } from '../Singleton/Devices';
 import { Controls } from './Controls'
+import { Render } from './Render'
 
 export class Attributes {
 
@@ -186,7 +184,7 @@ export class Attributes {
                         if( responsive ) {
     
                             fieldsetObject.push(
-                                Attributes.renderTabPanelComponent(
+                                Render.tabPanelComponent(
                                     fieldId,
                                     Object.keys( Devices.getInstance().getMediaQueries() ).map( ( layout ) => {
                                         return {
@@ -232,8 +230,11 @@ export class Attributes {
                         }
     
                         blocReturned.push(
-                            Attributes.renderPanelComponent( fieldId, label, fieldsetObject, false )
+                            Render.panelComponent( fieldId, label, fieldsetObject, false )
                         );
+                    }
+                    else {
+                        return;
                     }
                     break;
             }
@@ -262,58 +263,13 @@ export class Attributes {
             );
         }
         else {
-            blocReturned = (
-                <div
-                    key={ clientId + "-" + keys.join("-") + "-basicContainer"}
-                    className="basicField"
-                >
-                    { blocReturned }
-                </div>
-            );
+            blocReturned = Render.fieldContainer( clientId + "-" + keys.join("-"), blocReturned );
         }
     
         // Return
         return blocReturned;
     }
-    
-    static renderPanelComponent( id, label, inner, initialOpen = false ) {
-    
-        return (
-            <Panel
-                key={ id + "-panel" }
-            >
-                <PanelBody
-                    key={ id + "-PanelBody" }
-                    title={ label }
-                    initialOpen={ initialOpen }
-                >
-                    <div
-                        key={ id + "-panelBodyDivObject" }
-                        className="objectField components-base-control"
-                    >
-                        <div
-                            key={ id + "-panelBodySubDivObject" }
-                            className="objectField-content"
-                        > 
-                            { inner }
-                        </div>
-                    </div>
-                </PanelBody>
-            </Panel>
-        );
-    }
-    
-    static renderTabPanelComponent( id, tabs, inner, initialTabName = null  ) {
-    
-        return <TabPanel
-            key={ id + "-tabPanel" }
-            className="tab-panel-wpe-component"
-            activeClass="active-tab"
-            initialTabName={ initialTabName }
-            tabs={ tabs }
-        >{ inner }</TabPanel>;
-    }
-    
+
     static initComponentAttributes( attributes, props ) {
     
         for( const [key, value] of Object.entries(props) ) {       

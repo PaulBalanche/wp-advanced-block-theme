@@ -6,6 +6,7 @@ import {
 
 import { DraftEditor } from './DraftEditor'
 import { Attributes } from '../../Static/Attributes';
+import { Render } from '../../Static/Render';
 
 class WysiwygControl extends Component {
 
@@ -162,7 +163,7 @@ class WysiwygControl extends Component {
                         key={ id + "-WysiwygContainer" }
                         className="wysiwyg-container"
                     >
-                        <div className="components-base-control__label" key={ id + "-label" }>{ label }</div>
+                        { Render.label( id, label ) }
                         <DraftEditor id={ id } initialContent={ objectValue } onChange={ this.onChange } typo={ this.getTypo() } tools={ this.getTools() } />
                     </div>
                 </div>

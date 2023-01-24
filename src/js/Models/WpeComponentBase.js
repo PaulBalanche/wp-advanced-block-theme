@@ -8,6 +8,7 @@ import {
 } from '@wordpress/components';
 
 import { Attributes } from '../Static/Attributes';
+import { Render } from '../Static/Render';
 
 import { getBlockType } from '@wordpress/blocks';
 
@@ -210,7 +211,7 @@ export class WpeComponentBase extends Component {
                                 isColumnLayout={ true }
                                 className="wpe-component_edit_placeholder"
                             >
-                                { ( tabPanel.length > 1 ) ? Attributes.renderTabPanelComponent( this.props.clientId, tabPanel, function ( tabPanel ) { return tabPanel.content } ) : tabPanel[0].content }
+                                { ( tabPanel.length > 1 ) ? Render.tabPanelComponent( this.props.clientId, tabPanel, function ( tabPanel ) { return tabPanel.content } ) : tabPanel[0].content }
                             </Placeholder>
                         </div>
                         <div className='edit-zone__footer'>

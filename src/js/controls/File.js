@@ -7,6 +7,7 @@ import {
 } from '@wordpress/components';
 
 import { Attributes } from '../Static/Attributes';
+import { Render } from '../Static/Render';
 
 export function renderFile( componentInstance, type, id, label, keys, valueProp, objectValue, repeatable = false, required = false, responsive = false ) {
 
@@ -128,73 +129,68 @@ export function renderFile( componentInstance, type, id, label, keys, valueProp,
             </div>
         );
     }
-    let inner = (
-        <div
-            key={ id + "-MediaPlaceholderBasicContainer"}
-            className="basicField"
-        >
-            <MediaPlaceholder
-                key={ id }
-                onSelect={ ( value ) => {
+    let inner = Render.fieldContainer( id, blocReturned,
+        <MediaPlaceholder
+            key={ id }
+            onSelect={ ( value ) => {
 
-                    let newValue = undefined;
-                    switch( type ) {
-                        case "image":
-                            if( typeof value.id != 'undefined' ) {
-                                newValue = {
-                                    id: value.id,
-                                    preview: value.url
-                                };
+                let newValue = undefined;
+                switch( type ) {
+                    case "image":
+                        if( typeof value.id != 'undefined' ) {
+                            newValue = {
+                                id: value.id,
+                                preview: value.url
+                            };
+                        }
+                        break;
+
+                    case "video":
+                        if( typeof value.id != 'undefined' ) {
+                            newValue = {
+                                id: value.id,
+                                preview: value.icon,
+                                name: value.filename,
+                                mime: value.mime,
+                                size: value.filesizeInBytes
+                            };
+                        }
+                        break;
+                    
+                    case "file":
+                        if( typeof value.id != 'undefined' ) {
+                            newValue = {
+                                id: value.id,
+                                preview: value.icon,
+                                name: value.filename,
+                                mime: value.mime,
+                                size: value.filesizeInBytes
+                            };
+                        }
+                        break;
+
+                    case "gallery":
+                        newValue = [];
+                        value.forEach(image => {
+                            if( typeof image.id != 'undefined' ) {
+                                newValue.push( {
+                                    id: image.id,
+                                    preview: image.url
+                                } )
                             }
-                            break;
+                        });
+                        break;
+                }
 
-                        case "video":
-                            if( typeof value.id != 'undefined' ) {
-                                newValue = {
-                                    id: value.id,
-                                    preview: value.icon,
-                                    name: value.filename,
-                                    mime: value.mime,
-                                    size: value.filesizeInBytes
-                                };
-                            }
-                            break;
-                        
-                        case "file":
-                            if( typeof value.id != 'undefined' ) {
-                                newValue = {
-                                    id: value.id,
-                                    preview: value.icon,
-                                    name: value.filename,
-                                    mime: value.mime,
-                                    size: value.filesizeInBytes
-                                };
-                            }
-                            break;
-
-                        case "gallery":
-                            newValue = [];
-                            value.forEach(image => {
-                                if( typeof image.id != 'undefined' ) {
-                                    newValue.push( {
-                                        id: image.id,
-                                        preview: image.url
-                                    } )
-                                }
-                            });
-                            break;
-                    }
-
-                    if( typeof newValue != 'undefined' && ( typeof newValue != 'object' || Object.keys(newValue).length > 0 ) )
-                    Attributes.updateAttributes( keys, valueProp, newValue, false, componentInstance );
-                } }
-                multiple= { type == 'gallery' }
-                addToGallery= { type == 'gallery' && !! objectValue }
-                value={ objectValue }
-                disableDropZone={ true }
-            >{ preview }</MediaPlaceholder>
-        </div>
+                if( typeof newValue != 'undefined' && ( typeof newValue != 'object' || Object.keys(newValue).length > 0 ) )
+                Attributes.updateAttributes( keys, valueProp, newValue, false, componentInstance );
+            } }
+            multiple= { type == 'gallery' }
+            addToGallery= { type == 'gallery' && !! objectValue }
+            value={ objectValue }
+            disableDropZone={ true }
+        >{ preview }</MediaPlaceholder>
     );
 
-    return Attributes.renderPanelComponent( id, label, inner, false );
+    return Render.panelComponent( id, label, inner, false );
 }

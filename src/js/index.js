@@ -8,14 +8,6 @@ import layoutGrid               from '../../blocks/layout/wpe-grid/src/index'
 import layoutSlide              from '../../blocks/layout/wpe-slide/src/index'
 import layoutSlider             from '../../blocks/layout/wpe-slider/src/index'
 
-import { Devices } from './Singleton/Devices';
-import {
-    PanelBody,
-    Button,
-    ButtonGroup,
-    RangeControl
-} from '@wordpress/components';
-
 if( theme_spec?.metas?.backgroundColor ) {
     document.documentElement.style.setProperty('--abt-background-editor', theme_spec.metas.backgroundColor);
 }

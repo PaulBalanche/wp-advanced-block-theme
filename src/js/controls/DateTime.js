@@ -4,6 +4,7 @@ import {
 } from '@wordpress/components';
 
 import { Attributes } from '../Static/Attributes';
+import { Render } from '../Static/Render';
 
 export function renderDateTime( componentInstance, id, label, keys, valueProp, objectValue, repeatable = false, required = false ) {
 
@@ -46,7 +47,7 @@ export function renderDateTime( componentInstance, id, label, keys, valueProp, o
             key={ id + "-dateTimeContainer" }
             className="dateTime-container"
         >
-            <div className="components-base-control__label" key={ id + "-label" }>{ label }</div>
+            { Render.label( id, label ) }
             <MyDateTimePicker />
         </div>
     );

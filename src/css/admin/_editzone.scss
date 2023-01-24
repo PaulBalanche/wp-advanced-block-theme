@@ -115,17 +115,26 @@
             padding: 0;
             box-shadow: none;
             outline: none;
+            justify-content: flex-start;
     
             .components-placeholder__label {
                 margin-bottom: 20px;
             }
     
-            .basicField {
-        
-                .components-base-control__label, .components-input-control__label {
-                    padding-bottom: 0;
-                    margin-bottom: 8px;
-                }
+            .components-base-control__label, .components-input-control__label {
+                display: block;
+                text-transform: math-auto;
+                font-size: 12px;
+                font-weight: 500;
+                line-height: 1.4;
+                max-width: 100%;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                border-left: 3px solid #007cba;
+                padding: 7px 8px 5px 8px;
+                background: linear-gradient(90deg, rgb(245 245 245), transparent);
+                margin-bottom: 8px;
             }
         
             .tab-panel-wpe-component {
@@ -158,13 +167,20 @@
                 border-bottom: 1px solid #73b7d94d;
                 padding: 20px 0;
         
-                &:last-child {
+                &:not(.flex div ):last-child {
                     border-bottom: none;
                 }
         
                 .block-editor-media-placeholder {
                     box-shadow: none;
                     background: #f3f4f5;
+                }
+            }
+
+            .flex:last-child {
+
+                .basicField, .repeatableField {
+                    border-bottom: none;
                 }
             }
         
@@ -217,6 +233,18 @@
         
                     .objectField-content {
                         background: white;
+
+                        .flex {
+
+                            & > div {
+                                flex-grow: 1;
+                                margin-right: 4rem;
+                
+                                &:last-child {
+                                    margin-right: 0;
+                                }
+                            }
+                        }
                     }
         
                 }

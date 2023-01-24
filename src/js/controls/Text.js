@@ -4,7 +4,7 @@ import {
 } from '@wordpress/components';
 
 import { Attributes } from '../Static/Attributes';
-
+import { Render } from '../Static/Render';
 import { Devices } from '../Singleton/Devices';
 
 export function renderText( componentInstance, id, label, keys, valueProp, objectValue, isNumber = false, repeatable = false, required = false, responsive = false ) {
@@ -31,7 +31,7 @@ export function renderText( componentInstance, id, label, keys, valueProp, objec
 
     if( responsive ) {
 
-        let newInner = Attributes.renderTabPanelComponent(
+        let newInner = Render.tabPanelComponent(
                 id,
                 Object.keys( Devices.getInstance().getMediaQueries() ).map( ( layout ) => {
                     return {
