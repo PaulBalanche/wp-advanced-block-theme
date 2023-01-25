@@ -301,10 +301,12 @@ export class WpeComponentBase extends Component {
             editZone.push( EditZone.getInstance().render() );
         }
 
-        return <ButtonGroup
+        return <div
                 key={ this.props.clientId + "-EditZoneButtonGroup" }
-                className="abtButtonGroupEditZone"
-            >{ editZone }</ButtonGroup>
+                className="abtButtonGroupEditZoneContainer"
+            >
+                <div className='abtButtonGroupEditZone'>{ editZone }</div>
+            </div>
     }
 
     render() {

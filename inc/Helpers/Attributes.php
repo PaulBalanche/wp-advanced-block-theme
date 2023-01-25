@@ -24,6 +24,10 @@ class Attributes {
         if( isset($component_spec['props']) && is_array($component_spec['props']) && count($component_spec['props']) > 0 ) {
             foreach( $component_spec['props'] as $key_prop => $prop ) {
 
+                if( isset($attributes[$key_prop]) && ( ! isset($prop['repeatable']) || ! $prop['repeatable']) ) {
+                    self::setDefaultValue( $attributes, $key_prop, $prop );
+                }
+
                 switch( $prop['type'] ) {
                     
                     case 'boolean':
@@ -82,6 +86,32 @@ class Attributes {
 
          if( isset($prop['responsive']) && $prop['responsive'] ) {
             $attributes = [ 'media' =>  $attributes ];
+        }
+    }
+
+
+
+    /**
+     * Set default value if no value defined
+     * 
+     */
+    public static function setDefaultValue( &$attributes, $key_prop, $prop ) {
+
+        if( isset($prop['props']) && is_array($prop['props']) ) {
+
+            foreach( $prop['props'] as $key => $value ) {
+
+                if( is_array($value) && isset($value['default']) && ( ! isset($attributes[$key_prop][$key]) || $attributes[$key_prop][$key] == '' || $attributes[$key_prop][$key] == null || $attributes[$key_prop][$key] == 'null' ) ) {
+
+                    $attributes[$key_prop][$key] = $value['default'];
+                }
+            }
+        }
+        else {
+            if( is_array($prop) && isset($prop['default']) && ( ! isset($attributes[$key_prop]) || $attributes[$key_prop] == '' || $attributes[$key_prop] == null || $attributes[$key_prop] == 'null' ) ) {
+
+                $attributes[$key_prop] = $prop['default'];
+            }
         }
     }
 

@@ -79,6 +79,8 @@ export class Attributes {
         const clientId = componentInstance.props.clientId;
     
         prop.type = prop.type.toLowerCase();
+
+        prop.default = ( typeof prop.default != "undefined" ) ? prop.default : null;
     
         let blocReturned = [];
     
@@ -142,7 +144,7 @@ export class Attributes {
     
                 case 'select':
                 case 'color':
-                    blocReturned.push( Controls.render( 'Select', componentInstance, fieldId, label, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, responsive, { options: prop.options, } ) );
+                    blocReturned.push( Controls.render( 'Select', componentInstance, fieldId, label, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, responsive, { options: prop.options, default: prop.default } ) );
                     break;
                 
                 case 'radio':

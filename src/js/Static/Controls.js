@@ -41,7 +41,7 @@ export class Controls {
                 break;
                 
             case 'Select':
-                return  renderSelect( componentInstance, id, label, args.options, keys, valueProp, objectValue, repeatable, required );
+                return renderSelect( componentInstance, id, label, args.options, args.default, keys, valueProp, objectValue, repeatable, required );
                 break;
                 
             case 'Text':
