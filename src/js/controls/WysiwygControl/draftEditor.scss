@@ -27,7 +27,7 @@
         .DraftEditor-controls-row-inner {
 
             display: flex;
-            align-items: flex-start;
+            justify-content: space-between;
 
             .DraftEditor-styleButton {
 
@@ -50,6 +50,21 @@
                     border-color: #007cba;
               }
               
+        }
+    }
+
+    .toolbox {
+
+        display: flex;
+        align-items: center;
+        height: 34px;
+        border: 1px solid #ddd;
+        flex-grow: 1;
+        padding: 0 5px;
+
+        .components-button {
+            height: auto;
+            padding: 2px;
         }
     }
 

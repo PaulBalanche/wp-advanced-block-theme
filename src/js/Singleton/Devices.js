@@ -5,15 +5,19 @@ import {
     ButtonGroup
 } from '@wordpress/components';
 
+import { EditZone } from './EditZone';
+
 export class Devices {
     
     constructor() {
+
+        this.componentUsedToRender = false;
+
         this.componentInstance = {};
         this.mediaQueries = {};
         this.defaultMediaQuery = null;
         this.currentDevice = null;
-        this.alreadyRendered = false;
-
+    
         this.init();
     }
 
@@ -150,18 +154,18 @@ export class Devices {
         </>
     }
 
-    isFirstComponent( componentInstance ) {
+    render( clientId ) {
 
-        for( const [key, value] of Object.entries(this.getComponents()) ) {   
-            return ( key == componentInstance );
+        if( ! this.componentUsedToRender || this.componentUsedToRender == clientId ) {
+
+            this.componentUsedToRender = clientId;
+
+            return createPortal(
+                this.getButtonGroup(),
+                document.getElementById("devicesButtonGroupContainer")
+            );
         }
-    }
-
-    render() {
-
-        return createPortal(
-            this.getButtonGroup(),
-            document.getElementById("devicesButtonGroupContainer")
-        );
+        
+        return;
     }
 }

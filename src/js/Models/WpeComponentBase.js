@@ -13,41 +13,22 @@ import { Render } from '../Static/Render';
 import { getBlockType } from '@wordpress/blocks';
 
 import { EditZone } from '../Singleton/EditZone';
+import { Devices } from '../Singleton/Devices';
 
 export class WpeComponentBase extends Component {
 
 	constructor() {
         super( ...arguments );
 
-        this.state = {
-            editZone: false,
-            configMode: ( this?.props?.block_spec?.screenshot && this.props.block_spec.screenshot ) ? 1 : 2,
-            needPreviewUpdate: false
-        };
-
-        this.tabEnabledMode = [];
-        if( ! ( typeof this.props.disableButtonGroupMode != 'undefined' && this.props.disableButtonGroupMode ) ) {
-            this.initEnabledMode();
-        }
+        this.state = {};
 
         this.title = getBlockType(this.props.name).title;
     }
 
-    initEnabledMode () {
-
-        if( typeof this.props.current_user_can_edit_posts == 'undefined' || parseInt(this.props.current_user_can_edit_posts) ) {
-
-            if( this?.props?.block_spec?.screenshot && this.props.block_spec.screenshot ) {
-                this.tabEnabledMode.push(1);
-            }
-
-            this.tabEnabledMode.push(2);
-
-            if( this?.props?.block_spec?.props && typeof this.props.block_spec.props == 'object' && Object.keys(this.props.block_spec.props).length > 0 ) {
-                this.tabEnabledMode.push(3);
-            }
-        }
+    componentDidMount() {
+        Devices.getInstance().addComponent(this);
     }
+
 
     getAttribute( key ) {
 		return this.props.attributes[key];
@@ -55,51 +36,6 @@ export class WpeComponentBase extends Component {
 
     setAttributes( attributes ) {
         this.props.setAttributes( attributes );
-    }
-
-    renderButtonGroupMode() {
-
-        let modeDefinition = {
-            1: 'Screenshot',
-            2: 'Live',
-            3: 'Edit'
-        }
-
-        if( typeof this.tabEnabledMode == 'object' && this.tabEnabledMode.length > 0 ) {
-
-            let buttons = [];
-            for( var i in modeDefinition ) {
-
-                let index = parseInt(i);
-
-                if( this.tabEnabledMode.includes(index) ) {
-                    buttons.push(
-                        <Button
-                            key={ this.props.clientId + "-buttonConfigMode_" + index }
-                            isPressed={ this.state.configMode == index }
-                            onMouseDown={ () => {
-                                this.setState( { configMode: index } )
-                            } }
-                        >{ modeDefinition[index] }</Button>
-                    );
-                }
-            }
-
-            return (
-                <div
-                    className="buttonGroupComponentModeContainer"
-                    key={ this.props.clientId + "-buttonGroupComponentModeContainer" }
-                >
-                    <ButtonGroup
-                        key={ this.props.clientId + "-buttonGroupComponentMode" }
-                    >
-                     { buttons }
-                    </ButtonGroup>
-                </div>
-            );
-        }
-        
-        return null;
     }
 
     propsExists() {
@@ -215,6 +151,7 @@ export class WpeComponentBase extends Component {
                             </Placeholder>
                         </div>
                         <div className='edit-zone__footer'>
+                            { typeof this.state.needPreviewUpdate != 'undefined' && 
                             <Button
                                 key={ this.props.clientId + "-buttonUpdatePreview" }
                                 className="abtButtonUpdatePreview"
@@ -222,7 +159,7 @@ export class WpeComponentBase extends Component {
                                 onMouseDown={ () => {
                                     this.setState( { needPreviewUpdate: true } )
                                 } }
-                            ><Dashicon icon="saved" />Update preview</Button>
+                            ><Dashicon icon="saved" />Update preview</Button> }
                             <Button
                                 key={ this.props.clientId + "-buttonCloseEditZone" }
                                 className="abtButtonCloseEditZone"
@@ -246,34 +183,46 @@ export class WpeComponentBase extends Component {
         return null;
     }
 
-    renderScreenshot () {
-
-        if( this.props.block_spec.screenshot ) {
-            return <img
-                key={ this.props.clientId + "-screen" }
-                src={ this.props.block_spec.screenshot }
-            />
-        }
-
-        return null;
-    }
-
     liveRendering() {
         return null;
     }
 
-    renderEditZone( content = null ) {
+    renderEditZone( content = null, titleOnly = false ) {
 
         let  editZone = [];
 
         // Title
         editZone.push(<div key={ this.props.clientId + "_EditZoneTitle" } className="title">{ this.title }</div>);
         
-        // Separator
-        editZone.push(<div key={ this.props.clientId + "_EditZoneSeparator1" } className="separator"></div>);
+        if( ! titleOnly ) {
 
-        // Edit button
-        editZone.push(<Button
+            // Separator
+            editZone.push(<div key={ this.props.clientId + "_EditZoneSeparator1" } className="separator"></div>);
+
+            // Edit button
+            editZone.push( this.renderButtonEditZone() );
+
+            // Additionnal content
+            if( content != null ) {
+
+                // Separator
+                editZone.push(<div key={ this.props.clientId + "_EditZoneSeparator2" } className="separator"></div>);
+                
+                // Additionnal content
+                editZone.push(content);
+            }
+        }
+
+        return <div
+                key={ this.props.clientId + "-EditZoneButtonGroup" }
+                className="abtButtonGroupEditZoneContainer"
+            >
+                <div className='abtButtonGroupEditZone'>{ editZone }</div>
+            </div>
+    }
+
+    renderButtonEditZone( verbose = 'Edit' ) {
+        return <Button
             key={ this.props.clientId + "-EditZoneButtonEdition" }
             className="abtButtonEditZone"
             variant="primary"
@@ -285,32 +234,22 @@ export class WpeComponentBase extends Component {
                     EditZone.getInstance().addComponent(this);
                 }
             } }
-        ><Dashicon icon="edit" /> Edit content</Button>);
-
-        // Additionnal content
-        if( content != null ) {
-
-            // Separator
-            editZone.push(<div key={ this.props.clientId + "_EditZoneSeparator2" } className="separator"></div>);
-            
-            // Additionnal content
-            editZone.push(content);
-        }
-
-        if( EditZone.getInstance().hasComponent(this) ) {
-            editZone.push( EditZone.getInstance().render() );
-        }
-
-        return <div
-                key={ this.props.clientId + "-EditZoneButtonGroup" }
-                className="abtButtonGroupEditZoneContainer"
-            >
-                <div className='abtButtonGroupEditZone'>{ editZone }</div>
-            </div>
+        ><Dashicon icon="edit" /> { verbose } content</Button>
     }
 
     render() {
-        return this.liveRendering()
+
+        var render = [];
+
+        render.push( Devices.getInstance().render(this.props.clientId) );
+        
+        render.push( this.liveRendering() );
+
+        if( EditZone.getInstance().hasComponent(this) ) {
+            render.push( EditZone.getInstance().render() );
+        }
+        
+        return render;
     }
 
 

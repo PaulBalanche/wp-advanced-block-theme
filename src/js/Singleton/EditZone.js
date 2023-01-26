@@ -3,6 +3,7 @@ import { createPortal } from '@wordpress/element';
 export class EditZone {
     
     constructor() {
+
         this.componentInstance = {};
 
         this.init();
@@ -22,15 +23,34 @@ export class EditZone {
         const componentEditZone = document.createElement("div");
         componentEditZone.setAttribute("id", "abt-component-edit-zone");
         componentEditZone.setAttribute("class", "hide");
+
+        const componentEditZoneLoader = document.createElement("div");
+        componentEditZoneLoader.setAttribute("class", "loader");
+
+        componentEditZone.appendChild(componentEditZoneLoader);
         document.querySelector('.interface-interface-skeleton__body').appendChild(componentEditZone);
     }
 
     addComponent( componentInstance ) {
 
-        this.componentInstance[componentInstance.props.clientId] = componentInstance;
+        if( ! document.querySelector("#abt-component-edit-zone").classList.contains("hide") ) {
+
+            document.querySelector("#abt-component-edit-zone").classList.add("updating");
+            document.querySelector("#abt-component-edit-zone .loader").style.display = 'block';
+        }
+
         this.clean();
+        this.componentInstance[componentInstance.props.clientId] = componentInstance;
+        
         document.querySelector("#abt-component-edit-zone").classList.remove("hide");
         document.querySelector(".interface-interface-skeleton").classList.add("editZoneEnabled");
+
+        setTimeout( () => {
+            document.querySelector("#abt-component-edit-zone").classList.remove("updating");
+        });  
+        setTimeout( () => {
+            document.querySelector("#abt-component-edit-zone .loader").style.display = 'none';
+        }, 1000);        
     } 
     
     removeComponent( componentInstance ) {
@@ -50,17 +70,18 @@ export class EditZone {
 
     clean() {
 
-        let index = 0;
-        const length = Object.keys(this.componentInstance).length;
-        if( length > 1 ) {
+        // let index = 0;
+        // const length = Object.keys(this.componentInstance).length;
+        // if( length > 1 ) {
 
-            for( const [key, value] of Object.entries(this.componentInstance) ) {
-                index++;
-                if( index < length ) {
-                    delete this.componentInstance[key];
-                }
-            }
-        }
+        //     for( const [key, value] of Object.entries(this.componentInstance) ) {
+        //         index++;
+        //         if( index < length ) {
+        //             delete this.componentInstance[key];
+        //         }
+        //     }
+        // }
+        this.componentInstance = {};
     }
 
     hide() {

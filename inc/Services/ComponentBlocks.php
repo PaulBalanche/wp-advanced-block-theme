@@ -211,9 +211,23 @@ class ComponentBlocks extends ServiceBase {
         }
 
         $componentBlockInstance = Main::getInstance()->get_component_block_instance( $request['component_id'] );
-        if( $componentBlockInstance->attributes_autosaves_post( $attributes, $post_id, $client_id ) ) {
-            wp_send_json_success();
-        }
+
+         // Check missing required attributes
+         $missing_required_attributes = $componentBlockInstance->get_missing_required_attributes( $attributes );
+         if( count($missing_required_attributes) == 0 ) {
+
+            if( $componentBlockInstance->attributes_autosaves_post( $attributes, $post_id, $client_id ) ) {
+                wp_send_json_success();
+            }
+         }
+         else {
+
+            if( count($attributes) == 1 && isset($attributes['id_component']) ) {
+                wp_send_json_error( [ 'isEmpty' => true ]  );
+            }
+
+            wp_send_json_error( 'Edit all required fields.' );
+         }
         
         wp_send_json_error( 'Error during attributes_autosaves_post' );
     }

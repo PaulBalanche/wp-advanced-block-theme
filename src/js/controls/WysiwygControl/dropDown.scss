@@ -1,7 +1,7 @@
 .wpe-dropdown-container {
-
-    width: 300px;
+    
     margin-right: 10px;
+    flex-grow: 1;
 
     &:last-child {
         margin-right: 0;
@@ -21,6 +21,9 @@
     
             .wpe-dropdown-header-title {
                 padding: 8px 14px 0 14px;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                white-space: nowrap;
             }
     
             .dashicon {
@@ -72,6 +75,12 @@
     
                 &:hover {
                     background: rgb(240 240 240);
+                }
+
+                .wpe-dropdown-list-item-inner {
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                    white-space: nowrap;
                 }
             }
         }

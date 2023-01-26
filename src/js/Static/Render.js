@@ -6,14 +6,15 @@ import {
 
 export class Render {
 
-    static tabPanelComponent( id, tabs, inner, initialTabName = null  ) {
-    
+    static tabPanelComponent( id, tabs, inner, initialTabName = null, onSelect = null ) {
+
         return <TabPanel
             key={ id + "-tabPanel" }
             className="tab-panel-wpe-component"
             activeClass="active-tab"
             initialTabName={ initialTabName }
             tabs={ tabs }
+            onSelect={ onSelect }
         >{ inner }</TabPanel>;
     }
 

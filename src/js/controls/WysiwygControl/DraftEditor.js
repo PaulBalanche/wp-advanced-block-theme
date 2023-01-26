@@ -407,7 +407,7 @@ export class DraftEditor extends Component {
                             editorState={this.state.editorState}
                             onToggle={this.toggleColorStyle}
                         />
-                        <div className="border-style">
+                        <div className="toolbox">
                             <LinkControl
                                 editorState={this.state.editorState}
                                 onSubmit={this.confirmLink}

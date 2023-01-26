@@ -44,7 +44,10 @@
             box-shadow: none;
         }
 
-        
+        &[data-type="custom/wpe-column"]:has( .block-editor-block-list__block:hover):after,
+        &[data-type="custom/wpe-column"]:has( .is-selected):after {
+            border: 1px dashed rgb(0 124 186 / 50%);
+        }
 
         // &:hover,
         // &:focus,
@@ -62,4 +65,15 @@
     // .box:has(> .box:hover):after {
     //     opacity: 0;
     // }
+}
+
+body.is-dragging-components-draggable {
+
+    #editor {
+
+        .block-editor-block-list__block::after {
+            border: 1px dashed rgb(0 124 186 / 50%) !important;
+        }
+    }
+    
 }

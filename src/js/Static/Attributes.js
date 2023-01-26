@@ -279,6 +279,11 @@ export class Attributes {
             if( typeof value != 'object' || value == null )
                 continue;
     
+            if( typeof value.type == 'undefined' ) {
+                console.log(value);
+                console.log(attributes);
+                console.log(props);
+            }
             let currentType = ( typeof value.repeatable != 'undefined' && value.repeatable ) ? 'array' : value.type.toLowerCase();
             currentType = ( typeof value.responsive != 'undefined' && value.responsive ) ? 'object' : currentType;
             

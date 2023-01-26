@@ -28,47 +28,50 @@ class Attributes {
                     self::setDefaultValue( $attributes, $key_prop, $prop );
                 }
 
-                switch( $prop['type'] ) {
+                if( isset($prop['type']) ) {
                     
-                    case 'boolean':
-                        Boolean::format( $attributes, $key_prop, $prop );
-                        break;
+                    switch( $prop['type'] ) {
+                        
+                        case 'boolean':
+                            Boolean::format( $attributes, $key_prop, $prop );
+                            break;
 
-                    case 'image':
-                        Image::format( $attributes, $key_prop, $prop );
-                        break;
+                        case 'image':
+                            Image::format( $attributes, $key_prop, $prop );
+                            break;
 
-                    case 'gallery':
-                        Gallery::format( $attributes, $key_prop, $prop );
-                        break;
-                    
-                    case 'video':
-                        Video::format( $attributes, $key_prop, $prop );
-                        break;
+                        case 'gallery':
+                            Gallery::format( $attributes, $key_prop, $prop );
+                            break;
+                        
+                        case 'video':
+                            Video::format( $attributes, $key_prop, $prop );
+                            break;
 
-                    case 'file':
-                        File::format( $attributes, $key_prop, $prop );
-                        break;
+                        case 'file':
+                            File::format( $attributes, $key_prop, $prop );
+                            break;
 
-                    case 'relation':
-                        Relation::format( $attributes, $key_prop, $prop, $component_spec['id'] );
-                        break;
+                        case 'relation':
+                            Relation::format( $attributes, $key_prop, $prop, $component_spec['id'] );
+                            break;
 
-                    case 'object':
-                        RecursiveObject::format( $attributes, $key_prop, $prop );
-                        break;
+                        case 'object':
+                            RecursiveObject::format( $attributes, $key_prop, $prop );
+                            break;
 
-                    case 'link':
-                        Link::format( $attributes, $key_prop, $prop );
-                        break;
+                        case 'link':
+                            Link::format( $attributes, $key_prop, $prop );
+                            break;
 
-                    case 'date':
-                        Date::format( $attributes, $key_prop, $prop );
-                        break;
+                        case 'date':
+                            Date::format( $attributes, $key_prop, $prop );
+                            break;
 
-                    case 'wysiwyg':
-                        Wysiwyg::format( $attributes, $key_prop, $prop );
-                        break;
+                        case 'wysiwyg':
+                            Wysiwyg::format( $attributes, $key_prop, $prop );
+                            break;
+                    }
                 }
             }
         }
