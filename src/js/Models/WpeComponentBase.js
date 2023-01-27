@@ -245,7 +245,9 @@ export class WpeComponentBase extends Component {
         
         render.push( this.liveRendering() );
 
+        console.log('hasComponent');
         if( EditZone.getInstance().hasComponent(this) ) {
+            console.log('yes!');
             render.push( EditZone.getInstance().render() );
         }
         

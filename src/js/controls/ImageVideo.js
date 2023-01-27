@@ -83,7 +83,7 @@ export function renderImageVideo( componentInstance, type, args, id, label, keys
                 labels.instructions = args.instructions[responsive_id]
             }
 
-            responsiveContent.push( Render.fieldContainer( id + "_" + responsive_id,
+            responsiveContent.push( Render.fieldContainer( id + "_image_" + responsive_id,
                     <MediaPlaceholder
                         key={ id + "-MediaPlaceholder-" + responsive_id }
                         onSelect={ ( value ) => {
@@ -136,7 +136,7 @@ export function renderImageVideo( componentInstance, type, args, id, label, keys
                 />
             ) );
 
-            responsiveContent.push( Render.fieldContainer( id + "_" + responsive_id, <VideoRadioControl /> ) );
+            responsiveContent.push( Render.fieldContainer( id + "_video_" + responsive_id, <VideoRadioControl /> ) );
 
             /**
              * File
@@ -184,7 +184,7 @@ export function renderImageVideo( componentInstance, type, args, id, label, keys
                     );
                 }
                 
-                responsiveContent.push ( Render.fieldContainer( id + "_" + responsive_id,
+                responsiveContent.push ( Render.fieldContainer( id + "_file_" + responsive_id,
                         <MediaPlaceholder
                             key={ id + "-MediaPlaceholder-" + responsive_id }
                             onSelect={ ( value ) => {
@@ -215,7 +215,7 @@ export function renderImageVideo( componentInstance, type, args, id, label, keys
              * Embed
              */
             if( selected_option == 'embed' ) {
-                responsiveContent.push ( Render.fieldContainer( id + "_" + responsive_id,
+                responsiveContent.push ( Render.fieldContainer( id + "_embed_" + responsive_id,
                         <TextControl
                             key={ id + "-embedLink"}
                             label={ 'Embed link' }

@@ -14,16 +14,7 @@ export function renderDateTime( componentInstance, id, label, keys, valueProp, o
         label = (
             <>
                 { label }
-                <Button
-                    key={ id + "-repeatableRemoveElt" }
-                    isLink={true}
-                    className="removeRepeatable"
-                    onClick={ () =>
-                        Attributes.removeEltRepeatable( keys, valueProp )
-                    }
-                >
-                    Remove
-                </Button>
+                { Render.buttonRemoveRepeatableElt( id, () => { Attributes.removeEltRepeatable( keys, valueProp, componentInstance ) } ) }
             </>
         );
     }

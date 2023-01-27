@@ -41,6 +41,8 @@ export class EditZone {
 
         this.clean();
         this.componentInstance[componentInstance.props.clientId] = componentInstance;
+
+        console.log(this.componentInstance);
         
         document.querySelector("#abt-component-edit-zone").classList.remove("hide");
         document.querySelector(".interface-interface-skeleton").classList.add("editZoneEnabled");
@@ -90,7 +92,7 @@ export class EditZone {
     }
   
     render() {
-console.log(this.componentInstance);
+
         let children = [];
         for( const [key, value] of Object.entries(this.componentInstance) ) {
             children.push( value.renderEditMode() );

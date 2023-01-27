@@ -129,7 +129,7 @@ export function renderFile( componentInstance, type, id, label, keys, valueProp,
             </div>
         );
     }
-    let inner = Render.fieldContainer( id, blocReturned,
+    let inner = Render.fieldContainer( id + '_file',
         <MediaPlaceholder
             key={ id }
             onSelect={ ( value ) => {

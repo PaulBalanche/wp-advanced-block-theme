@@ -17,6 +17,8 @@ export class Attributes {
     }
     
     static removeEltRepeatable( arrayKey, currentValueProp, componentInstance ) {
+        console.log(arrayKey);
+        console.log(currentValueProp);
         Attributes.updateAttributes( arrayKey, currentValueProp, false, false, componentInstance );
     }
     
@@ -217,16 +219,7 @@ export class Attributes {
                             label = (
                                 <>
                                     { label }
-                                    <Button
-                                        key={ fieldId + "-repeatableRemoveElt" }
-                                        isLink={true}
-                                        className="removeRepeatable"
-                                        onClick={ () =>
-                                            Attributes.removeEltRepeatable( tempKeyObject, valueProp, componentInstance )
-                                        }
-                                    >
-                                        Remove
-                                    </Button>
+                                    { Render.buttonRemoveRepeatableElt( fieldId, () => { Attributes.removeEltRepeatable( tempKeyObject, valueProp, componentInstance ) } ) }
                                 </>
                             );
                         }
@@ -244,16 +237,7 @@ export class Attributes {
     
         // Add repeatable button
         if( !! repeatable ) {
-            blocReturned.push(
-                <Button
-                    key={ clientId + "-" + keys.join("-") + "-repeatableAddElt" }
-                    isSecondary
-                    isSmall
-                    onClick={ () => 
-                        Attributes.addEltToRepeatable( keys, valueProp, currentValueAttribute, false, componentInstance )
-                    }
-                >Add</Button>
-            );
+            blocReturned.push( Render.buttonAddRepeatableElt( clientId + "-" + keys.join("-"), () => { Attributes.addEltToRepeatable( keys, valueProp, currentValueAttribute, false, componentInstance ) } ) );
     
             blocReturned = (
                 <div

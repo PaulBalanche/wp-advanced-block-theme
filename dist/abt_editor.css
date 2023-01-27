@@ -511,7 +511,8 @@ body.is-dragging-components-draggable #editor .block-editor-block-list__block::a
   margin-bottom: 20px;
 }
 #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-base-control__label, #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-input-control__label {
-  display: block;
+  display: flex;
+  align-items: center;
   text-transform: math-auto;
   font-size: 13px;
   font-weight: 500;
@@ -575,12 +576,14 @@ body.is-dragging-components-draggable #editor .block-editor-block-list__block::a
   margin: 0;
 }
 #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-panel .components-panel__body .components-panel__body-title .components-button {
-  display: block;
+  display: flex;
+  align-items: center;
 }
 #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-panel .components-panel__body .components-panel__body-title .components-button:focus {
   box-shadow: none;
 }
-#abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-panel .components-panel__body .components-panel__body-title .removeRepeatable {
+#abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-panel .components-panel__body .components-panel__body-title .repeatableRemoveElt {
+  display: inline-flex;
   right: 55px;
 }
 #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-panel .components-panel__body .components-panel__body-title:hover {
@@ -602,27 +605,22 @@ body.is-dragging-components-draggable #editor .block-editor-block-list__block::a
 #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-panel .components-panel__body .objectField-content .flex > div:last-child {
   margin-right: 0;
 }
-#abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-panel:hover .removeRepeatable {
+#abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-panel:hover .repeatableRemoveElt {
   visibility: visible;
 }
 #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-base-control {
   position: relative;
 }
-#abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-base-control .removeRepeatable {
+#abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-base-control .repeatableRemoveElt {
   visibility: hidden;
   position: absolute;
-  top: 0;
   right: 0;
-  padding-right: 0;
 }
-#abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-base-control .components-select-control__input {
-  padding: 0px 26px 0px 15px;
-  height: 40px;
+#abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-base-control .repeatableRemoveElt .dashicon {
+  font-size: 1rem;
+  height: auto;
 }
-#abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-base-control .components-input-control__backdrop {
-  border-color: #e0e0e0;
-}
-#abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-base-control__field:hover .removeRepeatable {
+#abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-base-control__field:hover .repeatableRemoveElt {
   visibility: visible;
 }
 #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-placeholder .media-preview-container {
@@ -663,7 +661,7 @@ body.is-dragging-components-draggable #editor .block-editor-block-list__block::a
 #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .link-control-container .components-text-control__input {
   width: auto;
 }
-#abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .link-control-container .components-button.removeRepeatable {
+#abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .link-control-container .components-button.repeatableRemoveElt {
   right: 16px;
 }
 #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .link-control-container .block-editor-link-control {
@@ -687,6 +685,38 @@ body.is-dragging-components-draggable #editor .block-editor-block-list__block::a
   justify-content: flex-end;
   flex-direction: column;
   align-items: flex-end;
+}
+#abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .repeatableAddElt {
+  border: 1px dashed #e0e0e0;
+  width: 100%;
+  box-shadow: none;
+  color: rgb(200, 200, 200);
+  justify-content: center;
+}
+#abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .repeatableAddElt .dashicon {
+  font-size: 1rem;
+  height: auto;
+  margin-right: 3px;
+  transition: none;
+}
+#abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .repeatableAddElt:hover {
+  color: var(--wp-admin-theme-color);
+  border-color: var(--wp-admin-theme-color);
+}
+#abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder textarea {
+  border-color: #e0e0e0;
+  padding: 12px;
+}
+#abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-text-control__input {
+  border-color: #e0e0e0;
+  padding: 12px;
+}
+#abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-select-control__input {
+  padding: 0px 26px 0px 15px;
+  height: 42px;
+}
+#abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-input-control__backdrop {
+  border-color: #e0e0e0;
 }
 #abt-component-edit-zone .edit-zone__footer {
   display: flex;

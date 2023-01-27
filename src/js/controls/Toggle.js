@@ -4,6 +4,7 @@ import {
 } from '@wordpress/components';
 
 import { Attributes } from '../Static/Attributes';
+import { Render } from '../Static/Render';
 
 export function renderToggle( componentInstance, id, label, help, keys, valueProp, objectValue, repeatable = false, required = false ) {
 
@@ -13,16 +14,7 @@ export function renderToggle( componentInstance, id, label, help, keys, valuePro
         label = (
             <>
                 { label }
-                <Button
-                    key={ id + "-repeatableRemoveElt" }
-                    isLink={true}
-                    className="removeRepeatable"
-                    onClick={ () =>
-                        Attributes.removeEltRepeatable( keys, valueProp )
-                    }
-                >
-                    Remove
-                </Button>
+                { Render.buttonRemoveRepeatableElt( id, () => { Attributes.removeEltRepeatable( keys, valueProp, componentInstance ) } ) }
             </>
         );
     }

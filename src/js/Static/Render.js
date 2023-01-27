@@ -1,7 +1,9 @@
 import {
     Panel,
     PanelBody,
-    TabPanel
+    TabPanel,
+    Button,
+    Dashicon
 } from '@wordpress/components';
 
 export class Render {
@@ -67,4 +69,26 @@ export class Render {
         </div>
     }
 
+    static buttonAddRepeatableElt( id, onclick ) {
+        
+        return <Button
+            key={ id + "-repeatableAddElt" }
+            className="repeatableAddElt"
+            onClick={onclick}
+            variant="secondary"
+        ><Dashicon icon="insert" /> Add</Button>
+    }
+
+    static buttonRemoveRepeatableElt( id, onclick ) {
+        
+        return <Button
+            key={ id + "-repeatableRemoveElt" }
+            className="repeatableRemoveElt"
+            onClick={onclick}
+            variant="secondary"
+            isSmall
+        >
+            <Dashicon icon="no-alt" /> Remove
+        </Button>
+    }
 }

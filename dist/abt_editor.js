@@ -7521,12 +7521,9 @@ function renderDateTime(componentInstance, id, label, keys, valueProp, objectVal
   let required = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : false;
   label = required ? label + '*' : label;
   if (repeatable) {
-    label = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, label, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
-      key: id + "-repeatableRemoveElt",
-      isLink: true,
-      className: "removeRepeatable",
-      onClick: () => _Static_Attributes__WEBPACK_IMPORTED_MODULE_2__.Attributes.removeEltRepeatable(keys, valueProp)
-    }, "Remove"));
+    label = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, label, _Static_Render__WEBPACK_IMPORTED_MODULE_3__.Render.buttonRemoveRepeatableElt(id, () => {
+      _Static_Attributes__WEBPACK_IMPORTED_MODULE_2__.Attributes.removeEltRepeatable(keys, valueProp, componentInstance);
+    }));
   }
   const MyDateTimePicker = withState({
     date: objectValue ? objectValue : new Date()
@@ -7658,7 +7655,7 @@ function renderFile(componentInstance, type, id, label, keys, valueProp, objectV
       }
     }, "Remove"));
   }
-  let inner = _Static_Render__WEBPACK_IMPORTED_MODULE_4__.Render.fieldContainer(id, blocReturned, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.MediaPlaceholder, {
+  let inner = _Static_Render__WEBPACK_IMPORTED_MODULE_4__.Render.fieldContainer(id + '_file', (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.MediaPlaceholder, {
     key: id,
     onSelect: value => {
       let newValue = undefined;
@@ -7800,7 +7797,7 @@ function renderImageVideo(componentInstance, type, args, id, label, keys, valueP
       if (args.instructions && typeof args.instructions == 'object' && args.instructions[responsive_id]) {
         labels.instructions = args.instructions[responsive_id];
       }
-      responsiveContent.push(_Static_Render__WEBPACK_IMPORTED_MODULE_4__.Render.fieldContainer(id + "_" + responsive_id, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.MediaPlaceholder, {
+      responsiveContent.push(_Static_Render__WEBPACK_IMPORTED_MODULE_4__.Render.fieldContainer(id + "_image_" + responsive_id, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.MediaPlaceholder, {
         key: id + "-MediaPlaceholder-" + responsive_id,
         onSelect: value => {
           let newValue = undefined;
@@ -7852,7 +7849,7 @@ function renderImageVideo(componentInstance, type, args, id, label, keys, valueP
           }
         });
       });
-      responsiveContent.push(_Static_Render__WEBPACK_IMPORTED_MODULE_4__.Render.fieldContainer(id + "_" + responsive_id, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(VideoRadioControl, null)));
+      responsiveContent.push(_Static_Render__WEBPACK_IMPORTED_MODULE_4__.Render.fieldContainer(id + "_video_" + responsive_id, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(VideoRadioControl, null)));
 
       /**
        * File
@@ -7883,7 +7880,7 @@ function renderImageVideo(componentInstance, type, args, id, label, keys, valueP
             }, false, componentInstance)
           }, "Remove"));
         }
-        responsiveContent.push(_Static_Render__WEBPACK_IMPORTED_MODULE_4__.Render.fieldContainer(id + "_" + responsive_id, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.MediaPlaceholder, {
+        responsiveContent.push(_Static_Render__WEBPACK_IMPORTED_MODULE_4__.Render.fieldContainer(id + "_file_" + responsive_id, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.MediaPlaceholder, {
           key: id + "-MediaPlaceholder-" + responsive_id,
           onSelect: value => {
             let newValue = undefined;
@@ -7912,7 +7909,7 @@ function renderImageVideo(componentInstance, type, args, id, label, keys, valueP
        * Embed
        */
       if (selected_option == 'embed') {
-        responsiveContent.push(_Static_Render__WEBPACK_IMPORTED_MODULE_4__.Render.fieldContainer(id + "_" + responsive_id, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.TextControl, {
+        responsiveContent.push(_Static_Render__WEBPACK_IMPORTED_MODULE_4__.Render.fieldContainer(id + "_embed_" + responsive_id, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.TextControl, {
           key: id + "-embedLink",
           label: 'Embed link',
           type: 'text',
@@ -7981,14 +7978,11 @@ function renderLink(componentInstance, id, label, keys, valueProp, objectValue) 
   }
   label = required ? label + '*' : label;
   if (repeatable) {
-    label = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, label, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
-      key: id + "-repeatableRemoveElt",
-      isLink: true,
-      className: "removeRepeatable",
-      onClick: () => _Static_Attributes__WEBPACK_IMPORTED_MODULE_3__.Attributes.removeEltRepeatable(keys, valueProp)
-    }, "Remove"));
+    label = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, label, _Static_Render__WEBPACK_IMPORTED_MODULE_4__.Render.buttonRemoveRepeatableElt(id, () => {
+      _Static_Attributes__WEBPACK_IMPORTED_MODULE_3__.Attributes.removeEltRepeatable(keys, valueProp, componentInstance);
+    }));
   }
-  let inner = _Static_Render__WEBPACK_IMPORTED_MODULE_4__.Render.fieldContainer(id, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  let inner = _Static_Render__WEBPACK_IMPORTED_MODULE_4__.Render.fieldContainer(id + '_link', (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     key: id + "-LinkControlComponentsBaseControl",
     className: "components-base-control"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -8052,8 +8046,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _Static_Attributes__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Static/Attributes */ "./src/js/Static/Attributes.js");
-/* harmony import */ var _wordpress_compose__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/compose */ "@wordpress/compose");
-/* harmony import */ var _wordpress_compose__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_compose__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _Static_Render__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Static/Render */ "./src/js/Static/Render.js");
+/* harmony import */ var _wordpress_compose__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/compose */ "@wordpress/compose");
+/* harmony import */ var _wordpress_compose__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_wordpress_compose__WEBPACK_IMPORTED_MODULE_4__);
+
 
 
 
@@ -8064,14 +8060,11 @@ function renderRadio(componentInstance, id, label, options, keys, valueProp, obj
   if (typeof options == 'undefined') return null;
   label = required ? label + '*' : label;
   if (repeatable) {
-    label = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, label, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
-      key: id + "-repeatableRemoveElt",
-      isLink: true,
-      className: "removeRepeatable",
-      onClick: () => _Static_Attributes__WEBPACK_IMPORTED_MODULE_2__.Attributes.removeEltRepeatable(keys, valueProp)
-    }, "Remove"));
+    label = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, label, _Static_Render__WEBPACK_IMPORTED_MODULE_3__.Render.buttonRemoveRepeatableElt(id, () => {
+      _Static_Attributes__WEBPACK_IMPORTED_MODULE_2__.Attributes.removeEltRepeatable(keys, valueProp, componentInstance);
+    }));
   }
-  const MyRadioControl = (0,_wordpress_compose__WEBPACK_IMPORTED_MODULE_3__.withState)({
+  const MyRadioControl = (0,_wordpress_compose__WEBPACK_IMPORTED_MODULE_4__.withState)({
     option: objectValue
   })(_ref => {
     let {
@@ -8126,6 +8119,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _Static_Attributes__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Static/Attributes */ "./src/js/Static/Attributes.js");
+/* harmony import */ var _Static_Render__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Static/Render */ "./src/js/Static/Render.js");
+
 
 
 
@@ -8135,12 +8130,9 @@ function renderRelation(componentInstance, id, label, entity, keys, valueProp, o
   if (typeof entity == 'undefined' || typeof this.props.relations[entity] == 'undefined' || this.props.relations[entity] == null || Object.keys(this.props.relations[entity]).length == 0) return null;
   label = required ? label + '*' : label;
   if (repeatable) {
-    label = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, label, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
-      key: id + "-repeatableRemoveElt",
-      isLink: true,
-      className: "removeRepeatable",
-      onClick: () => _Static_Attributes__WEBPACK_IMPORTED_MODULE_2__.Attributes.removeEltRepeatable(keys, valueProp)
-    }, "Remove"));
+    label = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, label, _Static_Render__WEBPACK_IMPORTED_MODULE_3__.Render.buttonRemoveRepeatableElt(id, () => {
+      _Static_Attributes__WEBPACK_IMPORTED_MODULE_2__.Attributes.removeEltRepeatable(keys, valueProp, componentInstance);
+    }));
   }
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.SelectControl, {
     key: id,
@@ -8174,6 +8166,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _Static_Attributes__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Static/Attributes */ "./src/js/Static/Attributes.js");
+/* harmony import */ var _Static_Render__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Static/Render */ "./src/js/Static/Render.js");
+
 
 
 
@@ -8183,12 +8177,9 @@ function renderSelect(componentInstance, id, label, options, defaultValue, keys,
   if (typeof options == 'undefined') return null;
   label = required ? label + '*' : label;
   if (repeatable) {
-    label = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, label, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
-      key: id + "-repeatableRemoveElt",
-      isLink: true,
-      className: "removeRepeatable",
-      onClick: () => _Static_Attributes__WEBPACK_IMPORTED_MODULE_2__.Attributes.removeEltRepeatable(keys, valueProp)
-    }, "Remove"));
+    label = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, label, _Static_Render__WEBPACK_IMPORTED_MODULE_3__.Render.buttonRemoveRepeatableElt(id, () => {
+      _Static_Attributes__WEBPACK_IMPORTED_MODULE_2__.Attributes.removeEltRepeatable(keys, valueProp, componentInstance);
+    }));
   }
   const defaultLabel = defaultValue != null ? 'Default (' + defaultValue + ')' : 'Default';
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.SelectControl, {
@@ -8240,12 +8231,9 @@ function renderText(componentInstance, id, label, keys, valueProp, objectValue) 
   let responsive = arguments.length > 9 && arguments[9] !== undefined ? arguments[9] : false;
   label = required ? label + '*' : label;
   if (repeatable) {
-    label = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, label, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
-      key: id + "-repeatableRemoveElt",
-      isLink: true,
-      className: "removeRepeatable",
-      onClick: () => _Static_Attributes__WEBPACK_IMPORTED_MODULE_2__.Attributes.removeEltRepeatable(keys, valueProp)
-    }, "Remove"));
+    label = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, label, _Static_Render__WEBPACK_IMPORTED_MODULE_3__.Render.buttonRemoveRepeatableElt(id, () => {
+      _Static_Attributes__WEBPACK_IMPORTED_MODULE_2__.Attributes.removeEltRepeatable(keys, valueProp, componentInstance);
+    }));
   }
   if (responsive) {
     let newInner = _Static_Render__WEBPACK_IMPORTED_MODULE_3__.Render.tabPanelComponent(id, Object.keys(_Singleton_Devices__WEBPACK_IMPORTED_MODULE_4__.Devices.getInstance().getMediaQueries()).map(layout => {
@@ -8289,6 +8277,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _Static_Attributes__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Static/Attributes */ "./src/js/Static/Attributes.js");
+/* harmony import */ var _Static_Render__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Static/Render */ "./src/js/Static/Render.js");
+
 
 
 
@@ -8297,12 +8287,9 @@ function renderTextarea(componentInstance, id, label, keys, valueProp, objectVal
   let required = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : false;
   label = required ? label + '*' : label;
   if (repeatable) {
-    label = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, label, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
-      key: id + "-repeatableRemoveElt",
-      isLink: true,
-      className: "removeRepeatable",
-      onClick: () => _Static_Attributes__WEBPACK_IMPORTED_MODULE_2__.Attributes.removeEltRepeatable(keys, valueProp)
-    }, "Remove"));
+    label = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, label, _Static_Render__WEBPACK_IMPORTED_MODULE_3__.Render.buttonRemoveRepeatableElt(id, () => {
+      _Static_Attributes__WEBPACK_IMPORTED_MODULE_2__.Attributes.removeEltRepeatable(keys, valueProp, componentInstance);
+    }));
   }
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.TextareaControl, {
     key: id,
@@ -8330,6 +8317,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _Static_Attributes__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Static/Attributes */ "./src/js/Static/Attributes.js");
+/* harmony import */ var _Static_Render__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Static/Render */ "./src/js/Static/Render.js");
+
 
 
 
@@ -8338,12 +8327,9 @@ function renderToggle(componentInstance, id, label, help, keys, valueProp, objec
   let required = arguments.length > 8 && arguments[8] !== undefined ? arguments[8] : false;
   label = required ? label + '*' : label;
   if (repeatable) {
-    label = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, label, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
-      key: id + "-repeatableRemoveElt",
-      isLink: true,
-      className: "removeRepeatable",
-      onClick: () => _Static_Attributes__WEBPACK_IMPORTED_MODULE_2__.Attributes.removeEltRepeatable(keys, valueProp)
-    }, "Remove"));
+    label = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, label, _Static_Render__WEBPACK_IMPORTED_MODULE_3__.Render.buttonRemoveRepeatableElt(id, () => {
+      _Static_Attributes__WEBPACK_IMPORTED_MODULE_2__.Attributes.removeEltRepeatable(keys, valueProp, componentInstance);
+    }));
   }
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.ToggleControl, {
     key: id,
@@ -9099,12 +9085,9 @@ class WysiwygControl extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Com
     } = this.props;
     label = required ? label + '*' : label;
     if (repeatable) {
-      label = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, label, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
-        key: id + "-repeatableRemoveElt",
-        isLink: true,
-        className: "removeRepeatable",
-        onClick: () => _Static_Attributes__WEBPACK_IMPORTED_MODULE_3__.Attributes.removeEltRepeatable(keys, valueProp)
-      }, "Remove"));
+      label = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, label, _Static_Render__WEBPACK_IMPORTED_MODULE_4__.Render.buttonRemoveRepeatableElt(id, () => {
+        _Static_Attributes__WEBPACK_IMPORTED_MODULE_3__.Attributes.removeEltRepeatable(keys, valueProp, componentInstance);
+      }));
     }
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       key: id + "-WysiwygComponentsBaseControl",
@@ -9358,7 +9341,9 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
     var render = [];
     render.push(_Singleton_Devices__WEBPACK_IMPORTED_MODULE_6__.Devices.getInstance().render(this.props.clientId));
     render.push(this.liveRendering());
+    console.log('hasComponent');
     if (_Singleton_EditZone__WEBPACK_IMPORTED_MODULE_5__.EditZone.getInstance().hasComponent(this)) {
+      console.log('yes!');
       render.push(_Singleton_EditZone__WEBPACK_IMPORTED_MODULE_5__.EditZone.getInstance().render());
     }
     return render;
@@ -9541,6 +9526,7 @@ class EditZone {
     }
     this.clean();
     this.componentInstance[componentInstance.props.clientId] = componentInstance;
+    console.log(this.componentInstance);
     document.querySelector("#abt-component-edit-zone").classList.remove("hide");
     document.querySelector(".interface-interface-skeleton").classList.add("editZoneEnabled");
     setTimeout(() => {
@@ -9579,7 +9565,6 @@ class EditZone {
     document.querySelector(".interface-interface-skeleton").classList.remove("editZoneEnabled");
   }
   render() {
-    console.log(this.componentInstance);
     let children = [];
     for (const [key, value] of Object.entries(this.componentInstance)) {
       children.push(value.renderEditMode());
@@ -9624,6 +9609,8 @@ class Attributes {
     Attributes.updateAttributes(arrayKey, currentValueProp, currentValueRepeatableField.concat(""), isNumber, componentInstance);
   }
   static removeEltRepeatable(arrayKey, currentValueProp, componentInstance) {
+    console.log(arrayKey);
+    console.log(currentValueProp);
     Attributes.updateAttributes(arrayKey, currentValueProp, false, false, componentInstance);
   }
   static fileSizeFormat(filesizeInBytes) {
@@ -9772,12 +9759,9 @@ class Attributes {
               }
             }
             if (repeatable) {
-              label = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, label, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
-                key: fieldId + "-repeatableRemoveElt",
-                isLink: true,
-                className: "removeRepeatable",
-                onClick: () => Attributes.removeEltRepeatable(tempKeyObject, valueProp, componentInstance)
-              }, "Remove"));
+              label = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, label, _Render__WEBPACK_IMPORTED_MODULE_4__.Render.buttonRemoveRepeatableElt(fieldId, () => {
+                Attributes.removeEltRepeatable(tempKeyObject, valueProp, componentInstance);
+              }));
             }
             blocReturned.push(_Render__WEBPACK_IMPORTED_MODULE_4__.Render.panelComponent(fieldId, label, fieldsetObject, false));
           } else {
@@ -9789,12 +9773,9 @@ class Attributes {
 
     // Add repeatable button
     if (!!repeatable) {
-      blocReturned.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
-        key: clientId + "-" + keys.join("-") + "-repeatableAddElt",
-        isSecondary: true,
-        isSmall: true,
-        onClick: () => Attributes.addEltToRepeatable(keys, valueProp, currentValueAttribute, false, componentInstance)
-      }, "Add"));
+      blocReturned.push(_Render__WEBPACK_IMPORTED_MODULE_4__.Render.buttonAddRepeatableElt(clientId + "-" + keys.join("-"), () => {
+        Attributes.addEltToRepeatable(keys, valueProp, currentValueAttribute, false, componentInstance);
+      }));
       blocReturned = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
         key: clientId + "-" + keys.join("-") + "-repeatableContainer",
         className: "repeatableField components-base-control"
@@ -10067,6 +10048,27 @@ class Render {
       key: id + "-label",
       className: className
     }, inner);
+  }
+  static buttonAddRepeatableElt(id, onclick) {
+    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
+      key: id + "-repeatableAddElt",
+      className: "repeatableAddElt",
+      onClick: onclick,
+      variant: "secondary"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
+      icon: "insert"
+    }), " Add");
+  }
+  static buttonRemoveRepeatableElt(id, onclick) {
+    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
+      key: id + "-repeatableRemoveElt",
+      className: "repeatableRemoveElt",
+      onClick: onclick,
+      variant: "secondary",
+      isSmall: true
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
+      icon: "no-alt"
+    }), " Remove");
   }
 }
 
