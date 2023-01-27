@@ -256,5 +256,9 @@ export function renderImageVideo( componentInstance, type, args, id, label, keys
     else 
         videoControl.push( tabPanelResponsive[0].content );
     
+    if( repeatable ) {
+        return videoControl;
+    }
+    
     return Render.panelComponent( id, label, videoControl, false );
 }

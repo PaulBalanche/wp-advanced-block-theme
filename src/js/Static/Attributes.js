@@ -162,7 +162,18 @@ export class Attributes {
                     break;
     
                 case 'image':
-                    blocReturned.push( Controls.render( 'ImageVideo', componentInstance, fieldId, labelTemp, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, responsive, { type: prop.type, args: ( prop.image && typeof prop.image == 'object' ) ? prop.image : {} } ) );
+
+                    if( repeatable) {
+                        blocReturned.push(
+                            Render.panelBodyComponent( fieldId, keyLoop + 1,
+                                Controls.render( 'ImageVideo', componentInstance, fieldId, labelTemp, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, responsive, { type: prop.type, args: ( prop.image && typeof prop.image == 'object' ) ? prop.image : {} } ),
+                                false, Render.buttonRemoveRepeatableElt( fieldId, () => { Attributes.removeEltRepeatable( keys.concat(keyLoop), valueProp, componentInstance ) } ) )
+                        );
+                    }
+                    else{
+                        blocReturned.push( Controls.render( 'ImageVideo', componentInstance, fieldId, labelTemp, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, responsive, { type: prop.type, args: ( prop.image && typeof prop.image == 'object' ) ? prop.image : {} } ) );
+                    }
+
                     break;
     
                 case 'video':
@@ -232,7 +243,7 @@ export class Attributes {
         // Add repeatable button
         if( !! repeatable ) {
             
-            if( typeof prop.props == "object" ) {
+            if( [ 'object', 'gallery', 'file', 'video', 'image', 'link' ].includes(prop.type) ) {
                 
                 blocReturned = [ <Panel
                     key={ clientId + "-" + keys.join("-") + "-panel" }

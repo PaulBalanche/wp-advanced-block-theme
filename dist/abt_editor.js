@@ -7941,6 +7941,9 @@ function renderImageVideo(componentInstance, type, args, id, label, keys, valueP
       tabs: tabPanelResponsive
     }, tabPanelResponsive => tabPanelResponsive.content));
   } else videoControl.push(tabPanelResponsive[0].content);
+  if (repeatable) {
+    return videoControl;
+  }
   return _Static_Render__WEBPACK_IMPORTED_MODULE_4__.Render.panelComponent(id, label, videoControl, false);
 }
 
@@ -9704,10 +9707,19 @@ class Attributes {
           blocReturned.push(_Controls__WEBPACK_IMPORTED_MODULE_3__.Controls.render('DateTime', componentInstance, fieldId, labelTemp, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field));
           break;
         case 'image':
-          blocReturned.push(_Controls__WEBPACK_IMPORTED_MODULE_3__.Controls.render('ImageVideo', componentInstance, fieldId, labelTemp, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, responsive, {
-            type: prop.type,
-            args: prop.image && typeof prop.image == 'object' ? prop.image : {}
-          }));
+          if (repeatable) {
+            blocReturned.push(_Render__WEBPACK_IMPORTED_MODULE_4__.Render.panelBodyComponent(fieldId, keyLoop + 1, _Controls__WEBPACK_IMPORTED_MODULE_3__.Controls.render('ImageVideo', componentInstance, fieldId, labelTemp, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, responsive, {
+              type: prop.type,
+              args: prop.image && typeof prop.image == 'object' ? prop.image : {}
+            }), false, _Render__WEBPACK_IMPORTED_MODULE_4__.Render.buttonRemoveRepeatableElt(fieldId, () => {
+              Attributes.removeEltRepeatable(keys.concat(keyLoop), valueProp, componentInstance);
+            })));
+          } else {
+            blocReturned.push(_Controls__WEBPACK_IMPORTED_MODULE_3__.Controls.render('ImageVideo', componentInstance, fieldId, labelTemp, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, responsive, {
+              type: prop.type,
+              args: prop.image && typeof prop.image == 'object' ? prop.image : {}
+            }));
+          }
           break;
         case 'video':
           blocReturned.push(_Controls__WEBPACK_IMPORTED_MODULE_3__.Controls.render('ImageVideo', componentInstance, fieldId, labelTemp, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, responsive, {
@@ -9761,7 +9773,7 @@ class Attributes {
 
     // Add repeatable button
     if (!!repeatable) {
-      if (typeof prop.props == "object") {
+      if (['object', 'gallery', 'file', 'video', 'image', 'link'].includes(prop.type)) {
         blocReturned = [(0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Panel, {
           key: clientId + "-" + keys.join("-") + "-panel",
           header: label
