@@ -9,17 +9,34 @@ import {
 } from '@wordpress/block-editor';
 import apiFetch from '@wordpress/api-fetch';
 
+import {
+    Button,
+    Dashicon
+} from '@wordpress/components';
+
+import { Devices } from '../../../src/js/Singleton/Devices';
+
+// import DOMPurify from 'dompurify';
+
 class WpeComponent extends WpeComponentBase {
 
 	constructor() {
         super( ...arguments );
+
+        // Because of ID will be not saved to the block’s comment delimiter default attribute, we manually set it.
+        if( typeof this.props.attributes.id_component == 'undefined' )
+            this.setAttributes( { id_component: this.props.block_spec.id } );
 
         this.iframeResize = this._iframeResize.bind(this);
     }
 
     componentDidMount() {
 
-        this.apiFetch();
+        Devices.getInstance().addComponent(this);
+
+        setTimeout( () => {
+            this.apiFetch()
+        } );
     }
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -40,11 +57,12 @@ class WpeComponent extends WpeComponentBase {
             iframeLoaded: false,
             error: null
         });
-        
+
         apiFetch( {
             path: js_const.rest_api_namespace + js_const.componentblock_attr_autosaves_rest_api_resource_path + '/' + js_const.post_id + '/' + this.props.attributes.id_component + '/' + this.props.clientId,
             method: 'POST',
             data: ( attributes == null ) ? this.props.attributes : attributes
+
         } ).then( ( res ) => {
             if( res.success ) {
 
@@ -54,8 +72,9 @@ class WpeComponent extends WpeComponentBase {
                 });
             }
             else {
+
                 this.setState({
-                    error: "Sorry an error occurs...",
+                    error: res.data,
                     needPreviewUpdate: false
                 });
 
@@ -101,10 +120,6 @@ class WpeComponent extends WpeComponentBase {
 
     liveRendering() {
 
-        // Because of ID will be not saved to the block’s comment delimiter default attribute, we manually set it.
-        if( typeof this.props.attributes.id_component == 'undefined' )
-            this.setAttributes( { id_component: this.props.block_spec.id } );
-
         if( this?.props?.block_spec?.container && this.props.block_spec.container ) {
 
             return <div { ...this.props.innerBlocksProps } />
@@ -113,13 +128,24 @@ class WpeComponent extends WpeComponentBase {
 
             const { error, previewReady } = this.state;
 
-            var render = [ this.renderEditZone() ];
+            var render = [];
 
             if( error != null ){
-                render.push(error);
+
+                if( typeof error == 'object' && error?.isEmpty && error.isEmpty ) {
+                    render.push(this.renderEditZone(null, true));
+                    render.push( <div key={ this.props.clientId + "-LiveRenderingMessage" } className='liveRenderingMessage'>{ this.renderButtonEditZone() }</div> );
+                }
+                else {
+                    render.push(this.renderEditZone());
+                    // render.push(<div className="liveRenderingMessage">{ <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(error) }} /> }</div>);
+                    render.push(<div key={ this.props.clientId + "-LiveRenderingMessage" } className="liveRenderingMessage">{ error }</div>);
+                }
             } else if( ! previewReady ) {
+                render.push(this.renderEditZone());
                 render.push(this.renderLoaderPreview());
             } else {
+                render.push(this.renderEditZone());
                 render.push(this.renderLoaderPreview());
                 render.push(this.renderIframePreview());
             }

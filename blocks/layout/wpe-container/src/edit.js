@@ -24,7 +24,6 @@ class WpeContainer extends WpeComponentBase {
     liveRendering() {
 
         const { children, ...innerBlocksProps } = this.props.innerBlocksProps;
-
         innerBlocksProps.key = 'innerBlocksProps_' + this.props.clientId;
 
         return <div {...innerBlocksProps}>

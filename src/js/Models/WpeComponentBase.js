@@ -221,7 +221,7 @@ export class WpeComponentBase extends Component {
             </div>
     }
 
-    renderButtonEditZone( verbose = 'Edit' ) {
+    renderButtonEditZone() {
         return <Button
             key={ this.props.clientId + "-EditZoneButtonEdition" }
             className="abtButtonEditZone"
@@ -234,7 +234,7 @@ export class WpeComponentBase extends Component {
                     EditZone.getInstance().addComponent(this);
                 }
             } }
-        ><Dashicon icon="edit" /> { verbose } content</Button>
+        ><Dashicon icon="edit" /> Edit</Button>
     }
 
     render() {

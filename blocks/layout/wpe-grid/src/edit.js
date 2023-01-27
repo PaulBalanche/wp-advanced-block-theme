@@ -13,7 +13,6 @@ import {
 } from '@wordpress/block-editor';
 
 import {
-    PanelBody,
     RangeControl
 } from '@wordpress/components';
 
@@ -22,6 +21,7 @@ import { get, map, times } from 'lodash';
 
 
 import { Devices } from '../../../../src/js/Singleton/Devices';
+import { Render } from '../../../../src/js/Static/Render';
 
 /**
  * Add some columns in wpe-container based on variation selected
@@ -58,18 +58,15 @@ class WpeGrid extends WpeComponentBase {
             return <div
                 key={ this.props.clientId + "-InspectorControls" }
             >
-                <PanelBody
-                    key={ "inspectorControlsPanelBody_" + this.props.clientId }
-                >
+                { Render.fieldContainer( this.props.clientId + '_gridCountColumns',
                     <RangeControl
                         label="Number of cells"
                         value={ gridCountColumns }
                         onChange={ ( value ) => this.setAttributes( { gridCountColumns: value } ) }
                         min={ 1 }
                         max={ gridCountColumns + 1 }
-                    />
-                </PanelBody>
-            </div>;
+                    />, true ) }
+            </div>
         }
 
         return null;
@@ -89,7 +86,7 @@ class WpeGrid extends WpeComponentBase {
         } = this.props;
 
         const { children, ...innerBlocksProps } = this.props.innerBlocksProps;
-
+        innerBlocksProps.key = 'innerBlocksProps_' + clientId;
         /**
          * Define innerBlocks
          */

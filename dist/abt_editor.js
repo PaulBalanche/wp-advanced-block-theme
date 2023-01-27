@@ -6146,12 +6146,14 @@ class WpeComponent extends _src_js_Models_WpeComponentBase__WEBPACK_IMPORTED_MOD
         if (typeof error == 'object' && error?.isEmpty && error.isEmpty) {
           render.push(this.renderEditZone(null, true));
           render.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+            key: this.props.clientId + "-LiveRenderingMessage",
             className: "liveRenderingMessage"
-          }, this.renderButtonEditZone('Add')));
+          }, this.renderButtonEditZone()));
         } else {
           render.push(this.renderEditZone());
           // render.push(<div className="liveRenderingMessage">{ <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(error) }} /> }</div>);
           render.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+            key: this.props.clientId + "-LiveRenderingMessage",
             className: "liveRenderingMessage"
           }, error));
         }
@@ -6404,13 +6406,13 @@ class WpeColumn extends _src_js_Models_WpeComponentBase__WEBPACK_IMPORTED_MODULE
       children,
       ...innerBlocksProps
     } = this.props.innerBlocksProps;
+    innerBlocksProps.key = 'innerBlocksProps_' + this.props.clientId;
     innerBlocksProps.style = {
       gridColumnStart: this.getLayout('columnStart', this.state.currentBodyDevice),
       gridColumnEnd: this.getLayout('columnStart', this.state.currentBodyDevice) + this.getLayout('width', this.state.currentBodyDevice),
       gridRowStart: this.getLayout('rowStart', this.state.currentBodyDevice),
       gridRowEnd: this.getLayout('rowStart', this.state.currentBodyDevice) + this.getLayout('height', this.state.currentBodyDevice)
     };
-    innerBlocksProps.key = 'innerBlocksProps_' + this.props.clientId;
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", innerBlocksProps, this.renderEditZone(), children);
   }
 }
@@ -6835,7 +6837,7 @@ class WpeGrid extends _src_js_Models_WpeComponentBase__WEBPACK_IMPORTED_MODULE_2
       children,
       ...innerBlocksProps
     } = this.props.innerBlocksProps;
-
+    innerBlocksProps.key = 'innerBlocksProps_' + clientId;
     /**
      * Define innerBlocks
      */
@@ -7366,6 +7368,7 @@ class WpeSlider extends _src_js_Models_WpeComponentBase__WEBPACK_IMPORTED_MODULE
       children,
       ...innerBlocksProps
     } = this.props.innerBlocksProps;
+    innerBlocksProps.key = 'innerBlocksProps_' + clientId;
     let inlineCss = '';
     let buttons = [];
     inner_blocks.forEach((element, key) => {
@@ -9336,7 +9339,6 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
     }, editZone));
   }
   renderButtonEditZone() {
-    let verbose = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'Edit';
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
       key: this.props.clientId + "-EditZoneButtonEdition",
       className: "abtButtonEditZone",
@@ -9350,7 +9352,7 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
       }
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
       icon: "edit"
-    }), " ", verbose, " content");
+    }), " Edit");
   }
   render() {
     var render = [];
@@ -9577,6 +9579,7 @@ class EditZone {
     document.querySelector(".interface-interface-skeleton").classList.remove("editZoneEnabled");
   }
   render() {
+    console.log(this.componentInstance);
     let children = [];
     for (const [key, value] of Object.entries(this.componentInstance)) {
       children.push(value.renderEditMode());

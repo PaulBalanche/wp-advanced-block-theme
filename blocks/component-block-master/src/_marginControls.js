@@ -162,7 +162,6 @@ export class MarginControls extends Component {
         return (
             <>
                 <PanelBody title={ 'Padding' } initialOpen={ false }>
-
                     <TabPanel
                         className="padding-tab-panel"
                         activeClass="active-tab"

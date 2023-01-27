@@ -90,7 +90,7 @@ export class EditZone {
     }
   
     render() {
-
+console.log(this.componentInstance);
         let children = [];
         for( const [key, value] of Object.entries(this.componentInstance) ) {
             children.push( value.renderEditMode() );

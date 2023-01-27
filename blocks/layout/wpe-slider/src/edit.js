@@ -46,6 +46,7 @@ class WpeSlider extends WpeComponentBase {
         } = this.props;
 
         const { children, ...innerBlocksProps } = this.props.innerBlocksProps;
+        innerBlocksProps.key = 'innerBlocksProps_' + clientId;
 
         let inlineCss = '';
         let buttons = [];
