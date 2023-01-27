@@ -86,7 +86,7 @@
         bottom: 0;
         left: 0;
         right: 0;
-        background: white center no-repeat url('../../img/svg-loaders/oval.svg');
+        background: white;
         opacity: 0;
         z-index: 1;
         display: none;
@@ -252,11 +252,6 @@
                         .components-button:focus {
                             box-shadow: none;
                         }
-        
-                        .repeatableRemoveElt {
-                            display: inline-flex;
-                            right: 55px;
-                        }
 
                         &:hover {
                             background: #f3f4f5;
@@ -289,35 +284,8 @@
                     }
         
                 }
-                
-                &:hover .repeatableRemoveElt {
-                    visibility: visible;
-                }
             }
-        
-            .components-base-control {
-                
-                position: relative;
-        
-                .repeatableRemoveElt {
-                    visibility: hidden;
-                    position: absolute;
-                    right: 0;
 
-                    .dashicon {
-                        font-size: 1rem;
-                        height: auto;
-                    }
-                }
-            }
-        
-            .components-base-control__field {
-        
-                &:hover .repeatableRemoveElt {
-                    visibility: visible;
-                }
-            }
-        
             .components-placeholder {
         
                 .media-preview-container {
@@ -367,10 +335,6 @@
                 
                 .components-text-control__input {
                     width: auto;
-                }
-        
-                .components-button.repeatableRemoveElt {
-                    right: 16px;
                 }
         
                 .block-editor-link-control {
@@ -439,6 +403,41 @@
 
             .components-input-control__backdrop {
                 border-color: #e0e0e0;
+            }
+        }
+
+        .repeatableContainer {
+
+            .repeatableRemoveElt {
+                // visibility: hidden;
+                // position: absolute;
+                // right: 0;
+
+                .dashicon {
+                    font-size: 1rem;
+                    height: auto;
+                }
+            }
+
+            .repeatableItem {
+                
+                position: relative;
+
+                .repeatableRemoveElt {
+                    position: absolute;
+                    display: none;
+                    right: 10px;
+                    bottom: 9px;
+                }
+
+                &.components-panel__body .repeatableRemoveElt {
+                    bottom: initial;
+                    top: 60px;
+                }
+
+                &:hover .repeatableRemoveElt {
+                    display: inline-flex;
+                }
             }
         }
     }

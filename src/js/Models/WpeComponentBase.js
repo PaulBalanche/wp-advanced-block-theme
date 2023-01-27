@@ -165,7 +165,7 @@ export class WpeComponentBase extends Component {
                                 className="abtButtonCloseEditZone"
                                 variant="primary"
                                 onMouseDown={ () => {
-                                    EditZone.getInstance().removeComponent(this);
+                                    EditZone.getInstance().hide();
                                 } }
                             ><Dashicon icon="no-alt" />Close</Button>
                         </div>
@@ -227,12 +227,7 @@ export class WpeComponentBase extends Component {
             className="abtButtonEditZone"
             variant="primary"
             onMouseDown={ () => {
-                if( EditZone.getInstance().hasComponent(this) ) {
-                    EditZone.getInstance().removeComponent(this);
-                }
-                else {
-                    EditZone.getInstance().addComponent(this);
-                }
+                EditZone.getInstance().show(this)
             } }
         ><Dashicon icon="edit" /> Edit</Button>
     }
@@ -244,10 +239,8 @@ export class WpeComponentBase extends Component {
         render.push( Devices.getInstance().render(this.props.clientId) );
         
         render.push( this.liveRendering() );
-
-        console.log('hasComponent');
-        if( EditZone.getInstance().hasComponent(this) ) {
-            console.log('yes!');
+    
+        if( typeof this.state.editZone != 'undefined' && this.state.editZone ) {
             render.push( EditZone.getInstance().render() );
         }
         

@@ -8229,12 +8229,17 @@ function renderText(componentInstance, id, label, keys, valueProp, objectValue) 
   let repeatable = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : false;
   let required = arguments.length > 8 && arguments[8] !== undefined ? arguments[8] : false;
   let responsive = arguments.length > 9 && arguments[9] !== undefined ? arguments[9] : false;
-  label = required ? label + '*' : label;
-  if (repeatable) {
-    label = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, label, _Static_Render__WEBPACK_IMPORTED_MODULE_3__.Render.buttonRemoveRepeatableElt(id, () => {
-      _Static_Attributes__WEBPACK_IMPORTED_MODULE_2__.Attributes.removeEltRepeatable(keys, valueProp, componentInstance);
-    }));
-  }
+  label = required && label != null ? label + '*' : label;
+
+  // if( repeatable ) {
+  //     label = (
+  //         <>
+  //             { label }
+  //             { Render.buttonRemoveRepeatableElt( id, () => { Attributes.removeEltRepeatable( keys, valueProp, componentInstance ) } ) }
+  //         </>
+  //     );
+  // }
+
   if (responsive) {
     let newInner = _Static_Render__WEBPACK_IMPORTED_MODULE_3__.Render.tabPanelComponent(id, Object.keys(_Singleton_Devices__WEBPACK_IMPORTED_MODULE_4__.Devices.getInstance().getMediaQueries()).map(layout => {
       return {
@@ -8247,16 +8252,24 @@ function renderText(componentInstance, id, label, keys, valueProp, objectValue) 
     }, _Singleton_Devices__WEBPACK_IMPORTED_MODULE_4__.Devices.getInstance().getCurrentDevice());
     return newInner;
   }
-  return renderTextControl(componentInstance, id, label, isNumber, objectValue, keys, valueProp);
+  return renderTextControl(componentInstance, id, label, isNumber, objectValue, keys, valueProp, repeatable);
 }
-function renderTextControl(componentInstance, id, label, isNumber, value, keysToUpdate, valueProp) {
-  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.TextControl, {
+function renderTextControl(componentInstance, id, label, isNumber, value, keysToUpdate, valueProp, repeatable) {
+  var textControl = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.TextControl, {
     key: id,
     label: label,
     type: !!isNumber ? "number" : "text",
     value: value,
     onChange: newValue => _Static_Attributes__WEBPACK_IMPORTED_MODULE_2__.Attributes.updateAttributes(keysToUpdate, valueProp, newValue, isNumber, componentInstance)
   });
+  if (repeatable) {
+    textControl = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "repeatableItem"
+    }, textControl, _Static_Render__WEBPACK_IMPORTED_MODULE_3__.Render.buttonRemoveRepeatableElt(id, () => {
+      _Static_Attributes__WEBPACK_IMPORTED_MODULE_2__.Attributes.removeEltRepeatable(keysToUpdate, valueProp, componentInstance);
+    }));
+  }
+  return textControl;
 }
 
 /***/ }),
@@ -9266,7 +9279,7 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
           className: "abtButtonCloseEditZone",
           variant: "primary",
           onMouseDown: () => {
-            _Singleton_EditZone__WEBPACK_IMPORTED_MODULE_5__.EditZone.getInstance().removeComponent(this);
+            _Singleton_EditZone__WEBPACK_IMPORTED_MODULE_5__.EditZone.getInstance().hide();
           }
         }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
           icon: "no-alt"
@@ -9327,11 +9340,7 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
       className: "abtButtonEditZone",
       variant: "primary",
       onMouseDown: () => {
-        if (_Singleton_EditZone__WEBPACK_IMPORTED_MODULE_5__.EditZone.getInstance().hasComponent(this)) {
-          _Singleton_EditZone__WEBPACK_IMPORTED_MODULE_5__.EditZone.getInstance().removeComponent(this);
-        } else {
-          _Singleton_EditZone__WEBPACK_IMPORTED_MODULE_5__.EditZone.getInstance().addComponent(this);
-        }
+        _Singleton_EditZone__WEBPACK_IMPORTED_MODULE_5__.EditZone.getInstance().show(this);
       }
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
       icon: "edit"
@@ -9341,9 +9350,7 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
     var render = [];
     render.push(_Singleton_Devices__WEBPACK_IMPORTED_MODULE_6__.Devices.getInstance().render(this.props.clientId));
     render.push(this.liveRendering());
-    console.log('hasComponent');
-    if (_Singleton_EditZone__WEBPACK_IMPORTED_MODULE_5__.EditZone.getInstance().hasComponent(this)) {
-      console.log('yes!');
+    if (typeof this.state.editZone != 'undefined' && this.state.editZone) {
       render.push(_Singleton_EditZone__WEBPACK_IMPORTED_MODULE_5__.EditZone.getInstance().render());
     }
     return render;
@@ -9501,7 +9508,7 @@ __webpack_require__.r(__webpack_exports__);
 
 class EditZone {
   constructor() {
-    this.componentInstance = {};
+    this.componentInstance = null;
     this.init();
   }
   static getInstance() {
@@ -9519,57 +9526,42 @@ class EditZone {
     componentEditZone.appendChild(componentEditZoneLoader);
     document.querySelector('.interface-interface-skeleton__body').appendChild(componentEditZone);
   }
-  addComponent(componentInstance) {
-    if (!document.querySelector("#abt-component-edit-zone").classList.contains("hide")) {
-      document.querySelector("#abt-component-edit-zone").classList.add("updating");
-      document.querySelector("#abt-component-edit-zone .loader").style.display = 'block';
-    }
-    this.clean();
-    this.componentInstance[componentInstance.props.clientId] = componentInstance;
-    console.log(this.componentInstance);
-    document.querySelector("#abt-component-edit-zone").classList.remove("hide");
-    document.querySelector(".interface-interface-skeleton").classList.add("editZoneEnabled");
-    setTimeout(() => {
-      document.querySelector("#abt-component-edit-zone").classList.remove("updating");
-    });
+  update() {
+    document.querySelector("#abt-component-edit-zone").classList.add("updating");
+    document.querySelector("#abt-component-edit-zone .loader").style.display = 'block';
     setTimeout(() => {
       document.querySelector("#abt-component-edit-zone .loader").style.display = 'none';
     }, 1000);
   }
-  removeComponent(componentInstance) {
-    delete this.componentInstance[componentInstance.props.clientId];
-    this.hide();
-  }
-  hasComponent(componentInstance) {
-    if (typeof this.componentInstance[componentInstance.props.clientId] != 'undefined') {
-      return true;
+  show(componentInstance) {
+    if (this.componentInstance != null) {
+      if (this.componentInstance == componentInstance) {
+        this.hide();
+        return;
+      } else {
+        this.update();
+      }
     }
-    return false;
-  }
-  clean() {
-    // let index = 0;
-    // const length = Object.keys(this.componentInstance).length;
-    // if( length > 1 ) {
-
-    //     for( const [key, value] of Object.entries(this.componentInstance) ) {
-    //         index++;
-    //         if( index < length ) {
-    //             delete this.componentInstance[key];
-    //         }
-    //     }
-    // }
-    this.componentInstance = {};
+    this.componentInstance = componentInstance;
+    componentInstance.setState({
+      editZone: true
+    });
+    setTimeout(() => {
+      document.querySelector("#abt-component-edit-zone").classList.remove("hide");
+      document.querySelector(".interface-interface-skeleton").classList.add("editZoneEnabled");
+      document.querySelector("#abt-component-edit-zone").classList.remove("updating");
+    });
   }
   hide() {
     document.querySelector("#abt-component-edit-zone").classList.add("hide");
     document.querySelector(".interface-interface-skeleton").classList.remove("editZoneEnabled");
+    this.componentInstance.setState({
+      editZone: false
+    });
+    this.componentInstance = null;
   }
   render() {
-    let children = [];
-    for (const [key, value] of Object.entries(this.componentInstance)) {
-      children.push(value.renderEditMode());
-    }
-    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createPortal)(children, document.querySelector("#abt-component-edit-zone"));
+    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createPortal)(this.componentInstance.renderEditMode(), document.querySelector("#abt-component-edit-zone"));
   }
 }
 
@@ -9609,8 +9601,6 @@ class Attributes {
     Attributes.updateAttributes(arrayKey, currentValueProp, currentValueRepeatableField.concat(""), isNumber, componentInstance);
   }
   static removeEltRepeatable(arrayKey, currentValueProp, componentInstance) {
-    console.log(arrayKey);
-    console.log(currentValueProp);
     Attributes.updateAttributes(arrayKey, currentValueProp, false, false, componentInstance);
   }
   static fileSizeFormat(filesizeInBytes) {
@@ -9661,76 +9651,73 @@ class Attributes {
     });
     if (!repeatable) currentValueAttribute = [currentValueAttribute];else if (typeof currentValueAttribute != "object" || currentValueAttribute.length == 0) currentValueAttribute = [""];
     let responsive = typeof prop.responsive != "undefined" && !!prop.responsive ? true : false;
+    const label = typeof prop.label != "undefined" ? prop.label : typeof prop.title != "undefined" ? prop.title : keys.slice(-1);
     for (var keyLoop in currentValueAttribute) {
       keyLoop = Attributes.returnStringOrNumber(keyLoop, true);
-      let label = typeof prop.label != "undefined" ? prop.label : typeof prop.title != "undefined" ? prop.title : keys.slice(-1);
-      if (repeatable) {
-        let index = keyLoop + 1;
-        label = label + " " + index + "/" + currentValueAttribute.length;
-      }
+      const labelTemp = !repeatable || repeatable && keyLoop == 0 ? label : null;
       let required_field = typeof prop.required != "undefined" && prop.required ? true : false;
       let fieldId = clientId + "-" + keys.join("-") + "-" + keyLoop;
       switch (prop.type) {
         case 'string':
-          blocReturned.push(_Controls__WEBPACK_IMPORTED_MODULE_3__.Controls.render('Text', componentInstance, fieldId, label, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, responsive, {
+          blocReturned.push(_Controls__WEBPACK_IMPORTED_MODULE_3__.Controls.render('Text', componentInstance, fieldId, labelTemp, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, responsive, {
             isNumber: false
           }));
           break;
         case 'number':
-          blocReturned.push(_Controls__WEBPACK_IMPORTED_MODULE_3__.Controls.render('Text', componentInstance, fieldId, label, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, responsive, {
+          blocReturned.push(_Controls__WEBPACK_IMPORTED_MODULE_3__.Controls.render('Text', componentInstance, fieldId, labelTemp, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, responsive, {
             isNumber: true
           }));
           break;
         case 'text':
-          blocReturned.push(_Controls__WEBPACK_IMPORTED_MODULE_3__.Controls.render('Textarea', componentInstance, fieldId, label, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, responsive));
+          blocReturned.push(_Controls__WEBPACK_IMPORTED_MODULE_3__.Controls.render('Textarea', componentInstance, fieldId, labelTemp, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, responsive));
           break;
         case 'richText':
         case 'wysiwyg':
-          blocReturned.push(_Controls__WEBPACK_IMPORTED_MODULE_3__.Controls.render('Wysiwyg', componentInstance, fieldId, label, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, responsive));
+          blocReturned.push(_Controls__WEBPACK_IMPORTED_MODULE_3__.Controls.render('Wysiwyg', componentInstance, fieldId, labelTemp, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, responsive));
           break;
         case 'boolean':
-          blocReturned.push(_Controls__WEBPACK_IMPORTED_MODULE_3__.Controls.render('Toggle', componentInstance, fieldId, label, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, responsive, {
+          blocReturned.push(_Controls__WEBPACK_IMPORTED_MODULE_3__.Controls.render('Toggle', componentInstance, fieldId, labelTemp, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, responsive, {
             help: prop.help
           }));
           break;
         case 'select':
         case 'color':
-          blocReturned.push(_Controls__WEBPACK_IMPORTED_MODULE_3__.Controls.render('Select', componentInstance, fieldId, label, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, responsive, {
+          blocReturned.push(_Controls__WEBPACK_IMPORTED_MODULE_3__.Controls.render('Select', componentInstance, fieldId, labelTemp, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, responsive, {
             options: prop.options,
             default: prop.default
           }));
           break;
         case 'radio':
-          blocReturned.push(_Controls__WEBPACK_IMPORTED_MODULE_3__.Controls.render('Radio', componentInstance, fieldId, label, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, responsive, {
+          blocReturned.push(_Controls__WEBPACK_IMPORTED_MODULE_3__.Controls.render('Radio', componentInstance, fieldId, labelTemp, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, responsive, {
             options: prop.options
           }));
           break;
         case 'link':
-          blocReturned.push(_Controls__WEBPACK_IMPORTED_MODULE_3__.Controls.render('Link', componentInstance, fieldId, label, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field));
+          blocReturned.push(_Controls__WEBPACK_IMPORTED_MODULE_3__.Controls.render('Link', componentInstance, fieldId, labelTemp, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field));
           break;
         case 'relation':
-          blocReturned.push(_Controls__WEBPACK_IMPORTED_MODULE_3__.Controls.render('Relation', componentInstance, fieldId, label, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, responsive, {
+          blocReturned.push(_Controls__WEBPACK_IMPORTED_MODULE_3__.Controls.render('Relation', componentInstance, fieldId, labelTemp, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, responsive, {
             entity: prop.entity
           }));
           break;
         case 'date':
-          blocReturned.push(_Controls__WEBPACK_IMPORTED_MODULE_3__.Controls.render('DateTime', componentInstance, fieldId, label, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field));
+          blocReturned.push(_Controls__WEBPACK_IMPORTED_MODULE_3__.Controls.render('DateTime', componentInstance, fieldId, labelTemp, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field));
           break;
         case 'image':
-          blocReturned.push(_Controls__WEBPACK_IMPORTED_MODULE_3__.Controls.render('ImageVideo', componentInstance, fieldId, label, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, responsive, {
+          blocReturned.push(_Controls__WEBPACK_IMPORTED_MODULE_3__.Controls.render('ImageVideo', componentInstance, fieldId, labelTemp, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, responsive, {
             type: prop.type,
             args: prop.image && typeof prop.image == 'object' ? prop.image : {}
           }));
           break;
         case 'video':
-          blocReturned.push(_Controls__WEBPACK_IMPORTED_MODULE_3__.Controls.render('ImageVideo', componentInstance, fieldId, label, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, responsive, {
+          blocReturned.push(_Controls__WEBPACK_IMPORTED_MODULE_3__.Controls.render('ImageVideo', componentInstance, fieldId, labelTemp, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, responsive, {
             type: prop.type,
             args: prop.video && typeof prop.video == 'object' ? prop.video : {}
           }));
           break;
         case 'file':
         case 'gallery':
-          blocReturned.push(_Controls__WEBPACK_IMPORTED_MODULE_3__.Controls.render('File', componentInstance, fieldId, label, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, responsive, {
+          blocReturned.push(_Controls__WEBPACK_IMPORTED_MODULE_3__.Controls.render('File', componentInstance, fieldId, labelTemp, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, responsive, {
             type: prop.type
           }));
           break;
@@ -9759,11 +9746,12 @@ class Attributes {
               }
             }
             if (repeatable) {
-              label = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, label, _Render__WEBPACK_IMPORTED_MODULE_4__.Render.buttonRemoveRepeatableElt(fieldId, () => {
+              blocReturned.push(_Render__WEBPACK_IMPORTED_MODULE_4__.Render.panelBodyComponent(fieldId, keyLoop + 1, fieldsetObject, false, _Render__WEBPACK_IMPORTED_MODULE_4__.Render.buttonRemoveRepeatableElt(fieldId, () => {
                 Attributes.removeEltRepeatable(tempKeyObject, valueProp, componentInstance);
-              }));
+              })));
+            } else {
+              blocReturned.push(_Render__WEBPACK_IMPORTED_MODULE_4__.Render.panelComponent(fieldId, labelTemp, fieldsetObject, false));
             }
-            blocReturned.push(_Render__WEBPACK_IMPORTED_MODULE_4__.Render.panelComponent(fieldId, label, fieldsetObject, false));
           } else {
             return;
           }
@@ -9773,16 +9761,28 @@ class Attributes {
 
     // Add repeatable button
     if (!!repeatable) {
+      if (typeof prop.props == "object") {
+        blocReturned = [(0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Panel, {
+          key: clientId + "-" + keys.join("-") + "-panel",
+          header: label
+        }, blocReturned)];
+      }
       blocReturned.push(_Render__WEBPACK_IMPORTED_MODULE_4__.Render.buttonAddRepeatableElt(clientId + "-" + keys.join("-"), () => {
         Attributes.addEltToRepeatable(keys, valueProp, currentValueAttribute, false, componentInstance);
       }));
-      blocReturned = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-        key: clientId + "-" + keys.join("-") + "-repeatableContainer",
-        className: "repeatableField components-base-control"
-      }, blocReturned);
-    } else {
-      blocReturned = _Render__WEBPACK_IMPORTED_MODULE_4__.Render.fieldContainer(clientId + "-" + keys.join("-"), blocReturned);
+
+      //     blocReturned = (
+      //         <div
+      //             key={ clientId + "-" + keys.join("-") + "-repeatableContainer"}
+      //             className="repeatableField components-base-control"
+      //         >   
+      //             { blocReturned }
+      //         </div>
+      //     );
     }
+    // else {
+    blocReturned = _Render__WEBPACK_IMPORTED_MODULE_4__.Render.fieldContainer(clientId + "-" + keys.join("-"), blocReturned, !!repeatable ? 'repeatableContainer' : '');
+    // }
 
     // Return
     return blocReturned;
@@ -9790,11 +9790,6 @@ class Attributes {
   static initComponentAttributes(attributes, props) {
     for (const [key, value] of Object.entries(props)) {
       if (typeof value != 'object' || value == null) continue;
-      if (typeof value.type == 'undefined') {
-        console.log(value);
-        console.log(attributes);
-        console.log(props);
-      }
       let currentType = typeof value.repeatable != 'undefined' && value.repeatable ? 'array' : value.type.toLowerCase();
       currentType = typeof value.responsive != 'undefined' && value.responsive ? 'object' : currentType;
       switch (currentType) {
@@ -10021,17 +10016,23 @@ class Render {
     let initialOpen = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Panel, {
       key: id + "-panel"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.PanelBody, {
+    }, this.panelBodyComponent(id, label, inner, initialOpen));
+  }
+  static panelBodyComponent(id, label, inner) {
+    let initialOpen = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
+    let removeButton = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : null;
+    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.PanelBody, {
       key: id + "-PanelBody",
       title: label,
-      initialOpen: initialOpen
+      initialOpen: initialOpen,
+      className: removeButton != null ? 'repeatableItem' : false
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       key: id + "-panelBodyDivObject",
       className: "objectField components-base-control"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       key: id + "-panelBodySubDivObject",
       className: "objectField-content"
-    }, inner))));
+    }, inner, removeButton)));
   }
   static fieldContainer(id, inner) {
     let extraClass = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '';

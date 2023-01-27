@@ -4,7 +4,7 @@ export class EditZone {
     
     constructor() {
 
-        this.componentInstance = {};
+        this.componentInstance = null;
 
         this.init();
     }
@@ -31,75 +31,51 @@ export class EditZone {
         document.querySelector('.interface-interface-skeleton__body').appendChild(componentEditZone);
     }
 
-    addComponent( componentInstance ) {
+    update() {
+        document.querySelector("#abt-component-edit-zone").classList.add("updating");
+        document.querySelector("#abt-component-edit-zone .loader").style.display = 'block';
 
-        if( ! document.querySelector("#abt-component-edit-zone").classList.contains("hide") ) {
-
-            document.querySelector("#abt-component-edit-zone").classList.add("updating");
-            document.querySelector("#abt-component-edit-zone .loader").style.display = 'block';
-        }
-
-        this.clean();
-        this.componentInstance[componentInstance.props.clientId] = componentInstance;
-
-        console.log(this.componentInstance);
-        
-        document.querySelector("#abt-component-edit-zone").classList.remove("hide");
-        document.querySelector(".interface-interface-skeleton").classList.add("editZoneEnabled");
-
-        setTimeout( () => {
-            document.querySelector("#abt-component-edit-zone").classList.remove("updating");
-        });  
         setTimeout( () => {
             document.querySelector("#abt-component-edit-zone .loader").style.display = 'none';
-        }, 1000);        
-    } 
-    
-    removeComponent( componentInstance ) {
-
-        delete this.componentInstance[componentInstance.props.clientId];
-        this.hide();
-    } 
-
-    hasComponent( componentInstance ) {
-
-        if( typeof this.componentInstance[componentInstance.props.clientId] != 'undefined' ) {
-            return true;
-        }
-     
-        return false;
+        }, 1000);
     }
 
-    clean() {
+    show( componentInstance ) {
 
-        // let index = 0;
-        // const length = Object.keys(this.componentInstance).length;
-        // if( length > 1 ) {
+        if( this.componentInstance != null ) {
 
-        //     for( const [key, value] of Object.entries(this.componentInstance) ) {
-        //         index++;
-        //         if( index < length ) {
-        //             delete this.componentInstance[key];
-        //         }
-        //     }
-        // }
-        this.componentInstance = {};
+            if( this.componentInstance == componentInstance ) {
+                this.hide();
+                return;
+            }
+            else {
+                this.update();
+            }
+        }
+
+        this.componentInstance = componentInstance;
+        componentInstance.setState( { editZone: true } );
+        
+        setTimeout( () => {
+            document.querySelector("#abt-component-edit-zone").classList.remove("hide");
+            document.querySelector(".interface-interface-skeleton").classList.add("editZoneEnabled");
+            document.querySelector("#abt-component-edit-zone").classList.remove("updating");
+        });  
     }
 
     hide() {
+        
         document.querySelector("#abt-component-edit-zone").classList.add("hide");
         document.querySelector(".interface-interface-skeleton").classList.remove("editZoneEnabled");
+
+        this.componentInstance.setState( { editZone: false } );
+        this.componentInstance = null;
     }
   
     render() {
 
-        let children = [];
-        for( const [key, value] of Object.entries(this.componentInstance) ) {
-            children.push( value.renderEditMode() );
-        }
-
         return createPortal(
-            children,
+            this.componentInstance.renderEditMode(),
             document.querySelector("#abt-component-edit-zone")
         );
     }

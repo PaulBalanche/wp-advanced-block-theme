@@ -22,29 +22,34 @@ export class Render {
 
     static panelComponent( id, label, inner, initialOpen = false ) {
     
-        return (
-            <Panel
-                key={ id + "-panel" }
+        return <Panel
+            key={ id + "-panel" }
+        >
+            { this.panelBodyComponent(id, label, inner, initialOpen ) }
+        </Panel>
+    }
+
+    static panelBodyComponent( id, label, inner, initialOpen = false, removeButton = null ) {
+
+        return <PanelBody
+            key={ id + "-PanelBody" }
+            title={ label }
+            initialOpen={ initialOpen }
+            className={ removeButton != null  ? 'repeatableItem' : false }
+        >
+            <div
+                key={ id + "-panelBodyDivObject" }
+                className="objectField components-base-control"
             >
-                <PanelBody
-                    key={ id + "-PanelBody" }
-                    title={ label }
-                    initialOpen={ initialOpen }
-                >
-                    <div
-                        key={ id + "-panelBodyDivObject" }
-                        className="objectField components-base-control"
-                    >
-                        <div
-                            key={ id + "-panelBodySubDivObject" }
-                            className="objectField-content"
-                        > 
-                            { inner }
-                        </div>
-                    </div>
-                </PanelBody>
-            </Panel>
-        );
+                <div
+                    key={ id + "-panelBodySubDivObject" }
+                    className="objectField-content"
+                > 
+                    { inner }
+                    { removeButton }
+                </div>
+            </div>
+        </PanelBody>
     }
 
     static fieldContainer( id, inner, extraClass = '' ) {

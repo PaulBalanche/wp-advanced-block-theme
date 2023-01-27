@@ -9,16 +9,16 @@ import { Devices } from '../Singleton/Devices';
 
 export function renderText( componentInstance, id, label, keys, valueProp, objectValue, isNumber = false, repeatable = false, required = false, responsive = false ) {
 
-    label = ( required ) ? label + '*' : label;
+    label = ( required && label != null ) ? label + '*' : label;
 
-    if( repeatable ) {
-        label = (
-            <>
-                { label }
-                { Render.buttonRemoveRepeatableElt( id, () => { Attributes.removeEltRepeatable( keys, valueProp, componentInstance ) } ) }
-            </>
-        );
-    }
+    // if( repeatable ) {
+    //     label = (
+    //         <>
+    //             { label }
+    //             { Render.buttonRemoveRepeatableElt( id, () => { Attributes.removeEltRepeatable( keys, valueProp, componentInstance ) } ) }
+    //         </>
+    //     );
+    // }
 
     if( responsive ) {
 
@@ -56,13 +56,14 @@ export function renderText( componentInstance, id, label, keys, valueProp, objec
         isNumber,
         objectValue,
         keys,
-        valueProp
+        valueProp,
+        repeatable
     );
 }
 
-function renderTextControl( componentInstance, id, label, isNumber, value, keysToUpdate, valueProp ) {
+function renderTextControl( componentInstance, id, label, isNumber, value, keysToUpdate, valueProp, repeatable ) {
 
-    return <TextControl
+    var textControl = <TextControl
         key={ id }
         label={ label }
         type={ !! isNumber ? "number" : "text" }
@@ -71,4 +72,13 @@ function renderTextControl( componentInstance, id, label, isNumber, value, keysT
             Attributes.updateAttributes( keysToUpdate, valueProp, newValue, isNumber, componentInstance )
         }
     />
+
+    if( repeatable ) {
+        textControl = <div className='repeatableItem'>
+            { textControl }
+            { Render.buttonRemoveRepeatableElt( id, () => { Attributes.removeEltRepeatable( keysToUpdate, valueProp, componentInstance ) } ) }
+        </div>
+    }
+
+    return textControl;
 }
