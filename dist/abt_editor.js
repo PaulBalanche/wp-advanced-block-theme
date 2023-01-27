@@ -9564,7 +9564,10 @@ class EditZone {
     this.componentInstance = null;
   }
   render() {
-    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createPortal)(this.componentInstance.renderEditMode(), document.querySelector("#abt-component-edit-zone"));
+    if (this.componentInstance != null) {
+      return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createPortal)(this.componentInstance.renderEditMode(), document.querySelector("#abt-component-edit-zone"));
+    }
+    return;
   }
 }
 

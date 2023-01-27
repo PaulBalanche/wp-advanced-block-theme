@@ -74,9 +74,13 @@ export class EditZone {
   
     render() {
 
-        return createPortal(
-            this.componentInstance.renderEditMode(),
-            document.querySelector("#abt-component-edit-zone")
-        );
+        if( this.componentInstance != null ) {
+            return createPortal(
+                this.componentInstance.renderEditMode(),
+                document.querySelector("#abt-component-edit-zone")
+            );
+        }
+
+        return;
     }
 }
