@@ -66,7 +66,8 @@ function renderTextControl( componentInstance, id, label, isNumber, value, keysT
     var textControl = <TextControl
         key={ id }
         label={ label }
-        type={ !! isNumber ? "number" : "text" }
+        // type={ !! isNumber ? "number" : "text" }
+        type="text"
         value={ value }
         onChange={ ( newValue ) =>
             Attributes.updateAttributes( keysToUpdate, valueProp, newValue, isNumber, componentInstance )

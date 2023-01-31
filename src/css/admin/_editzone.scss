@@ -203,7 +203,8 @@
         
                 .block-editor-media-placeholder {
                     box-shadow: none;
-                    background: #f3f4f5;
+                    // background: #f3f4f5;
+                    padding: 0;
                 }
             }
 
@@ -329,16 +330,16 @@
                 background: white;
                 border: 1px solid #cce4f1;
         
-                .components-base-control__label {
-                    margin: 0 16px;
-                }
-                
-                .components-text-control__input {
-                    width: auto;
+                .components-base-control__field {
+                    padding: 0 10px;
                 }
         
                 .block-editor-link-control {
                     border-top: 1px solid #e2e4e7;
+
+                    .block-editor-link-control__search-item {
+                        box-sizing: border-box;
+                    }
                 }
                 
             }

@@ -551,7 +551,7 @@ body.is-dragging-components-draggable #editor .block-editor-block-list__block::a
 }
 #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .basicField .block-editor-media-placeholder, #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .repeatableField .block-editor-media-placeholder {
   box-shadow: none;
-  background: #f3f4f5;
+  padding: 0;
 }
 #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .flex:last-child .basicField, #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .flex:last-child .repeatableField {
   border-bottom: none;
@@ -633,14 +633,14 @@ body.is-dragging-components-draggable #editor .block-editor-block-list__block::a
   background: white;
   border: 1px solid #cce4f1;
 }
-#abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .link-control-container .components-base-control__label {
-  margin: 0 16px;
-}
-#abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .link-control-container .components-text-control__input {
-  width: auto;
+#abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .link-control-container .components-base-control__field {
+  padding: 0 10px;
 }
 #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .link-control-container .block-editor-link-control {
   border-top: 1px solid #e2e4e7;
+}
+#abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .link-control-container .block-editor-link-control .block-editor-link-control__search-item {
+  box-sizing: border-box;
 }
 #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .radio-control-container {
   padding: 1em;
@@ -780,7 +780,7 @@ body.is-dragging-components-draggable #editor .block-editor-block-list__block::a
   width: 100%;
   transition: width 0.4s;
 }
-#editor .interface-interface-skeleton.editZoneEnabled {
+#editor .interface-interface-skeleton.resizable.editZoneEnabled {
   width: calc(100% - 700px);
 }
 #editor .interface-interface-skeleton__body .edit-post-visual-editor__post-title-wrapper {

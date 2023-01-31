@@ -164,9 +164,11 @@ export class Attributes {
                 case 'image':
 
                     if( repeatable) {
+
+                        var imageName = ( typeof currentValueAttribute[keyLoop] == 'object' && typeof currentValueAttribute[keyLoop].default == 'object' && typeof currentValueAttribute[keyLoop].default.preview != 'undefined' ) ? currentValueAttribute[keyLoop].default.preview.split('/').pop() : '';
                         blocReturned.push(
-                            Render.panelBodyComponent( fieldId, keyLoop + 1,
-                                Controls.render( 'ImageVideo', componentInstance, fieldId, labelTemp, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, responsive, { type: prop.type, args: ( prop.image && typeof prop.image == 'object' ) ? prop.image : {} } ),
+                            Render.panelBodyComponent( fieldId, '#' + ( keyLoop + 1 ) + '. ' + imageName,
+                                Controls.render( 'ImageVideo', componentInstance, fieldId, '#' + ( keyLoop + 1 ) + '.' + labelTemp, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, responsive, { type: prop.type, args: ( prop.image && typeof prop.image == 'object' ) ? prop.image : {} } ),
                                 false, Render.buttonRemoveRepeatableElt( fieldId, () => { Attributes.removeEltRepeatable( keys.concat(keyLoop), valueProp, componentInstance ) } ) )
                         );
                     }
@@ -223,8 +225,40 @@ export class Attributes {
                         }
     
                         if( repeatable ) {
+
+                            var labelRepeatble = '#' + ( keyLoop + 1 ) + '.';
+
+                            var tempValueProp = valueProp;
+                            if( typeof tempValueProp == 'object' ) {
+
+                                for( var i in tempKeyObject ) {
+                                    if( typeof tempValueProp[ tempKeyObject[i] ] != 'undefined' ) {
+                                        tempValueProp = tempValueProp[ tempKeyObject[i] ];
+                                    }
+                                }
+
+                                var labelTempValueProp = [];
+                                if( typeof tempValueProp.title != 'undefined' ) {
+                                    labelTempValueProp.push( tempValueProp.title );
+                                }
+                                else if( typeof tempValueProp.name != 'undefined' ) {
+                                    labelTempValueProp.push( tempValueProp.name );
+                                }
+                                else if( typeof tempValueProp.id != 'undefined' ) {
+                                    labelTempValueProp.push( tempValueProp.id );
+                                }
+                                else {
+                                    for( var i in tempValueProp ) {
+                                        labelTempValueProp.push(i + ": " + tempValueProp[i]);
+                                    }
+                                }
+                                
+                                labelRepeatble += " " + labelTempValueProp.join(' / ');
+                            }
+
+
                             blocReturned.push(
-                                Render.panelBodyComponent( fieldId, keyLoop + 1, fieldsetObject, false, Render.buttonRemoveRepeatableElt( fieldId, () => { Attributes.removeEltRepeatable( tempKeyObject, valueProp, componentInstance ) } ) )
+                                Render.panelBodyComponent( fieldId, labelRepeatble, fieldsetObject, false, Render.buttonRemoveRepeatableElt( fieldId, () => { Attributes.removeEltRepeatable( tempKeyObject, valueProp, componentInstance ) } ) )
                             );
                         }
                         else {
@@ -346,7 +380,7 @@ export class Attributes {
                     break;
                 case 'number':
                     attributes[key] = {
-                        type: 'number'
+                        type: 'string'
                     };
                     break;
                 case 'image':

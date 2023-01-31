@@ -116,7 +116,7 @@ export function renderFile( componentInstance, type, id, label, keys, valueProp,
                     isSecondary
                     isSmall
                     className="reset-button"
-                    onClick={ () => {
+                    onMouseDown={ () => {
                             if( type == "gallery" && objectValue.length > 1 )
                             componentInstance.setAttributes( { [keys]: objectValue.slice(0, objectValue.length - 1) } );
                             else if( repeatable )

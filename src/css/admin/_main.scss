@@ -9,7 +9,7 @@
         width: 100%;
         transition: width 0.4s;
 
-        &.editZoneEnabled {
+        &.resizable.editZoneEnabled {
             width: calc(100% - 700px);
         }
     }

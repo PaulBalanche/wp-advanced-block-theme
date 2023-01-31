@@ -67,7 +67,7 @@ class WpeSlider extends WpeComponentBase {
                 <Button
                     key={ clientId + "-buttonSlide_" + index }
                     isPressed={ isPressed }
-                    onClick={ () => this.setState( { activeSlide: element.clientId } ) }
+                    onMouseDown={ () => this.setState( { activeSlide: element.clientId } ) }
                 >{ 'Slide ' + index }</Button>
             );
         });
@@ -76,7 +76,7 @@ class WpeSlider extends WpeComponentBase {
             <Button
                 key={ clientId + "-buttonSlide_X" }
                 isPressed={ false }
-                onClick={ () => this.addSlide() }
+                onMouseDown={ () => this.addSlide() }
                 className="addSlide"
             >New slide</Button>
         );

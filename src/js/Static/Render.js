@@ -79,7 +79,7 @@ export class Render {
         return <Button
             key={ id + "-repeatableAddElt" }
             className="repeatableAddElt"
-            onClick={onclick}
+            onMouseDown={onclick}
             variant="secondary"
         ><Dashicon icon="insert" /> Add</Button>
     }
@@ -89,7 +89,7 @@ export class Render {
         return <Button
             key={ id + "-repeatableRemoveElt" }
             className="repeatableRemoveElt"
-            onClick={onclick}
+            onMouseDown={onclick}
             variant="secondary"
             isSmall
         >

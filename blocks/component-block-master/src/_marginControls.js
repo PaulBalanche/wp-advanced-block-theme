@@ -133,7 +133,7 @@ export class MarginControls extends Component {
                             <Button
                                 variant="secondary"
                                 className="is-secondary"
-                                onClick={ () => {
+                                onMouseDown={ () => {
 
                                         if( property == 'padding' ) {
                                             this.resetPadding(deviceType)

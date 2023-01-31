@@ -66,7 +66,7 @@ export function renderImageVideo( componentInstance, type, args, id, label, keys
                             isSecondary
                             isSmall
                             className="reset-button"
-                            onClick={ () => {
+                            onMouseDown={ () => {
                                     Attributes.updateAttributes( keys.concat(responsive_id), valueProp, undefined, false, componentInstance )
                                 }
                             }
@@ -77,7 +77,8 @@ export function renderImageVideo( componentInstance, type, args, id, label, keys
 
             // MediaPlaceholder labels
             let labels = {
-                title: ( responsive_id != 'default' ) ? label + ' (' + responsive_id + ')' : label
+                // title: ( responsive_id != 'default' ) ? label + ' (' + responsive_id + ')' : label
+                title: null
             }
             if( args.instructions && typeof args.instructions == 'object' && args.instructions[responsive_id] ) {
                 labels.instructions = args.instructions[responsive_id]
@@ -176,7 +177,7 @@ export function renderImageVideo( componentInstance, type, args, id, label, keys
                                 isSecondary
                                 isSmall
                                 className="reset-button"
-                                onClick={ () => 
+                                onMouseDown={ () => 
                                     Attributes.updateAttributes( keys.concat(responsive_id), valueProp, {  type: 'file' }, false, componentInstance )
                                 }
                             >Remove</Button>

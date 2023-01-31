@@ -303,7 +303,7 @@ class ComponentBlock extends ModelBase {
                             $currentType = 'object';
                             break;
                         case 'number':
-                            $currentType = 'number';
+                            $currentType = 'string';
                             break;
                         case 'image':
                             $currentType = 'object';
