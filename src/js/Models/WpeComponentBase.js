@@ -104,7 +104,7 @@ export class WpeComponentBase extends Component {
                     }
 
                     let valueProp = this.getAttribute( keyProp );
-                    currentEditCat.push( Attributes.renderControl( prop, [ keyProp ], { [keyProp]: valueProp }, this ) );
+                    currentEditCat.push( Attributes.renderProp( prop, [ keyProp ], { [keyProp]: valueProp }, this ) );
                 }
 
                 if( keyCat == "default" ) {

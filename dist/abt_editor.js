@@ -7517,14 +7517,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 function renderDateTime(componentInstance, id, label, keys, valueProp, objectValue) {
-  let repeatable = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : false;
-  let required = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : false;
+  let required = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : false;
   label = required ? label + '*' : label;
-  if (repeatable) {
-    label = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, label, _Static_Render__WEBPACK_IMPORTED_MODULE_3__.Render.buttonRemoveRepeatableElt(id, () => {
-      _Static_Attributes__WEBPACK_IMPORTED_MODULE_2__.Attributes.removeEltRepeatable(keys, valueProp, componentInstance);
-    }));
-  }
   const MyDateTimePicker = withState({
     date: objectValue ? objectValue : new Date()
   })(_ref => {
@@ -7577,9 +7571,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 function renderFile(componentInstance, type, id, label, keys, valueProp, objectValue) {
-  let repeatable = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : false;
-  let required = arguments.length > 8 && arguments[8] !== undefined ? arguments[8] : false;
-  let responsive = arguments.length > 9 && arguments[9] !== undefined ? arguments[9] : false;
+  let required = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : false;
   label = label && required ? label + '*' : label;
   let preview = false;
   if (objectValue && typeof objectValue == 'object') {
@@ -7733,219 +7725,175 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _Static_Attributes__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Static/Attributes */ "./src/js/Static/Attributes.js");
 /* harmony import */ var _Static_Render__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../Static/Render */ "./src/js/Static/Render.js");
+/* harmony import */ var _Singleton_Devices__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../Singleton/Devices */ "./src/js/Singleton/Devices.js");
+
 
 
 
 
 
 function renderImageVideo(componentInstance, type, args, id, label, keys, valueProp, objectValue) {
-  let repeatable = arguments.length > 8 && arguments[8] !== undefined ? arguments[8] : false;
-  let required = arguments.length > 9 && arguments[9] !== undefined ? arguments[9] : false;
-  let responsive = arguments.length > 10 && arguments[10] !== undefined ? arguments[10] : false;
+  let required = arguments.length > 8 && arguments[8] !== undefined ? arguments[8] : false;
   label = label && required ? label + '*' : label;
-  let videoControl = [];
-  var tabPanelResponsive = [];
-
-  // Responsive init
-  if (!args.responsive || typeof args.responsive != 'object') args.responsive = ['default'];
-
-  // Remove useless data
-  if (typeof objectValue == 'object') {
-    for (var i in objectValue) {
-      if (!args.responsive.includes(i)) delete objectValue[i];
+  let imageVideoControl = [];
+  if (type == 'image') {
+    let preview = false;
+    if (typeof objectValue == 'object' && objectValue.preview) {
+      preview = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+        key: id + "-mediaPreviewContainer",
+        className: "media-preview-container"
+      }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
+        key: id + "-imagePreview",
+        alt: "Edit image",
+        title: "Edit image",
+        className: "edit-image-preview",
+        src: objectValue.preview
+      }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Button, {
+        key: id + "-removeMedia",
+        isSecondary: true,
+        isSmall: true,
+        className: "reset-button",
+        onMouseDown: () => {
+          _Static_Attributes__WEBPACK_IMPORTED_MODULE_3__.Attributes.updateAttributes(keys, valueProp, undefined, false, componentInstance);
+        }
+      }, "Remove"));
     }
-  }
 
-  // Loop on each responsive entries
-  for (var i in args.responsive) {
-    let responsive_id = args.responsive[i];
-    let responsiveContent = [];
-
-    // Update component attribute if empty 
-    if (!objectValue[responsive_id]) {
-      if (typeof objectValue != 'object') _Static_Attributes__WEBPACK_IMPORTED_MODULE_3__.Attributes.updateAttributes(keys, valueProp, {
-        [responsive_id]: {}
-      }, false, componentInstance);else _Static_Attributes__WEBPACK_IMPORTED_MODULE_3__.Attributes.updateAttributes(keys.concat(responsive_id), valueProp, {}, false, componentInstance);
+    // MediaPlaceholder labels
+    let labels = {
+      // title: label
+      title: null
+    };
+    if (args.instructions && typeof args.instructions == 'object' && args.instructions) {
+      labels.instructions = args.instructions;
     }
-    if (type == 'image') {
+    imageVideoControl.push(_Static_Render__WEBPACK_IMPORTED_MODULE_4__.Render.fieldContainer(id + "_image", (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.MediaPlaceholder, {
+      key: id + "-MediaPlaceholder",
+      onSelect: value => {
+        let newValue = undefined;
+        if (typeof value.id != 'undefined') {
+          newValue = {
+            id: value.id,
+            preview: value.url
+          };
+        }
+        if (typeof newValue != 'undefined' && (typeof newValue != 'object' || Object.keys(newValue).length > 0)) _Static_Attributes__WEBPACK_IMPORTED_MODULE_3__.Attributes.updateAttributes(keys, valueProp, newValue, false, componentInstance);
+      },
+      value: objectValue ? objectValue : false,
+      disableDropZone: true,
+      labels: labels
+    }, preview)));
+  } else if (type == 'video') {
+    /**
+     * Video type
+     */
+    let options_video_type = [];
+    if (args.file) options_video_type.push({
+      label: 'File',
+      value: 'file'
+    });
+    if (args.embed) options_video_type.push({
+      label: 'Embed',
+      value: 'embed'
+    });
+    let selected_option = objectValue && objectValue.type ? objectValue.type : args.file ? 'file' : args.embed ? 'embed' : false;
+    const VideoRadioControl = withState({
+      option: selected_option
+    })(_ref => {
+      let {
+        option,
+        setState
+      } = _ref;
+      return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.RadioControl, {
+        key: id + "-videoType",
+        label: "Video type",
+        selected: option,
+        options: options_video_type,
+        onChange: newValue => {
+          setState({
+            newValue
+          });
+          _Static_Attributes__WEBPACK_IMPORTED_MODULE_3__.Attributes.updateAttributes(keys, valueProp, {
+            type: newValue
+          }, false, componentInstance);
+        }
+      });
+    });
+    imageVideoControl.push(_Static_Render__WEBPACK_IMPORTED_MODULE_4__.Render.fieldContainer(id + "_video", (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(VideoRadioControl, null)));
+
+    /**
+     * File
+     */
+    if (selected_option == 'file') {
       let preview = false;
-      if (objectValue[responsive_id] && typeof objectValue[responsive_id] == 'object' && objectValue[responsive_id].preview) {
+      if (objectValue && objectValue.file && typeof objectValue.file == 'object') {
+        preview = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
+          key: id + "-filePreview",
+          alt: "Edit file",
+          title: "Edit file",
+          className: "edit-file-preview",
+          src: objectValue.file.preview
+        }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+          key: id + "-fileDetails",
+          className: "file-details"
+        }, objectValue.file.name, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), objectValue.file.mime, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), _Static_Attributes__WEBPACK_IMPORTED_MODULE_3__.Attributes.fileSizeFormat(objectValue.file.size)));
         preview = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-          key: id + "-mediaPreviewContainer" + responsive_id,
+          key: id + "-mediaPreviewContainer",
           className: "media-preview-container"
-        }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
-          key: id + "-imagePreview" + responsive_id,
-          alt: "Edit image",
-          title: "Edit image",
-          className: "edit-image-preview",
-          src: objectValue[responsive_id].preview
-        }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Button, {
-          key: id + "-removeMedia" + responsive_id,
+        }, preview, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Button, {
+          key: id + "-removeMedia",
           isSecondary: true,
           isSmall: true,
           className: "reset-button",
-          onMouseDown: () => {
-            _Static_Attributes__WEBPACK_IMPORTED_MODULE_3__.Attributes.updateAttributes(keys.concat(responsive_id), valueProp, undefined, false, componentInstance);
-          }
+          onMouseDown: () => _Static_Attributes__WEBPACK_IMPORTED_MODULE_3__.Attributes.updateAttributes(keys, valueProp, {
+            type: 'file'
+          }, false, componentInstance)
         }, "Remove"));
       }
-
-      // MediaPlaceholder labels
-      let labels = {
-        // title: ( responsive_id != 'default' ) ? label + ' (' + responsive_id + ')' : label
-        title: null
-      };
-      if (args.instructions && typeof args.instructions == 'object' && args.instructions[responsive_id]) {
-        labels.instructions = args.instructions[responsive_id];
-      }
-      responsiveContent.push(_Static_Render__WEBPACK_IMPORTED_MODULE_4__.Render.fieldContainer(id + "_image_" + responsive_id, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.MediaPlaceholder, {
-        key: id + "-MediaPlaceholder-" + responsive_id,
+      imageVideoControl.push(_Static_Render__WEBPACK_IMPORTED_MODULE_4__.Render.fieldContainer(id + "_file", (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.MediaPlaceholder, {
+        key: id + "-MediaPlaceholder",
         onSelect: value => {
           let newValue = undefined;
           if (typeof value.id != 'undefined') {
             newValue = {
               id: value.id,
-              preview: value.url
+              preview: value.icon,
+              name: value.filename,
+              mime: value.mime,
+              size: value.filesizeInBytes
             };
           }
-          if (typeof newValue != 'undefined' && (typeof newValue != 'object' || Object.keys(newValue).length > 0)) _Static_Attributes__WEBPACK_IMPORTED_MODULE_3__.Attributes.updateAttributes(keys.concat(responsive_id), valueProp, newValue, false, componentInstance);
-        },
-        value: objectValue[responsive_id] ? objectValue[responsive_id] : false,
-        disableDropZone: true,
-        labels: labels
-      }, preview)));
-    } else if (type == 'video') {
-      /**
-       * Video type
-       */
-      let options_video_type = [];
-      if (args.file) options_video_type.push({
-        label: 'File',
-        value: 'file'
-      });
-      if (args.embed) options_video_type.push({
-        label: 'Embed',
-        value: 'embed'
-      });
-      let selected_option = objectValue[responsive_id] && objectValue[responsive_id].type ? objectValue[responsive_id].type : args.file ? 'file' : args.embed ? 'embed' : false;
-      const VideoRadioControl = withState({
-        option: selected_option
-      })(_ref => {
-        let {
-          option,
-          setState
-        } = _ref;
-        return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.RadioControl, {
-          key: id + "-videoType-" + responsive_id,
-          label: "Video type",
-          selected: option,
-          options: options_video_type,
-          onChange: newValue => {
-            setState({
-              newValue
-            });
-            _Static_Attributes__WEBPACK_IMPORTED_MODULE_3__.Attributes.updateAttributes(keys.concat(responsive_id), valueProp, {
-              type: newValue
+          if (typeof newValue != 'undefined' && (typeof newValue != 'object' || Object.keys(newValue).length > 0)) {
+            _Static_Attributes__WEBPACK_IMPORTED_MODULE_3__.Attributes.updateAttributes(keys, valueProp, {
+              type: 'file',
+              file: newValue
             }, false, componentInstance);
           }
-        });
-      });
-      responsiveContent.push(_Static_Render__WEBPACK_IMPORTED_MODULE_4__.Render.fieldContainer(id + "_video_" + responsive_id, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(VideoRadioControl, null)));
-
-      /**
-       * File
-       */
-      if (selected_option == 'file') {
-        let preview = false;
-        if (objectValue[responsive_id] && objectValue[responsive_id].file && typeof objectValue[responsive_id].file == 'object') {
-          preview = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
-            key: id + "-filePreview-" + responsive_id,
-            alt: "Edit file",
-            title: "Edit file",
-            className: "edit-file-preview",
-            src: objectValue[responsive_id].file.preview
-          }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-            key: id + "-fileDetails-" + responsive_id,
-            className: "file-details"
-          }, objectValue[responsive_id].file.name, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), objectValue[responsive_id].file.mime, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), _Static_Attributes__WEBPACK_IMPORTED_MODULE_3__.Attributes.fileSizeFormat(objectValue[responsive_id].file.size)));
-          preview = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-            key: id + "-mediaPreviewContainer-" + responsive_id,
-            className: "media-preview-container"
-          }, preview, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Button, {
-            key: id + "-removeMedia-" + responsive_id,
-            isSecondary: true,
-            isSmall: true,
-            className: "reset-button",
-            onMouseDown: () => _Static_Attributes__WEBPACK_IMPORTED_MODULE_3__.Attributes.updateAttributes(keys.concat(responsive_id), valueProp, {
-              type: 'file'
-            }, false, componentInstance)
-          }, "Remove"));
-        }
-        responsiveContent.push(_Static_Render__WEBPACK_IMPORTED_MODULE_4__.Render.fieldContainer(id + "_file_" + responsive_id, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.MediaPlaceholder, {
-          key: id + "-MediaPlaceholder-" + responsive_id,
-          onSelect: value => {
-            let newValue = undefined;
-            if (typeof value.id != 'undefined') {
-              newValue = {
-                id: value.id,
-                preview: value.icon,
-                name: value.filename,
-                mime: value.mime,
-                size: value.filesizeInBytes
-              };
-            }
-            if (typeof newValue != 'undefined' && (typeof newValue != 'object' || Object.keys(newValue).length > 0)) {
-              _Static_Attributes__WEBPACK_IMPORTED_MODULE_3__.Attributes.updateAttributes(keys.concat(responsive_id), valueProp, {
-                type: 'file',
-                file: newValue
-              }, false, componentInstance);
-            }
-          },
-          value: objectValue[responsive_id] && objectValue[responsive_id].file ? objectValue[responsive_id].file : false,
-          disableDropZone: true
-        }, preview)));
-      }
-
-      /**
-       * Embed
-       */
-      if (selected_option == 'embed') {
-        responsiveContent.push(_Static_Render__WEBPACK_IMPORTED_MODULE_4__.Render.fieldContainer(id + "_embed_" + responsive_id, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.TextControl, {
-          key: id + "-embedLink",
-          label: 'Embed link',
-          type: 'text',
-          value: objectValue[responsive_id] && objectValue[responsive_id].embed ? objectValue[responsive_id].embed.url : '',
-          onChange: newValue => _Static_Attributes__WEBPACK_IMPORTED_MODULE_3__.Attributes.updateAttributes(keys.concat(responsive_id), valueProp, {
-            type: 'embed',
-            embed: {
-              url: newValue
-            }
-          }, false, componentInstance)
-        })));
-      }
+        },
+        value: objectValue && objectValue.file ? objectValue.file : false,
+        disableDropZone: true
+      }, preview)));
     }
 
-    // Tab panel construction
-    tabPanelResponsive.push({
-      name: responsive_id,
-      title: responsive_id.charAt(0).toUpperCase() + responsive_id.slice(1),
-      content: responsiveContent
-    });
+    /**
+     * Embed
+     */
+    if (selected_option == 'embed') {
+      imageVideoControl.push(_Static_Render__WEBPACK_IMPORTED_MODULE_4__.Render.fieldContainer(id + "_embed", (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.TextControl, {
+        key: id + "-embedLink",
+        label: 'Embed link',
+        type: 'text',
+        value: objectValue && objectValue.embed ? objectValue.embed.url : '',
+        onChange: newValue => _Static_Attributes__WEBPACK_IMPORTED_MODULE_3__.Attributes.updateAttributes(keys, valueProp, {
+          type: 'embed',
+          embed: {
+            url: newValue
+          }
+        }, false, componentInstance)
+      })));
+    }
   }
-
-  // Render tab if more than 1 content
-  if (tabPanelResponsive.length > 1) {
-    videoControl.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.TabPanel, {
-      key: id + "-tabPanelVideo",
-      className: "tab-panel-wpe-component",
-      activeClass: "active-tab",
-      tabs: tabPanelResponsive
-    }, tabPanelResponsive => tabPanelResponsive.content));
-  } else videoControl.push(tabPanelResponsive[0].content);
-  if (repeatable) {
-    return videoControl;
-  }
-  return _Static_Render__WEBPACK_IMPORTED_MODULE_4__.Render.panelComponent(id, label, videoControl, false);
+  return _Static_Render__WEBPACK_IMPORTED_MODULE_4__.Render.panelComponent(id, label, imageVideoControl, false);
 }
 
 /***/ }),
@@ -7975,17 +7923,11 @@ __webpack_require__.r(__webpack_exports__);
 
 
 function renderLink(componentInstance, id, label, keys, valueProp, objectValue) {
-  let repeatable = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : false;
-  let required = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : false;
+  let required = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : false;
   if (typeof objectValue == 'undefined') {
     objectValue = {};
   }
   label = required ? label + '*' : label;
-  if (repeatable) {
-    label = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, label, _Static_Render__WEBPACK_IMPORTED_MODULE_4__.Render.buttonRemoveRepeatableElt(id, () => {
-      _Static_Attributes__WEBPACK_IMPORTED_MODULE_3__.Attributes.removeEltRepeatable(keys, valueProp, componentInstance);
-    }));
-  }
   let inner = _Static_Render__WEBPACK_IMPORTED_MODULE_4__.Render.fieldContainer(id + '_link', (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     key: id + "-LinkControlComponentsBaseControl",
     className: "components-base-control"
@@ -8034,6 +7976,37 @@ function renderLink(componentInstance, id, label, keys, valueProp, objectValue) 
 
 /***/ }),
 
+/***/ "./src/js/Controls/Object.js":
+/*!***********************************!*\
+  !*** ./src/js/Controls/Object.js ***!
+  \***********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "renderObject": () => (/* binding */ renderObject)
+/* harmony export */ });
+/* harmony import */ var _Singleton_Devices__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Singleton/Devices */ "./src/js/Singleton/Devices.js");
+/* harmony import */ var _Static_Attributes__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Static/Attributes */ "./src/js/Static/Attributes.js");
+/* harmony import */ var _Static_Render__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Static/Render */ "./src/js/Static/Render.js");
+
+
+
+function renderObject(componentInstance, id, label, keys, valueProp, objectValue) {
+  let required = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : false;
+  let fieldsetObject = [];
+  if (false) {} else {
+    for (const [keySubProp, valueSubProp] of Object.entries(objectValue)) {
+      fieldsetObject.push(_Static_Attributes__WEBPACK_IMPORTED_MODULE_1__.Attributes.renderProp(valueSubProp, keys.concat(keySubProp), valueProp, componentInstance));
+    }
+  }
+  if (false) { var i, labelTempValueProp, tempValueProp, labelRepeatble; }
+  return _Static_Render__WEBPACK_IMPORTED_MODULE_2__.Render.panelComponent(id, label, fieldsetObject, false);
+}
+
+/***/ }),
+
 /***/ "./src/js/Controls/Radio.js":
 /*!**********************************!*\
   !*** ./src/js/Controls/Radio.js ***!
@@ -8059,15 +8032,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 function renderRadio(componentInstance, id, label, options, keys, valueProp, objectValue) {
-  let repeatable = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : false;
-  let required = arguments.length > 8 && arguments[8] !== undefined ? arguments[8] : false;
+  let required = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : false;
   if (typeof options == 'undefined') return null;
   label = required ? label + '*' : label;
-  if (repeatable) {
-    label = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, label, _Static_Render__WEBPACK_IMPORTED_MODULE_3__.Render.buttonRemoveRepeatableElt(id, () => {
-      _Static_Attributes__WEBPACK_IMPORTED_MODULE_2__.Attributes.removeEltRepeatable(keys, valueProp, componentInstance);
-    }));
-  }
   const MyRadioControl = (0,_wordpress_compose__WEBPACK_IMPORTED_MODULE_4__.withState)({
     option: objectValue
   })(_ref => {
@@ -8129,15 +8096,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 function renderRelation(componentInstance, id, label, entity, keys, valueProp, objectValue) {
-  let repeatable = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : false;
-  let required = arguments.length > 8 && arguments[8] !== undefined ? arguments[8] : false;
+  let required = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : false;
   if (typeof entity == 'undefined' || typeof this.props.relations[entity] == 'undefined' || this.props.relations[entity] == null || Object.keys(this.props.relations[entity]).length == 0) return null;
   label = required ? label + '*' : label;
-  if (repeatable) {
-    label = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, label, _Static_Render__WEBPACK_IMPORTED_MODULE_3__.Render.buttonRemoveRepeatableElt(id, () => {
-      _Static_Attributes__WEBPACK_IMPORTED_MODULE_2__.Attributes.removeEltRepeatable(keys, valueProp, componentInstance);
-    }));
-  }
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.SelectControl, {
     key: id,
     label: label,
@@ -8176,15 +8137,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 function renderSelect(componentInstance, id, label, options, defaultValue, keys, valueProp, objectValue) {
-  let repeatable = arguments.length > 8 && arguments[8] !== undefined ? arguments[8] : false;
-  let required = arguments.length > 9 && arguments[9] !== undefined ? arguments[9] : false;
+  let required = arguments.length > 8 && arguments[8] !== undefined ? arguments[8] : false;
   if (typeof options == 'undefined') return null;
   label = required ? label + '*' : label;
-  if (repeatable) {
-    label = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, label, _Static_Render__WEBPACK_IMPORTED_MODULE_3__.Render.buttonRemoveRepeatableElt(id, () => {
-      _Static_Attributes__WEBPACK_IMPORTED_MODULE_2__.Attributes.removeEltRepeatable(keys, valueProp, componentInstance);
-    }));
-  }
   const defaultLabel = defaultValue != null ? 'Default (' + defaultValue + ')' : 'Default';
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.SelectControl, {
     key: id,
@@ -8230,51 +8185,17 @@ __webpack_require__.r(__webpack_exports__);
 
 function renderText(componentInstance, id, label, keys, valueProp, objectValue) {
   let isNumber = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : false;
-  let repeatable = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : false;
-  let required = arguments.length > 8 && arguments[8] !== undefined ? arguments[8] : false;
-  let responsive = arguments.length > 9 && arguments[9] !== undefined ? arguments[9] : false;
+  let required = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : false;
   label = required && label != null ? label + '*' : label;
-
-  // if( repeatable ) {
-  //     label = (
-  //         <>
-  //             { label }
-  //             { Render.buttonRemoveRepeatableElt( id, () => { Attributes.removeEltRepeatable( keys, valueProp, componentInstance ) } ) }
-  //         </>
-  //     );
-  // }
-
-  if (responsive) {
-    let newInner = _Static_Render__WEBPACK_IMPORTED_MODULE_3__.Render.tabPanelComponent(id, Object.keys(_Singleton_Devices__WEBPACK_IMPORTED_MODULE_4__.Devices.getInstance().getMediaQueries()).map(layout => {
-      return {
-        name: layout,
-        title: layout.charAt(0).toUpperCase() + layout.slice(1),
-        className: 'tab-' + layout
-      };
-    }), function (tab) {
-      return renderTextControl(componentInstance, id + "-" + tab.name, label, isNumber, typeof objectValue[tab.name] == 'string' ? objectValue[tab.name] : '', keys.concat(tab.name), valueProp);
-    }, _Singleton_Devices__WEBPACK_IMPORTED_MODULE_4__.Devices.getInstance().getCurrentDevice());
-    return newInner;
-  }
-  return renderTextControl(componentInstance, id, label, isNumber, objectValue, keys, valueProp, repeatable);
-}
-function renderTextControl(componentInstance, id, label, isNumber, value, keysToUpdate, valueProp, repeatable) {
   var textControl = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.TextControl, {
     key: id,
     label: label
     // type={ !! isNumber ? "number" : "text" }
     ,
     type: "text",
-    value: value,
-    onChange: newValue => _Static_Attributes__WEBPACK_IMPORTED_MODULE_2__.Attributes.updateAttributes(keysToUpdate, valueProp, newValue, isNumber, componentInstance)
+    value: objectValue,
+    onChange: newValue => _Static_Attributes__WEBPACK_IMPORTED_MODULE_2__.Attributes.updateAttributes(keys, valueProp, newValue, isNumber, componentInstance)
   });
-  if (repeatable) {
-    textControl = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "repeatableItem"
-    }, textControl, _Static_Render__WEBPACK_IMPORTED_MODULE_3__.Render.buttonRemoveRepeatableElt(id, () => {
-      _Static_Attributes__WEBPACK_IMPORTED_MODULE_2__.Attributes.removeEltRepeatable(keysToUpdate, valueProp, componentInstance);
-    }));
-  }
   return textControl;
 }
 
@@ -8302,14 +8223,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 function renderTextarea(componentInstance, id, label, keys, valueProp, objectValue) {
-  let repeatable = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : false;
-  let required = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : false;
+  let required = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : false;
   label = required ? label + '*' : label;
-  if (repeatable) {
-    label = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, label, _Static_Render__WEBPACK_IMPORTED_MODULE_3__.Render.buttonRemoveRepeatableElt(id, () => {
-      _Static_Attributes__WEBPACK_IMPORTED_MODULE_2__.Attributes.removeEltRepeatable(keys, valueProp, componentInstance);
-    }));
-  }
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.TextareaControl, {
     key: id,
     label: label,
@@ -8342,14 +8257,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 function renderToggle(componentInstance, id, label, help, keys, valueProp, objectValue) {
-  let repeatable = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : false;
-  let required = arguments.length > 8 && arguments[8] !== undefined ? arguments[8] : false;
+  let required = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : false;
   label = required ? label + '*' : label;
-  if (repeatable) {
-    label = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, label, _Static_Render__WEBPACK_IMPORTED_MODULE_3__.Render.buttonRemoveRepeatableElt(id, () => {
-      _Static_Attributes__WEBPACK_IMPORTED_MODULE_2__.Attributes.removeEltRepeatable(keys, valueProp, componentInstance);
-    }));
-  }
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.ToggleControl, {
     key: id,
     label: label,
@@ -9227,7 +9136,7 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
             }
           }
           let valueProp = this.getAttribute(keyProp);
-          currentEditCat.push(_Static_Attributes__WEBPACK_IMPORTED_MODULE_2__.Attributes.renderControl(prop, [keyProp], {
+          currentEditCat.push(_Static_Attributes__WEBPACK_IMPORTED_MODULE_2__.Attributes.renderProp(prop, [keyProp], {
             [keyProp]: valueProp
           }, this));
         }
@@ -9592,9 +9501,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _Singleton_Devices__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Singleton/Devices */ "./src/js/Singleton/Devices.js");
-/* harmony import */ var _Controls__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Controls */ "./src/js/Static/Controls.js");
-/* harmony import */ var _Render__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Render */ "./src/js/Static/Render.js");
-
+/* harmony import */ var _Render__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Render */ "./src/js/Static/Render.js");
 
 
 
@@ -9646,187 +9553,95 @@ class Attributes {
     }
     return objectReturned;
   }
-  static renderControl(prop, keys, valueProp, componentInstance) {
-    const clientId = componentInstance.props.clientId;
-    prop.type = prop.type.toLowerCase();
-    prop.default = typeof prop.default != "undefined" ? prop.default : null;
-    let blocReturned = [];
-    let repeatable = typeof prop.repeatable != "undefined" && !!prop.repeatable ? true : false;
+  static renderProp(prop, keys, valueProp, componentInstance) {
+    const type = prop.type.toLowerCase();
+    const blockKey = componentInstance.props.clientId + "-" + keys.join("-");
+    const repeatable = typeof prop.repeatable != "undefined" && !!prop.repeatable ? true : false;
+    const label = typeof prop.label != "undefined" ? prop.label : typeof prop.title != "undefined" ? prop.title : keys.slice(-1);
+    const required_field = typeof prop.required != "undefined" && prop.required ? true : false;
     let currentValueAttribute = valueProp;
     keys.forEach(element => {
-      if (typeof currentValueAttribute == 'object') {
-        if (currentValueAttribute.hasOwnProperty(element) && typeof currentValueAttribute[element] != "undefined") currentValueAttribute = currentValueAttribute[element];else currentValueAttribute = "";
-      }
+      currentValueAttribute = typeof currentValueAttribute == 'object' && currentValueAttribute.hasOwnProperty(element) && typeof currentValueAttribute[element] != "undefined" ? currentValueAttribute[element] : "";
     });
-    if (!repeatable) currentValueAttribute = [currentValueAttribute];else if (typeof currentValueAttribute != "object" || currentValueAttribute.length == 0) currentValueAttribute = [""];
-    let responsive = typeof prop.responsive != "undefined" && !!prop.responsive ? true : false;
-    const label = typeof prop.label != "undefined" ? prop.label : typeof prop.title != "undefined" ? prop.title : keys.slice(-1);
-    for (var keyLoop in currentValueAttribute) {
-      keyLoop = Attributes.returnStringOrNumber(keyLoop, true);
-      const labelTemp = !repeatable || repeatable && keyLoop == 0 ? label : null;
-      let required_field = typeof prop.required != "undefined" && prop.required ? true : false;
-      let fieldId = clientId + "-" + keys.join("-") + "-" + keyLoop;
-      switch (prop.type) {
-        case 'string':
-          blocReturned.push(_Controls__WEBPACK_IMPORTED_MODULE_3__.Controls.render('Text', componentInstance, fieldId, labelTemp, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, responsive, {
-            isNumber: false
-          }));
-          break;
-        case 'number':
-          blocReturned.push(_Controls__WEBPACK_IMPORTED_MODULE_3__.Controls.render('Text', componentInstance, fieldId, labelTemp, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, responsive, {
-            isNumber: true
-          }));
-          break;
-        case 'text':
-          blocReturned.push(_Controls__WEBPACK_IMPORTED_MODULE_3__.Controls.render('Textarea', componentInstance, fieldId, labelTemp, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, responsive));
-          break;
-        case 'richText':
-        case 'wysiwyg':
-          blocReturned.push(_Controls__WEBPACK_IMPORTED_MODULE_3__.Controls.render('Wysiwyg', componentInstance, fieldId, labelTemp, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, responsive));
-          break;
-        case 'boolean':
-          blocReturned.push(_Controls__WEBPACK_IMPORTED_MODULE_3__.Controls.render('Toggle', componentInstance, fieldId, labelTemp, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, responsive, {
-            help: prop.help
-          }));
-          break;
-        case 'select':
-        case 'color':
-          blocReturned.push(_Controls__WEBPACK_IMPORTED_MODULE_3__.Controls.render('Select', componentInstance, fieldId, labelTemp, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, responsive, {
-            options: prop.options,
-            default: prop.default
-          }));
-          break;
-        case 'radio':
-          blocReturned.push(_Controls__WEBPACK_IMPORTED_MODULE_3__.Controls.render('Radio', componentInstance, fieldId, labelTemp, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, responsive, {
-            options: prop.options
-          }));
-          break;
-        case 'link':
-          blocReturned.push(_Controls__WEBPACK_IMPORTED_MODULE_3__.Controls.render('Link', componentInstance, fieldId, labelTemp, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field));
-          break;
-        case 'relation':
-          blocReturned.push(_Controls__WEBPACK_IMPORTED_MODULE_3__.Controls.render('Relation', componentInstance, fieldId, labelTemp, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, responsive, {
-            entity: prop.entity
-          }));
-          break;
-        case 'date':
-          blocReturned.push(_Controls__WEBPACK_IMPORTED_MODULE_3__.Controls.render('DateTime', componentInstance, fieldId, labelTemp, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field));
-          break;
-        case 'image':
-          if (repeatable) {
-            var imageName = typeof currentValueAttribute[keyLoop] == 'object' && typeof currentValueAttribute[keyLoop].default == 'object' && typeof currentValueAttribute[keyLoop].default.preview != 'undefined' ? currentValueAttribute[keyLoop].default.preview.split('/').pop() : '';
-            blocReturned.push(_Render__WEBPACK_IMPORTED_MODULE_4__.Render.panelBodyComponent(fieldId, '#' + (keyLoop + 1) + '. ' + imageName, _Controls__WEBPACK_IMPORTED_MODULE_3__.Controls.render('ImageVideo', componentInstance, fieldId, '#' + (keyLoop + 1) + '.' + labelTemp, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, responsive, {
-              type: prop.type,
-              args: prop.image && typeof prop.image == 'object' ? prop.image : {}
-            }), false, _Render__WEBPACK_IMPORTED_MODULE_4__.Render.buttonRemoveRepeatableElt(fieldId, () => {
-              Attributes.removeEltRepeatable(keys.concat(keyLoop), valueProp, componentInstance);
-            })));
-          } else {
-            blocReturned.push(_Controls__WEBPACK_IMPORTED_MODULE_3__.Controls.render('ImageVideo', componentInstance, fieldId, labelTemp, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, responsive, {
-              type: prop.type,
-              args: prop.image && typeof prop.image == 'object' ? prop.image : {}
-            }));
-          }
-          break;
-        case 'video':
-          blocReturned.push(_Controls__WEBPACK_IMPORTED_MODULE_3__.Controls.render('ImageVideo', componentInstance, fieldId, labelTemp, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, responsive, {
-            type: prop.type,
-            args: prop.video && typeof prop.video == 'object' ? prop.video : {}
-          }));
-          break;
-        case 'file':
-        case 'gallery':
-          blocReturned.push(_Controls__WEBPACK_IMPORTED_MODULE_3__.Controls.render('File', componentInstance, fieldId, labelTemp, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, responsive, {
-            type: prop.type
-          }));
-          break;
-        case 'object':
-          if (typeof prop.props == "object") {
-            let tempKeyObject = repeatable ? keys.concat(keyLoop) : keys;
-            let fieldsetObject = [];
-            if (responsive) {
-              fieldsetObject.push(_Render__WEBPACK_IMPORTED_MODULE_4__.Render.tabPanelComponent(fieldId, Object.keys(_Singleton_Devices__WEBPACK_IMPORTED_MODULE_2__.Devices.getInstance().getMediaQueries()).map(layout => {
-                return {
-                  name: layout,
-                  title: layout.charAt(0).toUpperCase() + layout.slice(1),
-                  className: 'tab-' + layout
-                };
-              }), function (tab) {
-                let tempKeyObjectReponsive = keys.concat(tab.name);
-                let fieldsetObjectResponsive = [];
-                for (const [keySubProp, valueSubProp] of Object.entries(prop.props)) {
-                  fieldsetObjectResponsive.push(Attributes.renderControl(valueSubProp, tempKeyObjectReponsive.concat(keySubProp), valueProp, componentInstance));
-                }
-                return fieldsetObjectResponsive;
-              }, _Singleton_Devices__WEBPACK_IMPORTED_MODULE_2__.Devices.getInstance().getCurrentDevice()));
-            } else {
-              for (const [keySubProp, valueSubProp] of Object.entries(prop.props)) {
-                fieldsetObject.push(Attributes.renderControl(valueSubProp, tempKeyObject.concat(keySubProp), valueProp, componentInstance));
-              }
-            }
-            if (repeatable) {
-              var labelRepeatble = '#' + (keyLoop + 1) + '.';
-              var tempValueProp = valueProp;
-              if (typeof tempValueProp == 'object') {
-                for (var i in tempKeyObject) {
-                  if (typeof tempValueProp[tempKeyObject[i]] != 'undefined') {
-                    tempValueProp = tempValueProp[tempKeyObject[i]];
-                  }
-                }
-                var labelTempValueProp = [];
-                if (typeof tempValueProp.title != 'undefined') {
-                  labelTempValueProp.push(tempValueProp.title);
-                } else if (typeof tempValueProp.name != 'undefined') {
-                  labelTempValueProp.push(tempValueProp.name);
-                } else if (typeof tempValueProp.id != 'undefined') {
-                  labelTempValueProp.push(tempValueProp.id);
-                } else {
-                  for (var i in tempValueProp) {
-                    labelTempValueProp.push(i + ": " + tempValueProp[i]);
-                  }
-                }
-                labelRepeatble += " " + labelTempValueProp.join(' / ');
-              }
-              blocReturned.push(_Render__WEBPACK_IMPORTED_MODULE_4__.Render.panelBodyComponent(fieldId, labelRepeatble, fieldsetObject, false, _Render__WEBPACK_IMPORTED_MODULE_4__.Render.buttonRemoveRepeatableElt(fieldId, () => {
-                Attributes.removeEltRepeatable(tempKeyObject, valueProp, componentInstance);
-              })));
-            } else {
-              blocReturned.push(_Render__WEBPACK_IMPORTED_MODULE_4__.Render.panelComponent(fieldId, labelTemp, fieldsetObject, false));
-            }
-          } else {
-            return;
-          }
-          break;
-      }
+    var args = {};
+    switch (type) {
+      case 'string':
+        args = {
+          isNumber: false
+        };
+        break;
+      case 'number':
+        args = {
+          isNumber: true
+        };
+        break;
+      case 'boolean':
+        args = {
+          help: prop.help
+        };
+        break;
+      case 'select':
+      case 'color':
+        args = {
+          options: prop.options,
+          default: typeof prop.default != "undefined" ? prop.default : null
+        };
+        break;
+      case 'radio':
+        args = {
+          options: prop.options
+        };
+        break;
+      case 'relation':
+        args = {
+          entity: prop.entity
+        };
+        break;
+      case 'image':
+        args = {
+          type: type,
+          args: prop.image && typeof prop.image == 'object' ? prop.image : {}
+        };
+        break;
+      case 'video':
+        args = {
+          type: type,
+          args: prop.video && typeof prop.video == 'object' ? prop.video : {}
+        };
+        break;
+      case 'file':
+      case 'gallery':
+        args = {
+          type: type
+        };
+        break;
+      case 'object':
+        if (typeof prop.props != "object") {
+          return;
+        }
+        args = {
+          props: prop.props
+        };
+        break;
     }
-
-    // Add repeatable button
-    if (!!repeatable) {
-      if (['object', 'gallery', 'file', 'video', 'image', 'link'].includes(prop.type)) {
-        blocReturned = [(0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Panel, {
-          key: clientId + "-" + keys.join("-") + "-panel",
-          header: label
-        }, blocReturned)];
+    if (typeof prop.responsive != "undefined" && !!prop.responsive) {
+      if (typeof currentValueAttribute != "object") {
+        currentValueAttribute = {};
       }
-      blocReturned.push(_Render__WEBPACK_IMPORTED_MODULE_4__.Render.buttonAddRepeatableElt(clientId + "-" + keys.join("-"), () => {
-        Attributes.addEltToRepeatable(keys, valueProp, currentValueAttribute, false, componentInstance);
-      }));
-
-      //     blocReturned = (
-      //         <div
-      //             key={ clientId + "-" + keys.join("-") + "-repeatableContainer"}
-      //             className="repeatableField components-base-control"
-      //         >   
-      //             { blocReturned }
-      //         </div>
-      //     );
+      return _Render__WEBPACK_IMPORTED_MODULE_3__.Render.fieldContainer(blockKey, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Panel, {
+        key: blockKey + "-panel",
+        className: ""
+      }, _Render__WEBPACK_IMPORTED_MODULE_3__.Render.label(blockKey, required_field && label != null ? label + '*' : label), _Render__WEBPACK_IMPORTED_MODULE_3__.Render.tabPanelComponent(blockKey, Object.keys(_Singleton_Devices__WEBPACK_IMPORTED_MODULE_2__.Devices.getInstance().getMediaQueries()).map(layout => {
+        return {
+          name: layout,
+          title: layout.charAt(0).toUpperCase() + layout.slice(1),
+          className: 'tab-' + layout
+        };
+      }), tab => {
+        return _Render__WEBPACK_IMPORTED_MODULE_3__.Render.control(type, componentInstance, blockKey + "-" + tab.name, null, keys.concat(tab.name), valueProp, currentValueAttribute[tab.name], repeatable, required_field, args);
+      }, _Singleton_Devices__WEBPACK_IMPORTED_MODULE_2__.Devices.getInstance().getCurrentDevice(), null, 'tabPanelResponsiveProp')));
     }
-    // else {
-    blocReturned = _Render__WEBPACK_IMPORTED_MODULE_4__.Render.fieldContainer(clientId + "-" + keys.join("-"), blocReturned, !!repeatable ? 'repeatableContainer' : '');
-    // }
-
-    // Return
-    return blocReturned;
+    return _Render__WEBPACK_IMPORTED_MODULE_3__.Render.control(type, componentInstance, blockKey, label, keys, valueProp, currentValueAttribute, repeatable, required_field, args);
   }
   static initComponentAttributes(attributes, props) {
     for (const [key, value] of Object.entries(props)) {
@@ -9954,7 +9769,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Controls_Text__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../Controls/Text */ "./src/js/Controls/Text.js");
 /* harmony import */ var _Controls_Textarea__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../Controls/Textarea */ "./src/js/Controls/Textarea.js");
 /* harmony import */ var _Controls_Toggle__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../Controls/Toggle */ "./src/js/Controls/Toggle.js");
-/* harmony import */ var _Controls_WysiwygControl_WysiwygControl__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../Controls/WysiwygControl/WysiwygControl */ "./src/js/Controls/WysiwygControl/WysiwygControl.js");
+/* harmony import */ var _Controls_Object__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../Controls/Object */ "./src/js/Controls/Object.js");
+/* harmony import */ var _Controls_WysiwygControl_WysiwygControl__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../Controls/WysiwygControl/WysiwygControl */ "./src/js/Controls/WysiwygControl/WysiwygControl.js");
+
 
 
 
@@ -9969,54 +9786,47 @@ __webpack_require__.r(__webpack_exports__);
 
 class Controls {
   static render(type, componentInstance, id, label, keys, valueProp, objectValue) {
-    let repeatable = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : false;
-    let required = arguments.length > 8 && arguments[8] !== undefined ? arguments[8] : false;
-    let responsive = arguments.length > 9 && arguments[9] !== undefined ? arguments[9] : false;
-    let args = arguments.length > 10 && arguments[10] !== undefined ? arguments[10] : [];
+    let required = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : false;
+    let args = arguments.length > 8 && arguments[8] !== undefined ? arguments[8] : {};
     switch (type) {
-      case 'DateTime':
-        return (0,_Controls_DateTime__WEBPACK_IMPORTED_MODULE_1__.renderDateTime)(componentInstance, id, label, keys, valueProp, objectValue, repeatable, required);
-        break;
-      case 'File':
-        return (0,_Controls_File__WEBPACK_IMPORTED_MODULE_2__.renderFile)(componentInstance, args.type, id, label, keys, valueProp, objectValue, repeatable, required, responsive);
-        break;
-      case 'ImageVideo':
-        return (0,_Controls_ImageVideo__WEBPACK_IMPORTED_MODULE_3__.renderImageVideo)(componentInstance, args.type, args.args, id, label, keys, valueProp, objectValue, repeatable, required, responsive);
-        break;
-      case 'Link':
-        return (0,_Controls_Link__WEBPACK_IMPORTED_MODULE_4__.renderLink)(componentInstance, id, label, keys, valueProp, objectValue, repeatable, required);
-        break;
-      case 'Radio':
-        return (0,_Controls_Radio__WEBPACK_IMPORTED_MODULE_5__.renderRadio)(componentInstance, id, label, args.options, keys, valueProp, objectValue, repeatable, required);
-        break;
-      case 'Relation':
-        return (0,_Controls_Relation__WEBPACK_IMPORTED_MODULE_6__.renderRelation)(componentInstance, id, label, args.entity, keys, valueProp, objectValue, repeatable, required);
-        break;
-      case 'Select':
-        return (0,_Controls_Select__WEBPACK_IMPORTED_MODULE_7__.renderSelect)(componentInstance, id, label, args.options, args.default, keys, valueProp, objectValue, repeatable, required);
-        break;
-      case 'Text':
-        return (0,_Controls_Text__WEBPACK_IMPORTED_MODULE_8__.renderText)(componentInstance, id, label, keys, valueProp, objectValue, args.isNumber, repeatable, required, responsive);
-        break;
-      case 'Textarea':
-        return (0,_Controls_Textarea__WEBPACK_IMPORTED_MODULE_9__.renderTextarea)(componentInstance, id, label, keys, valueProp, objectValue, repeatable, required);
-        break;
-      case 'Toggle':
-        return (0,_Controls_Toggle__WEBPACK_IMPORTED_MODULE_10__.renderToggle)(componentInstance, id, label, props.help, keys, valueProp, objectValue, repeatable, required);
-        break;
-      case 'Wysiwyg':
-        return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Controls_WysiwygControl_WysiwygControl__WEBPACK_IMPORTED_MODULE_11__["default"], {
+      case 'date':
+        return (0,_Controls_DateTime__WEBPACK_IMPORTED_MODULE_1__.renderDateTime)(componentInstance, id, label, keys, valueProp, objectValue, required);
+      case 'file':
+      case 'gallery':
+        return (0,_Controls_File__WEBPACK_IMPORTED_MODULE_2__.renderFile)(componentInstance, args.type, id, label, keys, valueProp, objectValue, required);
+      case 'image':
+      case 'video':
+        return (0,_Controls_ImageVideo__WEBPACK_IMPORTED_MODULE_3__.renderImageVideo)(componentInstance, args.type, args.args, id, label, keys, valueProp, objectValue, required);
+      case 'link':
+        return (0,_Controls_Link__WEBPACK_IMPORTED_MODULE_4__.renderLink)(componentInstance, id, label, keys, valueProp, objectValue, required);
+      case 'radio':
+        return (0,_Controls_Radio__WEBPACK_IMPORTED_MODULE_5__.renderRadio)(componentInstance, id, label, args.options, keys, valueProp, objectValue, required);
+      case 'relation':
+        return (0,_Controls_Relation__WEBPACK_IMPORTED_MODULE_6__.renderRelation)(componentInstance, id, label, args.entity, keys, valueProp, objectValue, required);
+      case 'select':
+      case 'color':
+        return (0,_Controls_Select__WEBPACK_IMPORTED_MODULE_7__.renderSelect)(componentInstance, id, label, args.options, args.default, keys, valueProp, objectValue, required);
+      case 'string':
+      case 'number':
+        return (0,_Controls_Text__WEBPACK_IMPORTED_MODULE_8__.renderText)(componentInstance, id, label, keys, valueProp, objectValue, args.isNumber, required);
+      case 'text':
+        return (0,_Controls_Textarea__WEBPACK_IMPORTED_MODULE_9__.renderTextarea)(componentInstance, id, label, keys, valueProp, objectValue, required);
+      case 'boolean':
+        return (0,_Controls_Toggle__WEBPACK_IMPORTED_MODULE_10__.renderToggle)(componentInstance, id, label, props.help, keys, valueProp, objectValue, required);
+      case 'object':
+        return (0,_Controls_Object__WEBPACK_IMPORTED_MODULE_11__.renderObject)(componentInstance, id, label, keys, valueProp, args.props, required);
+      case 'richText':
+      case 'wysiwyg':
+        return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Controls_WysiwygControl_WysiwygControl__WEBPACK_IMPORTED_MODULE_12__["default"], {
           key: id + "-WysiwygControl",
           id: id,
           label: label,
-          keys: repeatable ? keys.concat(keyLoop) : keys,
+          keys: keys,
           valueProp: valueProp,
           objectValue: objectValue,
-          repeatable: repeatable,
           required: required,
           componentInstance: componentInstance
         });
-        break;
     }
   }
 }
@@ -10038,15 +9848,20 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _Controls__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Controls */ "./src/js/Static/Controls.js");
+/* harmony import */ var _Attributes__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Attributes */ "./src/js/Static/Attributes.js");
+
+
 
 
 class Render {
   static tabPanelComponent(id, tabs, inner) {
     let initialTabName = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
     let onSelect = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : null;
+    let extraClass = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : '';
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.TabPanel, {
       key: id + "-tabPanel",
-      className: "tab-panel-wpe-component",
+      className: "tab-panel-wpe-component " + extraClass,
       activeClass: "active-tab",
       initialTabName: initialTabName,
       tabs: tabs,
@@ -10111,6 +9926,34 @@ class Render {
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
       icon: "no-alt"
     }), " Remove");
+  }
+  static control(type, componentInstance, blockKey, label, keys, valueProp, controllerValue, repeatable, required_field, args) {
+    var control = [];
+    var extraClassfieldContainer = '';
+    if (repeatable) {
+      extraClassfieldContainer = 'repeatableContainer';
+      if (typeof controllerValue != "object" || controllerValue.length == 0) {
+        controllerValue = [""];
+      }
+      for (var keyLoop in controllerValue) {
+        keyLoop = _Attributes__WEBPACK_IMPORTED_MODULE_3__.Attributes.returnStringOrNumber(keyLoop, true);
+        control.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+          className: "repeatableItem"
+        }, _Controls__WEBPACK_IMPORTED_MODULE_2__.Controls.render(type, componentInstance, blockKey + "-" + keyLoop, null, keys.concat(keyLoop), valueProp, controllerValue[keyLoop], required_field, args), Render.buttonRemoveRepeatableElt(blockKey + "-" + keyLoop, () => {
+          _Attributes__WEBPACK_IMPORTED_MODULE_3__.Attributes.removeEltRepeatable(keys.concat(keyLoop), valueProp, componentInstance);
+        })));
+      }
+      control.push(Render.buttonAddRepeatableElt(blockKey, () => {
+        _Attributes__WEBPACK_IMPORTED_MODULE_3__.Attributes.addEltToRepeatable(keys, valueProp, controllerValue, false, componentInstance);
+      }));
+      control = [(0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Panel, {
+        key: blockKey + "-panel",
+        header: required_field && label != null ? label + '*' : label
+      }, control)];
+    } else {
+      control.push(_Controls__WEBPACK_IMPORTED_MODULE_2__.Controls.render(type, componentInstance, blockKey, label, keys, valueProp, typeof controllerValue != 'undefined' ? controllerValue : '', required_field, args));
+    }
+    return Render.fieldContainer(blockKey, control, extraClassfieldContainer);
   }
 }
 

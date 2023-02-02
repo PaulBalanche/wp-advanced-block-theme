@@ -9,7 +9,7 @@ import {
 import { Attributes } from '../Static/Attributes';
 import { Render } from '../Static/Render';
 
-export function renderFile( componentInstance, type, id, label, keys, valueProp, objectValue, repeatable = false, required = false, responsive = false ) {
+export function renderFile( componentInstance, type, id, label, keys, valueProp, objectValue, required = false ) {
 
     label = ( label && required ) ? label + '*' : label;
     
@@ -122,7 +122,7 @@ export function renderFile( componentInstance, type, id, label, keys, valueProp,
                             else if( repeatable )
                                 Attributes.removeEltRepeatable( keys, valueProp, componentInstance );
                             else
-                            componentInstance.setAttributes( { [keys]: undefined } );
+                                componentInstance.setAttributes( { [keys]: undefined } );
                         }
                     }
                 >Remove</Button>

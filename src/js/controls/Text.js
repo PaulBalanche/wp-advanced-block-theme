@@ -7,79 +7,20 @@ import { Attributes } from '../Static/Attributes';
 import { Render } from '../Static/Render';
 import { Devices } from '../Singleton/Devices';
 
-export function renderText( componentInstance, id, label, keys, valueProp, objectValue, isNumber = false, repeatable = false, required = false, responsive = false ) {
+export function renderText( componentInstance, id, label, keys, valueProp, objectValue, isNumber = false, required = false ) {
 
     label = ( required && label != null ) ? label + '*' : label;
-
-    // if( repeatable ) {
-    //     label = (
-    //         <>
-    //             { label }
-    //             { Render.buttonRemoveRepeatableElt( id, () => { Attributes.removeEltRepeatable( keys, valueProp, componentInstance ) } ) }
-    //         </>
-    //     );
-    // }
-
-    if( responsive ) {
-
-        let newInner = Render.tabPanelComponent(
-                id,
-                Object.keys( Devices.getInstance().getMediaQueries() ).map( ( layout ) => {
-                    return {
-                        name: layout,
-                        title: layout.charAt(0).toUpperCase() + layout.slice(1),
-                        className: 'tab-' + layout
-                    };
-                } ),
-                function ( tab ) {
-
-                    return renderTextControl(
-                        componentInstance,
-                        id + "-" + tab.name,
-                        label,
-                        isNumber,
-                        ( typeof objectValue[tab.name] == 'string' ) ? objectValue[tab.name] : '',
-                        keys.concat(tab.name),
-                        valueProp
-                    );
-                },
-                Devices.getInstance().getCurrentDevice()
-            );
-        
-        return newInner;
-    }
-
-    return renderTextControl(
-        componentInstance,
-        id,
-        label,
-        isNumber,
-        objectValue,
-        keys,
-        valueProp,
-        repeatable
-    );
-}
-
-function renderTextControl( componentInstance, id, label, isNumber, value, keysToUpdate, valueProp, repeatable ) {
 
     var textControl = <TextControl
         key={ id }
         label={ label }
         // type={ !! isNumber ? "number" : "text" }
         type="text"
-        value={ value }
+        value={ objectValue }
         onChange={ ( newValue ) =>
-            Attributes.updateAttributes( keysToUpdate, valueProp, newValue, isNumber, componentInstance )
+            Attributes.updateAttributes( keys, valueProp, newValue, isNumber, componentInstance )
         }
     />
-
-    if( repeatable ) {
-        textControl = <div className='repeatableItem'>
-            { textControl }
-            { Render.buttonRemoveRepeatableElt( id, () => { Attributes.removeEltRepeatable( keysToUpdate, valueProp, componentInstance ) } ) }
-        </div>
-    }
 
     return textControl;
 }

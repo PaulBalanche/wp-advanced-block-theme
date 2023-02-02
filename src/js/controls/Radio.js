@@ -7,21 +7,12 @@ import { Attributes } from '../Static/Attributes';
 import { Render } from '../Static/Render';
 import { withState } from '@wordpress/compose';
 
-export function renderRadio( componentInstance, id, label, options, keys, valueProp, objectValue, repeatable = false, required = false ) {
+export function renderRadio( componentInstance, id, label, options, keys, valueProp, objectValue, required = false ) {
 
     if( typeof options == 'undefined' )
         return null;
 
     label = ( required ) ? label + '*' : label;
-
-    if( repeatable ) {
-        label = (
-            <>
-                { label }
-                { Render.buttonRemoveRepeatableElt( id, () => { Attributes.removeEltRepeatable( keys, valueProp, componentInstance ) } ) }
-            </>
-        );
-    }
 
     const MyRadioControl = withState( {
         option: objectValue,

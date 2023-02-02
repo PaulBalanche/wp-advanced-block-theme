@@ -4,7 +4,6 @@ import {
 } from '@wordpress/components';
 
 import { Devices } from '../Singleton/Devices';
-import { Controls } from './Controls'
 import { Render } from './Render'
 
 export class Attributes {
@@ -74,238 +73,124 @@ export class Attributes {
         
         return objectReturned;
     }
-    
-    static renderControl( prop, keys, valueProp, componentInstance ) {
-    
-        const clientId = componentInstance.props.clientId;
-    
-        prop.type = prop.type.toLowerCase();
 
-        prop.default = ( typeof prop.default != "undefined" ) ? prop.default : null;
+
+
+
+
+
+
+
+
     
-        let blocReturned = [];
-    
-        let repeatable = ( typeof prop.repeatable != "undefined" && !! prop.repeatable ) ? true : false;
+    static renderProp( prop, keys, valueProp, componentInstance ) {
+       
+        const type = prop.type.toLowerCase();
+        const blockKey = componentInstance.props.clientId + "-" + keys.join("-");
+        const repeatable = ( typeof prop.repeatable != "undefined" && !! prop.repeatable ) ? true : false;
+        const label = ( typeof prop.label != "undefined" ) ? prop.label : ( ( typeof prop.title != "undefined" ) ? prop.title : keys.slice(-1) );
+        const required_field = ( typeof prop.required != "undefined" && prop.required ) ? true : false;
         
         let currentValueAttribute = valueProp;
-        keys.forEach(element => {
-    
-            if( typeof currentValueAttribute == 'object' ) {
-    
-                if ( currentValueAttribute.hasOwnProperty(element) && typeof currentValueAttribute[element] != "undefined" )
-                    currentValueAttribute = currentValueAttribute[element];
-                else
-                    currentValueAttribute = "";
-            }
-        });
-    
-        if( ! repeatable )
-            currentValueAttribute = [ currentValueAttribute ];
-        else if( typeof currentValueAttribute != "object" || currentValueAttribute.length == 0 )
-            currentValueAttribute = [ "" ];
-    
-        let responsive = ( typeof prop.responsive != "undefined" && !! prop.responsive ) ? true : false;
-    
-        const label = ( typeof prop.label != "undefined" ) ? prop.label : ( ( typeof prop.title != "undefined" ) ? prop.title : keys.slice(-1) );
+        keys.forEach( element => { currentValueAttribute = ( typeof currentValueAttribute == 'object' && currentValueAttribute.hasOwnProperty(element) && typeof currentValueAttribute[element] != "undefined" ) ? currentValueAttribute[element] : ""; } );
 
-        for (var keyLoop in currentValueAttribute) {
-    
-            keyLoop = Attributes.returnStringOrNumber(keyLoop, true);
-    
-            const labelTemp = ( ! repeatable || ( repeatable && keyLoop == 0 ) ) ? label : null;
-    
-            let required_field = ( typeof prop.required != "undefined" && prop.required ) ? true : false;
-    
-            let fieldId = clientId + "-" + keys.join("-") + "-" + keyLoop;
-            switch( prop.type ) {
-    
-                case 'string':
-                    blocReturned.push( Controls.render( 'Text', componentInstance, fieldId, labelTemp, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, responsive, { isNumber: false } ) );
-                    break;
-    
-                case 'number':
-                    blocReturned.push( Controls.render( 'Text', componentInstance, fieldId, labelTemp, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, responsive, { isNumber: true } ) );
-                    break;
-    
-                case 'text':
-                    blocReturned.push( Controls.render( 'Textarea', componentInstance, fieldId, labelTemp, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, responsive ) );
-                    break;
-                
-                case 'richText':
-                case 'wysiwyg':
-                    blocReturned.push( Controls.render( 'Wysiwyg', componentInstance, fieldId, labelTemp, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, responsive ) );
-                    break;
-    
-                case 'boolean':
-                    blocReturned.push( Controls.render( 'Toggle', componentInstance, fieldId, labelTemp, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, responsive, { help: prop.help } ) );
-                    break;
-    
-                case 'select':
-                case 'color':
-                    blocReturned.push( Controls.render( 'Select', componentInstance, fieldId, labelTemp, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, responsive, { options: prop.options, default: prop.default } ) );
-                    break;
-                
-                case 'radio':
-                    blocReturned.push( Controls.render( 'Radio', componentInstance, fieldId, labelTemp, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, responsive, { options: prop.options } ) );
-                    break;
-    
-                case 'link':
-                    blocReturned.push( Controls.render( 'Link', componentInstance, fieldId, labelTemp, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field ) );
-                    break;
-    
-                case 'relation':
-                    blocReturned.push( Controls.render( 'Relation', componentInstance, fieldId, labelTemp, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, responsive, { entity: prop.entity } ) );
-                    break;
-                
-                case 'date':
-                    blocReturned.push( Controls.render( 'DateTime', componentInstance, fieldId, labelTemp, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field ) );
-                    break;
-    
-                case 'image':
-
-                    if( repeatable) {
-
-                        var imageName = ( typeof currentValueAttribute[keyLoop] == 'object' && typeof currentValueAttribute[keyLoop].default == 'object' && typeof currentValueAttribute[keyLoop].default.preview != 'undefined' ) ? currentValueAttribute[keyLoop].default.preview.split('/').pop() : '';
-                        blocReturned.push(
-                            Render.panelBodyComponent( fieldId, '#' + ( keyLoop + 1 ) + '. ' + imageName,
-                                Controls.render( 'ImageVideo', componentInstance, fieldId, '#' + ( keyLoop + 1 ) + '.' + labelTemp, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, responsive, { type: prop.type, args: ( prop.image && typeof prop.image == 'object' ) ? prop.image : {} } ),
-                                false, Render.buttonRemoveRepeatableElt( fieldId, () => { Attributes.removeEltRepeatable( keys.concat(keyLoop), valueProp, componentInstance ) } ) )
-                        );
-                    }
-                    else{
-                        blocReturned.push( Controls.render( 'ImageVideo', componentInstance, fieldId, labelTemp, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, responsive, { type: prop.type, args: ( prop.image && typeof prop.image == 'object' ) ? prop.image : {} } ) );
-                    }
-
-                    break;
-    
-                case 'video':
-                    blocReturned.push( Controls.render( 'ImageVideo', componentInstance, fieldId, labelTemp, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, responsive, { type: prop.type, args: ( prop.video && typeof prop.video == 'object' ) ? prop.video : {} } ) );
-                    break;
-                
-                case 'file':
-                case 'gallery':
-                    blocReturned.push( Controls.render( 'File', componentInstance, fieldId, labelTemp, repeatable ? keys.concat(keyLoop) : keys, valueProp, currentValueAttribute[keyLoop], repeatable, required_field, responsive, { type: prop.type } ) );
-                    break;
-    
-                case 'object':
-    
-                    if( typeof prop.props == "object" ) {
-                        
-                        let tempKeyObject = repeatable ? keys.concat(keyLoop) : keys;
-                        let fieldsetObject = [];
-    
-                        if( responsive ) {
-    
-                            fieldsetObject.push(
-                                Render.tabPanelComponent(
-                                    fieldId,
-                                    Object.keys( Devices.getInstance().getMediaQueries() ).map( ( layout ) => {
-                                        return {
-                                            name: layout,
-                                            title: layout.charAt(0).toUpperCase() + layout.slice(1),
-                                            className: 'tab-' + layout
-                                        };
-                                    } ),
-                                    function ( tab ) {
-                                        let tempKeyObjectReponsive = keys.concat(tab.name);
-                                        let fieldsetObjectResponsive = [];
-                                        for( const [ keySubProp, valueSubProp ] of Object.entries(prop.props) ) {
-                                            fieldsetObjectResponsive.push( Attributes.renderControl( valueSubProp, tempKeyObjectReponsive.concat(keySubProp), valueProp, componentInstance ) );
-                                        }
-                                        return fieldsetObjectResponsive;
-                                    },
-                                    Devices.getInstance().getCurrentDevice()
-                                )
-                            );
-                        }
-                        else {
-                            for (const [keySubProp, valueSubProp] of Object.entries(prop.props)) {
-                                fieldsetObject.push( Attributes.renderControl( valueSubProp, tempKeyObject.concat(keySubProp), valueProp, componentInstance ) );
-                            }
-                        }
-    
-                        if( repeatable ) {
-
-                            var labelRepeatble = '#' + ( keyLoop + 1 ) + '.';
-
-                            var tempValueProp = valueProp;
-                            if( typeof tempValueProp == 'object' ) {
-
-                                for( var i in tempKeyObject ) {
-                                    if( typeof tempValueProp[ tempKeyObject[i] ] != 'undefined' ) {
-                                        tempValueProp = tempValueProp[ tempKeyObject[i] ];
-                                    }
-                                }
-
-                                var labelTempValueProp = [];
-                                if( typeof tempValueProp.title != 'undefined' ) {
-                                    labelTempValueProp.push( tempValueProp.title );
-                                }
-                                else if( typeof tempValueProp.name != 'undefined' ) {
-                                    labelTempValueProp.push( tempValueProp.name );
-                                }
-                                else if( typeof tempValueProp.id != 'undefined' ) {
-                                    labelTempValueProp.push( tempValueProp.id );
-                                }
-                                else {
-                                    for( var i in tempValueProp ) {
-                                        labelTempValueProp.push(i + ": " + tempValueProp[i]);
-                                    }
-                                }
-                                
-                                labelRepeatble += " " + labelTempValueProp.join(' / ');
-                            }
-
-
-                            blocReturned.push(
-                                Render.panelBodyComponent( fieldId, labelRepeatble, fieldsetObject, false, Render.buttonRemoveRepeatableElt( fieldId, () => { Attributes.removeEltRepeatable( tempKeyObject, valueProp, componentInstance ) } ) )
-                            );
-                        }
-                        else {
-                            blocReturned.push(
-                                Render.panelComponent( fieldId, labelTemp, fieldsetObject, false )
-                            )
-                        }
-                    }
-                    else {
-                        return;
-                    }
-                    break;
-            }
+        var args = {};
+        switch( type ) {
+            case 'string':
+                args = { isNumber: false };
+                break;
+            case 'number':
+                args = { isNumber: true };
+                break;
+            case 'boolean':
+                args = { help: prop.help };
+                break;
+            case 'select':
+            case 'color':
+                args = { options: prop.options, default: ( typeof prop.default != "undefined" ) ? prop.default : null };
+                break;
+            case 'radio':
+                args = { options: prop.options };
+                break;
+            case 'relation':
+                args = { entity: prop.entity };
+                break;
+            case 'image':
+                args = { type: type, args: ( prop.image && typeof prop.image == 'object' ) ? prop.image : {} };
+                break;
+            case 'video':
+                args = { type: type, args: ( prop.video && typeof prop.video == 'object' ) ? prop.video : {} };
+                break;
+            case 'file':
+            case 'gallery':
+                args = { type: type };
+                break;
+            case 'object':
+                if( typeof prop.props != "object" ) { return }
+                args = { props: prop.props };
+                break;
         }
-    
-        // Add repeatable button
-        if( !! repeatable ) {
-            
-            if( [ 'object', 'gallery', 'file', 'video', 'image', 'link' ].includes(prop.type) ) {
-                
-                blocReturned = [ <Panel
-                    key={ clientId + "-" + keys.join("-") + "-panel" }
-                    header={label}
+
+        if( typeof prop.responsive != "undefined" && !! prop.responsive ) {
+
+            if( typeof currentValueAttribute != "object" ) {
+                currentValueAttribute = {};
+            }
+
+            return Render.fieldContainer( blockKey,
+                <Panel
+                    key={ blockKey + "-panel" }
+                    className=""
                 >
-                    { blocReturned }
-                </Panel> ]
-            }
-
-            blocReturned.push( Render.buttonAddRepeatableElt( clientId + "-" + keys.join("-"), () => { Attributes.addEltToRepeatable( keys, valueProp, currentValueAttribute, false, componentInstance ) } ) );
-
-
-        //     blocReturned = (
-        //         <div
-        //             key={ clientId + "-" + keys.join("-") + "-repeatableContainer"}
-        //             className="repeatableField components-base-control"
-        //         >   
-        //             { blocReturned }
-        //         </div>
-        //     );
+                    { Render.label( blockKey, ( required_field && label != null ) ? label + '*' : label ) }
+                    { Render.tabPanelComponent(
+                        blockKey,
+                        Object.keys( Devices.getInstance().getMediaQueries() ).map( ( layout ) => {
+                            return {
+                                name: layout,
+                                title: layout.charAt(0).toUpperCase() + layout.slice(1),
+                                className: 'tab-' + layout
+                            }
+                        } ),
+                        ( tab ) => {
+                            return Render.control( type, componentInstance, blockKey + "-" + tab.name, null, keys.concat(tab.name), valueProp, currentValueAttribute[tab.name], repeatable, required_field, args );
+                        },
+                        Devices.getInstance().getCurrentDevice(),
+                        null,
+                        'tabPanelResponsiveProp'
+                    ) }
+                </Panel>
+            )
         }
-        // else {
-            blocReturned = Render.fieldContainer( clientId + "-" + keys.join("-"), blocReturned, ( !! repeatable ) ? 'repeatableContainer' : '' );
-        // }
-    
-        // Return
-        return blocReturned;
+
+        return Render.control( type, componentInstance, blockKey, label, keys, valueProp, currentValueAttribute, repeatable, required_field, args );
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     static initComponentAttributes( attributes, props ) {
     

@@ -10,22 +10,13 @@ import {
 import { Attributes } from '../Static/Attributes';
 import { Render } from '../Static/Render';
 
-export function renderLink( componentInstance, id, label, keys, valueProp, objectValue, repeatable = false, required = false ) {
+export function renderLink( componentInstance, id, label, keys, valueProp, objectValue, required = false ) {
         
     if( typeof objectValue == 'undefined' ) {
         objectValue = {};
     }
 
     label = ( required ) ? label + '*' : label;
-
-    if( repeatable ) {
-        label = (
-            <>
-                { label }
-                { Render.buttonRemoveRepeatableElt( id, () => { Attributes.removeEltRepeatable( keys, valueProp, componentInstance ) } ) }
-            </>
-        );
-    }
 
     let inner = Render.fieldContainer( id + '_link',
         <div

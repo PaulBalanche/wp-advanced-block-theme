@@ -8,67 +8,64 @@ import { renderSelect } from '../Controls/Select';
 import { renderText } from '../Controls/Text';
 import { renderTextarea } from '../Controls/Textarea';
 import { renderToggle } from '../Controls/Toggle';
+import { renderObject } from '../Controls/Object';
 import WysiwygControl from '../Controls/WysiwygControl/WysiwygControl';
 
 export class Controls {
 
-    static render( type, componentInstance, id, label, keys, valueProp, objectValue, repeatable = false, required = false, responsive = false, args = [] ) {
+    static render( type, componentInstance, id, label, keys, valueProp, objectValue, required = false, args = {} ) {
 
         switch(type) {
 
-            case 'DateTime':
-                return renderDateTime( componentInstance, id, label, keys, valueProp, objectValue, repeatable, required );
-                break;
+            case 'date':
+                return renderDateTime( componentInstance, id, label, keys, valueProp, objectValue, required );
                 
-            case 'File':
-                return renderFile( componentInstance, args.type, id, label, keys, valueProp, objectValue, repeatable, required, responsive );
-                break;
+            case 'file':
+            case 'gallery':
+                return renderFile( componentInstance, args.type, id, label, keys, valueProp, objectValue, required );
                 
-            case 'ImageVideo':
-                return renderImageVideo( componentInstance, args.type, args.args, id, label, keys, valueProp, objectValue, repeatable, required, responsive );
-                break;
+            case 'image':
+            case 'video':
+                return renderImageVideo( componentInstance, args.type, args.args, id, label, keys, valueProp, objectValue, required );
                 
-            case 'Link':
-                return renderLink( componentInstance, id, label, keys, valueProp, objectValue, repeatable, required );
-                break;
+            case 'link':
+                return renderLink( componentInstance, id, label, keys, valueProp, objectValue, required );
                 
-            case 'Radio':
-                return renderRadio( componentInstance, id, label, args.options, keys, valueProp, objectValue, repeatable, required );
-                break;
+            case 'radio':
+                return renderRadio( componentInstance, id, label, args.options, keys, valueProp, objectValue, required );
                 
-            case 'Relation':
-                return renderRelation( componentInstance, id, label, args.entity, keys, valueProp, objectValue, repeatable, required );
-                break;
+            case 'relation':
+                return renderRelation( componentInstance, id, label, args.entity, keys, valueProp, objectValue, required );
                 
-            case 'Select':
-                return renderSelect( componentInstance, id, label, args.options, args.default, keys, valueProp, objectValue, repeatable, required );
-                break;
+            case 'select':
+            case 'color':
+                return renderSelect( componentInstance, id, label, args.options, args.default, keys, valueProp, objectValue, required );
                 
-            case 'Text':
-                return renderText( componentInstance, id, label, keys, valueProp, objectValue, args.isNumber, repeatable, required, responsive );
-                break;
+            case 'string':
+            case 'number':
+                return renderText( componentInstance, id, label, keys, valueProp, objectValue, args.isNumber, required );
                 
-            case 'Textarea':
-                return renderTextarea( componentInstance, id, label, keys, valueProp, objectValue, repeatable, required );
-                break;
+            case 'text':
+                return renderTextarea( componentInstance, id, label, keys, valueProp, objectValue, required );
                 
-            case 'Toggle':
-                return renderToggle( componentInstance, id, label, props.help, keys, valueProp, objectValue, repeatable, required );
-                break;
+            case 'boolean':
+                return renderToggle( componentInstance, id, label, props.help, keys, valueProp, objectValue, required );
+            
+            case 'object':
+                return renderObject( componentInstance, id, label, keys, valueProp, args.props, required );
 
-            case 'Wysiwyg':
+            case 'richText':
+            case 'wysiwyg':
                 return <WysiwygControl
                     key={ id + "-WysiwygControl" }
                     id={ id }
                     label={ label }
-                    keys={ repeatable ? keys.concat(keyLoop) : keys }
+                    keys={ keys }
                     valueProp={ valueProp }
                     objectValue={ objectValue }
-                    repeatable={ repeatable }
                     required={ required }
                     componentInstance={ componentInstance }
                 />
-                break;
         }
     }
 }

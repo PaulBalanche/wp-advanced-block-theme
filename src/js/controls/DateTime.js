@@ -6,18 +6,9 @@ import {
 import { Attributes } from '../Static/Attributes';
 import { Render } from '../Static/Render';
 
-export function renderDateTime( componentInstance, id, label, keys, valueProp, objectValue, repeatable = false, required = false ) {
+export function renderDateTime( componentInstance, id, label, keys, valueProp, objectValue, required = false ) {
 
     label = ( required ) ? label + '*' : label;
-
-    if( repeatable ) {
-        label = (
-            <>
-                { label }
-                { Render.buttonRemoveRepeatableElt( id, () => { Attributes.removeEltRepeatable( keys, valueProp, componentInstance ) } ) }
-            </>
-        );
-    }
 
     const MyDateTimePicker = withState( {
         date: ( objectValue ) ? objectValue : new Date(),
