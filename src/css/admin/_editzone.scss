@@ -146,8 +146,7 @@
             }
     
             .components-base-control__label,
-            .components-input-control__label,
-            .repeatableContainer > .components-panel > .components-panel__header {
+            .components-input-control__label{
                 display: flex;
                 align-items: center;
                 text-transform: math-auto;
@@ -192,29 +191,27 @@
                 .components-tab-panel__tab-content {
                     padding: 15px 0 0 0;
                 }
+            }
 
-                &.tabPanelResponsiveProp {
-                    
+            .components-panel__row {
+
+                & > .tab-panel-wpe-component {
+
                     & > .components-tab-panel__tabs {
                         background: rgb(252 252 252);
                         border-bottom: 1px solid #e0e0e0;
-
-                        & > .repeatableContainer > .components-panel {
-                            border: none;
-                            padding: 0;
-                            background: none;
-                        }
-
+    
                         .components-tab-panel__tabs-item {
                             font-weight: 400;
                         }
                     }
+
+                    & > .components-tab-panel__tab-content {
+                        padding: 15px;
+                    }
                 }
             }
 
-            .components-panel__body-content > .tab-panel-wpe-component > .components-tab-panel__tab-content {
-                padding: 15px;
-            }
         
             .basicField, .repeatableField {
                 padding: 10px 0;
@@ -292,8 +289,9 @@
                         }
                     }
 
-                    .components-panel__body-content {
+                    .components-panel__row {
                         padding: 15px;
+                        display: block;
 
                         &:has( > .tab-panel-wpe-component ) {
                             padding: 0;
@@ -432,6 +430,7 @@
                 box-shadow: none;
                 color: rgb(200 200 200);
                 justify-content: center;
+                margin-top: 5px;
 
                 .dashicon {
                     font-size: 1rem;
@@ -465,37 +464,52 @@
             }
         }
 
-        .repeatableContainer {
+        .repeatableRemoveElt {
+            // visibility: hidden;
+            // position: absolute;
+            // right: 0;
+
+            .dashicon {
+                font-size: 1rem;
+                height: auto;
+            }
+        }
+
+        .repeatableItem {
+            
+            position: relative;
+            padding: 5px 0;
 
             .repeatableRemoveElt {
-                // visibility: hidden;
-                // position: absolute;
-                // right: 0;
-
-                .dashicon {
-                    font-size: 1rem;
-                    height: auto;
-                }
+                position: absolute;
+                display: none;
+                right: 10px;
+                top: 14px;
             }
 
-            .repeatableItem {
-                
-                position: relative;
+            &.object .repeatableRemoveElt {
+               right: 50px;
+               top: 18px;
+            }
 
-                .repeatableRemoveElt {
-                    position: absolute;
-                    display: none;
-                    right: 10px;
-                    bottom: 9px;
+            &:hover .repeatableRemoveElt {
+                display: inline-flex;
+            }
+
+            .repeatableObjectLabel {
+
+                .id {
+                    color: rgb(220, 220, 220);
                 }
 
-                &.components-panel__body .repeatableRemoveElt {
-                    bottom: initial;
-                    top: 60px;
-                }
+                .props {
 
-                &:hover .repeatableRemoveElt {
-                    display: inline-flex;
+                    margin: 5px 0 0 0;
+
+                    .key {
+                        color: rgb(220, 220, 220);
+                    }
+
                 }
             }
         }

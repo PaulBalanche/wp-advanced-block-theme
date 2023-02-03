@@ -1,6 +1,7 @@
 import {
     Panel,
     PanelBody,
+    PanelRow,
     TabPanel,
     Button,
     Dashicon
@@ -49,10 +50,10 @@ export class Render {
             initialOpen={ ( label != null ) ? initialOpen : true }
             className={ className.join(' ') }
         >
-            <div className="components-panel__body-content">
+            <PanelRow>
                 { inner }
                 { removeButton }
-            </div>
+            </PanelRow>
         </PanelBody>
     }
 
@@ -78,22 +79,22 @@ export class Render {
         </div>
     }
 
-    static buttonAddRepeatableElt( id, onclick ) {
+    static buttonAddRepeatableElt( id, keys, valueProp, controllerValue, componentInstance ) {
         
         return <Button
             key={ id + "-repeatableAddElt" }
             className="repeatableAddElt"
-            onMouseDown={onclick}
+            onMouseDown={ () => { Attributes.addEltToRepeatable( keys, valueProp, controllerValue, false, componentInstance ) } }
             variant="secondary"
         ><Dashicon icon="insert" /> Add</Button>
     }
 
-    static buttonRemoveRepeatableElt( id, onclick ) {
+    static buttonRemoveRepeatableElt( id, keys, valueProp, componentInstance ) {
         
         return <Button
             key={ id + "-repeatableRemoveElt" }
             className="repeatableRemoveElt"
-            onMouseDown={onclick}
+            onMouseDown={ () => { Attributes.removeEltRepeatable( keys, valueProp, componentInstance ) } }
             variant="secondary"
             isSmall
         >
@@ -104,11 +105,8 @@ export class Render {
     static control( type, componentInstance, blockKey, label, keys, valueProp, controllerValue, repeatable, required_field, args ) {
         
         var control = [];
-        var extraClassfieldContainer = '';
 
         if( repeatable ) {
-
-            extraClassfieldContainer = 'repeatableContainer';
 
             if( typeof controllerValue != "object" || controllerValue.length == 0 ) {
                 controllerValue = [ "" ];
@@ -118,21 +116,25 @@ export class Render {
 
                 keyLoop = Attributes.returnStringOrNumber(keyLoop, true);
 
-                control.push( <div className='repeatableItem'>
-                    { Controls.render( type, componentInstance, blockKey + "-" + keyLoop, label, keys.concat(keyLoop), valueProp, controllerValue[keyLoop], required_field, args ) }
-                    { Render.buttonRemoveRepeatableElt( blockKey + "-" + keyLoop, () => { Attributes.removeEltRepeatable( keys.concat(keyLoop), valueProp, componentInstance ) } ) }
-                    </div>
+                const labelRepeatableItem = ( type == 'object' ) ? Render.repeatableObjectLabelFormatting( blockKey + "-" + keyLoop, controllerValue, keyLoop ) : null;
+
+                control.push( <div key={ blockKey + "-" + keyLoop + "_repeatableItem" } className={ 'repeatableItem ' + type }>
+                    { Controls.render( type, componentInstance, blockKey + "-" + keyLoop, labelRepeatableItem, keys.concat(keyLoop), valueProp, controllerValue[keyLoop], required_field, args ) }
+                    { Render.buttonRemoveRepeatableElt( blockKey + "-" + keyLoop, keys.concat(keyLoop), valueProp, componentInstance ) }
+                </div>
                 );
             }
 
-            control.push( Render.buttonAddRepeatableElt( blockKey, () => { Attributes.addEltToRepeatable( keys, valueProp, controllerValue, false, componentInstance ) } ) );
+            control.push( Render.buttonAddRepeatableElt( blockKey, keys, valueProp, controllerValue, componentInstance ) );
 
-            control = Render.panelComponent(
-                blockKey,
-                ( required_field && label != null ) ? label + '*' : label,
-                control,
-                true
-            )
+            control = ( label != null ) ?
+                Render.panelComponent(
+                    blockKey,
+                    ( required_field ) ? label + '*' : label,
+                    control,
+                    true
+                ) :
+                control;
         }
         else {
             control.push( Controls.render( type, componentInstance, blockKey, label, keys, valueProp, ( typeof controllerValue != 'undefined' ) ? controllerValue : '', required_field, args ) );
@@ -143,9 +145,45 @@ export class Render {
 
         return Render.fieldContainer(
             blockKey,
-            control,
-            extraClassfieldContainer
+            control
         )
+    }
+
+    static repeatableObjectLabelFormatting( blockKey, valueProp, keyLoop ) {
+        
+        var labelKey = keyLoop + 1;
+        labelKey = ( labelKey < 10 ) ? '0' + labelKey : labelKey;
+        labelKey = '#' + labelKey + '.'
+
+        var itemsProp = null;
+
+        var valueProp = valueProp[keyLoop];
+        if( typeof valueProp == 'object' && Object.keys(valueProp).length > 0 ) {
+
+            itemsProp = [];
+
+            if( typeof valueProp.title != 'undefined' ) {
+                itemsProp.push( <li key={ blockKey + "-repeatableObjectLabel-key" } ><span className="value">{ valueProp.title }</span></li> );
+            }
+            else if( typeof valueProp.name != 'undefined' ) {
+                itemsProp.push( <li key={ blockKey + "-repeatableObjectLabel-key" }><span className="value">{ valueProp.name }</span></li> );
+            }
+            else if( typeof valueProp.id != 'undefined' ) {
+                itemsProp.push( <li key={ blockKey + "-repeatableObjectLabel-key" }><span className="value">{ valueProp.id }</span></li> );
+            }
+            else {
+                for( var i in valueProp ) {
+                    itemsProp.push( <li key={ blockKey + "-repeatableObjectLabel-key-" + i }><span className="key">{ i + ": " }</span><span className="value">{ valueProp[i] } </span></li> );
+                }
+            }
+
+            itemsProp = <ul key={ blockKey + "-repeatableObjectLabel-ul" } className='props'>{ itemsProp }</ul>
+        }
+
+        return <div key={ blockKey + "-repeatableObjectLabel" } className='repeatableObjectLabel'>
+            <div key={ blockKey + "-repeatableObjectLabel-id" } className='id'>{ labelKey }</div>
+            { itemsProp }
+        </div>
     }
 
 }

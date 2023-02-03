@@ -29,6 +29,8 @@ export class EditZone {
 
         componentEditZone.appendChild(componentEditZoneLoader);
         document.querySelector('.interface-interface-skeleton__body').appendChild(componentEditZone);
+
+        document.querySelector(".interface-interface-skeleton").classList.add("resizable");
     }
 
     update() {
