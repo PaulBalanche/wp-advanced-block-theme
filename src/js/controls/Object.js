@@ -72,5 +72,8 @@ export function renderObject( componentInstance, id, label, keys, valueProp, obj
         return Render.panelBodyComponent( id, labelRepeatble, fieldsetObject, false, Render.buttonRemoveRepeatableElt( id, () => { Attributes.removeEltRepeatable( keys, valueProp, componentInstance ) } ) )
     }
 
+    if( label == null )
+        return fieldsetObject;
+        
     return Render.panelComponent( id, label, fieldsetObject, false )
 }

@@ -138,12 +138,9 @@ export class Attributes {
             }
 
             return Render.fieldContainer( blockKey,
-                <Panel
-                    key={ blockKey + "-panel" }
-                    className=""
-                >
-                    { Render.label( blockKey, ( required_field && label != null ) ? label + '*' : label ) }
-                    { Render.tabPanelComponent(
+                Render.panelComponent( blockKey,
+                    ( required_field && label != null ) ? label + '*' : label,
+                    Render.tabPanelComponent(
                         blockKey,
                         Object.keys( Devices.getInstance().getMediaQueries() ).map( ( layout ) => {
                             return {
@@ -158,8 +155,10 @@ export class Attributes {
                         Devices.getInstance().getCurrentDevice(),
                         null,
                         'tabPanelResponsiveProp'
-                    ) }
-                </Panel>
+                    ),
+                    ( type == 'object' ) ? false : true,
+                    'responsive'
+                )
             )
         }
 

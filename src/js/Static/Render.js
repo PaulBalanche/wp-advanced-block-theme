@@ -23,34 +23,35 @@ export class Render {
         >{ inner }</TabPanel>;
     }
 
-    static panelComponent( id, label, inner, initialOpen = false ) {
-    
+    static panelComponent( id, label, inner, initialOpen = false, extraClass = '' ) {
+        
+        var className = [];   
+        if( extraClass != ''  )
+            className.push(extraClass);
+
         return <Panel
             key={ id + "-panel" }
+            className={ className.join(' ') }
         >
-            { this.panelBodyComponent(id, label, inner, initialOpen ) }
+            { this.panelBodyComponent(id, label, inner, initialOpen, null, extraClass ) }
         </Panel>
     }
 
-    static panelBodyComponent( id, label, inner, initialOpen = false, removeButton = null ) {
+    static panelBodyComponent( id, label, inner, initialOpen = false, removeButton = null, extraClassContent = '' ) {
+
+        var className = [];        
+        if( removeButton != null  )
+            className.push('repeatableItem');
 
         return <PanelBody
             key={ id + "-PanelBody" }
             title={ label }
-            initialOpen={ initialOpen }
-            className={ removeButton != null  ? 'repeatableItem' : false }
+            initialOpen={ ( label != null ) ? initialOpen : true }
+            className={ className.join(' ') }
         >
-            <div
-                key={ id + "-panelBodyDivObject" }
-                className="objectField components-base-control"
-            >
-                <div
-                    key={ id + "-panelBodySubDivObject" }
-                    className="objectField-content"
-                > 
-                    { inner }
-                    { removeButton }
-                </div>
+            <div className="components-panel__body-content">
+                { inner }
+                { removeButton }
             </div>
         </PanelBody>
     }
@@ -118,7 +119,7 @@ export class Render {
                 keyLoop = Attributes.returnStringOrNumber(keyLoop, true);
 
                 control.push( <div className='repeatableItem'>
-                    { Controls.render( type, componentInstance, blockKey + "-" + keyLoop, null, keys.concat(keyLoop), valueProp, controllerValue[keyLoop], required_field, args ) }
+                    { Controls.render( type, componentInstance, blockKey + "-" + keyLoop, label, keys.concat(keyLoop), valueProp, controllerValue[keyLoop], required_field, args ) }
                     { Render.buttonRemoveRepeatableElt( blockKey + "-" + keyLoop, () => { Attributes.removeEltRepeatable( keys.concat(keyLoop), valueProp, componentInstance ) } ) }
                     </div>
                 );
@@ -126,16 +127,19 @@ export class Render {
 
             control.push( Render.buttonAddRepeatableElt( blockKey, () => { Attributes.addEltToRepeatable( keys, valueProp, controllerValue, false, componentInstance ) } ) );
 
-            control = [ <Panel
-                key={ blockKey + "-panel" }
-                header={ ( required_field && label != null ) ? label + '*' : label }
-            >
-                { control }
-            </Panel> ]
+            control = Render.panelComponent(
+                blockKey,
+                ( required_field && label != null ) ? label + '*' : label,
+                control,
+                true
+            )
         }
         else {
             control.push( Controls.render( type, componentInstance, blockKey, label, keys, valueProp, ( typeof controllerValue != 'undefined' ) ? controllerValue : '', required_field, args ) );
         }
+
+        if( label == null )
+            return control;
 
         return Render.fieldContainer(
             blockKey,

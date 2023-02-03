@@ -1,10 +1,8 @@
 import {
-    Button,
     SelectControl
 } from '@wordpress/components';
 
 import { Attributes } from '../Static/Attributes';
-import { Render } from '../Static/Render';
 
 export function renderSelect( componentInstance, id, label, options, defaultValue, keys, valueProp, objectValue, required = false ) {
 

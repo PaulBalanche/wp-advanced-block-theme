@@ -171,31 +171,49 @@
                     margin-bottom: 2px;
                 }
             }
-        
+            
             .tab-panel-wpe-component {
         
                 .components-tab-panel__tabs {
                     background: #f3f4f5;
         
                     &-item {
-                        margin-bottom: 0;
+                        margin: 0px 15px;
+                        padding: 0;
+                        color: rgb(220 220 220);
         
                         &:focus:not(:disabled), &.active-tab {
                             box-shadow: 0 3px #007CBA;
+                            color: rgb(30,30,30);
                         }
                     }
                 }
-        
+
                 .components-tab-panel__tab-content {
-                    padding: 10px 10px 0px 10px;
+                    padding: 15px 0 0 0;
+                }
+
+                &.tabPanelResponsiveProp {
+                    
+                    & > .components-tab-panel__tabs {
+                        background: rgb(252 252 252);
+                        border-bottom: 1px solid #e0e0e0;
+
+                        & > .repeatableContainer > .components-panel {
+                            border: none;
+                            padding: 0;
+                            background: none;
+                        }
+
+                        .components-tab-panel__tabs-item {
+                            font-weight: 400;
+                        }
+                    }
                 }
             }
-        
-            .objectField-content {
-        
-                .tab-panel-wpe-component {
-                    margin-top: 20px;
-                }
+
+            .components-panel__body-content > .tab-panel-wpe-component > .components-tab-panel__tab-content {
+                padding: 15px;
             }
         
             .basicField, .repeatableField {
@@ -229,15 +247,13 @@
             .objectField {
         
                 .objectField-content {
-                    background: #f3f4f5;
-                    padding: 0 20px;
         
                     .basicField, .repeatableField {
                         border-color: #e2e4e7;
                     }
                 }
             }
-        
+
             .components-panel {
         
                 margin-bottom: 8px;
@@ -247,10 +263,12 @@
                 }
 
                 & > .components-base-control__label {
-                    background: #e0e0e0;
+                    background: #f3f4f5;
                     margin: 0;
-                    padding: 13px 16px 11px 16px;
+                    padding: 0 0 0 16px;
                     border-left: none;
+                    height: 48px;
+                    border-bottom: 1px solid #e0e0e0;
                 }
                 
                 .components-panel__body {
@@ -274,17 +292,23 @@
                         }
                     }
 
+                    .components-panel__body-content {
+                        padding: 15px;
+
+                        &:has( > .tab-panel-wpe-component ) {
+                            padding: 0;
+                        }
+                    }
+
                     &.is-opened > .components-panel__body-title {
         
                         background: #f3f4f5;
                     }
-
-                    .components-base-control {
-                        padding: 10px 0 0 0;
-                    }
         
-                    .objectField-content {
-                        background: white;
+                    .objectField-content:not(.responsive) {
+
+                        padding: 10px 20px 10px 20px;
+
 
                         .flex {
 
@@ -298,19 +322,23 @@
                             }
                         }
                     }
-        
                 }
-            }
 
-            .repeatableContainer > .components-panel {
-                padding: 15px;
-                background: rgb(250 250 250);
-            }
+                .components-tab-panel__tab-content .objectField-content {
+                    padding: 0;
+                }
 
-            .tabPanelResponsiveProp > .components-tab-panel__tab-content > .repeatableContainer > .components-panel {
-                border: none;
-                padding: 0;
-                background: none;
+                &.noLabel {
+                    border: none;
+
+                    .components-panel__body {
+                        border: none;
+                        
+                        .components-base-control {
+                            padding: 0;
+                        }
+                    }
+                }
             }
 
             .components-placeholder {
@@ -338,6 +366,10 @@
                         display: inline-flex;
                     }
                 }
+            }
+            
+            .components-base-control__field {
+                margin: 0;
             }
         
             .rich-text-container {

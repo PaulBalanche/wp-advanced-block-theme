@@ -8002,6 +8002,7 @@ function renderObject(componentInstance, id, label, keys, valueProp, objectValue
     }
   }
   if (false) { var i, labelTempValueProp, tempValueProp, labelRepeatble; }
+  if (label == null) return fieldsetObject;
   return _Static_Render__WEBPACK_IMPORTED_MODULE_2__.Render.panelComponent(id, label, fieldsetObject, false);
 }
 
@@ -8131,8 +8132,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _Static_Attributes__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Static/Attributes */ "./src/js/Static/Attributes.js");
-/* harmony import */ var _Static_Render__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Static/Render */ "./src/js/Static/Render.js");
-
 
 
 
@@ -9496,13 +9495,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "Attributes": () => (/* binding */ Attributes)
 /* harmony export */ });
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _Singleton_Devices__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Singleton/Devices */ "./src/js/Singleton/Devices.js");
-/* harmony import */ var _Render__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Render */ "./src/js/Static/Render.js");
-
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _Singleton_Devices__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Singleton/Devices */ "./src/js/Singleton/Devices.js");
+/* harmony import */ var _Render__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Render */ "./src/js/Static/Render.js");
 
 
 
@@ -9628,20 +9624,17 @@ class Attributes {
       if (typeof currentValueAttribute != "object") {
         currentValueAttribute = {};
       }
-      return _Render__WEBPACK_IMPORTED_MODULE_3__.Render.fieldContainer(blockKey, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Panel, {
-        key: blockKey + "-panel",
-        className: ""
-      }, _Render__WEBPACK_IMPORTED_MODULE_3__.Render.label(blockKey, required_field && label != null ? label + '*' : label), _Render__WEBPACK_IMPORTED_MODULE_3__.Render.tabPanelComponent(blockKey, Object.keys(_Singleton_Devices__WEBPACK_IMPORTED_MODULE_2__.Devices.getInstance().getMediaQueries()).map(layout => {
+      return _Render__WEBPACK_IMPORTED_MODULE_2__.Render.fieldContainer(blockKey, _Render__WEBPACK_IMPORTED_MODULE_2__.Render.panelComponent(blockKey, required_field && label != null ? label + '*' : label, _Render__WEBPACK_IMPORTED_MODULE_2__.Render.tabPanelComponent(blockKey, Object.keys(_Singleton_Devices__WEBPACK_IMPORTED_MODULE_1__.Devices.getInstance().getMediaQueries()).map(layout => {
         return {
           name: layout,
           title: layout.charAt(0).toUpperCase() + layout.slice(1),
           className: 'tab-' + layout
         };
       }), tab => {
-        return _Render__WEBPACK_IMPORTED_MODULE_3__.Render.control(type, componentInstance, blockKey + "-" + tab.name, null, keys.concat(tab.name), valueProp, currentValueAttribute[tab.name], repeatable, required_field, args);
-      }, _Singleton_Devices__WEBPACK_IMPORTED_MODULE_2__.Devices.getInstance().getCurrentDevice(), null, 'tabPanelResponsiveProp')));
+        return _Render__WEBPACK_IMPORTED_MODULE_2__.Render.control(type, componentInstance, blockKey + "-" + tab.name, null, keys.concat(tab.name), valueProp, currentValueAttribute[tab.name], repeatable, required_field, args);
+      }, _Singleton_Devices__WEBPACK_IMPORTED_MODULE_1__.Devices.getInstance().getCurrentDevice(), null, 'tabPanelResponsiveProp'), type == 'object' ? false : true, 'responsive'));
     }
-    return _Render__WEBPACK_IMPORTED_MODULE_3__.Render.control(type, componentInstance, blockKey, label, keys, valueProp, currentValueAttribute, repeatable, required_field, args);
+    return _Render__WEBPACK_IMPORTED_MODULE_2__.Render.control(type, componentInstance, blockKey, label, keys, valueProp, currentValueAttribute, repeatable, required_field, args);
   }
   static initComponentAttributes(attributes, props) {
     for (const [key, value] of Object.entries(props)) {
@@ -9870,25 +9863,28 @@ class Render {
   }
   static panelComponent(id, label, inner) {
     let initialOpen = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
+    let extraClass = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : '';
+    var className = [];
+    if (extraClass != '') className.push(extraClass);
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Panel, {
-      key: id + "-panel"
-    }, this.panelBodyComponent(id, label, inner, initialOpen));
+      key: id + "-panel",
+      className: className.join(' ')
+    }, this.panelBodyComponent(id, label, inner, initialOpen, null, extraClass));
   }
   static panelBodyComponent(id, label, inner) {
     let initialOpen = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
     let removeButton = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : null;
+    let extraClassContent = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : '';
+    var className = [];
+    if (removeButton != null) className.push('repeatableItem');
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.PanelBody, {
       key: id + "-PanelBody",
       title: label,
-      initialOpen: initialOpen,
-      className: removeButton != null ? 'repeatableItem' : false
+      initialOpen: label != null ? initialOpen : true,
+      className: className.join(' ')
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      key: id + "-panelBodyDivObject",
-      className: "objectField components-base-control"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      key: id + "-panelBodySubDivObject",
-      className: "objectField-content"
-    }, inner, removeButton)));
+      className: "components-panel__body-content"
+    }, inner, removeButton));
   }
   static fieldContainer(id, inner) {
     let extraClass = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '';
@@ -9939,20 +9935,18 @@ class Render {
         keyLoop = _Attributes__WEBPACK_IMPORTED_MODULE_3__.Attributes.returnStringOrNumber(keyLoop, true);
         control.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
           className: "repeatableItem"
-        }, _Controls__WEBPACK_IMPORTED_MODULE_2__.Controls.render(type, componentInstance, blockKey + "-" + keyLoop, null, keys.concat(keyLoop), valueProp, controllerValue[keyLoop], required_field, args), Render.buttonRemoveRepeatableElt(blockKey + "-" + keyLoop, () => {
+        }, _Controls__WEBPACK_IMPORTED_MODULE_2__.Controls.render(type, componentInstance, blockKey + "-" + keyLoop, label, keys.concat(keyLoop), valueProp, controllerValue[keyLoop], required_field, args), Render.buttonRemoveRepeatableElt(blockKey + "-" + keyLoop, () => {
           _Attributes__WEBPACK_IMPORTED_MODULE_3__.Attributes.removeEltRepeatable(keys.concat(keyLoop), valueProp, componentInstance);
         })));
       }
       control.push(Render.buttonAddRepeatableElt(blockKey, () => {
         _Attributes__WEBPACK_IMPORTED_MODULE_3__.Attributes.addEltToRepeatable(keys, valueProp, controllerValue, false, componentInstance);
       }));
-      control = [(0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Panel, {
-        key: blockKey + "-panel",
-        header: required_field && label != null ? label + '*' : label
-      }, control)];
+      control = Render.panelComponent(blockKey, required_field && label != null ? label + '*' : label, control, true);
     } else {
       control.push(_Controls__WEBPACK_IMPORTED_MODULE_2__.Controls.render(type, componentInstance, blockKey, label, keys, valueProp, typeof controllerValue != 'undefined' ? controllerValue : '', required_field, args));
     }
+    if (label == null) return control;
     return Render.fieldContainer(blockKey, control, extraClassfieldContainer);
   }
 }
