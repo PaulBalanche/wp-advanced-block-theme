@@ -9921,6 +9921,40 @@ class Render {
       icon: "no-alt"
     }), " Remove");
   }
+  static dragStart(event) {
+    event.dataTransfer.setData('keyToMove', event.target.getAttribute('datakey'));
+    event.target.parentElement.classList.add('dragged');
+  }
+  static drop(event, keys, valueProp, controllerValue, componentInstance) {
+    event.preventDefault();
+    document.querySelector('.dragged').classList.remove('dragged');
+    const keyToMove = event.dataTransfer.getData('keyToMove');
+    const newKey = event.target.getAttribute('datakey');
+
+    // console.log( 'keyToMove : ' + keyToMove );
+    // console.log( 'newKey : ' + newKey );
+
+    var newControllerValue = [];
+    for (var i in controllerValue) {
+      if (i < newKey && i != keyToMove) {
+        // console.log( 'push : ' + i );
+        newControllerValue.push(controllerValue[i]);
+      }
+    }
+    // console.log( 'push keyToMove : ' + keyToMove );
+    newControllerValue.push(controllerValue[keyToMove]);
+    for (var i in controllerValue) {
+      if (i >= newKey && i != keyToMove) {
+        // console.log( 'push : ' + i );
+        newControllerValue.push(controllerValue[i]);
+      }
+    }
+    // console.log(newControllerValue);
+    _Attributes__WEBPACK_IMPORTED_MODULE_3__.Attributes.updateAttributes(keys, valueProp, newControllerValue, false, componentInstance);
+  }
+  static dragOver(event) {
+    event.preventDefault();
+  }
   static control(type, componentInstance, blockKey, label, keys, valueProp, controllerValue, repeatable, required_field, args) {
     var control = [];
     if (repeatable) {
@@ -9930,11 +9964,37 @@ class Render {
       for (var keyLoop in controllerValue) {
         keyLoop = _Attributes__WEBPACK_IMPORTED_MODULE_3__.Attributes.returnStringOrNumber(keyLoop, true);
         const labelRepeatableItem = type == 'object' ? Render.repeatableObjectLabelFormatting(blockKey + "-" + keyLoop, controllerValue, keyLoop) : null;
-        control.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+        control.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+          key: blockKey + "-" + keyLoop + "_repeatableDropZone",
+          className: 'repeatableDropZone ' + type,
+          onDrop: event => {
+            Render.drop(event, keys, valueProp, controllerValue, componentInstance);
+          },
+          onDragOver: event => {
+            Render.dragOver(event);
+          },
+          dataKey: keyLoop
+        }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
           key: blockKey + "-" + keyLoop + "_repeatableItem",
-          className: 'repeatableItem ' + type
-        }, _Controls__WEBPACK_IMPORTED_MODULE_2__.Controls.render(type, componentInstance, blockKey + "-" + keyLoop, labelRepeatableItem, keys.concat(keyLoop), valueProp, controllerValue[keyLoop], required_field, args), Render.buttonRemoveRepeatableElt(blockKey + "-" + keyLoop, keys.concat(keyLoop), valueProp, componentInstance)));
+          className: 'repeatableItem ' + type,
+          draggable: "true",
+          onDragStart: event => {
+            Render.dragStart(event);
+          },
+          dataKey: keyLoop
+        }, _Controls__WEBPACK_IMPORTED_MODULE_2__.Controls.render(type, componentInstance, blockKey + "-" + keyLoop, labelRepeatableItem, keys.concat(keyLoop), valueProp, controllerValue[keyLoop], required_field, args), Render.buttonRemoveRepeatableElt(blockKey + "-" + keyLoop, keys.concat(keyLoop), valueProp, componentInstance))));
       }
+      control.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+        key: blockKey + "-" + keyLoop + "_repeatableDropZone",
+        className: 'repeatableDropZone ' + type,
+        onDrop: event => {
+          Render.drop(event, keys, valueProp, controllerValue, componentInstance);
+        },
+        onDragOver: event => {
+          Render.dragOver(event);
+        },
+        dataKey: controllerValue.length
+      }));
       control.push(Render.buttonAddRepeatableElt(blockKey, keys, valueProp, controllerValue, componentInstance));
       control = label != null ? Render.panelComponent(blockKey, required_field ? label + '*' : label, control, true) : control;
     } else {

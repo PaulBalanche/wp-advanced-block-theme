@@ -102,6 +102,47 @@ export class Render {
         </Button>
     }
 
+    static dragStart( event ) {
+        event.dataTransfer.setData( 'keyToMove', event.target.getAttribute('datakey') );
+        event.target.parentElement.classList.add('dragged');
+    }
+    
+    static drop( event, keys, valueProp, controllerValue, componentInstance ) {
+        event.preventDefault()
+
+        document.querySelector('.dragged').classList.remove('dragged');
+
+        const keyToMove = event.dataTransfer.getData( 'keyToMove' );
+        const newKey = event.target.getAttribute('datakey')
+        
+        // console.log( 'keyToMove : ' + keyToMove );
+        // console.log( 'newKey : ' + newKey );
+
+        var newControllerValue = [];
+        for( var i in controllerValue ) {
+
+            if( i < newKey && i != keyToMove ) {
+                // console.log( 'push : ' + i );
+                newControllerValue.push( controllerValue[i] );
+            }
+        }
+        // console.log( 'push keyToMove : ' + keyToMove );
+        newControllerValue.push( controllerValue[keyToMove] );
+        for( var i in controllerValue ) {
+
+            if( i >= newKey && i != keyToMove ) {
+                // console.log( 'push : ' + i );
+                newControllerValue.push( controllerValue[i] );
+            }
+        }
+        // console.log(newControllerValue);
+        Attributes.updateAttributes( keys, valueProp, newControllerValue, false, componentInstance );
+    }
+
+    static dragOver(event) {
+        event.preventDefault();
+    }
+
     static control( type, componentInstance, blockKey, label, keys, valueProp, controllerValue, repeatable, required_field, args ) {
         
         var control = [];
@@ -118,12 +159,35 @@ export class Render {
 
                 const labelRepeatableItem = ( type == 'object' ) ? Render.repeatableObjectLabelFormatting( blockKey + "-" + keyLoop, controllerValue, keyLoop ) : null;
 
-                control.push( <div key={ blockKey + "-" + keyLoop + "_repeatableItem" } className={ 'repeatableItem ' + type }>
-                    { Controls.render( type, componentInstance, blockKey + "-" + keyLoop, labelRepeatableItem, keys.concat(keyLoop), valueProp, controllerValue[keyLoop], required_field, args ) }
-                    { Render.buttonRemoveRepeatableElt( blockKey + "-" + keyLoop, keys.concat(keyLoop), valueProp, componentInstance ) }
-                </div>
-                );
+                control.push(<>
+                    <div
+                        key={ blockKey + "-" + keyLoop + "_repeatableDropZone" }
+                        className={ 'repeatableDropZone ' + type }
+                        onDrop={ (event) => { Render.drop( event, keys, valueProp, controllerValue, componentInstance  ) } }
+                        onDragOver={ (event) => { Render.dragOver(event) } }
+                        dataKey={keyLoop}
+                    ></div>
+                    <div
+                        key={ blockKey + "-" + keyLoop + "_repeatableItem" }
+                        className={ 'repeatableItem ' + type }
+                        draggable="true"
+                        onDragStart={ (event) => { Render.dragStart( event ) } }
+                        dataKey={keyLoop}
+                    >
+                        { Controls.render( type, componentInstance, blockKey + "-" + keyLoop, labelRepeatableItem, keys.concat(keyLoop), valueProp, controllerValue[keyLoop], required_field, args ) }
+                        { Render.buttonRemoveRepeatableElt( blockKey + "-" + keyLoop, keys.concat(keyLoop), valueProp, componentInstance ) }
+                    </div>
+                    
+                </>);
             }
+
+            control.push( <div
+                key={ blockKey + "-" + keyLoop + "_repeatableDropZone" }
+                className={ 'repeatableDropZone ' + type }
+                onDrop={ (event) => { Render.drop( event, keys, valueProp, controllerValue, componentInstance  ) } }
+                onDragOver={ (event) => { Render.dragOver(event) } }
+                dataKey={controllerValue.length}
+            ></div> );
 
             control.push( Render.buttonAddRepeatableElt( blockKey, keys, valueProp, controllerValue, componentInstance ) );
 

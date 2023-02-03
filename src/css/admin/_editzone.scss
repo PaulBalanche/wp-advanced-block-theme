@@ -253,7 +253,7 @@
 
             .components-panel {
         
-                margin-bottom: 8px;
+                // margin-bottom: 8px;
 
                 &:last-child {
                     margin-bottom: 0;
@@ -512,6 +512,17 @@
 
                 }
             }
+        }
+
+        .repeatableDropZone {
+            border: 1px dashed var(--wp-admin-theme-color);
+            height: 40px;
+            width: 100%;
+            display: none;
+        }
+
+        .dragged .repeatableDropZone {
+            display: block;
         }
     }
 

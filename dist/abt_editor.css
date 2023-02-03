@@ -575,9 +575,6 @@ body.is-dragging-components-draggable #editor .block-editor-block-list__block::a
 #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .objectField .objectField-content .basicField, #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .objectField .objectField-content .repeatableField {
   border-color: #e2e4e7;
 }
-#abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-panel {
-  margin-bottom: 8px;
-}
 #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-panel:last-child {
   margin-bottom: 0;
 }
@@ -762,6 +759,15 @@ body.is-dragging-components-draggable #editor .block-editor-block-list__block::a
 }
 #abt-component-edit-zone .edit-zone__body .repeatableItem .repeatableObjectLabel .props .key {
   color: rgb(220, 220, 220);
+}
+#abt-component-edit-zone .edit-zone__body .repeatableDropZone {
+  border: 1px dashed var(--wp-admin-theme-color);
+  height: 40px;
+  width: 100%;
+  display: none;
+}
+#abt-component-edit-zone .edit-zone__body .dragged .repeatableDropZone {
+  display: block;
 }
 #abt-component-edit-zone .edit-zone__footer {
   display: flex;
