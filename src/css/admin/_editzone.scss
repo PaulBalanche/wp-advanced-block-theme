@@ -500,6 +500,7 @@
 
                 .id {
                     color: rgb(220, 220, 220);
+                    display: none;
                 }
 
                 .props {
@@ -518,7 +519,7 @@
             border: 1px dashed var(--wp-admin-theme-color);
             height: 40px;
             width: 100%;
-            display: none;
+            // display: none;
         }
 
         .dragged .repeatableDropZone {

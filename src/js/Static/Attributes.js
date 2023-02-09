@@ -29,19 +29,20 @@ export class Attributes {
     }
     
     static updateAttributes( arrayKey, currentValue, newValue, isNumber = false, componentInstance ) {
+
         let keyToUpdate = arrayKey[0];
         let newValueToUpdate = Attributes.recursiveUpdateObjectFromObject(arrayKey, currentValue, newValue, isNumber);
-    
+
         componentInstance.setAttributes( { [keyToUpdate]: newValueToUpdate[keyToUpdate] } );
     }
     
     static recursiveUpdateObjectFromObject( arrayKey, fromObject, newValue, isNumber = false ) {
-    
+
         const firstElement = arrayKey.shift();
-    
-        if( typeof fromObject != 'object' || ( Array.isArray(fromObject) && typeof firstElement == 'string' ) || ( ! Array.isArray(fromObject) && typeof firstElement == 'number' ) )
-            fromObject = ( typeof firstElement == 'string' ) ? {} : [];
-    
+
+        if( typeof fromObject != 'object' || ( Array.isArray(fromObject) && isNaN(firstElement) ) || ( ! Array.isArray(fromObject) && typeof firstElement == 'number' ) )
+            fromObject = ( isNaN(firstElement) ) ? {} : [];
+
         let objectReturned = ( Array.isArray(fromObject) ) ? [] : {};
     
         for( const [key, val] of Object.entries(fromObject) ) {
@@ -82,7 +83,7 @@ export class Attributes {
 
 
 
-    
+
     static renderProp( prop, keys, valueProp, componentInstance ) {
        
         const type = prop.type.toLowerCase();
@@ -92,7 +93,7 @@ export class Attributes {
         const required_field = ( typeof prop.required != "undefined" && prop.required ) ? true : false;
         
         let currentValueAttribute = valueProp;
-        keys.forEach( element => { currentValueAttribute = ( typeof currentValueAttribute == 'object' && currentValueAttribute.hasOwnProperty(element) && typeof currentValueAttribute[element] != "undefined" ) ? currentValueAttribute[element] : ""; } );
+        keys.forEach( element => { currentValueAttribute = ( currentValueAttribute != null && typeof currentValueAttribute == 'object' && currentValueAttribute.hasOwnProperty(element) && typeof currentValueAttribute[element] != "undefined" ) ? currentValueAttribute[element] : ""; } );
 
         var args = {};
         switch( type ) {
