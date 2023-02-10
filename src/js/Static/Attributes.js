@@ -38,7 +38,8 @@ export class Attributes {
     
     static recursiveUpdateObjectFromObject( arrayKey, fromObject, newValue, isNumber = false ) {
 
-        const firstElement = arrayKey.shift();
+        const currentArrayKey = Object.assign([], arrayKey);       
+        const firstElement = currentArrayKey.shift();
 
         if( typeof fromObject != 'object' || ( Array.isArray(fromObject) && isNaN(firstElement) ) || ( ! Array.isArray(fromObject) && typeof firstElement == 'number' ) )
             fromObject = ( isNaN(firstElement) ) ? {} : [];
@@ -47,8 +48,8 @@ export class Attributes {
     
         for( const [key, val] of Object.entries(fromObject) ) {
             if( key == firstElement ) {
-                if( arrayKey.length > 0 )
-                    objectReturned[key] = Attributes.recursiveUpdateObjectFromObject(arrayKey, val, newValue, isNumber);
+                if( currentArrayKey.length > 0 )
+                    objectReturned[key] = Attributes.recursiveUpdateObjectFromObject(currentArrayKey, val, newValue, isNumber);
                 else if( !! newValue )
                     objectReturned[key] = Attributes.returnStringOrNumber(newValue, isNumber);
             }
@@ -58,14 +59,14 @@ export class Attributes {
     
         if( typeof objectReturned[firstElement] == 'undefined' ) {
     
-            if( arrayKey.length > 0 )
-                objectReturned[firstElement] = Attributes.recursiveUpdateObjectFromObject(arrayKey, undefined, newValue, isNumber);
+            if( currentArrayKey.length > 0 )
+                objectReturned[firstElement] = Attributes.recursiveUpdateObjectFromObject(currentArrayKey, undefined, newValue, isNumber);
             else if( !! newValue )
                 objectReturned[firstElement] = Attributes.returnStringOrNumber(newValue, isNumber);
         }
     
         // Re-index in case of element suppression
-        if( arrayKey.length == 0 && ! newValue ) {
+        if( currentArrayKey.length == 0 && ! newValue ) {
             for (let index = 0; index < objectReturned.length; index++) {
                 if( typeof objectReturned[index] == 'undefined' )
                     objectReturned.splice(index, 1);

@@ -14729,20 +14729,21 @@ class Attributes {
   }
   static recursiveUpdateObjectFromObject(arrayKey, fromObject, newValue) {
     let isNumber = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
-    const firstElement = arrayKey.shift();
+    const currentArrayKey = Object.assign([], arrayKey);
+    const firstElement = currentArrayKey.shift();
     if (typeof fromObject != 'object' || Array.isArray(fromObject) && isNaN(firstElement) || !Array.isArray(fromObject) && typeof firstElement == 'number') fromObject = isNaN(firstElement) ? {} : [];
     let objectReturned = Array.isArray(fromObject) ? [] : {};
     for (const [key, val] of Object.entries(fromObject)) {
       if (key == firstElement) {
-        if (arrayKey.length > 0) objectReturned[key] = Attributes.recursiveUpdateObjectFromObject(arrayKey, val, newValue, isNumber);else if (!!newValue) objectReturned[key] = Attributes.returnStringOrNumber(newValue, isNumber);
+        if (currentArrayKey.length > 0) objectReturned[key] = Attributes.recursiveUpdateObjectFromObject(currentArrayKey, val, newValue, isNumber);else if (!!newValue) objectReturned[key] = Attributes.returnStringOrNumber(newValue, isNumber);
       } else objectReturned[key] = val;
     }
     if (typeof objectReturned[firstElement] == 'undefined') {
-      if (arrayKey.length > 0) objectReturned[firstElement] = Attributes.recursiveUpdateObjectFromObject(arrayKey, undefined, newValue, isNumber);else if (!!newValue) objectReturned[firstElement] = Attributes.returnStringOrNumber(newValue, isNumber);
+      if (currentArrayKey.length > 0) objectReturned[firstElement] = Attributes.recursiveUpdateObjectFromObject(currentArrayKey, undefined, newValue, isNumber);else if (!!newValue) objectReturned[firstElement] = Attributes.returnStringOrNumber(newValue, isNumber);
     }
 
     // Re-index in case of element suppression
-    if (arrayKey.length == 0 && !newValue) {
+    if (currentArrayKey.length == 0 && !newValue) {
       for (let index = 0; index < objectReturned.length; index++) {
         if (typeof objectReturned[index] == 'undefined') objectReturned.splice(index, 1);
       }
@@ -15241,9 +15242,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Attributes__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./Attributes */ "./src/js/Static/Attributes.js");
 /* harmony import */ var _Render__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./Render */ "./src/js/Static/Render.js");
 /* harmony import */ var _Controls__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./Controls */ "./src/js/Static/Controls.js");
-/* harmony import */ var draft_js_lib_DefaultDraftBlockRenderMap__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! draft-js/lib/DefaultDraftBlockRenderMap */ "./node_modules/draft-js/lib/DefaultDraftBlockRenderMap.js");
-/* harmony import */ var draft_js_lib_DefaultDraftBlockRenderMap__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(draft_js_lib_DefaultDraftBlockRenderMap__WEBPACK_IMPORTED_MODULE_8__);
-
 
 
 
@@ -15260,7 +15258,7 @@ class Sortable extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Component
       items: Object.keys(this.props.controllerValue)
     };
     this.handleDragEnd = this._handleDragEnd.bind(this);
-    this.removeItem = this._removeItem.bind(this);
+    this.handleRemove = this._handleRemove.bind(this);
     this.addItem = this._addItem.bind(this);
   }
   _handleDragEnd(event) {
@@ -15275,7 +15273,7 @@ class Sortable extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Component
       this.setState({
         items: newItems
       });
-      var newControllerValue = [];
+      const newControllerValue = [];
       for (var i in newItems) {
         if ((i < newIndex || newIndex > oldIndex && i == newIndex) && i != oldIndex) {
           newControllerValue.push(this.props.controllerValue[i]);
@@ -15290,11 +15288,14 @@ class Sortable extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Component
       _Attributes__WEBPACK_IMPORTED_MODULE_5__.Attributes.updateAttributes(this.props.keys, this.props.valueProp, newControllerValue, false, this.props.componentInstance);
     }
   }
-  _removeItem(elt) {
-    const indexToRemove = elt.target.getAttribute('data-index');
-    var currentStateItems = this.state.items;
-    currentStateItems.splice(indexToRemove, 1);
-    this.updateItems(currentStateItems);
+  _handleRemove(id) {
+    const indexToRemove = this.state.items.indexOf(id);
+    this.setState({
+      items: this.state.items.filter(item => item !== id)
+    });
+    const newControllerValue = Object.assign([], this.props.controllerValue);
+    newControllerValue.splice(indexToRemove, 1);
+    _Attributes__WEBPACK_IMPORTED_MODULE_5__.Attributes.updateAttributes(this.props.keys, this.props.valueProp, newControllerValue, false, this.props.componentInstance);
   }
   _addItem(elt) {
     var currentStateItems = this.state.items;
@@ -15306,16 +15307,11 @@ class Sortable extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Component
       }
     }
     currentStateItems.push("" + newIndexToAdd + "");
-    this.updateItems(currentStateItems);
-  }
-  updateItems(newItems) {
     this.setState({
-      items: newItems
+      items: currentStateItems
     });
-    var newControllerValue = [];
-    for (var keyLoop in newItems) {
-      newControllerValue.push(this.props.controllerValue[newItems[keyLoop]]);
-    }
+    const newControllerValue = Object.assign([], this.props.controllerValue);
+    newControllerValue.push("");
     _Attributes__WEBPACK_IMPORTED_MODULE_5__.Attributes.updateAttributes(this.props.keys, this.props.valueProp, newControllerValue, false, this.props.componentInstance);
   }
   renderItems() {
@@ -15325,17 +15321,10 @@ class Sortable extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Component
       renderItems.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_SortableItem__WEBPACK_IMPORTED_MODULE_4__.SortableItem, {
         key: this.props.blockKey + "-" + keyLoop + "-SortableItem",
         id: this.state.items[keyLoop],
-        blockKey: this.props.blockKey
-      }, _Controls__WEBPACK_IMPORTED_MODULE_7__.Controls.render(this.props.type, this.props.componentInstance, this.props.blockKey + "-" + keyLoop, labelRepeatableItem, this.props.keys.concat(keyLoop), this.props.valueProp, this.props.controllerValue[keyLoop], this.props.required_field, this.props.args), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
-        key: this.props.blockKey + "-" + keyLoop + "-repeatableRemoveElt",
-        className: "repeatableRemoveElt",
-        "data-index": keyLoop,
-        onMouseDown: this.removeItem,
-        variant: "secondary",
-        isSmall: true
-      }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
-        icon: "no-alt"
-      }), " Remove")));
+        blockKey: this.props.blockKey,
+        onRemove: this.handleRemove,
+        type: this.props.type
+      }, _Controls__WEBPACK_IMPORTED_MODULE_7__.Controls.render(this.props.type, this.props.componentInstance, this.props.blockKey + "-" + keyLoop, labelRepeatableItem, this.props.keys.concat(keyLoop), this.props.valueProp, this.props.controllerValue[keyLoop], this.props.required_field, this.props.args)));
     }
     return renderItems;
   }
@@ -15351,11 +15340,18 @@ class Sortable extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Component
     // sensors={sensors}
     , {
       collisionDetection: _dnd_kit_core__WEBPACK_IMPORTED_MODULE_2__.closestCenter,
-      onDragEnd: this.handleDragEnd
+      onDragEnd: this.handleDragEnd,
+      measuring: {
+        droppable: {
+          strategy: _dnd_kit_core__WEBPACK_IMPORTED_MODULE_2__.MeasuringStrategy.Always
+        }
+      }
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_dnd_kit_sortable__WEBPACK_IMPORTED_MODULE_3__.SortableContext, {
       items: this.state.items,
       strategy: _dnd_kit_sortable__WEBPACK_IMPORTED_MODULE_3__.verticalListSortingStrategy
-    }, this.renderItems()), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", {
+      className: "repeatableContainer"
+    }, this.renderItems())), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
       className: "repeatableAddElt",
       onMouseDown: this.addItem,
       variant: "secondary"
@@ -15383,10 +15379,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _dnd_kit_sortable__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @dnd-kit/sortable */ "./node_modules/@dnd-kit/sortable/dist/sortable.esm.js");
 /* harmony import */ var _dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @dnd-kit/utilities */ "./node_modules/@dnd-kit/utilities/dist/utilities.esm.js");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__);
 
 
 
 
+
+const animateLayoutChanges = args => (0,_dnd_kit_sortable__WEBPACK_IMPORTED_MODULE_2__.defaultAnimateLayoutChanges)({
+  ...args,
+  wasDragging: true
+});
 function SortableItem(props) {
   const {
     attributes,
@@ -15396,22 +15399,36 @@ function SortableItem(props) {
     transform,
     transition
   } = (0,_dnd_kit_sortable__WEBPACK_IMPORTED_MODULE_2__.useSortable)({
-    id: props.id
+    id: props.id,
+    animateLayoutChanges
   });
   const style = {
-    transform: _dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_3__.CSS.Transform.toString(transform),
-    transition
+    transition,
+    transform: _dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_3__.CSS.Translate.toString(transform)
   };
-  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("div", (0,_babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_0__["default"])({
+  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("li", (0,_babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_0__["default"])({
     key: props.id + "-SortableItemContainer",
     ref: setNodeRef,
     style: style
   }, attributes, {
-    className: "repeatableItem"
-  }), props.children, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("button", (0,_babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_0__["default"])({
-    key: props.blockKey + "-" + props.id + "-repeatableHandlerButton",
+    className: "repeatableItem " + props.type
+  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("div", {
+    className: "sortableItemInner"
+  }, props.children), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.Button, (0,_babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_0__["default"])({
     ref: setActivatorNodeRef
-  }, listeners), "Drag handle"));
+  }, listeners, {
+    className: "drag",
+    variant: "tertiary",
+    isSmall: true,
+    icon: "move"
+  })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.Button, {
+    className: "remove",
+    onMouseDown: () => props.onRemove(props.id),
+    variant: "tertiary",
+    isDestructive: true,
+    isSmall: true,
+    icon: "trash"
+  }));
 }
 
 /***/ }),

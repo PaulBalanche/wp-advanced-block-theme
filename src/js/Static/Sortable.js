@@ -12,6 +12,7 @@ import {
   PointerSensor,
   useSensor,
   useSensors,
+  MeasuringStrategy
 } from '@dnd-kit/core';
 import {
   arrayMove,
@@ -25,7 +26,6 @@ import {SortableItem} from './SortableItem';
 import { Attributes } from './Attributes'
 import { Render } from './Render'
 import { Controls } from './Controls'
-import { toIndexedSeq } from 'draft-js/lib/DefaultDraftBlockRenderMap';
 
 export class Sortable extends Component {
 
@@ -37,7 +37,7 @@ export class Sortable extends Component {
         };
 
         this.handleDragEnd = this._handleDragEnd.bind(this);
-        this.removeItem = this._removeItem.bind(this);
+        this.handleRemove = this._handleRemove.bind(this);
         this.addItem = this._addItem.bind(this);
     }
 
@@ -52,7 +52,7 @@ export class Sortable extends Component {
 
             this.setState( { items: newItems } );
 
-            var newControllerValue = [];
+            const newControllerValue = [];
             for( var i in newItems ) {
                 if( ( i < newIndex || ( newIndex > oldIndex && i == newIndex ) ) && i != oldIndex ) {
                     newControllerValue.push( this.props.controllerValue[ i ] );
@@ -70,13 +70,15 @@ export class Sortable extends Component {
         }
     }
 
-    _removeItem(elt) {
+    _handleRemove(id) {
 
-        const indexToRemove = elt.target.getAttribute('data-index');
-        var currentStateItems = this.state.items;
-        currentStateItems.splice(indexToRemove, 1);
+        const indexToRemove = this.state.items.indexOf(id);
+        this.setState( { items: this.state.items.filter((item) => item !== id) });
 
-        this.updateItems( currentStateItems );
+        const newControllerValue = Object.assign([], this.props.controllerValue);    
+        newControllerValue.splice(indexToRemove, 1);
+
+        Attributes.updateAttributes( this.props.keys, this.props.valueProp, newControllerValue, false, this.props.componentInstance );
     }
 
     _addItem(elt) {
@@ -90,23 +92,15 @@ export class Sortable extends Component {
             }
         }
         currentStateItems.push( "" + newIndexToAdd + "" );
-        this.updateItems( currentStateItems );
-    }
+        this.setState( { items: currentStateItems } );
 
-    updateItems(newItems) {
-        
-        this.setState( { items: newItems } );
-
-        var newControllerValue = [];
-        for( var keyLoop in newItems ) {
-            newControllerValue.push( this.props.controllerValue[ newItems[keyLoop] ] );
-        }
-
+        const newControllerValue = Object.assign([], this.props.controllerValue);    
+        newControllerValue.push("");
         Attributes.updateAttributes( this.props.keys, this.props.valueProp, newControllerValue, false, this.props.componentInstance );
     }
 
     renderItems() {
-        
+
         var renderItems = [];
         for( var keyLoop in this.state.items ) {
 
@@ -116,6 +110,8 @@ export class Sortable extends Component {
                     key={ this.props.blockKey + "-" + keyLoop + "-SortableItem" }
                     id={this.state.items[keyLoop]}
                     blockKey={this.props.blockKey}
+                    onRemove={this.handleRemove}
+                    type={this.props.type}
                 >
                     { Controls.render(
                         this.props.type,
@@ -128,16 +124,6 @@ export class Sortable extends Component {
                         this.props.required_field,
                         this.props.args
                     ) }
-                    <Button
-                        key={ this.props.blockKey + "-" + keyLoop + "-repeatableRemoveElt" }
-                        className="repeatableRemoveElt"
-                        data-index={keyLoop}
-                        onMouseDown={this.removeItem}
-                        variant="secondary"
-                        isSmall
-                    >
-                        <Dashicon icon="no-alt" /> Remove
-                    </Button>
                 </SortableItem>
             );
         }
@@ -158,12 +144,15 @@ export class Sortable extends Component {
                 // sensors={sensors}
                 collisionDetection={closestCenter}
                 onDragEnd={this.handleDragEnd}
+                measuring={{droppable: {strategy: MeasuringStrategy.Always}}}
             >
                 <SortableContext 
                     items={ this.state.items }
                     strategy={verticalListSortingStrategy}
                 >
-                    { this.renderItems() }
+                    <ul className="repeatableContainer">
+                        { this.renderItems() }
+                    </ul>
                 </SortableContext>
                 <Button
                     className="repeatableAddElt"
