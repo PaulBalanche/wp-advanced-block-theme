@@ -30,10 +30,8 @@ export class Attributes {
     
     static updateAttributes( arrayKey, currentValue, newValue, isNumber = false, componentInstance ) {
 
-        let keyToUpdate = arrayKey[0];
-        let newValueToUpdate = Attributes.recursiveUpdateObjectFromObject(arrayKey, currentValue, newValue, isNumber);
-
-        componentInstance.setAttributes( { [keyToUpdate]: newValueToUpdate[keyToUpdate] } );
+        const newValueToUpdate = Attributes.recursiveUpdateObjectFromObject(arrayKey, currentValue, newValue, isNumber);
+        componentInstance.setAttributes( { [ arrayKey[0] ]: newValueToUpdate[ arrayKey[0] ] } );
     }
     
     static recursiveUpdateObjectFromObject( arrayKey, fromObject, newValue, isNumber = false ) {

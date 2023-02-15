@@ -243,7 +243,7 @@ export class WpeComponentBase extends Component {
         if( typeof this.state.editZone != 'undefined' && this.state.editZone ) {
             render.push( EditZone.getInstance().render() );
         }
-        
+
         return render;
     }
 

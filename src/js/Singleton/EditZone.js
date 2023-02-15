@@ -1,12 +1,10 @@
 import { createPortal } from '@wordpress/element';
+import { Component } from '@wordpress/element';
 
 export class EditZone {
     
     constructor() {
-
         this.componentInstance = null;
-
-        this.init();
     }
 
     static getInstance() {
@@ -15,22 +13,26 @@ export class EditZone {
           this.instance = new EditZone();
         }
 
+        this.instance.init();
+
         return this.instance;
     }
 
     init() {
         
-        const componentEditZone = document.createElement("div");
-        componentEditZone.setAttribute("id", "abt-component-edit-zone");
-        componentEditZone.setAttribute("class", "hide");
+        if( document.querySelector('#abt-component-edit-zone') == null ) {
+            const componentEditZone = document.createElement("div");
+            componentEditZone.setAttribute("id", "abt-component-edit-zone");
+            componentEditZone.setAttribute("class", "hide");
 
-        const componentEditZoneLoader = document.createElement("div");
-        componentEditZoneLoader.setAttribute("class", "loader");
+            const componentEditZoneLoader = document.createElement("div");
+            componentEditZoneLoader.setAttribute("class", "loader");
 
-        componentEditZone.appendChild(componentEditZoneLoader);
-        document.querySelector('.interface-interface-skeleton__body').appendChild(componentEditZone);
+            componentEditZone.appendChild(componentEditZoneLoader);
+            document.querySelector('.edit-post-visual-editor').appendChild(componentEditZone);
 
-        document.querySelector(".interface-interface-skeleton").classList.add("resizable");
+            document.querySelector("#editor").classList.add("resizable");
+        }
     }
 
     update() {
@@ -52,6 +54,7 @@ export class EditZone {
             }
             else {
                 this.update();
+                this.componentInstance.setState( { editZone: false } );
             }
         }
 
@@ -60,23 +63,24 @@ export class EditZone {
         
         setTimeout( () => {
             document.querySelector("#abt-component-edit-zone").classList.remove("hide");
-            document.querySelector(".interface-interface-skeleton").classList.add("editZoneEnabled");
             document.querySelector("#abt-component-edit-zone").classList.remove("updating");
         });  
     }
 
     hide() {
-        
-        document.querySelector("#abt-component-edit-zone").classList.add("hide");
-        document.querySelector(".interface-interface-skeleton").classList.remove("editZoneEnabled");
 
-        this.componentInstance.setState( { editZone: false } );
-        this.componentInstance = null;
+        document.querySelector("#abt-component-edit-zone").classList.add("hide");
+
+        if( this.componentInstance != null ) {
+            this.componentInstance.setState( { editZone: false } );
+            this.componentInstance = null;
+        }
     }
   
     render() {
 
         if( this.componentInstance != null ) {
+
             return createPortal(
                 this.componentInstance.renderEditMode(),
                 document.querySelector("#abt-component-edit-zone")

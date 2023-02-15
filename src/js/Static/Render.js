@@ -42,25 +42,19 @@ export class Render {
             key={ id + "-panel" }
             className={ className.join(' ') }
         >
-            { this.panelBodyComponent(id, label, inner, initialOpen, null, extraClass ) }
+            { this.panelBodyComponent(id, label, inner, initialOpen ) }
         </Panel>
     }
 
-    static panelBodyComponent( id, label, inner, initialOpen = false, removeButton = null, extraClassContent = '' ) {
-
-        var className = [];        
-        if( removeButton != null  )
-            className.push('repeatableItem');
+    static panelBodyComponent( id, label, inner, initialOpen = false ) {
 
         return <PanelBody
             key={ id + "-PanelBody" }
             title={ label }
             initialOpen={ ( label != null ) ? initialOpen : true }
-            className={ className.join(' ') }
         >
             <PanelRow>
                 { inner }
-                { removeButton }
             </PanelRow>
         </PanelBody>
     }
@@ -168,7 +162,7 @@ export class Render {
 
     static repeatableObjectLabelFormatting( blockKey, valueProp, keyLoop ) {
         
-        var labelKey = keyLoop + 1;
+        var labelKey = Attributes.returnStringOrNumber(keyLoop, true) + 1;
         labelKey = ( labelKey < 10 ) ? '0' + labelKey : labelKey;
         labelKey = '#' + labelKey + '.'
 

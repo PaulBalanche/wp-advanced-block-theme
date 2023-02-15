@@ -394,7 +394,10 @@ body.is-dragging-components-draggable #editor .block-editor-block-list__block::a
   visibility: visible;
 }
 
-#editor .block-editor-block-list__block .abtButtonGroupEditZoneContainer {
+#editor .interface-interface-skeleton.is-mode-text #abt-component-edit-zone {
+  display: none;
+}
+#editor .interface-interface-skeleton.is-mode-visual .block-editor-block-list__block .abtButtonGroupEditZoneContainer {
   display: flex;
   align-items: center;
   position: absolute;
@@ -403,7 +406,7 @@ body.is-dragging-components-draggable #editor .block-editor-block-list__block::a
   left: 0;
   justify-content: center;
 }
-#editor .block-editor-block-list__block .abtButtonGroupEditZoneContainer .abtButtonGroupEditZone {
+#editor .interface-interface-skeleton.is-mode-visual .block-editor-block-list__block .abtButtonGroupEditZoneContainer .abtButtonGroupEditZone {
   display: flex;
   align-items: center;
   padding: 12px 20px 12px 20px;
@@ -414,25 +417,25 @@ body.is-dragging-components-draggable #editor .block-editor-block-list__block::a
   background: rgba(0, 0, 0, 0.5);
   box-shadow: 0px 0.8px 2.2px rgba(0, 0, 0, 0.022), 0px 2px 5.3px rgba(0, 0, 0, 0.032), 0px 3.8px 10px rgba(0, 0, 0, 0.04), 0px 6.7px 17.9px rgba(0, 0, 0, 0.048), 0px 12.5px 33.4px rgba(0, 0, 0, 0.058), 0px 30px 80px rgba(0, 0, 0, 0.08);
 }
-#editor .block-editor-block-list__block .abtButtonGroupEditZoneContainer .abtButtonGroupEditZone .separator {
+#editor .interface-interface-skeleton.is-mode-visual .block-editor-block-list__block .abtButtonGroupEditZoneContainer .abtButtonGroupEditZone .separator {
   margin: 0 25px;
   width: 1px;
   height: 30px;
   background: rgba(0, 124, 186, 0.5);
 }
-#editor .block-editor-block-list__block .abtButtonGroupEditZoneContainer .abtButtonGroupEditZone .title {
+#editor .interface-interface-skeleton.is-mode-visual .block-editor-block-list__block .abtButtonGroupEditZoneContainer .abtButtonGroupEditZone .title {
   font-size: 0.75em;
   font-weight: 600;
   color: white;
 }
-#editor .block-editor-block-list__block .abtButtonGroupEditZoneContainer .abtButtonGroupEditZone .is-primary {
+#editor .interface-interface-skeleton.is-mode-visual .block-editor-block-list__block .abtButtonGroupEditZoneContainer .abtButtonGroupEditZone .is-primary {
   box-shadow: none;
   font-weight: 500;
 }
-#editor .block-editor-block-list__block .abtButtonGroupEditZoneContainer .abtButtonGroupEditZone .is-primary .dashicon {
+#editor .interface-interface-skeleton.is-mode-visual .block-editor-block-list__block .abtButtonGroupEditZoneContainer .abtButtonGroupEditZone .is-primary .dashicon {
   margin-right: 4px;
 }
-#editor .block-editor-block-list__block .loaderLiveRenderingIframe {
+#editor .interface-interface-skeleton.is-mode-visual .block-editor-block-list__block .loaderLiveRenderingIframe {
   display: none;
   position: absolute;
   width: 100%;
@@ -442,13 +445,12 @@ body.is-dragging-components-draggable #editor .block-editor-block-list__block::a
   background: var(--abt-background-editor, "white") center no-repeat url(data:image/svg+xml;base64,PCEtLSBCeSBTYW0gSGVyYmVydCAoQHNoZXJiKSwgZm9yIGV2ZXJ5b25lLiBNb3JlIEAgaHR0cDovL2dvby5nbC83QUp6YkwgLS0+Cjxzdmcgd2lkdGg9IjUwIiBoZWlnaHQ9IjUwIiB2aWV3Qm94PSIwIDAgMzggMzgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgc3Ryb2tlPSIjMDA3Y2JhIj4KICAgIDxnIGZpbGw9Im5vbmUiIGZpbGwtcnVsZT0iZXZlbm9kZCI+CiAgICAgICAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMSAxKSIgc3Ryb2tlLXdpZHRoPSIyIj4KICAgICAgICAgICAgPGNpcmNsZSBzdHJva2Utb3BhY2l0eT0iLjUiIGN4PSIxOCIgY3k9IjE4IiByPSIxOCIvPgogICAgICAgICAgICA8cGF0aCBkPSJNMzYgMThjMC05Ljk0LTguMDYtMTgtMTgtMTgiPgogICAgICAgICAgICAgICAgPGFuaW1hdGVUcmFuc2Zvcm0KICAgICAgICAgICAgICAgICAgICBhdHRyaWJ1dGVOYW1lPSJ0cmFuc2Zvcm0iCiAgICAgICAgICAgICAgICAgICAgdHlwZT0icm90YXRlIgogICAgICAgICAgICAgICAgICAgIGZyb209IjAgMTggMTgiCiAgICAgICAgICAgICAgICAgICAgdG89IjM2MCAxOCAxOCIKICAgICAgICAgICAgICAgICAgICBkdXI9IjFzIgogICAgICAgICAgICAgICAgICAgIHJlcGVhdENvdW50PSJpbmRlZmluaXRlIi8+CiAgICAgICAgICAgIDwvcGF0aD4KICAgICAgICA8L2c+CiAgICA8L2c+Cjwvc3ZnPg==);
   opacity: 0.75;
 }
-
-#abt-component-edit-zone {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone {
   position: fixed;
-  top: 0;
   right: 0;
   width: 700px;
-  height: 100%;
+  top: 61px;
+  bottom: 25px;
   background: white;
   z-index: 99999;
   border-left: 1px solid #e0e0e0;
@@ -456,7 +458,7 @@ body.is-dragging-components-draggable #editor .block-editor-block-list__block::a
   box-shadow: 0 0 50px 0 rgba(0, 0, 0, 0.2);
   transition: right 0.4s, box-shadow 0.4s;
 }
-#abt-component-edit-zone .loader {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .loader {
   position: absolute;
   top: 0;
   bottom: 0;
@@ -468,14 +470,14 @@ body.is-dragging-components-draggable #editor .block-editor-block-list__block::a
   display: none;
   transition: opacity 1s;
 }
-#abt-component-edit-zone.updating .loader {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone.updating .loader {
   opacity: 1;
 }
-#abt-component-edit-zone.hide {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone.hide {
   right: -800px;
   box-shadow: none;
 }
-#abt-component-edit-zone .edit-zone__header {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__header {
   display: flex;
   align-items: center;
   padding: 0 20px;
@@ -490,7 +492,7 @@ body.is-dragging-components-draggable #editor .block-editor-block-list__block::a
   width: 100%;
   height: 60px;
 }
-#abt-component-edit-zone .edit-zone__body {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body {
   padding: 20px;
   overflow: auto;
   position: absolute;
@@ -501,17 +503,17 @@ body.is-dragging-components-draggable #editor .block-editor-block-list__block::a
   top: 61px;
   background: white;
 }
-#abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder {
   padding: 0;
   box-shadow: none;
   outline: none;
   justify-content: flex-start;
 }
-#abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-placeholder__label {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-placeholder__label {
   margin-bottom: 20px;
 }
-#abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-base-control__label,
-#abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-input-control__label {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-base-control__label,
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-input-control__label {
   display: flex;
   align-items: center;
   text-transform: math-auto;
@@ -528,57 +530,54 @@ body.is-dragging-components-draggable #editor .block-editor-block-list__block::a
   border-bottom: none;
   height: auto;
 }
-#abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-flex-item .components-base-control__label, #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-flex-item .components-input-control__label {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-flex-item .components-base-control__label, #editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-flex-item .components-input-control__label {
   margin-bottom: 2px;
 }
-#abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .tab-panel-wpe-component .components-tab-panel__tabs {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .tab-panel-wpe-component .components-tab-panel__tabs {
   background: #f3f4f5;
 }
-#abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .tab-panel-wpe-component .components-tab-panel__tabs-item {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .tab-panel-wpe-component .components-tab-panel__tabs-item {
   margin: 0px 15px;
   padding: 0;
   color: rgb(220, 220, 220);
 }
-#abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .tab-panel-wpe-component .components-tab-panel__tabs-item:focus:not(:disabled), #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .tab-panel-wpe-component .components-tab-panel__tabs-item.active-tab {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .tab-panel-wpe-component .components-tab-panel__tabs-item:focus:not(:disabled), #editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .tab-panel-wpe-component .components-tab-panel__tabs-item.active-tab {
   box-shadow: 0 3px #007CBA;
   color: rgb(30, 30, 30);
 }
-#abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .tab-panel-wpe-component .components-tab-panel__tab-content {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .tab-panel-wpe-component .components-tab-panel__tab-content {
   padding: 15px 0 0 0;
 }
-#abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-panel__row > .tab-panel-wpe-component > .components-tab-panel__tabs {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-panel__row > .tab-panel-wpe-component > .components-tab-panel__tabs {
   background: rgb(252, 252, 252);
   border-bottom: 1px solid #e0e0e0;
 }
-#abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-panel__row > .tab-panel-wpe-component > .components-tab-panel__tabs .components-tab-panel__tabs-item {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-panel__row > .tab-panel-wpe-component > .components-tab-panel__tabs .components-tab-panel__tabs-item {
   font-weight: 400;
 }
-#abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-panel__row > .tab-panel-wpe-component > .components-tab-panel__tab-content {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-panel__row > .tab-panel-wpe-component > .components-tab-panel__tab-content {
   padding: 15px;
 }
-#abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .basicField, #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .repeatableField {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .basicField, #editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .repeatableField {
   padding: 10px 0;
 }
-#abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .basicField:not(.flex div):last-child, #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .repeatableField:not(.flex div):last-child {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .basicField:not(.flex div):last-child, #editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .repeatableField:not(.flex div):last-child {
   border-bottom: none;
 }
-#abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .basicField .block-editor-media-placeholder, #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .repeatableField .block-editor-media-placeholder {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .basicField .block-editor-media-placeholder, #editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .repeatableField .block-editor-media-placeholder {
   box-shadow: none;
   padding: 0;
 }
-#abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .flex:last-child .basicField, #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .flex:last-child .repeatableField {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .flex:last-child .basicField, #editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .flex:last-child .repeatableField {
   border-bottom: none;
 }
-#abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .repeatableField .block-editor-media-placeholder {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .repeatableField .block-editor-media-placeholder {
   margin-bottom: 8px;
 }
-#abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .objectField .objectField-content .basicField, #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .objectField .objectField-content .repeatableField {
-  border-color: #e2e4e7;
-}
-#abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-panel:last-child {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-panel:last-child {
   margin-bottom: 0;
 }
-#abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-panel > .components-base-control__label {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-panel > .components-base-control__label {
   background: #f3f4f5;
   margin: 0;
   padding: 0 0 0 16px;
@@ -586,55 +585,50 @@ body.is-dragging-components-draggable #editor .block-editor-block-list__block::a
   height: 48px;
   border-bottom: 1px solid #e0e0e0;
 }
-#abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-panel .components-panel__body {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-panel .components-panel__body {
   padding: 0;
 }
-#abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-panel .components-panel__body .components-panel__body-title {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-panel .components-panel__body .components-panel__body-title {
   margin: 0;
 }
-#abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-panel .components-panel__body .components-panel__body-title .components-button {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-panel .components-panel__body .components-panel__body-title .components-button {
   display: flex;
   align-items: center;
+  padding: 16px 48px 16px 16px;
 }
-#abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-panel .components-panel__body .components-panel__body-title .components-button:focus {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-panel .components-panel__body .components-panel__body-title .components-button:focus {
   box-shadow: none;
 }
-#abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-panel .components-panel__body .components-panel__body-title:hover {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-panel .components-panel__body .components-panel__body-title:hover {
   background: #f3f4f5;
 }
-#abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-panel .components-panel__body .components-panel__row {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-panel .components-panel__body .components-panel__row {
   padding: 15px;
   display: block;
 }
-#abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-panel .components-panel__body .components-panel__row:has(> .tab-panel-wpe-component) {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-panel .components-panel__body .components-panel__row:has(> .tab-panel-wpe-component) {
   padding: 0;
 }
-#abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-panel .components-panel__body.is-opened > .components-panel__body-title {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-panel .components-panel__body.is-opened > .components-panel__body-title {
   background: #f3f4f5;
 }
-#abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-panel .components-panel__body .objectField-content:not(.responsive) {
-  padding: 10px 20px 10px 20px;
-}
-#abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-panel .components-panel__body .objectField-content:not(.responsive) .flex > div {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-panel .components-panel__body .flex > div {
   flex-grow: 1;
   margin-right: 4rem;
 }
-#abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-panel .components-panel__body .objectField-content:not(.responsive) .flex > div:last-child {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-panel .components-panel__body .flex > div:last-child {
   margin-right: 0;
 }
-#abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-panel .components-tab-panel__tab-content .objectField-content {
-  padding: 0;
-}
-#abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-panel.noLabel {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-panel.noLabel {
   border: none;
 }
-#abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-panel.noLabel .components-panel__body {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-panel.noLabel .components-panel__body {
   border: none;
 }
-#abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-panel.noLabel .components-panel__body .components-base-control {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-panel.noLabel .components-panel__body .components-base-control {
   padding: 0;
 }
-#abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-placeholder .media-preview-container {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-placeholder .media-preview-container {
   position: relative;
   width: 100%;
   border: 1px solid #e2e4e7;
@@ -642,62 +636,62 @@ body.is-dragging-components-draggable #editor .block-editor-block-list__block::a
   display: flex;
   background: white;
 }
-#abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-placeholder .media-preview-container .file-details {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-placeholder .media-preview-container .file-details {
   margin-left: 10px;
 }
-#abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-placeholder .media-preview-container .reset-button {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-placeholder .media-preview-container .reset-button {
   position: absolute;
   background: white;
   top: 16px;
   right: 16px;
   display: none;
 }
-#abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-placeholder .media-preview-container:hover > .reset-button {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-placeholder .media-preview-container:hover > .reset-button {
   display: inline-flex;
 }
-#abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-base-control__field {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-base-control__field {
   margin: 0;
 }
-#abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .rich-text-container .block-editor-rich-text__editable {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .rich-text-container .block-editor-rich-text__editable {
   background: #fff;
   padding: 6px 8px;
   border-radius: 2px;
   border: 1px solid #757575;
 }
-#abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .link-control-container {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .link-control-container {
   padding: 1em 0;
   background: white;
   border: 1px solid #cce4f1;
 }
-#abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .link-control-container .components-base-control__field {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .link-control-container .components-base-control__field {
   padding: 0 10px;
 }
-#abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .link-control-container .block-editor-link-control {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .link-control-container .block-editor-link-control {
   border-top: 1px solid #e2e4e7;
 }
-#abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .link-control-container .block-editor-link-control .block-editor-link-control__search-item {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .link-control-container .block-editor-link-control .block-editor-link-control__search-item {
   box-sizing: border-box;
 }
-#abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .radio-control-container {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .radio-control-container {
   padding: 1em;
   background: white;
   border: 1px solid #cce4f1;
 }
-#abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .dateTime-container {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .dateTime-container {
   background: #f3f4f5;
   padding: 20px;
   border-radius: 2px;
 }
-#abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .dateTime-container .components-datetime {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .dateTime-container .components-datetime {
   display: flex;
   justify-content: space-between;
 }
-#abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .dateTime-container .components-datetime .components-datetime__buttons {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .dateTime-container .components-datetime .components-datetime__buttons {
   justify-content: flex-end;
   flex-direction: column;
   align-items: flex-end;
 }
-#abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .repeatableAddElt {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .repeatableAddElt {
   border: 1px dashed #e0e0e0;
   width: 100%;
   box-shadow: none;
@@ -705,85 +699,85 @@ body.is-dragging-components-draggable #editor .block-editor-block-list__block::a
   justify-content: center;
   margin-top: 5px;
 }
-#abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .repeatableAddElt .dashicon {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .repeatableAddElt .dashicon {
   font-size: 1rem;
   height: auto;
   margin-right: 3px;
   transition: none;
 }
-#abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .repeatableAddElt:hover {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .repeatableAddElt:hover {
   color: var(--wp-admin-theme-color);
   border-color: var(--wp-admin-theme-color);
 }
-#abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder textarea {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder textarea {
   border-color: #e0e0e0;
   padding: 12px;
 }
-#abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-text-control__input {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-text-control__input {
   border-color: #e0e0e0;
   padding: 12px;
 }
-#abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-select-control__input {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-select-control__input {
   padding: 0px 26px 0px 15px;
   height: 42px;
 }
-#abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-input-control__backdrop {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-input-control__backdrop {
   border-color: #e0e0e0;
 }
-#abt-component-edit-zone .edit-zone__body .repeatableContainer .repeatableItem {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .repeatableContainer .repeatableItem {
   position: relative;
   margin: 5px 0;
 }
-#abt-component-edit-zone .edit-zone__body .repeatableContainer .repeatableItem .sortableItemInner {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .repeatableContainer .repeatableItem .sortableItemInner {
   padding: 0;
   transition: padding 0.4s;
 }
-#abt-component-edit-zone .edit-zone__body .repeatableContainer .repeatableItem .sortableItemInner .repeatableObjectLabel .id {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .repeatableContainer .repeatableItem .sortableItemInner .repeatableObjectLabel .id {
   color: rgb(220, 220, 220);
 }
-#abt-component-edit-zone .edit-zone__body .repeatableContainer .repeatableItem .sortableItemInner .repeatableObjectLabel .props {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .repeatableContainer .repeatableItem .sortableItemInner .repeatableObjectLabel .props {
   margin: 5px 0 0 0;
 }
-#abt-component-edit-zone .edit-zone__body .repeatableContainer .repeatableItem .sortableItemInner .repeatableObjectLabel .props .key {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .repeatableContainer .repeatableItem .sortableItemInner .repeatableObjectLabel .props .key {
   color: rgb(220, 220, 220);
 }
-#abt-component-edit-zone .edit-zone__body .repeatableContainer .repeatableItem .drag {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .repeatableContainer .repeatableItem .drag {
   position: absolute;
   display: none;
   left: 0;
   top: 50%;
   transform: translateY(-50%);
 }
-#abt-component-edit-zone .edit-zone__body .repeatableContainer .repeatableItem .drag .dashicon {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .repeatableContainer .repeatableItem .drag .dashicon {
   font-size: 1rem;
   height: auto;
 }
-#abt-component-edit-zone .edit-zone__body .repeatableContainer .repeatableItem .remove {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .repeatableContainer .repeatableItem .remove {
   position: absolute;
   display: none;
   right: 0;
   top: 50%;
   transform: translateY(-50%);
 }
-#abt-component-edit-zone .edit-zone__body .repeatableContainer .repeatableItem .remove .dashicon {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .repeatableContainer .repeatableItem .remove .dashicon {
   font-size: 1rem;
   height: auto;
 }
-#abt-component-edit-zone .edit-zone__body .repeatableContainer .repeatableItem:hover .sortableItemInner {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .repeatableContainer .repeatableItem:hover .sortableItemInner {
   padding: 0 32px;
 }
-#abt-component-edit-zone .edit-zone__body .repeatableContainer .repeatableItem:hover .drag,
-#abt-component-edit-zone .edit-zone__body .repeatableContainer .repeatableItem:hover .remove {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .repeatableContainer .repeatableItem:hover .drag,
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .repeatableContainer .repeatableItem:hover .remove {
   display: inline-flex;
 }
-#abt-component-edit-zone .edit-zone__body .repeatableContainer .repeatableItem:hover:has(.sortableItemInner > .components-panel > .components-panel__body.is-opened) .sortableItemInner {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .repeatableContainer .repeatableItem:hover:has(.sortableItemInner > .components-panel > .components-panel__body.is-opened) .sortableItemInner {
   padding: 0;
 }
-#abt-component-edit-zone .edit-zone__body .repeatableContainer .repeatableItem:hover:has(.sortableItemInner > .components-panel > .components-panel__body.is-opened) .drag,
-#abt-component-edit-zone .edit-zone__body .repeatableContainer .repeatableItem:hover:has(.sortableItemInner > .components-panel > .components-panel__body.is-opened) .remove {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .repeatableContainer .repeatableItem:hover:has(.sortableItemInner > .components-panel > .components-panel__body.is-opened) .drag,
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .repeatableContainer .repeatableItem:hover:has(.sortableItemInner > .components-panel > .components-panel__body.is-opened) .remove {
   display: none;
 }
-#abt-component-edit-zone .edit-zone__footer {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__footer {
   display: flex;
   justify-content: space-between;
   padding: 20px 20px 0 20px;
@@ -799,18 +793,18 @@ body.is-dragging-components-draggable #editor .block-editor-block-list__block::a
   height: 75px;
   box-sizing: border-box;
 }
-#abt-component-edit-zone .edit-zone__footer .components-button.is-primary {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__footer .components-button.is-primary {
   color: var(--wp-admin-theme-color);
   background: white;
 }
-#abt-component-edit-zone .edit-zone__footer .components-button.is-primary:hover {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__footer .components-button.is-primary:hover {
   background: var(--wp-admin-theme-color-darker-10);
   color: #fff;
 }
-#abt-component-edit-zone .edit-zone__footer .components-button.is-primary .dashicon {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__footer .components-button.is-primary .dashicon {
   margin-right: 4px;
 }
-#abt-component-edit-zone .edit-zone__footer .abtButtonCloseEditZone {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__footer .abtButtonCloseEditZone {
   margin-left: auto;
 }
 
@@ -846,11 +840,11 @@ body.is-dragging-components-draggable #editor .block-editor-block-list__block::a
 #editor .flex {
   display: flex;
 }
-#editor .interface-interface-skeleton {
+#editor.resizable .is-mode-visual .interface-interface-skeleton__body {
   width: 100%;
   transition: width 0.4s;
 }
-#editor .interface-interface-skeleton.resizable.editZoneEnabled {
+#editor.resizable .is-mode-visual .interface-interface-skeleton__body:has(#abt-component-edit-zone .edit-zone__inner) {
   width: calc(100% - 700px);
 }
 #editor .interface-interface-skeleton__body .edit-post-visual-editor__post-title-wrapper {

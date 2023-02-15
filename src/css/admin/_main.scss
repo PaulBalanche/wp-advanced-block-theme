@@ -4,13 +4,19 @@
         display: flex;
     }
     
-    .interface-interface-skeleton {
+    &.resizable {
 
-        width: 100%;
-        transition: width 0.4s;
+        .is-mode-visual {
 
-        &.resizable.editZoneEnabled {
-            width: calc(100% - 700px);
+            .interface-interface-skeleton__body {
+
+                width: 100%;
+                transition: width 0.4s;
+
+                &:has(#abt-component-edit-zone .edit-zone__inner) {
+                    width: calc(100% - 700px);
+                }
+            }
         }
     }
 

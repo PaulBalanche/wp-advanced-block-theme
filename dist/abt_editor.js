@@ -13196,13 +13196,21 @@ __webpack_require__.r(__webpack_exports__);
 
 
 function renderObject(componentInstance, id, label, keys, valueProp, objectValue) {
-  let required = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : false;
+  let initialOpen = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : false;
+  let required = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : false;
   let fieldsetObject = [];
   for (const [keySubProp, valueSubProp] of Object.entries(objectValue)) {
     fieldsetObject.push(_Static_Attributes__WEBPACK_IMPORTED_MODULE_0__.Attributes.renderProp(valueSubProp, keys.concat(keySubProp), valueProp, componentInstance));
   }
   if (label == null) return fieldsetObject;
-  return _Static_Render__WEBPACK_IMPORTED_MODULE_1__.Render.panelComponent(id, label, fieldsetObject, false);
+
+  // let currentValueAttribute = valueProp;
+  // keys.forEach( element => { currentValueAttribute = ( currentValueAttribute != null && typeof currentValueAttribute == 'object' && currentValueAttribute.hasOwnProperty(element) && typeof currentValueAttribute[element] != "undefined" ) ? currentValueAttribute[element] : ""; } );
+  // if( currentValueAttribute == '' ) {
+  //     initialOpen = true;
+  // }
+
+  return _Static_Render__WEBPACK_IMPORTED_MODULE_1__.Render.panelComponent(id, label, fieldsetObject, initialOpen);
 }
 
 /***/ }),
@@ -13374,10 +13382,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _Static_Attributes__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Static/Attributes */ "./src/js/Static/Attributes.js");
-/* harmony import */ var _Static_Render__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Static/Render */ "./src/js/Static/Render.js");
-/* harmony import */ var _Singleton_Devices__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../Singleton/Devices */ "./src/js/Singleton/Devices.js");
-
-
 
 
 
@@ -13385,16 +13389,15 @@ function renderText(componentInstance, id, label, keys, valueProp, objectValue) 
   let isNumber = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : false;
   let required = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : false;
   label = required && label != null ? label + '*' : label;
-  var textControl = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.TextControl, {
+  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.TextControl, {
     key: id,
     label: label
     // type={ !! isNumber ? "number" : "text" }
     ,
     type: "text",
     value: objectValue,
-    onChange: newValue => _Static_Attributes__WEBPACK_IMPORTED_MODULE_2__.Attributes.updateAttributes(keys, valueProp, newValue, isNumber, componentInstance)
+    onChange: newValue => _Static_Attributes__WEBPACK_IMPORTED_MODULE_2__.Attributes.updateAttributes(keys, valueProp, newValue, false, componentInstance)
   });
-  return textControl;
 }
 
 /***/ }),
@@ -13415,8 +13418,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _Static_Attributes__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Static/Attributes */ "./src/js/Static/Attributes.js");
-/* harmony import */ var _Static_Render__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Static/Render */ "./src/js/Static/Render.js");
-
 
 
 
@@ -14619,26 +14620,29 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
 
+
 class EditZone {
   constructor() {
     this.componentInstance = null;
-    this.init();
   }
   static getInstance() {
     if (!this.instance) {
       this.instance = new EditZone();
     }
+    this.instance.init();
     return this.instance;
   }
   init() {
-    const componentEditZone = document.createElement("div");
-    componentEditZone.setAttribute("id", "abt-component-edit-zone");
-    componentEditZone.setAttribute("class", "hide");
-    const componentEditZoneLoader = document.createElement("div");
-    componentEditZoneLoader.setAttribute("class", "loader");
-    componentEditZone.appendChild(componentEditZoneLoader);
-    document.querySelector('.interface-interface-skeleton__body').appendChild(componentEditZone);
-    document.querySelector(".interface-interface-skeleton").classList.add("resizable");
+    if (document.querySelector('#abt-component-edit-zone') == null) {
+      const componentEditZone = document.createElement("div");
+      componentEditZone.setAttribute("id", "abt-component-edit-zone");
+      componentEditZone.setAttribute("class", "hide");
+      const componentEditZoneLoader = document.createElement("div");
+      componentEditZoneLoader.setAttribute("class", "loader");
+      componentEditZone.appendChild(componentEditZoneLoader);
+      document.querySelector('.edit-post-visual-editor').appendChild(componentEditZone);
+      document.querySelector("#editor").classList.add("resizable");
+    }
   }
   update() {
     document.querySelector("#abt-component-edit-zone").classList.add("updating");
@@ -14654,6 +14658,9 @@ class EditZone {
         return;
       } else {
         this.update();
+        this.componentInstance.setState({
+          editZone: false
+        });
       }
     }
     this.componentInstance = componentInstance;
@@ -14662,17 +14669,17 @@ class EditZone {
     });
     setTimeout(() => {
       document.querySelector("#abt-component-edit-zone").classList.remove("hide");
-      document.querySelector(".interface-interface-skeleton").classList.add("editZoneEnabled");
       document.querySelector("#abt-component-edit-zone").classList.remove("updating");
     });
   }
   hide() {
     document.querySelector("#abt-component-edit-zone").classList.add("hide");
-    document.querySelector(".interface-interface-skeleton").classList.remove("editZoneEnabled");
-    this.componentInstance.setState({
-      editZone: false
-    });
-    this.componentInstance = null;
+    if (this.componentInstance != null) {
+      this.componentInstance.setState({
+        editZone: false
+      });
+      this.componentInstance = null;
+    }
   }
   render() {
     if (this.componentInstance != null) {
@@ -14721,10 +14728,9 @@ class Attributes {
   static updateAttributes(arrayKey, currentValue, newValue) {
     let isNumber = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
     let componentInstance = arguments.length > 4 ? arguments[4] : undefined;
-    let keyToUpdate = arrayKey[0];
-    let newValueToUpdate = Attributes.recursiveUpdateObjectFromObject(arrayKey, currentValue, newValue, isNumber);
+    const newValueToUpdate = Attributes.recursiveUpdateObjectFromObject(arrayKey, currentValue, newValue, isNumber);
     componentInstance.setAttributes({
-      [keyToUpdate]: newValueToUpdate[keyToUpdate]
+      [arrayKey[0]]: newValueToUpdate[arrayKey[0]]
     });
   }
   static recursiveUpdateObjectFromObject(arrayKey, fromObject, newValue) {
@@ -15008,7 +15014,7 @@ class Controls {
       case 'boolean':
         return (0,_Controls_Toggle__WEBPACK_IMPORTED_MODULE_10__.renderToggle)(componentInstance, id, label, props.help, keys, valueProp, objectValue, required);
       case 'object':
-        return (0,_Controls_Object__WEBPACK_IMPORTED_MODULE_11__.renderObject)(componentInstance, id, label, keys, valueProp, args.props, required);
+        return (0,_Controls_Object__WEBPACK_IMPORTED_MODULE_11__.renderObject)(componentInstance, id, label, keys, valueProp, args.props, typeof args.initialOpen != 'undefined' ? args.initialOpen : false, required);
       case 'richText':
       case 'wysiwyg':
         return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Controls_WysiwygControl_WysiwygControl__WEBPACK_IMPORTED_MODULE_12__["default"], {
@@ -15076,20 +15082,15 @@ class Render {
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Panel, {
       key: id + "-panel",
       className: className.join(' ')
-    }, this.panelBodyComponent(id, label, inner, initialOpen, null, extraClass));
+    }, this.panelBodyComponent(id, label, inner, initialOpen));
   }
   static panelBodyComponent(id, label, inner) {
     let initialOpen = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
-    let removeButton = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : null;
-    let extraClassContent = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : '';
-    var className = [];
-    if (removeButton != null) className.push('repeatableItem');
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.PanelBody, {
       key: id + "-PanelBody",
       title: label,
-      initialOpen: label != null ? initialOpen : true,
-      className: className.join(' ')
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.PanelRow, null, inner, removeButton));
+      initialOpen: label != null ? initialOpen : true
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.PanelRow, null, inner));
   }
   static fieldContainer(id, inner) {
     let extraClass = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '';
@@ -15168,7 +15169,7 @@ class Render {
     return Render.fieldContainer(blockKey, control);
   }
   static repeatableObjectLabelFormatting(blockKey, valueProp, keyLoop) {
-    var labelKey = keyLoop + 1;
+    var labelKey = _Attributes__WEBPACK_IMPORTED_MODULE_3__.Attributes.returnStringOrNumber(keyLoop, true) + 1;
     labelKey = labelKey < 10 ? '0' + labelKey : labelKey;
     labelKey = '#' + labelKey + '.';
     var itemsProp = null;

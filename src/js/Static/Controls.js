@@ -52,7 +52,7 @@ export class Controls {
                 return renderToggle( componentInstance, id, label, props.help, keys, valueProp, objectValue, required );
             
             case 'object':
-                return renderObject( componentInstance, id, label, keys, valueProp, args.props, required );
+                return renderObject( componentInstance, id, label, keys, valueProp, args.props, ( typeof args.initialOpen != 'undefined' ) ? args.initialOpen : false, required );
 
             case 'richText':
             case 'wysiwyg':
