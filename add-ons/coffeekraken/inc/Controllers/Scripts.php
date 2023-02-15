@@ -73,8 +73,8 @@ class Scripts extends ControllerBase {
 
                         // Check if ENV exists
                         if( isset($asset['env']) ) {
-                            if( defined('FRONT_ENV') ) {
-                                if( FRONT_ENV != $asset['env'] ) {
+                            if( defined('ABT_FRONT_ENV') ) {
+                                if( ABT_FRONT_ENV != $asset['env'] ) {
                                     unset($context['frontspec']['assets'][$key_asset]);
                                     continue;
                                 }
