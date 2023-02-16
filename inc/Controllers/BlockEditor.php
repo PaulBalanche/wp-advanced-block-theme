@@ -61,7 +61,7 @@ class BlockEditor extends ControllerBase {
         wp_localize_script( $handle, 'js_const', [
             'admin_post' => admin_url( 'admin-post.php' ),
             'post_id' => get_the_ID(),
-            'rest_api_url' => home_url() . '/wp-json/',
+            'rest_api_url' => rest_url(),
             'rest_api_namespace' => $this->get_config()->get('rest_api_namespace'),
             'componentblock_attr_autosaves_rest_api_resource_path' => ComponentBlocksService::get_attributes_autosaves_rest_api_resource_path()
         ] );
