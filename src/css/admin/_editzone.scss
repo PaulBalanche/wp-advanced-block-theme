@@ -19,9 +19,11 @@
                     align-items: center;
                     position: absolute;
                     top: 1px;
+                    bottom: 1px;
                     right: 0;
                     left: 0;
                     justify-content: center;
+                    align-items: flex-start;
         
                     .abtButtonGroupEditZone {
         
@@ -144,20 +146,30 @@
                     top: 61px;
                     background: white;
 
-                    .description {
+                    .description, .alert {
                         margin-bottom: 20px;
                         text-align: justify;
                         display: flex;
                         align-items: center;
-                        font-weight: 500;
                         padding-right: 40px;
 
                         .dashicon {
                             color: var(--wp-admin-theme-color);
-                            font-size: 2em;
                             width: auto;
                             height: auto;
-                            margin-right: 15px;
+                            margin-right: 10px;
+                        }
+                    }
+
+                    .alert {
+                        color: #fff;
+                        background: #cc1818;
+                        padding: 10px;
+                        
+                        .dashicon {
+                            color: white;
+                            font-size: 3.5em;
+                            margin-right: 20px;
                         }
                     }
             

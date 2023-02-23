@@ -66,6 +66,7 @@
   text-align: center;
   padding: 80px 100px 50px 100px;
   color: white;
+  position: relative;
 }
 .block-editor-block-list__layout > .wp-block .liveRenderingMessage .abtButtonEditZone {
   display: inline-flex;
@@ -92,7 +93,7 @@
 #editor .interface-interface-skeleton.is-mode-visual .block-editor-block-list__block:not(:hover):not(.is-selected):has(.liveRenderingMessage) > .abtButtonGroupEditZoneContainer, #editor .interface-interface-skeleton.is-mode-visual .block-editor-block-list__block:has(.block-editor-block-list__block:hover):has(.liveRenderingMessage) > .abtButtonGroupEditZoneContainer {
   display: flex;
 }
-#editor .interface-interface-skeleton.is-mode-visual .block-editor-block-list__block:not(:hover):not(.is-selected):after, #editor .interface-interface-skeleton.is-mode-visual .block-editor-block-list__block:has(.block-editor-block-list__block:hover):after {
+#editor .interface-interface-skeleton.is-mode-visual .block-editor-block-list__block:not(:hover):not(.is-selected):not(.is-reusable.has-child-selected):after, #editor .interface-interface-skeleton.is-mode-visual .block-editor-block-list__block:not(.is-reusable.has-child-selected):has(.block-editor-block-list__block:hover):after {
   border: none;
   box-shadow: none;
 }
@@ -102,6 +103,13 @@
 }
 #editor .interface-interface-skeleton.is-mode-visual .block-editor-block-list__block[data-type="custom/wpe-column"]:has(.block-editor-block-list__block:hover):after, #editor .interface-interface-skeleton.is-mode-visual .block-editor-block-list__block[data-type="custom/wpe-column"]:has(.is-selected):after {
   border: 1px dashed rgba(0, 124, 186, 0.5);
+}
+#editor .interface-interface-skeleton.is-mode-visual .block-editor-block-list__block.is-reusable {
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+}
+#editor .interface-interface-skeleton.is-mode-visual .block-editor-block-list__block.is-reusable.is-selected, #editor .interface-interface-skeleton.is-mode-visual .block-editor-block-list__block.is-reusable.has-child-selected {
+  background: rgba(var(--wp-admin-theme-color--rgb), 0.3);
 }
 
 body.is-dragging-components-draggable #editor .block-editor-block-list__block::after {
@@ -412,9 +420,11 @@ body.is-dragging-components-draggable #editor .block-editor-block-list__block::a
   align-items: center;
   position: absolute;
   top: 1px;
+  bottom: 1px;
   right: 0;
   left: 0;
   justify-content: center;
+  align-items: flex-start;
 }
 #editor .interface-interface-skeleton.is-mode-visual .block-editor-block-list__block .abtButtonGroupEditZoneContainer .abtButtonGroupEditZone {
   display: flex;
@@ -513,20 +523,28 @@ body.is-dragging-components-draggable #editor .block-editor-block-list__block::a
   top: 61px;
   background: white;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .description {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .description, #editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .alert {
   margin-bottom: 20px;
   text-align: justify;
   display: flex;
   align-items: center;
-  font-weight: 500;
   padding-right: 40px;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .description .dashicon {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .description .dashicon, #editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .alert .dashicon {
   color: var(--wp-admin-theme-color);
-  font-size: 2em;
   width: auto;
   height: auto;
-  margin-right: 15px;
+  margin-right: 10px;
+}
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .alert {
+  color: #fff;
+  background: #cc1818;
+  padding: 10px;
+}
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .alert .dashicon {
+  color: white;
+  font-size: 3.5em;
+  margin-right: 20px;
 }
 #editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder {
   padding: 0;
@@ -884,7 +902,19 @@ body.is-dragging-components-draggable #editor .block-editor-block-list__block::a
   margin-right: 5rem;
 }
 #editor .interface-interface-skeleton__header .edit-post-header__toolbar #devicesButtonGroupContainer .devicesInfo {
-  margin-right: 1rem;
+  margin-right: 30px;
+  display: flex;
+  align-items: center;
+}
+#editor .interface-interface-skeleton__header .edit-post-header__toolbar #devicesButtonGroupContainer .devicesInfo .dashicon {
+  font-size: 1.2em;
+  height: auto;
+  width: auto;
+  margin: 2px 5px 0 5px;
+}
+#editor .interface-interface-skeleton__header .edit-post-header__toolbar #devicesButtonGroupContainer .devicesButtonGroup button {
+  box-shadow: inset 0 0 0 1px var(--border300, rgb(235, 235, 235));
+  background: var(--background300, rgb(245, 245, 245));
 }
 #editor .interface-interface-skeleton__header .edit-post-header__toolbar #devicesButtonGroupContainer .devicesButtonGroup button.is-pressed {
   background: var(--wp-admin-theme-color);

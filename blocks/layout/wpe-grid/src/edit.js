@@ -179,6 +179,14 @@ export default ( block_spec, theme_spec ) => compose( [
 
         const { __experimentalGetPreviewDeviceType } = select( 'core/edit-post' );
 
+        // Detect if inside a reusable block
+        const getBlockParents = select('core/block-editor').getBlockParents(props.clientId);
+        const parentsBlock = [];
+        for( var i in getBlockParents ) {
+
+            parentsBlock.push( select('core/block-editor').getBlock( getBlockParents[i] ) );
+        }
+
         return {
             block_spec,
             theme_spec,
@@ -190,7 +198,8 @@ export default ( block_spec, theme_spec ) => compose( [
             blockType: select('core/blocks').getBlockType(props.name),
             experimentalDeviceType: __experimentalGetPreviewDeviceType(),
             isSelectedBlock: select('core/block-editor').isBlockSelected(props.clientId),
-            isParentOfSelectedBlock: select('core/block-editor').hasSelectedInnerBlock(props.clientId, true)
+            isParentOfSelectedBlock: select('core/block-editor').hasSelectedInnerBlock(props.clientId, true),
+            parentsBlock
         };
     } ),
     withDispatch( ( dispatch ) => {

@@ -33,13 +33,25 @@
                 margin-right: 5rem;
     
                 .devicesInfo {
-                    margin-right: 1rem;
+                    margin-right: 30px;
+                    display: flex;
+                    align-items: center;
+
+                    .dashicon {
+                        font-size: 1.2em;
+                        height: auto;
+                        width: auto;
+                        margin: 2px 5px 0 5px;
+                    }
                 }
 
                 .devicesButtonGroup {
     
                     button {
-    
+                        
+                        box-shadow: inset 0 0 0 1px $border300;
+                        background: $background300;
+
                         &.is-pressed {
                             background: var(--wp-admin-theme-color);
                         }

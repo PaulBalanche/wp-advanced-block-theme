@@ -13,6 +13,8 @@ import { Render } from '../Static/Render';
 
 import { getBlockType } from '@wordpress/blocks';
 
+import { isReusableBlock } from '@wordpress/blocks'
+
 import { EditZone } from '../Singleton/EditZone';
 import { Devices } from '../Singleton/Devices';
 
@@ -24,12 +26,12 @@ export class WpeComponentBase extends Component {
         this.state = {};
 
         this.title = getBlockType(this.props.name).title;
+        this.isAReusableBlock = this.defineIfIsReusableBlock();
     }
 
     componentDidMount() {
         Devices.getInstance().addComponent(this);
     }
-
 
     getAttribute( key ) {
 		return this.props.attributes[key];
@@ -44,9 +46,28 @@ export class WpeComponentBase extends Component {
         return ( typeof this.props.block_spec.props == 'object' && Object.keys(this.props.block_spec.props).length > 0 );
     }
 
+    defineIfIsReusableBlock() {
+
+        if( typeof this.props.parentsBlock == 'object' ) {
+
+            for( var i in this.props.parentsBlock ) {
+                if( isReusableBlock(this.props.parentsBlock[i]) ) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    isReusableBlock() {
+        return !! this.isAReusableBlock;
+    }
+
     renderEditMode() {
 
-        const description = ( typeof this.description != 'undefined' ) ? <div className='description'><Dashicon icon="info" />{ this.description }</div> : null;
+        const description = ( typeof this.description != 'undefined' ) ? <div className='description'><Dashicon icon="info-outline" />{ this.description }</div> : null;
+        const alertReusableBlock = ( this.isReusableBlock() ) ? <div className='alert'><Dashicon icon="warning" /><p><b>Be careful !</b><br />This block is part of a reusable block composition.<br />Updating this block will apply the changes everywhere it is used.</p></div> : null;
 
         let tabPanel = [];
 
@@ -130,6 +151,7 @@ export class WpeComponentBase extends Component {
                 </div>
                 <div className='edit-zone__body'>
                     { description }
+                    { alertReusableBlock }
                     <Placeholder
                         key={ this.props.clientId + "-ConfigurationPlaceholder" }
                         isColumnLayout={ true }

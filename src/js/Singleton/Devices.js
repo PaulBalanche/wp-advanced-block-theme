@@ -2,7 +2,8 @@ import { createPortal } from '@wordpress/element';
 
 import {
     Button,
-    ButtonGroup
+    ButtonGroup,
+    Dashicon
 } from '@wordpress/components';
 
 import { EditZone } from './EditZone';
@@ -128,11 +129,11 @@ export class Devices {
 
     getButtonGroup() {
 
-        const minText = ( this.getMediaQueries()[ this.currentDevice ]['minWidth'] != null && this.getMediaQueries()[ this.currentDevice ]['minWidth'] > 0 ) ? this.getMediaQueries()[ this.currentDevice ]['minWidth'] + 'px < ' : '';
-        const maxText = ( this.getMediaQueries()[ this.currentDevice ]['maxWidth'] != null ) ?  ' < ' + this.getMediaQueries()[ this.currentDevice ]['maxWidth'] + 'px' : '';
+        const minText = ( this.getMediaQueries()[ this.currentDevice ]['minWidth'] != null && this.getMediaQueries()[ this.currentDevice ]['minWidth'] > 0 ) ? <>{ this.getMediaQueries()[ this.currentDevice ]['minWidth'] + 'px' }<Dashicon icon="arrow-left-alt2" /></> : null;
+        const maxText = ( this.getMediaQueries()[ this.currentDevice ]['maxWidth'] != null ) ? <><Dashicon icon="arrow-left-alt2" />{ this.getMediaQueries()[ this.currentDevice ]['maxWidth'] + 'px' }</> : null;
 
         return <>
-            <div className='devicesInfo'>{ minText + this.currentDevice.charAt(0).toUpperCase() + this.currentDevice.slice(1) + maxText }</div>
+            <div className='devicesInfo'>{ minText }{ this.currentDevice.charAt(0).toUpperCase() + this.currentDevice.slice(1) }{ maxText }</div>
             <ButtonGroup
                 key="devicesButtonGroup"
                 className="devicesButtonGroup"

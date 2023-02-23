@@ -177,12 +177,21 @@ export default ( block_spec, current_user_can_edit_posts, theme_spec ) => compos
             }
         }
 
+        // Detect if inside a reusable block
+        const getBlockParents = select('core/block-editor').getBlockParents(props.clientId);
+        const parentsBlock = [];
+        for( var i in getBlockParents ) {
+
+            parentsBlock.push( select('core/block-editor').getBlock( getBlockParents[i] ) );
+        }
+
         return {
             relations: relations,
             block_spec,
             current_user_can_edit_posts: current_user_can_edit_posts,
             theme_spec,
             innerBlocksProps: ( block_spec?.container && block_spec.container ) ? useInnerBlocksProps( useBlockProps( { className: '' } ), { renderAppender: InnerBlocks.ButtonBlockAppender } ) : null,
+            parentsBlock
         };
     } ),
 ] )( WpeComponent )

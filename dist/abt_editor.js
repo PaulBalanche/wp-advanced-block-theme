@@ -11392,6 +11392,13 @@ class WpeComponent extends _src_js_Models_WpeComponentBase__WEBPACK_IMPORTED_MOD
       }
     }
   }
+
+  // Detect if inside a reusable block
+  const getBlockParents = select('core/block-editor').getBlockParents(props.clientId);
+  const parentsBlock = [];
+  for (var i in getBlockParents) {
+    parentsBlock.push(select('core/block-editor').getBlock(getBlockParents[i]));
+  }
   return {
     relations: relations,
     block_spec,
@@ -11401,7 +11408,8 @@ class WpeComponent extends _src_js_Models_WpeComponentBase__WEBPACK_IMPORTED_MOD
       className: ''
     }), {
       renderAppender: _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_5__.InnerBlocks.ButtonBlockAppender
-    }) : null
+    }) : null,
+    parentsBlock
   };
 })])(WpeComponent));
 
@@ -11736,6 +11744,13 @@ class WpeContainer extends _src_js_Models_WpeComponentBase__WEBPACK_IMPORTED_MOD
   const {
     __experimentalGetPreviewDeviceType
   } = select('core/edit-post');
+
+  // Detect if inside a reusable block
+  const getBlockParents = select('core/block-editor').getBlockParents(props.clientId);
+  const parentsBlock = [];
+  for (var i in getBlockParents) {
+    parentsBlock.push(select('core/block-editor').getBlock(getBlockParents[i]));
+  }
   return {
     containerConfig: containerConfig,
     block_spec,
@@ -11748,7 +11763,8 @@ class WpeContainer extends _src_js_Models_WpeComponentBase__WEBPACK_IMPORTED_MOD
     // backgroundData: ! props.attributes.backgroundFile ? null : select('core').getEntityRecord('postType', 'attachment', props.attributes.backgroundFile ),
     // experimentalDeviceType: __experimentalGetPreviewDeviceType(),
     isSelectedBlock: select('core/block-editor').isBlockSelected(props.clientId),
-    isParentOfSelectedBlock: select('core/block-editor').hasSelectedInnerBlock(props.clientId, true)
+    isParentOfSelectedBlock: select('core/block-editor').hasSelectedInnerBlock(props.clientId, true),
+    parentsBlock
   };
 })])(WpeContainer));
 
@@ -12082,6 +12098,13 @@ class WpeGrid extends _src_js_Models_WpeComponentBase__WEBPACK_IMPORTED_MODULE_2
   const {
     __experimentalGetPreviewDeviceType
   } = select('core/edit-post');
+
+  // Detect if inside a reusable block
+  const getBlockParents = select('core/block-editor').getBlockParents(props.clientId);
+  const parentsBlock = [];
+  for (var i in getBlockParents) {
+    parentsBlock.push(select('core/block-editor').getBlock(getBlockParents[i]));
+  }
   return {
     block_spec,
     theme_spec,
@@ -12097,7 +12120,8 @@ class WpeGrid extends _src_js_Models_WpeComponentBase__WEBPACK_IMPORTED_MODULE_2
     blockType: select('core/blocks').getBlockType(props.name),
     experimentalDeviceType: __experimentalGetPreviewDeviceType(),
     isSelectedBlock: select('core/block-editor').isBlockSelected(props.clientId),
-    isParentOfSelectedBlock: select('core/block-editor').hasSelectedInnerBlock(props.clientId, true)
+    isParentOfSelectedBlock: select('core/block-editor').hasSelectedInnerBlock(props.clientId, true),
+    parentsBlock
   };
 }), (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_6__.withDispatch)(dispatch => {
   const {
@@ -12577,6 +12601,12 @@ class WpeSlider extends _src_js_Models_WpeComponentBase__WEBPACK_IMPORTED_MODULE
   }
 }
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((block_spec, theme_spec) => (0,_wordpress_compose__WEBPACK_IMPORTED_MODULE_3__.compose)([(0,_wordpress_data__WEBPACK_IMPORTED_MODULE_5__.withSelect)((select, props) => {
+  // Detect if inside a reusable block
+  const getBlockParents = select('core/block-editor').getBlockParents(props.clientId);
+  const parentsBlock = [];
+  for (var i in getBlockParents) {
+    parentsBlock.push(select('core/block-editor').getBlock(getBlockParents[i]));
+  }
   return {
     block_spec,
     theme_spec,
@@ -12589,7 +12619,8 @@ class WpeSlider extends _src_js_Models_WpeComponentBase__WEBPACK_IMPORTED_MODULE
     countSlides: select('core/block-editor').getBlockCount(props.clientId),
     blockType: select('core/blocks').getBlockType(props.name),
     isSelectedBlock: select('core/block-editor').isBlockSelected(props.clientId),
-    isParentOfSelectedBlock: select('core/block-editor').hasSelectedInnerBlock(props.clientId, true)
+    isParentOfSelectedBlock: select('core/block-editor').hasSelectedInnerBlock(props.clientId, true),
+    parentsBlock
   };
 }), (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_5__.withDispatch)(dispatch => {
   const {
@@ -14241,11 +14272,13 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Component {
   constructor() {
     super(...arguments);
     this.state = {};
     this.title = (0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_4__.getBlockType)(this.props.name).title;
+    this.isAReusableBlock = this.defineIfIsReusableBlock();
   }
   componentDidMount() {
     _Singleton_Devices__WEBPACK_IMPORTED_MODULE_6__.Devices.getInstance().addComponent(this);
@@ -14259,12 +14292,30 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
   propsExists() {
     return typeof this.props.block_spec.props == 'object' && Object.keys(this.props.block_spec.props).length > 0;
   }
+  defineIfIsReusableBlock() {
+    if (typeof this.props.parentsBlock == 'object') {
+      for (var i in this.props.parentsBlock) {
+        if ((0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_4__.isReusableBlock)(this.props.parentsBlock[i])) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+  isReusableBlock() {
+    return !!this.isAReusableBlock;
+  }
   renderEditMode() {
     const description = typeof this.description != 'undefined' ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "description"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
-      icon: "info"
+      icon: "info-outline"
     }), this.description) : null;
+    const alertReusableBlock = this.isReusableBlock() ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "alert"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
+      icon: "warning"
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("b", null, "Be careful !"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), "This block is part of a reusable block composition.", (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), "Updating this block will apply the changes everywhere it is used.")) : null;
     let tabPanel = [];
     let catReOrder = {
       default: {
@@ -14345,7 +14396,7 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
       className: "edit-zone__header"
     }, this.title), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "edit-zone__body"
-    }, description, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Placeholder, {
+    }, description, alertReusableBlock, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Placeholder, {
       key: this.props.clientId + "-ConfigurationPlaceholder",
       isColumnLayout: true,
       className: "wpe-component_edit_placeholder"
@@ -14550,11 +14601,15 @@ class Devices {
     return this.componentInstance;
   }
   getButtonGroup() {
-    const minText = this.getMediaQueries()[this.currentDevice]['minWidth'] != null && this.getMediaQueries()[this.currentDevice]['minWidth'] > 0 ? this.getMediaQueries()[this.currentDevice]['minWidth'] + 'px < ' : '';
-    const maxText = this.getMediaQueries()[this.currentDevice]['maxWidth'] != null ? ' < ' + this.getMediaQueries()[this.currentDevice]['maxWidth'] + 'px' : '';
+    const minText = this.getMediaQueries()[this.currentDevice]['minWidth'] != null && this.getMediaQueries()[this.currentDevice]['minWidth'] > 0 ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, this.getMediaQueries()[this.currentDevice]['minWidth'] + 'px', (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
+      icon: "arrow-left-alt2"
+    })) : null;
+    const maxText = this.getMediaQueries()[this.currentDevice]['maxWidth'] != null ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
+      icon: "arrow-left-alt2"
+    }), this.getMediaQueries()[this.currentDevice]['maxWidth'] + 'px') : null;
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "devicesInfo"
-    }, minText + this.currentDevice.charAt(0).toUpperCase() + this.currentDevice.slice(1) + maxText), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.ButtonGroup, {
+    }, minText, this.currentDevice.charAt(0).toUpperCase() + this.currentDevice.slice(1), maxText), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.ButtonGroup, {
       key: "devicesButtonGroup",
       className: "devicesButtonGroup"
     }, Object.keys(this.getMediaQueries()).map(layout => {
