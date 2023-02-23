@@ -67,8 +67,11 @@
   padding: 80px 100px 50px 100px;
   color: white;
 }
+.block-editor-block-list__layout > .wp-block .liveRenderingMessage .abtButtonEditZone {
+  display: inline-flex;
+}
 
-#editor .block-editor-block-list__block::after {
+#editor .interface-interface-skeleton.is-mode-visual .block-editor-block-list__block::after {
   content: "";
   position: absolute;
   z-index: 1;
@@ -83,14 +86,21 @@
   border: 1px solid rgba(0, 124, 186, 0.5);
   box-shadow: 0px 0.8px 2.2px rgba(0, 0, 0, 0.014), 0px 2px 5.3px rgba(0, 0, 0, 0.02), 0px 3.8px 10px rgba(0, 0, 0, 0.025), 0px 6.7px 17.9px rgba(0, 0, 0, 0.03), 0px 12.5px 33.4px rgba(0, 0, 0, 0.036), 0px 30px 80px rgba(0, 0, 0, 0.05);
 }
-#editor .block-editor-block-list__block:not(:hover):not(.is-selected) > .abtButtonGroupEditZoneContainer, #editor .block-editor-block-list__block:has(.block-editor-block-list__block:hover) > .abtButtonGroupEditZoneContainer {
+#editor .interface-interface-skeleton.is-mode-visual .block-editor-block-list__block:not(:hover):not(.is-selected) > .abtButtonGroupEditZoneContainer, #editor .interface-interface-skeleton.is-mode-visual .block-editor-block-list__block:has(.block-editor-block-list__block:hover) > .abtButtonGroupEditZoneContainer {
   display: none;
 }
-#editor .block-editor-block-list__block:not(:hover):not(.is-selected):after, #editor .block-editor-block-list__block:has(.block-editor-block-list__block:hover):after {
+#editor .interface-interface-skeleton.is-mode-visual .block-editor-block-list__block:not(:hover):not(.is-selected):has(.liveRenderingMessage) > .abtButtonGroupEditZoneContainer, #editor .interface-interface-skeleton.is-mode-visual .block-editor-block-list__block:has(.block-editor-block-list__block:hover):has(.liveRenderingMessage) > .abtButtonGroupEditZoneContainer {
+  display: flex;
+}
+#editor .interface-interface-skeleton.is-mode-visual .block-editor-block-list__block:not(:hover):not(.is-selected):after, #editor .interface-interface-skeleton.is-mode-visual .block-editor-block-list__block:has(.block-editor-block-list__block:hover):after {
   border: none;
   box-shadow: none;
 }
-#editor .block-editor-block-list__block[data-type="custom/wpe-column"]:has(.block-editor-block-list__block:hover):after, #editor .block-editor-block-list__block[data-type="custom/wpe-column"]:has(.is-selected):after {
+#editor .interface-interface-skeleton.is-mode-visual .block-editor-block-list__block:not(:hover):not(.is-selected):has(.liveRenderingMessage):after, #editor .interface-interface-skeleton.is-mode-visual .block-editor-block-list__block:has(.block-editor-block-list__block:hover):has(.liveRenderingMessage):after {
+  border: 1px solid rgba(0, 124, 186, 0.5);
+  box-shadow: 0px 0.8px 2.2px rgba(0, 0, 0, 0.014), 0px 2px 5.3px rgba(0, 0, 0, 0.02), 0px 3.8px 10px rgba(0, 0, 0, 0.025), 0px 6.7px 17.9px rgba(0, 0, 0, 0.03), 0px 12.5px 33.4px rgba(0, 0, 0, 0.036), 0px 30px 80px rgba(0, 0, 0, 0.05);
+}
+#editor .interface-interface-skeleton.is-mode-visual .block-editor-block-list__block[data-type="custom/wpe-column"]:has(.block-editor-block-list__block:hover):after, #editor .interface-interface-skeleton.is-mode-visual .block-editor-block-list__block[data-type="custom/wpe-column"]:has(.is-selected):after {
   border: 1px dashed rgba(0, 124, 186, 0.5);
 }
 
@@ -453,7 +463,7 @@ body.is-dragging-components-draggable #editor .block-editor-block-list__block::a
   bottom: 25px;
   background: white;
   z-index: 99999;
-  border-left: 1px solid #e0e0e0;
+  border-left: 1px solid var(--border300, rgb(235, 235, 235));
   box-sizing: border-box;
   box-shadow: 0 0 50px 0 rgba(0, 0, 0, 0.2);
   transition: right 0.4s, box-shadow 0.4s;
@@ -503,17 +513,32 @@ body.is-dragging-components-draggable #editor .block-editor-block-list__block::a
   top: 61px;
   background: white;
 }
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .description {
+  margin-bottom: 20px;
+  text-align: justify;
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+  padding-right: 40px;
+}
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .description .dashicon {
+  color: var(--wp-admin-theme-color);
+  font-size: 2em;
+  width: auto;
+  height: auto;
+  margin-right: 15px;
+}
 #editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder {
   padding: 0;
   box-shadow: none;
   outline: none;
   justify-content: flex-start;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-placeholder__label {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .components-placeholder__label {
   margin-bottom: 20px;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-base-control__label,
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-input-control__label {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .components-base-control__label,
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .components-input-control__label {
   display: flex;
   align-items: center;
   text-transform: math-auto;
@@ -524,205 +549,233 @@ body.is-dragging-components-draggable #editor .block-editor-block-list__block::a
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  border-left: 3px solid #e0e0e0;
+  border-left: 3px solid var(--border300, rgb(235, 235, 235));
   padding: 2px 0 0 8px;
   margin-bottom: 10px;
   border-bottom: none;
   height: auto;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-flex-item .components-base-control__label, #editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-flex-item .components-input-control__label {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .components-flex-item .components-base-control__label, #editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .components-flex-item .components-input-control__label {
   margin-bottom: 2px;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .tab-panel-wpe-component .components-tab-panel__tabs {
-  background: #f3f4f5;
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .tab-panel-wpe-component .components-tab-panel__tabs {
+  background: var(--background300, rgb(245, 245, 245));
+  border: 1px solid var(--border300, rgb(235, 235, 235));
+  border-bottom: none;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .tab-panel-wpe-component .components-tab-panel__tabs-item {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .tab-panel-wpe-component .components-tab-panel__tabs-item {
   margin: 0px 15px;
   padding: 0;
-  color: rgb(220, 220, 220);
+  color: rgb(200, 200, 200);
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .tab-panel-wpe-component .components-tab-panel__tabs-item:focus:not(:disabled), #editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .tab-panel-wpe-component .components-tab-panel__tabs-item.active-tab {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .tab-panel-wpe-component .components-tab-panel__tabs-item:focus:not(:disabled), #editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .tab-panel-wpe-component .components-tab-panel__tabs-item.active-tab {
   box-shadow: 0 3px #007CBA;
   color: rgb(30, 30, 30);
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .tab-panel-wpe-component .components-tab-panel__tab-content {
-  padding: 15px 0 0 0;
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .tab-panel-wpe-component .components-tab-panel__tabs-item:hover {
+  color: rgb(30, 30, 30);
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-panel__row > .tab-panel-wpe-component > .components-tab-panel__tabs {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .tab-panel-wpe-component .components-tab-panel__tab-content {
+  padding: 15px 18px 5px 18px;
+  background: #fcfcfc;
+  border: 1px solid var(--border300, rgb(235, 235, 235));
+  border-top: none;
+}
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .components-panel__row > .tab-panel-wpe-component > .components-tab-panel__tabs {
   background: rgb(252, 252, 252);
-  border-bottom: 1px solid #e0e0e0;
+  border: none;
+  border-bottom: 1px solid var(--border300, rgb(235, 235, 235));
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-panel__row > .tab-panel-wpe-component > .components-tab-panel__tabs .components-tab-panel__tabs-item {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .components-panel__row > .tab-panel-wpe-component > .components-tab-panel__tabs .components-tab-panel__tabs-item {
   font-weight: 400;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-panel__row > .tab-panel-wpe-component > .components-tab-panel__tab-content {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .components-panel__row > .tab-panel-wpe-component > .components-tab-panel__tab-content {
   padding: 15px;
+  border: none;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .basicField, #editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .repeatableField {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .basicField, #editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .repeatableField {
   padding: 10px 0;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .basicField:not(.flex div):last-child, #editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .repeatableField:not(.flex div):last-child {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .basicField:not(.flex div):last-child, #editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .repeatableField:not(.flex div):last-child {
   border-bottom: none;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .basicField .block-editor-media-placeholder, #editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .repeatableField .block-editor-media-placeholder {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .basicField .block-editor-media-placeholder, #editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .repeatableField .block-editor-media-placeholder {
   box-shadow: none;
   padding: 0;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .flex:last-child .basicField, #editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .flex:last-child .repeatableField {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .flex:last-child .basicField, #editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .flex:last-child .repeatableField {
   border-bottom: none;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .repeatableField .block-editor-media-placeholder {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .repeatableField .block-editor-media-placeholder {
   margin-bottom: 8px;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-panel:last-child {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .components-panel {
+  border: 1px solid var(--border300, rgb(235, 235, 235));
+}
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .components-panel:last-child {
   margin-bottom: 0;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-panel > .components-base-control__label {
-  background: #f3f4f5;
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .components-panel > .components-base-control__label {
+  background: var(--background300, rgb(245, 245, 245));
   margin: 0;
   padding: 0 0 0 16px;
   border-left: none;
   height: 48px;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid var(--border300, rgb(235, 235, 235));
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-panel .components-panel__body {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .components-panel .components-panel__body {
   padding: 0;
-}
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-panel .components-panel__body .components-panel__body-title {
+  border: none;
   margin: 0;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-panel .components-panel__body .components-panel__body-title .components-button {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .components-panel .components-panel__body .components-panel__body-title {
+  margin: 0;
+}
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .components-panel .components-panel__body .components-panel__body-title .components-button {
   display: flex;
   align-items: center;
   padding: 16px 48px 16px 16px;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-panel .components-panel__body .components-panel__body-title .components-button:focus {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .components-panel .components-panel__body .components-panel__body-title .components-button:focus {
   box-shadow: none;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-panel .components-panel__body .components-panel__body-title:hover {
-  background: #f3f4f5;
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .components-panel .components-panel__body .components-panel__body-title:hover {
+  background: var(--background300, rgb(245, 245, 245));
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-panel .components-panel__body .components-panel__row {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .components-panel .components-panel__body .components-panel__row {
   padding: 15px;
   display: block;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-panel .components-panel__body .components-panel__row:has(> .tab-panel-wpe-component) {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .components-panel .components-panel__body .components-panel__row:has(> .tab-panel-wpe-component) {
   padding: 0;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-panel .components-panel__body.is-opened > .components-panel__body-title {
-  background: #f3f4f5;
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .components-panel .components-panel__body.is-opened > .components-panel__body-title {
+  background: var(--background300, rgb(245, 245, 245));
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-panel .components-panel__body .flex > div {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .components-panel .components-panel__body .flex > div {
   flex-grow: 1;
   margin-right: 4rem;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-panel .components-panel__body .flex > div:last-child {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .components-panel .components-panel__body .flex > div:last-child {
   margin-right: 0;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-panel.noLabel {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .components-panel.noLabel {
   border: none;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-panel.noLabel .components-panel__body {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .components-panel.noLabel .components-panel__body {
   border: none;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-panel.noLabel .components-panel__body .components-base-control {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .components-panel.noLabel .components-panel__body .components-base-control {
   padding: 0;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-placeholder .media-preview-container {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .components-placeholder .media-preview-container {
   position: relative;
   width: 100%;
-  border: 1px solid #e2e4e7;
+  border: 1px solid var(--border300, rgb(235, 235, 235));
   padding: 10px;
   display: flex;
   background: white;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-placeholder .media-preview-container .file-details {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .components-placeholder .media-preview-container .file-details {
   margin-left: 10px;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-placeholder .media-preview-container .reset-button {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .components-placeholder .media-preview-container .reset-button {
   position: absolute;
   background: white;
   top: 16px;
   right: 16px;
   display: none;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-placeholder .media-preview-container:hover > .reset-button {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .components-placeholder .media-preview-container:hover > .reset-button {
   display: inline-flex;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-base-control__field {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .components-base-control__field {
   margin: 0;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .rich-text-container .block-editor-rich-text__editable {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .rich-text-container .block-editor-rich-text__editable {
   background: #fff;
   padding: 6px 8px;
   border-radius: 2px;
   border: 1px solid #757575;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .link-control-container {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .link-control-container {
   padding: 1em 0;
   background: white;
-  border: 1px solid #cce4f1;
+  border: 1px solid var(--border300, rgb(235, 235, 235));
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .link-control-container .components-base-control__field {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .link-control-container .components-base-control__field {
   padding: 0 10px;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .link-control-container .block-editor-link-control {
-  border-top: 1px solid #e2e4e7;
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .link-control-container .block-editor-link-control {
+  border-top: 1px solid var(--border300, rgb(235, 235, 235));
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .link-control-container .block-editor-link-control .block-editor-link-control__search-item {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .link-control-container .block-editor-link-control .block-editor-link-control__search-item {
   box-sizing: border-box;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .radio-control-container {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .link-control-container .block-editor-link-control input[type=text] {
+  border-color: var(--border300, rgb(235, 235, 235));
+  box-shadow: none;
+  outline: none;
+}
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .link-control-container .block-editor-link-control .block-editor-link-control__tools {
+  border-top: 1px solid var(--border300, rgb(235, 235, 235));
+}
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .radio-control-container {
   padding: 1em;
   background: white;
   border: 1px solid #cce4f1;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .dateTime-container {
-  background: #f3f4f5;
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .dateTime-container {
+  background: var(--background300, rgb(245, 245, 245));
   padding: 20px;
   border-radius: 2px;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .dateTime-container .components-datetime {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .dateTime-container .components-datetime {
   display: flex;
   justify-content: space-between;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .dateTime-container .components-datetime .components-datetime__buttons {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .dateTime-container .components-datetime .components-datetime__buttons {
   justify-content: flex-end;
   flex-direction: column;
   align-items: flex-end;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .repeatableAddElt {
-  border: 1px dashed #e0e0e0;
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .repeatableAddElt {
+  border: 1px dashed var(--border300, rgb(235, 235, 235));
   width: 100%;
   box-shadow: none;
   color: rgb(200, 200, 200);
   justify-content: center;
   margin-top: 5px;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .repeatableAddElt .dashicon {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .repeatableAddElt .dashicon {
   font-size: 1rem;
   height: auto;
   margin-right: 3px;
   transition: none;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .repeatableAddElt:hover {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .repeatableAddElt:hover {
   color: var(--wp-admin-theme-color);
   border-color: var(--wp-admin-theme-color);
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder textarea {
-  border-color: #e0e0e0;
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body textarea {
+  border-color: var(--border300, rgb(235, 235, 235));
   padding: 12px;
+  box-shadow: none;
+  outline: none;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-text-control__input {
-  border-color: #e0e0e0;
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .components-text-control__input {
+  border-color: var(--border300, rgb(235, 235, 235));
   padding: 12px;
+  margin-bottom: 10px;
+  box-shadow: none;
+  outline: none;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-select-control__input {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .components-select-control__input {
   padding: 0px 26px 0px 15px;
   height: 42px;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder .components-input-control__backdrop {
-  border-color: #e0e0e0;
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .components-input-control__backdrop {
+  border-color: var(--border300, rgb(235, 235, 235));
 }
 #editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .repeatableContainer .repeatableItem {
   position: relative;
@@ -890,7 +943,7 @@ body.is-dragging-components-draggable #editor .block-editor-block-list__block::a
 }
 .wpe-dropdown-container .wpe-dropdown-wrapper {
   position: relative;
-  border: 1px solid #ddd;
+  border: 1px solid var(--border300, rgb(235, 235, 235));
 }
 .wpe-dropdown-container .wpe-dropdown-wrapper .wpe-dropdown-header {
   position: relative;
@@ -913,7 +966,7 @@ body.is-dragging-components-draggable #editor .block-editor-block-list__block::a
   position: absolute;
   z-index: 2;
   background: white;
-  border: 1px solid #ddd;
+  border: 1px solid var(--border300, rgb(235, 235, 235));
   top: 34px;
   left: -1px;
   right: -1px;
@@ -934,7 +987,7 @@ body.is-dragging-components-draggable #editor .block-editor-block-list__block::a
 }
 .wpe-dropdown-container .wpe-dropdown-wrapper .wpe-dropdown-list .wpe-dropdown-list-item {
   padding: 4px;
-  border-bottom: 1px solid rgb(240, 240, 240);
+  border-bottom: 1px solid var(--border300, rgb(235, 235, 235));
   cursor: pointer;
 }
 .wpe-dropdown-container .wpe-dropdown-wrapper .wpe-dropdown-list .wpe-dropdown-list-item:last-child {
@@ -966,13 +1019,13 @@ body.is-dragging-components-draggable #editor .block-editor-block-list__block::a
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  border-top: 1px solid #ddd;
+  border-top: 1px solid var(--border300, rgb(235, 235, 235));
   padding: 0 32px;
 }
 
 .DraftEditor-Container {
   background-color: rgb(248, 248, 248);
-  border: 1px solid #ddd;
+  border: 1px solid var(--border300, rgb(235, 235, 235));
   font-family: "Georgia", serif;
   font-size: 14px;
   padding: 15px;
@@ -985,10 +1038,10 @@ body.is-dragging-components-draggable #editor .block-editor-block-list__block::a
 }
 .DraftEditor-Container .DraftEditor-controls-row .label.label-background {
   display: inline-block;
-  background: #ddd;
+  background: var(--border300, rgb(235, 235, 235));
   padding: 1px 7px 0px 7px;
   border-radius: 6px 6px 0px 0px;
-  border: 1px solid #ddd;
+  border: 1px solid var(--border300, rgb(235, 235, 235));
 }
 .DraftEditor-Container .DraftEditor-controls-row .DraftEditor-controls-row-inner {
   display: flex;
@@ -1015,7 +1068,7 @@ body.is-dragging-components-draggable #editor .block-editor-block-list__block::a
   display: flex;
   align-items: center;
   height: 34px;
-  border: 1px solid #ddd;
+  border: 1px solid var(--border300, rgb(235, 235, 235));
   flex-grow: 1;
   padding: 0 5px;
 }
@@ -1024,18 +1077,17 @@ body.is-dragging-components-draggable #editor .block-editor-block-list__block::a
   padding: 2px;
 }
 .DraftEditor-Container .border-style {
-  border: 1px solid #ddd;
+  border: 1px solid var(--border300, rgb(235, 235, 235));
   padding: 6px;
 }
 
 .DraftEditor-root {
   background: #fff;
-  border: 1px solid #ddd;
+  border: 1px solid var(--border300, rgb(235, 235, 235));
   padding: 15px;
 }
 
 .DraftEditor-editor {
-  /* border-top: 1px solid #ddd; */
   cursor: text;
   font-size: 16px;
   margin-top: 10px;

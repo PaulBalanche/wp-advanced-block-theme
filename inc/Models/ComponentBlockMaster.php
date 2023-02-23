@@ -42,7 +42,7 @@ class ComponentBlockMaster extends ModelBase {
      * 
      */
     public static function render( $attributes, $content ) {
-        
+
         if( ! isset( $attributes['id_component'] ) )
             return;
 

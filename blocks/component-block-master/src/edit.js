@@ -27,6 +27,8 @@ class WpeComponent extends WpeComponentBase {
         if( typeof this.props.attributes.id_component == 'undefined' )
             this.setAttributes( { id_component: this.props.block_spec.id } );
 
+        this.description = this.props.block_spec.description;
+
         this.iframeResize = this._iframeResize.bind(this);
     }
 
@@ -138,7 +140,6 @@ class WpeComponent extends WpeComponentBase {
                 }
                 else {
                     render.push(this.renderEditZone());
-                    // render.push(<div className="liveRenderingMessage">{ <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(error) }} /> }</div>);
                     render.push(<div key={ this.props.clientId + "-LiveRenderingMessage" } className="liveRenderingMessage">{ error }</div>);
                 }
             } else if( ! previewReady ) {
@@ -150,14 +151,7 @@ class WpeComponent extends WpeComponentBase {
                 render.push(this.renderIframePreview());
             }
 
-            return render;
-
-            // return  <ServerSideRender
-            //     key={ this.props.clientId + "-serverSideRender" }
-            //     block={ "custom/wpe-component-" + this.props.block_spec.id }
-            //     attributes={ this.props.attributes }
-            //     httpMethod={ "POST" }
-            // />
+            return render
         }
     }
 }

@@ -37,12 +37,8 @@ class Grid extends ControllerBase {
         // Generate Coffeekraken CSS layout string
         $layout = [];
         $media = $this->get_config()->get_spec('media');
-        if( $media && is_array($media) && isset($media['defaultAction'], $media['queries']) && is_array($media['queries']) && count($media['queries']) > 0 ) {
+        if( $media && is_array($media) && isset($media['queries']) && is_array($media['queries']) && count($media['queries']) > 0 ) {
 
-            // $defaultMedia = ( $media['defaultAction'] == '<=' ) ? array_key_first( $media['queries'] ) : array_key_last( $media['queries'] );
-            // $layout = [
-            //     'default' => Css::generate_coffeekraken_css_layout( $cellsLayout, $defaultMedia )
-            // ];
             foreach( $media['queries'] as $device => $query ) {
                 $layout[$device] = Css::generate_coffeekraken_css_layout( $cellsLayout, $device );
             }

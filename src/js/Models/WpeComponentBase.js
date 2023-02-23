@@ -4,7 +4,8 @@ import {
     Button,
     ButtonGroup,
     Placeholder,
-    Dashicon
+    Dashicon,
+    TextControl
 } from '@wordpress/components';
 
 import { Attributes } from '../Static/Attributes';
@@ -45,12 +46,20 @@ export class WpeComponentBase extends Component {
 
     renderEditMode() {
 
+        const description = ( typeof this.description != 'undefined' ) ? <div className='description'><Dashicon icon="info" />{ this.description }</div> : null;
+
+        let tabPanel = [];
+
+        let catReOrder = {
+            default: { name: "Attributes", props: {} },
+            block_settings: { name: "Settings", props: {
+                anchor: { "type": "string", "label": "Anchor" }
+            } },
+            spacing: { name: "Spacing", props: {} }
+        };
+        
         if( this.propsExists() ) {
-
-            let catReOrder = {
-                default: { props: {} }
-            };
-
+            
             // 1. Loop Props Categories
             if( typeof this.props.block_spec.props_categories != 'undefined' && this.props.block_spec.props_categories != null ) {
                 for (const [keyCatProps, valueCatProps] of Object.entries(this.props.block_spec.props_categories)) {
@@ -60,122 +69,96 @@ export class WpeComponentBase extends Component {
             }
 
             // 2. Loop Props
-            for (const [keyProp, valueProp] of Object.entries(this.props.block_spec.props)) {
+            for( const [keyProp, valueProp] of Object.entries(this.props.block_spec.props) ) {
         
                 if( typeof valueProp != 'object' || valueProp == null )
                     continue;
 
-                if( typeof valueProp.category != 'undefined' && valueProp.category != null && valueProp.category in catReOrder ) {
-                    catReOrder[valueProp.category].props[keyProp] = valueProp;
-                }
-                else {
-                    catReOrder.default.props[keyProp] = valueProp;
-                }
-            }
-
-            // 3. Remove empty category
-            for (const [keyProp, valueProp] of Object.entries(catReOrder)) {
-        
-                if( Object.keys(catReOrder[keyProp].props).length == 0 ) {
-                    delete catReOrder[keyProp];
-                }
-            }
-
-            // 4. Render
-            var tabPanel = [];
-            for (const [keyCat, valCat] of Object.entries(catReOrder)) {
-                
-                if( valCat.props.length == 0 )
-                    continue;
-                
-                let currentEditCat = [];
-
-                forEachCatProps: for (const [keyProp, prop] of Object.entries(valCat.props)) {
-
-                    // Conditional treatment
-                    if( typeof prop.conditional == 'object' ) {
-                        for (const [index, conditionalField] of Object.entries(prop.conditional)) {
-                            
-                            let conditionalFieldKey = Object.keys(conditionalField)[0];
-                            let conditionalFieldValue = conditionalField[conditionalFieldKey];
-                            if( this.getAttribute( conditionalFieldKey ) != conditionalFieldValue )
-                                continue forEachCatProps;
-                        }
-                    }
-
-                    let valueProp = this.getAttribute( keyProp );
-                    currentEditCat.push( Attributes.renderProp( prop, [ keyProp ], { [keyProp]: valueProp }, this ) );
-                }
-
-                if( keyCat == "default" ) {
-
-                    tabPanel.push( {
-                        name: keyCat,
-                        title: "Default",
-                        content: currentEditCat
-                    } );
-                }
-                else {
-
-                    tabPanel.push( {
-                        name: keyCat,
-                        title: valCat.name,
-                        content: currentEditCat
-                    } );
-                }
-            }
-
-            const inspectorContent = this.renderInspectorControls();
-            if( inspectorContent != null ) {
-                tabPanel.push( {
-                    name: 'config',
-                    title: "Config",
-                    content: inspectorContent
-                } );
-            }
-
-            if( tabPanel.length > 0 ) {
-
-                const editZoneChild = 
-                    <div key={ this.props.clientId + "-editZone" } className='edit-zone__inner'>
-                        <div className='edit-zone__header'>
-                            { this.title }
-                        </div>
-                        <div className='edit-zone__body'>
-                            <Placeholder
-                                key={ this.props.clientId + "-ConfigurationPlaceholder" }
-                                isColumnLayout={ true }
-                                className="wpe-component_edit_placeholder"
-                            >
-                                { ( tabPanel.length > 1 ) ? Render.tabPanelComponent( this.props.clientId, tabPanel, function ( tabPanel ) { return tabPanel.content } ) : tabPanel[0].content }
-                            </Placeholder>
-                        </div>
-                        <div className='edit-zone__footer'>
-                            { typeof this.state.needPreviewUpdate != 'undefined' && 
-                            <Button
-                                key={ this.props.clientId + "-buttonUpdatePreview" }
-                                className="abtButtonUpdatePreview"
-                                variant="primary"
-                                onMouseDown={ () => {
-                                    this.setState( { needPreviewUpdate: true } )
-                                } }
-                            ><Dashicon icon="saved" />Update preview</Button> }
-                            <Button
-                                key={ this.props.clientId + "-buttonCloseEditZone" }
-                                className="abtButtonCloseEditZone"
-                                variant="primary"
-                                onMouseDown={ () => {
-                                    EditZone.getInstance().hide();
-                                } }
-                            ><Dashicon icon="no-alt" />Close</Button>
-                        </div>
-                    </div>
-
-                return editZoneChild;
+                const currentCatToPush = ( typeof valueProp.category != 'undefined' && valueProp.category != null && valueProp.category in catReOrder ) ? valueProp.category : ( (  [ 'margin', 'padding', 'gap' ].includes(keyProp) ) ? 'spacing' : 'default' );
+                catReOrder[currentCatToPush].props[keyProp] = valueProp;
             }
         }
 
-        return null;
+        // 3. Remove empty category
+        for(const [keyProp, valueProp] of Object.entries(catReOrder) ) {
+    
+            if( Object.keys(catReOrder[keyProp].props).length == 0 ) {
+                delete catReOrder[keyProp];
+            }
+        }
+
+        // 4. Render
+        for( const [keyCat, valCat] of Object.entries(catReOrder) ) {
+            
+            if( valCat.props.length == 0 )
+                continue;
+            
+            let currentEditCat = [];
+
+            forEachCatProps: for (const [keyProp, prop] of Object.entries(valCat.props)) {
+
+                // Conditional treatment
+                if( typeof prop.conditional == 'object' ) {
+                    for (const [index, conditionalField] of Object.entries(prop.conditional)) {
+                        
+                        let conditionalFieldKey = Object.keys(conditionalField)[0];
+                        let conditionalFieldValue = conditionalField[conditionalFieldKey];
+                        if( this.getAttribute( conditionalFieldKey ) != conditionalFieldValue )
+                            continue forEachCatProps;
+                    }
+                }
+
+                let valueProp = this.getAttribute( keyProp );
+                currentEditCat.push( Attributes.renderProp( prop, [ keyProp ], { [keyProp]: valueProp }, this ) );
+            }
+
+            if( keyCat == "block_settings" ) {
+                currentEditCat.push( this.renderInspectorControls() );
+            }
+
+            tabPanel.push( {
+                name: keyCat,
+                title: valCat.name,
+                content: currentEditCat
+            } );
+        }
+
+        return (
+            <div key={ this.props.clientId + "-editZone" } className='edit-zone__inner'>
+                <div className='edit-zone__header'>
+                    { this.title }
+                </div>
+                <div className='edit-zone__body'>
+                    { description }
+                    <Placeholder
+                        key={ this.props.clientId + "-ConfigurationPlaceholder" }
+                        isColumnLayout={ true }
+                        className="wpe-component_edit_placeholder"
+                    >
+                        { Render.tabPanelComponent( this.props.clientId, tabPanel, function ( tabPanel ) { return tabPanel.content } ) }
+                    </Placeholder>
+                </div>
+                <div className='edit-zone__footer'>
+                    { typeof this.state.needPreviewUpdate != 'undefined' && 
+                    <Button
+                        key={ this.props.clientId + "-buttonUpdatePreview" }
+                        className="abtButtonUpdatePreview"
+                        variant="primary"
+                        onMouseDown={ () => {
+                            this.setState( { needPreviewUpdate: true } )
+                        } }
+                    ><Dashicon icon="saved" />Update preview</Button> }
+                    <Button
+                        key={ this.props.clientId + "-buttonCloseEditZone" }
+                        className="abtButtonCloseEditZone"
+                        variant="primary"
+                        onMouseDown={ () => {
+                            EditZone.getInstance().hide();
+                        } }
+                    ><Dashicon icon="no-alt" />Close</Button>
+                </div>
+            </div>
+        )
     }
 
     renderInspectorControls() {

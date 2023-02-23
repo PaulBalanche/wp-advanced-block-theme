@@ -12,6 +12,8 @@ export function renderObject( componentInstance, id, label, keys, valueProp, obj
     if( label == null )
         return fieldsetObject;
 
+    label = ( required ) ? label + '*' : label;
+
     // let currentValueAttribute = valueProp;
     // keys.forEach( element => { currentValueAttribute = ( currentValueAttribute != null && typeof currentValueAttribute == 'object' && currentValueAttribute.hasOwnProperty(element) && typeof currentValueAttribute[element] != "undefined" ) ? currentValueAttribute[element] : ""; } );
     // if( currentValueAttribute == '' ) {

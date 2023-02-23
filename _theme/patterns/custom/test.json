@@ -1,5 +1,0 @@
-{
-	"__file": "wp_block",
-	"title": "Test !!!",
-	"content": "<!-- wp:custom/section --><!-- wp:media-text {\"mediaId\":1841,\"mediaLink\":\"http://wpe-google-oauth.ch:8040/new-test/600x400/\",\"mediaType\":\"image\"} --><div class=\"wp-block-media-text alignwide is-stacked-on-mobile\"><figure class=\"wp-block-media-text__media\"><img src=\"http://wpe-google-oauth.ch:8040/app/uploads/2020/02/600x400.png\" alt=\"\" class=\"wp-image-1841\"/></figure><div class=\"wp-block-media-text__content\"><!-- wp:heading --><h2>Title section</h2><!-- /wp:heading --><!-- wp:paragraph {\"placeholder\":\"Content…\",\"fontSize\":\"large\"} --><p class=\"has-large-font-size\">Pellentesque a massa iaculis, ullamcorper erat ut, varius justo. Nullam non lectus id neque malesuada porta. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Curabitur sagittis congue mi, id vestibulum nibh. Nulla mattis ultricies pharetra. Etiam id velit est. Nunc semper condimentum nibh eu commodo.</p><!-- /wp:paragraph --></div></div><!-- /wp:media-text --><!-- /wp:custom/section -->"
-  }

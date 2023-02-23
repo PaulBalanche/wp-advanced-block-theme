@@ -51,7 +51,6 @@ class BlockEditor extends ControllerBase {
             'current_user_can_edit_posts' => ( current_user_can('edit_posts') ) ? '1' : '0',
             'components' => ComponentBlocksService::get_all_blocks_spec(),
             'container' => $this->get_config()->get_spec('container'),
-            'supports' => $this->get_config()->get_spec('supports'),
             'galleryType' => $this->get_config()->get_spec('galleryType'),
             'gridConfig' => $this->get_config()->get_spec('gridConfig')
         ];

@@ -109,12 +109,6 @@ class FrontEnd extends ServiceBase {
 
             foreach($component_props as $key_props => $props) {
 
-                // Extend attribute
-                // if( is_array($props) && isset($props['extends']) ) {
-                //     $component_props[$key_props] = wp_parse_args( $props, $this->get_extends_component_viewspec($props['extends']) );
-                //     unset( $component_props[$key_props]['extends'] );
-                // }
-
                 // If invalid or null component, or type absent, or need only editable props => just bypass it and continue to the next component
                 if( is_null($component_props[$key_props]) || ! is_array($component_props[$key_props]) || ! isset($component_props[$key_props]['type']) || ( isset( $props['editable'] ) && $props['editable'] == false ) ) {
                     unset( $component_props[$key_props] );
@@ -138,33 +132,6 @@ class FrontEnd extends ServiceBase {
         }
 
         return $component_props;
-    }
-
-
-
-    /**
-     * Get and treat extended component 
-     * 
-     */
-    public function get_extends_component_viewspec( $extends ) {
-
-        if( strpos($extends, '.') !== false ) {
-
-            $frontspec_views_path = $this->get_config()->get_spec( 'views' );
-            if( is_array($frontspec_views_path) && isset($frontspec_views_path['folders']) & is_array($frontspec_views_path['folders']) ) {
-
-                $prefix_extends = explode('.', $extends);
-                if( is_array($prefix_extends) && count($prefix_extends) == 2 && isset($frontspec_views_path['folders'][ $prefix_extends[0] ]) ) {
-
-                    $extends_dir = $frontspec_views_path['folders'][ $prefix_extends[0] ] . '/' . $prefix_extends[1] . '/';
-                }
-            }
-        }
-        else {
-            $extends_dir = 'components/';
-        }
-
-        return $this->get_component_viewspec( $extends, $extends_dir );
     }
 
 }

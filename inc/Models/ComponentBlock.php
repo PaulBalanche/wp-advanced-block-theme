@@ -401,7 +401,7 @@ class ComponentBlock extends ModelBase {
                 // Check missing required attributes
                 $missing_required_attributes = $this->get_missing_required_attributes( $render_attributes );
                 if( count($missing_required_attributes) == 0 ) {
-
+// echo '<pre>';print_r($render_attributes);
                     $render = apply_filters( 'Abt\render_component_block_' . $this->get_ID(), RenderService::render( $block_spec['path'], $render_attributes ) );
                 }
                 else if( Request::is_admin_editor_request() ) {
