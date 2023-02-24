@@ -7,14 +7,15 @@ import {
     InnerBlocks,
     useBlockProps,
     useInnerBlocksProps,
-    __experimentalBlockVariationPicker
+    __experimentalBlockVariationPicker,
+    store as blockEditorStore
 } from '@wordpress/block-editor';
 
 import {
     RangeControl
 } from '@wordpress/components';
 
-import { withSelect } from '@wordpress/data';
+import { withSelect, withDispatch, dispatch } from '@wordpress/data';
 
 import { Devices } from '../../../../src/js/Singleton/Devices';
 import { Render } from '../../../../src/js/Static/Render';
@@ -197,4 +198,14 @@ export default ( block_spec, theme_spec ) => compose( [
             countColumns: select( 'core/block-editor' ).getBlockCount(props.clientId)
         };
     } ),
+    withDispatch( ( dispatch ) => {
+        
+		const {
+            removeBlock
+        } = dispatch( blockEditorStore );
+
+		return {
+            removeBlock
+		};
+	} )
 ] )( WpeColumn );

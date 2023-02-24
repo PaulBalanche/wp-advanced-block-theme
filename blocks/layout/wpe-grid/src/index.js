@@ -27,9 +27,6 @@ variations.forEach( function (elt, index){
 });
 
 let attributes = {
-    gridCountColumns: {
-        type: 'number'
-    },
     gridLocked: {
         type: 'boolean',
         default: false

@@ -11746,6 +11746,13 @@ class WpeColumn extends _src_js_Models_WpeComponentBase__WEBPACK_IMPORTED_MODULE
     disableButtonGroupMode: true,
     countColumns: select('core/block-editor').getBlockCount(props.clientId)
   };
+}), (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_5__.withDispatch)(dispatch => {
+  const {
+    removeBlock
+  } = dispatch(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__.store);
+  return {
+    removeBlock
+  };
 })])(WpeColumn));
 
 /***/ }),
@@ -12150,13 +12157,12 @@ class WpeGrid extends _src_js_Models_WpeComponentBase__WEBPACK_IMPORTED_MODULE_2
   renderInspectorControls() {
     // InspectorControls
     if (!this.getAttribute('gridLocked')) {
-      let gridCountColumns = parseInt(this.getAttribute('gridCountColumns'));
-      return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-        key: this.props.clientId + "-InspectorControls"
-      }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_5__.Button, {
+      return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_5__.Button, {
+        key: this.props.clientId + "-buttonAddColumn",
+        variant: "primary",
         isPressed: false,
         onMouseDown: () => this.addColumn()
-      }, "Add column"));
+      }, "Add column");
     }
     return null;
   }
@@ -12194,55 +12200,6 @@ class WpeGrid extends _src_js_Models_WpeComponentBase__WEBPACK_IMPORTED_MODULE_2
         }
       })));
     } else {
-      // let gridCountColumns = parseInt( this.getAttribute('gridCountColumns') );
-
-      /**
-       * Add or remove columns
-       * 
-       */
-      // if( gridCountColumns > countColumns ) {
-
-      //     // Define rowStart fo the new colums added
-      //     let initLayout = {};
-      //     Object.keys( Devices.getInstance().getMediaQueries() ).forEach( ( layout ) => {
-
-      //         initLayout[ layout ] = {
-      //             columnStart: 1,
-      //             width: 1,
-      //             rowStart: 2,
-      //             height: 1
-      //         };
-      //         inner_blocks.forEach(element => {
-      //             if( element.attributes.layout && element.attributes.layout[ layout ] ) {
-
-      //                 let currentRowStart = ( element.attributes.layout[ layout ].rowStart && element.attributes.layout[ layout ].rowStart ) ? element.attributes.layout[ layout ].rowStart : 1
-      //                 let currentHeight = ( element.attributes.layout[ layout ].height && element.attributes.layout[ layout ].height ) ? element.attributes.layout[ layout ].height : 1;
-      //                 let currentRowEnd = currentRowStart + currentHeight;
-      //                 if( currentRowEnd > initLayout[ layout ].rowStart ) {
-      //                     initLayout[ layout ].rowStart = currentRowEnd;
-      //                 }
-      //             }
-      //         });                    
-      //     } );
-
-      //     let numberOfColumnsToAdd = gridCountColumns - countColumns;
-      //     let inner_blocks_new = [
-      //         ...inner_blocks,
-      //         ...times( numberOfColumnsToAdd, () => {
-      //             return createBlock( 'custom/wpe-column', {
-      //                 layout: initLayout
-      //             } )
-      //         } )
-      //     ];
-
-      //     replaceInnerBlocks( clientId, inner_blocks_new, false );
-      // }
-      // else if( gridCountColumns < countColumns ) {
-
-      //     let inner_blocks_new = inner_blocks.slice( 0, gridCountColumns );
-      //     replaceInnerBlocks( clientId, inner_blocks_new, false );
-      // }
-
       return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", innerBlocksProps, this.renderEditZone(), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
         className: "gridContainer"
       }, children));
@@ -12506,9 +12463,6 @@ variations.forEach(function (elt, index) {
 });
 
 let attributes = {
-  gridCountColumns: {
-    type: 'number'
-  },
   gridLocked: {
     type: 'boolean',
     default: false
