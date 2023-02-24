@@ -2,16 +2,15 @@
  * WordPress dependencies
  */
 import { WpeComponentBase } from '../../../../src/js/Models/WpeComponentBase';
+import { withSelect, withDispatch, dispatch } from '@wordpress/data';
 import { compose } from '@wordpress/compose';
 import {
     InnerBlocks,
     useBlockProps,
     useInnerBlocksProps,
-    __experimentalBlockVariationPicker
+    __experimentalBlockVariationPicker,
+    store as blockEditorStore
 } from '@wordpress/block-editor';
-
-import { withSelect } from '@wordpress/data';
-
 
 /**
  * registerBlockType edit function
@@ -58,4 +57,16 @@ export default ( containerConfig, block_spec, theme_spec ) => compose( [
             parentsBlock
         };
     } ),
+    withDispatch( ( dispatch ) => {
+        
+		const {
+            removeBlock,
+            duplicateBlocks
+        } = dispatch( blockEditorStore );
+
+		return {
+            removeBlock,
+            duplicateBlocks
+		};
+	} )
 ] )( WpeContainer )

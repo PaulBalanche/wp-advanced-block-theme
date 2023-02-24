@@ -62,7 +62,6 @@ class FrontEnd extends ServiceBase {
         if( $path_viewspec_file && is_array($path_viewspec_file) && count($path_viewspec_file) == 1 ) {
             $path_viewspec_file = $path_viewspec_file[0];
         }
-        // $path_viewspec_file = $component_dir . $componentName . '/' . $this->get_config()->get('viewspecJsonFilename');
 
         // Get the file content
         $component_viewspec = ( file_exists( $path_viewspec_file ) ) ? json_decode( file_get_contents( $path_viewspec_file ), true ) : [];
@@ -110,7 +109,14 @@ class FrontEnd extends ServiceBase {
             foreach($component_props as $key_props => $props) {
 
                 // If invalid or null component, or type absent, or need only editable props => just bypass it and continue to the next component
-                if( is_null($component_props[$key_props]) || ! is_array($component_props[$key_props]) || ! isset($component_props[$key_props]['type']) || ( isset( $props['editable'] ) && $props['editable'] == false ) ) {
+                if(
+                    is_null($component_props[$key_props]) ||
+                    ! is_array($component_props[$key_props]) ||
+                    ! isset($component_props[$key_props]['type']) ||
+                    ( isset( $props['editable'] ) && $props['editable'] == false ) ||
+                    ( ( strtolower($component_props[$key_props]['type']) == 'object' || strtolower($component_props[$key_props]['type']) == 'object[]' || strtolower($component_props[$key_props]['type']) == 'object{}' ) && ! isset($component_props[$key_props]['props']) ) ||
+                    strtolower($component_props[$key_props]['type']) == 'html'
+                ) {
                     unset( $component_props[$key_props] );
                     continue;
                 }

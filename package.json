@@ -30,6 +30,7 @@
     "@wordpress/block-editor": "^11.4.0",
     "@wordpress/blocks": "^12.1.0",
     "@wordpress/hooks": "^3.26.0",
+    "@wordpress/reusable-blocks": "^4.4.0",
     "dompurify": "^2.4.3"
   }
 }

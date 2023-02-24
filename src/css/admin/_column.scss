@@ -6,6 +6,10 @@
     margin-bottom: 0 !important;
     box-sizing: border-box;
 
+    &.is-empty {
+        padding-top: 80px !important;
+    }
+
     .block-list-appender {
         position: relative;
         max-width: 90%;

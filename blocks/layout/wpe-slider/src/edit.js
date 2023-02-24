@@ -121,10 +121,16 @@ export default ( block_spec, theme_spec ) => compose( [
     } ),
     withDispatch( ( dispatch ) => {
         
-		const { replaceInnerBlocks } = dispatch( blockEditorStore );
+		const {
+            replaceInnerBlocks,
+            removeBlock,
+            duplicateBlocks
+        } = dispatch( blockEditorStore );
 
 		return {
-			replaceInnerBlocks
+			replaceInnerBlocks,
+            removeBlock,
+            duplicateBlocks
 		};
 	} )
 ] )( WpeSlider );

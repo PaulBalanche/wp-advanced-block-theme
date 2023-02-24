@@ -13,7 +13,8 @@ import {
 } from '@wordpress/block-editor';
 
 import {
-    RangeControl
+    RangeControl,
+    Button
 } from '@wordpress/components';
 
 import { withSelect, withDispatch, dispatch } from '@wordpress/data';
@@ -48,6 +49,41 @@ class WpeGrid extends WpeComponentBase {
         super( ...arguments );
     }
 
+    addColumn() {
+
+        // Define rowStart fo the new colums added
+        let initLayout = {};
+        Object.keys( Devices.getInstance().getMediaQueries() ).forEach( ( layout ) => {
+
+            initLayout[ layout ] = {
+                columnStart: 1,
+                width: 1,
+                rowStart: 2,
+                height: 1
+            };
+            this.props.inner_blocks.forEach(element => {
+                if( element.attributes.layout && element.attributes.layout[ layout ] ) {
+
+                    let currentRowStart = ( element.attributes.layout[ layout ].rowStart && element.attributes.layout[ layout ].rowStart ) ? element.attributes.layout[ layout ].rowStart : 1
+                    let currentHeight = ( element.attributes.layout[ layout ].height && element.attributes.layout[ layout ].height ) ? element.attributes.layout[ layout ].height : 1;
+                    let currentRowEnd = currentRowStart + currentHeight;
+                    if( currentRowEnd > initLayout[ layout ].rowStart ) {
+                        initLayout[ layout ].rowStart = currentRowEnd;
+                    }
+                }
+            });                    
+        } );
+
+        let inner_blocks_new = [
+            ...this.props.inner_blocks,
+            createBlock( 'custom/wpe-column', {
+                layout: initLayout
+            } )
+        ];
+
+        this.props.replaceInnerBlocks( this.props.clientId, inner_blocks_new, false );
+    }
+
     renderInspectorControls() {
 
         // InspectorControls
@@ -58,14 +94,18 @@ class WpeGrid extends WpeComponentBase {
             return <div
                 key={ this.props.clientId + "-InspectorControls" }
             >
-                { Render.fieldContainer( this.props.clientId + '_gridCountColumns',
+                {/* { Render.fieldContainer( this.props.clientId + '_gridCountColumns',
                     <RangeControl
                         label="Number of cells"
                         value={ gridCountColumns }
                         onChange={ ( value ) => this.setAttributes( { gridCountColumns: value } ) }
                         min={ 1 }
                         max={ gridCountColumns + 1 }
-                    />, true ) }
+                    />, true ) } */}
+                    <Button
+                        isPressed={ false }
+                        onMouseDown={ () => this.addColumn() }
+                    >Add column</Button>
             </div>
         }
 
@@ -116,55 +156,54 @@ class WpeGrid extends WpeComponentBase {
         }
         else {
 
-            let gridCountColumns = parseInt( this.getAttribute('gridCountColumns') );
+            // let gridCountColumns = parseInt( this.getAttribute('gridCountColumns') );
 
             /**
              * Add or remove columns
              * 
              */
-            if( gridCountColumns > countColumns ) {
+            // if( gridCountColumns > countColumns ) {
 
-                // Define rowStart fo the new colums added
+            //     // Define rowStart fo the new colums added
+            //     let initLayout = {};
+            //     Object.keys( Devices.getInstance().getMediaQueries() ).forEach( ( layout ) => {
 
-                let initLayout = {};
-                Object.keys( Devices.getInstance().getMediaQueries() ).forEach( ( layout ) => {
+            //         initLayout[ layout ] = {
+            //             columnStart: 1,
+            //             width: 1,
+            //             rowStart: 2,
+            //             height: 1
+            //         };
+            //         inner_blocks.forEach(element => {
+            //             if( element.attributes.layout && element.attributes.layout[ layout ] ) {
 
-                    initLayout[ layout ] = {
-                        columnStart: 1,
-                        width: 1,
-                        rowStart: 2,
-                        height: 1
-                    };
-                    inner_blocks.forEach(element => {
-                        if( element.attributes.layout && element.attributes.layout[ layout ] ) {
+            //                 let currentRowStart = ( element.attributes.layout[ layout ].rowStart && element.attributes.layout[ layout ].rowStart ) ? element.attributes.layout[ layout ].rowStart : 1
+            //                 let currentHeight = ( element.attributes.layout[ layout ].height && element.attributes.layout[ layout ].height ) ? element.attributes.layout[ layout ].height : 1;
+            //                 let currentRowEnd = currentRowStart + currentHeight;
+            //                 if( currentRowEnd > initLayout[ layout ].rowStart ) {
+            //                     initLayout[ layout ].rowStart = currentRowEnd;
+            //                 }
+            //             }
+            //         });                    
+            //     } );
 
-                            let currentRowStart = ( element.attributes.layout[ layout ].rowStart && element.attributes.layout[ layout ].rowStart ) ? element.attributes.layout[ layout ].rowStart : 1
-                            let currentHeight = ( element.attributes.layout[ layout ].height && element.attributes.layout[ layout ].height ) ? element.attributes.layout[ layout ].height : 1;
-                            let currentRowEnd = currentRowStart + currentHeight;
-                            if( currentRowEnd > initLayout[ layout ].rowStart ) {
-                                initLayout[ layout ].rowStart = currentRowEnd;
-                            }
-                        }
-                    });                    
-                } );
+            //     let numberOfColumnsToAdd = gridCountColumns - countColumns;
+            //     let inner_blocks_new = [
+            //         ...inner_blocks,
+            //         ...times( numberOfColumnsToAdd, () => {
+            //             return createBlock( 'custom/wpe-column', {
+            //                 layout: initLayout
+            //             } )
+            //         } )
+            //     ];
 
-                let numberOfColumnsToAdd = gridCountColumns - countColumns;
-                let inner_blocks_new = [
-                    ...inner_blocks,
-                    ...times( numberOfColumnsToAdd, () => {
-                        return createBlock( 'custom/wpe-column', {
-                            layout: initLayout
-                        } )
-                    } )
-                ];
-
-                replaceInnerBlocks( clientId, inner_blocks_new, false );
-            }
-            else if( gridCountColumns < countColumns ) {
+            //     replaceInnerBlocks( clientId, inner_blocks_new, false );
+            // }
+            // else if( gridCountColumns < countColumns ) {
             
-                let inner_blocks_new = inner_blocks.slice( 0, gridCountColumns );
-                replaceInnerBlocks( clientId, inner_blocks_new, false );
-            }
+            //     let inner_blocks_new = inner_blocks.slice( 0, gridCountColumns );
+            //     replaceInnerBlocks( clientId, inner_blocks_new, false );
+            // }
 
             return <div {...innerBlocksProps}>
                 { this.renderEditZone() }
@@ -204,10 +243,16 @@ export default ( block_spec, theme_spec ) => compose( [
     } ),
     withDispatch( ( dispatch ) => {
         
-		const { replaceInnerBlocks } = dispatch( blockEditorStore );
+		const {
+            replaceInnerBlocks,
+            removeBlock,
+            duplicateBlocks
+        } = dispatch( blockEditorStore );
 
 		return {
-			replaceInnerBlocks
+			replaceInnerBlocks,
+            removeBlock,
+            duplicateBlocks
 		};
 	} )
 ] )( WpeGrid );

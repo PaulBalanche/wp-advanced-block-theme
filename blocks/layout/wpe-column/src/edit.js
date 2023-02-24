@@ -168,6 +168,10 @@ class WpeColumn extends WpeComponentBase {
         const { children, ...innerBlocksProps } = this.props.innerBlocksProps;
         innerBlocksProps.key = 'innerBlocksProps_' + this.props.clientId;
 
+        if( this.props.countColumns == 0 ) {
+            innerBlocksProps.className += ' is-empty'
+        }
+
         innerBlocksProps.style = {
             gridColumnStart: this.getLayout( 'columnStart', this.state.currentBodyDevice ),
             gridColumnEnd: this.getLayout( 'columnStart', this.state.currentBodyDevice ) + this.getLayout( 'width', this.state.currentBodyDevice ),
@@ -183,13 +187,14 @@ class WpeColumn extends WpeComponentBase {
 }
 
 export default ( block_spec, theme_spec ) => compose( [
-    withSelect( () => {
+    withSelect( ( select, props ) => {
 
         return {
             block_spec,
             theme_spec,
             innerBlocksProps: useInnerBlocksProps( useBlockProps( { className: '' } ), { renderAppender: InnerBlocks.ButtonBlockAppender } ),
-            disableButtonGroupMode: true
+            disableButtonGroupMode: true,
+            countColumns: select( 'core/block-editor' ).getBlockCount(props.clientId)
         };
     } ),
 ] )( WpeColumn );

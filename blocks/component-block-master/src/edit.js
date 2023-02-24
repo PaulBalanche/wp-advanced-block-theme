@@ -1,22 +1,18 @@
 import { WpeComponentBase } from '../../../src/js/Models/WpeComponentBase';
-import ServerSideRender from '@wordpress/server-side-render';
-import { withSelect } from '@wordpress/data';
+import { withSelect, withDispatch, dispatch } from '@wordpress/data';
 import { compose } from '@wordpress/compose';
 import {
     InnerBlocks,
     useBlockProps,
-    useInnerBlocksProps
+    useInnerBlocksProps,
+    store as blockEditorStore
 } from '@wordpress/block-editor';
+
+// import { store as reusableBlocksStore } from '@wordpress/reusable-blocks';
+
 import apiFetch from '@wordpress/api-fetch';
 
-import {
-    Button,
-    Dashicon
-} from '@wordpress/components';
-
 import { Devices } from '../../../src/js/Singleton/Devices';
-
-// import DOMPurify from 'dompurify';
 
 class WpeComponent extends WpeComponentBase {
 
@@ -28,6 +24,7 @@ class WpeComponent extends WpeComponentBase {
             this.setAttributes( { id_component: this.props.block_spec.id } );
 
         this.description = this.props.block_spec.description;
+        this.previewUrl = js_const.rest_api_url + js_const.rest_api_namespace + js_const.componentblock_attr_autosaves_rest_api_resource_path + '/' + js_const.post_id + '/' + this.props.attributes.id_component + '/' + this.props.clientId;
 
         this.iframeResize = this._iframeResize.bind(this);
     }
@@ -115,7 +112,7 @@ class WpeComponent extends WpeComponentBase {
             key={ this.props.clientId + "-LiveRenderingIframe" }
             id={ this.props.clientId + "-LiveRenderingIframe" }
             style={ { width: '100%' } }
-            src={ js_const.rest_api_url + js_const.rest_api_namespace + js_const.componentblock_attr_autosaves_rest_api_resource_path + '/' + js_const.post_id + '/' + this.props.attributes.id_component + '/' + this.props.clientId }
+            src={ this.previewUrl }
             onLoad={this.iframeResize}
         ></iframe>
     }
@@ -191,7 +188,27 @@ export default ( block_spec, current_user_can_edit_posts, theme_spec ) => compos
             current_user_can_edit_posts: current_user_can_edit_posts,
             theme_spec,
             innerBlocksProps: ( block_spec?.container && block_spec.container ) ? useInnerBlocksProps( useBlockProps( { className: '' } ), { renderAppender: InnerBlocks.ButtonBlockAppender } ) : null,
-            parentsBlock
+            parentsBlock,
+            blockInstance: select('core/block-editor').getBlock( props.clientId )
         };
     } ),
+    withDispatch( ( dispatch ) => {
+        
+		const {
+            removeBlock,
+            duplicateBlocks,
+            // moveBlocksUp,
+            // moveBlocksDown
+        } = dispatch( blockEditorStore );
+
+        // const { __experimentalConvertBlocksToReusable } = dispatch( reusableBlocksStore );
+
+		return {
+			removeBlock,
+            duplicateBlocks,
+            // __experimentalConvertBlocksToReusable
+            // moveBlocksUp,
+            // moveBlocksDown
+		};
+	} )
 ] )( WpeComponent )

@@ -5,8 +5,13 @@ import {
     ButtonGroup,
     Placeholder,
     Dashicon,
-    TextControl
+    TextControl,
+    DropdownMenu
 } from '@wordpress/components';
+
+import {
+    pages, cog, trash
+} from '@wordpress/icons';
 
 import { Attributes } from '../Static/Attributes';
 import { Render } from '../Static/Render';
@@ -23,10 +28,13 @@ export class WpeComponentBase extends Component {
 	constructor() {
         super( ...arguments );
 
-        this.state = {};
+        this.state = {
+            alertReusableBlockMessage: false,
+            alertUpdateAttributesMessage: null
+        };
 
         this.title = getBlockType(this.props.name).title;
-        this.isAReusableBlock = this.defineIfIsReusableBlock();
+        this.reusableBlock = this.isReusableBlock();
     }
 
     componentDidMount() {
@@ -46,32 +54,140 @@ export class WpeComponentBase extends Component {
         return ( typeof this.props.block_spec.props == 'object' && Object.keys(this.props.block_spec.props).length > 0 );
     }
 
-    defineIfIsReusableBlock() {
+    isReusableBlock() {
 
         if( typeof this.props.parentsBlock == 'object' ) {
 
             for( var i in this.props.parentsBlock ) {
                 if( isReusableBlock(this.props.parentsBlock[i]) ) {
-                    return true;
+                    return this.props.parentsBlock[i];
                 }
             }
         }
 
-        return false;
+        return null;
     }
 
-    isReusableBlock() {
-        return !! this.isAReusableBlock;
+    getReusableBlock() {
+        return this.reusableBlock;
+    }
+
+    descriptionMessage() {
+
+        return ( typeof this.description != 'undefined' ) ?
+            <div className='description'>
+                <Dashicon icon="info-outline" />
+                { this.description }
+            </div>
+            : null;
+    }
+
+    reusableBlockMessage() {
+
+        return ( this.getReusableBlock() != null ) ?
+            <div key={ this.props.clientId + "-reusableBlockMessage" } className='reusableBlockMessage'>
+                <Dashicon icon="warning" />
+                <div>
+                    <h3>Reusable block</h3>
+                    <p>Updating this block will apply the changes everywhere it is used.</p>
+                    <Button
+                        variant="secondary"
+                        href={ js_const.admin_url + "post.php?post=" + this.getReusableBlock().attributes.ref + "&action=edit" }
+                        target='_blank'
+                    ><Dashicon icon="edit" />Edit reusable block</Button>
+                </div>
+            </div>
+        : null;
+    }
+
+    alertReusableBlockMessage() {
+        
+        return this.getReusableBlock() != null && ! this.state.alertReusableBlockMessage &&
+            <div key={ this.props.clientId + "-alertReusableBlockMessage" } className='alertMessage reusableBlockMessage'>
+                <div className='inner'>
+                    <Dashicon icon="warning" />
+                    <div>
+                        <h3>Be careful !</h3>
+                        <p>
+                            This block is part of a reusable block composition.<br />
+                            Updating this block will apply the changes everywhere it is used.
+                        </p>
+                        <Button
+                                key={ this.props.clientId + "alert_reusable_block" }
+                                variant="primary"
+                                onMouseDown={ () => {
+                                    this.setState( { alertReusableBlockMessage: true } )
+                                } }
+                            ><Dashicon icon="yes" />All right!</Button>
+                    </div>
+                </div>
+            </div>
+    }
+
+    alertUpdateAttributesMessage() {
+        
+        return this.state.alertUpdateAttributesMessage != null && ! this.state.alertUpdateAttributesMessage &&
+            <div key={ this.props.clientId + "-alertUpdateAttributesMessage" } className='alertMessage updateAttributesMessage'>
+                <div className='inner'>
+                    <Dashicon icon="info-outline" />
+                    <div>
+                        <h3>Updating preview...</h3>
+                        <p>
+                            This preview update does not save the post.<br />
+                            <b>Don't forget to save your changes!</b>
+                        </p>
+                        <Button
+                                key={ this.props.clientId + "alert_reusable_block" }
+                                variant="secondary"
+                                onMouseDown={ () => {
+                                    this.setState( { alertUpdateAttributesMessage: true } )
+                                } }
+                            ><Dashicon icon="yes" />All right!</Button>
+                    </div>
+                </div>
+            </div>
+    }
+
+    editZoneTools() {
+        
+        const controls = [];
+        
+        if( typeof this.props.duplicateBlocks != 'undefined' ) {
+            controls.push( {
+                title: 'Duplicate',
+                icon: pages,
+                onClick: () => {
+                    EditZone.getInstance().hide();
+                    this.props.duplicateBlocks( [ this.props.clientId ] )
+                    
+                }
+            } );
+        }
+
+        if( typeof this.props.removeBlock != 'undefined' ) {
+            controls.push( {
+                title: 'Remove',
+                icon: trash,
+                onClick: () => {
+                    EditZone.getInstance().hide();
+                    this.props.removeBlock(this.props.clientId)
+                }
+            } );
+        }
+        
+        return ( controls.length > 0 ) ? 
+            <DropdownMenu
+                key={ this.props.clientId + "-editZoneDropdownMenu" }
+                icon={ cog }
+                label="Advanced"
+                controls={ controls }
+            />
+        : null;
     }
 
     renderEditMode() {
 
-        const description = ( typeof this.description != 'undefined' ) ? <div className='description'><Dashicon icon="info-outline" />{ this.description }</div> : null;
-        const alertReusableBlock = ( this.isReusableBlock() ) ? <div className='alert'><Dashicon icon="warning" /><p><b>Be careful !</b><br />This block is part of a reusable block composition.<br />Updating this block will apply the changes everywhere it is used.</p></div> : null;
-
-        let tabPanel = [];
-
-        let catReOrder = {
+        const catReOrder = {
             default: { name: "Attributes", props: {} },
             block_settings: { name: "Settings", props: {
                 anchor: { "type": "string", "label": "Anchor" }
@@ -102,13 +218,14 @@ export class WpeComponentBase extends Component {
 
         // 3. Remove empty category
         for(const [keyProp, valueProp] of Object.entries(catReOrder) ) {
-    
+
             if( Object.keys(catReOrder[keyProp].props).length == 0 ) {
                 delete catReOrder[keyProp];
             }
         }
 
         // 4. Render
+        const tabPanel = [];
         for( const [keyCat, valCat] of Object.entries(catReOrder) ) {
             
             if( valCat.props.length == 0 )
@@ -147,11 +264,14 @@ export class WpeComponentBase extends Component {
         return (
             <div key={ this.props.clientId + "-editZone" } className='edit-zone__inner'>
                 <div className='edit-zone__header'>
-                    { this.title }
+                    <h2 className='title'>{ this.title }</h2>
+                    <div className='tools'>
+                        { this.editZoneTools() }
+                    </div>
                 </div>
                 <div className='edit-zone__body'>
-                    { description }
-                    { alertReusableBlock }
+                    { this.reusableBlockMessage() }
+                    { this.descriptionMessage() }
                     <Placeholder
                         key={ this.props.clientId + "-ConfigurationPlaceholder" }
                         isColumnLayout={ true }
@@ -167,9 +287,21 @@ export class WpeComponentBase extends Component {
                         className="abtButtonUpdatePreview"
                         variant="primary"
                         onMouseDown={ () => {
-                            this.setState( { needPreviewUpdate: true } )
+                            this.setState( { needPreviewUpdate: true } );
+                            if( this.state.alertUpdateAttributesMessage == null ) {
+                                this.setState( { alertUpdateAttributesMessage: false } );
+                            }
                         } }
-                    ><Dashicon icon="saved" />Update preview</Button> }
+                    ><Dashicon icon="update" />Update preview</Button> }
+                    {
+                        typeof this.previewUrl != 'undefined' && 
+                    <Button
+                        key={ this.props.clientId + "-buttonPreviewUrl" }
+                        className="abtButtonPreviewUrl"
+                        variant="primary"
+                        href={ this.previewUrl }
+                        target="_blank"
+                    ><Dashicon icon="external" />Open preview</Button> }
                     <Button
                         key={ this.props.clientId + "-buttonCloseEditZone" }
                         className="abtButtonCloseEditZone"
@@ -179,6 +311,8 @@ export class WpeComponentBase extends Component {
                         } }
                     ><Dashicon icon="no-alt" />Close</Button>
                 </div>
+                { this.alertReusableBlockMessage() }
+                { this.alertUpdateAttributesMessage() }
             </div>
         )
     }
@@ -206,6 +340,25 @@ export class WpeComponentBase extends Component {
 
             // Edit button
             editZone.push( this.renderButtonEditZone() );
+
+            // editZone.push(
+            //     <Button
+            //         key={ this.props.clientId + "-buttonMoveBlocksUp" }
+            //         variant="primary"
+            //         onMouseDown={ () => {
+            //             this.props.moveBlocksUp( [ this.props.clientId ] )
+            //         } }
+            //     >Up</Button>
+            // );
+            // editZone.push(
+            //     <Button
+            //         key={ this.props.clientId + "-buttonMoveBlocksDown" }
+            //         variant="primary"
+            //         onMouseDown={ () => {
+            //             this.props.moveBlocksDown( [ this.props.clientId ] )
+            //         } }
+            //     >Down</Button>
+            // );
 
             // Additionnal content
             if( content != null ) {

@@ -79,7 +79,7 @@ class CoreBlock extends ModelBase {
 
 
     /**
-     * Generate block spec used by Wordspress Gutenberg
+     * Generate block spec used by Wordpress Block Editor
      * 
      */
     public function generate_block_spec( $component_frontspec ) {

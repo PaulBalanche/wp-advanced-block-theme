@@ -58,7 +58,7 @@ class BlockEditor extends ControllerBase {
         wp_localize_script( $handle, 'theme_spec', apply_filters( 'Abt\localize_editor_script', $this->get_config()->get_spec(), $this->get_config()->get('componentBlockPrefixName'), 'theme_spec' ) );
         wp_localize_script( $handle, 'blocks_spec', apply_filters( 'Abt\localize_editor_script', apply_filters( 'Abt\editor_script_localize_blocks_spec', [] ), $this->get_config()->get('componentBlockPrefixName'), 'block_spec' ) );
         wp_localize_script( $handle, 'js_const', [
-            'admin_post' => admin_url( 'admin-post.php' ),
+            'admin_url' => admin_url(),
             'post_id' => get_the_ID(),
             'rest_api_url' => rest_url(),
             'rest_api_namespace' => $this->get_config()->get('rest_api_namespace'),

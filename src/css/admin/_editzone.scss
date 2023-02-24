@@ -114,7 +114,11 @@
             
                 &.hide {
                     right: -800px;
-                    box-shadow:none;
+                    box-shadow: none;
+                }
+
+                .components-button {
+                    transition: all 0.1s ease-in;
                 }
             
                 .edit-zone__header {
@@ -123,15 +127,30 @@
                     align-items: center;
                     padding: 0 20px;
                     background: var(--wp-admin-theme-color);
-                    border-bottom: var(--wp-admin-theme-color-darker-10);
                     color: white;
-                    font-size: 16px;
-                    font-weight: 400;
                     position: absolute;
                     left: 0;
                     top: 0;
                     width: 100%;
                     height: 60px;
+                    box-sizing: border-box;
+
+                    h2 {
+                        margin: 0;
+                        color: white;
+                    }
+
+                    .tools {
+                        margin-left: auto;
+                        
+                        .components-button {
+                            color: white;
+                            
+                            &:hover {
+                                color: var(--wp-admin-theme-color-darker-20);
+                            }
+                        }
+                    }
                 }
             
                 .edit-zone__body {
@@ -146,30 +165,55 @@
                     top: 61px;
                     background: white;
 
-                    .description, .alert {
+                    .description {
                         margin-bottom: 20px;
                         text-align: justify;
                         display: flex;
                         align-items: center;
-                        padding-right: 40px;
+                        background: $background300;
+                        padding: 20px;
+                        border-radius: 2px;
 
-                        .dashicon {
-                            color: var(--wp-admin-theme-color);
-                            width: auto;
-                            height: auto;
+                        & > .dashicon {
                             margin-right: 10px;
                         }
                     }
 
-                    .alert {
+                    .reusableBlockMessage {
+                        margin-bottom: 20px;
+                        text-align: justify;
+                        display: flex;
                         color: #fff;
-                        background: #cc1818;
-                        padding: 10px;
+                        background: var(--wp--preset--color--vivid-red);
+                        padding: 20px;
+                        border-radius: 2px;
                         
-                        .dashicon {
+                        & > .dashicon {
                             color: white;
-                            font-size: 3.5em;
+                            font-size: 2.2em;
                             margin-right: 20px;
+                        }
+
+                        h3 {
+                            color: white;
+                            margin: 6px 0 0 0;
+                        }
+
+                        .components-button {
+                            color: white;
+                            box-shadow: inset 0 0 0 1px white;
+
+                            &:hover {
+                                color: var(--wp--preset--color--vivid-red);
+                                background: white;
+                            }
+                            
+                            .dashicon {
+                                margin-right: 8px;
+                                font-size: 1.4em;
+                                height: auto;
+                                width: auto;
+                            }
                         }
                     }
             
@@ -604,7 +648,6 @@
                     justify-content: space-between;
                     padding: 20px 20px 0 20px;
                     background: var(--wp-admin-theme-color);
-                    border-top: var(--wp-admin-theme-color-darker-10);
                     color: white;
                     font-size: 16px;
                     font-weight: 500;
@@ -629,8 +672,76 @@
                         }
                     }
             
+                    .abtButtonPreviewUrl {
+                        margin-left: 10px;
+                    }
+
                     .abtButtonCloseEditZone {
                         margin-left: auto;
+                    }
+                }
+
+                .alertMessage {
+                    position: absolute;
+                    top: 0;
+                    bottom: 0;
+                    left: 0;
+                    right: 0;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+
+                    .inner {
+                        display: flex;
+
+                        & > .dashicon {
+                            font-size: 4em;
+                            width: auto;
+                            height: auto;
+                            margin-right: 30px;
+                        }
+
+                        p {
+                            font-size: 1.1em;
+                        }
+    
+                        .components-button {
+                            margin-top: 10px;
+                        }
+                    }
+
+                    &.reusableBlockMessage {
+                        
+                        background: var(--wp--preset--color--vivid-red);
+                        color: white;
+
+                        .inner {
+        
+                            h3 {
+                                color: white;
+                            }
+
+                            .components-button {
+                                background: white;
+                                color: var(--wp--preset--color--vivid-red);
+        
+                                &:hover {
+                                    background: var(--wp--preset--color--vivid-red);
+                                    color: white;
+                                    box-shadow: inset 0 0 0 1px white;
+                                }
+                            }
+                        }
+                    }
+
+                    &.updateAttributesMessage {
+
+                        background: $background300;
+
+                        .components-button:hover  {
+                            background: var(--wp-admin-theme-color);
+                            color: white;
+                        }
                     }
                 }
             }
