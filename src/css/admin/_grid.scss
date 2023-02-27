@@ -7,6 +7,7 @@
             .block-editor-block-list__block[data-type="custom/wpe-grid"] {
 
                 padding-top: 60px;
+                padding-bottom: 20px;
         
                 .gridContainer {
         
@@ -30,6 +31,28 @@
                             margin-top: 0;
                         }
                     }
+                }
+
+                .containerAddColumn {
+                    display: flex;
+                    position: relative;
+                    visibility: hidden;
+                    border: 1px dashed white;
+                    margin: 0 4px;
+                    padding: 20px 0;
+                    color: white;
+                    cursor: pointer;
+                    align-items: center;
+                    justify-content: center;
+
+                    .dashicon {
+                        margin-right: 10px;
+                    }
+                }
+                &:hover > .containerAddColumn,
+                &.is-selected > .containerAddColumn,
+                &.has-child-selected > .containerAddColumn {
+                    visibility: visible;
                 }
             }
         

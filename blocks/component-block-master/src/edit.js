@@ -197,8 +197,8 @@ export default ( block_spec, current_user_can_edit_posts, theme_spec ) => compos
 		const {
             removeBlock,
             duplicateBlocks,
-            // moveBlocksUp,
-            // moveBlocksDown
+            moveBlocksUp,
+            moveBlocksDown
         } = dispatch( blockEditorStore );
 
         // const { __experimentalConvertBlocksToReusable } = dispatch( reusableBlocksStore );
@@ -207,8 +207,8 @@ export default ( block_spec, current_user_can_edit_posts, theme_spec ) => compos
 			removeBlock,
             duplicateBlocks,
             // __experimentalConvertBlocksToReusable
-            // moveBlocksUp,
-            // moveBlocksDown
+            moveBlocksUp,
+            moveBlocksDown
 		};
 	} )
 ] )( WpeComponent )

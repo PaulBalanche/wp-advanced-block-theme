@@ -12,13 +12,16 @@ import {
 } from '@wordpress/block-editor';
 
 import {
-    RangeControl
+    RangeControl,
+    Button,
+    Dashicon
 } from '@wordpress/components';
 
 import { withSelect, withDispatch, dispatch } from '@wordpress/data';
 
 import { Devices } from '../../../../src/js/Singleton/Devices';
 import { Render } from '../../../../src/js/Static/Render';
+import { EditZone } from '../../../../src/js/Singleton/EditZone';
 
 /**
  * registerBlockType edit function
@@ -116,52 +119,6 @@ class WpeColumn extends WpeComponentBase {
                 )
             )
         );
-
-
-
-        return Render.panelComponent( this.props.clientId, 'Layout',
-        <>
-            <div className='flex'>
-                { Render.fieldContainer( this.props.clientId + "_columnStart",
-                    <RangeControl
-                        label="Column start"
-                        value={ this.getLayout( 'columnStart', this.state.currentBodyDevice ) }
-                        onChange={ ( value ) => this.setLayout( 'columnStart', Number.parseInt(value), this.state.currentBodyDevice ) }
-                        min={ 1 }
-                        max={ this.getLayout( 'columnStart', this.state.currentBodyDevice ) + 1 }
-                    />
-                ) }
-                { Render.fieldContainer( this.props.clientId + "_width",
-                    <RangeControl
-                        label="Width"
-                        value={ this.getLayout( 'width', this.state.currentBodyDevice ) }
-                        onChange={ ( value ) => this.setLayout( 'width', Number.parseInt(value), this.state.currentBodyDevice ) }
-                        min={ 1 }
-                        max={ this.getLayout( 'width', this.state.currentBodyDevice ) + 1 }
-                    />
-                ) }
-            </div>
-            <div className='flex'>
-                { Render.fieldContainer( this.props.clientId + "_rowStart",
-                    <RangeControl
-                        label="Row start"
-                        value={ this.getLayout( 'rowStart', this.state.currentBodyDevice ) }
-                        onChange={ ( value ) => this.setLayout( 'rowStart', Number.parseInt(value), this.state.currentBodyDevice ) }
-                        min={ 1 }
-                        max={ this.getLayout( 'rowStart', this.state.currentBodyDevice ) + 1 }
-                    />
-                ) }
-                { Render.fieldContainer( this.props.clientId + "_height",
-                    <RangeControl
-                        label="Height"
-                        value={ this.getLayout( 'height', this.state.currentBodyDevice ) }
-                        onChange={ ( value ) => this.setLayout( 'height', Number.parseInt(value), this.state.currentBodyDevice ) }
-                        min={ 1 }
-                        max={ this.getLayout( 'height', this.state.currentBodyDevice ) + 1 }
-                    />
-                ) }
-            </div>
-        </>, true );
     }
 
     liveRendering() {

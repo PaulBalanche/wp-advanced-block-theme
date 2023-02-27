@@ -6,11 +6,14 @@ import {
     Placeholder,
     Dashicon,
     TextControl,
-    DropdownMenu
+    DropdownMenu,
+    Modal,
+    MenuGroup,
+    MenuItem
 } from '@wordpress/components';
 
 import {
-    pages, cog, trash
+    pages, cog, trash, chevronUp, chevronDown
 } from '@wordpress/icons';
 
 import { Attributes } from '../Static/Attributes';
@@ -22,6 +25,7 @@ import { isReusableBlock } from '@wordpress/blocks'
 
 import { EditZone } from '../Singleton/EditZone';
 import { Devices } from '../Singleton/Devices';
+import { WpeModal } from './Modal';
 
 export class WpeComponentBase extends Component {
 
@@ -30,7 +34,8 @@ export class WpeComponentBase extends Component {
 
         this.state = {
             alertReusableBlockMessage: false,
-            alertUpdateAttributesMessage: null
+            alertUpdateAttributesMessage: null,
+            removeSubmitted: false
         };
 
         this.title = getBlockType(this.props.name).title;
@@ -126,62 +131,148 @@ export class WpeComponentBase extends Component {
 
     alertUpdateAttributesMessage() {
         
+        // return this.state.alertUpdateAttributesMessage != null && ! this.state.alertUpdateAttributesMessage &&
+        //     <div key={ this.props.clientId + "-alertUpdateAttributesMessage" } className='alertMessage updateAttributesMessage'>
+        //         <div className='inner'>
+        //             <Dashicon icon="info-outline" />
+        //             <div>
+        //                 <h3>Updating preview...</h3>
+        //                 <p>
+        //                     This preview update does not save the post.<br />
+        //                     <b>Don't forget to save your changes!</b>
+        //                 </p>
+        //                 <Button
+        //                         key={ this.props.clientId + "alert_reusable_block" }
+        //                         variant="secondary"
+        //                         onMouseDown={ () => {
+        //                             this.setState( { alertUpdateAttributesMessage: true } )
+        //                         } }
+        //                     ><Dashicon icon="yes" />All right!</Button>
+        //             </div>
+        //         </div>
+        //     </div>
+
         return this.state.alertUpdateAttributesMessage != null && ! this.state.alertUpdateAttributesMessage &&
-            <div key={ this.props.clientId + "-alertUpdateAttributesMessage" } className='alertMessage updateAttributesMessage'>
-                <div className='inner'>
-                    <Dashicon icon="info-outline" />
-                    <div>
-                        <h3>Updating preview...</h3>
-                        <p>
-                            This preview update does not save the post.<br />
-                            <b>Don't forget to save your changes!</b>
-                        </p>
-                        <Button
-                                key={ this.props.clientId + "alert_reusable_block" }
-                                variant="secondary"
-                                onMouseDown={ () => {
-                                    this.setState( { alertUpdateAttributesMessage: true } )
-                                } }
-                            ><Dashicon icon="yes" />All right!</Button>
-                    </div>
-                </div>
-            </div>
+            <WpeModal
+                id={ this.props.clientId + "-modalAlertUpdateAttributesMessage" }
+                title={ "Updating preview..." }
+                onClose={ () => console.log('close') }
+            >
+                <Dashicon icon="info-outline" />
+                <p>
+                        This preview update does not save the post.<br />
+                        <b>Don't forget to save your changes!</b>
+                    </p>
+                    <Button
+                            key={ this.props.clientId + "alert_reusable_block" }
+                            variant="secondary"
+                            onMouseDown={ () => {
+                                this.setState( { alertUpdateAttributesMessage: true } )
+                            } }
+                        ><Dashicon icon="yes" />All right!</Button>
+            </WpeModal>
     }
 
-    editZoneTools() {
+    renderSpecificTools() {
+         return null;
+    }
+
+    renderTools() {
         
-        const controls = [];
-        
+        const menuGroup = [];
+
+        if( typeof this.props.moveBlocksUp != 'undefined' || typeof this.props.moveBlocksDown != 'undefined' ) {
+
+            const groupMoveBlock = [];
+
+            if( typeof this.props.moveBlocksUp != 'undefined' ) {
+
+                groupMoveBlock.push(
+                    <MenuItem
+                        key={ this.props.clientId + "-toolsDropdownMenu-move-up" }
+                        icon={ chevronUp }
+                        onClick={ () => this.props.moveBlocksUp( [ this.props.clientId ] ) }
+                    >
+                        Move up
+                    </MenuItem>
+                );
+            }
+
+            if( typeof this.props.moveBlocksDown != 'undefined' ) {
+
+                groupMoveBlock.push(
+                    <MenuItem
+                        key={ this.props.clientId + "-toolsDropdownMenu-move-down" }
+                        icon={ chevronDown }
+                        onClick={ () => this.props.moveBlocksDown( [ this.props.clientId ] ) }
+                    >
+                        Move down
+                    </MenuItem>
+                );
+            }
+
+            menuGroup.push(
+                <MenuGroup
+                    key={ this.props.clientId + "-toolsDropdownMenu-move" }
+                >
+                    { groupMoveBlock }
+                </MenuGroup>
+            );
+        }
+
         if( typeof this.props.duplicateBlocks != 'undefined' ) {
-            controls.push( {
-                title: 'Duplicate',
-                icon: pages,
-                onClick: () => {
-                    EditZone.getInstance().hide();
-                    this.props.duplicateBlocks( [ this.props.clientId ] )
-                    
-                }
-            } );
+
+            const groupSpecificTools = [];
+
+            groupSpecificTools.push( this.renderSpecificTools() );
+
+            groupSpecificTools.push(
+                <MenuItem
+                    key={ this.props.clientId + "-toolsDropdownMenu-SpecificTools-duplicate" }
+                    icon={ pages }
+                    onClick={ () => {
+                        EditZone.getInstance().hide();
+                        this.props.duplicateBlocks( [ this.props.clientId ] )
+                    } }
+                >
+                    Duplicate
+                </MenuItem>
+            );
+
+            menuGroup.push(
+                <MenuGroup
+                    key={ this.props.clientId + "-toolsDropdownMenu-SpecificTools" }
+                >
+                    { groupSpecificTools }
+                </MenuGroup>
+            );
         }
 
         if( typeof this.props.removeBlock != 'undefined' ) {
-            controls.push( {
-                title: 'Remove',
-                icon: trash,
-                onClick: () => {
-                    EditZone.getInstance().hide();
-                    this.props.removeBlock(this.props.clientId)
-                }
-            } );
+
+            menuGroup.push(
+                <MenuGroup
+                    key={ this.props.clientId + "-toolsDropdownMenu-remove" }
+                >
+                    <MenuItem
+                        key={ this.props.clientId + "-toolsDropdownMenu-remove-trash" }
+                        icon={ trash }
+                        onClick={ () => this.setState( { removeSubmitted: true } ) }
+                    >
+                        Remove { this.title }
+                    </MenuItem>
+                </MenuGroup>
+            );
         }
-        
-        return ( controls.length > 0 ) ? 
+
+        return ( menuGroup.length > 0 ) ? 
             <DropdownMenu
-                key={ this.props.clientId + "-editZoneDropdownMenu" }
+                key={ this.props.clientId + "-toolsDropdownMenu" }
                 icon={ cog }
                 label="Advanced"
-                controls={ controls }
-            />
+            >
+                { () => { return menuGroup } }
+            </DropdownMenu>
         : null;
     }
 
@@ -266,7 +357,7 @@ export class WpeComponentBase extends Component {
                 <div className='edit-zone__header'>
                     <h2 className='title'>{ this.title }</h2>
                     <div className='tools'>
-                        { this.editZoneTools() }
+                        { this.renderTools() }
                     </div>
                 </div>
                 <div className='edit-zone__body'>
@@ -341,25 +432,6 @@ export class WpeComponentBase extends Component {
             // Edit button
             editZone.push( this.renderButtonEditZone() );
 
-            // editZone.push(
-            //     <Button
-            //         key={ this.props.clientId + "-buttonMoveBlocksUp" }
-            //         variant="primary"
-            //         onMouseDown={ () => {
-            //             this.props.moveBlocksUp( [ this.props.clientId ] )
-            //         } }
-            //     >Up</Button>
-            // );
-            // editZone.push(
-            //     <Button
-            //         key={ this.props.clientId + "-buttonMoveBlocksDown" }
-            //         variant="primary"
-            //         onMouseDown={ () => {
-            //             this.props.moveBlocksDown( [ this.props.clientId ] )
-            //         } }
-            //     >Down</Button>
-            // );
-
             // Additionnal content
             if( content != null ) {
 
@@ -369,6 +441,8 @@ export class WpeComponentBase extends Component {
                 // Additionnal content
                 editZone.push(content);
             }
+
+            editZone.push( this.renderTools() );
         }
 
         return <div
@@ -390,6 +464,28 @@ export class WpeComponentBase extends Component {
         ><Dashicon icon="edit" /> Edit</Button>
     }
 
+    renderRemoveModal() {
+
+        return ( this.state.removeSubmitted && typeof this.props.removeBlock != 'undefined' ) ?
+            <WpeModal
+                id={ this.props.clientId + "-modalRemoveBlock" }
+                title={ "Confirm \"" + this.title + "\" suppression" }
+                onClose={ () => this.setState( { removeSubmitted: false } ) }
+            >
+                <p>Are you sure you want to remove this block ?</p>
+                <Button
+                    variant="primary"
+                    isDestructive={true}
+                    onMouseDown={ () => {
+                        this.setState( { removeSubmitted: false } );
+                        EditZone.getInstance().hide();
+                        this.props.removeBlock(this.props.clientId);
+                    } }
+                >Yes !</Button>
+            </WpeModal>
+        : null;
+    }
+
     render() {
 
         var render = [];
@@ -402,9 +498,9 @@ export class WpeComponentBase extends Component {
             render.push( EditZone.getInstance().render() );
         }
 
+        render.push( this.renderRemoveModal() );
+
         return render;
     }
-
-
 
 }

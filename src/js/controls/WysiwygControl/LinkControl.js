@@ -130,7 +130,7 @@ export class LinkControl extends Component {
                     <Dashicon icon="admin-links" />
                 </Button>
                 { this.isValid && this.state.isOpen && (
-                    <Modal title={ title } onRequestClose={this.close} className="wpe-modal-link">
+                    <Modal title={ title } onRequestClose={this.close} className="wpe-modal">
                         <div className="components-modal__body">{ this.getContent() }</div>
                         <div className="components-modal__footer">
                             { this.getFooter() }

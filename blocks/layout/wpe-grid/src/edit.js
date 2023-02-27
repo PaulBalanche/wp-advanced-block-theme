@@ -13,16 +13,19 @@ import {
 } from '@wordpress/block-editor';
 
 import {
-    RangeControl,
-    Button
+    MenuItem,
+    Dashicon
 } from '@wordpress/components';
+
+import {
+    plus
+} from '@wordpress/icons';
 
 import { withSelect, withDispatch, dispatch } from '@wordpress/data';
 import { get, map, times } from 'lodash';
 
 
 import { Devices } from '../../../../src/js/Singleton/Devices';
-import { Render } from '../../../../src/js/Static/Render';
 
 /**
  * Add some columns in wpe-container based on variation selected
@@ -84,20 +87,15 @@ class WpeGrid extends WpeComponentBase {
         this.props.replaceInnerBlocks( this.props.clientId, inner_blocks_new, false );
     }
 
-    renderInspectorControls() {
-
-        // InspectorControls
-        if( ! this.getAttribute('gridLocked') ) {
-
-            return <Button
-                key={ this.props.clientId + "-buttonAddColumn" }
-                variant="primary"
-                isPressed={ false }
-                onMouseDown={ () => this.addColumn() }
-            >Add column</Button>
-        }
-
-        return null;
+    renderSpecificTools() {
+        
+        return <MenuItem
+            key={ this.props.clientId + "-toolsDropdownMenu-SpecificTools-addColumn" }
+            icon={ plus }
+            onClick={ () => this.addColumn() }
+        >
+            Add column
+        </MenuItem>
     }
 
     liveRendering() {
@@ -146,7 +144,12 @@ class WpeGrid extends WpeComponentBase {
 
             return <div {...innerBlocksProps}>
                 { this.renderEditZone() }
-                <div className='gridContainer'>{ children }</div>
+                <div className='gridContainer'>
+                    { children }
+                </div>
+                <div className='containerAddColumn' onClick={ () => this.addColumn() }>
+                    <Dashicon icon="plus" />Add column
+                </div>
             </div>
         }
     }
@@ -185,13 +188,17 @@ export default ( block_spec, theme_spec ) => compose( [
 		const {
             replaceInnerBlocks,
             removeBlock,
-            duplicateBlocks
+            duplicateBlocks,
+            moveBlocksUp,
+            moveBlocksDown
         } = dispatch( blockEditorStore );
 
 		return {
 			replaceInnerBlocks,
             removeBlock,
-            duplicateBlocks
+            duplicateBlocks,
+            moveBlocksUp,
+            moveBlocksDown
 		};
 	} )
 ] )( WpeGrid );
