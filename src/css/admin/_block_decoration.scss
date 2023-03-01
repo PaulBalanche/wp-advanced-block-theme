@@ -65,11 +65,19 @@
 
             &.is-reusable {
                 
-                padding-top: 3rem;
-                padding-bottom: 3rem;
+                &::before, &::after {
+                    content: none;
+                }
+
+                padding-top: 2rem;
+                padding-bottom: 2rem;
                 
-                &.is-selected, &.has-child-selected {
-                    background: rgba(var(--wp-admin-theme-color--rgb), 0.3);
+                &:hover, &.is-selected, &.has-child-selected {
+                    background: rgba(70,180,80, 0.1);
+                }
+
+                .block-editor-block-list__block::after {
+                    border-color: rgb(70 180 80 / 50%);
                 }
             }
         }

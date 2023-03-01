@@ -115,8 +115,19 @@
         }
     }
 
-    &.modal-warning {
-        
+    &.modal-warning {      
         border-top: 6px solid #F56E28;
+    }
+
+    &.modal-accent-green {
+        border-top: 6px solid #46B450;
+
+        .is-primary {
+            background-color: #46B450;
+
+            &:hover {
+                background-color: #338c3b;
+            }
+        }
     }
 }

@@ -108,11 +108,17 @@
   border: 1px dashed rgba(0, 124, 186, 0.5);
 }
 #editor .interface-interface-skeleton.is-mode-visual .block-editor-block-list__block.is-reusable {
-  padding-top: 3rem;
-  padding-bottom: 3rem;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
 }
-#editor .interface-interface-skeleton.is-mode-visual .block-editor-block-list__block.is-reusable.is-selected, #editor .interface-interface-skeleton.is-mode-visual .block-editor-block-list__block.is-reusable.has-child-selected {
-  background: rgba(var(--wp-admin-theme-color--rgb), 0.3);
+#editor .interface-interface-skeleton.is-mode-visual .block-editor-block-list__block.is-reusable::before, #editor .interface-interface-skeleton.is-mode-visual .block-editor-block-list__block.is-reusable::after {
+  content: none;
+}
+#editor .interface-interface-skeleton.is-mode-visual .block-editor-block-list__block.is-reusable:hover, #editor .interface-interface-skeleton.is-mode-visual .block-editor-block-list__block.is-reusable.is-selected, #editor .interface-interface-skeleton.is-mode-visual .block-editor-block-list__block.is-reusable.has-child-selected {
+  background: rgba(70, 180, 80, 0.1);
+}
+#editor .interface-interface-skeleton.is-mode-visual .block-editor-block-list__block.is-reusable .block-editor-block-list__block::after {
+  border-color: rgba(70, 180, 80, 0.5);
 }
 
 body.is-dragging-components-draggable #editor .block-editor-block-list__block::after {
@@ -500,6 +506,15 @@ body.is-dragging-components-draggable #editor .block-editor-block-list__block::a
   background: var(--abt-background-editor, "white") center no-repeat url(data:image/svg+xml;base64,PCEtLSBCeSBTYW0gSGVyYmVydCAoQHNoZXJiKSwgZm9yIGV2ZXJ5b25lLiBNb3JlIEAgaHR0cDovL2dvby5nbC83QUp6YkwgLS0+Cjxzdmcgd2lkdGg9IjUwIiBoZWlnaHQ9IjUwIiB2aWV3Qm94PSIwIDAgMzggMzgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgc3Ryb2tlPSIjMDA3Y2JhIj4KICAgIDxnIGZpbGw9Im5vbmUiIGZpbGwtcnVsZT0iZXZlbm9kZCI+CiAgICAgICAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMSAxKSIgc3Ryb2tlLXdpZHRoPSIyIj4KICAgICAgICAgICAgPGNpcmNsZSBzdHJva2Utb3BhY2l0eT0iLjUiIGN4PSIxOCIgY3k9IjE4IiByPSIxOCIvPgogICAgICAgICAgICA8cGF0aCBkPSJNMzYgMThjMC05Ljk0LTguMDYtMTgtMTgtMTgiPgogICAgICAgICAgICAgICAgPGFuaW1hdGVUcmFuc2Zvcm0KICAgICAgICAgICAgICAgICAgICBhdHRyaWJ1dGVOYW1lPSJ0cmFuc2Zvcm0iCiAgICAgICAgICAgICAgICAgICAgdHlwZT0icm90YXRlIgogICAgICAgICAgICAgICAgICAgIGZyb209IjAgMTggMTgiCiAgICAgICAgICAgICAgICAgICAgdG89IjM2MCAxOCAxOCIKICAgICAgICAgICAgICAgICAgICBkdXI9IjFzIgogICAgICAgICAgICAgICAgICAgIHJlcGVhdENvdW50PSJpbmRlZmluaXRlIi8+CiAgICAgICAgICAgIDwvcGF0aD4KICAgICAgICA8L2c+CiAgICA8L2c+Cjwvc3ZnPg==);
   opacity: 0.75;
 }
+#editor .interface-interface-skeleton.is-mode-visual .block-editor-block-list__block.is-reusable .abtButtonGroupEditZone {
+  border-color: #46B450;
+}
+#editor .interface-interface-skeleton.is-mode-visual .block-editor-block-list__block.is-reusable .abtButtonGroupEditZone .is-primary, #editor .interface-interface-skeleton.is-mode-visual .block-editor-block-list__block.is-reusable .abtButtonGroupEditZone .separator {
+  background: #46B450;
+}
+#editor .interface-interface-skeleton.is-mode-visual .block-editor-block-list__block.is-reusable .abtButtonGroupEditZone .components-dropdown .components-dropdown-menu__toggle:hover {
+  background: #46B450;
+}
 #editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone {
   position: fixed;
   right: 0;
@@ -511,7 +526,7 @@ body.is-dragging-components-draggable #editor .block-editor-block-list__block::a
   border-left: 1px solid var(--border300, rgb(235, 235, 235));
   box-sizing: border-box;
   box-shadow: 0 0 50px 0 rgba(0, 0, 0, 0.2);
-  transition: right 0.4s, box-shadow 0.4s;
+  transition: all 0.4s;
 }
 #editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .loader {
   position: absolute;
@@ -529,7 +544,7 @@ body.is-dragging-components-draggable #editor .block-editor-block-list__block::a
   opacity: 1;
 }
 #editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone.hide {
-  right: -800px;
+  right: -700px;
   box-shadow: none;
 }
 #editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .components-button {
@@ -566,7 +581,7 @@ body.is-dragging-components-draggable #editor .block-editor-block-list__block::a
   color: var(--wp-admin-theme-color);
 }
 #editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .is-reusable-block .edit-zone__header {
-  background: #F56E28;
+  background: #46B450;
 }
 #editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body {
   padding: 20px;
@@ -581,14 +596,22 @@ body.is-dragging-components-draggable #editor .block-editor-block-list__block::a
 }
 #editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .description {
   margin-bottom: 20px;
-  text-align: justify;
+  background: var(--background300, rgb(245, 245, 245));
+  border-radius: 2px;
+  padding: 10px 20px;
+}
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .description .row {
   display: flex;
   align-items: center;
-  background: var(--background300, rgb(245, 245, 245));
-  padding: 20px;
-  border-radius: 2px;
+  padding: 5px 0;
+  text-align: justify;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .description > .dashicon {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .description .row.is-reusable {
+  color: #46B450;
+  font-weight: 500;
+  font-size: 1em;
+}
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .description .dashicon {
   margin-right: 10px;
 }
 #editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder {
@@ -674,6 +697,12 @@ body.is-dragging-components-draggable #editor .block-editor-block-list__block::a
 }
 #editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .components-panel {
   border: 1px solid var(--border300, rgb(235, 235, 235));
+}
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .components-panel:hover:has(> .components-panel__body.is-opened) {
+  border-color: rgba(0, 124, 186, 0.5);
+}
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .components-panel:has(.components-panel:hover):hover {
+  border-color: var(--border300, rgb(235, 235, 235));
 }
 #editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .components-panel:last-child {
   margin-bottom: 0;
@@ -925,49 +954,14 @@ body.is-dragging-components-draggable #editor .block-editor-block-list__block::a
 #editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__footer .abtButtonCloseEditZone {
   margin-left: auto;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .is-reusable-block .reusableBlockMessage {
-  margin-bottom: 20px;
-  text-align: justify;
-  display: flex;
-  align-items: center;
-  color: #fff;
-  background: #F56E28;
-  padding: 12px 20px;
-  border-radius: 2px;
-}
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .is-reusable-block .reusableBlockMessage > .dashicon {
-  color: white;
-  font-size: 1.8em;
-  margin-right: 10px;
-  height: auto;
-  width: auto;
-}
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .is-reusable-block .reusableBlockMessage h3 {
-  color: white;
-  margin: 0;
-}
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .is-reusable-block .reusableBlockMessage .components-button {
-  color: white;
-  margin-left: auto;
-}
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .is-reusable-block .reusableBlockMessage .components-button:hover {
-  color: #F56E28;
-  background: white;
-}
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .is-reusable-block .reusableBlockMessage .components-button .dashicon {
-  margin-right: 8px;
-  font-size: 1.4em;
-  height: auto;
-  width: auto;
-}
 #editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .is-reusable-block .edit-zone__footer {
-  background: #F56E28;
+  background: #46B450;
 }
 #editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .is-reusable-block .edit-zone__footer .components-button.is-primary {
-  color: #F56E28;
+  color: #46B450;
 }
 #editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .is-reusable-block .edit-zone__footer .components-button.is-primary:hover {
-  background: #F56E28;
+  background: #46B450;
   color: white;
   box-shadow: inset 0 0 0 1px white;
 }
@@ -1210,6 +1204,15 @@ body.is-dragging-components-draggable #editor .block-editor-block-list__block::a
 }
 .wpe-modal.modal-warning {
   border-top: 6px solid #F56E28;
+}
+.wpe-modal.modal-accent-green {
+  border-top: 6px solid #46B450;
+}
+.wpe-modal.modal-accent-green .is-primary {
+  background-color: #46B450;
+}
+.wpe-modal.modal-accent-green .is-primary:hover {
+  background-color: #338c3b;
 }
 
 .DraftEditor-Container {

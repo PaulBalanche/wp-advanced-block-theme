@@ -96,6 +96,27 @@
                     background: var(--abt-background-editor, 'white') center no-repeat url('../../img/svg-loaders/oval.svg');
                     opacity: 0.75;
                 }
+
+                &.is-reusable {
+
+                    .abtButtonGroupEditZone {
+                        border-color: #46B450;
+
+                        .is-primary, .separator {
+                            background: #46B450;
+                        }
+
+                        .components-dropdown {
+
+                            .components-dropdown-menu__toggle {
+
+                                &:hover {
+                                    background: #46B450;
+                                }
+                            }
+                        }
+                    }
+                }
             }
 
             #abt-component-edit-zone{
@@ -109,7 +130,7 @@
                 border-left: 1px solid $border300;
                 box-sizing: border-box;
                 box-shadow: 0 0 50px 0 rgb(0 0 0 / 20%);
-                transition: right 0.4s, box-shadow 0.4s;
+                transition: all 0.4s;
             
                 .loader {
                     position: absolute;
@@ -132,7 +153,7 @@
                 }
             
                 &.hide {
-                    right: -800px;
+                    right: -700px;
                     box-shadow: none;
                 }
 
@@ -180,7 +201,7 @@
                 .is-reusable-block {
 
                     .edit-zone__header {
-                        background: #F56E28;
+                        background: #46B450;
                     }
                 }
             
@@ -197,15 +218,26 @@
                     background: white;
 
                     .description {
-                        margin-bottom: 20px;
-                        text-align: justify;
-                        display: flex;
-                        align-items: center;
-                        background: $background300;
-                        padding: 20px;
-                        border-radius: 2px;
 
-                        & > .dashicon {
+                        margin-bottom: 20px;
+                        background: $background300;
+                        border-radius: 2px;
+                        padding: 10px 20px;
+
+                        .row {
+                            display: flex;
+                            align-items: center;
+                            padding: 5px 0;
+                            text-align: justify;
+
+                            &.is-reusable {
+                                color: #46B450;
+                                font-weight: 500;
+                                font-size: 1em;
+                            }
+                        }
+
+                        .dashicon {
                             margin-right: 10px;
                         }
                     }
@@ -331,6 +363,13 @@
                     .components-panel {
 
                         border: 1px solid $border300;
+
+                        &:hover:has(> .components-panel__body.is-opened) {
+                            border-color: rgb(0 124 186 / 50%);
+                        }
+                        &:has(.components-panel:hover):hover {
+                            border-color: $border300;
+                        }
         
                         &:last-child {
                             margin-bottom: 0;
@@ -676,55 +715,14 @@
 
                 .is-reusable-block {
 
-                    .reusableBlockMessage {
-                        margin-bottom: 20px;
-                        text-align: justify;
-                        display: flex;
-                        align-items: center;
-                        color: #fff;
-                        background: #F56E28;
-                        padding: 12px 20px;
-                        border-radius: 2px;
-                        
-                        & > .dashicon {
-                            color: white;
-                            font-size: 1.8em;
-                            margin-right: 10px;
-                            height: auto;
-                            width: auto;
-                        }
-
-                        h3 {
-                            color: white;
-                            margin: 0;
-                        }
-
-                        .components-button {
-                            color: white;
-                            margin-left: auto;
-
-                            &:hover {
-                                color: #F56E28;
-                                background: white;
-                            }
-                            
-                            .dashicon {
-                                margin-right: 8px;
-                                font-size: 1.4em;
-                                height: auto;
-                                width: auto;
-                            }
-                        }
-                    }
-
                     .edit-zone__footer {
-                        background: #F56E28;
+                        background: #46B450;
 
                         .components-button.is-primary {
-                            color: #F56E28;
+                            color: #46B450;
                 
                             &:hover {
-                                background: #F56E28;
+                                background: #46B450;
                                 color: white;
                                 box-shadow: inset 0 0 0 1px white;
                             }

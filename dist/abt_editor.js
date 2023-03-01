@@ -14578,24 +14578,24 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
     return this.reusableBlock;
   }
   descriptionMessage() {
-    return typeof this.description != 'undefined' ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    const messages = [];
+    if (this.getReusableBlock() != null) {
+      messages.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+        className: "row is-reusable"
+      }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
+        icon: "warning"
+      }), "Reusable block"));
+    }
+    if (typeof this.description != 'undefined') {
+      messages.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+        className: "row"
+      }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
+        icon: "info-outline"
+      }), this.description));
+    }
+    return messages.length > 0 ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "description"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
-      icon: "info-outline"
-    }), this.description) : null;
-  }
-  reusableBlockMessage() {
-    return this.getReusableBlock() != null ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      key: this.props.clientId + "-reusableBlockMessage",
-      className: "reusableBlockMessage"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
-      icon: "warning"
-    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h3", null, "Reusable block"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
-      href: js_const.admin_url + "post.php?post=" + this.getReusableBlock().attributes.ref + "&action=edit",
-      target: "_blank"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
-      icon: "edit"
-    }), "Edit reusable block")) : null;
+    }, messages) : null;
   }
   alertReusableBlockMessage() {
     return this.getReusableBlock() != null && this.state.alertReusableBlockMessage != null && !this.state.alertReusableBlockMessage ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Modal__WEBPACK_IMPORTED_MODULE_7__.WpeModal, {
@@ -14606,7 +14606,7 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
         alertUpdateAttributesMessage: true
       }),
       hasFooter: false,
-      type: "warning",
+      type: "accent-green",
       icon: "warning"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
       className: "center"
@@ -14801,7 +14801,7 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
       className: "tools"
     }, this.renderTools())), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "edit-zone__body"
-    }, this.reusableBlockMessage(), this.descriptionMessage(), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Placeholder, {
+    }, this.descriptionMessage(), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Placeholder, {
       key: this.props.clientId + "-ConfigurationPlaceholder",
       isColumnLayout: true,
       className: "wpe-component_edit_placeholder"
@@ -14934,6 +14934,7 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
     }, "Cancel"))) : null;
   }
   render() {
+    _Singleton_EditZone__WEBPACK_IMPORTED_MODULE_5__.EditZone.getInstance();
     var render = [];
     render.push(_Singleton_Devices__WEBPACK_IMPORTED_MODULE_6__.Devices.getInstance().render(this.props.clientId));
     render.push(this.liveRendering());

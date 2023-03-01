@@ -79,26 +79,30 @@ export class WpeComponentBase extends Component {
 
     descriptionMessage() {
 
-        return ( typeof this.description != 'undefined' ) ?
+        const messages = [];
+
+        if( this.getReusableBlock() != null ) {
+            messages.push(
+                <div className='row is-reusable'>
+                    <Dashicon icon="warning" />Reusable block
+                </div>
+            )
+        }
+
+        if( typeof this.description != 'undefined' ) {
+            messages.push(
+                <div className='row'>
+                    <Dashicon icon="info-outline" />
+                    { this.description }
+                </div>
+            )
+        }
+
+        return( messages.length > 0 ) ?
             <div className='description'>
-                <Dashicon icon="info-outline" />
-                { this.description }
+                { messages }
             </div>
             : null;
-    }
-
-    reusableBlockMessage() {
-
-        return ( this.getReusableBlock() != null ) ?
-            <div key={ this.props.clientId + "-reusableBlockMessage" } className='reusableBlockMessage'>
-                <Dashicon icon="warning" />
-                <h3>Reusable block</h3>
-                <Button
-                        href={ js_const.admin_url + "post.php?post=" + this.getReusableBlock().attributes.ref + "&action=edit" }
-                        target='_blank'
-                    ><Dashicon icon="edit" />Edit reusable block</Button>
-            </div>
-        : null;
     }
 
     alertReusableBlockMessage() {
@@ -110,7 +114,7 @@ export class WpeComponentBase extends Component {
                 title={ "Reusable block" }
                 onClose={ () => this.setState( { alertUpdateAttributesMessage: true } ) }
                 hasFooter={false}
-                type="warning"
+                type="accent-green"
                 icon="warning"
             >
                 <p className='center'>
@@ -354,7 +358,6 @@ export class WpeComponentBase extends Component {
                     </div>
                 </div>
                 <div className='edit-zone__body'>
-                    { this.reusableBlockMessage() }
                     { this.descriptionMessage() }
                     <Placeholder
                         key={ this.props.clientId + "-ConfigurationPlaceholder" }
@@ -436,7 +439,7 @@ export class WpeComponentBase extends Component {
 
             editZone.push( this.renderTools() );
         }
-
+        
         return <div
                 key={ this.props.clientId + "-EditZoneButtonGroup" }
                 className="abtButtonGroupEditZoneContainer"
@@ -488,6 +491,8 @@ export class WpeComponentBase extends Component {
     }
 
     render() {
+
+        EditZone.getInstance();
 
         var render = [];
 
