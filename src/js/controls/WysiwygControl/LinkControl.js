@@ -8,6 +8,8 @@ import {
     Dashicon
 } from '@wordpress/components';
 
+import { WpeModal } from '../../Models/Modal';
+
 export class LinkControl extends Component {
 
     constructor() {
@@ -130,12 +132,16 @@ export class LinkControl extends Component {
                     <Dashicon icon="admin-links" />
                 </Button>
                 { this.isValid && this.state.isOpen && (
-                    <Modal title={ title } onRequestClose={this.close} className="wpe-modal">
-                        <div className="components-modal__body">{ this.getContent() }</div>
-                        <div className="components-modal__footer">
-                            { this.getFooter() }
-                        </div>
-                    </Modal>
+                    <WpeModal
+                        key={ this.props.clientId + "-linkWpeModal" }
+                        id={ this.props.clientId + "-linkWpeModal" }
+                        title={title}
+                        onClose={this.close}
+                        icon="admin-links"
+                    >
+                        { this.getContent() }
+                        <div className="bouttonGroup">{ this.getFooter() }</div>
+                    </WpeModal>
                 ) }
             </>
         );

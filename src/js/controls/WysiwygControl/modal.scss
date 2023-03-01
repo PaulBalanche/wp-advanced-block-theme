@@ -1,12 +1,13 @@
 .components-modal__screen-overlay {
     z-index: 1000001;
+    background-color: rgb(0 0 0 / 80%);
 }
 
 .wpe-modal {
 
-    min-width: 600px;
-    min-height: 240px;
+    min-width: 800px;
     padding: 0;
+    border-top: 6px solid var(--wp-admin-theme-color);
 
     .components-modal__content {
 
@@ -19,7 +20,62 @@
     
         .components-modal__body {
     
-            padding: 50px 50px 120px;
+            padding: 50px 50px 80px;
+
+            .title {
+
+                display: flex;
+                align-items: center;
+                margin: 0 0 50px 0;
+                border-bottom: 1px solid $border300;
+                padding: 0 0 20px 0;
+
+                .dashicon {
+                    font-size: 2.5em;
+                    width: auto;
+                    height: auto;
+                    margin-right: 20px;
+                    color: #b4b4b4;
+                }
+
+                h1 {
+                    font-size: 1.7em;
+                    font-weight: 500;
+                    color: #1d2327;
+                    margin: 0;
+                    padding: 0;
+                }
+            }
+
+            .children {
+
+                p {
+                    font-size: 1.1em;
+                    margin: 0;
+                    line-height: 1.6em;
+
+                    &.center {
+                        text-align: center;
+                    }
+                }
+
+                .bouttonGroup {
+                    display: flex;
+                    justify-content: center;
+                    margin-top: 40px;
+                    
+                    button {
+                        padding: 22px 28px;
+                        font-size: 1.1em;
+                        margin: 0 10px;
+
+                        .dashicon {
+                            margin-right: 10px;
+                            margin-left: -10px;
+                        }
+                    }
+                }
+            }
     
             .components-toggle-control {
                 margin-top: 20px;
@@ -28,15 +84,8 @@
     
         .components-modal__footer {
     
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            z-index: 10;
             height: 60px;
-            width: 100%;
             display: flex;
-            flex-direction: row;
-            justify-content: space-between;
             align-items: center;
             border-top: 1px solid $border300;
             background: $background300;
@@ -46,5 +95,28 @@
                 margin-left: auto;
             }
         }
+    }
+
+    &.modal-error {
+        
+        border-top: 6px solid #DC3232;
+
+        .components-modal__content {
+
+            .components-modal__body {
+                
+                .title {
+
+                    h1 {
+                        color: #DC3232;
+                    }
+                }
+            }
+        }
+    }
+
+    &.modal-warning {
+        
+        border-top: 6px solid #F56E28;
     }
 }

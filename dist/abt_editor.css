@@ -565,6 +565,9 @@ body.is-dragging-components-draggable #editor .block-editor-block-list__block::a
   background: white;
   color: var(--wp-admin-theme-color);
 }
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .is-reusable-block .edit-zone__header {
+  background: #F56E28;
+}
 #editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body {
   padding: 20px;
   overflow: auto;
@@ -587,38 +590,6 @@ body.is-dragging-components-draggable #editor .block-editor-block-list__block::a
 }
 #editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .description > .dashicon {
   margin-right: 10px;
-}
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .reusableBlockMessage {
-  margin-bottom: 20px;
-  text-align: justify;
-  display: flex;
-  color: #fff;
-  background: var(--wp--preset--color--vivid-red);
-  padding: 20px;
-  border-radius: 2px;
-}
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .reusableBlockMessage > .dashicon {
-  color: white;
-  font-size: 2.2em;
-  margin-right: 20px;
-}
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .reusableBlockMessage h3 {
-  color: white;
-  margin: 6px 0 0 0;
-}
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .reusableBlockMessage .components-button {
-  color: white;
-  box-shadow: inset 0 0 0 1px white;
-}
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .reusableBlockMessage .components-button:hover {
-  color: var(--wp--preset--color--vivid-red);
-  background: white;
-}
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .reusableBlockMessage .components-button .dashicon {
-  margin-right: 8px;
-  font-size: 1.4em;
-  height: auto;
-  width: auto;
 }
 #editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .wpe-component_edit_placeholder {
   padding: 0;
@@ -954,53 +925,51 @@ body.is-dragging-components-draggable #editor .block-editor-block-list__block::a
 #editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__footer .abtButtonCloseEditZone {
   margin-left: auto;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .alertMessage {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .is-reusable-block .reusableBlockMessage {
+  margin-bottom: 20px;
+  text-align: justify;
   display: flex;
   align-items: center;
-  justify-content: center;
+  color: #fff;
+  background: #F56E28;
+  padding: 12px 20px;
+  border-radius: 2px;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .alertMessage .inner {
-  display: flex;
-}
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .alertMessage .inner > .dashicon {
-  font-size: 4em;
-  width: auto;
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .is-reusable-block .reusableBlockMessage > .dashicon {
+  color: white;
+  font-size: 1.8em;
+  margin-right: 10px;
   height: auto;
-  margin-right: 30px;
+  width: auto;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .alertMessage .inner p {
-  font-size: 1.1em;
-}
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .alertMessage .inner .components-button {
-  margin-top: 10px;
-}
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .alertMessage.reusableBlockMessage {
-  background: var(--wp--preset--color--vivid-red);
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .is-reusable-block .reusableBlockMessage h3 {
   color: white;
+  margin: 0;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .alertMessage.reusableBlockMessage .inner h3 {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .is-reusable-block .reusableBlockMessage .components-button {
   color: white;
+  margin-left: auto;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .alertMessage.reusableBlockMessage .inner .components-button {
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .is-reusable-block .reusableBlockMessage .components-button:hover {
+  color: #F56E28;
   background: white;
-  color: var(--wp--preset--color--vivid-red);
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .alertMessage.reusableBlockMessage .inner .components-button:hover {
-  background: var(--wp--preset--color--vivid-red);
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .is-reusable-block .reusableBlockMessage .components-button .dashicon {
+  margin-right: 8px;
+  font-size: 1.4em;
+  height: auto;
+  width: auto;
+}
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .is-reusable-block .edit-zone__footer {
+  background: #F56E28;
+}
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .is-reusable-block .edit-zone__footer .components-button.is-primary {
+  color: #F56E28;
+}
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .is-reusable-block .edit-zone__footer .components-button.is-primary:hover {
+  background: #F56E28;
   color: white;
   box-shadow: inset 0 0 0 1px white;
-}
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .alertMessage.updateAttributesMessage {
-  background: var(--background300, rgb(245, 245, 245));
-}
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .alertMessage.updateAttributesMessage .components-button:hover {
-  background: var(--wp-admin-theme-color);
-  color: white;
 }
 
 #editor .interface-interface-skeleton__header .edit-post-header__toolbar {
@@ -1158,12 +1127,13 @@ body.is-dragging-components-draggable #editor .block-editor-block-list__block::a
 
 .components-modal__screen-overlay {
   z-index: 1000001;
+  background-color: rgba(0, 0, 0, 0.8);
 }
 
 .wpe-modal {
-  min-width: 600px;
-  min-height: 240px;
+  min-width: 800px;
   padding: 0;
+  border-top: 6px solid var(--wp-admin-theme-color);
 }
 .wpe-modal .components-modal__content {
   padding: 0;
@@ -1173,21 +1143,57 @@ body.is-dragging-components-draggable #editor .block-editor-block-list__block::a
   border-bottom: 1px solid var(--border300, rgb(235, 235, 235));
 }
 .wpe-modal .components-modal__content .components-modal__body {
-  padding: 50px 50px 120px;
+  padding: 50px 50px 80px;
+}
+.wpe-modal .components-modal__content .components-modal__body .title {
+  display: flex;
+  align-items: center;
+  margin: 0 0 50px 0;
+  border-bottom: 1px solid var(--border300, rgb(235, 235, 235));
+  padding: 0 0 20px 0;
+}
+.wpe-modal .components-modal__content .components-modal__body .title .dashicon {
+  font-size: 2.5em;
+  width: auto;
+  height: auto;
+  margin-right: 20px;
+  color: #b4b4b4;
+}
+.wpe-modal .components-modal__content .components-modal__body .title h1 {
+  font-size: 1.7em;
+  font-weight: 500;
+  color: #1d2327;
+  margin: 0;
+  padding: 0;
+}
+.wpe-modal .components-modal__content .components-modal__body .children p {
+  font-size: 1.1em;
+  margin: 0;
+  line-height: 1.6em;
+}
+.wpe-modal .components-modal__content .components-modal__body .children p.center {
+  text-align: center;
+}
+.wpe-modal .components-modal__content .components-modal__body .children .bouttonGroup {
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+}
+.wpe-modal .components-modal__content .components-modal__body .children .bouttonGroup button {
+  padding: 22px 28px;
+  font-size: 1.1em;
+  margin: 0 10px;
+}
+.wpe-modal .components-modal__content .components-modal__body .children .bouttonGroup button .dashicon {
+  margin-right: 10px;
+  margin-left: -10px;
 }
 .wpe-modal .components-modal__content .components-modal__body .components-toggle-control {
   margin-top: 20px;
 }
 .wpe-modal .components-modal__content .components-modal__footer {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  z-index: 10;
   height: 60px;
-  width: 100%;
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
   align-items: center;
   border-top: 1px solid var(--border300, rgb(235, 235, 235));
   background: var(--background300, rgb(245, 245, 245));
@@ -1195,6 +1201,15 @@ body.is-dragging-components-draggable #editor .block-editor-block-list__block::a
 }
 .wpe-modal .components-modal__content .components-modal__footer .alignRight {
   margin-left: auto;
+}
+.wpe-modal.modal-error {
+  border-top: 6px solid #DC3232;
+}
+.wpe-modal.modal-error .components-modal__content .components-modal__body .title h1 {
+  color: #DC3232;
+}
+.wpe-modal.modal-warning {
+  border-top: 6px solid #F56E28;
 }
 
 .DraftEditor-Container {

@@ -14164,6 +14164,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _Models_Modal__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../Models/Modal */ "./src/js/Models/Modal.js");
+
 
 
 
@@ -14274,14 +14276,14 @@ class LinkControl extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Compon
       onClick: this.open
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
       icon: "admin-links"
-    })), this.isValid && this.state.isOpen && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Modal, {
+    })), this.isValid && this.state.isOpen && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Models_Modal__WEBPACK_IMPORTED_MODULE_2__.WpeModal, {
+      key: this.props.clientId + "-linkWpeModal",
+      id: this.props.clientId + "-linkWpeModal",
       title: title,
-      onRequestClose: this.close,
-      className: "wpe-modal"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "components-modal__body"
-    }, this.getContent()), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "components-modal__footer"
+      onClose: this.close,
+      icon: "admin-links"
+    }, this.getContent(), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "bouttonGroup"
     }, this.getFooter())));
   }
 }
@@ -14454,22 +14456,48 @@ __webpack_require__.r(__webpack_exports__);
 class WpeModal extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Component {
   constructor() {
     super(...arguments);
+    this.state = {
+      showModal: true
+    };
+    this.handleCloseModal = this.handleCloseModal.bind(this);
+  }
+  handleCloseModal() {
+    this.setState({
+      showModal: false
+    });
+    this.props.onClose();
   }
   render() {
-    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Modal, {
-      key: this.props.id,
+    const classNameModal = ['wpe-modal'];
+    if (typeof this.props.type != 'undefined') {
+      classNameModal.push('modal-' + this.props.type);
+    }
+    const hasFooter = typeof this.props.hasFooter == 'undefined' || this.props.hasFooter;
+    return this.state.showModal && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Modal, {
+      key: this.props.id + "-modal",
       title: this.props.title,
-      onRequestClose: () => this.props.onClose(),
-      className: "wpe-modal"
+      onRequestClose: null,
+      isDismissible: false,
+      className: classNameModal.join(' '),
+      __experimentalHideHeader: true,
+      shouldCloseOnEsc: true,
+      shouldCloseOnClickOutside: true
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "components-modal__body"
-    }, this.props.children), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "title"
+    }, typeof this.props.icon != 'undefined' && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
+      icon: this.props.icon
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h1", null, this.props.title)), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "children"
+    }, this.props.children)), hasFooter && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "components-modal__footer"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
       className: "alignRight",
       variant: "secondary",
-      onMouseDown: () => this.props.onClose()
-    }, "Cancel")));
+      isSmall: true,
+      onMouseDown: this.handleCloseModal
+    }, "Close")));
   }
 }
 
@@ -14517,7 +14545,7 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
   constructor() {
     super(...arguments);
     this.state = {
-      alertReusableBlockMessage: false,
+      alertReusableBlockMessage: null,
       alertUpdateAttributesMessage: null,
       removeSubmitted: false
     };
@@ -14562,24 +14590,30 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
       className: "reusableBlockMessage"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
       icon: "warning"
-    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h3", null, "Reusable block"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "Updating this block will apply the changes everywhere it is used."), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
-      variant: "secondary",
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h3", null, "Reusable block"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
       href: js_const.admin_url + "post.php?post=" + this.getReusableBlock().attributes.ref + "&action=edit",
       target: "_blank"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
       icon: "edit"
-    }), "Edit reusable block"))) : null;
+    }), "Edit reusable block")) : null;
   }
   alertReusableBlockMessage() {
-    return this.getReusableBlock() != null && !this.state.alertReusableBlockMessage && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      key: this.props.clientId + "-alertReusableBlockMessage",
-      className: "alertMessage reusableBlockMessage"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "inner"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
+    return this.getReusableBlock() != null && this.state.alertReusableBlockMessage != null && !this.state.alertReusableBlockMessage ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Modal__WEBPACK_IMPORTED_MODULE_7__.WpeModal, {
+      key: this.props.clientId + "-alertReusableBlockMessageWpeModal",
+      id: this.props.clientId + "-alertReusableBlockMessageWpeModal",
+      title: "Reusable block",
+      onClose: () => this.setState({
+        alertUpdateAttributesMessage: true
+      }),
+      hasFooter: false,
+      type: "warning",
       icon: "warning"
-    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h3", null, "Be careful !"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "This block is part of a reusable block composition.", (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), "Updating this block will apply the changes everywhere it is used."), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
-      key: this.props.clientId + "alert_reusable_block",
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
+      className: "center"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h3", null, "Be careful !"), "This block is part of a ", (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("b", null, "reusable block"), " composition.", (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), "Updating this block will ", (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("b", null, "apply the changes everywhere it is used.")), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "bouttonGroup"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
+      key: this.props.clientId + "alertReusableBlockMessageButton",
       variant: "primary",
       onMouseDown: () => {
         this.setState({
@@ -14588,39 +14622,26 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
       }
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
       icon: "yes"
-    }), "All right!"))));
+    }), "All right!"))) : null;
   }
   alertUpdateAttributesMessage() {
-    // return this.state.alertUpdateAttributesMessage != null && ! this.state.alertUpdateAttributesMessage &&
-    //     <div key={ this.props.clientId + "-alertUpdateAttributesMessage" } className='alertMessage updateAttributesMessage'>
-    //         <div className='inner'>
-    //             <Dashicon icon="info-outline" />
-    //             <div>
-    //                 <h3>Updating preview...</h3>
-    //                 <p>
-    //                     This preview update does not save the post.<br />
-    //                     <b>Don't forget to save your changes!</b>
-    //                 </p>
-    //                 <Button
-    //                         key={ this.props.clientId + "alert_reusable_block" }
-    //                         variant="secondary"
-    //                         onMouseDown={ () => {
-    //                             this.setState( { alertUpdateAttributesMessage: true } )
-    //                         } }
-    //                     ><Dashicon icon="yes" />All right!</Button>
-    //             </div>
-    //         </div>
-    //     </div>
-
-    return this.state.alertUpdateAttributesMessage != null && !this.state.alertUpdateAttributesMessage && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Modal__WEBPACK_IMPORTED_MODULE_7__.WpeModal, {
-      id: this.props.clientId + "-modalAlertUpdateAttributesMessage",
+    return this.state.alertUpdateAttributesMessage != null && !this.state.alertUpdateAttributesMessage ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Modal__WEBPACK_IMPORTED_MODULE_7__.WpeModal, {
+      key: this.props.clientId + "-alertUpdateAttributesMessageWpeModal",
+      id: this.props.clientId + "-alertUpdateAttributesMessageWpeModal",
       title: "Updating preview...",
-      onClose: () => console.log('close')
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
-      icon: "info-outline"
-    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "This preview update does not save the post.", (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("b", null, "Don't forget to save your changes!")), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
-      key: this.props.clientId + "alert_reusable_block",
-      variant: "secondary",
+      onClose: () => this.setState({
+        alertUpdateAttributesMessage: true
+      }),
+      hasFooter: false,
+      type: "warning",
+      icon: "update"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
+      className: "center"
+    }, "This preview update does not save the post.", (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("b", null, "Don't forget to save your changes!")), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "bouttonGroup"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
+      key: this.props.clientId + "alertUpdateAttributesMessageButton",
+      variant: "primary",
       onMouseDown: () => {
         this.setState({
           alertUpdateAttributesMessage: true
@@ -14628,7 +14649,7 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
       }
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
       icon: "yes"
-    }), "All right!"));
+    }), "All right!"))) : null;
   }
   renderSpecificTools() {
     return null;
@@ -14690,6 +14711,11 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
     }) : null;
   }
   renderEditMode() {
+    if (this.getReusableBlock() != null && this.state.alertReusableBlockMessage == null) {
+      this.setState({
+        alertReusableBlockMessage: false
+      });
+    }
     const catReOrder = {
       default: {
         name: "Attributes",
@@ -14763,9 +14789,10 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
         content: currentEditCat
       });
     }
+    const classNameEditZone = this.getReusableBlock() ? 'edit-zone__inner is-reusable-block' : 'edit-zone__inner';
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       key: this.props.clientId + "-editZone",
-      className: "edit-zone__inner"
+      className: classNameEditZone
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "edit-zone__header"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h2", {
@@ -14815,7 +14842,7 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
       }
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
       icon: "no-alt"
-    }), "Close")), this.alertReusableBlockMessage(), this.alertUpdateAttributesMessage());
+    }), "Close")));
   }
   renderInspectorControls() {
     return null;
@@ -14877,12 +14904,19 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
   }
   renderRemoveModal() {
     return this.state.removeSubmitted && typeof this.props.removeBlock != 'undefined' ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Modal__WEBPACK_IMPORTED_MODULE_7__.WpeModal, {
-      id: this.props.clientId + "-modalRemoveBlock",
+      key: this.props.clientId + "-removeBlockWpeModal",
+      id: this.props.clientId + "-removeBlockWpeModal",
       title: "Confirm \"" + this.title + "\" suppression",
       onClose: () => this.setState({
         removeSubmitted: false
-      })
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "Are you sure you want to remove this block ?"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
+      }),
+      type: "error",
+      icon: "trash"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
+      className: "center"
+    }, "Are you sure you want to remove this block ?"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "bouttonGroup"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
       variant: "primary",
       isDestructive: true,
       onMouseDown: () => {
@@ -14892,7 +14926,12 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
         _Singleton_EditZone__WEBPACK_IMPORTED_MODULE_5__.EditZone.getInstance().hide();
         this.props.removeBlock(this.props.clientId);
       }
-    }, "Yes !")) : null;
+    }, "Yes !"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
+      variant: "tertiary",
+      onMouseDown: () => this.setState({
+        removeSubmitted: false
+      })
+    }, "Cancel"))) : null;
   }
   render() {
     var render = [];
@@ -14901,6 +14940,8 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
     if (typeof this.state.editZone != 'undefined' && this.state.editZone) {
       render.push(_Singleton_EditZone__WEBPACK_IMPORTED_MODULE_5__.EditZone.getInstance().render());
     }
+    render.push(this.alertUpdateAttributesMessage());
+    render.push(this.alertReusableBlockMessage());
     render.push(this.renderRemoveModal());
     return render;
   }
