@@ -12,6 +12,8 @@ import {
 
 import apiFetch from '@wordpress/api-fetch';
 
+// import { store as preferencesStore } from '@wordpress/preferences';
+
 import { Devices } from '../../../src/js/Singleton/Devices';
 
 class WpeComponent extends WpeComponentBase {
@@ -201,7 +203,12 @@ export default ( block_spec, current_user_can_edit_posts, theme_spec ) => compos
             moveBlocksDown
         } = dispatch( blockEditorStore );
 
-        // const { __experimentalConvertBlocksToReusable } = dispatch( reusableBlocksStore );
+        // dispatch( preferencesStore ).setDefaults(
+        //     'abt/wpe-component',
+        //     {
+        //         myBooleanFeature: true
+        //     }
+        // );
 
 		return {
 			removeBlock,

@@ -5,7 +5,7 @@
 
 .wpe-modal {
 
-    min-width: 800px;
+    min-width: 640px;
     padding: 0;
     border-top: 6px solid var(--wp-admin-theme-color);
 
@@ -20,7 +20,7 @@
     
         .components-modal__body {
     
-            padding: 50px 50px 80px;
+            padding: 50px;
 
             .title {
 
@@ -28,7 +28,7 @@
                 align-items: center;
                 margin: 0 0 50px 0;
                 border-bottom: 1px solid $border300;
-                padding: 0 0 20px 0;
+                padding: 0 0 30px 0;
 
                 .dashicon {
                     font-size: 2.5em;
@@ -47,7 +47,7 @@
                 }
             }
 
-            .children {
+            .inner {
 
                 p {
                     font-size: 1.1em;
@@ -61,18 +61,22 @@
 
                 .bouttonGroup {
                     display: flex;
-                    justify-content: center;
+                    flex-wrap: wrap;
+                    justify-content: space-between;
                     margin-top: 40px;
+                    
+                    .row {
+                        margin-top: 10px;
+                        width: 100%;
+
+                        &:first-child {
+                            margin-top: 0;
+                        }
+                    }
                     
                     button {
                         padding: 22px 28px;
                         font-size: 1.1em;
-                        margin: 0 10px;
-
-                        .dashicon {
-                            margin-right: 10px;
-                            margin-left: -10px;
-                        }
                     }
                 }
             }
@@ -95,6 +99,33 @@
                 margin-left: auto;
             }
         }
+
+        button {
+
+            &.is-tertiary {
+
+                color: #1d2327;
+                
+                &:hover {
+                    box-shadow: inset 0 0 0 1px var(--wp-admin-theme-color-darker-10);
+                }
+            }
+
+            &.is-link {
+
+                color: #1d2327;
+                text-decoration: none;
+                
+                &:hover {
+                    text-decoration: underline;
+                }
+            }
+
+            .dashicon {
+                margin-right: 10px;
+                margin-left: -10px;
+            }
+        }
     }
 
     &.modal-error {
@@ -115,18 +146,39 @@
         }
     }
 
-    &.modal-warning {      
-        border-top: 6px solid #F56E28;
-    }
+    &.modal-warning {
 
-    &.modal-accent-green {
-        border-top: 6px solid #46B450;
+        border-top: 6px solid #f0b849;
 
         .is-primary {
-            background-color: #46B450;
+            background-color: #f0b849;
 
             &:hover {
-                background-color: #338c3b;
+                background-color: #ffa900;
+            }
+        }
+    }
+
+    &.center {
+
+        text-align: center;
+
+        .components-modal__body {
+
+            .inner {
+
+                .title {
+                    justify-content: center;
+                }
+        
+                .bouttonGroup {
+        
+                    justify-content: center;
+                    
+                    button {
+                        margin: 0 10px;
+                    }
+                }
             }
         }
     }

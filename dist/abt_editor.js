@@ -11444,6 +11444,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+// import { store as preferencesStore } from '@wordpress/preferences';
+
+
 class WpeComponent extends _src_js_Models_WpeComponentBase__WEBPACK_IMPORTED_MODULE_1__.WpeComponentBase {
   constructor() {
     super(...arguments);
@@ -11609,7 +11612,12 @@ class WpeComponent extends _src_js_Models_WpeComponentBase__WEBPACK_IMPORTED_MOD
     moveBlocksDown
   } = dispatch(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_4__.store);
 
-  // const { __experimentalConvertBlocksToReusable } = dispatch( reusableBlocksStore );
+  // dispatch( preferencesStore ).setDefaults(
+  //     'abt/wpe-component',
+  //     {
+  //         myBooleanFeature: true
+  //     }
+  // );
 
   return {
     removeBlock,
@@ -14470,7 +14478,7 @@ class WpeModal extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Component
   render() {
     const classNameModal = ['wpe-modal'];
     if (typeof this.props.type != 'undefined') {
-      classNameModal.push('modal-' + this.props.type);
+      classNameModal.push('modal-' + this.props.type + ' center');
     }
     const hasFooter = typeof this.props.hasFooter == 'undefined' || this.props.hasFooter;
     return this.state.showModal && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Modal, {
@@ -14489,13 +14497,12 @@ class WpeModal extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Component
     }, typeof this.props.icon != 'undefined' && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
       icon: this.props.icon
     }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h1", null, this.props.title)), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "children"
+      className: "inner"
     }, this.props.children)), hasFooter && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "components-modal__footer"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
       className: "alignRight",
-      variant: "secondary",
-      isSmall: true,
+      variant: "link",
       onMouseDown: this.handleCloseModal
     }, "Close")));
   }
@@ -14518,18 +14525,21 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/@wordpress/icons/build-module/library/chevron-up.js");
-/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/@wordpress/icons/build-module/library/chevron-down.js");
-/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/@wordpress/icons/build-module/library/pages.js");
-/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/@wordpress/icons/build-module/library/trash.js");
-/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/@wordpress/icons/build-module/library/cog.js");
+/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/@wordpress/icons/build-module/library/chevron-up.js");
+/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/@wordpress/icons/build-module/library/chevron-down.js");
+/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/@wordpress/icons/build-module/library/pages.js");
+/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/@wordpress/icons/build-module/library/trash.js");
+/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/@wordpress/icons/build-module/library/cog.js");
 /* harmony import */ var _Static_Attributes__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Static/Attributes */ "./src/js/Static/Attributes.js");
 /* harmony import */ var _Static_Render__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Static/Render */ "./src/js/Static/Render.js");
 /* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/blocks */ "@wordpress/blocks");
 /* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _Singleton_EditZone__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../Singleton/EditZone */ "./src/js/Singleton/EditZone.js");
-/* harmony import */ var _Singleton_Devices__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../Singleton/Devices */ "./src/js/Singleton/Devices.js");
-/* harmony import */ var _Modal__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./Modal */ "./src/js/Models/Modal.js");
+/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @wordpress/data */ "@wordpress/data");
+/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_wordpress_data__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _Singleton_EditZone__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../Singleton/EditZone */ "./src/js/Singleton/EditZone.js");
+/* harmony import */ var _Singleton_Devices__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../Singleton/Devices */ "./src/js/Singleton/Devices.js");
+/* harmony import */ var _Modal__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./Modal */ "./src/js/Models/Modal.js");
+
 
 
 
@@ -14547,13 +14557,14 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
     this.state = {
       alertReusableBlockMessage: null,
       alertUpdateAttributesMessage: null,
-      removeSubmitted: false
+      removeSubmitted: false,
+      userPreferences: this.initUserPreferencePersistent()
     };
     this.title = (0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_4__.getBlockType)(this.props.name).title;
     this.reusableBlock = this.isReusableBlock();
   }
   componentDidMount() {
-    _Singleton_Devices__WEBPACK_IMPORTED_MODULE_6__.Devices.getInstance().addComponent(this);
+    _Singleton_Devices__WEBPACK_IMPORTED_MODULE_7__.Devices.getInstance().addComponent(this);
   }
   getAttribute(key) {
     return this.props.attributes[key];
@@ -14577,28 +14588,78 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
   getReusableBlock() {
     return this.reusableBlock;
   }
+  getUserPreferencePersistent(key) {
+    const storage = localStorage.getItem('ABT_PREFERENCES_USER_' + js_const.user_id);
+    let jsonStorage = {};
+    if (storage) {
+      jsonStorage = JSON.parse(storage);
+      if (typeof jsonStorage == 'object' && typeof jsonStorage[key] != 'undefined') {
+        return jsonStorage[key];
+      }
+    }
+    return false;
+  }
+  initUserPreferencePersistent() {
+    const storage = localStorage.getItem('ABT_PREFERENCES_USER_' + js_const.user_id);
+    if (storage) {
+      let jsonStorage = JSON.parse(storage);
+      if (typeof jsonStorage == 'object') {
+        return jsonStorage;
+      }
+    }
+    return null;
+  }
+  updateUserPreferencePersistent() {
+    if (this.state.userPreferences != null) {
+      localStorage.setItem('ABT_PREFERENCES_USER_' + js_const.user_id, JSON.stringify(this.state.userPreferences));
+    }
+  }
+  getUserUserPreference(key) {
+    let userPreferences = this.state.userPreferences;
+    if (userPreferences != null && typeof userPreferences == 'object' && typeof userPreferences[key] != 'undefined') {
+      return userPreferences[key];
+    }
+    return false;
+  }
+  toogleUserUserPreference(key) {
+    console.log(this.state);
+    let userPreferences = this.state.userPreferences;
+    if (userPreferences == null) {
+      userPreferences = {};
+    }
+    if (typeof userPreferences[key] != 'undefined') {
+      userPreferences[key] = !userPreferences[key];
+    } else userPreferences[key] = true;
+    this.setState({
+      userPreferences: userPreferences
+    });
+    console.log({
+      userPreferences: userPreferences
+    });
+    console.log(this.state);
+  }
   descriptionMessage() {
     const messages = [];
-    if (this.getReusableBlock() != null) {
-      messages.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-        className: "row is-reusable"
-      }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
-        icon: "warning"
-      }), "Reusable block"));
-    }
     if (typeof this.description != 'undefined') {
       messages.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+        key: this.props.clientId + "-descriptionMessage-info",
         className: "row"
       }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
         icon: "info-outline"
       }), this.description));
     }
     return messages.length > 0 ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      key: this.props.clientId + "-descriptionMessage",
       className: "description"
     }, messages) : null;
   }
   alertReusableBlockMessage() {
-    return this.getReusableBlock() != null && this.state.alertReusableBlockMessage != null && !this.state.alertReusableBlockMessage ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Modal__WEBPACK_IMPORTED_MODULE_7__.WpeModal, {
+    let display = true;
+    display = display && this.getReusableBlock() != null ? true : false;
+    display = display && this.state.alertReusableBlockMessage != null ? true : false;
+    display = display && !this.state.alertReusableBlockMessage ? true : false;
+    display = display && !this.getUserPreferencePersistent('hideAlertReusableBlockMessage') ? true : false;
+    return display ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Modal__WEBPACK_IMPORTED_MODULE_8__.WpeModal, {
       key: this.props.clientId + "-alertReusableBlockMessageWpeModal",
       id: this.props.clientId + "-alertReusableBlockMessageWpeModal",
       title: "Reusable block",
@@ -14606,12 +14667,11 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
         alertUpdateAttributesMessage: true
       }),
       hasFooter: false,
-      type: "accent-green",
-      icon: "warning"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
-      className: "center"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h3", null, "Be careful !"), "This block is part of a ", (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("b", null, "reusable block"), " composition.", (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), "Updating this block will ", (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("b", null, "apply the changes everywhere it is used.")), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      type: "warning"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h3", null, "Be careful !"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "This block is part of a ", (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("b", null, "reusable block"), " composition.", (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), "Updating this block will ", (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("b", null, "apply the changes everywhere it is used.")), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "bouttonGroup"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "row"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
       key: this.props.clientId + "alertReusableBlockMessageButton",
       variant: "primary",
@@ -14619,13 +14679,20 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
         this.setState({
           alertReusableBlockMessage: true
         });
+        this.updateUserPreferencePersistent();
       }
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
       icon: "yes"
-    }), "All right!"))) : null;
+    }), "All right!")), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "row"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.CheckboxControl, {
+      label: "Do not show this message again",
+      checked: this.getUserUserPreference('hideAlertReusableBlockMessage'),
+      onChange: () => this.toogleUserUserPreference('hideAlertReusableBlockMessage')
+    })))) : null;
   }
   alertUpdateAttributesMessage() {
-    return this.state.alertUpdateAttributesMessage != null && !this.state.alertUpdateAttributesMessage ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Modal__WEBPACK_IMPORTED_MODULE_7__.WpeModal, {
+    return this.state.alertUpdateAttributesMessage != null && !this.state.alertUpdateAttributesMessage ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Modal__WEBPACK_IMPORTED_MODULE_8__.WpeModal, {
       key: this.props.clientId + "-alertUpdateAttributesMessageWpeModal",
       id: this.props.clientId + "-alertUpdateAttributesMessageWpeModal",
       title: "Updating preview...",
@@ -14633,11 +14700,8 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
         alertUpdateAttributesMessage: true
       }),
       hasFooter: false,
-      type: "warning",
-      icon: "update"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
-      className: "center"
-    }, "This preview update does not save the post.", (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("b", null, "Don't forget to save your changes!")), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      type: "info"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "This preview update does not save the post.", (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("b", null, "Don't forget to save your changes!")), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "bouttonGroup"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
       key: this.props.clientId + "alertUpdateAttributesMessageButton",
@@ -14658,17 +14722,17 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
     const menuGroup = [];
     if (typeof this.props.moveBlocksUp != 'undefined' || typeof this.props.moveBlocksDown != 'undefined') {
       const groupMoveBlock = [];
-      if (typeof this.props.moveBlocksUp != 'undefined') {
+      if (typeof this.props.moveBlocksUp != 'undefined' && this.getReusableBlock() == null) {
         groupMoveBlock.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.MenuItem, {
           key: this.props.clientId + "-toolsDropdownMenu-move-up",
-          icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_8__["default"],
+          icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_9__["default"],
           onClick: () => this.props.moveBlocksUp([this.props.clientId])
         }, "Move up"));
       }
-      if (typeof this.props.moveBlocksDown != 'undefined') {
+      if (typeof this.props.moveBlocksDown != 'undefined' && this.getReusableBlock() == null) {
         groupMoveBlock.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.MenuItem, {
           key: this.props.clientId + "-toolsDropdownMenu-move-down",
-          icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_9__["default"],
+          icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_10__["default"],
           onClick: () => this.props.moveBlocksDown([this.props.clientId])
         }, "Move down"));
       }
@@ -14681,9 +14745,9 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
       groupSpecificTools.push(this.renderSpecificTools());
       groupSpecificTools.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.MenuItem, {
         key: this.props.clientId + "-toolsDropdownMenu-SpecificTools-duplicate",
-        icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_10__["default"],
+        icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_11__["default"],
         onClick: () => {
-          _Singleton_EditZone__WEBPACK_IMPORTED_MODULE_5__.EditZone.getInstance().hide();
+          _Singleton_EditZone__WEBPACK_IMPORTED_MODULE_6__.EditZone.getInstance().hide();
           this.props.duplicateBlocks([this.props.clientId]);
         }
       }, "Duplicate"));
@@ -14696,7 +14760,7 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
         key: this.props.clientId + "-toolsDropdownMenu-remove"
       }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.MenuItem, {
         key: this.props.clientId + "-toolsDropdownMenu-remove-trash",
-        icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_11__["default"],
+        icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_12__["default"],
         onClick: () => this.setState({
           removeSubmitted: true
         })
@@ -14704,18 +14768,13 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
     }
     return menuGroup.length > 0 ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.DropdownMenu, {
       key: this.props.clientId + "-toolsDropdownMenu",
-      icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_12__["default"],
+      icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_13__["default"],
       label: "Advanced"
     }, () => {
       return menuGroup;
     }) : null;
   }
   renderEditMode() {
-    if (this.getReusableBlock() != null && this.state.alertReusableBlockMessage == null) {
-      this.setState({
-        alertReusableBlockMessage: false
-      });
-    }
     const catReOrder = {
       default: {
         name: "Attributes",
@@ -14795,9 +14854,13 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
       className: classNameEditZone
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "edit-zone__header"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h2", {
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "title"
-    }, this.title), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h2", null, this.title), this.getReusableBlock() != null && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "is-reusable"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
+      icon: "warning"
+    }), "Reusable block")), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "tools"
     }, this.renderTools())), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "edit-zone__body"
@@ -14838,7 +14901,7 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
       className: "abtButtonCloseEditZone",
       variant: "primary",
       onMouseDown: () => {
-        _Singleton_EditZone__WEBPACK_IMPORTED_MODULE_5__.EditZone.getInstance().hide();
+        _Singleton_EditZone__WEBPACK_IMPORTED_MODULE_6__.EditZone.getInstance().hide();
       }
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
       icon: "no-alt"
@@ -14896,50 +14959,53 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
       className: "abtButtonEditZone",
       variant: "primary",
       onMouseDown: () => {
-        _Singleton_EditZone__WEBPACK_IMPORTED_MODULE_5__.EditZone.getInstance().show(this);
+        _Singleton_EditZone__WEBPACK_IMPORTED_MODULE_6__.EditZone.getInstance().show(this);
       }
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
       icon: "edit"
     }), " Edit");
   }
   renderRemoveModal() {
-    return this.state.removeSubmitted && typeof this.props.removeBlock != 'undefined' ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Modal__WEBPACK_IMPORTED_MODULE_7__.WpeModal, {
+    return this.state.removeSubmitted && typeof this.props.removeBlock != 'undefined' ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Modal__WEBPACK_IMPORTED_MODULE_8__.WpeModal, {
       key: this.props.clientId + "-removeBlockWpeModal",
       id: this.props.clientId + "-removeBlockWpeModal",
       title: "Confirm \"" + this.title + "\" suppression",
       onClose: () => this.setState({
         removeSubmitted: false
       }),
-      type: "error",
-      icon: "trash"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
-      className: "center"
-    }, "Are you sure you want to remove this block ?"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      hasFooter: false,
+      type: "warning"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "Are you sure you want to remove this block ?"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "bouttonGroup"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "row"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
       variant: "primary",
-      isDestructive: true,
       onMouseDown: () => {
         this.setState({
           removeSubmitted: false
         });
-        _Singleton_EditZone__WEBPACK_IMPORTED_MODULE_5__.EditZone.getInstance().hide();
+        _Singleton_EditZone__WEBPACK_IMPORTED_MODULE_6__.EditZone.getInstance().hide();
         this.props.removeBlock(this.props.clientId);
       }
-    }, "Yes !"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
-      variant: "tertiary",
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
+      icon: "trash"
+    }), "Yes, remove it.")), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "row"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
+      variant: "link",
       onMouseDown: () => this.setState({
         removeSubmitted: false
       })
-    }, "Cancel"))) : null;
+    }, "Cancel")))) : null;
   }
   render() {
-    _Singleton_EditZone__WEBPACK_IMPORTED_MODULE_5__.EditZone.getInstance();
+    _Singleton_EditZone__WEBPACK_IMPORTED_MODULE_6__.EditZone.getInstance();
     var render = [];
-    render.push(_Singleton_Devices__WEBPACK_IMPORTED_MODULE_6__.Devices.getInstance().render(this.props.clientId));
+    render.push(_Singleton_Devices__WEBPACK_IMPORTED_MODULE_7__.Devices.getInstance().render(this.props.clientId));
     render.push(this.liveRendering());
     if (typeof this.state.editZone != 'undefined' && this.state.editZone) {
-      render.push(_Singleton_EditZone__WEBPACK_IMPORTED_MODULE_5__.EditZone.getInstance().render());
+      render.push(_Singleton_EditZone__WEBPACK_IMPORTED_MODULE_6__.EditZone.getInstance().render());
     }
     render.push(this.alertUpdateAttributesMessage());
     render.push(this.alertReusableBlockMessage());
@@ -15145,9 +15211,13 @@ class EditZone {
       }
     }
     this.componentInstance = componentInstance;
-    componentInstance.setState({
+    const newState = {
       editZone: true
-    });
+    };
+    if (componentInstance.getReusableBlock() != null && componentInstance.state.alertReusableBlockMessage == null) {
+      newState.alertReusableBlockMessage = false;
+    }
+    componentInstance.setState(newState);
     setTimeout(() => {
       document.querySelector("#abt-component-edit-zone").classList.remove("hide");
       document.querySelector("#abt-component-edit-zone").classList.remove("updating");

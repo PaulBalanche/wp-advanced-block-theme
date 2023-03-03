@@ -59,7 +59,12 @@ export class EditZone {
         }
 
         this.componentInstance = componentInstance;
-        componentInstance.setState( { editZone: true } );
+
+        const newState = { editZone: true };
+        if( componentInstance.getReusableBlock() != null && componentInstance.state.alertReusableBlockMessage == null ) {
+            newState.alertReusableBlockMessage =  false;
+        }
+        componentInstance.setState( newState);
         
         setTimeout( () => {
             document.querySelector("#abt-component-edit-zone").classList.remove("hide");

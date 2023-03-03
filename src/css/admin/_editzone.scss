@@ -100,18 +100,24 @@
                 &.is-reusable {
 
                     .abtButtonGroupEditZone {
-                        border-color: #46B450;
+                        border-color: rgba(240, 184, 73, 0.5);
 
-                        .is-primary, .separator {
-                            background: #46B450;
+                        .separator {
+                            background: #f0b849;
                         }
+                        .is-primary{
+                            background-color: #f0b849;
 
+                            &:hover {
+                                background-color: #ffa900;
+                            }
+                        }
                         .components-dropdown {
 
                             .components-dropdown-menu__toggle {
 
                                 &:hover {
-                                    background: #46B450;
+                                    background: #f0b849;
                                 }
                             }
                         }
@@ -127,9 +133,7 @@
                 bottom: 25px;
                 background: white;
                 z-index: 99999;
-                border-left: 1px solid $border300;
                 box-sizing: border-box;
-                box-shadow: 0 0 50px 0 rgb(0 0 0 / 20%);
                 transition: all 0.4s;
             
                 .loader {
@@ -166,8 +170,8 @@
                     display: flex;
                     align-items: center;
                     padding: 0 20px;
-                    background: var(--wp-admin-theme-color);
-                    color: white;
+                    background: $background300;
+                    border-bottom: 1px solid $border300;
                     position: absolute;
                     left: 0;
                     top: 0;
@@ -175,24 +179,25 @@
                     height: 60px;
                     box-sizing: border-box;
 
+                    
                     h2 {
                         margin: 0;
-                        color: white;
+                        color: var(--wp-admin-theme-color);
                     }
 
                     .tools {
                         margin-left: auto;
                         
                         .components-dropdown-menu__toggle {
-                            color: white;
-                            
+
+                            color: var(--wp-admin-theme-color);
+
                             &:focus {
                                 box-shadow: none;
                             }
 
                             &:hover {
-                                background: white;
-                                color: var(--wp-admin-theme-color);
+                                color: var(--wp-admin-theme-color-darker-10);
                             }
                         }
                     }
@@ -201,10 +206,47 @@
                 .is-reusable-block {
 
                     .edit-zone__header {
-                        background: #46B450;
+                        background: #fef8ee;
+
+                        .title {
+                        
+                            display: flex;
+
+                            h2 {
+                                color: #f0b849
+                            }
+
+                            .is-reusable {
+                                display: flex;
+                                align-items: center;
+                                color: #3c434a;
+                                margin-left: 20px;
+                                border-left: 1px solid $border300;
+                                padding-left: 20px;
+    
+                                .dashicon {
+                                    margin-right: 6px;
+                                    font-size: 1.2em;
+                                    height: auto;
+                                    width: auto;
+                                }
+                            }
+                        }
+
+                        .components-dropdown {
+
+                            .components-dropdown-menu__toggle {
+
+                                color: #f0b849;
+                
+                                &:hover {
+                                    color: #ffa900;
+                                }
+                            }
+                        }
                     }
                 }
-            
+
                 .edit-zone__body {
             
                     padding: 20px;
@@ -231,7 +273,7 @@
                             text-align: justify;
 
                             &.is-reusable {
-                                color: #46B450;
+                                color: #f0b849;
                                 font-weight: 500;
                                 font-size: 1em;
                             }
@@ -363,6 +405,7 @@
                     .components-panel {
 
                         border: 1px solid $border300;
+                        transition: border 0.2s;
 
                         &:hover:has(> .components-panel__body.is-opened) {
                             border-color: rgb(0 124 186 / 50%);
@@ -673,14 +716,25 @@
                             }
                         }
                     }
+
+                    &::-webkit-scrollbar {
+                        width: 8px;
+                    }
+                    &::-webkit-scrollbar-track {
+                        background-color: white;
+                        border-left: 1px solid $border300;
+                    }
+                    &::-webkit-scrollbar-thumb {
+                        background: #74a9c3;
+                    }
                 }
             
                 .edit-zone__footer {
                     display: flex;
                     justify-content: space-between;
                     padding: 20px 20px 0 20px;
-                    background: var(--wp-admin-theme-color);
-                    color: white;
+                    background: $background300;
+                    border-top: 1px solid $border300;
                     font-size: 16px;
                     font-weight: 500;
                     position: absolute;
@@ -691,14 +745,7 @@
                     box-sizing: border-box;
             
                     .components-button.is-primary {
-                        color: var(--wp-admin-theme-color);
-                        background: white;
-            
-                        &:hover {
-                            background: var(--wp-admin-theme-color-darker-10);
-                            color: #fff;
-                        }
-            
+
                         .dashicon {
                             margin-right: 4px;
                         }
@@ -715,16 +762,20 @@
 
                 .is-reusable-block {
 
+                    .edit-zone__body {
+                        
+                        &::-webkit-scrollbar-thumb {
+                            background: #ffd98e;
+                        }
+                    }
+                    
                     .edit-zone__footer {
-                        background: #46B450;
 
                         .components-button.is-primary {
-                            color: #46B450;
+                            background: #f0b849;
                 
                             &:hover {
-                                background: #46B450;
-                                color: white;
-                                box-shadow: inset 0 0 0 1px white;
+                                background: #ffa900;
                             }
                         }
                     }

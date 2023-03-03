@@ -73,11 +73,11 @@
                 padding-bottom: 2rem;
                 
                 &:hover, &.is-selected, &.has-child-selected {
-                    background: rgba(70,180,80, 0.1);
+                    background: rgb(240 184 73 / 20%);
                 }
 
                 .block-editor-block-list__block::after {
-                    border-color: rgb(70 180 80 / 50%);
+                    border-color: rgb(240 184 73 / 50%);
                 }
             }
         }

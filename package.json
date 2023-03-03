@@ -10,16 +10,16 @@
   "author": "Paul Balanche <pb@buzzbrothers.ch>",
   "license": "ISC",
   "devDependencies": {
-    "@wordpress/scripts": "25.0.0",
     "@wordpress/icons": "^9.14.0",
+    "@wordpress/scripts": "25.0.0",
     "@wordpress/server-side-render": "^4.0.0",
-    "merge-anything": "^5.1.4",
     "css-loader": "^6.7.3",
-    "raw-loader": "^4.0.2",
-    "postcss": "^8.4.20",
-    "postcss-loader": "^7.0.2",
     "draft-js": "^0.11.7",
     "immutable": "^4.1.0",
+    "merge-anything": "^5.1.4",
+    "postcss": "^8.4.20",
+    "postcss-loader": "^7.0.2",
+    "raw-loader": "^4.0.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
@@ -30,6 +30,7 @@
     "@wordpress/block-editor": "^11.4.0",
     "@wordpress/blocks": "^12.1.0",
     "@wordpress/hooks": "^3.26.0",
+    "@wordpress/preferences": "^3.5.0",
     "@wordpress/reusable-blocks": "^4.4.0",
     "dompurify": "^2.4.3"
   }

@@ -24,7 +24,7 @@ export class WpeModal extends Component {
         const classNameModal = [ 'wpe-modal' ];
 
         if( typeof this.props.type != 'undefined' ) {
-            classNameModal.push( 'modal-' + this.props.type);
+            classNameModal.push( 'modal-' + this.props.type + ' center');
         }
 
         const hasFooter = ( typeof this.props.hasFooter == 'undefined' || this.props.hasFooter );
@@ -47,14 +47,13 @@ export class WpeModal extends Component {
                             ) }
                             <h1>{ this.props.title }</h1>
                         </div>
-                        <div className="children">{ this.props.children }</div>
+                        <div className="inner">{ this.props.children }</div>
                     </div>
                     { hasFooter && (
                         <div className="components-modal__footer">
                             <Button
                                 className="alignRight"
-                                variant="secondary"
-                                isSmall
+                                variant="link"
                                 onMouseDown={this.handleCloseModal}
                             >Close</Button>
                         </div>

@@ -9,7 +9,8 @@ import {
     DropdownMenu,
     Modal,
     MenuGroup,
-    MenuItem
+    MenuItem,
+    CheckboxControl
 } from '@wordpress/components';
 
 import {
@@ -23,6 +24,8 @@ import { getBlockType } from '@wordpress/blocks';
 
 import { isReusableBlock } from '@wordpress/blocks'
 
+import { select, withSelect, withDispatch, dispatch } from '@wordpress/data';
+
 import { EditZone } from '../Singleton/EditZone';
 import { Devices } from '../Singleton/Devices';
 import { WpeModal } from './Modal';
@@ -35,7 +38,8 @@ export class WpeComponentBase extends Component {
         this.state = {
             alertReusableBlockMessage: null,
             alertUpdateAttributesMessage: null,
-            removeSubmitted: false
+            removeSubmitted: false,
+            userPreferences: this.initUserPreferencePersistent()
         };
 
         this.title = getBlockType(this.props.name).title;
@@ -77,21 +81,81 @@ export class WpeComponentBase extends Component {
         return this.reusableBlock;
     }
 
+    getUserPreferencePersistent( key ) {
+
+        const storage = localStorage.getItem('ABT_PREFERENCES_USER_' + js_const.user_id );
+        let jsonStorage = {};
+        if( storage) {
+            jsonStorage = JSON.parse(storage);
+            if( typeof jsonStorage == 'object' && typeof jsonStorage[key] != 'undefined' ) {
+                return jsonStorage[key];
+            }
+        }
+
+        return false;
+    }
+
+    initUserPreferencePersistent() {
+
+        const storage = localStorage.getItem('ABT_PREFERENCES_USER_' + js_const.user_id );
+        if( storage) {
+            let jsonStorage = JSON.parse(storage);
+            if( typeof jsonStorage == 'object' ) {
+                return jsonStorage;
+            }
+        }
+
+        return null;
+    }
+
+    updateUserPreferencePersistent() {
+
+        if( this.state.userPreferences != null) {
+            localStorage.setItem( 'ABT_PREFERENCES_USER_' + js_const.user_id, JSON.stringify(this.state.userPreferences) );
+        }
+    }
+
+    getUserUserPreference( key ) {
+        
+        let userPreferences = this.state.userPreferences;
+        if( userPreferences != null && typeof userPreferences == 'object' && typeof userPreferences[key] != 'undefined' ) {
+            return userPreferences[key];
+        }
+
+        return false;
+    }
+
+    toogleUserUserPreference( key ) {
+
+        console.log(this.state);
+
+        let userPreferences = this.state.userPreferences;
+        if( userPreferences == null ) {
+            userPreferences = {};
+        }
+
+        if( typeof userPreferences[key] != 'undefined' ) {
+            userPreferences[key] = ! userPreferences[key];
+        }
+        else
+            userPreferences[key] = true;
+
+        this.setState( { userPreferences: userPreferences } );
+
+        console.log({ userPreferences: userPreferences });
+        console.log(this.state);
+    }
+
     descriptionMessage() {
 
         const messages = [];
 
-        if( this.getReusableBlock() != null ) {
-            messages.push(
-                <div className='row is-reusable'>
-                    <Dashicon icon="warning" />Reusable block
-                </div>
-            )
-        }
-
         if( typeof this.description != 'undefined' ) {
             messages.push(
-                <div className='row'>
+                <div
+                    key={ this.props.clientId + "-descriptionMessage-info" }
+                    className='row'
+                >
                     <Dashicon icon="info-outline" />
                     { this.description }
                 </div>
@@ -99,7 +163,10 @@ export class WpeComponentBase extends Component {
         }
 
         return( messages.length > 0 ) ?
-            <div className='description'>
+            <div
+                key={ this.props.clientId + "-descriptionMessage" }
+                className='description'
+            >
                 { messages }
             </div>
             : null;
@@ -107,29 +174,45 @@ export class WpeComponentBase extends Component {
 
     alertReusableBlockMessage() {
         
-        return ( this.getReusableBlock() != null && this.state.alertReusableBlockMessage != null && ! this.state.alertReusableBlockMessage ) ?
+        let display = true;
+
+        display = ( display && this.getReusableBlock() != null ) ? true : false;
+        display = ( display && this.state.alertReusableBlockMessage != null ) ? true : false;
+        display = ( display && ! this.state.alertReusableBlockMessage ) ? true : false;
+        display = ( display && ! this.getUserPreferencePersistent('hideAlertReusableBlockMessage') ) ? true : false;
+
+        return ( display ) ?
             <WpeModal
                 key={ this.props.clientId + "-alertReusableBlockMessageWpeModal" }
                 id={ this.props.clientId + "-alertReusableBlockMessageWpeModal" }
                 title={ "Reusable block" }
                 onClose={ () => this.setState( { alertUpdateAttributesMessage: true } ) }
                 hasFooter={false}
-                type="accent-green"
-                icon="warning"
+                type="warning"
             >
-                <p className='center'>
-                    <h3>Be careful !</h3>
+                <h3>Be careful !</h3>
+                <p>
                     This block is part of a <b>reusable block</b> composition.<br />
                     Updating this block will <b>apply the changes everywhere it is used.</b>
                 </p>
                 <div className="bouttonGroup">
-                    <Button
-                            key={ this.props.clientId + "alertReusableBlockMessageButton" }
-                            variant="primary"
-                            onMouseDown={ () => {
-                                this.setState( { alertReusableBlockMessage: true } )
-                            } }
-                        ><Dashicon icon="yes" />All right!</Button>
+                    <div className='row'>
+                        <Button
+                                key={ this.props.clientId + "alertReusableBlockMessageButton" }
+                                variant="primary"
+                                onMouseDown={ () => {
+                                    this.setState( { alertReusableBlockMessage: true } );
+                                    this.updateUserPreferencePersistent();
+                                } }
+                            ><Dashicon icon="yes" />All right!</Button>
+                    </div>
+                    <div className='row'>
+                        <CheckboxControl
+                            label="Do not show this message again"
+                            checked={ this.getUserUserPreference('hideAlertReusableBlockMessage') }
+                            onChange={ () => this.toogleUserUserPreference('hideAlertReusableBlockMessage') }
+                        />
+                    </div>
                 </div>
             </WpeModal>
             : null;
@@ -144,10 +227,9 @@ export class WpeComponentBase extends Component {
                 title={ "Updating preview..." }
                 onClose={ () => this.setState( { alertUpdateAttributesMessage: true } ) }
                 hasFooter={false}
-                type="warning"
-                icon="update"
+                type="info"
             >
-                <p className='center'>  
+                <p>  
                     This preview update does not save the post.<br />
                     <b>Don't forget to save your changes!</b>
                 </p>
@@ -176,20 +258,20 @@ export class WpeComponentBase extends Component {
 
             const groupMoveBlock = [];
 
-            if( typeof this.props.moveBlocksUp != 'undefined' ) {
+            if( typeof this.props.moveBlocksUp != 'undefined' && this.getReusableBlock() == null ) {
 
                 groupMoveBlock.push(
                     <MenuItem
                         key={ this.props.clientId + "-toolsDropdownMenu-move-up" }
                         icon={ chevronUp }
-                        onClick={ () => this.props.moveBlocksUp( [ this.props.clientId ] ) }
+                        onClick={ () => this.props.moveBlocksUp( [ this.props.clientId ] )  }
                     >
                         Move up
                     </MenuItem>
                 );
             }
 
-            if( typeof this.props.moveBlocksDown != 'undefined' ) {
+            if( typeof this.props.moveBlocksDown != 'undefined' && this.getReusableBlock() == null ) {
 
                 groupMoveBlock.push(
                     <MenuItem
@@ -269,10 +351,6 @@ export class WpeComponentBase extends Component {
 
     renderEditMode() {
 
-        if( this.getReusableBlock() != null && this.state.alertReusableBlockMessage == null ) {
-            this.setState( { alertReusableBlockMessage: false } );
-        }
-
         const catReOrder = {
             default: { name: "Attributes", props: {} },
             block_settings: { name: "Settings", props: {
@@ -319,7 +397,7 @@ export class WpeComponentBase extends Component {
             
             let currentEditCat = [];
 
-            forEachCatProps: for (const [keyProp, prop] of Object.entries(valCat.props)) {
+            forEachCatProps: for( const [keyProp, prop] of Object.entries(valCat.props) ) {
 
                 // Conditional treatment
                 if( typeof prop.conditional == 'object' ) {
@@ -352,7 +430,12 @@ export class WpeComponentBase extends Component {
         return (
             <div key={ this.props.clientId + "-editZone" } className={classNameEditZone}>
                 <div className='edit-zone__header'>
-                    <h2 className='title'>{ this.title }</h2>
+                    <div className='title'>
+                        <h2>{ this.title }</h2>
+                        { ( this.getReusableBlock() != null ) && <div className='is-reusable'>
+                            <Dashicon icon="warning" />Reusable block
+                        </div> }
+                    </div>
                     <div className='tools'>
                         { this.renderTools() }
                     </div>
@@ -467,24 +550,27 @@ export class WpeComponentBase extends Component {
                 id={ this.props.clientId + "-removeBlockWpeModal" }
                 title={ "Confirm \"" + this.title + "\" suppression" }
                 onClose={ () => this.setState( { removeSubmitted: false } ) }
-                type="error"
-                icon="trash"
+                hasFooter={false}
+                type="warning"
             >
-                <p className='center'>Are you sure you want to remove this block ?</p>
+                <p>Are you sure you want to remove this block ?</p>
                 <div className="bouttonGroup">
-                    <Button
-                        variant="primary"
-                        isDestructive={true}
-                        onMouseDown={ () => {
-                            this.setState( { removeSubmitted: false } );
-                            EditZone.getInstance().hide();
-                            this.props.removeBlock(this.props.clientId);
-                        } }
-                    >Yes !</Button>
-                    <Button
-                        variant="tertiary"
-                        onMouseDown={ () => this.setState( { removeSubmitted: false } ) }
-                    >Cancel</Button>
+                    <div className='row'>
+                        <Button
+                            variant="primary"
+                            onMouseDown={ () => {
+                                this.setState( { removeSubmitted: false } );
+                                EditZone.getInstance().hide();
+                                this.props.removeBlock(this.props.clientId);
+                            } }
+                        ><Dashicon icon="trash" />Yes, remove it.</Button>
+                    </div>
+                    <div className='row'>
+                        <Button
+                            variant="link"
+                            onMouseDown={ () => this.setState( { removeSubmitted: false } ) }
+                        >Cancel</Button>
+                    </div>
                 </div>
             </WpeModal>
         : null;

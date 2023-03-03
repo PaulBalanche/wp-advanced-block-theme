@@ -115,10 +115,10 @@
   content: none;
 }
 #editor .interface-interface-skeleton.is-mode-visual .block-editor-block-list__block.is-reusable:hover, #editor .interface-interface-skeleton.is-mode-visual .block-editor-block-list__block.is-reusable.is-selected, #editor .interface-interface-skeleton.is-mode-visual .block-editor-block-list__block.is-reusable.has-child-selected {
-  background: rgba(70, 180, 80, 0.1);
+  background: rgba(240, 184, 73, 0.2);
 }
 #editor .interface-interface-skeleton.is-mode-visual .block-editor-block-list__block.is-reusable .block-editor-block-list__block::after {
-  border-color: rgba(70, 180, 80, 0.5);
+  border-color: rgba(240, 184, 73, 0.5);
 }
 
 body.is-dragging-components-draggable #editor .block-editor-block-list__block::after {
@@ -507,13 +507,19 @@ body.is-dragging-components-draggable #editor .block-editor-block-list__block::a
   opacity: 0.75;
 }
 #editor .interface-interface-skeleton.is-mode-visual .block-editor-block-list__block.is-reusable .abtButtonGroupEditZone {
-  border-color: #46B450;
+  border-color: rgba(240, 184, 73, 0.5);
 }
-#editor .interface-interface-skeleton.is-mode-visual .block-editor-block-list__block.is-reusable .abtButtonGroupEditZone .is-primary, #editor .interface-interface-skeleton.is-mode-visual .block-editor-block-list__block.is-reusable .abtButtonGroupEditZone .separator {
-  background: #46B450;
+#editor .interface-interface-skeleton.is-mode-visual .block-editor-block-list__block.is-reusable .abtButtonGroupEditZone .separator {
+  background: #f0b849;
+}
+#editor .interface-interface-skeleton.is-mode-visual .block-editor-block-list__block.is-reusable .abtButtonGroupEditZone .is-primary {
+  background-color: #f0b849;
+}
+#editor .interface-interface-skeleton.is-mode-visual .block-editor-block-list__block.is-reusable .abtButtonGroupEditZone .is-primary:hover {
+  background-color: #ffa900;
 }
 #editor .interface-interface-skeleton.is-mode-visual .block-editor-block-list__block.is-reusable .abtButtonGroupEditZone .components-dropdown .components-dropdown-menu__toggle:hover {
-  background: #46B450;
+  background: #f0b849;
 }
 #editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone {
   position: fixed;
@@ -523,9 +529,7 @@ body.is-dragging-components-draggable #editor .block-editor-block-list__block::a
   bottom: 25px;
   background: white;
   z-index: 99999;
-  border-left: 1px solid var(--border300, rgb(235, 235, 235));
   box-sizing: border-box;
-  box-shadow: 0 0 50px 0 rgba(0, 0, 0, 0.2);
   transition: all 0.4s;
 }
 #editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .loader {
@@ -554,8 +558,8 @@ body.is-dragging-components-draggable #editor .block-editor-block-list__block::a
   display: flex;
   align-items: center;
   padding: 0 20px;
-  background: var(--wp-admin-theme-color);
-  color: white;
+  background: var(--background300, rgb(245, 245, 245));
+  border-bottom: 1px solid var(--border300, rgb(235, 235, 235));
   position: absolute;
   left: 0;
   top: 0;
@@ -565,23 +569,48 @@ body.is-dragging-components-draggable #editor .block-editor-block-list__block::a
 }
 #editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__header h2 {
   margin: 0;
-  color: white;
+  color: var(--wp-admin-theme-color);
 }
 #editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__header .tools {
   margin-left: auto;
 }
 #editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__header .tools .components-dropdown-menu__toggle {
-  color: white;
+  color: var(--wp-admin-theme-color);
 }
 #editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__header .tools .components-dropdown-menu__toggle:focus {
   box-shadow: none;
 }
 #editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__header .tools .components-dropdown-menu__toggle:hover {
-  background: white;
-  color: var(--wp-admin-theme-color);
+  color: var(--wp-admin-theme-color-darker-10);
 }
 #editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .is-reusable-block .edit-zone__header {
-  background: #46B450;
+  background: #fef8ee;
+}
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .is-reusable-block .edit-zone__header .title {
+  display: flex;
+}
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .is-reusable-block .edit-zone__header .title h2 {
+  color: #f0b849;
+}
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .is-reusable-block .edit-zone__header .title .is-reusable {
+  display: flex;
+  align-items: center;
+  color: #3c434a;
+  margin-left: 20px;
+  border-left: 1px solid var(--border300, rgb(235, 235, 235));
+  padding-left: 20px;
+}
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .is-reusable-block .edit-zone__header .title .is-reusable .dashicon {
+  margin-right: 6px;
+  font-size: 1.2em;
+  height: auto;
+  width: auto;
+}
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .is-reusable-block .edit-zone__header .components-dropdown .components-dropdown-menu__toggle {
+  color: #f0b849;
+}
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .is-reusable-block .edit-zone__header .components-dropdown .components-dropdown-menu__toggle:hover {
+  color: #ffa900;
 }
 #editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body {
   padding: 20px;
@@ -607,7 +636,7 @@ body.is-dragging-components-draggable #editor .block-editor-block-list__block::a
   text-align: justify;
 }
 #editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .description .row.is-reusable {
-  color: #46B450;
+  color: #f0b849;
   font-weight: 500;
   font-size: 1em;
 }
@@ -697,6 +726,7 @@ body.is-dragging-components-draggable #editor .block-editor-block-list__block::a
 }
 #editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .components-panel {
   border: 1px solid var(--border300, rgb(235, 235, 235));
+  transition: border 0.2s;
 }
 #editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .components-panel:hover:has(> .components-panel__body.is-opened) {
   border-color: rgba(0, 124, 186, 0.5);
@@ -922,12 +952,22 @@ body.is-dragging-components-draggable #editor .block-editor-block-list__block::a
 #editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body .repeatableContainer .repeatableItem:hover:has(.sortableItemInner > .components-panel > .components-panel__body.is-opened) .remove {
   display: none;
 }
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body::-webkit-scrollbar {
+  width: 8px;
+}
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body::-webkit-scrollbar-track {
+  background-color: white;
+  border-left: 1px solid var(--border300, rgb(235, 235, 235));
+}
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__body::-webkit-scrollbar-thumb {
+  background: #74a9c3;
+}
 #editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__footer {
   display: flex;
   justify-content: space-between;
   padding: 20px 20px 0 20px;
-  background: var(--wp-admin-theme-color);
-  color: white;
+  background: var(--background300, rgb(245, 245, 245));
+  border-top: 1px solid var(--border300, rgb(235, 235, 235));
   font-size: 16px;
   font-weight: 500;
   position: absolute;
@@ -936,14 +976,6 @@ body.is-dragging-components-draggable #editor .block-editor-block-list__block::a
   width: 100%;
   height: 75px;
   box-sizing: border-box;
-}
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__footer .components-button.is-primary {
-  color: var(--wp-admin-theme-color);
-  background: white;
-}
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__footer .components-button.is-primary:hover {
-  background: var(--wp-admin-theme-color-darker-10);
-  color: #fff;
 }
 #editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__footer .components-button.is-primary .dashicon {
   margin-right: 4px;
@@ -954,16 +986,14 @@ body.is-dragging-components-draggable #editor .block-editor-block-list__block::a
 #editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .edit-zone__footer .abtButtonCloseEditZone {
   margin-left: auto;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .is-reusable-block .edit-zone__footer {
-  background: #46B450;
+#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .is-reusable-block .edit-zone__body::-webkit-scrollbar-thumb {
+  background: #ffd98e;
 }
 #editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .is-reusable-block .edit-zone__footer .components-button.is-primary {
-  color: #46B450;
+  background: #f0b849;
 }
 #editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .is-reusable-block .edit-zone__footer .components-button.is-primary:hover {
-  background: #46B450;
-  color: white;
-  box-shadow: inset 0 0 0 1px white;
+  background: #ffa900;
 }
 
 #editor .interface-interface-skeleton__header .edit-post-header__toolbar {
@@ -1125,7 +1155,7 @@ body.is-dragging-components-draggable #editor .block-editor-block-list__block::a
 }
 
 .wpe-modal {
-  min-width: 800px;
+  min-width: 640px;
   padding: 0;
   border-top: 6px solid var(--wp-admin-theme-color);
 }
@@ -1137,14 +1167,14 @@ body.is-dragging-components-draggable #editor .block-editor-block-list__block::a
   border-bottom: 1px solid var(--border300, rgb(235, 235, 235));
 }
 .wpe-modal .components-modal__content .components-modal__body {
-  padding: 50px 50px 80px;
+  padding: 50px;
 }
 .wpe-modal .components-modal__content .components-modal__body .title {
   display: flex;
   align-items: center;
   margin: 0 0 50px 0;
   border-bottom: 1px solid var(--border300, rgb(235, 235, 235));
-  padding: 0 0 20px 0;
+  padding: 0 0 30px 0;
 }
 .wpe-modal .components-modal__content .components-modal__body .title .dashicon {
   font-size: 2.5em;
@@ -1160,27 +1190,30 @@ body.is-dragging-components-draggable #editor .block-editor-block-list__block::a
   margin: 0;
   padding: 0;
 }
-.wpe-modal .components-modal__content .components-modal__body .children p {
+.wpe-modal .components-modal__content .components-modal__body .inner p {
   font-size: 1.1em;
   margin: 0;
   line-height: 1.6em;
 }
-.wpe-modal .components-modal__content .components-modal__body .children p.center {
+.wpe-modal .components-modal__content .components-modal__body .inner p.center {
   text-align: center;
 }
-.wpe-modal .components-modal__content .components-modal__body .children .bouttonGroup {
+.wpe-modal .components-modal__content .components-modal__body .inner .bouttonGroup {
   display: flex;
-  justify-content: center;
+  flex-wrap: wrap;
+  justify-content: space-between;
   margin-top: 40px;
 }
-.wpe-modal .components-modal__content .components-modal__body .children .bouttonGroup button {
+.wpe-modal .components-modal__content .components-modal__body .inner .bouttonGroup .row {
+  margin-top: 10px;
+  width: 100%;
+}
+.wpe-modal .components-modal__content .components-modal__body .inner .bouttonGroup .row:first-child {
+  margin-top: 0;
+}
+.wpe-modal .components-modal__content .components-modal__body .inner .bouttonGroup button {
   padding: 22px 28px;
   font-size: 1.1em;
-  margin: 0 10px;
-}
-.wpe-modal .components-modal__content .components-modal__body .children .bouttonGroup button .dashicon {
-  margin-right: 10px;
-  margin-left: -10px;
 }
 .wpe-modal .components-modal__content .components-modal__body .components-toggle-control {
   margin-top: 20px;
@@ -1196,6 +1229,23 @@ body.is-dragging-components-draggable #editor .block-editor-block-list__block::a
 .wpe-modal .components-modal__content .components-modal__footer .alignRight {
   margin-left: auto;
 }
+.wpe-modal .components-modal__content button.is-tertiary {
+  color: #1d2327;
+}
+.wpe-modal .components-modal__content button.is-tertiary:hover {
+  box-shadow: inset 0 0 0 1px var(--wp-admin-theme-color-darker-10);
+}
+.wpe-modal .components-modal__content button.is-link {
+  color: #1d2327;
+  text-decoration: none;
+}
+.wpe-modal .components-modal__content button.is-link:hover {
+  text-decoration: underline;
+}
+.wpe-modal .components-modal__content button .dashicon {
+  margin-right: 10px;
+  margin-left: -10px;
+}
 .wpe-modal.modal-error {
   border-top: 6px solid #DC3232;
 }
@@ -1203,16 +1253,25 @@ body.is-dragging-components-draggable #editor .block-editor-block-list__block::a
   color: #DC3232;
 }
 .wpe-modal.modal-warning {
-  border-top: 6px solid #F56E28;
+  border-top: 6px solid #f0b849;
 }
-.wpe-modal.modal-accent-green {
-  border-top: 6px solid #46B450;
+.wpe-modal.modal-warning .is-primary {
+  background-color: #f0b849;
 }
-.wpe-modal.modal-accent-green .is-primary {
-  background-color: #46B450;
+.wpe-modal.modal-warning .is-primary:hover {
+  background-color: #ffa900;
 }
-.wpe-modal.modal-accent-green .is-primary:hover {
-  background-color: #338c3b;
+.wpe-modal.center {
+  text-align: center;
+}
+.wpe-modal.center .components-modal__body .inner .title {
+  justify-content: center;
+}
+.wpe-modal.center .components-modal__body .inner .bouttonGroup {
+  justify-content: center;
+}
+.wpe-modal.center .components-modal__body .inner .bouttonGroup button {
+  margin: 0 10px;
 }
 
 .DraftEditor-Container {
