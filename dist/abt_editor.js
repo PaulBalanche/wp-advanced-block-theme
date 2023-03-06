@@ -14668,7 +14668,7 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
       }),
       hasFooter: false,
       type: "warning"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h3", null, "Be careful !"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "This block is part of a ", (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("b", null, "reusable block"), " composition.", (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), "Updating this block will ", (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("b", null, "apply the changes everywhere it is used.")), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "This block is part of a ", (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("b", null, "reusable block"), " composition.", (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), "Updating this block will ", (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("b", null, "apply the changes everywhere it is used.")), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "bouttonGroup"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "row"
@@ -14848,22 +14848,20 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
         content: currentEditCat
       });
     }
-    const classNameEditZone = this.getReusableBlock() ? 'edit-zone__inner is-reusable-block' : 'edit-zone__inner';
+    const classNameEditZone = this.getReusableBlock() ? 'o-edit-zone_inner is-reusable-block' : 'o-edit-zone_inner';
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       key: this.props.clientId + "-editZone",
       className: classNameEditZone
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "edit-zone__header"
+      className: "o-edit-zone_header"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "title"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h2", null, this.title), this.getReusableBlock() != null && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "is-reusable"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
-      icon: "warning"
-    }), "Reusable block")), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "tools"
     }, this.renderTools())), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "edit-zone__body"
+      className: "o-edit-zone_body"
     }, this.descriptionMessage(), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Placeholder, {
       key: this.props.clientId + "-ConfigurationPlaceholder",
       isColumnLayout: true,
@@ -14871,7 +14869,7 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
     }, _Static_Render__WEBPACK_IMPORTED_MODULE_3__.Render.tabPanelComponent(this.props.clientId, tabPanel, function (tabPanel) {
       return tabPanel.content;
     }))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "edit-zone__footer"
+      className: "o-edit-zone_footer"
     }, typeof this.state.needPreviewUpdate != 'undefined' && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
       key: this.props.clientId + "-buttonUpdatePreview",
       className: "abtButtonUpdatePreview",
@@ -14896,10 +14894,12 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
       target: "_blank"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
       icon: "external"
-    }), "Open preview"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
+    }), "Open preview"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      class: "o-flex-grow"
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
       key: this.props.clientId + "-buttonCloseEditZone",
       className: "abtButtonCloseEditZone",
-      variant: "primary",
+      variant: "secondary",
       onMouseDown: () => {
         _Singleton_EditZone__WEBPACK_IMPORTED_MODULE_6__.EditZone.getInstance().hide();
       }
@@ -14924,11 +14924,8 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
       className: "title"
     }, this.title));
     if (!titleOnly) {
-      // Separator
-      editZone.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-        key: this.props.clientId + "_EditZoneSeparator1",
-        className: "separator"
-      }));
+      // // Separator
+      // editZone.push(<div key={ this.props.clientId + "_EditZoneSeparator1" } className="separator"></div>);
 
       // Edit button
       editZone.push(this.renderButtonEditZone());
@@ -15183,9 +15180,9 @@ class EditZone {
     if (document.querySelector('#abt-component-edit-zone') == null) {
       const componentEditZone = document.createElement("div");
       componentEditZone.setAttribute("id", "abt-component-edit-zone");
-      componentEditZone.setAttribute("class", "hide");
+      componentEditZone.classList.add('o-edit-zone', 'hide');
       const componentEditZoneLoader = document.createElement("div");
-      componentEditZoneLoader.setAttribute("class", "loader");
+      componentEditZone.classList.add('loader');
       componentEditZone.appendChild(componentEditZoneLoader);
       document.querySelector('.edit-post-visual-editor').appendChild(componentEditZone);
       document.querySelector("#editor").classList.add("resizable");

@@ -1,13 +1,10 @@
 @import './vars';
-@import './column';
-@import './component';
-@import './block_decoration';
-@import './container';
-@import './grid';
-@import './inspector';
-@import './slide';
-@import './slider';
+
+@import './components/_import';
+@import './generic/_import';
+@import './layout//_import';
+@import './toCheck/_import';
+@import './zones/_import';
+
 @import './editzone';
-@import './toolbar';
-@import './main';
-@import '../../js/Controls/WysiwygControl/draftEditor'
+@import '../../js/_import';

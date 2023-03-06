@@ -11,11 +11,12 @@
 
         position: relative;
         border: 1px solid $border300;
+        border-radius: $o-border-radius-large;
+        background: white;
     
         .wpe-dropdown-header {
     
             position: relative;
-            background: white;
             height: 34px;
             cursor: pointer;
     

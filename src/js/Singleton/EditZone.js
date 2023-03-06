@@ -23,10 +23,10 @@ export class EditZone {
         if( document.querySelector('#abt-component-edit-zone') == null ) {
             const componentEditZone = document.createElement("div");
             componentEditZone.setAttribute("id", "abt-component-edit-zone");
-            componentEditZone.setAttribute("class", "hide");
+            componentEditZone.classList.add('o-edit-zone', 'hide');
 
             const componentEditZoneLoader = document.createElement("div");
-            componentEditZoneLoader.setAttribute("class", "loader");
+            componentEditZone.classList.add('loader');
 
             componentEditZone.appendChild(componentEditZoneLoader);
             document.querySelector('.edit-post-visual-editor').appendChild(componentEditZone);

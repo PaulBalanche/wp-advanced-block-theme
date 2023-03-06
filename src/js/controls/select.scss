@@ -1,0 +1,8 @@
+.components-input-control__container {
+    border-radius: $o-border-radius-large !important;
+
+    &:hover,
+    &:focus {
+        border-color: $o-accent-color-border !important;
+    }
+}

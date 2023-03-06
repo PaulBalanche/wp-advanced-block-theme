@@ -190,7 +190,6 @@ export class WpeComponentBase extends Component {
                 hasFooter={false}
                 type="warning"
             >
-                <h3>Be careful !</h3>
                 <p>
                     This block is part of a <b>reusable block</b> composition.<br />
                     Updating this block will <b>apply the changes everywhere it is used.</b>
@@ -425,22 +424,20 @@ export class WpeComponentBase extends Component {
             } );
         }
 
-        const classNameEditZone = ( this.getReusableBlock() ) ? 'edit-zone__inner is-reusable-block' : 'edit-zone__inner';
+        const classNameEditZone = ( this.getReusableBlock() ) ? 'o-edit-zone_inner is-reusable-block' : 'o-edit-zone_inner';
 
         return (
             <div key={ this.props.clientId + "-editZone" } className={classNameEditZone}>
-                <div className='edit-zone__header'>
+                <div className='o-edit-zone_header'>
                     <div className='title'>
                         <h2>{ this.title }</h2>
-                        { ( this.getReusableBlock() != null ) && <div className='is-reusable'>
-                            <Dashicon icon="warning" />Reusable block
-                        </div> }
+                        { ( this.getReusableBlock() != null ) && <div className='is-reusable'></div> }
                     </div>
                     <div className='tools'>
                         { this.renderTools() }
                     </div>
                 </div>
-                <div className='edit-zone__body'>
+                <div className='o-edit-zone_body'>
                     { this.descriptionMessage() }
                     <Placeholder
                         key={ this.props.clientId + "-ConfigurationPlaceholder" }
@@ -450,7 +447,7 @@ export class WpeComponentBase extends Component {
                         { Render.tabPanelComponent( this.props.clientId, tabPanel, function ( tabPanel ) { return tabPanel.content } ) }
                     </Placeholder>
                 </div>
-                <div className='edit-zone__footer'>
+                <div className='o-edit-zone_footer'>
 
                     { typeof this.state.needPreviewUpdate != 'undefined' && 
                     <Button
@@ -473,10 +470,11 @@ export class WpeComponentBase extends Component {
                         href={ this.previewUrl }
                         target="_blank"
                     ><Dashicon icon="external" />Open preview</Button> }
+                    <div class="o-flex-grow"></div>
                     <Button
                         key={ this.props.clientId + "-buttonCloseEditZone" }
                         className="abtButtonCloseEditZone"
-                        variant="primary"
+                        variant="secondary"
                         onMouseDown={ () => {
                             EditZone.getInstance().hide();
                         } }
@@ -504,8 +502,8 @@ export class WpeComponentBase extends Component {
         
         if( ! titleOnly ) {
 
-            // Separator
-            editZone.push(<div key={ this.props.clientId + "_EditZoneSeparator1" } className="separator"></div>);
+            // // Separator
+            // editZone.push(<div key={ this.props.clientId + "_EditZoneSeparator1" } className="separator"></div>);
 
             // Edit button
             editZone.push( this.renderButtonEditZone() );

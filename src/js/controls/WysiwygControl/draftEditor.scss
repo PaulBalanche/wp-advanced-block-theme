@@ -2,11 +2,11 @@
 @import './modal';
 
 .DraftEditor-Container {
-    background-color: rgb(248,248,248);
-    border: 1px solid $border300;
     font-family: 'Georgia', serif;
     font-size: 14px;
-    padding: 15px;
+    border: 1px solid $o-main-color-border;
+    border-radius: $o-border-radius-large;
+    background: white;
 
     .DraftEditor-controls-row {
         
@@ -59,6 +59,7 @@
         align-items: center;
         height: 34px;
         border: 1px solid $border300;
+        border-radius: $o-border-radius-large;
         flex-grow: 1;
         padding: 0 5px;
 
@@ -69,15 +70,31 @@
     }
 
     .border-style {
-      border: 1px solid $border300;
+      // border: 1px solid $border300;
+      border-radius: $o-border-radius-large;
       padding: 6px;
   }
+
+  .DraftEditor-controls-row {
+    margin: 0 !important;
+    padding: $o-space-20;
+    background: $o-background-color;
+
+    &:first-child {
+      border-top-left-radius: $o-border-radius-large;
+      border-top-right-radius: $o-border-radius-large;
+    }
+
+    &:nth-child(2) {
+      padding-block-start: 0;
+      border-bottom: solid 1px $o-main-color-border;
+    }
+  }
+
 }
 
 .DraftEditor-root {
-  background: #fff;
-  border: 1px solid $border300;
-  padding: 15px;
+  padding: $o-space-40;
 }
 
 .DraftEditor-editor {
