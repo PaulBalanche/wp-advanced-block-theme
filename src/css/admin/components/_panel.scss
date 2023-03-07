@@ -1,7 +1,7 @@
 .components-panel {
     position: relative;
     border: 1px solid $o-main-color-border;
-    border-radius: $o-border-radius-large;
+    border-radius: $o-border-radius;
 
     &:after {
         content: '';
@@ -10,13 +10,13 @@
         width: calc(100% - 1px);
         height: calc(100% - 1px);
         border: 1px solid $o-accent-color-border;
-        border-radius: $o-border-radius-large;
+        border-radius: $o-border-radius;
         opacity: 0;
         pointer-events: none;
     }
 
     > .components-panel__body > .components-panel__body-title {
-        border-radius: $o-border-radius-large;
+        border-radius: $o-border-radius;
     }
 
     > .is-opened.components-panel__body > .components-panel__body-title {

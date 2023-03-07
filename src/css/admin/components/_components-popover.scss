@@ -1,12 +1,12 @@
 .block-editor-block-parent-selector {
-    border-radius: $o-border-radius !important;
+    border-radius: $o-border-radius-small !important;
     border: none !important;
     display: none;
 }
 
 
 .components-popover {
-    
+
     .block-editor-block-contextual-toolbar {
         transform: translateY(50%);
         margin: 0 !important;
@@ -16,7 +16,7 @@
     }
 
     .block-editor-block-contextual-toolbar {
-        border-radius: $o-border-radius;
+        border-radius: $o-border-radius-small;
         border: none;
 
         * {
@@ -31,6 +31,6 @@
     }
 
     .components-popover__content {
-        border-radius: $o-border-radius;
+        border-radius: $o-border-radius-small;
     }
 }

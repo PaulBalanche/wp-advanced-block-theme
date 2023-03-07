@@ -470,7 +470,7 @@ export class WpeComponentBase extends Component {
                         href={ this.previewUrl }
                         target="_blank"
                     ><Dashicon icon="external" />Open preview</Button> }
-                    <div class="o-flex-grow"></div>
+                    <div className="o-flex-grow"></div>
                     <Button
                         key={ this.props.clientId + "-buttonCloseEditZone" }
                         className="abtButtonCloseEditZone"
@@ -523,9 +523,9 @@ export class WpeComponentBase extends Component {
         
         return <div
                 key={ this.props.clientId + "-EditZoneButtonGroup" }
-                className="abtButtonGroupEditZoneContainer"
+                className="o-toolbar-container"
             >
-                <div className='abtButtonGroupEditZone'>{ editZone }</div>
+                <div className='o-toolbar'>{ editZone }</div>
             </div>
     }
 
@@ -535,7 +535,7 @@ export class WpeComponentBase extends Component {
             className="abtButtonEditZone"
             variant="primary"
             onMouseDown={ () => {
-                EditZone.getInstance().show(this)
+                EditZone.getInstance().open(this)
             } }
         ><Dashicon icon="edit" /> Edit</Button>
     }

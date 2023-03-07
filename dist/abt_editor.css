@@ -1,5 +1,5 @@
 /*!**********************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[3].use[1]!./node_modules/@wordpress/scripts/node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[3].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[3].use[3]!./src/css/admin/editor.scss ***!
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[3].use[1]!./node_modules/@wordpress/scripts/node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[3].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[3].use[3]!./src/css/admin/_index.scss ***!
   \**********************************************************************************************************************************************************************************************************************************************************************************/
 .block-editor-block-list__block[data-type="custom/wpe-column"] {
   width: 100%;
@@ -107,7 +107,7 @@
   border-radius: 4px;
 }
 
-#editor .editor-styles-wrapper.block-editor-writing-flow .is-root-container.is-layout-flow .block-editor-block-list__block[data-type="custom/wpe-grid"] > * > .abtButtonGroupEditZone {
+#editor .editor-styles-wrapper.block-editor-writing-flow .is-root-container.is-layout-flow .block-editor-block-list__block[data-type="custom/wpe-grid"] > * > .o-toolbar {
   top: -80px;
 }
 #editor .editor-styles-wrapper.block-editor-writing-flow .is-root-container.is-layout-flow .block-editor-block-list__block[data-type="custom/wpe-grid"] .gridContainer {
@@ -182,6 +182,97 @@
 }
 .components-panel:hover > .components-panel__body > .components-panel__body-title, .components-panel:focus > .components-panel__body > .components-panel__body-title, .components-panel:focus-within > .components-panel__body > .components-panel__body-title {
   background: #d8eef8 !important;
+}
+
+.repeatableAddElt {
+  border: 1px dashed var(--border300, rgb(235, 235, 235));
+  width: 100%;
+  box-shadow: none;
+  color: rgb(200, 200, 200);
+  justify-content: center;
+  margin-top: 5px;
+}
+.repeatableAddElt .dashicon {
+  font-size: 1rem;
+  height: auto;
+  margin-right: 3px;
+  transition: none;
+}
+.repeatableAddElt:hover {
+  color: var(--wp-admin-theme-color);
+  border-color: var(--wp-admin-theme-color);
+}
+
+.repeatableContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.repeatableContainer .repeatableItem {
+  position: relative;
+  -webkit-padding-end: 0;
+          padding-inline-end: 0;
+  transition: all 0.1s ease-in-out;
+}
+.repeatableContainer .repeatableItem:hover {
+  -webkit-padding-end: 2.5em;
+          padding-inline-end: 2.5em;
+}
+.repeatableContainer .repeatableItem .sortableItemInner .repeatableObjectLabel {
+  display: flex;
+  gap: 12px;
+  -webkit-margin-before: 5px;
+          margin-block-start: 5px;
+}
+.repeatableContainer .repeatableItem .sortableItemInner .repeatableObjectLabel .id {
+  font-weight: bolder;
+}
+.repeatableContainer .repeatableItem .sortableItemInner .repeatableObjectLabel .props {
+  display: flex;
+  gap: 12px;
+}
+.repeatableContainer .repeatableItem .sortableItemInner .repeatableObjectLabel .props .key {
+  opacity: 0.5;
+}
+.repeatableContainer .repeatableItem .drag {
+  position: absolute;
+  right: 0;
+  top: 0;
+  padding: 0;
+  margin: 0;
+  color: rgba(0, 0, 0, 0.6);
+  opacity: 0;
+  box-shadow: none !important;
+  transition: all 0.1s ease-in-out;
+}
+.repeatableContainer .repeatableItem .drag:hover {
+  opacity: 1;
+}
+.repeatableContainer .repeatableItem .drag .dashicon {
+  font-size: 1rem;
+  height: 1rem;
+}
+.repeatableContainer .repeatableItem:hover .drag {
+  opacity: 0.3;
+}
+.repeatableContainer .repeatableItem .remove {
+  position: absolute;
+  right: 0;
+  top: 2em;
+  color: rgba(0, 0, 0, 0.6);
+  opacity: 0;
+  box-shadow: none !important;
+  transition: all 0.1s ease-in-out;
+}
+.repeatableContainer .repeatableItem .remove:hover {
+  opacity: 1;
+}
+.repeatableContainer .repeatableItem .remove .dashicon {
+  font-size: 1rem;
+  height: 1rem;
+}
+.repeatableContainer .repeatableItem:hover .remove {
+  opacity: 0.3;
 }
 
 .block-editor-block-list__block.block-editor-block-list__layout[data-type="custom/wpe-slide"] {
@@ -491,7 +582,7 @@
   width: 100%;
   transition: width 0.4s;
 }
-#editor.resizable .is-mode-visual .interface-interface-skeleton__body:has(#abt-component-edit-zone .edit-zone__inner) {
+#editor.resizable .is-mode-visual .interface-interface-skeleton__body:has(#o-edit-zone .edit-zone__inner) {
   width: calc(100% - 700px);
 }
 #editor .interface-interface-skeleton__body .edit-post-visual-editor__post-title-wrapper {
@@ -508,7 +599,7 @@
   border-radius: 10px;
   z-index: 99999;
   box-sizing: border-box;
-  transition: all 0.4s;
+  transition: all 0.2s ease-out;
   display: flex;
   flex-direction: column;
   box-shadow: 0px 0.8px 2.2px rgba(0, 0, 0, 0.022), 0px 2px 5.3px rgba(0, 0, 0, 0.032), 0px 3.8px 10px rgba(0, 0, 0, 0.04), 0px 6.7px 17.9px rgba(0, 0, 0, 0.048), 0px 12.5px 33.4px rgba(0, 0, 0, 0.058), 0px 30px 80px rgba(0, 0, 0, 0.08);
@@ -666,7 +757,9 @@
     transform: translateY(0);
   }
 }
-.wp-block-post-content {
+.edit-post-visual-editor .wp-block-post-content {
+  border-left: solid 1px hsla(200deg, 0%, 55%, 0.2);
+  border-right: solid 1px hsla(200deg, 0%, 55%, 0.2);
   /**
    * Toolbar
    */
@@ -674,17 +767,17 @@
    * Appender
    */
 }
-.wp-block-post-content.is-layout-flow {
+.edit-post-visual-editor .wp-block-post-content.is-layout-flow {
   display: flex;
   flex-direction: column;
   gap: 60px;
   padding: 100px 0;
 }
-.wp-block-post-content.is-layout-flow .block-editor-block-list__block {
+.edit-post-visual-editor .wp-block-post-content.is-layout-flow .block-editor-block-list__block {
   width: 100%;
   max-width: 100%;
 }
-.wp-block-post-content .loaderLiveRenderingIframe {
+.edit-post-visual-editor .wp-block-post-content .o-preview-zone_loader {
   display: none;
   position: absolute;
   width: 100%;
@@ -694,25 +787,25 @@
   background: var(--abt-background-editor, "white") center no-repeat url(data:image/svg+xml;base64,PCEtLSBCeSBTYW0gSGVyYmVydCAoQHNoZXJiKSwgZm9yIGV2ZXJ5b25lLiBNb3JlIEAgaHR0cDovL2dvby5nbC83QUp6YkwgLS0+Cjxzdmcgd2lkdGg9IjUwIiBoZWlnaHQ9IjUwIiB2aWV3Qm94PSIwIDAgMzggMzgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgc3Ryb2tlPSIjMDA3Y2JhIj4KICAgIDxnIGZpbGw9Im5vbmUiIGZpbGwtcnVsZT0iZXZlbm9kZCI+CiAgICAgICAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMSAxKSIgc3Ryb2tlLXdpZHRoPSIyIj4KICAgICAgICAgICAgPGNpcmNsZSBzdHJva2Utb3BhY2l0eT0iLjUiIGN4PSIxOCIgY3k9IjE4IiByPSIxOCIvPgogICAgICAgICAgICA8cGF0aCBkPSJNMzYgMThjMC05Ljk0LTguMDYtMTgtMTgtMTgiPgogICAgICAgICAgICAgICAgPGFuaW1hdGVUcmFuc2Zvcm0KICAgICAgICAgICAgICAgICAgICBhdHRyaWJ1dGVOYW1lPSJ0cmFuc2Zvcm0iCiAgICAgICAgICAgICAgICAgICAgdHlwZT0icm90YXRlIgogICAgICAgICAgICAgICAgICAgIGZyb209IjAgMTggMTgiCiAgICAgICAgICAgICAgICAgICAgdG89IjM2MCAxOCAxOCIKICAgICAgICAgICAgICAgICAgICBkdXI9IjFzIgogICAgICAgICAgICAgICAgICAgIHJlcGVhdENvdW50PSJpbmRlZmluaXRlIi8+CiAgICAgICAgICAgIDwvcGF0aD4KICAgICAgICA8L2c+CiAgICA8L2c+Cjwvc3ZnPg==);
   opacity: 0.75;
 }
-.wp-block-post-content .block-editor-block-list__block {
+.edit-post-visual-editor .wp-block-post-content .block-editor-block-list__block {
   margin: 0 !important;
 }
-.wp-block-post-content .block-editor-block-list__block::before, .wp-block-post-content .block-editor-block-list__block::after {
+.edit-post-visual-editor .wp-block-post-content .block-editor-block-list__block::before, .edit-post-visual-editor .wp-block-post-content .block-editor-block-list__block::after {
   display: none !important;
 }
-.wp-block-post-content .block-editor-block-list__block:not(:hover):not(.is-selected):not([data-type="custom/wpe-grid"].has-child-selected) > .abtButtonGroupEditZoneContainer, .wp-block-post-content .block-editor-block-list__block:has(.block-editor-block-list__block:hover):not([data-type="custom/wpe-grid"]) > .abtButtonGroupEditZoneContainer {
+.edit-post-visual-editor .wp-block-post-content .block-editor-block-list__block:not(:hover):not(.is-selected):not([data-type="custom/wpe-grid"].has-child-selected) > .o-toolbar-container, .edit-post-visual-editor .wp-block-post-content .block-editor-block-list__block:has(.block-editor-block-list__block:hover):not([data-type="custom/wpe-grid"]) > .o-toolbar-container {
   display: none !important;
 }
-.wp-block-post-content .block-editor-block-list__block:not(:hover):not(.is-selected):has(.liveRenderingMessage) > .abtButtonGroupEditZoneContainer, .wp-block-post-content .block-editor-block-list__block:has(.block-editor-block-list__block:hover):has(.liveRenderingMessage) > .abtButtonGroupEditZoneContainer {
+.edit-post-visual-editor .wp-block-post-content .block-editor-block-list__block:not(:hover):not(.is-selected):has(.liveRenderingMessage) > .o-toolbar-container, .edit-post-visual-editor .wp-block-post-content .block-editor-block-list__block:has(.block-editor-block-list__block:hover):has(.liveRenderingMessage) > .o-toolbar-container {
   display: flex !important;
 }
-.wp-block-post-content .block-editor-block-list__block:not(:hover):not(.is-selected):has(.liveRenderingMessage):after, .wp-block-post-content .block-editor-block-list__block:has(.block-editor-block-list__block:hover):has(.liveRenderingMessage):after {
+.edit-post-visual-editor .wp-block-post-content .block-editor-block-list__block:not(:hover):not(.is-selected):has(.liveRenderingMessage):after, .edit-post-visual-editor .wp-block-post-content .block-editor-block-list__block:has(.block-editor-block-list__block:hover):has(.liveRenderingMessage):after {
   border: 1px solid rgba(0, 124, 186, 0.5);
 }
-.wp-block-post-content .block-editor-block-list__block[data-type="custom/wpe-column"]:has(.block-editor-block-list__block:hover):after, .wp-block-post-content .block-editor-block-list__block[data-type="custom/wpe-column"]:has(.is-selected):after, .wp-block-post-content .block-editor-block-list__block[data-type="custom/wpe-column"].is-empty:after {
+.edit-post-visual-editor .wp-block-post-content .block-editor-block-list__block[data-type="custom/wpe-column"]:has(.block-editor-block-list__block:hover):after, .edit-post-visual-editor .wp-block-post-content .block-editor-block-list__block[data-type="custom/wpe-column"]:has(.is-selected):after, .edit-post-visual-editor .wp-block-post-content .block-editor-block-list__block[data-type="custom/wpe-column"].is-empty:after {
   border: 1px dashed rgba(0, 124, 186, 0.5);
 }
-.wp-block-post-content .abtButtonGroupEditZoneContainer {
+.edit-post-visual-editor .wp-block-post-content .o-toolbar-container {
   display: block;
   align-items: center;
   position: absolute;
@@ -722,7 +815,7 @@
   left: 0;
   animation: o-toolbar-in 0.1s ease-out forwards;
 }
-.wp-block-post-content .abtButtonGroupEditZoneContainer .abtButtonGroupEditZone {
+.edit-post-visual-editor .wp-block-post-content .o-toolbar-container .o-toolbar {
   display: flex;
   align-items: center;
   gap: 18px;
@@ -737,13 +830,13 @@
   transform: translateY(-50%) translateX(-50%);
   transition: all 0.3s ease-in-out;
 }
-.wp-block-post-content .abtButtonGroupEditZoneContainer .abtButtonGroupEditZone .separator {
+.edit-post-visual-editor .wp-block-post-content .o-toolbar-container .o-toolbar .separator {
   margin: 0 25px;
   width: 1px;
   height: 30px;
   background: rgba(0, 0, 0, 0.6);
 }
-.wp-block-post-content .abtButtonGroupEditZoneContainer .abtButtonGroupEditZone .title {
+.edit-post-visual-editor .wp-block-post-content .o-toolbar-container .o-toolbar .title {
   font-size: 0.75em;
   font-weight: 600;
   -webkit-padding-end: 18px;
@@ -752,43 +845,43 @@
           padding-inline-start: 6px;
   color: rgba(0, 0, 0, 0.6);
 }
-.wp-block-post-content .abtButtonGroupEditZoneContainer .abtButtonGroupEditZone .title h2 {
+.edit-post-visual-editor .wp-block-post-content .o-toolbar-container .o-toolbar .title h2 {
   color: #f0b849;
 }
-.wp-block-post-content .abtButtonGroupEditZoneContainer .abtButtonGroupEditZone .is-primary {
+.edit-post-visual-editor .wp-block-post-content .o-toolbar-container .o-toolbar .is-primary {
   box-shadow: none;
   font-weight: 500;
 }
-.wp-block-post-content .abtButtonGroupEditZoneContainer .abtButtonGroupEditZone .is-primary .dashicon {
+.edit-post-visual-editor .wp-block-post-content .o-toolbar-container .o-toolbar .is-primary .dashicon {
   margin-right: 4px;
 }
-.wp-block-post-content .abtButtonGroupEditZoneContainer .abtButtonGroupEditZone .components-dropdown {
+.edit-post-visual-editor .wp-block-post-content .o-toolbar-container .o-toolbar .components-dropdown {
   display: inline-flex;
 }
-.wp-block-post-content .abtButtonGroupEditZoneContainer .abtButtonGroupEditZone .components-dropdown .components-dropdown-menu__toggle {
+.edit-post-visual-editor .wp-block-post-content .o-toolbar-container .o-toolbar .components-dropdown .components-dropdown-menu__toggle {
   color: rgba(0, 0, 0, 0.6);
 }
-.wp-block-post-content .abtButtonGroupEditZoneContainer .abtButtonGroupEditZone .components-dropdown .components-dropdown-menu__toggle:focus {
+.edit-post-visual-editor .wp-block-post-content .o-toolbar-container .o-toolbar .components-dropdown .components-dropdown-menu__toggle:focus {
   box-shadow: none;
 }
-.wp-block-post-content .abtButtonGroupEditZoneContainer .abtButtonGroupEditZone .components-dropdown .components-dropdown-menu__toggle:hover {
+.edit-post-visual-editor .wp-block-post-content .o-toolbar-container .o-toolbar .components-dropdown .components-dropdown-menu__toggle:hover {
   background: var(--wp-admin-theme-color-darker-10);
   color: rgb(255, 255, 255);
 }
-.wp-block-post-content .is-reusable .is-primary {
+.edit-post-visual-editor .wp-block-post-content .is-reusable .is-primary {
   background: #f0b849;
 }
-.wp-block-post-content .is-reusable .is-primary:hover {
+.edit-post-visual-editor .wp-block-post-content .is-reusable .is-primary:hover {
   background: #D09E3B;
 }
-.wp-block-post-content .wp-block.block-list-appender {
+.edit-post-visual-editor .wp-block-post-content .wp-block.block-list-appender {
   border-color: var(--wp-admin-theme-color) !important;
   margin: 30px !important;
   width: auto !important;
   padding: 0 !important;
   position: relative !important;
 }
-.wp-block-post-content .wp-block.block-list-appender svg * {
+.edit-post-visual-editor .wp-block-post-content .wp-block.block-list-appender svg * {
   fill: var(--wp-admin-theme-color);
 }
 
@@ -808,86 +901,109 @@
 #editor .interface-interface-skeleton__header .edit-post-header__toolbar .edit-post-visual-editor__post-title-wrapper h1:after {
   content: none;
 }
-#editor .interface-interface-skeleton__header .edit-post-header__toolbar #devicesButtonGroupContainer {
+
+#devicesButtonGroupContainer {
   display: flex;
+  position: relative;
   align-items: center;
+  justify-content: flex-end;
   margin-left: auto;
-  margin-right: 5rem;
+  margin-right: 30px;
+  -webkit-padding-end: 36px;
+          padding-inline-end: 36px;
 }
-#editor .interface-interface-skeleton__header .edit-post-header__toolbar #devicesButtonGroupContainer .devicesInfo {
+#devicesButtonGroupContainer:after {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 1px;
+  height: 100%;
+  background-color: #e8e8e8;
+}
+#devicesButtonGroupContainer .devicesInfo {
   margin-right: 30px;
   display: flex;
   align-items: center;
 }
-#editor .interface-interface-skeleton__header .edit-post-header__toolbar #devicesButtonGroupContainer .devicesInfo .dashicon {
+#devicesButtonGroupContainer .devicesInfo .dashicon {
   font-size: 1.2em;
   height: auto;
   width: auto;
   margin: 2px 5px 0 5px;
 }
-#editor .interface-interface-skeleton__header .edit-post-header__toolbar #devicesButtonGroupContainer .devicesButtonGroup button {
+#devicesButtonGroupContainer .devicesButtonGroup button {
   box-shadow: inset 0 0 0 1px var(--border300, rgb(235, 235, 235));
   background: var(--background300, rgb(245, 245, 245));
 }
-#editor .interface-interface-skeleton__header .edit-post-header__toolbar #devicesButtonGroupContainer .devicesButtonGroup button.is-pressed {
+#devicesButtonGroupContainer .devicesButtonGroup button:first-child {
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+#devicesButtonGroupContainer .devicesButtonGroup button:last-child {
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+#devicesButtonGroupContainer .devicesButtonGroup button.is-pressed {
   background: var(--wp-admin-theme-color);
 }
 
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .wpe-component_edit_placeholder {
+#editor .interface-interface-skeleton.is-mode-visual #o-edit-zone .wpe-component_edit_placeholder {
   padding: 0;
   box-shadow: none;
   outline: none;
   justify-content: flex-start;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .components-placeholder__label {
+#editor .interface-interface-skeleton.is-mode-visual #o-edit-zone .components-placeholder__label {
   margin-bottom: 20px;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .components-flex-item .components-base-control__label, #editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .components-flex-item .components-input-control__label {
+#editor .interface-interface-skeleton.is-mode-visual #o-edit-zone .components-flex-item .components-base-control__label, #editor .interface-interface-skeleton.is-mode-visual #o-edit-zone .components-flex-item .components-input-control__label {
   margin-bottom: 2px;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .tab-panel-wpe-component .components-tab-panel__tabs-item {
+#editor .interface-interface-skeleton.is-mode-visual #o-edit-zone .tab-panel-wpe-component .components-tab-panel__tabs-item {
   margin: 0px 15px;
   padding: 0;
   color: rgb(200, 200, 200);
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .tab-panel-wpe-component .components-tab-panel__tabs-item:focus:not(:disabled), #editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .tab-panel-wpe-component .components-tab-panel__tabs-item.active-tab {
+#editor .interface-interface-skeleton.is-mode-visual #o-edit-zone .tab-panel-wpe-component .components-tab-panel__tabs-item:focus:not(:disabled), #editor .interface-interface-skeleton.is-mode-visual #o-edit-zone .tab-panel-wpe-component .components-tab-panel__tabs-item.active-tab {
   color: rgb(30, 30, 30);
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .tab-panel-wpe-component .components-tab-panel__tabs-item:hover {
+#editor .interface-interface-skeleton.is-mode-visual #o-edit-zone .tab-panel-wpe-component .components-tab-panel__tabs-item:hover {
   color: rgb(30, 30, 30);
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .components-panel__row > .tab-panel-wpe-component > .components-tab-panel__tabs {
+#editor .interface-interface-skeleton.is-mode-visual #o-edit-zone .components-panel__row > .tab-panel-wpe-component > .components-tab-panel__tabs {
   background: rgb(252, 252, 252);
   border: none;
   border-bottom: 1px solid var(--border300, rgb(235, 235, 235));
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .components-panel__row > .tab-panel-wpe-component > .components-tab-panel__tabs .components-tab-panel__tabs-item {
+#editor .interface-interface-skeleton.is-mode-visual #o-edit-zone .components-panel__row > .tab-panel-wpe-component > .components-tab-panel__tabs .components-tab-panel__tabs-item {
   font-weight: 400;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .components-panel__row > .tab-panel-wpe-component > .components-tab-panel__tab-content {
+#editor .interface-interface-skeleton.is-mode-visual #o-edit-zone .components-panel__row > .tab-panel-wpe-component > .components-tab-panel__tab-content {
   padding: 15px;
   border: none;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .basicField, #editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .repeatableField {
+#editor .interface-interface-skeleton.is-mode-visual #o-edit-zone .basicField, #editor .interface-interface-skeleton.is-mode-visual #o-edit-zone .repeatableField {
   padding: 10px 0;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .basicField:not(.flex div):last-child, #editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .repeatableField:not(.flex div):last-child {
+#editor .interface-interface-skeleton.is-mode-visual #o-edit-zone .basicField:not(.flex div):last-child, #editor .interface-interface-skeleton.is-mode-visual #o-edit-zone .repeatableField:not(.flex div):last-child {
   border-bottom: none;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .basicField .block-editor-media-placeholder, #editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .repeatableField .block-editor-media-placeholder {
+#editor .interface-interface-skeleton.is-mode-visual #o-edit-zone .basicField .block-editor-media-placeholder, #editor .interface-interface-skeleton.is-mode-visual #o-edit-zone .repeatableField .block-editor-media-placeholder {
   box-shadow: none;
   padding: 0;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .flex:last-child .basicField, #editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .flex:last-child .repeatableField {
+#editor .interface-interface-skeleton.is-mode-visual #o-edit-zone .flex:last-child .basicField, #editor .interface-interface-skeleton.is-mode-visual #o-edit-zone .flex:last-child .repeatableField {
   border-bottom: none;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .repeatableField .block-editor-media-placeholder {
+#editor .interface-interface-skeleton.is-mode-visual #o-edit-zone .repeatableField .block-editor-media-placeholder {
   margin-bottom: 8px;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .components-panel:last-child {
+#editor .interface-interface-skeleton.is-mode-visual #o-edit-zone .components-panel:last-child {
   margin-bottom: 0;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .components-panel > .components-base-control__label {
+#editor .interface-interface-skeleton.is-mode-visual #o-edit-zone .components-panel > .components-base-control__label {
   background: var(--background300, rgb(245, 245, 245));
   margin: 0;
   padding: 0 0 0 16px;
@@ -895,52 +1011,52 @@
   height: 48px;
   border-bottom: 1px solid var(--border300, rgb(235, 235, 235));
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .components-panel .components-panel__body {
+#editor .interface-interface-skeleton.is-mode-visual #o-edit-zone .components-panel .components-panel__body {
   padding: 0;
   border: none;
   margin: 0;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .components-panel .components-panel__body .components-panel__body-title {
+#editor .interface-interface-skeleton.is-mode-visual #o-edit-zone .components-panel .components-panel__body .components-panel__body-title {
   margin: 0;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .components-panel .components-panel__body .components-panel__body-title .components-button {
+#editor .interface-interface-skeleton.is-mode-visual #o-edit-zone .components-panel .components-panel__body .components-panel__body-title .components-button {
   display: flex;
   align-items: center;
   padding: 16px 48px 16px 16px;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .components-panel .components-panel__body .components-panel__body-title .components-button:focus {
+#editor .interface-interface-skeleton.is-mode-visual #o-edit-zone .components-panel .components-panel__body .components-panel__body-title .components-button:focus {
   box-shadow: none;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .components-panel .components-panel__body .components-panel__body-title:hover {
+#editor .interface-interface-skeleton.is-mode-visual #o-edit-zone .components-panel .components-panel__body .components-panel__body-title:hover {
   background: var(--background300, rgb(245, 245, 245));
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .components-panel .components-panel__body .components-panel__row {
+#editor .interface-interface-skeleton.is-mode-visual #o-edit-zone .components-panel .components-panel__body .components-panel__row {
   padding: 15px;
   display: block;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .components-panel .components-panel__body .components-panel__row:has(> .tab-panel-wpe-component) {
+#editor .interface-interface-skeleton.is-mode-visual #o-edit-zone .components-panel .components-panel__body .components-panel__row:has(> .tab-panel-wpe-component) {
   padding: 0;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .components-panel .components-panel__body.is-opened > .components-panel__body-title {
+#editor .interface-interface-skeleton.is-mode-visual #o-edit-zone .components-panel .components-panel__body.is-opened > .components-panel__body-title {
   background: var(--background300, rgb(245, 245, 245));
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .components-panel .components-panel__body .flex > div {
+#editor .interface-interface-skeleton.is-mode-visual #o-edit-zone .components-panel .components-panel__body .flex > div {
   flex-grow: 1;
   margin-right: 4rem;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .components-panel .components-panel__body .flex > div:last-child {
+#editor .interface-interface-skeleton.is-mode-visual #o-edit-zone .components-panel .components-panel__body .flex > div:last-child {
   margin-right: 0;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .components-panel.noLabel {
+#editor .interface-interface-skeleton.is-mode-visual #o-edit-zone .components-panel.noLabel {
   border: none;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .components-panel.noLabel .components-panel__body {
+#editor .interface-interface-skeleton.is-mode-visual #o-edit-zone .components-panel.noLabel .components-panel__body {
   border: none;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .components-panel.noLabel .components-panel__body .components-base-control {
+#editor .interface-interface-skeleton.is-mode-visual #o-edit-zone .components-panel.noLabel .components-panel__body .components-base-control {
   padding: 0;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .components-placeholder .media-preview-container {
+#editor .interface-interface-skeleton.is-mode-visual #o-edit-zone .components-placeholder .media-preview-container {
   position: relative;
   width: 100%;
   border: 1px solid var(--border300, rgb(235, 235, 235));
@@ -948,65 +1064,65 @@
   display: flex;
   background: white;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .components-placeholder .media-preview-container .file-details {
+#editor .interface-interface-skeleton.is-mode-visual #o-edit-zone .components-placeholder .media-preview-container .file-details {
   margin-left: 10px;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .components-placeholder .media-preview-container .reset-button {
+#editor .interface-interface-skeleton.is-mode-visual #o-edit-zone .components-placeholder .media-preview-container .reset-button {
   position: absolute;
   background: white;
   top: 16px;
   right: 16px;
   display: none;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .components-placeholder .media-preview-container:hover > .reset-button {
+#editor .interface-interface-skeleton.is-mode-visual #o-edit-zone .components-placeholder .media-preview-container:hover > .reset-button {
   display: inline-flex;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .components-base-control__field {
+#editor .interface-interface-skeleton.is-mode-visual #o-edit-zone .components-base-control__field {
   margin: 0;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .rich-text-container .block-editor-rich-text__editable {
+#editor .interface-interface-skeleton.is-mode-visual #o-edit-zone .rich-text-container .block-editor-rich-text__editable {
   background: #fff;
   padding: 6px 8px;
   border-radius: 2px;
   border: 1px solid #757575;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .link-control-container .components-base-control__field {
+#editor .interface-interface-skeleton.is-mode-visual #o-edit-zone .link-control-container .components-base-control__field {
   padding: 0 10px;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .link-control-container .block-editor-link-control {
+#editor .interface-interface-skeleton.is-mode-visual #o-edit-zone .link-control-container .block-editor-link-control {
   border-top: 1px solid var(--border300, rgb(235, 235, 235));
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .link-control-container .block-editor-link-control .block-editor-link-control__search-item {
+#editor .interface-interface-skeleton.is-mode-visual #o-edit-zone .link-control-container .block-editor-link-control .block-editor-link-control__search-item {
   box-sizing: border-box;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .link-control-container .block-editor-link-control input[type=text] {
+#editor .interface-interface-skeleton.is-mode-visual #o-edit-zone .link-control-container .block-editor-link-control input[type=text] {
   border-color: var(--border300, rgb(235, 235, 235));
   box-shadow: none;
   outline: none;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .link-control-container .block-editor-link-control .block-editor-link-control__tools {
+#editor .interface-interface-skeleton.is-mode-visual #o-edit-zone .link-control-container .block-editor-link-control .block-editor-link-control__tools {
   border-top: 1px solid var(--border300, rgb(235, 235, 235));
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .radio-control-container {
+#editor .interface-interface-skeleton.is-mode-visual #o-edit-zone .radio-control-container {
   padding: 1em;
   background: white;
   border: 1px solid #cce4f1;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .dateTime-container {
+#editor .interface-interface-skeleton.is-mode-visual #o-edit-zone .dateTime-container {
   background: var(--background300, rgb(245, 245, 245));
   padding: 20px;
   border-radius: 2px;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .dateTime-container .components-datetime {
+#editor .interface-interface-skeleton.is-mode-visual #o-edit-zone .dateTime-container .components-datetime {
   display: flex;
   justify-content: space-between;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .dateTime-container .components-datetime .components-datetime__buttons {
+#editor .interface-interface-skeleton.is-mode-visual #o-edit-zone .dateTime-container .components-datetime .components-datetime__buttons {
   justify-content: flex-end;
   flex-direction: column;
   align-items: flex-end;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .repeatableAddElt {
+#editor .interface-interface-skeleton.is-mode-visual #o-edit-zone .repeatableAddElt {
   border: 1px dashed var(--border300, rgb(235, 235, 235));
   width: 100%;
   box-shadow: none;
@@ -1014,88 +1130,35 @@
   justify-content: center;
   margin-top: 5px;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .repeatableAddElt .dashicon {
+#editor .interface-interface-skeleton.is-mode-visual #o-edit-zone .repeatableAddElt .dashicon {
   font-size: 1rem;
   height: auto;
   margin-right: 3px;
   transition: none;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .repeatableAddElt:hover {
+#editor .interface-interface-skeleton.is-mode-visual #o-edit-zone .repeatableAddElt:hover {
   color: var(--wp-admin-theme-color);
   border-color: var(--wp-admin-theme-color);
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone textarea {
+#editor .interface-interface-skeleton.is-mode-visual #o-edit-zone textarea {
   border-color: var(--border300, rgb(235, 235, 235));
   padding: 12px;
   box-shadow: none;
   outline: none;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .components-text-control__input {
+#editor .interface-interface-skeleton.is-mode-visual #o-edit-zone .components-text-control__input {
   border-color: var(--border300, rgb(235, 235, 235));
   padding: 12px;
   margin-bottom: 10px;
   box-shadow: none;
   outline: none;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .components-select-control__input {
+#editor .interface-interface-skeleton.is-mode-visual #o-edit-zone .components-select-control__input {
   padding: 0px 26px 0px 15px;
   height: 42px;
 }
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .components-input-control__backdrop {
+#editor .interface-interface-skeleton.is-mode-visual #o-edit-zone .components-input-control__backdrop {
   border-color: var(--border300, rgb(235, 235, 235));
-}
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .repeatableContainer .repeatableItem {
-  position: relative;
-  margin: 5px 0;
-}
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .repeatableContainer .repeatableItem .sortableItemInner {
-  padding: 0;
-  transition: padding 0.4s;
-}
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .repeatableContainer .repeatableItem .sortableItemInner .repeatableObjectLabel .id {
-  color: rgb(220, 220, 220);
-}
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .repeatableContainer .repeatableItem .sortableItemInner .repeatableObjectLabel .props {
-  margin: 5px 0 0 0;
-}
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .repeatableContainer .repeatableItem .sortableItemInner .repeatableObjectLabel .props .key {
-  color: rgb(220, 220, 220);
-}
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .repeatableContainer .repeatableItem .drag {
-  position: absolute;
-  display: none;
-  left: 0;
-  top: 50%;
-  transform: translateY(-50%);
-}
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .repeatableContainer .repeatableItem .drag .dashicon {
-  font-size: 1rem;
-  height: auto;
-}
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .repeatableContainer .repeatableItem .remove {
-  position: absolute;
-  display: none;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
-}
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .repeatableContainer .repeatableItem .remove .dashicon {
-  font-size: 1rem;
-  height: auto;
-}
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .repeatableContainer .repeatableItem:hover .sortableItemInner {
-  padding: 0 32px;
-}
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .repeatableContainer .repeatableItem:hover .drag,
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .repeatableContainer .repeatableItem:hover .remove {
-  display: inline-flex;
-}
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .repeatableContainer .repeatableItem:hover:has(.sortableItemInner > .components-panel > .components-panel__body.is-opened) .sortableItemInner {
-  padding: 0;
-}
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .repeatableContainer .repeatableItem:hover:has(.sortableItemInner > .components-panel > .components-panel__body.is-opened) .drag,
-#editor .interface-interface-skeleton.is-mode-visual #abt-component-edit-zone .repeatableContainer .repeatableItem:hover:has(.sortableItemInner > .components-panel > .components-panel__body.is-opened) .remove {
-  display: none;
 }
 #editor .interface-interface-skeleton.is-mode-visual .edit-zone__footer {
   display: flex;
@@ -1659,6 +1722,9 @@
 }
 .components-input-control__container:hover, .components-input-control__container:focus {
   border-color: #d8eef8 !important;
+}
+.components-input-control__container .components-input-control-suffix-wrapper {
+  right: 10px;
 }
 
 .components-text-control__input {

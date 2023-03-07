@@ -1,4 +1,4 @@
-import '../css/admin/editor.scss'
+import '../css/admin/_index.scss'
 
 import componentBlockMaster     from '../../blocks/component-block-master/src/index'
 import layoutColumn             from '../../blocks/layout/wpe-column/src/index'

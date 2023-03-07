@@ -5,10 +5,10 @@
     top: calc(61px + $o-space-50);
     bottom: calc(25px + $o-space-50);
     background: white;
-    border-radius: $o-border-radius-large;
+    border-radius: $o-border-radius;
     z-index: 99999;
     box-sizing: border-box;
-    transition: all 0.4s;
+    transition: all .2s ease-out;
     display: flex;
     flex-direction: column;
     box-shadow: $o-depth-100;
@@ -51,8 +51,8 @@
     &_header {
         padding: $o-padding;
         background: $o-accent-color;
-        border-top-left-radius: $o-border-radius-large;
-        border-top-right-radius: $o-border-radius-large;
+        border-top-left-radius: $o-border-radius;
+        border-top-right-radius: $o-border-radius;
         
         &:has(.is-reusable) {
             background: $o-warn-color;
@@ -121,7 +121,7 @@
             background: $o-background-color;
             border-radius: 2px;
             padding: $o-padding;
-            border-radius: $o-border-radius-large;
+            border-radius: $o-border-radius;
 
             .row {
                 display: flex;
@@ -160,8 +160,8 @@
         display: flex;
         padding: $o-padding;
         background: $o-background-color;
-        border-bottom-left-radius: $o-border-radius-large;
-        border-bottom-right-radius: $o-border-radius-large;
+        border-bottom-left-radius: $o-border-radius;
+        border-bottom-right-radius: $o-border-radius;
         border-top: 1px solid $o-main-color-border;
         gap: $o-space-30;    
     }

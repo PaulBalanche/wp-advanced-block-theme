@@ -18,6 +18,8 @@ import { Devices } from '../../../src/js/Singleton/Devices';
 
 class WpeComponent extends WpeComponentBase {
 
+    _$iframes;
+
 	constructor() {
         super( ...arguments );
 
@@ -38,6 +40,31 @@ class WpeComponent extends WpeComponentBase {
         setTimeout( () => {
             this.apiFetch()
         } );
+
+
+        // load iframes one after the other
+        // it seems that it's a bad idea cause it's slower...
+        // (async () => {
+        //     if (!this._$iframes) {
+        //         this._$iframes = Array.from(document.querySelectorAll('.o-preview-iframe') ?? []);
+        //         for (let [idx, $iframe] of this._$iframes.entries()) {
+        //             await new Promise((resolve) => {
+        //                 $iframe.addEventListener('load', () => {
+        //                     resolve();
+        //                 });
+        //                 $iframe.setAttribute('src', $iframe.getAttribute('data-src'));
+        //             });
+        //         }
+        //     }
+        // })();
+
+        // for (let [idx, $frame] of this._$iframes.entries()) {
+        //     console.log($iframe.key);
+        //     if ($frame.id === $iframe.key) {
+        //         console.log(idx, $frame, $iframe);
+        //     }
+        // }
+
     }
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -110,16 +137,23 @@ class WpeComponent extends WpeComponentBase {
 
     renderIframePreview() {
         
-        return <iframe
+
+
+        const $iframe = <iframe
+            className='o-preview-iframe'
             key={ this.props.clientId + "-LiveRenderingIframe" }
             id={ this.props.clientId + "-LiveRenderingIframe" }
             style={ { width: '100%' } }
             src={ this.previewUrl }
             onLoad={this.iframeResize}
-        ></iframe>
+        ></iframe>; 
+
+        return $iframe;
     }
 
     liveRendering() {
+
+        
 
         if( this?.props?.block_spec?.container && this.props.block_spec.container ) {
 

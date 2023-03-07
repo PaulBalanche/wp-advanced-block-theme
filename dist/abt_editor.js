@@ -11448,6 +11448,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 class WpeComponent extends _src_js_Models_WpeComponentBase__WEBPACK_IMPORTED_MODULE_1__.WpeComponentBase {
+  _$iframes;
   constructor() {
     super(...arguments);
 
@@ -11464,7 +11465,31 @@ class WpeComponent extends _src_js_Models_WpeComponentBase__WEBPACK_IMPORTED_MOD
     setTimeout(() => {
       this.apiFetch();
     });
+
+    // load iframes one after the other
+    // it seems that it's a bad idea cause it's slower...
+    // (async () => {
+    //     if (!this._$iframes) {
+    //         this._$iframes = Array.from(document.querySelectorAll('.o-preview-iframe') ?? []);
+    //         for (let [idx, $iframe] of this._$iframes.entries()) {
+    //             await new Promise((resolve) => {
+    //                 $iframe.addEventListener('load', () => {
+    //                     resolve();
+    //                 });
+    //                 $iframe.setAttribute('src', $iframe.getAttribute('data-src'));
+    //             });
+    //         }
+    //     }
+    // })();
+
+    // for (let [idx, $frame] of this._$iframes.entries()) {
+    //     console.log($iframe.key);
+    //     if ($frame.id === $iframe.key) {
+    //         console.log(idx, $frame, $iframe);
+    //     }
+    // }
   }
+
   shouldComponentUpdate(nextProps, nextState) {
     this._iframeResize.bind(this);
     if (!this.state.needPreviewUpdate && nextState.needPreviewUpdate) {
@@ -11520,7 +11545,8 @@ class WpeComponent extends _src_js_Models_WpeComponentBase__WEBPACK_IMPORTED_MOD
     });
   }
   renderIframePreview() {
-    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("iframe", {
+    const $iframe = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("iframe", {
+      className: "o-preview-iframe",
       key: this.props.clientId + "-LiveRenderingIframe",
       id: this.props.clientId + "-LiveRenderingIframe",
       style: {
@@ -11529,6 +11555,7 @@ class WpeComponent extends _src_js_Models_WpeComponentBase__WEBPACK_IMPORTED_MOD
       src: this.previewUrl,
       onLoad: this.iframeResize
     });
+    return $iframe;
   }
   liveRendering() {
     if (this?.props?.block_spec?.container && this.props.block_spec.container) {
@@ -14895,7 +14922,7 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
       icon: "external"
     }), "Open preview"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      class: "o-flex-grow"
+      className: "o-flex-grow"
     }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
       key: this.props.clientId + "-buttonCloseEditZone",
       className: "abtButtonCloseEditZone",
@@ -14945,9 +14972,9 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
     }
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       key: this.props.clientId + "-EditZoneButtonGroup",
-      className: "abtButtonGroupEditZoneContainer"
+      className: "o-toolbar-container"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "abtButtonGroupEditZone"
+      className: "o-toolbar"
     }, editZone));
   }
   renderButtonEditZone() {
@@ -14956,7 +14983,7 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
       className: "abtButtonEditZone",
       variant: "primary",
       onMouseDown: () => {
-        _Singleton_EditZone__WEBPACK_IMPORTED_MODULE_6__.EditZone.getInstance().show(this);
+        _Singleton_EditZone__WEBPACK_IMPORTED_MODULE_6__.EditZone.getInstance().open(this);
       }
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
       icon: "edit"
@@ -15166,6 +15193,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 class EditZone {
+  _$editZone;
+  _$editor;
+  _$loader;
   constructor() {
     this.componentInstance = null;
   }
@@ -15177,28 +15207,67 @@ class EditZone {
     return this.instance;
   }
   init() {
-    if (document.querySelector('#abt-component-edit-zone') == null) {
+    var _document$querySelect;
+    if (this._$editZone == null) {
       const componentEditZone = document.createElement("div");
-      componentEditZone.setAttribute("id", "abt-component-edit-zone");
+      componentEditZone.setAttribute("id", "o-edit-zone");
       componentEditZone.classList.add('o-edit-zone', 'hide');
+      this._$editZone = componentEditZone;
       const componentEditZoneLoader = document.createElement("div");
       componentEditZone.classList.add('loader');
+      this._$loader = componentEditZoneLoader;
       componentEditZone.appendChild(componentEditZoneLoader);
       document.querySelector('.edit-post-visual-editor').appendChild(componentEditZone);
-      document.querySelector("#editor").classList.add("resizable");
+      this._$editor = document.querySelector('#editor');
+      this._$editor.classList.add("resizable");
+
+      // init shortcuts
+      this._initShortcuts();
     }
+
+    // add a class on loaderLiveRenderingIframe for convinience
+    Array.from((_document$querySelect = document.querySelectorAll('.loaderLiveRenderingIframe')) !== null && _document$querySelect !== void 0 ? _document$querySelect : []).forEach($elm => {
+      $elm.classList.add('o-preview-zone_loader');
+    });
+  }
+  _initShortcuts() {
+    // listen for escape to close the editor
+    document.addEventListener('keyup', e => {
+      if (e.key === "Escape") {
+        e.stopPropagation();
+        e.preventDefault();
+        this.close();
+      }
+    });
+
+    // liten for maintaining the "§" key to hide and show the editor
+    document.addEventListener('keydown', e => {
+      if (e.key === '§') {
+        e.preventDefault();
+        this.hide();
+      }
+    });
+    document.addEventListener('keyup', e => {
+      if (e.key === '§') {
+        e.preventDefault();
+        this.show();
+      }
+    });
   }
   update() {
-    document.querySelector("#abt-component-edit-zone").classList.add("updating");
-    document.querySelector("#abt-component-edit-zone .loader").style.display = 'block';
+    this._$editZone.classList.add("updating");
+    this._$loader.style.display = 'block';
     setTimeout(() => {
-      document.querySelector("#abt-component-edit-zone .loader").style.display = 'none';
+      this._$loader.style.display = 'none';
     }, 1000);
   }
-  show(componentInstance) {
+  open() {
+    let componentInstance = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.componentInstance;
+    // if it's not the same componentInstance to display
+    // hide the previous one and display the new one
     if (this.componentInstance != null) {
       if (this.componentInstance == componentInstance) {
-        this.hide();
+        this.close();
         return;
       } else {
         this.update();
@@ -15216,12 +15285,11 @@ class EditZone {
     }
     componentInstance.setState(newState);
     setTimeout(() => {
-      document.querySelector("#abt-component-edit-zone").classList.remove("hide");
-      document.querySelector("#abt-component-edit-zone").classList.remove("updating");
+      this._$editZone.classList.remove("hide", 'updating');
     });
   }
-  hide() {
-    document.querySelector("#abt-component-edit-zone").classList.add("hide");
+  close() {
+    this.hide();
     if (this.componentInstance != null) {
       this.componentInstance.setState({
         editZone: false
@@ -15229,9 +15297,21 @@ class EditZone {
       this.componentInstance = null;
     }
   }
+  show() {
+    if (!this.componentInstance) {
+      return;
+    }
+    this._$editZone.classList.remove("hide", 'updating');
+  }
+  hide() {
+    if (!this.componentInstance) {
+      return;
+    }
+    this._$editZone.classList.add("hide");
+  }
   render() {
     if (this.componentInstance != null) {
-      return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createPortal)(this.componentInstance.renderEditMode(), document.querySelector("#abt-component-edit-zone"));
+      return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createPortal)(this.componentInstance.renderEditMode(), this._$editZone);
     }
     return;
   }
@@ -15719,7 +15799,7 @@ class Render {
   static repeatableObjectLabelFormatting(blockKey, valueProp, keyLoop) {
     var labelKey = _Attributes__WEBPACK_IMPORTED_MODULE_3__.Attributes.returnStringOrNumber(keyLoop, true) + 1;
     labelKey = labelKey < 10 ? '0' + labelKey : labelKey;
-    labelKey = '#' + labelKey + '.';
+    labelKey = '#' + labelKey;
     var itemsProp = null;
     var valueProp = valueProp[keyLoop];
     if (valueProp != null && typeof valueProp == 'object' && Object.keys(valueProp).length > 0) {
@@ -38373,9 +38453,9 @@ module.exports = warning;
 
 /***/ }),
 
-/***/ "./src/css/admin/editor.scss":
+/***/ "./src/css/admin/_index.scss":
 /*!***********************************!*\
-  !*** ./src/css/admin/editor.scss ***!
+  !*** ./src/css/admin/_index.scss ***!
   \***********************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
@@ -39840,7 +39920,7 @@ var __webpack_exports__ = {};
   !*** ./src/js/index.js ***!
   \*************************/
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _css_admin_editor_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../css/admin/editor.scss */ "./src/css/admin/editor.scss");
+/* harmony import */ var _css_admin_index_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../css/admin/_index.scss */ "./src/css/admin/_index.scss");
 /* harmony import */ var _blocks_component_block_master_src_index__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../blocks/component-block-master/src/index */ "./blocks/component-block-master/src/index.js");
 /* harmony import */ var _blocks_layout_wpe_column_src_index__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../blocks/layout/wpe-column/src/index */ "./blocks/layout/wpe-column/src/index.js");
 /* harmony import */ var _blocks_layout_wpe_container_src_index__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../blocks/layout/wpe-container/src/index */ "./blocks/layout/wpe-container/src/index.js");

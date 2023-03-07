@@ -6,7 +6,7 @@
         &.is-mode-visual {
 
 
-            #abt-component-edit-zone{
+            #o-edit-zone{
                 
                 
                         
@@ -321,83 +321,7 @@
                     .components-input-control__backdrop {
                         border-color: $border300;
                     }
-            
-                    .repeatableContainer {
-            
-                        .repeatableItem {
-                        
-                            position: relative;
-                            margin: 5px 0;
-            
-                            .sortableItemInner {
-                                padding: 0;
-                                transition: padding 0.4s;
-            
-                                .repeatableObjectLabel {
-                
-                                    .id {
-                                        color: rgb(220, 220, 220);
-                                    }
-                    
-                                    .props {
-                    
-                                        margin: 5px 0 0 0;
-                    
-                                        .key {
-                                            color: rgb(220, 220, 220);
-                                        }
-                                    }
-                                }
-                            }
-                
-                            .drag {
-                                position: absolute;
-                                display: none;
-                                left: 0;
-                                top: 50%;
-                                transform: translateY(-50%);
-                
-                                .dashicon {
-                                    font-size: 1rem;
-                                    height: auto;
-                                }
-                            }
-            
-                            .remove {
-                                position: absolute;
-                                display: none;
-                                right: 0;
-                                top: 50%;
-                                transform: translateY(-50%);
-                
-                                .dashicon {
-                                    font-size: 1rem;
-                                    height: auto;
-                                }
-                            }
-                
-                            &:hover {
-                
-                                .sortableItemInner {
-                                    padding: 0 32px;
-                                }
-                                .drag,
-                                .remove {
-                                    display: inline-flex;
-                                }
-            
-                                &:has( .sortableItemInner > .components-panel > .components-panel__body.is-opened) {
-                                    .sortableItemInner {
-                                        padding: 0;
-                                    }
-                                    .drag,
-                                    .remove {
-                                        display: none;
-                                    }
-                                }
-                            }
-                        }
-                    }
+        
 
                 }
             

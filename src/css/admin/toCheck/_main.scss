@@ -7,7 +7,7 @@
                 width: 100%;
                 transition: width 0.4s;
 
-                &:has(#abt-component-edit-zone .edit-zone__inner) {
+                &:has(#o-edit-zone .edit-zone__inner) {
                     width: calc(100% - 700px);
                 }
             }

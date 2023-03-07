@@ -3,6 +3,10 @@ import { Component } from '@wordpress/element';
 
 export class EditZone {
     
+    _$editZone;
+    _$editor;
+    _$loader;
+
     constructor() {
         this.componentInstance = null;
     }
@@ -20,36 +24,75 @@ export class EditZone {
 
     init() {
         
-        if( document.querySelector('#abt-component-edit-zone') == null ) {
+        if( this._$editZone == null ) {
+
             const componentEditZone = document.createElement("div");
-            componentEditZone.setAttribute("id", "abt-component-edit-zone");
+            componentEditZone.setAttribute("id", "o-edit-zone");
             componentEditZone.classList.add('o-edit-zone', 'hide');
+            this._$editZone = componentEditZone;
 
             const componentEditZoneLoader = document.createElement("div");
             componentEditZone.classList.add('loader');
+            this._$loader = componentEditZoneLoader;
 
             componentEditZone.appendChild(componentEditZoneLoader);
             document.querySelector('.edit-post-visual-editor').appendChild(componentEditZone);
 
-            document.querySelector("#editor").classList.add("resizable");
+            this._$editor = document.querySelector('#editor');
+            this._$editor.classList.add("resizable");
+
+            // init shortcuts
+            this._initShortcuts();
         }
+
+        // add a class on loaderLiveRenderingIframe for convinience
+        Array.from(document.querySelectorAll('.loaderLiveRenderingIframe') ?? []).forEach($elm => {
+            $elm.classList.add('o-preview-zone_loader');
+        });
+
+    }
+
+    _initShortcuts() {
+        // listen for escape to close the editor
+        document.addEventListener('keyup', (e) => {
+            if(e.key === "Escape") {
+                e.stopPropagation();
+                e.preventDefault();
+                this.close();
+            }
+        });
+
+        // liten for maintaining the "§" key to hide and show the editor
+        document.addEventListener('keydown', (e) => {
+            if (e.key === '§') {
+                e.preventDefault();
+                this.hide();
+            }
+        });
+        document.addEventListener('keyup', (e) => {
+            if (e.key === '§') {
+                e.preventDefault();
+                this.show();
+            }
+        });
     }
 
     update() {
-        document.querySelector("#abt-component-edit-zone").classList.add("updating");
-        document.querySelector("#abt-component-edit-zone .loader").style.display = 'block';
+        this._$editZone.classList.add("updating");
+        this._$loader.style.display = 'block';
 
         setTimeout( () => {
-            document.querySelector("#abt-component-edit-zone .loader").style.display = 'none';
+            this._$loader.style.display = 'none';
         }, 1000);
     }
 
-    show( componentInstance ) {
+    open( componentInstance = this.componentInstance ) {
 
+        // if it's not the same componentInstance to display
+        // hide the previous one and display the new one
         if( this.componentInstance != null ) {
-
             if( this.componentInstance == componentInstance ) {
-                this.hide();
+                this.close();
                 return;
             }
             else {
@@ -67,19 +110,30 @@ export class EditZone {
         componentInstance.setState( newState);
         
         setTimeout( () => {
-            document.querySelector("#abt-component-edit-zone").classList.remove("hide");
-            document.querySelector("#abt-component-edit-zone").classList.remove("updating");
+            this._$editZone.classList.remove("hide", 'updating');
         });  
     }
 
-    hide() {
-
-        document.querySelector("#abt-component-edit-zone").classList.add("hide");
-
+    close() {
+        this.hide();
         if( this.componentInstance != null ) {
             this.componentInstance.setState( { editZone: false } );
             this.componentInstance = null;
         }
+    }
+
+    show() {
+        if (!this.componentInstance) {
+            return;
+        }
+        this._$editZone.classList.remove("hide", 'updating');
+    }
+
+    hide() {
+        if (!this.componentInstance) {
+            return;
+        }
+        this._$editZone.classList.add("hide"); 
     }
   
     render() {
@@ -88,7 +142,7 @@ export class EditZone {
 
             return createPortal(
                 this.componentInstance.renderEditMode(),
-                document.querySelector("#abt-component-edit-zone")
+                this._$editZone
             );
         }
 

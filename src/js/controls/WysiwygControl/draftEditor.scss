@@ -5,7 +5,7 @@
     font-family: 'Georgia', serif;
     font-size: 14px;
     border: 1px solid $o-main-color-border;
-    border-radius: $o-border-radius-large;
+    border-radius: $o-border-radius;
     background: white;
 
     .DraftEditor-controls-row {
@@ -59,7 +59,7 @@
         align-items: center;
         height: 34px;
         border: 1px solid $border300;
-        border-radius: $o-border-radius-large;
+        border-radius: $o-border-radius;
         flex-grow: 1;
         padding: 0 5px;
 
@@ -71,7 +71,7 @@
 
     .border-style {
       // border: 1px solid $border300;
-      border-radius: $o-border-radius-large;
+      border-radius: $o-border-radius;
       padding: 6px;
   }
 
@@ -81,8 +81,8 @@
     background: $o-background-color;
 
     &:first-child {
-      border-top-left-radius: $o-border-radius-large;
-      border-top-right-radius: $o-border-radius-large;
+      border-top-left-radius: $o-border-radius;
+      border-top-right-radius: $o-border-radius;
     }
 
     &:nth-child(2) {

@@ -164,7 +164,7 @@ export class Render {
         
         var labelKey = Attributes.returnStringOrNumber(keyLoop, true) + 1;
         labelKey = ( labelKey < 10 ) ? '0' + labelKey : labelKey;
-        labelKey = '#' + labelKey + '.'
+        labelKey = '#' + labelKey
 
         var itemsProp = null;
 

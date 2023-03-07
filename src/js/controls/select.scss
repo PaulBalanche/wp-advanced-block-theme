@@ -1,8 +1,13 @@
 .components-input-control__container {
-    border-radius: $o-border-radius-large !important;
+    border-radius: $o-border-radius !important;
 
     &:hover,
     &:focus {
         border-color: $o-accent-color-border !important;
     }
+
+    .components-input-control-suffix-wrapper {
+        right: 10px;
+    }
+
 }
