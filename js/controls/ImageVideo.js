@@ -15,7 +15,7 @@ import { getLayouts, setBodyDevice, getBodyDevice } from '../devices';
 
 export function renderImageVideo( type, args, id, label, keys, valueProp, objectValue, repeatable = false, required = false, clientId, responsive = false ) {
 
-    label = ( label && required ) ? label + '*' : label;
+    label = ( label && required ) ? label + '<span class="o-required">*</span>' : label;
 
     let videoControl = [];
     var tabPanelResponsive = [];

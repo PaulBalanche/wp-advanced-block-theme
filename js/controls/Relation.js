@@ -10,7 +10,7 @@ export function renderRelation( id, label, entity, keys, valueProp, objectValue,
     if( typeof entity == 'undefined' || typeof this.props.relations[entity] == 'undefined' || this.props.relations[entity] == null || Object.keys(this.props.relations[entity]).length == 0 )
         return null;
 
-    label = ( required ) ? label + '*' : label;
+    label = ( required ) ? label + '<span class="o-required">*</span>' : label;
 
     if( repeatable ) {
         label = (

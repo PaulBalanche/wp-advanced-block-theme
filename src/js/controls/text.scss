@@ -1,8 +1,5 @@
-.components-text-control__input {
-    border-radius: $o-border-radius !important;
-
-    &:hover,
-    &:focus {
-        border-color: $o-accent-color-border !important;
+.o-editor {
+    .components-text-control__input {
+        @include o-field;
     }
 }

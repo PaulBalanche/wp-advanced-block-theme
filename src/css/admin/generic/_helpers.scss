@@ -1,7 +1,10 @@
-.flex {
-    display: flex;
-}
+.o-editor {
+    .flex {
+        display: flex;
+    }
 
-.o-flex-grow {
-    flex-grow: 1;
+    .o-flex-grow {
+        flex-grow: 1;
+    }
+
 }

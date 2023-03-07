@@ -7,7 +7,7 @@ import { updateAttributes, removeEltRepeatable } from '../attributes';
 
 export function renderTextarea( id, label, keys, valueProp, objectValue, repeatable = false, required = false, clientId ) {
 
-    label = ( required ) ? label + '*' : label;
+    label = ( required ) ? label + '<span class="o-required">*</span>' : label;
 
     if( repeatable ) {
         label = (

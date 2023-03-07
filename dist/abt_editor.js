@@ -15459,7 +15459,7 @@ class Attributes {
       if (typeof currentValueAttribute != "object") {
         currentValueAttribute = {};
       }
-      return _Render__WEBPACK_IMPORTED_MODULE_2__.Render.fieldContainer(blockKey, _Render__WEBPACK_IMPORTED_MODULE_2__.Render.panelComponent(blockKey, required_field && label != null ? label + '*' : label, _Render__WEBPACK_IMPORTED_MODULE_2__.Render.tabPanelComponent(blockKey, Object.keys(_Singleton_Devices__WEBPACK_IMPORTED_MODULE_1__.Devices.getInstance().getMediaQueries()).map(layout => {
+      return _Render__WEBPACK_IMPORTED_MODULE_2__.Render.fieldContainer(blockKey, _Render__WEBPACK_IMPORTED_MODULE_2__.Render.panelComponent(blockKey, required_field && label != null ? label + ' <span class="o-required">*</span>' : label, _Render__WEBPACK_IMPORTED_MODULE_2__.Render.tabPanelComponent(blockKey, Object.keys(_Singleton_Devices__WEBPACK_IMPORTED_MODULE_1__.Devices.getInstance().getMediaQueries()).map(layout => {
         return {
           name: layout,
           title: layout.charAt(0).toUpperCase() + layout.slice(1),
@@ -39936,13 +39936,40 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-if (theme_spec?.metas?.backgroundColor) {
-  document.documentElement.style.setProperty('--abt-background-editor', theme_spec.metas.backgroundColor);
+class OEditor {
+  constructor() {
+    // move wp ui elements
+    this._moveWpUiElements();
+
+    // init theme (Coffeekraken)
+    this._initTheme();
+
+    // add the scoping class "o-editor"
+    setTimeout(() => {
+      document.querySelector('.edit-post-visual-editor')?.classList?.add?.('o-editor');
+    });
+  }
+
+  /**
+   * Move some elements of the wordpress UI
+   */
+  _moveWpUiElements() {
+    let postTitle = document.querySelector('.edit-post-visual-editor__post-title-wrapper');
+    let headerToolbar = document.querySelector('.edit-post-header__toolbar > .edit-post-header-toolbar');
+    headerToolbar?.after?.(postTitle);
+  }
+
+  /**
+   * Just add the theme background color from the frontspec if needed
+   */
+  _initTheme() {
+    if (theme_spec?.metas?.backgroundColor) {
+      document.documentElement.style.setProperty('--abt-background-editor', theme_spec.metas.backgroundColor);
+    }
+  }
 }
 window.addEventListener('load', function () {
-  let postTitle = document.querySelector('.edit-post-visual-editor__post-title-wrapper');
-  let headerToolbar = document.querySelector('.edit-post-header__toolbar > .edit-post-header-toolbar');
-  headerToolbar.after(postTitle);
+  new OEditor();
 });
 })();
 

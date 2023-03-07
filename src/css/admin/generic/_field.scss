@@ -1,0 +1,13 @@
+@mixin o-field {
+    border-radius: $o-border-radius !important;
+    border: 1px solid $o-main-color-border !important;
+    padding: $o-padding !important;
+    box-shadow: none !important;
+    outline: none !important;
+    height: auto !important;
+
+    &:hover,
+    &:focus {
+        border-color: $o-accent-color-border !important;
+    }
+}

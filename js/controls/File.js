@@ -10,7 +10,7 @@ import { updateAttributes, removeEltRepeatable, fileSizeFormat, setAttributes } 
 
 export function renderFile( type, id, label, keys, valueProp, objectValue, repeatable = false, required = false, clientId, responsive = false ) {
 
-    label = ( label && required ) ? label + '*' : label;
+    label = ( label && required ) ? label + '<span class="o-required">*</span>' : label;
     
     let preview = false;
     if( objectValue && typeof objectValue == 'object' ) {

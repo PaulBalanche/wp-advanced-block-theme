@@ -15,7 +15,7 @@ export function renderLink( id, label, keys, valueProp, objectValue, repeatable 
         objectValue = {};
     }
 
-    label = ( required ) ? label + '*' : label;
+    label = ( required ) ? label + '<span class="o-required">*</span>' : label;
 
     if( repeatable ) {
         label = (

@@ -1,13 +1,13 @@
-.components-input-control__container {
-    border-radius: $o-border-radius !important;
+.o-editor {
+    .components-input-control__container {
 
-    &:hover,
-    &:focus {
-        border-color: $o-accent-color-border !important;
+        .components-select-control__input {
+            @include o-field;
+        }
+
+        .components-input-control-suffix-wrapper {
+            right: 10px;
+        }
+
     }
-
-    .components-input-control-suffix-wrapper {
-        right: 10px;
-    }
-
 }

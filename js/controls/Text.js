@@ -9,7 +9,7 @@ import { getLayouts, setBodyDevice, getBodyDevice } from '../devices';
 
 export function renderText( id, label, keys, valueProp, objectValue, isNumber = false, repeatable = false, required = false, clientId, responsive = false ) {
 
-    label = ( required ) ? label + '*' : label;
+    label = ( required ) ? label + '<span class="o-required">*</span>' : label;
 
     if( repeatable ) {
         label = (

@@ -12,7 +12,7 @@ export function renderRadio( id, label, options, keys, valueProp, objectValue, r
     if( typeof options == 'undefined' )
         return null;
 
-    label = ( required ) ? label + '*' : label;
+    label = ( required ) ? label + '<span class="o-required">*</span>' : label;
 
     if( repeatable ) {
         label = (

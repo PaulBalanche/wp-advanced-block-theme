@@ -139,7 +139,7 @@ export class Attributes {
 
             return Render.fieldContainer( blockKey,
                 Render.panelComponent( blockKey,
-                    ( required_field && label != null ) ? label + '*' : label,
+                    ( required_field && label != null ) ? label + ' <span class="o-required">*</span>' : label,
                     Render.tabPanelComponent(
                         blockKey,
                         Object.keys( Devices.getInstance().getMediaQueries() ).map( ( layout ) => {

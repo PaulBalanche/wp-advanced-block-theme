@@ -10,7 +10,7 @@ export function renderSelect( id, label, options, keys, valueProp, attributeValu
     if( typeof options == 'undefined' )
         return null;
 
-    label = ( required ) ? label + '*' : label;
+    label = ( required ) ? label + '<span class="o-required">*</span>' : label;
 
     if( repeatable ) {
         label = (
