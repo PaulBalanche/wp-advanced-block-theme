@@ -10,8 +10,6 @@
 }
 
 .o-editor {
-    border-left: solid 1px hsla(200,0%,55%,.2);
-        border-right: solid 1px hsla(200,0%,55%,.2);
 
     .editor-styles-wrapper.block-editor-writing-flow {
         background: var(--abt-background-editor, 'white');
@@ -36,6 +34,8 @@
         flex-direction: column;
         gap: $o-space-100;
         padding: 100px 0;
+        border-left: solid 1px hsla(200,0%,55%,.2);
+        border-right: solid 1px hsla(200,0%,55%,.2);
         
         .block-editor-block-list__block {
             width: 100%;
@@ -56,10 +56,28 @@
 
     .block-editor-block-list__block {
         margin: 0 !important;
+        user-select: none;
 
-        &::before,
+        /* wordpress outline */
         &::after {
             display: none !important;
+        }
+
+        &:before {
+            content: '';
+            display: block;
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(255,255,255,0.03);
+            opacity: 0;
+            cursor: pointer !important;
+            pointer-events: all !important;
+            transition: $o-transition-fast;
+            z-index: 10;
+        }
+        &:hover:before {
+            opacity: 1;
         }
 
         // toolbar
@@ -72,16 +90,6 @@
             display: flex !important;
         }
 
-        &:not(:hover):not(.is-selected):has(.liveRenderingMessage):after,
-        &:has( .block-editor-block-list__block:hover):has(.liveRenderingMessage):after {
-            border: 1px solid rgb(0 124 186 / 50%);
-        }
-
-        &[data-type="custom/wpe-column"]:has(.block-editor-block-list__block:hover):after,
-        &[data-type="custom/wpe-column"]:has(.is-selected):after,
-        &[data-type="custom/wpe-column"].is-empty:after {
-            border: 1px dashed rgb(0 124 186 / 50%);
-        }
     }
 
     /**
@@ -100,6 +108,7 @@
         align-items: center;
         position: absolute;
         width: 100%; height: 100%;
+        z-index: 20;
         top: 0;
         left: 0;
         animation: o-toolbar-in .1s ease-out forwards;

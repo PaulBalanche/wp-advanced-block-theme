@@ -227,6 +227,7 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
+  width: 100%;
 }
 .o-editor .repeatableContainer .repeatableItem {
   position: relative;
@@ -358,12 +359,25 @@
   visibility: visible;
 }
 
+.o-editor .tab-panel-wpe-component {
+  width: 100%;
+}
 .o-editor .components-tab-panel__tabs-item {
   border-radius: 0 !important;
 }
 .o-editor .components-tab-panel__tabs {
+  -webkit-margin-start: 30px;
+          margin-inline-start: 30px;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
+}
+.o-editor .components-tab-panel__tabs button {
+  margin: 0 !important;
+  border-bottom: 2px solid transparent;
+  transition: all 0.1s ease-in-out;
+}
+.o-editor .components-tab-panel__tabs button.active-tab {
+  border-bottom: 2px solid var(--wp-admin-theme-color);
 }
 .o-editor .components-tab-panel__tab-content {
   display: flex;
@@ -702,7 +716,6 @@
   background: #74a9c3;
 }
 .o-edit-zone_body .description {
-  margin-bottom: 20px;
   background: #fcfcfc;
   border-radius: 2px;
   padding: 24px 30px;
@@ -711,7 +724,6 @@
 .o-edit-zone_body .description .row {
   display: flex;
   align-items: center;
-  padding: 5px 0;
   text-align: justify;
 }
 .o-edit-zone_body .description .dashicon {
@@ -746,7 +758,7 @@
   background: #D09E3B;
 }
 
-#o-edit-zone .wpe-component_edit_placeholder {
+.o-editor .wpe-component_edit_placeholder {
   padding: 0;
   box-shadow: none;
   outline: none;
@@ -764,8 +776,6 @@
   }
 }
 .o-editor {
-  border-left: solid 1px hsla(200deg, 0%, 55%, 0.2);
-  border-right: solid 1px hsla(200deg, 0%, 55%, 0.2);
   /**
   * Toolbar
   */
@@ -791,6 +801,8 @@
   flex-direction: column;
   gap: 60px;
   padding: 100px 0;
+  border-left: solid 1px hsla(200deg, 0%, 55%, 0.2);
+  border-right: solid 1px hsla(200deg, 0%, 55%, 0.2);
 }
 .o-editor .is-layout-flow .block-editor-block-list__block {
   width: 100%;
@@ -808,9 +820,31 @@
 }
 .o-editor .block-editor-block-list__block {
   margin: 0 !important;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+  /* wordpress outline */
 }
-.o-editor .block-editor-block-list__block::before, .o-editor .block-editor-block-list__block::after {
+.o-editor .block-editor-block-list__block::after {
   display: none !important;
+}
+.o-editor .block-editor-block-list__block:before {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.03);
+  opacity: 0;
+  cursor: pointer !important;
+  pointer-events: all !important;
+  transition: all 0.1s ease-in-out;
+  z-index: 10;
+}
+.o-editor .block-editor-block-list__block:hover:before {
+  opacity: 1;
 }
 .o-editor .block-editor-block-list__block:not(:hover):not(.is-selected):not([data-type="custom/wpe-grid"].has-child-selected) > .o-toolbar-container, .o-editor .block-editor-block-list__block:has(.block-editor-block-list__block:hover):not([data-type="custom/wpe-grid"]) > .o-toolbar-container {
   display: none !important;
@@ -818,18 +852,13 @@
 .o-editor .block-editor-block-list__block:not(:hover):not(.is-selected):has(.liveRenderingMessage) > .o-toolbar-container, .o-editor .block-editor-block-list__block:has(.block-editor-block-list__block:hover):has(.liveRenderingMessage) > .o-toolbar-container {
   display: flex !important;
 }
-.o-editor .block-editor-block-list__block:not(:hover):not(.is-selected):has(.liveRenderingMessage):after, .o-editor .block-editor-block-list__block:has(.block-editor-block-list__block:hover):has(.liveRenderingMessage):after {
-  border: 1px solid rgba(0, 124, 186, 0.5);
-}
-.o-editor .block-editor-block-list__block[data-type="custom/wpe-column"]:has(.block-editor-block-list__block:hover):after, .o-editor .block-editor-block-list__block[data-type="custom/wpe-column"]:has(.is-selected):after, .o-editor .block-editor-block-list__block[data-type="custom/wpe-column"].is-empty:after {
-  border: 1px dashed rgba(0, 124, 186, 0.5);
-}
 .o-editor .o-toolbar-container {
   display: block;
   align-items: center;
   position: absolute;
   width: 100%;
   height: 100%;
+  z-index: 20;
   top: 0;
   left: 0;
   animation: o-toolbar-in 0.1s ease-out forwards;
@@ -1498,6 +1527,23 @@
   margin: 0 10px;
 }
 
+.o-editor .block-editor-media-placeholder {
+  border-radius: 10px !important;
+  border: 1px solid #e8e8e8 !important;
+  padding: 24px 30px !important;
+  box-shadow: none !important;
+  outline: none !important;
+  height: auto !important;
+  transition: all 0.1s ease-in-out !important;
+  min-height: 0;
+}
+.o-editor .block-editor-media-placeholder:hover {
+  border-color: #d8eef8 !important;
+}
+.o-editor .block-editor-media-placeholder:focus {
+  border-color: #47A8E7 !important;
+}
+
 .o-editor .components-input-control__container .components-select-control__input {
   border-radius: 10px !important;
   border: 1px solid #e8e8e8 !important;
@@ -1505,9 +1551,13 @@
   box-shadow: none !important;
   outline: none !important;
   height: auto !important;
+  transition: all 0.1s ease-in-out !important;
 }
-.o-editor .components-input-control__container .components-select-control__input:hover, .o-editor .components-input-control__container .components-select-control__input:focus {
+.o-editor .components-input-control__container .components-select-control__input:hover {
   border-color: #d8eef8 !important;
+}
+.o-editor .components-input-control__container .components-select-control__input:focus {
+  border-color: #47A8E7 !important;
 }
 .o-editor .components-input-control__container .components-input-control-suffix-wrapper {
   right: 10px;
@@ -1520,9 +1570,13 @@
   box-shadow: none !important;
   outline: none !important;
   height: auto !important;
+  transition: all 0.1s ease-in-out !important;
 }
-.o-editor .components-text-control__input:hover, .o-editor .components-text-control__input:focus {
+.o-editor .components-text-control__input:hover {
   border-color: #d8eef8 !important;
+}
+.o-editor .components-text-control__input:focus {
+  border-color: #47A8E7 !important;
 }
 
 .o-editor .components-textarea-control__input {
@@ -1532,9 +1586,13 @@
   box-shadow: none !important;
   outline: none !important;
   height: auto !important;
+  transition: all 0.1s ease-in-out !important;
 }
-.o-editor .components-textarea-control__input:hover, .o-editor .components-textarea-control__input:focus {
+.o-editor .components-textarea-control__input:hover {
   border-color: #d8eef8 !important;
+}
+.o-editor .components-textarea-control__input:focus {
+  border-color: #47A8E7 !important;
 }
 
 /*# sourceMappingURL=abt_editor.css.map*/

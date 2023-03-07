@@ -43,12 +43,20 @@ export class EditZone {
 
             // init shortcuts
             this._initShortcuts();
+
+            // init mouse events
+            this._initMouseEvents();
+
         }
 
         // add a class on loaderLiveRenderingIframe for convinience
         Array.from(document.querySelectorAll('.loaderLiveRenderingIframe') ?? []).forEach($elm => {
             $elm.classList.add('o-preview-zone_loader');
         });
+
+    }
+
+    _initMouseEvents() {
 
     }
 

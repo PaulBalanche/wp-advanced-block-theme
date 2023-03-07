@@ -156,7 +156,6 @@ export class WpeComponentBase extends Component {
                     key={ this.props.clientId + "-descriptionMessage-info" }
                     className='row'
                 >
-                    <Dashicon icon="info-outline" />
                     { this.description }
                 </div>
             )
@@ -524,6 +523,9 @@ export class WpeComponentBase extends Component {
         return <div
                 key={ this.props.clientId + "-EditZoneButtonGroup" }
                 className="o-toolbar-container"
+                onDoubleClick={(e) => {
+                    EditZone.getInstance().open(this)
+                }}
             >
                 <div className='o-toolbar'>{ editZone }</div>
             </div>

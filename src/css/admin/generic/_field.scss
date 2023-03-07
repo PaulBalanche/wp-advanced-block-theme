@@ -5,9 +5,15 @@
     box-shadow: none !important;
     outline: none !important;
     height: auto !important;
+    transition: $o-transition-fast !important;
 
-    &:hover,
-    &:focus {
+    &:hover {
         border-color: $o-accent-color-border !important;
     }
+    &:focus {
+        border-color: $o-accent-color-border-active !important;
+    }
+
+
+
 }

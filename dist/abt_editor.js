@@ -14671,9 +14671,7 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
       messages.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
         key: this.props.clientId + "-descriptionMessage-info",
         className: "row"
-      }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
-        icon: "info-outline"
-      }), this.description));
+      }, this.description));
     }
     return messages.length > 0 ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       key: this.props.clientId + "-descriptionMessage",
@@ -14972,7 +14970,10 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
     }
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       key: this.props.clientId + "-EditZoneButtonGroup",
-      className: "o-toolbar-container"
+      className: "o-toolbar-container",
+      onDoubleClick: e => {
+        _Singleton_EditZone__WEBPACK_IMPORTED_MODULE_6__.EditZone.getInstance().open(this);
+      }
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "o-toolbar"
     }, editZone));
@@ -15223,6 +15224,9 @@ class EditZone {
 
       // init shortcuts
       this._initShortcuts();
+
+      // init mouse events
+      this._initMouseEvents();
     }
 
     // add a class on loaderLiveRenderingIframe for convinience
@@ -15230,6 +15234,7 @@ class EditZone {
       $elm.classList.add('o-preview-zone_loader');
     });
   }
+  _initMouseEvents() {}
   _initShortcuts() {
     // listen for escape to close the editor
     document.addEventListener('keyup', e => {
