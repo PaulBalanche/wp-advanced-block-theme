@@ -1,9 +1,9 @@
 .o-edit-zone {
     position: fixed;
-    right: calc($o-space-50 + 8px);
+    right: calc($o-space-50 + 10px);
     width: 700px;
     top: calc(61px + $o-space-50);
-    bottom: calc(25px + $o-space-50);
+    bottom: calc($o-space-50);
     background: white;
     border-radius: $o-border-radius;
     z-index: 99999;

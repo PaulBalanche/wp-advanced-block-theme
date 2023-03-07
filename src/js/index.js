@@ -19,9 +19,7 @@ class OEditor {
         this._initTheme();
 
         // add the scoping class "o-editor"
-        setTimeout(() => {
-            document.querySelector('.edit-post-visual-editor')?.classList?.add?.('o-editor');
-        });
+        document.querySelector('.edit-post-visual-editor')?.classList?.add?.('o-editor');
 
     }
 
@@ -47,6 +45,8 @@ class OEditor {
 }
 
 window.addEventListener('load', function () {
-    new OEditor();
+    setTimeout(() => {
+        new OEditor();
+    }) 
 });
 

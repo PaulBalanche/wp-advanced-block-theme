@@ -12300,9 +12300,9 @@ class WpeGrid extends _src_js_Models_WpeComponentBase__WEBPACK_IMPORTED_MODULE_2
       })));
     } else {
       return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", innerBlocksProps, this.renderEditZone(), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-        className: "gridContainer"
+        className: "o-grid-container"
       }, children), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-        className: "containerAddColumn",
+        className: "o-grid-add-column",
         onClick: () => this.addColumn()
       }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_5__.Dashicon, {
         icon: "plus"
@@ -39950,9 +39950,7 @@ class OEditor {
     this._initTheme();
 
     // add the scoping class "o-editor"
-    setTimeout(() => {
-      document.querySelector('.edit-post-visual-editor')?.classList?.add?.('o-editor');
-    });
+    document.querySelector('.edit-post-visual-editor')?.classList?.add?.('o-editor');
   }
 
   /**
@@ -39974,7 +39972,9 @@ class OEditor {
   }
 }
 window.addEventListener('load', function () {
-  new OEditor();
+  setTimeout(() => {
+    new OEditor();
+  });
 });
 })();
 

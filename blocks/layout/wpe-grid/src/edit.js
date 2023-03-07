@@ -144,10 +144,10 @@ class WpeGrid extends WpeComponentBase {
 
             return <div {...innerBlocksProps}>
                 { this.renderEditZone() }
-                <div className='gridContainer'>
+                <div className='o-grid-container'>
                     { children }
                 </div>
-                <div className='containerAddColumn' onClick={ () => this.addColumn() }>
+                <div className='o-grid-add-column' onClick={ () => this.addColumn() }>
                     <Dashicon icon="plus" />Add column
                 </div>
             </div>

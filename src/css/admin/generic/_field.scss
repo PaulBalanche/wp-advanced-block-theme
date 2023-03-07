@@ -1,7 +1,7 @@
 @mixin o-field {
     border-radius: $o-border-radius !important;
     border: 1px solid $o-main-color-border !important;
-    padding: $o-padding !important;
+    padding: $o-padding-small !important;
     box-shadow: none !important;
     outline: none !important;
     height: auto !important;
@@ -14,6 +14,8 @@
         border-color: $o-accent-color-border-active !important;
     }
 
-
+    & ~ .components-input-control__backdrop {
+        display: none !important;
+    }
 
 }
