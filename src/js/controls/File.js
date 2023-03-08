@@ -1,30 +1,33 @@
-import {
-    MediaPlaceholder
-} from '@wordpress/block-editor';
+import { MediaPlaceholder } from "@wordpress/block-editor";
 
-import {
-    Button
-} from '@wordpress/components';
+import { Button } from "@wordpress/components";
 
-import { Attributes } from '../Static/Attributes';
-import { Render } from '../Static/Render';
+import { Attributes } from "../Static/Attributes";
+import { Render } from "../Static/Render";
 
-export function renderFile( componentInstance, type, id, label, keys, valueProp, objectValue, required = false ) {
+export function renderFile(
+    componentInstance,
+    type,
+    id,
+    label,
+    keys,
+    valueProp,
+    objectValue,
+    required = false
+) {
+    label = label && required ? label + "*" : label;
 
-    label = ( label && required ) ? label + '*' : label;
-    
     let preview = false;
-    if( objectValue && typeof objectValue == 'object' ) {
-
-        switch( type ) {
+    if (objectValue && typeof objectValue == "object") {
+        switch (type) {
             case "image":
                 preview = (
                     <img
-                        key={ id + "-imagePreview" }
+                        key={id + "-imagePreview"}
                         alt="Edit image"
                         title="Edit image"
                         className="edit-image-preview"
-                        src={ objectValue.preview }
+                        src={objectValue.preview}
                     />
                 );
                 break;
@@ -33,41 +36,39 @@ export function renderFile( componentInstance, type, id, label, keys, valueProp,
                 preview = (
                     <>
                         <img
-                            key={ id + "-filePreview" }
+                            key={id + "-filePreview"}
                             alt="Edit file"
                             title="Edit file"
                             className="edit-file-preview"
-                            src={ objectValue.preview }
+                            src={objectValue.preview}
                         />
-                        <div
-                            key={ id + "-fileDetails" }
-                            className="file-details"
-                        >
-                            { objectValue.name }<br />
-                            { objectValue.mime}<br />
-                            { Attributes.fileSizeFormat(objectValue.size) }
+                        <div key={id + "-fileDetails"} className="file-details">
+                            {objectValue.name}
+                            <br />
+                            {objectValue.mime}
+                            <br />
+                            {Attributes.fileSizeFormat(objectValue.size)}
                         </div>
                     </>
                 );
                 break;
-            
+
             case "file":
                 preview = (
                     <>
                         <img
-                            key={ id + "-filePreview" }
+                            key={id + "-filePreview"}
                             alt="Edit file"
                             title="Edit file"
                             className="edit-file-preview"
-                            src={ objectValue.preview }
+                            src={objectValue.preview}
                         />
-                        <div
-                            key={ id + "-fileDetails" }
-                            className="file-details"
-                        >
-                            { objectValue.name }<br />
-                            { objectValue.mime}<br />
-                            { Attributes.fileSizeFormat(objectValue.size) }
+                        <div key={id + "-fileDetails"} className="file-details">
+                            {objectValue.name}
+                            <br />
+                            {objectValue.mime}
+                            <br />
+                            {Attributes.fileSizeFormat(objectValue.size)}
                         </div>
                     </>
                 );
@@ -75,31 +76,31 @@ export function renderFile( componentInstance, type, id, label, keys, valueProp,
 
             case "gallery":
                 preview = [];
-                objectValue.forEach(image => {
+                objectValue.forEach((image) => {
                     preview.push(
                         <li
-                            key={ id + "-galleryImageContainerLi" + image.id }
+                            key={id + "-galleryImageContainerLi" + image.id}
                             className="blocks-gallery-item"
                         >
                             <img
-                                key={ id + "-galleryImage_" + image.id }
-                                src={ image.preview }
+                                key={id + "-galleryImage_" + image.id}
+                                src={image.preview}
                             />
                         </li>
                     );
                 });
-                
-                let columns = ( objectValue.length > 5 ) ? 5 : objectValue.length;
+
+                let columns = objectValue.length > 5 ? 5 : objectValue.length;
                 preview = (
-                    <figure 
-                        key={ id + "-galleryImagefigure" }
-                        className={ "wp-block-gallery columns-" + columns }
+                    <figure
+                        key={id + "-galleryImagefigure"}
+                        className={"wp-block-gallery columns-" + columns}
                     >
                         <ul
-                            key={ id + "-galleryImageContainerUl" }
+                            key={id + "-galleryImageContainerUl"}
                             className="blocks-gallery-grid"
                         >
-                            { preview }
+                            {preview}
                         </ul>
                     </figure>
                 );
@@ -107,90 +108,114 @@ export function renderFile( componentInstance, type, id, label, keys, valueProp,
         }
         preview = (
             <div
-                key={ id + "-mediaPreviewContainer" }
+                key={id + "-mediaPreviewContainer"}
                 className="media-preview-container"
             >
-                { preview }
+                {preview}
                 <Button
-                    key={ id + "-removeMedia" }
+                    key={id + "-removeMedia"}
                     isSecondary
                     isSmall
                     className="reset-button"
-                    onMouseDown={ () => {
-                            if( type == "gallery" && objectValue.length > 1 )
-                            componentInstance.setAttributes( { [keys]: objectValue.slice(0, objectValue.length - 1) } );
-                            else if( repeatable )
-                                Attributes.removeEltRepeatable( keys, valueProp, componentInstance );
-                            else
-                                componentInstance.setAttributes( { [keys]: undefined } );
-                        }
-                    }
-                >Remove</Button>
+                    onMouseDown={() => {
+                        if (type == "gallery" && objectValue.length > 1)
+                            componentInstance.setAttributes({
+                                [keys]: objectValue.slice(
+                                    0,
+                                    objectValue.length - 1
+                                ),
+                            });
+                        else if (repeatable)
+                            Attributes.removeEltRepeatable(
+                                keys,
+                                valueProp,
+                                componentInstance
+                            );
+                        else
+                            componentInstance.setAttributes({
+                                [keys]: undefined,
+                            });
+                    }}
+                >
+                    Remove
+                </Button>
             </div>
         );
     }
-    let inner = Render.fieldContainer( id + '_file',
+    let inner = Render.fieldContainer(
+        id + "_file",
         <MediaPlaceholder
-            key={ id }
-            onSelect={ ( value ) => {
-
+            key={id}
+            onSelect={(value) => {
                 let newValue = undefined;
-                switch( type ) {
+                switch (type) {
                     case "image":
-                        if( typeof value.id != 'undefined' ) {
+                        if (typeof value.id != "undefined") {
                             newValue = {
                                 id: value.id,
-                                preview: value.url
+                                preview: value.url,
                             };
                         }
                         break;
 
                     case "video":
-                        if( typeof value.id != 'undefined' ) {
+                        if (typeof value.id != "undefined") {
                             newValue = {
                                 id: value.id,
                                 preview: value.icon,
                                 name: value.filename,
                                 mime: value.mime,
-                                size: value.filesizeInBytes
+                                size: value.filesizeInBytes,
                             };
                         }
                         break;
-                    
+
                     case "file":
-                        if( typeof value.id != 'undefined' ) {
+                        if (typeof value.id != "undefined") {
                             newValue = {
                                 id: value.id,
                                 preview: value.icon,
                                 name: value.filename,
                                 mime: value.mime,
-                                size: value.filesizeInBytes
+                                size: value.filesizeInBytes,
                             };
                         }
                         break;
 
                     case "gallery":
                         newValue = [];
-                        value.forEach(image => {
-                            if( typeof image.id != 'undefined' ) {
-                                newValue.push( {
+                        value.forEach((image) => {
+                            if (typeof image.id != "undefined") {
+                                newValue.push({
                                     id: image.id,
-                                    preview: image.url
-                                } )
+                                    preview: image.url,
+                                });
                             }
                         });
                         break;
                 }
 
-                if( typeof newValue != 'undefined' && ( typeof newValue != 'object' || Object.keys(newValue).length > 0 ) )
-                Attributes.updateAttributes( keys, valueProp, newValue, false, componentInstance );
-            } }
-            multiple= { type == 'gallery' }
-            addToGallery= { type == 'gallery' && !! objectValue }
-            value={ objectValue }
-            disableDropZone={ true }
-        >{ preview }</MediaPlaceholder>
+                if (
+                    typeof newValue != "undefined" &&
+                    (typeof newValue != "object" ||
+                        Object.keys(newValue).length > 0)
+                )
+                    Attributes.updateAttributes(
+                        keys,
+                        valueProp,
+                        newValue,
+                        false,
+                        componentInstance
+                    );
+            }}
+            multiple={type == "gallery"}
+            addToGallery={type == "gallery" && !!objectValue}
+            value={objectValue}
+            disableDropZone={true}
+        >
+            {preview}
+        </MediaPlaceholder>
     );
 
-    return Render.panelComponent( id, label, inner, false );
+    return Render.panelComponent(id, label, inner, false);
 }

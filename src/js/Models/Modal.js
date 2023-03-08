@@ -1,65 +1,66 @@
-import { Button, Modal, Dashicon } from '@wordpress/components';
-import { Component } from '@wordpress/element';
+import { Button, Dashicon, Modal } from "@wordpress/components";
+import { Component } from "@wordpress/element";
 
 export class WpeModal extends Component {
-
     constructor() {
-        super( ...arguments );
+        super(...arguments);
 
         this.state = {
-            showModal: true
+            showModal: true,
         };
 
         this.handleCloseModal = this.handleCloseModal.bind(this);
     }
 
     handleCloseModal() {
-        
-        this.setState( { showModal: false } );
+        this.setState({ showModal: false });
         this.props.onClose();
     }
 
     render() {
+        const classNameModal = ["wpe-modal"];
 
-        const classNameModal = [ 'wpe-modal' ];
-
-        if( typeof this.props.type != 'undefined' ) {
-            classNameModal.push( 'modal-' + this.props.type + ' center');
+        if (typeof this.props.type != "undefined") {
+            classNameModal.push("modal-" + this.props.type + " center");
         }
 
-        const hasFooter = ( typeof this.props.hasFooter == 'undefined' || this.props.hasFooter );
+        const hasFooter =
+            typeof this.props.hasFooter == "undefined" || this.props.hasFooter;
 
-        return ( this.state.showModal &&
+        return (
+            this.state.showModal && (
                 <Modal
-                    key={ this.props.id + "-modal" }
-                    title={ this.props.title }
+                    key={this.props.id + "-modal"}
+                    title={this.props.title}
                     onRequestClose={null}
                     isDismissible={false}
-                    className={ classNameModal.join(' ') }
+                    className={classNameModal.join(" ")}
                     __experimentalHideHeader={true}
                     shouldCloseOnEsc={true}
-		            shouldCloseOnClickOutside={true}
+                    shouldCloseOnClickOutside={true}
                 >
                     <div className="components-modal__body">
-                        <div className='title'>
-                            { typeof this.props.icon != 'undefined' && (
-                                <Dashicon icon={ this.props.icon } />
-                            ) }
-                            <h1>{ this.props.title }</h1>
+                        <div className="title">
+                            {typeof this.props.icon != "undefined" && (
+                                <Dashicon icon={this.props.icon} />
+                            )}
+                            <h1>{this.props.title}</h1>
                         </div>
-                        <div className="inner">{ this.props.children }</div>
+                        <div className="inner">{this.props.children}</div>
                     </div>
-                    { hasFooter && (
+                    {hasFooter && (
                         <div className="components-modal__footer">
                             <Button
                                 className="alignRight"
                                 variant="link"
                                 onMouseDown={this.handleCloseModal}
-                            >Close</Button>
+                            >
+                                Close
+                            </Button>
                         </div>
-
-                    ) }
+                    )}
                 </Modal>
             )
+        );
     }
 }

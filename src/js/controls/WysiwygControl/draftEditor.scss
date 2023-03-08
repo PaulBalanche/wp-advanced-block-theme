@@ -1,15 +1,14 @@
-@import './dropDown';
-@import './modal';
+@import "./dropDown";
+@import "./modal";
 
 .DraftEditor-Container {
-    font-family: 'Georgia', serif;
+    font-family: "Georgia", serif;
     font-size: 14px;
     border: 1px solid $o-main-color-border;
     border-radius: $o-border-radius;
     background: white;
 
     .DraftEditor-controls-row {
-        
         margin-bottom: 10px;
 
         .label {
@@ -25,12 +24,10 @@
         }
 
         .DraftEditor-controls-row-inner {
-
             display: flex;
             justify-content: space-between;
 
             .DraftEditor-styleButton {
-
                 cursor: pointer;
                 margin: 0 1px 0 0 !important;
                 padding: 2px 8px !important;
@@ -38,23 +35,21 @@
                 border: 1px solid #007cba00;
                 border-radius: 6px;
                 line-height: 20px !important;
-              
+
                 &:last-child {
                     margin-right: 0;
                 }
-              }
-              
-              .DraftEditor-styleButton:hover,
-              .DraftEditor-activeButton {
-                    color: #007cba;
-                    border-color: #007cba;
-              }
-              
+            }
+
+            .DraftEditor-styleButton:hover,
+            .DraftEditor-activeButton {
+                color: #007cba;
+                border-color: #007cba;
+            }
         }
     }
 
     .toolbox {
-
         display: flex;
         align-items: center;
         height: 34px;
@@ -70,72 +65,70 @@
     }
 
     .border-style {
-      // border: 1px solid $border300;
-      border-radius: $o-border-radius;
-      padding: 6px;
-  }
-
-  .DraftEditor-controls-row {
-    margin: 0 !important;
-    padding: $o-space-20;
-    background: $o-background-color;
-
-    &:first-child {
-      border-top-left-radius: $o-border-radius;
-      border-top-right-radius: $o-border-radius;
+        // border: 1px solid $border300;
+        border-radius: $o-border-radius;
+        padding: 6px;
     }
 
-    &:nth-child(2) {
-      padding-block-start: 0;
-      border-bottom: solid 1px $o-main-color-border;
-    }
-  }
+    .DraftEditor-controls-row {
+        margin: 0 !important;
+        padding: $o-space-20;
+        background: $o-background-color;
 
+        &:first-child {
+            border-top-left-radius: $o-border-radius;
+            border-top-right-radius: $o-border-radius;
+        }
+
+        &:nth-child(2) {
+            padding-block-start: 0;
+            border-bottom: solid 1px $o-main-color-border;
+        }
+    }
 }
 
 .DraftEditor-root {
-  padding: $o-space-40;
+    padding: $o-space-40;
 }
 
 .DraftEditor-editor {
-  cursor: text;
-  font-size: 16px;
-  margin-top: 10px;
+    cursor: text;
+    font-size: 16px;
+    margin-top: 10px;
 }
 
 .DraftEditor-editor .public-DraftEditorPlaceholder-root,
 .DraftEditor-editor .public-DraftEditor-content {
-  margin: 0 -15px -15px;
-  padding: 15px;
+    margin: 0 -15px -15px;
+    padding: 15px;
 }
 
 .DraftEditor-editor .public-DraftEditor-content {
-  min-height: 100px;
+    min-height: 100px;
 }
 
 .DraftEditor-hidePlaceholder .public-DraftEditorPlaceholder-root {
-  display: none;
+    display: none;
 }
 
 .DraftEditor-editor .DraftEditor-blockquote {
-  border-left: 5px solid #eee;
-  color: #666;
-  font-family: 'Hoefler Text', 'Georgia', serif;
-  font-style: italic;
-  margin: 16px 0;
-  padding: 10px 20px;
+    border-left: 5px solid #eee;
+    color: #666;
+    font-family: "Hoefler Text", "Georgia", serif;
+    font-style: italic;
+    margin: 16px 0;
+    padding: 10px 20px;
 }
 
 .DraftEditor-editor .public-DraftStyleDefault-pre {
-  background-color: rgba(0, 0, 0, 0.05);
-  font-family: 'Inconsolata', 'Menlo', 'Consolas', monospace;
-  font-size: 16px;
-  padding: 20px;
+    background-color: rgba(0, 0, 0, 0.05);
+    font-family: "Inconsolata", "Menlo", "Consolas", monospace;
+    font-size: 16px;
+    padding: 20px;
 }
 
 .DraftEditor-controls {
-
-    font-family: 'Helvetica', sans-serif;
+    font-family: "Helvetica", sans-serif;
     font-size: 14px;
     margin-bottom: 5px;
     user-select: none;
@@ -144,16 +137,16 @@
 .WrapperBlockRendering {
     position: relative;
     padding: 20px 10px 10px 10px;
-    border: 1px dashed rgba(0,124,186,.5);
+    border: 1px dashed rgba(0, 124, 186, 0.5);
     margin: 10px 0;
 
-    &::before{
+    &::before {
         content: attr(type);
         display: block;
         position: absolute;
         left: -1px;
         top: -1px;
-        font-size: .6rem;
+        font-size: 0.6rem;
         background: #007cba;
         color: #fff;
         padding: 0px 10px;

@@ -143,7 +143,7 @@ class WpeGrid extends WpeComponentBase {
         else {
 
             return <div {...innerBlocksProps}>
-                { this.renderEditZone() }
+                { this.renderEditFormZone() }
                 <div className='o-grid-container'>
                     { children }
                 </div>
