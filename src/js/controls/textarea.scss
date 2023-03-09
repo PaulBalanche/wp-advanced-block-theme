@@ -1,0 +1,5 @@
+.o-editor {
+    .components-textarea-control__input {
+        @include o-field;
+    }
+}

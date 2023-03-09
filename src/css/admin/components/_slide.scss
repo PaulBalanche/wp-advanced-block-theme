@@ -1,0 +1,28 @@
+.o-editor {
+
+    .block-editor-block-list__layout[data-type="custom/wpe-slide"] {
+        margin-top: 0;
+        margin-bottom: 0;
+        background: none;
+
+        &::before {
+
+            content: '';
+            display: none;
+        }
+
+        .block-list-appender {
+            position: relative;
+        }
+
+        &:hover > .block-list-appender {
+            visibility: visible !important;
+        }
+
+        &:not([contenteditable])::focus::after {
+            border: none;
+        }
+
+    }
+
+}

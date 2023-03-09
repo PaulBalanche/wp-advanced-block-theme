@@ -28,7 +28,7 @@ class WpeSlide extends WpeComponentBase {
         innerBlocksProps.key = 'innerBlocksProps_' + this.props.clientId;
 
         return <div {...innerBlocksProps}>
-            { this.renderEditZone() }
+            { this.renderEditFormZone() }
             { children }
         </div>
     }

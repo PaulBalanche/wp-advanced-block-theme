@@ -1,0 +1,59 @@
+.o-editor {
+
+    .components-panel {
+        position: relative;
+        border: 1px solid $o-main-color-border;
+        border-radius: $o-border-radius;
+
+        &:after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: calc(100% - 1px);
+            height: calc(100% - 1px);
+            border: 1px solid $o-accent-color-border;
+            border-radius: $o-border-radius;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        > .components-panel__body > .components-panel__body-title {
+            border-radius: $o-border-radius;
+
+            button {
+                padding: $o-padding;
+            }
+        }
+
+        > .is-opened.components-panel__body > .components-panel__body-title {
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
+            background: $o-background-color !important;
+            // border-bottom: 1px solid $o-main-color-border;
+            margin: -15px -16px 0 -16px !important;
+        }
+
+        > .components-panel__body > .components-panel__row {
+            padding-top: $o-space-30;
+            flex-direction: column;
+            gap: $o-space-50;
+        }
+
+        &:hover,
+        &:focus,
+        &:focus-within {
+
+            border-color: transparent !important;
+
+            &:after {
+                opacity: 1;
+            }
+
+            > .components-panel__body > .components-panel__body-title {
+                background: $o-accent-color-border !important;
+            }
+
+        }
+    }
+
+}

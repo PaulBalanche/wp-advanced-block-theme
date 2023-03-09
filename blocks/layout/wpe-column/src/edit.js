@@ -138,7 +138,7 @@ class WpeColumn extends WpeComponentBase {
         };
 
         return <div {...innerBlocksProps}>
-            { this.renderEditZone() }
+            { this.renderEditFormZone() }
             { children }
         </div>
     }

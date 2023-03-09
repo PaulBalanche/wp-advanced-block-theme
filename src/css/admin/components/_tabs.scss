@@ -1,0 +1,37 @@
+.o-editor {
+
+    .tab-panel-wpe-component {
+        width: 100%;
+    }
+
+    .components-tab-panel__tabs-item {
+        border-radius: 0 !important;
+    }
+
+    .components-tab-panel__tabs {
+        margin-inline-start: $o-space-50;
+        border-top-left-radius: $o-border-radius;
+        border-top-right-radius: $o-border-radius;
+
+        button {
+            margin: 0 !important;
+            border-bottom: 2px solid transparent;
+            transition: $o-transition-fast;
+
+            &.active-tab {
+                border-bottom: 2px solid $o-accent-color;
+            }
+        }
+
+    }
+    .components-tab-panel__tab-content {
+        display: flex;
+        flex-direction: column;
+        gap: $o-space-40;
+        border-bottom-left-radius: $o-border-radius;
+        border-bottom-right-radius: $o-border-radius;
+        background: $o-background-color;
+        padding: $o-padding;
+        background: #fcfcfc;
+    }
+}

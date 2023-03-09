@@ -10,6 +10,7 @@
   "author": "Paul Balanche <pb@buzzbrothers.ch>",
   "license": "ISC",
   "devDependencies": {
+    "@prettier/plugin-php": "^0.19.3",
     "@wordpress/icons": "^9.14.0",
     "@wordpress/scripts": "25.0.0",
     "@wordpress/server-side-render": "^4.0.0",
@@ -32,6 +33,7 @@
     "@wordpress/hooks": "^3.26.0",
     "@wordpress/preferences": "^3.5.0",
     "@wordpress/reusable-blocks": "^4.4.0",
-    "dompurify": "^2.4.3"
+    "dompurify": "^2.4.3",
+    "react-router-dom": "^6.8.2"
   }
 }

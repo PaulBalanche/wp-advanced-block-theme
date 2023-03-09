@@ -1,0 +1,9 @@
+.o-editor {
+    .components-button {
+        border-radius: $o-border-radius-small;
+
+        .dashicon {
+            margin-inline-end: $o-space-10;
+        }
+    }
+}

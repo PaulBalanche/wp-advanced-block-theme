@@ -90,7 +90,7 @@ class WpeSlider extends WpeComponentBase {
         
         return <div {...innerBlocksProps}>
             <style>{inlineCss}</style>
-            { this.renderEditZone(buttonGroupComponentModeContainer) }
+            { this.renderEditFormZone(buttonGroupComponentModeContainer) }
             { children }
         </div>
     }

@@ -1,0 +1,11 @@
+.o-editor {
+    .components-input-control__container {
+        .components-select-control__input {
+            @include o-field;
+        }
+
+        .components-input-control-suffix-wrapper {
+            right: 10px;
+        }
+    }
+}

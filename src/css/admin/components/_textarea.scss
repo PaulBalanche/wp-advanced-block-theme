@@ -1,0 +1,10 @@
+.o-editor {
+    .components-textarea-control__input {
+        border-radius: $o-border-radius !important;
+
+        &:hover,
+        &:focus {
+            border-color: $o-accent-color-border !important;
+        }
+    }
+}

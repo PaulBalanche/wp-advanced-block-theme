@@ -1,0 +1,23 @@
+#editor {
+    &.resizable {
+        .is-mode-visual {
+
+            .interface-interface-skeleton__body {
+
+                width: 100%;
+                transition: width 0.4s;
+
+                &:has(#o-edit-zone .edit-zone__inner) {
+                    width: calc(100% - 700px);
+                }
+            }
+        }
+    }
+
+    .interface-interface-skeleton__body {
+        
+        .edit-post-visual-editor__post-title-wrapper {
+            display: none;
+        }
+    }
+}

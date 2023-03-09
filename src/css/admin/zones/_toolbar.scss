@@ -1,0 +1,29 @@
+#editor {
+
+    .interface-interface-skeleton__header {
+
+        .edit-post-header__toolbar {
+            
+            align-items: center;
+
+            .edit-post-header-toolbar {
+                flex-grow: initial;
+            }
+
+            .edit-post-visual-editor__post-title-wrapper {
+
+                margin: 0;
+                margin-left: 5rem;
+        
+                h1 {
+        
+                    margin: 0 auto;
+                    
+                    &:after {
+                        content: none;
+                    }
+                }
+            }
+        } 
+    }
+}

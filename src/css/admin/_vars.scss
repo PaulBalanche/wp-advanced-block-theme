@@ -2,3 +2,51 @@ $base_padding: 40px;
 $max_width_main_column: 75%;
 $border300: var( --border300, rgb(235,235,235) );
 $background300: var( --background300, rgb(245,245,245) );
+
+$o-depth-100:  0px 0.8px 2.2px rgba(0, 0, 0, 0.022),
+                0px 2px 5.3px rgba(0, 0, 0, 0.032),
+                0px 3.8px 10px rgba(0, 0, 0, 0.04),
+                0px 6.7px 17.9px rgba(0, 0, 0, 0.048),
+                0px 12.5px 33.4px rgba(0, 0, 0, 0.058),
+                0px 30px 80px rgba(0, 0, 0, 0.08);
+
+$o-main-color: rgba(255,255,255,1);
+$o-main-color-border: #e8e8e8;
+
+$o-warn-color: #EBCF6B;
+$o-warn-color-dark: #EBCF6B;
+$o-warn-color-light: #FCF2DE;
+
+$o-text-color: rgba(0,0,0,.6);
+
+$o-accent-color: var(--wp-admin-theme-color);
+$o-accent-color-hover: var(--wp-admin-theme-color-darker-10);
+$o-accent-color-border: #d8eef8;
+$o-accent-color-border-active: #47A8E7;
+
+$o-background-color: #fcfcfc;
+$o-foreground-color: rgba(255,255,255,1);
+
+$o-space-10: 6px;
+$o-space-20: 12px;
+$o-space-30: 18px;
+$o-space-40: 24px;
+$o-space-50: 30px;
+$o-space-60: 36px;
+$o-space-70: 42px;
+$o-space-80: 48px;
+$o-space-90: 54px;
+$o-space-100: 60px;
+
+$o-border-radius-small: 4px;
+$o-border-radius: 10px;
+$o-border-radius-large: 16px;
+
+$o-transition-fast: all .1s ease-in-out;
+$o-transition-default: all .3s ease-in-out;
+$o-transition-slow: all .6s ease-in-out;
+
+$o-padding-small: $o-space-30 $o-space-40;
+$o-padding: $o-space-40 $o-space-50;
+$o-padding-inline: $o-space-50;
+$o-padding-block: $o-space-40;

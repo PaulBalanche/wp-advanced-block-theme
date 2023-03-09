@@ -1,0 +1,53 @@
+#devicesButtonGroupContainer {
+    display: flex;
+    position: relative;
+    align-items: center;
+    justify-content: flex-end;
+    margin-left: auto;
+    margin-right: $o-space-50;
+    padding-inline-end: $o-space-60;
+
+    &:after {
+        content: '';
+        display: block;
+        position: absolute;
+        top: 0; right: 0;
+        width: 1px; height: 100%;
+        background-color: $o-main-color-border;
+    }
+
+    .devicesInfo {
+        margin-right: 30px;
+        display: flex;
+        align-items: center;
+
+        .dashicon {
+            font-size: 1.2em;
+            height: auto;
+            width: auto;
+            margin: 2px 5px 0 5px;
+        }
+    }
+
+    .devicesButtonGroup {
+
+        button {
+            
+            box-shadow: inset 0 0 0 1px $border300;
+            background: $background300;
+
+            &:first-child {
+                border-top-left-radius: $o-border-radius;
+                border-bottom-left-radius: $o-border-radius;
+            }
+            &:last-child {
+                border-top-right-radius: $o-border-radius;
+                border-bottom-right-radius: $o-border-radius;
+            }
+
+            &.is-pressed {
+                background: var(--wp-admin-theme-color);
+            }
+        }
+    }
+}

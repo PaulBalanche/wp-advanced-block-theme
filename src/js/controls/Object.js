@@ -1,18 +1,32 @@
-import { Attributes } from '../Static/Attributes';
-import { Render } from '../Static/Render';
+import { Attributes } from "../Static/Attributes";
+import { Render } from "../Static/Render";
 
-export function renderObject( componentInstance, id, label, keys, valueProp, objectValue, initialOpen = false, required = false ) {
-
+export function renderObject(
+    componentInstance,
+    id,
+    label,
+    keys,
+    valueProp,
+    objectValue,
+    initialOpen = false,
+    required = false
+) {
     let fieldsetObject = [];
 
-    for( const [keySubProp, valueSubProp] of Object.entries(objectValue) ) {
-        fieldsetObject.push( Attributes.renderProp( valueSubProp, keys.concat(keySubProp), valueProp, componentInstance ) );
+    for (const [keySubProp, valueSubProp] of Object.entries(objectValue)) {
+        fieldsetObject.push(
+            Attributes.renderProp(
+                valueSubProp,
+                keys.concat(keySubProp),
+                valueProp,
+                componentInstance
+            )
+        );
     }
 
-    if( label == null )
-        return fieldsetObject;
+    if (label == null) return fieldsetObject;
 
-    label = ( required ) ? label + '*' : label;
+    label = required ? label + "*" : label;
 
     // let currentValueAttribute = valueProp;
     // keys.forEach( element => { currentValueAttribute = ( currentValueAttribute != null && typeof currentValueAttribute == 'object' && currentValueAttribute.hasOwnProperty(element) && typeof currentValueAttribute[element] != "undefined" ) ? currentValueAttribute[element] : ""; } );
@@ -20,5 +34,5 @@ export function renderObject( componentInstance, id, label, keys, valueProp, obj
     //     initialOpen = true;
     // }
 
-    return Render.panelComponent( id, label, fieldsetObject, initialOpen )
+    return Render.panelComponent(id, label, fieldsetObject, initialOpen);
 }

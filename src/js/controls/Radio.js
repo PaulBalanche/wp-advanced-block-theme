@@ -1,47 +1,56 @@
-import {
-    Button,
-    RadioControl
-} from '@wordpress/components';
+import { RadioControl } from "@wordpress/components";
 
-import { Attributes } from '../Static/Attributes';
-import { Render } from '../Static/Render';
-import { withState } from '@wordpress/compose';
+import { withState } from "@wordpress/compose";
+import { Attributes } from "../Static/Attributes";
 
-export function renderRadio( componentInstance, id, label, options, keys, valueProp, objectValue, required = false ) {
+export function renderRadio(
+    componentInstance,
+    id,
+    label,
+    options,
+    keys,
+    valueProp,
+    objectValue,
+    required = false
+) {
+    if (typeof options == "undefined") return null;
 
-    if( typeof options == 'undefined' )
-        return null;
+    label = required ? label + "*" : label;
 
-    label = ( required ) ? label + '*' : label;
-
-    const MyRadioControl = withState( {
+    const MyRadioControl = withState({
         option: objectValue,
-    } )( ( { option, setState } ) => (
+    })(({ option, setState }) => (
         <RadioControl
-            key={ id }
-            label={ label }
-            selected={ option }
-            options={ options.map( function(value) {
-                return { label: value.name, value: value.value }
-            } ) }
-            onChange={ ( newValue ) => {
-                setState( { newValue } );
-                Attributes.updateAttributes( keys, valueProp, newValue, false, componentInstance );
-            } }
+            key={id}
+            label={label}
+            selected={option}
+            options={options.map(function (value) {
+                return { label: value.name, value: value.value };
+            })}
+            onChange={(newValue) => {
+                setState({ newValue });
+                Attributes.updateAttributes(
+                    keys,
+                    valueProp,
+                    newValue,
+                    false,
+                    componentInstance
+                );
+            }}
         />
-    ) );
+    ));
 
-    return(
+    return (
         <div
-            key={ id + "-RadioControlComponentsBaseControl" }
+            key={id + "-RadioControlComponentsBaseControl"}
             className="components-base-control"
         >
             <div
-                key={ id + "-RadioControlComponentsBaseControlField" }
+                key={id + "-RadioControlComponentsBaseControlField"}
                 className="components-base-control__field"
             >
                 <div
-                    key={ id + "-RadioControlContainer" }
+                    key={id + "-RadioControlContainer"}
                     className="radio-control-container"
                 >
                     <MyRadioControl />
