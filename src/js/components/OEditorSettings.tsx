@@ -21,14 +21,14 @@ export default class OEditorSettings {
 
         return <>
             <ToggleControl
-                label="alertReusableBlockMessage"
-                checked={ __OEditorApp.getInstance().getUserPreferences('alertReusableBlockMessage') }
-                onChange={ () => __OEditorApp.getInstance().updateUserPreferences('alertReusableBlockMessage') }
+                label="alertUpdateAttributes"
+                checked={ __OEditorApp.getInstance().getUserPreferences('alertUpdateAttributes') }
+                onChange={ () => __OEditorApp.getInstance().updateUserPreferences('alertUpdateAttributes') }
             />
             <ToggleControl
-                label="alertUpdateAttributesMessage"
-                checked={ __OEditorApp.getInstance().getUserPreferences('alertUpdateAttributesMessage') }
-                onChange={ () => __OEditorApp.getInstance().updateUserPreferences('alertUpdateAttributesMessage') }
+                label="alertReusableBlock"
+                checked={ __OEditorApp.getInstance().getUserPreferences('alertReusableBlock') }
+                onChange={ () => __OEditorApp.getInstance().updateUserPreferences('alertReusableBlock') }
             />
         </>
     }

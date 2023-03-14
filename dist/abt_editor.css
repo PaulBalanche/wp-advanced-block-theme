@@ -1088,6 +1088,12 @@
   background: var(--wp-admin-theme-color-darker-10);
   color: rgb(255, 255, 255);
 }
+.o-editor .is-reusable .is-primary {
+  background: #EBCF6B;
+}
+.o-editor .is-reusable .is-primary:hover {
+  background: #EBCF6B;
+}
 .o-editor .wp-block.block-list-appender {
   border-color: var(--wp-admin-theme-color) !important;
   margin: 30px !important;

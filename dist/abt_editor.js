@@ -14569,7 +14569,11 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
   constructor() {
     super(...arguments);
     this.state = {
-      removeSubmitted: false
+      modal: {
+        alertUpdateAttributes: null,
+        alertReusableBlock: null,
+        removeSubmitted: false
+      }
     };
     this.title = (0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_4__.getBlockType)(this.props.name).title;
     this.reusableBlock = this.isReusableBlock();
@@ -14668,9 +14672,7 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
       }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.MenuItem, {
         key: this.props.clientId + "-toolsDropdownMenu-remove-trash",
         icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_12__["default"],
-        onClick: () => this.setState({
-          removeSubmitted: true
-        })
+        onClick: () => this.showModal('removeSubmitted')
       }, "Remove ", this.title)));
     }
     return menuGroup.length > 0 ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.DropdownMenu, {
@@ -14780,14 +14782,41 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
       return tabPanel.content;
     })), document.querySelector(".o-editor-app.block-" + this.props.clientId + " .o-editor-app_body"));
   }
+  showModal(modal) {
+    let once = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+    if (once && this.state.modal[modal] != null) {
+      return;
+    }
+    if (_components_OEditorApp__WEBPACK_IMPORTED_MODULE_7__["default"].getInstance().getUserPreferences(modal) != null && !_components_OEditorApp__WEBPACK_IMPORTED_MODULE_7__["default"].getInstance().getUserPreferences(modal)) {
+      return;
+    }
+    const newModalState = this.state.modal;
+    newModalState[modal] = true;
+    this.setState({
+      modal: newModalState
+    });
+  }
+  hideModal(modal) {
+    const newModalState = this.state.modal;
+    newModalState[modal] = false;
+    this.setState({
+      modal: newModalState
+    });
+  }
+  displayModal(modal) {
+    return this.state.modal[modal];
+  }
   renderFooter() {
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, typeof this.state.needPreviewUpdate != "undefined" && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
       key: this.props.clientId + "-buttonUpdatePreview",
       className: "abtButtonUpdatePreview",
       variant: "primary",
-      onMouseDown: () => this.setState({
-        needPreviewUpdate: true
-      })
+      onMouseDown: () => {
+        this.setState({
+          needPreviewUpdate: true
+        });
+        this.showModal('alertUpdateAttributes', true);
+      }
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
       icon: "update"
     }), "Update preview"), typeof this.previewUrl != "undefined" && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
@@ -14804,9 +14833,7 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
       key: this.props.clientId + "-buttonCloseEditZone",
       className: "abtButtonCloseEditZone",
       variant: "secondary",
-      onMouseDown: () => {
-        _components_OEditorApp__WEBPACK_IMPORTED_MODULE_7__["default"].getInstance().hide();
-      }
+      onMouseDown: () => _components_OEditorApp__WEBPACK_IMPORTED_MODULE_7__["default"].getInstance().hide()
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
       icon: "no-alt"
     }), "Close"));
@@ -14852,6 +14879,9 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
       className: "o-toolbar-container",
       onDoubleClick: e => {
         _components_OEditorApp__WEBPACK_IMPORTED_MODULE_7__["default"].getInstance().open(this);
+        if (this.getReusableBlock() != null) {
+          this.showModal('alertReusableBlock', true);
+        }
       }
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "o-toolbar"
@@ -14864,19 +14894,20 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
       variant: "primary",
       onMouseDown: () => {
         _components_OEditorApp__WEBPACK_IMPORTED_MODULE_7__["default"].getInstance().open(this);
+        if (this.getReusableBlock() != null) {
+          this.showModal('alertReusableBlock', true);
+        }
       }
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
       icon: "edit"
     }), " Edit");
   }
   renderRemoveModal() {
-    return this.state.removeSubmitted && typeof this.props.removeBlock != "undefined" ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Modal__WEBPACK_IMPORTED_MODULE_6__.WpeModal, {
+    return this.displayModal('removeSubmitted') && typeof this.props.removeBlock != "undefined" ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Modal__WEBPACK_IMPORTED_MODULE_6__.WpeModal, {
       key: this.props.clientId + "-removeBlockWpeModal",
       id: this.props.clientId + "-removeBlockWpeModal",
       title: 'Confirm "' + this.title + '" suppression',
-      onClose: () => this.setState({
-        removeSubmitted: false
-      }),
+      onClose: () => this.hideModal('removeSubmitted'),
       hasFooter: false,
       type: "warning"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "Are you sure you want to remove this block ?"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -14886,9 +14917,7 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
       variant: "primary",
       onMouseDown: () => {
-        this.setState({
-          removeSubmitted: false
-        });
+        this.hideModal('removeSubmitted');
         _components_OEditorApp__WEBPACK_IMPORTED_MODULE_7__["default"].getInstance().hide();
         this.props.removeBlock(this.props.clientId);
       }
@@ -14898,10 +14927,63 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
       className: "row"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
       variant: "link",
-      onMouseDown: () => this.setState({
-        removeSubmitted: false
-      })
+      onMouseDown: () => this.hideModal('removeSubmitted')
     }, "Cancel")))) : null;
+  }
+  alertUpdateAttributes() {
+    return this.displayModal('alertUpdateAttributes') ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Modal__WEBPACK_IMPORTED_MODULE_6__.WpeModal, {
+      key: this.props.clientId + "-alertUpdateAttributesMessageWpeModal",
+      id: this.props.clientId + "-alertUpdateAttributesMessageWpeModal",
+      title: "Updating preview...",
+      onClose: () => this.hideModal('alertUpdateAttributes'),
+      hasFooter: false,
+      type: "info"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "This preview update does not save the post.", (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("b", null, "Don't forget to save your changes!")), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "bouttonGroup"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "row"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
+      key: this.props.clientId + "alertUpdateAttributesMessageButton",
+      variant: "primary",
+      onMouseDown: () => this.hideModal('alertUpdateAttributes')
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
+      icon: "yes"
+    }), "All right!")), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "row"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.CheckboxControl, {
+      label: "Do not show this message again",
+      checked: !_components_OEditorApp__WEBPACK_IMPORTED_MODULE_7__["default"].getInstance().getUserPreferences('alertUpdateAttributes'),
+      onChange: () => _components_OEditorApp__WEBPACK_IMPORTED_MODULE_7__["default"].getInstance().updateUserPreferences('alertUpdateAttributes')
+    })))) : null;
+  }
+  alertReusableBlock() {
+    let display = true;
+    display = display && this.getReusableBlock() != null ? true : false;
+    display = display && this.displayModal('alertReusableBlock') ? true : false;
+    return display ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Modal__WEBPACK_IMPORTED_MODULE_6__.WpeModal, {
+      key: this.props.clientId + "-alertReusableBlockMessageWpeModal",
+      id: this.props.clientId + "-alertReusableBlockMessageWpeModal",
+      title: "Reusable block",
+      onClose: () => this.hideModal('alertReusableBlock'),
+      hasFooter: false,
+      type: "warning"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "This block is part of a ", (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("b", null, "reusable block"), " composition.", (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), "Updating this block will", " ", (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("b", null, "apply the changes everywhere it is used.")), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "bouttonGroup"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "row"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
+      key: this.props.clientId + "alertReusableBlockMessageButton",
+      variant: "primary",
+      onMouseDown: () => this.hideModal('alertReusableBlock')
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
+      icon: "yes"
+    }), "All right!")), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "row"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.CheckboxControl, {
+      label: "Do not show this message again",
+      checked: !_components_OEditorApp__WEBPACK_IMPORTED_MODULE_7__["default"].getInstance().getUserPreferences('alertReusableBlock'),
+      onChange: () => _components_OEditorApp__WEBPACK_IMPORTED_MODULE_7__["default"].getInstance().updateUserPreferences('alertReusableBlock')
+    })))) : null;
   }
   render() {
     var render = [];
@@ -14909,6 +14991,8 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
     render.push(this.renderPropsEdition());
     render.push(this.liveRendering());
     render.push(this.renderRemoveModal());
+    render.push(this.alertUpdateAttributes());
+    render.push(this.alertReusableBlock());
     return render;
   }
 }
@@ -15852,8 +15936,8 @@ class OEditorApp extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Compone
       componentInstance: null,
       route: null,
       userPreferences: {
-        alertUpdateAttributesMessage: true,
-        alertReusableBlockMessage: true
+        alertUpdateAttributes: true,
+        alertReusableBlock: true
       }
     };
 
@@ -15944,7 +16028,7 @@ class OEditorApp extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Compone
     }
   }
   getUserPreferences(preference) {
-    return this.state.userPreferences[preference];
+    return typeof this.state.userPreferences[preference] != 'undefined' ? this.state.userPreferences[preference] : null;
   }
   updateUserPreferences(preference) {
     let value = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
@@ -16060,8 +16144,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _OEditorApp__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./OEditorApp */ "./src/js/components/OEditorApp.tsx");
-/* harmony import */ var _Models_Modal__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../Models/Modal */ "./src/js/Models/Modal.js");
-
 
 
 
@@ -16076,7 +16158,10 @@ class OEditorBlock {
       onMouseDown: () => _OEditorApp__WEBPACK_IMPORTED_MODULE_3__["default"].getInstance().routeTo('blocks')
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Dashicon, {
       icon: "editor-break"
-    })), this._blockInstance.renderTitle?.());
+    })), this._blockInstance.renderTitle?.(), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Button, {
+      key: "o-editor-welcome_routeTo-settings",
+      onMouseDown: () => _OEditorApp__WEBPACK_IMPORTED_MODULE_3__["default"].getInstance().routeTo('settings')
+    }, "Settings"));
   }
   renderTools() {
     return this._blockInstance.renderTools?.();
@@ -16086,9 +16171,6 @@ class OEditorBlock {
   }
   render() {
     const render = [];
-
-    // render.push( this.alertUpdateAttributesMessage() );
-
     return render;
   }
   getExtraClassName() {
@@ -16097,68 +16179,6 @@ class OEditorBlock {
       className += " is-reusable";
     }
     return className;
-  }
-  alertUpdateAttributesMessage() {
-    return this.state.alertUpdateAttributesMessage != null && !this.state.alertUpdateAttributesMessage ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Models_Modal__WEBPACK_IMPORTED_MODULE_4__.WpeModal, {
-      key: this.props.clientId + "-alertUpdateAttributesMessageWpeModal",
-      id: this.props.clientId + "-alertUpdateAttributesMessageWpeModal",
-      title: "Updating preview...",
-      onClose: () => this.setState({
-        alertUpdateAttributesMessage: true
-      }),
-      hasFooter: false,
-      type: "info"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "This preview update does not save the post.", (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("b", null, "Don't forget to save your changes!")), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "bouttonGroup"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Button, {
-      key: this.props.clientId + "alertUpdateAttributesMessageButton",
-      variant: "primary",
-      onMouseDown: () => {
-        this.setState({
-          alertUpdateAttributesMessage: true
-        });
-      }
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Dashicon, {
-      icon: "yes"
-    }), "All right!"))) : null;
-  }
-  alertReusableBlockMessage() {
-    let display = true;
-    display = display && this.getReusableBlock() != null ? true : false;
-    display = display && this.state.alertReusableBlockMessage != null ? true : false;
-    display = display && !this.state.alertReusableBlockMessage ? true : false;
-    display = display && !this.getUserPreferencePersistent("hideAlertReusableBlockMessage") ? true : false;
-    return display ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Models_Modal__WEBPACK_IMPORTED_MODULE_4__.WpeModal, {
-      key: this.props.clientId + "-alertReusableBlockMessageWpeModal",
-      id: this.props.clientId + "-alertReusableBlockMessageWpeModal",
-      title: "Reusable block",
-      onClose: () => this.setState({
-        alertUpdateAttributesMessage: true
-      }),
-      hasFooter: false,
-      type: "warning"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "This block is part of a ", (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("b", null, "reusable block"), " composition.", (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), "Updating this block will", " ", (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("b", null, "apply the changes everywhere it is used.")), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "bouttonGroup"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "row"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Button, {
-      key: this.props.clientId + "alertReusableBlockMessageButton",
-      variant: "primary",
-      onMouseDown: () => {
-        this.setState({
-          alertReusableBlockMessage: true
-        });
-        this.updateUserPreferencePersistent();
-      }
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Dashicon, {
-      icon: "yes"
-    }), "All right!")), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "row"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.CheckboxControl, {
-      label: "Do not show this message again",
-      checked: this.getUserUserPreference("hideAlertReusableBlockMessage"),
-      onChange: () => this.toogleUserUserPreference("hideAlertReusableBlockMessage")
-    })))) : null;
   }
 }
 
@@ -16290,13 +16310,13 @@ class OEditorSettings {
   }
   render() {
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.ToggleControl, {
-      label: "alertReusableBlockMessage",
-      checked: _OEditorApp__WEBPACK_IMPORTED_MODULE_3__["default"].getInstance().getUserPreferences('alertReusableBlockMessage'),
-      onChange: () => _OEditorApp__WEBPACK_IMPORTED_MODULE_3__["default"].getInstance().updateUserPreferences('alertReusableBlockMessage')
+      label: "alertUpdateAttributes",
+      checked: _OEditorApp__WEBPACK_IMPORTED_MODULE_3__["default"].getInstance().getUserPreferences('alertUpdateAttributes'),
+      onChange: () => _OEditorApp__WEBPACK_IMPORTED_MODULE_3__["default"].getInstance().updateUserPreferences('alertUpdateAttributes')
     }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.ToggleControl, {
-      label: "alertUpdateAttributesMessage",
-      checked: _OEditorApp__WEBPACK_IMPORTED_MODULE_3__["default"].getInstance().getUserPreferences('alertUpdateAttributesMessage'),
-      onChange: () => _OEditorApp__WEBPACK_IMPORTED_MODULE_3__["default"].getInstance().updateUserPreferences('alertUpdateAttributesMessage')
+      label: "alertReusableBlock",
+      checked: _OEditorApp__WEBPACK_IMPORTED_MODULE_3__["default"].getInstance().getUserPreferences('alertReusableBlock'),
+      onChange: () => _OEditorApp__WEBPACK_IMPORTED_MODULE_3__["default"].getInstance().updateUserPreferences('alertReusableBlock')
     }));
   }
   getExtraClassName() {

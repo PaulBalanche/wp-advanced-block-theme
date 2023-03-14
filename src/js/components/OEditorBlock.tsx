@@ -30,6 +30,12 @@ export default class OEditorBlock {
                 <Dashicon icon="editor-break" />
             </Button>
             {this._blockInstance.renderTitle?.()}
+            <Button
+                key="o-editor-welcome_routeTo-settings"
+                onMouseDown={() => __OEditorApp.getInstance().routeTo('settings') }
+            >
+                Settings
+            </Button>
         </>
     }
 
@@ -44,9 +50,6 @@ export default class OEditorBlock {
     render() {
 
         const render = [];
-
-        // render.push( this.alertUpdateAttributesMessage() );
-
         return render;
     }
     
@@ -60,121 +63,5 @@ export default class OEditorBlock {
 
         return className;
     }
-
-    alertUpdateAttributesMessage() {
-        return this.state.alertUpdateAttributesMessage != null &&
-            !this.state.alertUpdateAttributesMessage ? (
-            <WpeModal
-                key={
-                    this.props.clientId +
-                    "-alertUpdateAttributesMessageWpeModal"
-                }
-                id={
-                    this.props.clientId +
-                    "-alertUpdateAttributesMessageWpeModal"
-                }
-                title={"Updating preview..."}
-                onClose={() =>
-                    this.setState({ alertUpdateAttributesMessage: true })
-                }
-                hasFooter={false}
-                type="info"
-            >
-                <p>
-                    This preview update does not save the post.
-                    <br />
-                    <b>Don't forget to save your changes!</b>
-                </p>
-                <div className="bouttonGroup">
-                    <Button
-                        key={
-                            this.props.clientId +
-                            "alertUpdateAttributesMessageButton"
-                        }
-                        variant="primary"
-                        onMouseDown={() => {
-                            this.setState({
-                                alertUpdateAttributesMessage: true,
-                            });
-                        }}
-                    >
-                        <Dashicon icon="yes" />
-                        All right!
-                    </Button>
-                </div>
-            </WpeModal>
-        ) : null;
-    }
-
-    alertReusableBlockMessage() {
-        let display = true;
-
-        display = display && this.getReusableBlock() != null ? true : false;
-        display =
-            display && this.state.alertReusableBlockMessage != null
-                ? true
-                : false;
-        display =
-            display && !this.state.alertReusableBlockMessage ? true : false;
-        display =
-            display &&
-            !this.getUserPreferencePersistent("hideAlertReusableBlockMessage")
-                ? true
-                : false;
-
-        return display ? (
-            <WpeModal
-                key={this.props.clientId + "-alertReusableBlockMessageWpeModal"}
-                id={this.props.clientId + "-alertReusableBlockMessageWpeModal"}
-                title={"Reusable block"}
-                onClose={() =>
-                    this.setState({ alertUpdateAttributesMessage: true })
-                }
-                hasFooter={false}
-                type="warning"
-            >
-                <p>
-                    This block is part of a <b>reusable block</b> composition.
-                    <br />
-                    Updating this block will{" "}
-                    <b>apply the changes everywhere it is used.</b>
-                </p>
-                <div className="bouttonGroup">
-                    <div className="row">
-                        <Button
-                            key={
-                                this.props.clientId +
-                                "alertReusableBlockMessageButton"
-                            }
-                            variant="primary"
-                            onMouseDown={() => {
-                                this.setState({
-                                    alertReusableBlockMessage: true,
-                                });
-                                this.updateUserPreferencePersistent();
-                            }}
-                        >
-                            <Dashicon icon="yes" />
-                            All right!
-                        </Button>
-                    </div>
-                    <div className="row">
-                        <CheckboxControl
-                            label="Do not show this message again"
-                            checked={this.getUserUserPreference(
-                                "hideAlertReusableBlockMessage"
-                            )}
-                            onChange={() =>
-                                this.toogleUserUserPreference(
-                                    "hideAlertReusableBlockMessage"
-                                )
-                            }
-                        />
-                    </div>
-                </div>
-            </WpeModal>
-        ) : null;
-    }
-
     
 }

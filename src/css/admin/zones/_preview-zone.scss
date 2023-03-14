@@ -178,6 +178,16 @@
         }
     }
 
+    .is-reusable {
+        .is-primary {
+            background: $o-warn-color;
+
+            &:hover {
+                background: $o-warn-color-dark;
+            }
+        }
+    }
+
     /**
     * Appender
     */

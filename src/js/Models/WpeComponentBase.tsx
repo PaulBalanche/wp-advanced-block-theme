@@ -7,6 +7,7 @@ import {
     MenuGroup,
     MenuItem,
     Placeholder,
+    CheckboxControl
 } from "@wordpress/components";
 
 import { chevronDown, chevronUp, cog, pages, trash } from "@wordpress/icons";
@@ -30,7 +31,11 @@ export class WpeComponentBase extends Component {
         super(...arguments);
 
         this.state = {
-            removeSubmitted: false,
+            modal: {
+                alertUpdateAttributes: null,
+                alertReusableBlock: null,
+                removeSubmitted: false
+            }
         };
 
         this.title = getBlockType(this.props.name).title;
@@ -206,7 +211,7 @@ export class WpeComponentBase extends Component {
                             "-toolsDropdownMenu-remove-trash"
                         }
                         icon={trash}
-                        onClick={() => this.setState({ removeSubmitted: true })}
+                        onClick={() => this.showModal('removeSubmitted') }
                     >
                         Remove {this.title}
                     </MenuItem>
@@ -366,6 +371,32 @@ export class WpeComponentBase extends Component {
         );
     }
 
+    showModal( modal, once = false ) {
+
+        if( once && this.state.modal[modal] != null ) {
+            return;
+        }
+
+        if( __OEditorApp.getInstance().getUserPreferences(modal) != null && ! __OEditorApp.getInstance().getUserPreferences(modal) ) {
+            return;
+        }
+
+        const newModalState = this.state.modal;
+        newModalState[modal] = true;
+        this.setState({ modal: newModalState });
+    }
+
+    hideModal( modal ) {
+
+        const newModalState = this.state.modal;
+        newModalState[modal] = false;
+        this.setState({ modal: newModalState });
+    }
+
+    displayModal( modal ) {
+        return ( this.state.modal[modal] );
+    }
+
     renderFooter() {
         return (
             <>
@@ -374,7 +405,10 @@ export class WpeComponentBase extends Component {
                         key={this.props.clientId + "-buttonUpdatePreview"}
                         className="abtButtonUpdatePreview"
                         variant="primary"
-                        onMouseDown={() =>  this.setState({ needPreviewUpdate: true }) }
+                        onMouseDown={() => {
+                            this.setState({ needPreviewUpdate: true });
+                            this.showModal('alertUpdateAttributes', true);
+                        } }
                     >
                         <Dashicon icon="update" />
                         Update preview
@@ -397,9 +431,7 @@ export class WpeComponentBase extends Component {
                     key={this.props.clientId + "-buttonCloseEditZone"}
                     className="abtButtonCloseEditZone"
                     variant="secondary"
-                    onMouseDown={() => {
-                        __OEditorApp.getInstance().hide();
-                    }}
+                    onMouseDown={() => __OEditorApp.getInstance().hide() }
                 >
                     <Dashicon icon="no-alt" />
                     Close
@@ -456,6 +488,9 @@ export class WpeComponentBase extends Component {
                 className="o-toolbar-container"
                 onDoubleClick={(e) => {
                     __OEditorApp.getInstance().open( this );
+                    if( this.getReusableBlock() != null ) {
+                        this.showModal('alertReusableBlock', true);
+                    }
                 }}
             >
                 <div className="o-toolbar">{editZone}</div>
@@ -471,6 +506,9 @@ export class WpeComponentBase extends Component {
                 variant="primary"
                 onMouseDown={() => {
                     __OEditorApp.getInstance().open( this );
+                    if( this.getReusableBlock() != null ) {
+                        this.showModal('alertReusableBlock', true);
+                    }
                 }}
             >
                 <Dashicon icon="edit" /> Edit
@@ -479,13 +517,13 @@ export class WpeComponentBase extends Component {
     }
 
     renderRemoveModal() {
-        return this.state.removeSubmitted &&
+        return this.displayModal('removeSubmitted') &&
             typeof this.props.removeBlock != "undefined" ? (
             <WpeModal
                 key={this.props.clientId + "-removeBlockWpeModal"}
                 id={this.props.clientId + "-removeBlockWpeModal"}
                 title={'Confirm "' + this.title + '" suppression'}
-                onClose={() => this.setState({ removeSubmitted: false })}
+                onClose={() => this.hideModal('removeSubmitted') }
                 hasFooter={false}
                 type="warning"
             >
@@ -495,7 +533,7 @@ export class WpeComponentBase extends Component {
                         <Button
                             variant="primary"
                             onMouseDown={() => {
-                                this.setState({ removeSubmitted: false });
+                                this.hideModal('removeSubmitted');
                                 __OEditorApp.getInstance().hide();
                                 this.props.removeBlock(this.props.clientId);
                             }}
@@ -507,12 +545,108 @@ export class WpeComponentBase extends Component {
                     <div className="row">
                         <Button
                             variant="link"
-                            onMouseDown={() =>
-                                this.setState({ removeSubmitted: false })
-                            }
+                            onMouseDown={() => this.hideModal('removeSubmitted') }
                         >
                             Cancel
                         </Button>
+                    </div>
+                </div>
+            </WpeModal>
+        ) : null;
+    }
+
+    alertUpdateAttributes() {
+        
+        return this.displayModal('alertUpdateAttributes') ? (
+            <WpeModal
+                key={
+                    this.props.clientId +
+                    "-alertUpdateAttributesMessageWpeModal"
+                }
+                id={
+                    this.props.clientId +
+                    "-alertUpdateAttributesMessageWpeModal"
+                }
+                title={"Updating preview..."}
+                onClose={() => this.hideModal('alertUpdateAttributes') }
+                hasFooter={false}
+                type="info"
+            >
+                <p>
+                    This preview update does not save the post.
+                    <br />
+                    <b>Don't forget to save your changes!</b>
+                </p>
+                <div className="bouttonGroup">
+                    <div className="row">
+                        <Button
+                            key={
+                                this.props.clientId +
+                                "alertUpdateAttributesMessageButton"
+                            }
+                            variant="primary"
+                            onMouseDown={() => this.hideModal('alertUpdateAttributes') }
+                        >
+                            <Dashicon icon="yes" />
+                            All right!
+                        </Button>
+                    </div>
+                    <div className="row">
+                        <CheckboxControl
+                            label="Do not show this message again"
+                            checked={ ! __OEditorApp.getInstance().getUserPreferences('alertUpdateAttributes') }
+                            onChange={() => __OEditorApp.getInstance().updateUserPreferences('alertUpdateAttributes') }
+                        />
+                    </div>
+                </div>
+            </WpeModal>
+        ) : null;
+    }
+
+    alertReusableBlock() {
+        let display = true;
+
+        display = display && this.getReusableBlock() != null ? true : false;
+        display =
+            display && this.displayModal('alertReusableBlock')
+                ? true
+                : false;
+
+        return display ? (
+            <WpeModal
+                key={this.props.clientId + "-alertReusableBlockMessageWpeModal"}
+                id={this.props.clientId + "-alertReusableBlockMessageWpeModal"}
+                title={"Reusable block"}
+                onClose={() => this.hideModal('alertReusableBlock') }
+                hasFooter={false}
+                type="warning"
+            >
+                <p>
+                    This block is part of a <b>reusable block</b> composition.
+                    <br />
+                    Updating this block will{" "}
+                    <b>apply the changes everywhere it is used.</b>
+                </p>
+                <div className="bouttonGroup">
+                    <div className="row">
+                        <Button
+                            key={
+                                this.props.clientId +
+                                "alertReusableBlockMessageButton"
+                            }
+                            variant="primary"
+                            onMouseDown={() => this.hideModal('alertReusableBlock') }
+                        >
+                            <Dashicon icon="yes" />
+                            All right!
+                        </Button>
+                    </div>
+                    <div className="row">
+                        <CheckboxControl
+                            label="Do not show this message again"
+                            checked={ ! __OEditorApp.getInstance().getUserPreferences('alertReusableBlock') }
+                            onChange={() => __OEditorApp.getInstance().updateUserPreferences('alertReusableBlock') }
+                        />
                     </div>
                 </div>
             </WpeModal>
@@ -528,6 +662,8 @@ export class WpeComponentBase extends Component {
         render.push(this.renderPropsEdition());
         render.push(this.liveRendering());
         render.push(this.renderRemoveModal());
+        render.push(this.alertUpdateAttributes());
+        render.push(this.alertReusableBlock());
 
         return render;
     }

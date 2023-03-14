@@ -28,8 +28,8 @@ export default class OEditorApp extends Component {
             componentInstance: null,
             route: null,
             userPreferences: {
-                alertUpdateAttributesMessage: true,
-                alertReusableBlockMessage: true
+                alertUpdateAttributes: true,
+                alertReusableBlock: true
             }
         };
 
@@ -38,8 +38,6 @@ export default class OEditorApp extends Component {
 
         // get the actual edit app dom node
         this._$editApp = document.querySelector(".o-editor");
-
-        
     }
 
     componentDidMount() {
@@ -137,7 +135,7 @@ export default class OEditorApp extends Component {
 
     getUserPreferences( preference ) {
 
-        return this.state.userPreferences[preference];
+        return ( typeof this.state.userPreferences[preference] != 'undefined' ) ? this.state.userPreferences[preference] : null;
     }
 
     updateUserPreferences( preference, value = null ) {
