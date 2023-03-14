@@ -52,7 +52,18 @@
         background: $o-accent-color;
         border-top-left-radius: $o-border-radius;
         border-top-right-radius: $o-border-radius;
-                
+        display: flex;
+        align-items: center;
+        
+        .title {
+            display: flex;
+            align-items: center;
+
+            .dashicon {
+                color: white;
+            }
+        }
+        
         h2 {
             color: $o-foreground-color;
             margin: 0;
@@ -60,9 +71,6 @@
 
         .tools {
             margin-left: auto;
-            position: absolute;
-            top: calc($o-space-20 + 5px);
-            right: $o-space-30;
             
             .components-dropdown-menu__toggle {
                 color: $o-foreground-color;
@@ -97,6 +105,14 @@
         }
     }
 
+    &.inspector {
+        width: 400px;
+
+        li > ul {
+            padding: 0 0 0 $o-space-30;
+        }
+    }
+
 
     &_body {
         display: flex;
@@ -105,7 +121,6 @@
         flex-grow: 1;
         padding: $o-padding;
         overflow: auto;
-        background: white;
 
         &::-webkit-scrollbar {
             width: 8px;

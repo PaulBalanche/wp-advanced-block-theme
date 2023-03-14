@@ -1,5 +1,11 @@
 import React from "react";
 
+import {
+    ToggleControl
+} from "@wordpress/components";
+
+import __OEditorApp from "./OEditorApp";
+
 export default class OEditorSettings {
     constructor() {}
 
@@ -7,15 +13,27 @@ export default class OEditorSettings {
         return <h2>Inspector</h2>;
     }
 
-    renderTools() {
-        return <h4>tools</h4>;
-    }
-
     renderFooter() {
         return <h1>footer</h1>;
     }
 
     render() {
-        return <h1>Settings</h1>;
+
+        return <>
+            <ToggleControl
+                label="alertReusableBlockMessage"
+                checked={ __OEditorApp.getInstance().getUserPreferences('alertReusableBlockMessage') }
+                onChange={ () => __OEditorApp.getInstance().updateUserPreferences('alertReusableBlockMessage') }
+            />
+            <ToggleControl
+                label="alertUpdateAttributesMessage"
+                checked={ __OEditorApp.getInstance().getUserPreferences('alertUpdateAttributesMessage') }
+                onChange={ () => __OEditorApp.getInstance().updateUserPreferences('alertUpdateAttributesMessage') }
+            />
+        </>
+    }
+
+    getExtraClassName() {
+        return "settings";
     }
 }

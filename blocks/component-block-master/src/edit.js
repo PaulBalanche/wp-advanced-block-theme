@@ -277,9 +277,7 @@ export default (block_spec, current_user_can_edit_posts, theme_spec) =>
                           )
                         : null,
                 parentsBlock,
-                blockInstance: select("core/block-editor").getBlock(
-                    props.clientId
-                ),
+                blockInstance: select("core/block-editor").getBlock(props.clientId)
             };
         }),
         withDispatch((dispatch) => {
