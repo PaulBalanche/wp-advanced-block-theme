@@ -43,6 +43,8 @@
     .block-editor-block-list__block {
         margin: 0 !important;
         user-select: none;
+        opacity: 1;
+        transition: $o-transition-fast;
 
         /* wordpress outline */
         &::after {
@@ -74,14 +76,14 @@
             position: absolute;
             top: 0; left: 0;
             width: 100%; height: 100%;
-            background: rgba(255,255,255,0.03);
+            // background: rgba(255,255,255,0.03);
             opacity: 0;
             cursor: pointer !important;
             pointer-events: none !important;
             transition: $o-transition-fast;
             z-index: 10;
         }
-        &:hover:before, &.is-selected:before {
+        &:hover:before, &.is-selected:before, &.is-empty:before {
             opacity: 1;
         }
 
@@ -94,7 +96,16 @@
         &:has( .block-editor-block-list__block:hover):has(.liveRenderingMessage) > .o-toolbar-container {
             display: flex !important;
         }
+    }
 
+    .is-root-container:has(.block-editor-block-list__block.is-selected) {
+    
+        .block-editor-block-list__block:not(.is-selected):not(.has-child-selected):not(.is-selected .block-editor-block-list__block):not(.block-editor-block-list__block .block-editor-block-list__block):not(:hover) {
+            opacity: 0.1;
+        }
+        .has-child-selected .block-editor-block-list__block:not(.is-selected):not(.has-child-selected):not(.is-selected > .block-editor-block-list__block):not(:hover) {
+            opacity: 0.1;
+        }
     }
 
     /**
@@ -192,14 +203,25 @@
     * Appender
     */
     .wp-block.block-list-appender {
-        border-color: $o-accent-color !important;
-        margin: $o-space-50 !important;
-        width: auto !important;
-        padding: 0 !important;
-        position: relative !important;
-    
-        svg * {
-            fill: $o-accent-color;
+        border: 1px dashed $o-accent-color;
+        width: 90%;
+        max-width: 90%;
+        position: relative;
+
+        &:hover {
+            border-style: solid;
+        }
+
+        .components-button {
+            box-shadow: none;
+            
+            svg {
+                color: white;
+
+                * {
+                    fill: $o-accent-color;
+                }
+            }
         }
     }
 

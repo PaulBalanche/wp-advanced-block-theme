@@ -221,8 +221,11 @@ class ComponentBlocks extends ServiceBase {
             }
          }
          else {
-
-            if( count($attributes) == 1 && isset($attributes['id_component']) ) {
+            if(
+                count($attributes) == 0 ||
+                ( count($attributes) == 1 && isset($attributes['id_component']) ) ||
+                ( count($attributes) == 2 && isset($attributes['id_component'], $attributes['anchor']) )
+            ) {
                 wp_send_json_error( [ 'isEmpty' => true ]  );
             }
 

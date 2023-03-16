@@ -22,7 +22,7 @@ class OEditor {
 
         // add the scoping class "o-editor"
         const $editorContainer = document.querySelector(
-            ".edit-post-visual-editor"
+            ".interface-interface-skeleton__content"
         );
         if (!$editorContainer) {
             throw new Error(`The editor container "" does not exist...`);

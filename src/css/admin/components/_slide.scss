@@ -11,12 +11,8 @@
             display: none;
         }
 
-        .block-list-appender {
-            position: relative;
-        }
-
         &:hover > .block-list-appender {
-            visibility: visible !important;
+            visibility: visible;
         }
 
         &:not([contenteditable])::focus::after {

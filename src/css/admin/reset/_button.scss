@@ -5,4 +5,7 @@
         box-shadow: none !important;
     }
 
+    .components-form-toggle__input:focus + .components-form-toggle__track {
+        box-shadow: none;
+    }
 }

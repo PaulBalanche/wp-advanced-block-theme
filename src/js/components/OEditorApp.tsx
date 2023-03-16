@@ -2,12 +2,21 @@ import React from "react";
 
 import { Component } from "@wordpress/element";
 
+
+import {
+    Button,
+    Dashicon
+} from "@wordpress/components";
+
 import __OEditorInspector from "./OEditorInspector";
 import __OEditorSettings from "./OEditorSettings";
 import __OEditorWelcome from "./OEditorWelcome";
 import __OEditorBlock from "./OEditorBlock";
 
 import globalData from '../global';
+
+import OModal from './OModal';
+import OUserPreferences from './OUserPreferences';
 
 export default class OEditorApp extends Component {
     static _instance;
@@ -20,17 +29,14 @@ export default class OEditorApp extends Component {
     }
 
     _$editApp;
+    _$editAppContainer;
 
     constructor(props) {
         super(props);
 
         this.state = {
             componentInstance: null,
-            route: null,
-            userPreferences: {
-                alertUpdateAttributes: true,
-                alertReusableBlock: true
-            }
+            route: null
         };
 
         // @ts-ignore
@@ -38,6 +44,9 @@ export default class OEditorApp extends Component {
 
         // get the actual edit app dom node
         this._$editApp = document.querySelector(".o-editor");
+        this._$editAppContainer = document.querySelector(".o-editor-container");
+
+        new OUserPreferences();
     }
 
     componentDidMount() {
@@ -49,7 +58,8 @@ export default class OEditorApp extends Component {
         // Route the Editor App related to anchor
         this._routing();
 
-        this._initUserPreference();
+        this._hideEditorLoadingZone();
+        this._showEditorApp();
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
@@ -89,6 +99,25 @@ export default class OEditorApp extends Component {
         });
     }
 
+    _hideEditorLoadingZone() {
+
+        document.querySelector(".o-editor-loading-zone").classList.add("hide");
+        setTimeout(() => {
+            document.querySelector(".o-editor-loading-zone").classList.add("close");
+        }, 1000);
+    }
+
+    _showEditorApp() {
+        setTimeout(() => {
+            this._$editAppContainer.classList.add("show");
+        }, 1200);
+    }
+
+    goHome() {
+        this.clean();
+        this.setState({ route: null });
+    }
+
     _routing() {
 
         if (document.location.hash === "#settings") {
@@ -112,43 +141,6 @@ export default class OEditorApp extends Component {
             }
         }
     }
-
-    _initUserPreference() {
-        const storage = localStorage.getItem(
-            "ABT_PREFERENCES_USER_" + js_const.user_id
-        );
-        if (storage) {
-            let jsonStorage = JSON.parse(storage);
-            if (typeof jsonStorage == "object") {
-
-                const userPreferencesToInit = this.state.userPreferences;
-                for( var i in userPreferencesToInit ) {
-                    if( typeof jsonStorage[i] != 'undefined' ) {
-                        userPreferencesToInit[i] = jsonStorage[i];
-                    }
-                }
-                
-                this.setState({ userPreferences: userPreferencesToInit });
-            }
-        }
-    }
-
-    getUserPreferences( preference ) {
-
-        return ( typeof this.state.userPreferences[preference] != 'undefined' ) ? this.state.userPreferences[preference] : null;
-    }
-
-    updateUserPreferences( preference, value = null ) {
-
-        const userPreferencesToUpdate = this.state.userPreferences;
-        userPreferencesToUpdate[preference] = ( value != null ) ? value : ! userPreferencesToUpdate[preference];
-        this.setState({ userPreferences: userPreferencesToUpdate });
-
-        localStorage.setItem(
-            "ABT_PREFERENCES_USER_" + js_const.user_id,
-            JSON.stringify(userPreferencesToUpdate)
-        );
-    };
 
     routeTo( route ) {
         this.clean();
@@ -219,42 +211,72 @@ export default class OEditorApp extends Component {
         this._$editApp.classList.add("hide");
     }
 
+    renderBreadcrumb() {
+
+        return ( this.state.route != null ) ?
+            <div className="breadcrumb">
+                <Button
+                    key={"breadcrumb-home"}
+                    variant="link"
+                    onMouseDown={() => {
+                        if( this.state.route == 'blocks' && this.state.componentInstance != null ) {
+                            this.routeTo('blocks');
+                        }
+                        else {
+                            this.goHome();
+                        }
+                    } }
+                >
+                    <Dashicon icon="arrow-left-alt2" />Back
+                </Button>
+            </div>
+        : null;
+    }
+
     render() {
 
-        let componentToRender = new __OEditorWelcome();
         switch( this.state.route ) {
+
             case 'settings':
-                componentToRender = new __OEditorSettings();
+                var componentToRender = new __OEditorSettings();
                 break;
             case 'blocks':
-                componentToRender = ( this.state.componentInstance != null ) ? new __OEditorBlock( this.state.componentInstance ) : new __OEditorInspector();
+                var componentToRender = ( this.state.componentInstance != null ) ? new __OEditorBlock( this.state.componentInstance ) : new __OEditorInspector();
                 break;
+            default:
+                var componentToRender = new __OEditorWelcome();
         }
 
-        return <section
-            key="o-editor-app"
-            className={`o-editor-app ${
-                componentToRender?.getExtraClassName?.()
-            }`}
-        >
-            <div className="o-editor-app_header">
-                <div className="title">
-                    {componentToRender?.renderTitle?.() ?? <h2>Welcome</h2>}
-                </div>
-                { componentToRender?.renderTools && (
-                    <div className="tools">
-                        {componentToRender.renderTools()}
+        return <>
+            <section
+                key="o-editor-app"
+                className={`o-editor-app ${
+                    componentToRender?.getExtraClassName?.()
+                }`}
+            >
+                { componentToRender?.renderTitle && (
+                    <div className="o-editor-app_header">
+                        <div className="title">
+                            { this.renderBreadcrumb() }
+                            {componentToRender.renderTitle()}
+                        </div>
+                        { componentToRender?.renderTools && (
+                            <div className="tools">
+                                {componentToRender.renderTools()}
+                            </div>
+                        ) }
                     </div>
                 ) }
-            </div>
-            <div className="o-editor-app_body">
-                {componentToRender?.render?.()}
-            </div>
-            { componentToRender?.renderFooter && (
-                    <div className="o-editor-app_footer">
-                    {componentToRender?.renderFooter?.()}
+                <div className="o-editor-app_body">
+                    {componentToRender?.render?.()}
                 </div>
-            ) }
-        </section>
+                { componentToRender?.renderFooter && (
+                        <div className="o-editor-app_footer">
+                        {componentToRender?.renderFooter?.()}
+                    </div>
+                ) }
+            </section>
+            <OModal></OModal>
+        </>
     }
 }

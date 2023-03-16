@@ -1,9 +1,10 @@
 .o-editor-app {
     position: fixed;
     right: calc($o-space-50 + 10px);
-    width: 700px;
+    width: 280px;
     top: calc(61px + $o-space-50);
-    bottom: calc($o-space-50);
+    height: 200px;
+    max-height: calc(100vh - 61px - 2 * $o-space-50);
     background: white;
     border-radius: $o-border-radius;
     z-index: 99999;
@@ -12,6 +13,27 @@
     display: flex;
     flex-direction: column;
     box-shadow: $o-depth-100;
+    overflow: hidden;
+    transform: translate(840px, 0);
+
+    .show & {
+        transform: translate(0, 0);
+    }
+
+    &.block {
+        width: 800px;
+        height: calc(100vh - 61px - 2 * $o-space-50);
+    }
+
+    &.inspector {
+        width: 480px;
+        height: calc(100vh - 61px - 2 * $o-space-50);
+    }
+    
+    &.settings {
+        width: 480px;
+        height: 380px;
+    }
 
     .is-mode-text & {
         display: none;
@@ -37,7 +59,7 @@
     }
 
     .o-editor.hide & {
-        right: -700px;
+        right: -500px;
         box-shadow: none;
     }
 
@@ -48,25 +70,49 @@
     }
 
     &_header {
-        padding: $o-padding;
+        padding: $o-space-40 $o-space-70 $o-space-30 $o-space-70;
         background: $o-accent-color;
         border-top-left-radius: $o-border-radius;
         border-top-right-radius: $o-border-radius;
         display: flex;
         align-items: center;
-        
-        .title {
+
+        .breadcrumb {
+            
             display: flex;
             align-items: center;
+            margin-bottom: $o-space-10;
+
+            .is-link {
+                color: rgb(255 255 255 / 50%);
+                text-decoration: none;
+                padding: 0;
+                font-size: 12px;
+
+                &:hover {
+                    color: white;
+                }
+            }
 
             .dashicon {
-                color: white;
+                font-size: 1em;
+                height: auto;
+                width: auto;
+                transition-duration: 0.05s;
+                transition-timing-function: ease-in-out;
             }
+            
         }
         
         h2 {
             color: $o-foreground-color;
             margin: 0;
+
+            .subtitle {
+                padding-left: $o-space-20;
+                color: rgb(255 255 255 / 50%);
+                font-size: 12px;
+            }
         }
 
         .tools {
@@ -86,41 +132,14 @@
         }
     }
 
-    &.is-reusable {
-
-        .o-editor-app_header {
-            background: $o-warn-color;
-        }
-
-        .components-dropdown-menu__toggle {
-            color: $o-foreground-color;
-
-            &:focus {
-                box-shadow: none;
-            }
-
-            &:hover {
-                color: $o-foreground-color;
-            }
-        }
-    }
-
-    &.inspector {
-        width: 400px;
-
-        li > ul {
-            padding: 0 0 0 $o-space-30;
-        }
-    }
-
-
     &_body {
         display: flex;
         flex-direction: column;
         gap: $o-space-50;
         flex-grow: 1;
-        padding: $o-padding;
+        padding: $o-space-40 $o-space-70;
         overflow: auto;
+        background: $o-background-color;
 
         &::-webkit-scrollbar {
             width: 8px;
@@ -149,8 +168,124 @@
                 margin-inline-end: $o-space-20;
             }
         }
+    }
+
+    &_footer {
+        display: flex;
+        padding: $o-padding;
+        background: $o-background-color;
+        border-bottom-left-radius: $o-border-radius;
+        border-bottom-right-radius: $o-border-radius;
+        border-top: 1px solid $o-main-color-border;
+        gap: $o-space-30;    
+    }
+
+    &.is-reusable {
+
+        .o-editor-app_header {
+            background: $o-warn-color;
+        }
+
+        .components-dropdown-menu__toggle {
+            color: $o-foreground-color;
+
+            &:focus {
+                box-shadow: none;
+            }
+
+            &:hover {
+                color: $o-foreground-color;
+            }
+        }
+    }
+
+    &.inspector, &.welcome, &.settings {
+
+        li > ul {
+            padding: 0 0 0 $o-space-30;
+        }
+
+        ul {
+            margin: 0;
+            
+            .separator {
+                height: 1px;
+                border-bottom: 1px solid $border300;
+
+                &:last-child {
+                    display: none;
+                }
+            }
+        }
+
+        li {
+            padding: 0;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .is-tertiary {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            height: auto;
+            text-align: left;
+            padding: $o-space-20 0;
+            font-weight: 500;
+            font-size: 1.1em;
+            
+            &.animate {
+                transform: translate(-20px, 0);
+                transition: $o-transition-fast;
+
+                &:hover {
+                    transform: translate(0, 0);
+                }
+            }
+            .dashicon {
+                font-size: 1em;
+                height: auto;
+                width: auto;
+            }
+
+            .anchor {
+                color: rgb(30 30 30 / 50%);
+                font-weight: 400;
+                font-size: 0.8em;
+                margin-left: $o-space-10;
+            }
+        }
+    }
 
 
+    &.welcome {
+        .is-tertiary {
+            font-weight: initial;
+            font-size: 1em;
+            color: $o-text-color;
+
+            .dashicon {
+                font-size: 1.5em;
+                margin-inline-end: $o-space-20;
+            }
+        }
+    }
+
+    &.settings {
+        
+        li:not(.separator) {
+            padding: $o-space-30 0;
+        }
+
+        .components-base-control {
+            margin: 0;
+        }
+    }
+
+    
+
+    .block &_body {
+        padding: 0;
     }
 
     .is-reusable-block &_body {
@@ -168,17 +303,6 @@
         .description {
             background: $o-warn-color-light;
         }
-    }
-
-
-    &_footer {
-        display: flex;
-        padding: $o-padding;
-        background: $o-background-color;
-        border-bottom-left-radius: $o-border-radius;
-        border-bottom-right-radius: $o-border-radius;
-        border-top: 1px solid $o-main-color-border;
-        gap: $o-space-30;    
     }
     
     .is-reusable-block &_footer {

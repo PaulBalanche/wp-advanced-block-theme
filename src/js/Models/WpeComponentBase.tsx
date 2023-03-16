@@ -23,6 +23,8 @@ import { Devices } from "../Singleton/Devices";
 import { WpeModal } from "./Modal";
 
 import __OEditorApp from "../components/OEditorApp";
+import __OModal from '../components/OModal';
+import __OUserPreferences from '../components/OUserPreferences';
 
 import globalData from '../global';
 
@@ -32,8 +34,6 @@ export class WpeComponentBase extends Component {
 
         this.state = {
             modal: {
-                alertUpdateAttributes: null,
-                alertReusableBlock: null,
                 removeSubmitted: false
             }
         };
@@ -111,7 +111,15 @@ export class WpeComponentBase extends Component {
     }
 
     renderTitle() {
-        return <h2>{this.props.title ?? this.title ?? "Editor"}</h2>
+
+        const anchor = this.getAttribute('anchor');
+
+        return <>
+            <h2>
+                {this.props.title ?? this.title ?? "Editor"}
+                { ( typeof anchor != 'undefined' ) && <span className="subtitle">#{anchor}</span> }
+            </h2>
+        </>
     }
 
     renderTools() {
@@ -367,7 +375,7 @@ export class WpeComponentBase extends Component {
                     }
                 )}
             </Placeholder>,
-            document.querySelector( ".o-editor-app.block-" + this.props.clientId + " .o-editor-app_body" )
+            document.querySelector( ".o-editor-app.block .o-editor-app_body" )
         );
     }
 
@@ -377,7 +385,7 @@ export class WpeComponentBase extends Component {
             return;
         }
 
-        if( __OEditorApp.getInstance().getUserPreferences(modal) != null && ! __OEditorApp.getInstance().getUserPreferences(modal) ) {
+        if( __OUserPreferences.getInstance().getUserPreferences(modal) != null && ! __OUserPreferences.getInstance().getUserPreferences(modal) ) {
             return;
         }
 
@@ -407,7 +415,7 @@ export class WpeComponentBase extends Component {
                         variant="primary"
                         onMouseDown={() => {
                             this.setState({ needPreviewUpdate: true });
-                            this.showModal('alertUpdateAttributes', true);
+                            __OModal.getInstance().showModal('alertUpdateAttributes', true);
                         } }
                     >
                         <Dashicon icon="update" />
@@ -431,7 +439,7 @@ export class WpeComponentBase extends Component {
                     key={this.props.clientId + "-buttonCloseEditZone"}
                     className="abtButtonCloseEditZone"
                     variant="secondary"
-                    onMouseDown={() => __OEditorApp.getInstance().hide() }
+                    onMouseDown={() => __OEditorApp.getInstance().goHome() }
                 >
                     <Dashicon icon="no-alt" />
                     Close
@@ -489,7 +497,7 @@ export class WpeComponentBase extends Component {
                 onDoubleClick={(e) => {
                     __OEditorApp.getInstance().open( this );
                     if( this.getReusableBlock() != null ) {
-                        this.showModal('alertReusableBlock', true);
+                        __OModal.getInstance().showModal('alertReusableBlock', true);
                     }
                 }}
             >
@@ -507,7 +515,7 @@ export class WpeComponentBase extends Component {
                 onMouseDown={() => {
                     __OEditorApp.getInstance().open( this );
                     if( this.getReusableBlock() != null ) {
-                        this.showModal('alertReusableBlock', true);
+                        __OModal.getInstance().showModal('alertReusableBlock', true);
                     }
                 }}
             >
@@ -555,115 +563,15 @@ export class WpeComponentBase extends Component {
         ) : null;
     }
 
-    alertUpdateAttributes() {
-        
-        return this.displayModal('alertUpdateAttributes') ? (
-            <WpeModal
-                key={
-                    this.props.clientId +
-                    "-alertUpdateAttributesMessageWpeModal"
-                }
-                id={
-                    this.props.clientId +
-                    "-alertUpdateAttributesMessageWpeModal"
-                }
-                title={"Updating preview..."}
-                onClose={() => this.hideModal('alertUpdateAttributes') }
-                hasFooter={false}
-                type="info"
-            >
-                <p>
-                    This preview update does not save the post.
-                    <br />
-                    <b>Don't forget to save your changes!</b>
-                </p>
-                <div className="bouttonGroup">
-                    <div className="row">
-                        <Button
-                            key={
-                                this.props.clientId +
-                                "alertUpdateAttributesMessageButton"
-                            }
-                            variant="primary"
-                            onMouseDown={() => this.hideModal('alertUpdateAttributes') }
-                        >
-                            <Dashicon icon="yes" />
-                            All right!
-                        </Button>
-                    </div>
-                    <div className="row">
-                        <CheckboxControl
-                            label="Do not show this message again"
-                            checked={ ! __OEditorApp.getInstance().getUserPreferences('alertUpdateAttributes') }
-                            onChange={() => __OEditorApp.getInstance().updateUserPreferences('alertUpdateAttributes') }
-                        />
-                    </div>
-                </div>
-            </WpeModal>
-        ) : null;
-    }
-
-    alertReusableBlock() {
-        let display = true;
-
-        display = display && this.getReusableBlock() != null ? true : false;
-        display =
-            display && this.displayModal('alertReusableBlock')
-                ? true
-                : false;
-
-        return display ? (
-            <WpeModal
-                key={this.props.clientId + "-alertReusableBlockMessageWpeModal"}
-                id={this.props.clientId + "-alertReusableBlockMessageWpeModal"}
-                title={"Reusable block"}
-                onClose={() => this.hideModal('alertReusableBlock') }
-                hasFooter={false}
-                type="warning"
-            >
-                <p>
-                    This block is part of a <b>reusable block</b> composition.
-                    <br />
-                    Updating this block will{" "}
-                    <b>apply the changes everywhere it is used.</b>
-                </p>
-                <div className="bouttonGroup">
-                    <div className="row">
-                        <Button
-                            key={
-                                this.props.clientId +
-                                "alertReusableBlockMessageButton"
-                            }
-                            variant="primary"
-                            onMouseDown={() => this.hideModal('alertReusableBlock') }
-                        >
-                            <Dashicon icon="yes" />
-                            All right!
-                        </Button>
-                    </div>
-                    <div className="row">
-                        <CheckboxControl
-                            label="Do not show this message again"
-                            checked={ ! __OEditorApp.getInstance().getUserPreferences('alertReusableBlock') }
-                            onChange={() => __OEditorApp.getInstance().updateUserPreferences('alertReusableBlock') }
-                        />
-                    </div>
-                </div>
-            </WpeModal>
-        ) : null;
-    }
-
     render() {
 
-        var render = [];
+        const render = [];
 
         render.push(Devices.getInstance().render(this.props.clientId));
 
         render.push(this.renderPropsEdition());
         render.push(this.liveRendering());
         render.push(this.renderRemoveModal());
-        render.push(this.alertUpdateAttributes());
-        render.push(this.alertReusableBlock());
 
         return render;
     }

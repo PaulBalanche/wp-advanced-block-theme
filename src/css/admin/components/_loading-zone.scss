@@ -1,0 +1,31 @@
+.o-editor-loading-zone {
+    position: fixed;
+    background: white;
+    left: 0;
+    right: 0;
+    top: 61px;
+    bottom: 0;
+    z-index: 1;
+    transition: all 0.6s ease-in-out;
+
+    .o-editor-loading-zone-inner {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        opacity: 1;
+        transition: all 0.6s ease-in-out;
+    }
+
+    &.hide {
+        bottom: calc(100vh - 61px);
+
+        .o-editor-loading-zone-inner {
+            opacity: 0;
+        }
+    }
+
+    &.close {
+        display: none;
+    }
+}

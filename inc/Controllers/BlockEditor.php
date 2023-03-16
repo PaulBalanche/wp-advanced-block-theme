@@ -26,6 +26,8 @@ class BlockEditor extends ControllerBase {
 
         add_action('admin_enqueue_scripts', [ $this, 'register_editor_script' ] );
         add_action('admin_enqueue_scripts', [ $this, 'register_editor_style' ] );
+
+        add_action('in_admin_header', [ $this, 'display_gutenberg_loagind_zone' ] );
     }
 
 
@@ -83,6 +85,22 @@ class BlockEditor extends ControllerBase {
             ['wp-edit-blocks'],
             filemtime( ABT_PLUGIN_DIR . $this->css_filename )
         );  
+    }
+
+
+    /**
+     * Display a loading zone brefore Gutenbger is render
+     * 
+     */
+    public function display_gutenberg_loagind_zone() {
+
+        if( $_SERVER['SCRIPT_FILENAME'] == ABSPATH . 'wp-admin/post.php' && isset($_GET['action'], $_GET['post']) && $_GET['action'] == 'edit' ) {
+
+            global $post;
+            if( isset($post) && use_block_editor_for_post( $post ) ) {
+                echo '<div class="o-editor-loading-zone"><div class="o-editor-loading-zone-inner">Loading...</div></div>';
+            }
+        }
     }
 
 }

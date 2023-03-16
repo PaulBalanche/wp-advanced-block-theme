@@ -9,17 +9,24 @@
     }
 
     .components-tab-panel__tabs {
-        margin-inline-start: $o-space-50;
-        border-top-left-radius: $o-border-radius;
-        border-top-right-radius: $o-border-radius;
+        background: $o-accent-color-border;
+        padding: 0 $o-space-70;
+        position: sticky;
+        top: 0;
+        z-index: 1;
 
         button {
-            margin: 0 !important;
+            margin: 0 $o-space-20 !important;
+            padding: $o-space-40 0;
             border-bottom: 2px solid transparent;
             transition: $o-transition-fast;
 
             &.active-tab {
                 border-bottom: 2px solid $o-accent-color;
+            }
+
+            &:first-child {
+                margin-left: 0 !important;
             }
         }
 
@@ -30,8 +37,6 @@
         gap: $o-space-40;
         border-bottom-left-radius: $o-border-radius;
         border-bottom-right-radius: $o-border-radius;
-        background: $o-background-color;
-        padding: $o-padding;
-        background: #fcfcfc;
+        padding: $o-space-60 $o-space-70;
     }
 }

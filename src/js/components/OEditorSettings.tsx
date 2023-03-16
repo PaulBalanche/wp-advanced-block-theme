@@ -1,36 +1,48 @@
 import React from "react";
 
 import {
-    ToggleControl
+    Button,
+    Dashicon
 } from "@wordpress/components";
 
 import __OEditorApp from "./OEditorApp";
+import __OUserPreferences from "./OUserPreferences";
 
 export default class OEditorSettings {
     constructor() {}
 
     renderTitle() {
-        return <h2>Inspector</h2>;
+        return <h2>User preferences</h2>;
     }
 
     renderFooter() {
-        return <h1>footer</h1>;
+        return (
+            <>
+                <div className="o-flex-grow"></div>
+                <Button
+                    key={"buttonCloseEditZone"}
+                    className="abtButtonCloseEditZone"
+                    variant="secondary"
+                    onMouseDown={() => __OEditorApp.getInstance().goHome() }
+                >
+                    <Dashicon icon="no-alt" />
+                    Close
+                </Button>
+            </>
+        );
     }
 
     render() {
 
-        return <>
-            <ToggleControl
-                label="alertUpdateAttributes"
-                checked={ __OEditorApp.getInstance().getUserPreferences('alertUpdateAttributes') }
-                onChange={ () => __OEditorApp.getInstance().updateUserPreferences('alertUpdateAttributes') }
-            />
-            <ToggleControl
-                label="alertReusableBlock"
-                checked={ __OEditorApp.getInstance().getUserPreferences('alertReusableBlock') }
-                onChange={ () => __OEditorApp.getInstance().updateUserPreferences('alertReusableBlock') }
-            />
-        </>
+        return <ul>
+            <li>
+                <__OUserPreferences preference="alertUpdateAttributes" context="toggle" label="Display alert while update block preview ?" ></__OUserPreferences>
+            </li>
+            <li class="separator"></li>
+            <li>
+                <__OUserPreferences preference="alertReusableBlock" context="toggle" label="Display alert while edit reusable block ?" ></__OUserPreferences>
+            </li>
+        </ul>
     }
 
     getExtraClassName() {

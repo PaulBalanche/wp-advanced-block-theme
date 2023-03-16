@@ -19,24 +19,7 @@ export default class OEditorBlock {
     }
 
     renderTitle() {
-        return <>
-            <Button
-                key={
-                    this._blockInstance.props.clientId +
-                    "o-editor-back"
-                }
-                onMouseDown={() => __OEditorApp.getInstance().routeTo('blocks') }
-            >
-                <Dashicon icon="editor-break" />
-            </Button>
-            {this._blockInstance.renderTitle?.()}
-            <Button
-                key="o-editor-welcome_routeTo-settings"
-                onMouseDown={() => __OEditorApp.getInstance().routeTo('settings') }
-            >
-                Settings
-            </Button>
-        </>
+        return this._blockInstance.renderTitle?.();
     }
 
     renderTools() {
@@ -55,7 +38,7 @@ export default class OEditorBlock {
     
     getExtraClassName() {
 
-        var className = "block-" + this._blockInstance.props.clientId;
+        var className = "block";
 
         if( this._blockInstance.isReusable() ) {
             className += " is-reusable";

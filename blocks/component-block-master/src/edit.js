@@ -160,7 +160,6 @@ class WpeComponent extends WpeComponentBase {
                 className="o-preview-iframe"
                 key={this.props.clientId + "-LiveRenderingIframe"}
                 id={this.props.clientId + "-LiveRenderingIframe"}
-                style={{ width: "100%" }}
                 src={this.previewUrl}
                 onLoad={this.iframeResize}
             ></iframe>
@@ -179,7 +178,7 @@ class WpeComponent extends WpeComponentBase {
             const { error, previewReady } = this.state;
 
             var render = [];
-
+            
             if (error != null) {
                 if (
                     typeof error == "object" &&
