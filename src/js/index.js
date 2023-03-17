@@ -1,11 +1,9 @@
-import * as __ReactDom from 'react-dom';
+import * as __ReactDom from "react-dom";
 
 import { compose } from "@wordpress/compose";
 import { withDispatch, withSelect } from "@wordpress/data";
 
-import {
-    store as blockEditorStore,
-} from "@wordpress/block-editor";
+import { store as blockEditorStore } from "@wordpress/block-editor";
 
 import "../css/admin/_index.scss";
 
@@ -21,7 +19,6 @@ import "../../blocks/layout/wpe-slider/src/index";
 
 class OEditor {
     constructor() {
-
         // move wp ui elements
         this._moveWpUiElements();
 
@@ -72,33 +69,29 @@ class OEditor {
     }
 }
 
-function OEditorAppDisplay( props ) {
-    return <OEditorApp context={props} />
+function OEditorAppDisplay(props) {
+    return <OEditorApp context={props} />;
 }
 
 const OEditorAppContext = compose([
-    withSelect( ( select ) => {
-
+    withSelect((select) => {
         const blocksList = select("core/block-editor").getBlocks();
-        const selectedBlockClientId = select("core/block-editor").getSelectedBlockClientId();
+        const selectedBlockClientId =
+            select("core/block-editor").getSelectedBlockClientId();
 
         return {
             blocksList,
-            selectedBlockClientId
+            selectedBlockClientId,
         };
     }),
-    withDispatch( ( dispatch ) => {
-
-        const {
-            selectBlock,
-            resetSelection
-        } = dispatch(blockEditorStore);
+    withDispatch((dispatch) => {
+        const { selectBlock, resetSelection } = dispatch(blockEditorStore);
 
         return {
             selectBlock,
-            resetSelection
+            resetSelection,
         };
-    })
+    }),
 ])(OEditorAppDisplay);
 
 window.addEventListener("load", function () {

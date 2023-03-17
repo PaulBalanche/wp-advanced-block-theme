@@ -1,12 +1,8 @@
 import { Component } from "@wordpress/element";
 
-import {
-    ToggleControl,
-    CheckboxControl
-} from "@wordpress/components";
+import { CheckboxControl, ToggleControl } from "@wordpress/components";
 
 export default class OUserPreferences extends Component {
-
     static _instance;
     static getInstance() {
         return this._instance;
@@ -17,7 +13,7 @@ export default class OUserPreferences extends Component {
 
         this.state = {
             alertUpdateAttributes: true,
-            alertReusableBlock: true
+            alertReusableBlock: true,
         };
 
         // @ts-ignore
@@ -25,7 +21,6 @@ export default class OUserPreferences extends Component {
     }
 
     componentDidMount() {
-
         this._initUserPreference();
     }
 
@@ -36,9 +31,8 @@ export default class OUserPreferences extends Component {
         if (storage) {
             let jsonStorage = JSON.parse(storage);
             if (typeof jsonStorage == "object") {
-
-                for( var i in this.state ) {
-                    if( typeof jsonStorage[i] != 'undefined' ) {
+                for (var i in this.state) {
+                    if (typeof jsonStorage[i] != "undefined") {
                         this.setState({ [i]: jsonStorage[i] });
                     }
                 }
@@ -46,14 +40,15 @@ export default class OUserPreferences extends Component {
         }
     }
 
-    getUserPreferences( preference ) {
-        return ( typeof this.state[preference] != 'undefined' ) ? this.state[preference] : null;
+    getUserPreferences(preference) {
+        return typeof this.state[preference] != "undefined"
+            ? this.state[preference]
+            : null;
     }
 
-    updateUserPreferences( preference, value = null ) {
-
+    updateUserPreferences(preference, value = null) {
         const currentState = this.state;
-        const newValue = ( value != null ) ? value : ! currentState[preference];
+        const newValue = value != null ? value : !currentState[preference];
         this.setState({ [preference]: newValue });
         currentState[preference] = newValue;
 
@@ -64,18 +59,29 @@ export default class OUserPreferences extends Component {
     }
 
     render() {
-
         const render = [];
 
-        if( typeof this.props.preference != 'undefined' && typeof this.props.context != 'undefined' ) {
-
-            switch( this.props.context ) {
+        if (
+            typeof this.props.preference != "undefined" &&
+            typeof this.props.context != "undefined"
+        ) {
+            switch (this.props.context) {
                 case "toggle":
                     render.push(
                         <ToggleControl
-                            label={ ( typeof this.props.label != 'undefined' ) ? this.props.label :  this.props.preference }
-                            checked={ this.getUserPreferences(this.props.preference) }
-                            onChange={ () => this.updateUserPreferences(this.props.preference) }
+                            label={
+                                typeof this.props.label != "undefined"
+                                    ? this.props.label
+                                    : this.props.preference
+                            }
+                            checked={this.getUserPreferences(
+                                this.props.preference
+                            )}
+                            onChange={() =>
+                                this.updateUserPreferences(
+                                    this.props.preference
+                                )
+                            }
                         />
                     );
                     break;
@@ -83,17 +89,25 @@ export default class OUserPreferences extends Component {
                 case "checkbox":
                     render.push(
                         <CheckboxControl
-                            label={ ( typeof this.props.label != 'undefined' ) ? this.props.label :  this.props.preference }
-                            checked={ ! this.getUserPreferences(this.props.preference) }
-                            onChange={() => this.updateUserPreferences(this.props.preference) }
+                            label={
+                                typeof this.props.label != "undefined"
+                                    ? this.props.label
+                                    : this.props.preference
+                            }
+                            checked={
+                                !this.getUserPreferences(this.props.preference)
+                            }
+                            onChange={() =>
+                                this.updateUserPreferences(
+                                    this.props.preference
+                                )
+                            }
                         />
                     );
                     break;
             }
-            
         }
-        
+
         return render;
     }
-
 }

@@ -1,3 +1,3 @@
 export default {
-    componentInstances: {}
+    componentInstances: {},
 };

@@ -1,20 +1,7 @@
-import React from "react";
-
-import {
-    Button,
-    Dashicon,
-    CheckboxControl
-} from "@wordpress/components";
-
-import __OEditorApp from "./OEditorApp";
-
-import { WpeModal } from "../Models/Modal";
-
 export default class OEditorBlock {
-    
     _blockInstance;
 
-    constructor( blockInstance ) {
+    constructor(blockInstance) {
         this._blockInstance = blockInstance;
         document.location.hash = `${this._blockInstance.getId()}`;
     }
@@ -32,20 +19,17 @@ export default class OEditorBlock {
     }
 
     render() {
-
         const render = [];
         return render;
     }
-    
-    getExtraClassName() {
 
+    getExtraClassName() {
         var className = "block";
 
-        if( this._blockInstance.isReusable() ) {
+        if (this._blockInstance.isReusable()) {
             className += " is-reusable";
         }
 
         return className;
     }
-    
 }

@@ -7,7 +7,6 @@ import {
     MenuGroup,
     MenuItem,
     Placeholder,
-    CheckboxControl
 } from "@wordpress/components";
 
 import { chevronDown, chevronUp, cog, pages, trash } from "@wordpress/icons";
@@ -23,10 +22,10 @@ import { Devices } from "../Singleton/Devices";
 import { WpeModal } from "./Modal";
 
 import __OEditorApp from "../components/OEditorApp";
-import __OModal from '../components/OModal';
-import __OUserPreferences from '../components/OUserPreferences';
+import __OModal from "../components/OModal";
+import __OUserPreferences from "../components/OUserPreferences";
 
-import globalData from '../global';
+import globalData from "../global";
 
 export class WpeComponentBase extends Component {
     constructor() {
@@ -34,16 +33,16 @@ export class WpeComponentBase extends Component {
 
         this.state = {
             modal: {
-                removeSubmitted: false
-            }
+                removeSubmitted: false,
+            },
         };
 
         this.title = getBlockType(this.props.name).title;
         this.reusableBlock = this.isReusableBlock();
 
         globalData.componentInstances[this.props.clientId] = this;
-        if( typeof this.getAttribute('anchor') == 'undefined' ) {
-            this.setAttributes( { anchor: this.props.clientId } );
+        if (typeof this.getAttribute("anchor") == "undefined") {
+            this.setAttributes({ anchor: this.props.clientId });
         }
     }
 
@@ -111,16 +110,23 @@ export class WpeComponentBase extends Component {
     }
 
     renderTitle() {
+        const anchor = this.getAttribute("anchor");
+        const displayAnchor =
+            typeof anchor != "undefined" &&
+            anchor.match(
+                /^[a-z0-9]+-[a-z0-9]+-[a-z0-9]+-[a-z0-9]+-[a-z0-9]+$/
+            ) == null;
 
-        const anchor = this.getAttribute('anchor');
-        const displayAnchor = ( typeof anchor != 'undefined' && anchor.match(/^[a-z0-9]+-[a-z0-9]+-[a-z0-9]+-[a-z0-9]+-[a-z0-9]+$/) == null);
-
-        return <>
-            <h2>
-                {this.props.title ?? this.title ?? "Editor"}
-                { displayAnchor && <span className="subtitle">#{anchor}</span> }
-            </h2>
-        </>
+        return (
+            <>
+                <h2>
+                    {this.props.title ?? this.title ?? "Editor"}
+                    {displayAnchor && (
+                        <span className="subtitle">#{anchor}</span>
+                    )}
+                </h2>
+            </>
+        );
     }
 
     renderTools() {
@@ -220,7 +226,7 @@ export class WpeComponentBase extends Component {
                             "-toolsDropdownMenu-remove-trash"
                         }
                         icon={trash}
-                        onClick={() => this.showModal('removeSubmitted') }
+                        onClick={() => this.showModal("removeSubmitted")}
                     >
                         Remove {this.title}
                     </MenuItem>
@@ -252,12 +258,14 @@ export class WpeComponentBase extends Component {
      * Get the internal component id
      */
     getId(): string {
-        return this.getAttribute('anchor');
+        return this.getAttribute("anchor");
     }
 
     renderPropsEdition() {
-
-        if( ! __OEditorApp.exists() || ! __OEditorApp.getInstance().isBlockEdited( this.props.clientId ) ) {
+        if (
+            !__OEditorApp.exists() ||
+            !__OEditorApp.getInstance().isBlockEdited(this.props.clientId)
+        ) {
             return null;
         }
 
@@ -376,17 +384,20 @@ export class WpeComponentBase extends Component {
                     }
                 )}
             </Placeholder>,
-            document.querySelector( ".o-editor-app.block .o-editor-app_body" )
+            document.querySelector(".o-editor-app.block .o-editor-app_body")
         );
     }
 
-    showModal( modal, once = false ) {
-
-        if( once && this.state.modal[modal] != null ) {
+    showModal(modal, once = false) {
+        if (once && this.state.modal[modal] != null) {
             return;
         }
 
-        if( __OUserPreferences.getInstance().getUserPreferences(modal) != null && ! __OUserPreferences.getInstance().getUserPreferences(modal) ) {
+        if (
+            __OUserPreferences.getInstance().getUserPreferences(modal) !=
+                null &&
+            !__OUserPreferences.getInstance().getUserPreferences(modal)
+        ) {
             return;
         }
 
@@ -395,15 +406,14 @@ export class WpeComponentBase extends Component {
         this.setState({ modal: newModalState });
     }
 
-    hideModal( modal ) {
-
+    hideModal(modal) {
         const newModalState = this.state.modal;
         newModalState[modal] = false;
         this.setState({ modal: newModalState });
     }
 
-    displayModal( modal ) {
-        return ( this.state.modal[modal] );
+    displayModal(modal) {
+        return this.state.modal[modal];
     }
 
     renderFooter() {
@@ -416,8 +426,10 @@ export class WpeComponentBase extends Component {
                         variant="primary"
                         onMouseDown={() => {
                             this.setState({ needPreviewUpdate: true });
-                            __OModal.getInstance().showModal('alertUpdateAttributes', true);
-                        } }
+                            __OModal
+                                .getInstance()
+                                .showModal("alertUpdateAttributes", true);
+                        }}
                     >
                         <Dashicon icon="update" />
                         Update preview
@@ -440,7 +452,7 @@ export class WpeComponentBase extends Component {
                     key={this.props.clientId + "-buttonCloseEditZone"}
                     className="abtButtonCloseEditZone"
                     variant="secondary"
-                    onMouseDown={() => __OEditorApp.getInstance().clean() }
+                    onMouseDown={() => __OEditorApp.getInstance().clean()}
                 >
                     <Dashicon icon="no-alt" />
                     Close
@@ -458,7 +470,6 @@ export class WpeComponentBase extends Component {
     }
 
     renderEditFormZone(content = null, titleOnly = false) {
-
         let editZone = [];
 
         // Title
@@ -515,9 +526,11 @@ export class WpeComponentBase extends Component {
                 className="abtButtonEditZone"
                 variant="primary"
                 onMouseDown={() => {
-                    __OEditorApp.getInstance().open( this );
-                    if( this.getReusableBlock() != null ) {
-                        __OModal.getInstance().showModal('alertReusableBlock', true);
+                    __OEditorApp.getInstance().open(this);
+                    if (this.getReusableBlock() != null) {
+                        __OModal
+                            .getInstance()
+                            .showModal("alertReusableBlock", true);
                     }
                 }}
             >
@@ -527,13 +540,13 @@ export class WpeComponentBase extends Component {
     }
 
     renderRemoveModal() {
-        return this.displayModal('removeSubmitted') &&
+        return this.displayModal("removeSubmitted") &&
             typeof this.props.removeBlock != "undefined" ? (
             <WpeModal
                 key={this.props.clientId + "-removeBlockWpeModal"}
                 id={this.props.clientId + "-removeBlockWpeModal"}
                 title={'Confirm "' + this.title + '" suppression'}
-                onClose={() => this.hideModal('removeSubmitted') }
+                onClose={() => this.hideModal("removeSubmitted")}
                 hasFooter={false}
                 type="warning"
             >
@@ -543,7 +556,7 @@ export class WpeComponentBase extends Component {
                         <Button
                             variant="primary"
                             onMouseDown={() => {
-                                this.hideModal('removeSubmitted');
+                                this.hideModal("removeSubmitted");
                                 __OEditorApp.getInstance().hide();
                                 this.props.removeBlock(this.props.clientId);
                             }}
@@ -555,7 +568,9 @@ export class WpeComponentBase extends Component {
                     <div className="row">
                         <Button
                             variant="link"
-                            onMouseDown={() => this.hideModal('removeSubmitted') }
+                            onMouseDown={() =>
+                                this.hideModal("removeSubmitted")
+                            }
                         >
                             Cancel
                         </Button>
@@ -566,7 +581,6 @@ export class WpeComponentBase extends Component {
     }
 
     render() {
-
         const render = [];
 
         render.push(Devices.getInstance().render(this.props.clientId));

@@ -2,21 +2,17 @@ import React from "react";
 
 import { Component } from "@wordpress/element";
 
+import { Button, Dashicon } from "@wordpress/components";
 
-import {
-    Button,
-    Dashicon
-} from "@wordpress/components";
-
+import __OEditorBlock from "./OEditorBlock";
 import __OEditorInspector from "./OEditorInspector";
 import __OEditorSettings from "./OEditorSettings";
 import __OEditorWelcome from "./OEditorWelcome";
-import __OEditorBlock from "./OEditorBlock";
 
-import globalData from '../global';
+import globalData from "../global";
 
-import OModal from './OModal';
-import OUserPreferences from './OUserPreferences';
+import OModal from "./OModal";
+import OUserPreferences from "./OUserPreferences";
 
 export default class OEditorApp extends Component {
     static _instance;
@@ -25,7 +21,7 @@ export default class OEditorApp extends Component {
     }
 
     static exists() {
-        return ( typeof this._instance != 'undefined' );
+        return typeof this._instance != "undefined";
     }
 
     _$editApp;
@@ -35,7 +31,7 @@ export default class OEditorApp extends Component {
         super(props);
 
         this.state = {
-            route: null
+            route: null,
         };
 
         // @ts-ignore
@@ -47,7 +43,6 @@ export default class OEditorApp extends Component {
     }
 
     componentDidMount() {
-
         // init shortcuts and mouse events
         this._initShortcuts();
         this._initMouseEvents();
@@ -60,8 +55,7 @@ export default class OEditorApp extends Component {
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
-        
-        for( var i in globalData.componentInstances ) {
+        for (var i in globalData.componentInstances) {
             globalData.componentInstances[i].forceUpdate();
         }
     }
@@ -93,10 +87,11 @@ export default class OEditorApp extends Component {
     }
 
     _hideEditorLoadingZone() {
-
         document.querySelector(".o-editor-loading-zone").classList.add("hide");
         setTimeout(() => {
-            document.querySelector(".o-editor-loading-zone").classList.add("close");
+            document
+                .querySelector(".o-editor-loading-zone")
+                .classList.add("close");
         }, 1000);
     }
 
@@ -107,22 +102,24 @@ export default class OEditorApp extends Component {
     }
 
     _routing() {
-
         if (document.location.hash === "#settings") {
-            this.setState({ route: 'settings' });
+            this.setState({ route: "settings" });
         } else if (document.location.hash === "#help") {
-            this.setState({ route: 'help' });
+            this.setState({ route: "help" });
         } else {
-
-            const anchorDetection = document.location.hash?.match(/^#([a-zA-Z0-9-]+)/);
-            if( anchorDetection != null ) {
-
+            const anchorDetection =
+                document.location.hash?.match(/^#([a-zA-Z0-9-]+)/);
+            if (anchorDetection != null) {
                 const clientIdRequested = anchorDetection[1];
 
-                for( var i in globalData.componentInstances ) {
-
-                    if( globalData.componentInstances[i].getId() == clientIdRequested ) {
-                        this.forceSelectComponent( globalData.componentInstances[i] );
+                for (var i in globalData.componentInstances) {
+                    if (
+                        globalData.componentInstances[i].getId() ==
+                        clientIdRequested
+                    ) {
+                        this.forceSelectComponent(
+                            globalData.componentInstances[i]
+                        );
                         break;
                     }
                 }
@@ -130,7 +127,7 @@ export default class OEditorApp extends Component {
         }
     }
 
-    routeTo( route ) {
+    routeTo(route) {
         this.clean();
         this.setState({ route: route });
         document.location.hash = route;
@@ -141,17 +138,16 @@ export default class OEditorApp extends Component {
         this.setState({ route: null });
     }
 
-    isBlockEdited( clientId ) {
-
-        if( this.state.route != null ) {
+    isBlockEdited(clientId) {
+        if (this.state.route != null) {
             return false;
         }
 
-        if( this.props.context.selectedBlockClientId == undefined ) {
+        if (this.props.context.selectedBlockClientId == undefined) {
             return false;
         }
-        
-        if( this.props.context.selectedBlockClientId != clientId ) {
+
+        if (this.props.context.selectedBlockClientId != clientId) {
             return false;
         }
 
@@ -159,18 +155,19 @@ export default class OEditorApp extends Component {
     }
 
     forceSelectComponent(component: any): void {
-
         // If clientId given, get the block instance related
-        if ( typeof component == 'string' ) {
-            for( var i in globalData.componentInstances ) {
-                if( globalData.componentInstances[i].props.clientId == component ) {
+        if (typeof component == "string") {
+            for (var i in globalData.componentInstances) {
+                if (
+                    globalData.componentInstances[i].props.clientId == component
+                ) {
                     component = globalData.componentInstances[i];
                     break;
                 }
             }
         }
 
-        if( typeof component == 'string' ) {
+        if (typeof component == "string") {
             return;
         }
 
@@ -178,17 +175,25 @@ export default class OEditorApp extends Component {
     }
 
     refreshScroll() {
-        if( this.props.context.selectedBlockClientId != undefined ) {
-            document.querySelector('#block-' + this.props.context.selectedBlockClientId)?.scrollIntoView({
-                behavior: 'smooth',
-                block: 'center'
-            });
+        if (this.props.context.selectedBlockClientId != undefined) {
+            document
+                .querySelector(
+                    "#block-" + this.props.context.selectedBlockClientId
+                )
+                ?.scrollIntoView({
+                    behavior: "smooth",
+                    block: "center",
+                });
         }
     }
 
     clean() {
-        if( this.props.context.selectedBlockClientId != undefined ) {
-            this.props.context.resetSelection(this.props.context.selectedBlockClientId, this.props.context.selectedBlockClientId, -1);
+        if (this.props.context.selectedBlockClientId != undefined) {
+            this.props.context.resetSelection(
+                this.props.context.selectedBlockClientId,
+                this.props.context.selectedBlockClientId,
+                -1
+            );
         }
     }
 
@@ -206,65 +211,80 @@ export default class OEditorApp extends Component {
     }
 
     renderBreadcrumb() {
-
-        return ( this.state.route != null || ( this.props.context.selectedBlockClientId != undefined && typeof globalData.componentInstances[this.props.context.selectedBlockClientId] != 'undefined' ) ) ?
+        return this.state.route != null ||
+            (this.props.context.selectedBlockClientId != undefined &&
+                typeof globalData.componentInstances[
+                    this.props.context.selectedBlockClientId
+                ] != "undefined") ? (
             <div className="breadcrumb">
                 <Button
                     key={"breadcrumb-home"}
                     variant="link"
-                    onMouseDown={() => this.goInspector() }
+                    onMouseDown={() => this.goInspector()}
                 >
-                    <Dashicon icon="arrow-left-alt2" />Back
+                    <Dashicon icon="arrow-left-alt2" />
+                    Back
                 </Button>
             </div>
-        : null;
+        ) : null;
     }
 
     render() {
-
-        switch( this.state.route ) {
-
-            case 'settings':
+        switch (this.state.route) {
+            case "settings":
                 var componentToRender = new __OEditorSettings();
                 break;
-            case 'help':
+            case "help":
                 var componentToRender = new __OEditorWelcome();
                 break;
             default:
-                var componentToRender = ( this.props.context.selectedBlockClientId != undefined && typeof globalData.componentInstances[this.props.context.selectedBlockClientId] != 'undefined' ) ? new __OEditorBlock( globalData.componentInstances[this.props.context.selectedBlockClientId] ) : new __OEditorInspector( this.props.context.blocksList, this.props.context.selectBlock );
+                var componentToRender =
+                    this.props.context.selectedBlockClientId != undefined &&
+                    typeof globalData.componentInstances[
+                        this.props.context.selectedBlockClientId
+                    ] != "undefined"
+                        ? new __OEditorBlock(
+                              globalData.componentInstances[
+                                  this.props.context.selectedBlockClientId
+                              ]
+                          )
+                        : new __OEditorInspector(
+                              this.props.context.blocksList,
+                              this.props.context.selectBlock
+                          );
         }
 
-        return <>
-            <section
-                key="o-editor-app"
-                className={`o-editor-app ${
-                    componentToRender?.getExtraClassName?.()
-                }`}
-            >
-                { componentToRender?.renderTitle && (
-                    <div className="o-editor-app_header">
-                        <div className="title">
-                            { this.renderBreadcrumb() }
-                            {componentToRender.renderTitle()}
-                        </div>
-                        { componentToRender?.renderTools && (
-                            <div className="tools">
-                                {componentToRender.renderTools()}
+        return (
+            <>
+                <section
+                    key="o-editor-app"
+                    className={`o-editor-app ${componentToRender?.getExtraClassName?.()}`}
+                >
+                    {componentToRender?.renderTitle && (
+                        <div className="o-editor-app_header">
+                            <div className="title">
+                                {this.renderBreadcrumb()}
+                                {componentToRender.renderTitle()}
                             </div>
-                        ) }
+                            {componentToRender?.renderTools && (
+                                <div className="tools">
+                                    {componentToRender.renderTools()}
+                                </div>
+                            )}
+                        </div>
+                    )}
+                    <div className="o-editor-app_body">
+                        {componentToRender?.render?.()}
                     </div>
-                ) }
-                <div className="o-editor-app_body">
-                    {componentToRender?.render?.()}
-                </div>
-                { componentToRender?.renderFooter && (
+                    {componentToRender?.renderFooter && (
                         <div className="o-editor-app_footer">
-                        {componentToRender?.renderFooter?.()}
-                    </div>
-                ) }
-            </section>
-            <OUserPreferences />
-            <OModal />
-        </>
+                            {componentToRender?.renderFooter?.()}
+                        </div>
+                    )}
+                </section>
+                <OUserPreferences />
+                <OModal />
+            </>
+        );
     }
 }

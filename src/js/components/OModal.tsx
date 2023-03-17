@@ -1,18 +1,12 @@
 import { Component } from "@wordpress/element";
 
-import {
-    Button,
-    Dashicon,
-    CheckboxControl
-} from "@wordpress/components";
+import { Button, Dashicon } from "@wordpress/components";
 
-import __OEditorApp from "./OEditorApp";
 import __OUserPreferences from "./OUserPreferences";
 
 import { WpeModal } from "../Models/Modal";
 
 export default class OModal extends Component {
-
     static _instance;
     static getInstance() {
         return this._instance;
@@ -23,7 +17,7 @@ export default class OModal extends Component {
 
         this.state = {
             alertUpdateAttributes: null,
-            alertReusableBlock: null
+            alertReusableBlock: null,
         };
 
         // @ts-ignore
@@ -31,7 +25,6 @@ export default class OModal extends Component {
     }
 
     render() {
-
         const render = [];
 
         render.push(this.alertUpdateAttributes());
@@ -40,35 +33,37 @@ export default class OModal extends Component {
         return render;
     }
 
-    showModal( modal, once = false ) {
-
-        if( once && this.state[modal] != null ) {
+    showModal(modal, once = false) {
+        if (once && this.state[modal] != null) {
             return;
         }
 
-        if( __OUserPreferences.getInstance().getUserPreferences(modal) != null && ! __OUserPreferences.getInstance().getUserPreferences(modal) ) {
+        if (
+            __OUserPreferences.getInstance().getUserPreferences(modal) !=
+                null &&
+            !__OUserPreferences.getInstance().getUserPreferences(modal)
+        ) {
             return;
         }
 
         this.setState({ [modal]: true });
     }
 
-    displayModal( modal ) {
-        return ( this.state[modal] );
+    displayModal(modal) {
+        return this.state[modal];
     }
 
-    hideModal( modal ) {
+    hideModal(modal) {
         this.setState({ [modal]: false });
     }
 
     alertUpdateAttributes() {
-        
-        return this.displayModal('alertUpdateAttributes') ? (
+        return this.displayModal("alertUpdateAttributes") ? (
             <WpeModal
                 key="OModal-alertUpdateAttributes"
                 id="alertUpdateAttributesMessageWpeModal"
                 title="Updating preview..."
-                onClose={() => this.hideModal('alertUpdateAttributes') }
+                onClose={() => this.hideModal("alertUpdateAttributes")}
                 hasFooter={false}
                 type="info"
             >
@@ -80,18 +75,22 @@ export default class OModal extends Component {
                 <div className="bouttonGroup">
                     <div className="row">
                         <Button
-                            key={
-                                "alertUpdateAttributesMessageButton"
-                            }
+                            key={"alertUpdateAttributesMessageButton"}
                             variant="primary"
-                            onMouseDown={() => this.hideModal('alertUpdateAttributes') }
+                            onMouseDown={() =>
+                                this.hideModal("alertUpdateAttributes")
+                            }
                         >
                             <Dashicon icon="yes" />
                             All right!
                         </Button>
                     </div>
                     <div className="row">
-                        <__OUserPreferences preference="alertUpdateAttributes" context="checkbox" label="Do not show this message again" ></__OUserPreferences>
+                        <__OUserPreferences
+                            preference="alertUpdateAttributes"
+                            context="checkbox"
+                            label="Do not show this message again"
+                        ></__OUserPreferences>
                     </div>
                 </div>
             </WpeModal>
@@ -99,13 +98,12 @@ export default class OModal extends Component {
     }
 
     alertReusableBlock() {
-
-        return this.displayModal('alertReusableBlock') ? (
+        return this.displayModal("alertReusableBlock") ? (
             <WpeModal
                 key="OModal-alertReusableBlock"
                 id="alertReusableBlockMessageWpeModal"
                 title="Reusable block"
-                onClose={() => this.hideModal('alertReusableBlock') }
+                onClose={() => this.hideModal("alertReusableBlock")}
                 hasFooter={false}
                 type="warning"
             >
@@ -118,22 +116,25 @@ export default class OModal extends Component {
                 <div className="bouttonGroup">
                     <div className="row">
                         <Button
-                            key={
-                                "alertReusableBlockMessageButton"
-                            }
+                            key={"alertReusableBlockMessageButton"}
                             variant="primary"
-                            onMouseDown={() => this.hideModal('alertReusableBlock') }
+                            onMouseDown={() =>
+                                this.hideModal("alertReusableBlock")
+                            }
                         >
                             <Dashicon icon="yes" />
                             All right!
                         </Button>
                     </div>
                     <div className="row">
-                        <__OUserPreferences preference="alertReusableBlock" context="checkbox" label="Do not show this message again" ></__OUserPreferences>
+                        <__OUserPreferences
+                            preference="alertReusableBlock"
+                            context="checkbox"
+                            label="Do not show this message again"
+                        ></__OUserPreferences>
                     </div>
                 </div>
             </WpeModal>
         ) : null;
     }
-    
 }
