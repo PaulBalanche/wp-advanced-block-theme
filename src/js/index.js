@@ -1,8 +1,15 @@
+import * as __ReactDom from 'react-dom';
+
+import { compose } from "@wordpress/compose";
+import { withDispatch, withSelect } from "@wordpress/data";
+
+import {
+    store as blockEditorStore,
+} from "@wordpress/block-editor";
+
 import "../css/admin/_index.scss";
 
 import OEditorApp from "./components/OEditorApp";
-
-import * as __ReactDom from 'react-dom';
 
 import "../../blocks/component-block-master/src/index";
 import "../../blocks/layout/wpe-column/src/index";
@@ -14,6 +21,7 @@ import "../../blocks/layout/wpe-slider/src/index";
 
 class OEditor {
     constructor() {
+
         // move wp ui elements
         this._moveWpUiElements();
 
@@ -35,7 +43,7 @@ class OEditor {
         $editorContainer.appendChild($editorApp);
 
         // render our app
-        __ReactDom.render(<OEditorApp></OEditorApp>, $editorApp);
+        __ReactDom.render(<OEditorAppContext />, $editorApp);
     }
 
     /**
@@ -63,6 +71,35 @@ class OEditor {
         }
     }
 }
+
+function OEditorAppDisplay( props ) {
+    return <OEditorApp context={props} />
+}
+
+const OEditorAppContext = compose([
+    withSelect( ( select ) => {
+
+        const blocksList = select("core/block-editor").getBlocks();
+        const selectedBlockClientId = select("core/block-editor").getSelectedBlockClientId();
+
+        return {
+            blocksList,
+            selectedBlockClientId
+        };
+    }),
+    withDispatch( ( dispatch ) => {
+
+        const {
+            selectBlock,
+            resetSelection
+        } = dispatch(blockEditorStore);
+
+        return {
+            selectBlock,
+            resetSelection
+        };
+    })
+])(OEditorAppDisplay);
 
 window.addEventListener("load", function () {
     setTimeout(() => {

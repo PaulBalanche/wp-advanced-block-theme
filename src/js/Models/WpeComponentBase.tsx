@@ -113,11 +113,12 @@ export class WpeComponentBase extends Component {
     renderTitle() {
 
         const anchor = this.getAttribute('anchor');
+        const displayAnchor = ( typeof anchor != 'undefined' && anchor.match(/^[a-z0-9]+-[a-z0-9]+-[a-z0-9]+-[a-z0-9]+-[a-z0-9]+$/) == null);
 
         return <>
             <h2>
                 {this.props.title ?? this.title ?? "Editor"}
-                { ( typeof anchor != 'undefined' ) && <span className="subtitle">#{anchor}</span> }
+                { displayAnchor && <span className="subtitle">#{anchor}</span> }
             </h2>
         </>
     }
@@ -256,7 +257,7 @@ export class WpeComponentBase extends Component {
 
     renderPropsEdition() {
 
-        if( ! __OEditorApp.exists() || ! __OEditorApp.getInstance().isBlockEdited( this.getId() ) ) {
+        if( ! __OEditorApp.exists() || ! __OEditorApp.getInstance().isBlockEdited( this.props.clientId ) ) {
             return null;
         }
 
@@ -439,7 +440,7 @@ export class WpeComponentBase extends Component {
                     key={this.props.clientId + "-buttonCloseEditZone"}
                     className="abtButtonCloseEditZone"
                     variant="secondary"
-                    onMouseDown={() => __OEditorApp.getInstance().goHome() }
+                    onMouseDown={() => __OEditorApp.getInstance().clean() }
                 >
                     <Dashicon icon="no-alt" />
                     Close
@@ -457,6 +458,7 @@ export class WpeComponentBase extends Component {
     }
 
     renderEditFormZone(content = null, titleOnly = false) {
+
         let editZone = [];
 
         // Title
@@ -466,8 +468,8 @@ export class WpeComponentBase extends Component {
             </div>
         );
 
-        if (!titleOnly) {
-            // // Separator
+        if (false && !titleOnly) {
+            // Separator
             // editZone.push(<div key={ this.props.clientId + "_EditZoneSeparator1" } className="separator"></div>);
 
             // Edit button
@@ -494,12 +496,12 @@ export class WpeComponentBase extends Component {
             <div
                 key={this.props.clientId + "-EditZoneButtonGroup"}
                 className="o-toolbar-container"
-                onDoubleClick={(e) => {
-                    __OEditorApp.getInstance().open( this );
-                    if( this.getReusableBlock() != null ) {
-                        __OModal.getInstance().showModal('alertReusableBlock', true);
-                    }
-                }}
+                // onDoubleClick={(e) => {
+                //     __OEditorApp.getInstance().open( this );
+                //     if( this.getReusableBlock() != null ) {
+                //         __OModal.getInstance().showModal('alertReusableBlock', true);
+                //     }
+                // }}
             >
                 <div className="o-toolbar">{editZone}</div>
             </div>

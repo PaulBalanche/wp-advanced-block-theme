@@ -37,7 +37,6 @@ export default class OUserPreferences extends Component {
             let jsonStorage = JSON.parse(storage);
             if (typeof jsonStorage == "object") {
 
-                const userPreferencesToInit = this.state;
                 for( var i in this.state ) {
                     if( typeof jsonStorage[i] != 'undefined' ) {
                         this.setState({ [i]: jsonStorage[i] });
@@ -48,7 +47,6 @@ export default class OUserPreferences extends Component {
     }
 
     getUserPreferences( preference ) {
-
         return ( typeof this.state[preference] != 'undefined' ) ? this.state[preference] : null;
     }
 

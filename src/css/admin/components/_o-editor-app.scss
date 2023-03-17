@@ -1,9 +1,9 @@
 .o-editor-app {
     position: fixed;
     right: calc($o-space-50 + 10px);
-    width: 280px;
     top: calc(61px + $o-space-50);
-    height: 200px;
+    width: 320px;
+    height: calc(50vh + 61px + $o-space-50);
     max-height: calc(100vh - 61px - 2 * $o-space-50);
     background: white;
     border-radius: $o-border-radius;
@@ -24,15 +24,15 @@
         width: 800px;
         height: calc(100vh - 61px - 2 * $o-space-50);
     }
-
-    &.inspector {
-        width: 480px;
-        height: calc(100vh - 61px - 2 * $o-space-50);
-    }
     
     &.settings {
         width: 480px;
         height: 380px;
+    }
+
+    &.help {
+        width: 360px;
+        height: 400px;
     }
 
     .is-mode-text & {
@@ -199,7 +199,7 @@
         }
     }
 
-    &.inspector, &.welcome, &.settings {
+    &.inspector, &.help, &.settings {
 
         li > ul {
             padding: 0 0 0 $o-space-30;
@@ -258,7 +258,7 @@
     }
 
 
-    &.welcome {
+    &.help {
         .is-tertiary {
             font-weight: initial;
             font-size: 1em;

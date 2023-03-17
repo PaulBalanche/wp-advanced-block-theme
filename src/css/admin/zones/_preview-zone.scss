@@ -108,6 +108,13 @@
         }
     }
 
+    .is-root-container:has(.block-editor-block-list__block.is-pre-selected) {
+    
+        .block-editor-block-list__block:not(.is-pre-selected):not(.is-pre-selected .block-editor-block-list__block):not(.block-editor-block-list__block .block-editor-block-list__block):not(:hover) {
+            opacity: 0.5;
+        }
+    }
+
     /**
     * Toolbar
     */
@@ -128,6 +135,7 @@
         top: 0;
         left: 0;
         animation: o-toolbar-in .1s ease-out forwards;
+        cursor: pointer;
 
         .o-toolbar {
             display: flex;

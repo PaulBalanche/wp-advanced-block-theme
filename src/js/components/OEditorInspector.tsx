@@ -2,8 +2,6 @@ import React from "react";
 
 import { getBlockType } from "@wordpress/blocks";
 
-import { Component } from "@wordpress/element";
-
 import { compose } from "@wordpress/compose";
 import { withDispatch, withSelect } from "@wordpress/data";
 
@@ -18,34 +16,29 @@ import {
 
 import __OEditorApp from "./OEditorApp";
 
-import globalData from '../global';
-
 export default class OEditorInspector {
-    constructor() {}
-
-    renderTitle() {
-        return <h2>Inspector</h2>;
+    constructor( blocksList, selectBlock ) {
+        this.blocksList = blocksList;
+        this.selectBlock = selectBlock;
     }
 
-    renderFooter() {
-        return (
-            <>
-                <div className="o-flex-grow"></div>
-                <Button
-                    key={"buttonCloseEditZone"}
-                    className="abtButtonCloseEditZone"
-                    variant="secondary"
-                    onMouseDown={() => __OEditorApp.getInstance().goHome() }
-                >
-                    <Dashicon icon="no-alt" />
-                    Close
-                </Button>
-            </>
-        );
+    renderTitle() {
+        return <h2>Editor Blocks List</h2>;
+    }
+
+    renderTools() {
+        
+        return <Button
+            key={"o-editor-zone-button-help"}
+            variant="primary"
+            onMouseDown={() => __OEditorApp.getInstance().routeTo('help') }
+        >
+            <Dashicon icon="editor-help" />
+        </Button>
     }
 
     render() {
-        return <BlockList />
+        return <BlockList blocksList={this.blocksList} selectBlock={this.selectBlock} />
     }
 
     getExtraClassName() {
@@ -53,70 +46,44 @@ export default class OEditorInspector {
     }
 }
 
-
-function renderBlockList( { blockList, isChildren } ) {
+const BlockList = ( props ) => {
 
     return <ul>
-        { isChildren && <div class="separator"></div> }
-        { blockList.map((block) => <><BlockListItem block={ block } /><li class="separator"></li></>
+        { typeof props.isChildren != 'undefined' && props.isChildren && <div className="separator"></div> }
+        { props.blocksList.map((block) => <><BlockListItem block={ block } selectBlock={props.selectBlock} /><li className="separator"></li></>
         ) }
     </ul>
 }
 
-const BlockList = withSelect( ( select, props ) => {
-
-        const blockList = select("core/block-editor").getBlocks();
-
-        // blockList.forEach(element => {
-        //     if( element.name == 'core/block' ) {
-
-        //         // for( var i in globalData.componentInstances ) {
-        //         //     if( globalData.componentInstances[i].props.clientId == component ) {
-        //         //         component = globalData.componentInstances[i];
-        //         //         break;
-        //         //     }
-        //         // }
-
-                
-        //     }
-        //     // console.log(globalData.componentInstances);
-        // });
-
-        return {
-            blockList,
-            isChildren: false
-        };
-    } )( renderBlockList );
-
-
-function renderBlockListItem( { selectBlock, block } ) {
+const BlockListItem = ( { block, selectBlock } ) => {
 
     const anchor = block.attributes?.anchor;
+    const displayAnchor = ( typeof anchor != 'undefined' && anchor.match(/^[a-z0-9]+-[a-z0-9]+-[a-z0-9]+-[a-z0-9]+-[a-z0-9]+$/) == null);
+    const domBlock = document.querySelector('#block-' + block.clientId);
 
-    return <li>
+    return <li
+        key={"o-inspector-block-" + block.clientId}
+    >
         <Button
             variant="tertiary"
             className="animate"
             onMouseOver={() => {
-                selectBlock(block.clientId);
+                domBlock?.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center'
+                });
+                domBlock?.classList.add('is-pre-selected');
+            } }
+            onMouseOut={() => {
+                domBlock?.classList.remove('is-pre-selected');
             } }
             onMouseDown={() => {
-                __OEditorApp.getInstance().open(block.clientId);
+                selectBlock(block.clientId);
             } }
         >
             <Dashicon icon="arrow-right-alt2" />{ getBlockType(block.name).title }
-            { ( typeof anchor != 'undefined' ) && <span className="anchor">#{anchor}</span> }
+            { displayAnchor && <span className="anchor">#{anchor}</span> }
         </Button>
-        { block.innerBlocks.length > 0 && renderBlockList( { blockList: block.innerBlocks, isChildren: true } ) }
+        { block.innerBlocks.length > 0 && <BlockList blocksList={block.innerBlocks} selectBlock={selectBlock} isChildren={true} /> }
     </li>
 }
-
-const BlockListItem = withDispatch( ( dispatch ) => {
-        const {
-            selectBlock
-        } = dispatch(blockEditorStore);
-
-        return {
-            selectBlock
-        };
-    } )( renderBlockListItem );

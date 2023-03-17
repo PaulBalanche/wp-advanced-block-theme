@@ -16,6 +16,7 @@ export default class OEditorBlock {
 
     constructor( blockInstance ) {
         this._blockInstance = blockInstance;
+        document.location.hash = `${this._blockInstance.getId()}`;
     }
 
     renderTitle() {

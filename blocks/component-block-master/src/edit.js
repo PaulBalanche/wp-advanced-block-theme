@@ -16,6 +16,8 @@ import apiFetch from "@wordpress/api-fetch";
 
 import { Devices } from "../../../src/js/Singleton/Devices";
 
+import __OEditorApp from "../../../src/js/components/OEditorApp";
+
 class WpeComponent extends WpeComponentBase {
     _$iframes;
 
@@ -142,6 +144,8 @@ class WpeComponent extends WpeComponentBase {
             iFrame.parentNode.style.height = heightIframe;
             iFrame.contentWindow.document.body.style.overflowY = "hidden";
         }
+
+        __OEditorApp.getInstance().refreshScroll();
     }
 
     renderLoaderPreview() {
@@ -178,7 +182,7 @@ class WpeComponent extends WpeComponentBase {
             const { error, previewReady } = this.state;
 
             var render = [];
-            
+
             if (error != null) {
                 if (
                     typeof error == "object" &&
@@ -191,7 +195,8 @@ class WpeComponent extends WpeComponentBase {
                             key={this.props.clientId + "-LiveRenderingMessage"}
                             className="liveRenderingMessage"
                         >
-                            {this.renderButtonEditZone()}
+                            Click to edit
+                            {/* {this.renderButtonEditZone()} */}
                         </div>
                     );
                 } else {

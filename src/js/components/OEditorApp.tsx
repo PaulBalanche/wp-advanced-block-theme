@@ -35,7 +35,6 @@ export default class OEditorApp extends Component {
         super(props);
 
         this.state = {
-            componentInstance: null,
             route: null
         };
 
@@ -45,8 +44,6 @@ export default class OEditorApp extends Component {
         // get the actual edit app dom node
         this._$editApp = document.querySelector(".o-editor");
         this._$editAppContainer = document.querySelector(".o-editor-container");
-
-        new OUserPreferences();
     }
 
     componentDidMount() {
@@ -64,12 +61,8 @@ export default class OEditorApp extends Component {
 
     componentDidUpdate(prevProps, prevState, snapshot) {
         
-        if( prevState.componentInstance != null ) {
-            prevState.componentInstance.forceUpdate();
-        }
-
-        if( this.state.componentInstance != null ) {
-            this.state.componentInstance.forceUpdate();
+        for( var i in globalData.componentInstances ) {
+            globalData.componentInstances[i].forceUpdate();
         }
     }
 
@@ -77,12 +70,12 @@ export default class OEditorApp extends Component {
 
     _initShortcuts() {
         // listen for escape to close the editor
-        document.addEventListener("keyup", (e) => {
-            if (e.key === "Escape") {
-                e.preventDefault();
-                this.close();
-            }
-        });
+        // document.addEventListener("keyup", (e) => {
+        //     if (e.key === "Escape") {
+        //         e.preventDefault();
+        //         this.close();
+        //     }
+        // });
 
         // liten for maintaining the "§" key to hide and show the editor
         document.addEventListener("keydown", (e) => {
@@ -113,17 +106,12 @@ export default class OEditorApp extends Component {
         }, 1200);
     }
 
-    goHome() {
-        this.clean();
-        this.setState({ route: null });
-    }
-
     _routing() {
 
         if (document.location.hash === "#settings") {
             this.setState({ route: 'settings' });
-        } else if (document.location.hash === "#inspector") {
-            this.setState({ route: 'settings' });
+        } else if (document.location.hash === "#help") {
+            this.setState({ route: 'help' });
         } else {
 
             const anchorDetection = document.location.hash?.match(/^#([a-zA-Z0-9-]+)/);
@@ -134,7 +122,7 @@ export default class OEditorApp extends Component {
                 for( var i in globalData.componentInstances ) {
 
                     if( globalData.componentInstances[i].getId() == clientIdRequested ) {
-                        this.open( globalData.componentInstances[i] );
+                        this.forceSelectComponent( globalData.componentInstances[i] );
                         break;
                     }
                 }
@@ -148,24 +136,29 @@ export default class OEditorApp extends Component {
         document.location.hash = route;
     }
 
-    isBlockEdited( blockId ) {
+    goInspector() {
+        this.clean();
+        this.setState({ route: null });
+    }
 
-        if( this.state.route != 'blocks' ) {
+    isBlockEdited( clientId ) {
+
+        if( this.state.route != null ) {
             return false;
         }
 
-        if( this.state.componentInstance == null ) {
+        if( this.props.context.selectedBlockClientId == undefined ) {
             return false;
         }
         
-        if( this.state.componentInstance.getId() != blockId ) {
+        if( this.props.context.selectedBlockClientId != clientId ) {
             return false;
         }
 
         return true;
     }
 
-    open(component: any): void {
+    forceSelectComponent(component: any): void {
 
         // If clientId given, get the block instance related
         if ( typeof component == 'string' ) {
@@ -181,27 +174,28 @@ export default class OEditorApp extends Component {
             return;
         }
 
-        this.clean();
-        this.setState({
-            componentInstance: component,
-            route: 'blocks'
-        });
-
-        document.location.hash = `${component.getId()}`;
-        
-        this.show();
+        this.props.context.selectBlock(component.props.clientId);
     }
 
-    clean() {
-        if( this.state.componentInstance != null ) {
-            this.setState({ componentInstance: null });
+    refreshScroll() {
+        if( this.props.context.selectedBlockClientId != undefined ) {
+            document.querySelector('#block-' + this.props.context.selectedBlockClientId)?.scrollIntoView({
+                behavior: 'smooth',
+                block: 'center'
+            });
         }
     }
 
-    close() {
-        this.hide();
-        this.clean();
+    clean() {
+        if( this.props.context.selectedBlockClientId != undefined ) {
+            this.props.context.resetSelection(this.props.context.selectedBlockClientId, this.props.context.selectedBlockClientId, -1);
+        }
     }
+
+    // close() {
+    //     this.hide();
+    //     this.clean();
+    // }
 
     show() {
         this._$editApp.classList.remove("hide", "is-updating");
@@ -213,19 +207,12 @@ export default class OEditorApp extends Component {
 
     renderBreadcrumb() {
 
-        return ( this.state.route != null ) ?
+        return ( this.state.route != null || ( this.props.context.selectedBlockClientId != undefined && typeof globalData.componentInstances[this.props.context.selectedBlockClientId] != 'undefined' ) ) ?
             <div className="breadcrumb">
                 <Button
                     key={"breadcrumb-home"}
                     variant="link"
-                    onMouseDown={() => {
-                        if( this.state.route == 'blocks' && this.state.componentInstance != null ) {
-                            this.routeTo('blocks');
-                        }
-                        else {
-                            this.goHome();
-                        }
-                    } }
+                    onMouseDown={() => this.goInspector() }
                 >
                     <Dashicon icon="arrow-left-alt2" />Back
                 </Button>
@@ -240,11 +227,11 @@ export default class OEditorApp extends Component {
             case 'settings':
                 var componentToRender = new __OEditorSettings();
                 break;
-            case 'blocks':
-                var componentToRender = ( this.state.componentInstance != null ) ? new __OEditorBlock( this.state.componentInstance ) : new __OEditorInspector();
+            case 'help':
+                var componentToRender = new __OEditorWelcome();
                 break;
             default:
-                var componentToRender = new __OEditorWelcome();
+                var componentToRender = ( this.props.context.selectedBlockClientId != undefined && typeof globalData.componentInstances[this.props.context.selectedBlockClientId] != 'undefined' ) ? new __OEditorBlock( globalData.componentInstances[this.props.context.selectedBlockClientId] ) : new __OEditorInspector( this.props.context.blocksList, this.props.context.selectBlock );
         }
 
         return <>
@@ -276,7 +263,8 @@ export default class OEditorApp extends Component {
                     </div>
                 ) }
             </section>
-            <OModal></OModal>
+            <OUserPreferences />
+            <OModal />
         </>
     }
 }

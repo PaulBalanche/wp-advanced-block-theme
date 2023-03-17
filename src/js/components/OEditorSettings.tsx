@@ -23,7 +23,7 @@ export default class OEditorSettings {
                     key={"buttonCloseEditZone"}
                     className="abtButtonCloseEditZone"
                     variant="secondary"
-                    onMouseDown={() => __OEditorApp.getInstance().goHome() }
+                    onMouseDown={() => __OEditorApp.getInstance().clean() }
                 >
                     <Dashicon icon="no-alt" />
                     Close
@@ -38,7 +38,7 @@ export default class OEditorSettings {
             <li>
                 <__OUserPreferences preference="alertUpdateAttributes" context="toggle" label="Display alert while update block preview ?" ></__OUserPreferences>
             </li>
-            <li class="separator"></li>
+            <li className="separator"></li>
             <li>
                 <__OUserPreferences preference="alertReusableBlock" context="toggle" label="Display alert while edit reusable block ?" ></__OUserPreferences>
             </li>

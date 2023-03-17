@@ -197,9 +197,9 @@
 .o-editor-app {
   position: fixed;
   right: 40px;
-  width: 280px;
   top: 91px;
-  height: 200px;
+  width: 320px;
+  height: calc(50vh + 61px + 30px);
   max-height: calc(100vh - 61px - 60px);
   background: white;
   border-radius: 10px;
@@ -219,13 +219,13 @@
   width: 800px;
   height: calc(100vh - 61px - 60px);
 }
-.o-editor-app.inspector {
-  width: 480px;
-  height: calc(100vh - 61px - 60px);
-}
 .o-editor-app.settings {
   width: 480px;
   height: 380px;
+}
+.o-editor-app.help {
+  width: 360px;
+  height: 400px;
 }
 .is-mode-text .o-editor-app {
   display: none;
@@ -359,25 +359,25 @@
 .o-editor-app.is-reusable .components-dropdown-menu__toggle:hover {
   color: rgb(255, 255, 255);
 }
-.o-editor-app.inspector li > ul, .o-editor-app.welcome li > ul, .o-editor-app.settings li > ul {
+.o-editor-app.inspector li > ul, .o-editor-app.help li > ul, .o-editor-app.settings li > ul {
   padding: 0 0 0 18px;
 }
-.o-editor-app.inspector ul, .o-editor-app.welcome ul, .o-editor-app.settings ul {
+.o-editor-app.inspector ul, .o-editor-app.help ul, .o-editor-app.settings ul {
   margin: 0;
 }
-.o-editor-app.inspector ul .separator, .o-editor-app.welcome ul .separator, .o-editor-app.settings ul .separator {
+.o-editor-app.inspector ul .separator, .o-editor-app.help ul .separator, .o-editor-app.settings ul .separator {
   height: 1px;
   border-bottom: 1px solid var(--border300, rgb(235, 235, 235));
 }
-.o-editor-app.inspector ul .separator:last-child, .o-editor-app.welcome ul .separator:last-child, .o-editor-app.settings ul .separator:last-child {
+.o-editor-app.inspector ul .separator:last-child, .o-editor-app.help ul .separator:last-child, .o-editor-app.settings ul .separator:last-child {
   display: none;
 }
-.o-editor-app.inspector li, .o-editor-app.welcome li, .o-editor-app.settings li {
+.o-editor-app.inspector li, .o-editor-app.help li, .o-editor-app.settings li {
   padding: 0;
   margin: 0;
   overflow: hidden;
 }
-.o-editor-app.inspector .is-tertiary, .o-editor-app.welcome .is-tertiary, .o-editor-app.settings .is-tertiary {
+.o-editor-app.inspector .is-tertiary, .o-editor-app.help .is-tertiary, .o-editor-app.settings .is-tertiary {
   display: flex;
   align-items: center;
   width: 100%;
@@ -387,30 +387,30 @@
   font-weight: 500;
   font-size: 1.1em;
 }
-.o-editor-app.inspector .is-tertiary.animate, .o-editor-app.welcome .is-tertiary.animate, .o-editor-app.settings .is-tertiary.animate {
+.o-editor-app.inspector .is-tertiary.animate, .o-editor-app.help .is-tertiary.animate, .o-editor-app.settings .is-tertiary.animate {
   transform: translate(-20px, 0);
   transition: all 0.1s ease-in-out;
 }
-.o-editor-app.inspector .is-tertiary.animate:hover, .o-editor-app.welcome .is-tertiary.animate:hover, .o-editor-app.settings .is-tertiary.animate:hover {
+.o-editor-app.inspector .is-tertiary.animate:hover, .o-editor-app.help .is-tertiary.animate:hover, .o-editor-app.settings .is-tertiary.animate:hover {
   transform: translate(0, 0);
 }
-.o-editor-app.inspector .is-tertiary .dashicon, .o-editor-app.welcome .is-tertiary .dashicon, .o-editor-app.settings .is-tertiary .dashicon {
+.o-editor-app.inspector .is-tertiary .dashicon, .o-editor-app.help .is-tertiary .dashicon, .o-editor-app.settings .is-tertiary .dashicon {
   font-size: 1em;
   height: auto;
   width: auto;
 }
-.o-editor-app.inspector .is-tertiary .anchor, .o-editor-app.welcome .is-tertiary .anchor, .o-editor-app.settings .is-tertiary .anchor {
+.o-editor-app.inspector .is-tertiary .anchor, .o-editor-app.help .is-tertiary .anchor, .o-editor-app.settings .is-tertiary .anchor {
   color: rgba(30, 30, 30, 0.5);
   font-weight: 400;
   font-size: 0.8em;
   margin-left: 6px;
 }
-.o-editor-app.welcome .is-tertiary {
+.o-editor-app.help .is-tertiary {
   font-weight: initial;
   font-size: 1em;
   color: rgba(0, 0, 0, 0.6);
 }
-.o-editor-app.welcome .is-tertiary .dashicon {
+.o-editor-app.help .is-tertiary .dashicon {
   font-size: 1.5em;
   -webkit-margin-end: 12px;
           margin-inline-end: 12px;
@@ -1168,6 +1168,9 @@
 .o-editor .is-root-container:has(.block-editor-block-list__block.is-selected) .has-child-selected .block-editor-block-list__block:not(.is-selected):not(.has-child-selected):not(.is-selected > .block-editor-block-list__block):not(:hover) {
   opacity: 0.1;
 }
+.o-editor .is-root-container:has(.block-editor-block-list__block.is-pre-selected) .block-editor-block-list__block:not(.is-pre-selected):not(.is-pre-selected .block-editor-block-list__block):not(.block-editor-block-list__block .block-editor-block-list__block):not(:hover) {
+  opacity: 0.5;
+}
 .o-editor .o-toolbar-container {
   display: block;
   align-items: center;
@@ -1178,6 +1181,7 @@
   top: 0;
   left: 0;
   animation: o-toolbar-in 0.1s ease-out forwards;
+  cursor: pointer;
 }
 .o-editor .o-toolbar-container .o-toolbar {
   display: flex;
