@@ -11472,13 +11472,18 @@ class WpeComponent extends _src_js_Models_WpeComponentBase__WEBPACK_IMPORTED_MOD
     // it seems that it's a bad idea cause it's slower...
     // (async () => {
     //     if (!this._$iframes) {
-    //         this._$iframes = Array.from(document.querySelectorAll('.o-preview-iframe') ?? []);
+    //         this._$iframes = Array.from(
+    //             document.querySelectorAll(".o-preview-iframe") ?? []
+    //         );
     //         for (let [idx, $iframe] of this._$iframes.entries()) {
     //             await new Promise((resolve) => {
-    //                 $iframe.addEventListener('load', () => {
+    //                 $iframe.addEventListener("load", () => {
     //                     resolve();
     //                 });
-    //                 $iframe.setAttribute('src', $iframe.getAttribute('data-src'));
+    //                 $iframe.setAttribute(
+    //                     "src",
+    //                     $iframe.getAttribute("data-src")
+    //                 );
     //             });
     //         }
     //     }
@@ -14580,7 +14585,7 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
     this.title = (0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_4__.getBlockType)(this.props.name).title;
     this.reusableBlock = this.isReusableBlock();
     _global__WEBPACK_IMPORTED_MODULE_10__["default"].componentInstances[this.props.clientId] = this;
-    if (typeof this.getAttribute('anchor') == 'undefined') {
+    if (typeof this.getAttribute("anchor") == "undefined") {
       this.setAttributes({
         anchor: this.props.clientId
       });
@@ -14629,8 +14634,8 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
   }
   renderTitle() {
     var _ref, _this$props$title;
-    const anchor = this.getAttribute('anchor');
-    const displayAnchor = typeof anchor != 'undefined' && anchor.match(/^[a-z0-9]+-[a-z0-9]+-[a-z0-9]+-[a-z0-9]+-[a-z0-9]+$/) == null;
+    const anchor = this.getAttribute("anchor");
+    const displayAnchor = typeof anchor != "undefined" && anchor.match(/^[a-z0-9]+-[a-z0-9]+-[a-z0-9]+-[a-z0-9]+-[a-z0-9]+$/) == null;
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h2", null, (_ref = (_this$props$title = this.props.title) !== null && _this$props$title !== void 0 ? _this$props$title : this.title) !== null && _ref !== void 0 ? _ref : "Editor", displayAnchor && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
       className: "subtitle"
     }, "#", anchor)));
@@ -14678,7 +14683,7 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
       }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.MenuItem, {
         key: this.props.clientId + "-toolsDropdownMenu-remove-trash",
         icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_14__["default"],
-        onClick: () => this.showModal('removeSubmitted')
+        onClick: () => this.showModal("removeSubmitted")
       }, "Remove ", this.title)));
     }
     return menuGroup.length > 0 ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.DropdownMenu, {
@@ -14701,7 +14706,7 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
    * Get the internal component id
    */
   getId() {
-    return this.getAttribute('anchor');
+    return this.getAttribute("anchor");
   }
   renderPropsEdition() {
     if (!_components_OEditorApp__WEBPACK_IMPORTED_MODULE_7__["default"].exists() || !_components_OEditorApp__WEBPACK_IMPORTED_MODULE_7__["default"].getInstance().isBlockEdited(this.props.clientId)) {
@@ -14821,7 +14826,7 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
         this.setState({
           needPreviewUpdate: true
         });
-        _components_OModal__WEBPACK_IMPORTED_MODULE_8__["default"].getInstance().showModal('alertUpdateAttributes', true);
+        _components_OModal__WEBPACK_IMPORTED_MODULE_8__["default"].getInstance().showModal("alertUpdateAttributes", true);
       }
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
       icon: "update"
@@ -14882,7 +14887,7 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
       onMouseDown: () => {
         _components_OEditorApp__WEBPACK_IMPORTED_MODULE_7__["default"].getInstance().open(this);
         if (this.getReusableBlock() != null) {
-          _components_OModal__WEBPACK_IMPORTED_MODULE_8__["default"].getInstance().showModal('alertReusableBlock', true);
+          _components_OModal__WEBPACK_IMPORTED_MODULE_8__["default"].getInstance().showModal("alertReusableBlock", true);
         }
       }
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
@@ -14890,11 +14895,11 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
     }), " Edit");
   }
   renderRemoveModal() {
-    return this.displayModal('removeSubmitted') && typeof this.props.removeBlock != "undefined" ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Modal__WEBPACK_IMPORTED_MODULE_6__.WpeModal, {
+    return this.displayModal("removeSubmitted") && typeof this.props.removeBlock != "undefined" ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Modal__WEBPACK_IMPORTED_MODULE_6__.WpeModal, {
       key: this.props.clientId + "-removeBlockWpeModal",
       id: this.props.clientId + "-removeBlockWpeModal",
       title: 'Confirm "' + this.title + '" suppression',
-      onClose: () => this.hideModal('removeSubmitted'),
+      onClose: () => this.hideModal("removeSubmitted"),
       hasFooter: false,
       type: "warning"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "Are you sure you want to remove this block ?"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -14904,7 +14909,7 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
       variant: "primary",
       onMouseDown: () => {
-        this.hideModal('removeSubmitted');
+        this.hideModal("removeSubmitted");
         _components_OEditorApp__WEBPACK_IMPORTED_MODULE_7__["default"].getInstance().hide();
         this.props.removeBlock(this.props.clientId);
       }
@@ -14914,7 +14919,7 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
       className: "row"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
       variant: "link",
-      onMouseDown: () => this.hideModal('removeSubmitted')
+      onMouseDown: () => this.hideModal("removeSubmitted")
     }, "Cancel")))) : null;
   }
   render() {
@@ -15842,10 +15847,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _OEditorInspector__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./OEditorInspector */ "./src/js/components/OEditorInspector.tsx");
-/* harmony import */ var _OEditorSettings__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./OEditorSettings */ "./src/js/components/OEditorSettings.tsx");
-/* harmony import */ var _OEditorWelcome__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./OEditorWelcome */ "./src/js/components/OEditorWelcome.tsx");
-/* harmony import */ var _OEditorBlock__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./OEditorBlock */ "./src/js/components/OEditorBlock.tsx");
+/* harmony import */ var _OEditorBlock__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./OEditorBlock */ "./src/js/components/OEditorBlock.tsx");
+/* harmony import */ var _OEditorInspector__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./OEditorInspector */ "./src/js/components/OEditorInspector.tsx");
+/* harmony import */ var _OEditorSettings__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./OEditorSettings */ "./src/js/components/OEditorSettings.tsx");
+/* harmony import */ var _OEditorWelcome__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./OEditorWelcome */ "./src/js/components/OEditorWelcome.tsx");
 /* harmony import */ var _global__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../global */ "./src/js/global.js");
 /* harmony import */ var _OModal__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./OModal */ "./src/js/components/OModal.tsx");
 /* harmony import */ var _OUserPreferences__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./OUserPreferences */ "./src/js/components/OUserPreferences.tsx");
@@ -15865,7 +15870,7 @@ class OEditorApp extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Compone
     return this._instance;
   }
   static exists() {
-    return typeof this._instance != 'undefined';
+    return typeof this._instance != "undefined";
   }
   constructor(props) {
     super(props);
@@ -15897,11 +15902,32 @@ class OEditorApp extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Compone
   }
   _initMouseEvents() {}
   _initShortcuts() {
-    // listen for escape to close the editor
+    // let isEditing = false;
+    // // listen for escape to close the editor
+    // document.addEventListener("focusin", (e) => {
+    //     if (
+    //         e.target.tagName === "TEXTAREA" ||
+    //         e.target.tagName === "INPUT"
+    //     ) {
+    //         isEditing = true;
+    //         console.log("EDITING", isEditing);
+    //     }
+    // });
+    // document.addEventListener("focusout", (e) => {
+    //     if (
+    //         e.target.tagName === "TEXTAREA" ||
+    //         e.target.tagName === "INPUT"
+    //     ) {
+    //         setTimeout(() => {
+    //             // isEditing = false;
+    //             console.log("__EDITING", isEditing);
+    //         }, 1000);
+    //     }
+    // });
     // document.addEventListener("keyup", (e) => {
-    //     if (e.key === "Escape") {
+    //     if (e.key === "Escape" && !isEditing) {
     //         e.preventDefault();
-    //         this.close();
+    //         this.goInspector();
     //     }
     // });
 
@@ -15920,9 +15946,16 @@ class OEditorApp extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Compone
     });
   }
   _hideEditorLoadingZone() {
-    document.querySelector(".o-editor-loading-zone").classList.add("hide");
+    const $loadingZone = document.querySelector(".o-editor-loading-zone");
+    if (!$loadingZone) {
+      return;
+    }
+    $loadingZone.classList.add("hide");
     setTimeout(() => {
-      document.querySelector(".o-editor-loading-zone").classList.add("close");
+      $loadingZone.classList.add("close");
+      setTimeout(() => {
+        $loadingZone.remove();
+      }, 500);
     }, 1000);
   }
   _showEditorApp() {
@@ -15933,11 +15966,11 @@ class OEditorApp extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Compone
   _routing() {
     if (document.location.hash === "#settings") {
       this.setState({
-        route: 'settings'
+        route: "settings"
       });
     } else if (document.location.hash === "#help") {
       this.setState({
-        route: 'help'
+        route: "help"
       });
     } else {
       const anchorDetection = document.location.hash?.match(/^#([a-zA-Z0-9-]+)/);
@@ -15979,7 +16012,7 @@ class OEditorApp extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Compone
   }
   forceSelectComponent(component) {
     // If clientId given, get the block instance related
-    if (typeof component == 'string') {
+    if (typeof component == "string") {
       for (var i in _global__WEBPACK_IMPORTED_MODULE_7__["default"].componentInstances) {
         if (_global__WEBPACK_IMPORTED_MODULE_7__["default"].componentInstances[i].props.clientId == component) {
           component = _global__WEBPACK_IMPORTED_MODULE_7__["default"].componentInstances[i];
@@ -15987,16 +16020,16 @@ class OEditorApp extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Compone
         }
       }
     }
-    if (typeof component == 'string') {
+    if (typeof component == "string") {
       return;
     }
     this.props.context.selectBlock(component.props.clientId);
   }
   refreshScroll() {
     if (this.props.context.selectedBlockClientId != undefined) {
-      document.querySelector('#block-' + this.props.context.selectedBlockClientId)?.scrollIntoView({
-        behavior: 'smooth',
-        block: 'center'
+      document.querySelector("#block-" + this.props.context.selectedBlockClientId)?.scrollIntoView({
+        behavior: "smooth",
+        block: "center"
       });
     }
   }
@@ -16018,7 +16051,7 @@ class OEditorApp extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Compone
     this._$editApp.classList.add("hide");
   }
   renderBreadcrumb() {
-    return this.state.route != null || this.props.context.selectedBlockClientId != undefined && typeof _global__WEBPACK_IMPORTED_MODULE_7__["default"].componentInstances[this.props.context.selectedBlockClientId] != 'undefined' ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    return this.state.route != null || this.props.context.selectedBlockClientId != undefined && typeof _global__WEBPACK_IMPORTED_MODULE_7__["default"].componentInstances[this.props.context.selectedBlockClientId] != "undefined" ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "breadcrumb"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Button, {
       key: "breadcrumb-home",
@@ -16030,14 +16063,14 @@ class OEditorApp extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Compone
   }
   render() {
     switch (this.state.route) {
-      case 'settings':
-        var componentToRender = new _OEditorSettings__WEBPACK_IMPORTED_MODULE_4__["default"]();
+      case "settings":
+        var componentToRender = new _OEditorSettings__WEBPACK_IMPORTED_MODULE_5__["default"]();
         break;
-      case 'help':
-        var componentToRender = new _OEditorWelcome__WEBPACK_IMPORTED_MODULE_5__["default"]();
+      case "help":
+        var componentToRender = new _OEditorWelcome__WEBPACK_IMPORTED_MODULE_6__["default"]();
         break;
       default:
-        var componentToRender = this.props.context.selectedBlockClientId != undefined && typeof _global__WEBPACK_IMPORTED_MODULE_7__["default"].componentInstances[this.props.context.selectedBlockClientId] != 'undefined' ? new _OEditorBlock__WEBPACK_IMPORTED_MODULE_6__["default"](_global__WEBPACK_IMPORTED_MODULE_7__["default"].componentInstances[this.props.context.selectedBlockClientId]) : new _OEditorInspector__WEBPACK_IMPORTED_MODULE_3__["default"](this.props.context.blocksList, this.props.context.selectBlock);
+        var componentToRender = this.props.context.selectedBlockClientId != undefined && typeof _global__WEBPACK_IMPORTED_MODULE_7__["default"].componentInstances[this.props.context.selectedBlockClientId] != "undefined" ? new _OEditorBlock__WEBPACK_IMPORTED_MODULE_3__["default"](_global__WEBPACK_IMPORTED_MODULE_7__["default"].componentInstances[this.props.context.selectedBlockClientId]) : new _OEditorInspector__WEBPACK_IMPORTED_MODULE_4__["default"](this.props.context.blocksList, this.props.context.selectBlock);
     }
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("section", {
       key: "o-editor-app",
@@ -16129,13 +16162,13 @@ class OEditorInspector {
     this.selectBlock = selectBlock;
   }
   renderTitle() {
-    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h2", null, "Editor Blocks List");
+    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h2", null, "Inspector");
   }
   renderTools() {
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Button, {
       key: "o-editor-zone-button-help",
       variant: "primary",
-      onMouseDown: () => _OEditorApp__WEBPACK_IMPORTED_MODULE_4__["default"].getInstance().routeTo('help')
+      onMouseDown: () => _OEditorApp__WEBPACK_IMPORTED_MODULE_4__["default"].getInstance().routeTo("help")
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Dashicon, {
       icon: "editor-help"
     }));
@@ -16151,7 +16184,7 @@ class OEditorInspector {
   }
 }
 const BlockList = props => {
-  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", null, typeof props.isChildren != 'undefined' && props.isChildren && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", null, typeof props.isChildren != "undefined" && props.isChildren && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "separator"
   }), props.blocksList.map(block => (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(BlockListItem, {
     block: block,
@@ -16166,8 +16199,8 @@ const BlockListItem = _ref => {
     selectBlock
   } = _ref;
   const anchor = block.attributes?.anchor;
-  const displayAnchor = typeof anchor != 'undefined' && anchor.match(/^[a-z0-9]+-[a-z0-9]+-[a-z0-9]+-[a-z0-9]+-[a-z0-9]+$/) == null;
-  const domBlock = document.querySelector('#block-' + block.clientId);
+  const displayAnchor = typeof anchor != "undefined" && anchor.match(/^[a-z0-9]+-[a-z0-9]+-[a-z0-9]+-[a-z0-9]+-[a-z0-9]+$/) == null;
+  const domBlock = document.querySelector("#block-" + block.clientId);
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", {
     key: "o-inspector-block-" + block.clientId
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Button, {
@@ -16175,13 +16208,13 @@ const BlockListItem = _ref => {
     className: "animate",
     onMouseOver: () => {
       domBlock?.scrollIntoView({
-        behavior: 'smooth',
-        block: 'center'
+        behavior: "smooth",
+        block: "center"
       });
-      domBlock?.classList.add('is-pre-selected');
+      domBlock?.classList.add("is-pre-selected");
     },
     onMouseOut: () => {
-      domBlock?.classList.remove('is-pre-selected');
+      domBlock?.classList.remove("is-pre-selected");
     },
     onMouseDown: () => {
       selectBlock(block.clientId);
@@ -16291,7 +16324,7 @@ class OEditorWelcome {
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Button, {
       key: "o-editor-help-settings",
       variant: "tertiary",
-      onMouseDown: () => _OEditorApp__WEBPACK_IMPORTED_MODULE_3__["default"].getInstance().routeTo('settings')
+      onMouseDown: () => _OEditorApp__WEBPACK_IMPORTED_MODULE_3__["default"].getInstance().routeTo("settings")
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Dashicon, {
       icon: "admin-settings"
     }), "User preferences")));
@@ -16378,11 +16411,11 @@ class OModal extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Component {
     });
   }
   alertUpdateAttributes() {
-    return this.displayModal('alertUpdateAttributes') ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Models_Modal__WEBPACK_IMPORTED_MODULE_3__.WpeModal, {
+    return this.displayModal("alertUpdateAttributes") ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Models_Modal__WEBPACK_IMPORTED_MODULE_3__.WpeModal, {
       key: "OModal-alertUpdateAttributes",
       id: "alertUpdateAttributesMessageWpeModal",
       title: "Updating preview...",
-      onClose: () => this.hideModal('alertUpdateAttributes'),
+      onClose: () => this.hideModal("alertUpdateAttributes"),
       hasFooter: false,
       type: "info"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "This preview update does not save the post.", (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("b", null, "Don't forget to save your changes!")), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -16392,7 +16425,7 @@ class OModal extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Component {
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
       key: "alertUpdateAttributesMessageButton",
       variant: "primary",
-      onMouseDown: () => this.hideModal('alertUpdateAttributes')
+      onMouseDown: () => this.hideModal("alertUpdateAttributes")
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
       icon: "yes"
     }), "All right!")), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -16404,11 +16437,11 @@ class OModal extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Component {
     })))) : null;
   }
   alertReusableBlock() {
-    return this.displayModal('alertReusableBlock') ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Models_Modal__WEBPACK_IMPORTED_MODULE_3__.WpeModal, {
+    return this.displayModal("alertReusableBlock") ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Models_Modal__WEBPACK_IMPORTED_MODULE_3__.WpeModal, {
       key: "OModal-alertReusableBlock",
       id: "alertReusableBlockMessageWpeModal",
       title: "Reusable block",
-      onClose: () => this.hideModal('alertReusableBlock'),
+      onClose: () => this.hideModal("alertReusableBlock"),
       hasFooter: false,
       type: "warning"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "This block is part of a ", (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("b", null, "reusable block"), " composition.", (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), "Updating this block will", " ", (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("b", null, "apply the changes everywhere it is used.")), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -16418,7 +16451,7 @@ class OModal extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Component {
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
       key: "alertReusableBlockMessageButton",
       variant: "primary",
-      onMouseDown: () => this.hideModal('alertReusableBlock')
+      onMouseDown: () => this.hideModal("alertReusableBlock")
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
       icon: "yes"
     }), "All right!")), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -16474,7 +16507,7 @@ class OUserPreferences extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
       let jsonStorage = JSON.parse(storage);
       if (typeof jsonStorage == "object") {
         for (var i in this.state) {
-          if (typeof jsonStorage[i] != 'undefined') {
+          if (typeof jsonStorage[i] != "undefined") {
             this.setState({
               [i]: jsonStorage[i]
             });
@@ -16484,7 +16517,7 @@ class OUserPreferences extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
     }
   }
   getUserPreferences(preference) {
-    return typeof this.state[preference] != 'undefined' ? this.state[preference] : null;
+    return typeof this.state[preference] != "undefined" ? this.state[preference] : null;
   }
   updateUserPreferences(preference) {
     let value = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
@@ -16498,18 +16531,18 @@ class OUserPreferences extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
   }
   render() {
     const render = [];
-    if (typeof this.props.preference != 'undefined' && typeof this.props.context != 'undefined') {
+    if (typeof this.props.preference != "undefined" && typeof this.props.context != "undefined") {
       switch (this.props.context) {
         case "toggle":
           render.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.ToggleControl, {
-            label: typeof this.props.label != 'undefined' ? this.props.label : this.props.preference,
+            label: typeof this.props.label != "undefined" ? this.props.label : this.props.preference,
             checked: this.getUserPreferences(this.props.preference),
             onChange: () => this.updateUserPreferences(this.props.preference)
           }));
           break;
         case "checkbox":
           render.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.CheckboxControl, {
-            label: typeof this.props.label != 'undefined' ? this.props.label : this.props.preference,
+            label: typeof this.props.label != "undefined" ? this.props.label : this.props.preference,
             checked: !this.getUserPreferences(this.props.preference),
             onChange: () => this.updateUserPreferences(this.props.preference)
           }));

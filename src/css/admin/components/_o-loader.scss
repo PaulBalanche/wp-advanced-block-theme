@@ -1,0 +1,63 @@
+@keyframes o-loader {
+    0% {
+        border-width: 0.2em;
+        border-radius: 50% 45% 40% 40%;
+        transform: translate(-50%, -45%) scale(0.5) rotateX(-25deg) rotateY(0)
+            rotateZ(10deg) skewY(0);
+    }
+    20% {
+        border-width: 0.1em;
+        border-radius: 45% 50% 50% 50%;
+        transform: translate(-47%, -50%) scale(0.6) rotateX(10deg)
+            rotateY(10deg) rotateZ(-5deg) skewY(10deg);
+    }
+    40% {
+        border-width: 0.2em;
+        border-radius: 45% 40% 60% 40%;
+        transform: translate(-45%, -50%) scale(0.5) rotateX(0deg) rotateY(30deg)
+            rotateZ(10deg) skewY(-10deg);
+    }
+    60% {
+        border-width: 0.15em;
+        border-radius: 50% 45% 45% 50%;
+        transform: translate(-53%, -55%) scale(0.5) rotateX(25deg)
+            rotateY(-20deg) rotateZ(-20deg) skewY(0);
+    }
+    80% {
+        border-width: 0.15em;
+        border-radius: 45% 40% 50% 40%;
+        transform: translate(-45%, -55%) scale(0.5) rotateX(30deg)
+            rotateY(10deg) rotateZ(-15deg) skewY(0);
+    }
+    100% {
+        border-width: 0.2em;
+        border-radius: 50% 45% 40% 40%;
+        transform: translate(-50%, -45%) scale(0.5) rotateX(-25deg) rotateY(0)
+            rotateZ(10deg) skewY(0);
+    }
+}
+
+.o-loader {
+    width: 1em;
+    height: 1em;
+    font-size: 50px;
+    background: $o-accent-color;
+    border-radius: 0.4em;
+    position: relative;
+    perspective: 1.5em;
+
+    &:after {
+        content: "";
+        display: block;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 1em;
+        height: 1em;
+        border: 0.2em solid white;
+        border-radius: 50% 45% 40% 40%;
+        transform: translate(-50%, -50%) scale(0.5) rotateX(-25deg) rotateY(0)
+            rotateZ(0);
+        animation: o-loader 2s cubic-bezier(0.955, 0.01, 0.075, 0.99) infinite;
+    }
+}

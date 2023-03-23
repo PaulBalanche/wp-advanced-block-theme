@@ -9,7 +9,7 @@
     border-radius: $o-border-radius;
     z-index: 99999;
     box-sizing: border-box;
-    transition: all .2s ease-out;
+    transition: all 0.2s ease-out;
     display: flex;
     flex-direction: column;
     box-shadow: $o-depth-100;
@@ -24,7 +24,7 @@
         width: 800px;
         height: calc(100vh - 61px - 2 * $o-space-50);
     }
-    
+
     &.settings {
         width: 480px;
         height: 380px;
@@ -55,11 +55,11 @@
     &.is-updating {
         ._loader {
             opacity: 1;
-        }   
+        }
     }
 
     .o-editor.hide & {
-        right: -500px;
+        right: -840px;
         box-shadow: none;
     }
 
@@ -70,7 +70,7 @@
     }
 
     &_header {
-        padding: $o-space-40 $o-space-70 $o-space-30 $o-space-70;
+        padding: $o-space-40 $o-space-60 $o-space-40 $o-space-70;
         background: $o-accent-color;
         border-top-left-radius: $o-border-radius;
         border-top-right-radius: $o-border-radius;
@@ -78,7 +78,6 @@
         align-items: center;
 
         .breadcrumb {
-            
             display: flex;
             align-items: center;
             margin-bottom: $o-space-10;
@@ -101,12 +100,12 @@
                 transition-duration: 0.05s;
                 transition-timing-function: ease-in-out;
             }
-            
         }
-        
+
         h2 {
             color: $o-foreground-color;
             margin: 0;
+            font-size: 26px;
 
             .subtitle {
                 padding-left: $o-space-20;
@@ -117,7 +116,11 @@
 
         .tools {
             margin-left: auto;
-            
+
+            .dashicon {
+                margin: 0 !important;
+            }
+
             .components-dropdown-menu__toggle {
                 color: $o-foreground-color;
 
@@ -177,13 +180,12 @@
         border-bottom-left-radius: $o-border-radius;
         border-bottom-right-radius: $o-border-radius;
         border-top: 1px solid $o-main-color-border;
-        gap: $o-space-30;    
+        gap: $o-space-30;
     }
 
     &.is-reusable {
-
         .o-editor-app_header {
-            background: $o-warn-color;
+            background: $o-complementary-color;
         }
 
         .components-dropdown-menu__toggle {
@@ -199,15 +201,16 @@
         }
     }
 
-    &.inspector, &.help, &.settings {
-
+    &.inspector,
+    &.help,
+    &.settings {
         li > ul {
             padding: 0 0 0 $o-space-30;
         }
 
         ul {
             margin: 0;
-            
+
             .separator {
                 height: 1px;
                 border-bottom: 1px solid $border300;
@@ -233,7 +236,7 @@
             padding: $o-space-20 0;
             font-weight: 500;
             font-size: 1.1em;
-            
+
             &.animate {
                 transform: translate(-20px, 0);
                 transition: $o-transition-fast;
@@ -257,7 +260,6 @@
         }
     }
 
-
     &.help {
         .is-tertiary {
             font-weight: initial;
@@ -272,7 +274,6 @@
     }
 
     &.settings {
-        
         li:not(.separator) {
             padding: $o-space-30 0;
         }
@@ -282,14 +283,11 @@
         }
     }
 
-    
-
     .block &_body {
         padding: 0;
     }
 
     .is-reusable-block &_body {
-
         &::-webkit-scrollbar {
             width: 8px;
         }
@@ -297,23 +295,21 @@
             background-color: white;
         }
         &::-webkit-scrollbar-thumb {
-            background: $o-warn-color;
+            background: $o-complementary-color;
         }
 
         .description {
             background: $o-warn-color-light;
         }
     }
-    
+
     .is-reusable-block &_footer {
-        
         .components-button.is-primary {
-            background: $o-warn-color;
+            background: $o-complementary-color;
 
             &:hover {
-                background: $o-warn-color-dark;
+                background: $o-complementary-color-dark;
             }
-
         }
     }
 }

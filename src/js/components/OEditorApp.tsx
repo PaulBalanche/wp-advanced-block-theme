@@ -63,11 +63,32 @@ export default class OEditorApp extends Component {
     _initMouseEvents() {}
 
     _initShortcuts() {
-        // listen for escape to close the editor
+        // let isEditing = false;
+        // // listen for escape to close the editor
+        // document.addEventListener("focusin", (e) => {
+        //     if (
+        //         e.target.tagName === "TEXTAREA" ||
+        //         e.target.tagName === "INPUT"
+        //     ) {
+        //         isEditing = true;
+        //         console.log("EDITING", isEditing);
+        //     }
+        // });
+        // document.addEventListener("focusout", (e) => {
+        //     if (
+        //         e.target.tagName === "TEXTAREA" ||
+        //         e.target.tagName === "INPUT"
+        //     ) {
+        //         setTimeout(() => {
+        //             // isEditing = false;
+        //             console.log("__EDITING", isEditing);
+        //         }, 1000);
+        //     }
+        // });
         // document.addEventListener("keyup", (e) => {
-        //     if (e.key === "Escape") {
+        //     if (e.key === "Escape" && !isEditing) {
         //         e.preventDefault();
-        //         this.close();
+        //         this.goInspector();
         //     }
         // });
 
@@ -87,11 +108,16 @@ export default class OEditorApp extends Component {
     }
 
     _hideEditorLoadingZone() {
-        document.querySelector(".o-editor-loading-zone").classList.add("hide");
+        const $loadingZone = document.querySelector(".o-editor-loading-zone");
+        if (!$loadingZone) {
+            return;
+        }
+        $loadingZone.classList.add("hide");
         setTimeout(() => {
-            document
-                .querySelector(".o-editor-loading-zone")
-                .classList.add("close");
+            $loadingZone.classList.add("close");
+            setTimeout(() => {
+                $loadingZone.remove();
+            }, 500);
         }, 1000);
     }
 

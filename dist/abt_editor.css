@@ -166,6 +166,26 @@
   margin-top: 40px;
 }
 
+@keyframes o-loading-in {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes o-loading-out {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+}
 .o-editor-loading-zone {
   position: fixed;
   background: white;
@@ -174,24 +194,33 @@
   top: 61px;
   bottom: 0;
   z-index: 1;
-  transition: all 0.6s ease-in-out;
+  transition: all 0.1s ease-in-out;
+  overflow: hidden;
+  opacity: 1;
 }
-.o-editor-loading-zone .o-editor-loading-zone-inner {
+.o-editor-loading-zone ._inner {
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
   height: 100%;
-  opacity: 1;
-  transition: all 0.6s ease-in-out;
-}
-.o-editor-loading-zone.hide {
-  bottom: calc(100vh - 61px);
-}
-.o-editor-loading-zone.hide .o-editor-loading-zone-inner {
   opacity: 0;
+  transition: all 0.1s ease-in-out;
+  animation: o-loading-in 0.2s ease-in-out forwards;
+  animation-delay: 0.3s;
+}
+.o-editor-loading-zone ._inner span {
+  color: var(--wp-admin-theme-color);
+}
+.o-editor-loading-zone .o-loader {
+  font-size: 75px;
+}
+.o-editor-loading-zone.hide ._inner {
+  animation: o-loading-out 0.2s ease-in-out forwards;
 }
 .o-editor-loading-zone.close {
-  display: none;
+  opacity: 0;
+  pointer-events: none;
 }
 
 .o-editor-app {
@@ -246,7 +275,7 @@
   opacity: 1;
 }
 .o-editor.hide .o-editor-app {
-  right: -500px;
+  right: -840px;
   box-shadow: none;
 }
 .o-editor-app_inner {
@@ -255,7 +284,7 @@
   height: 100%;
 }
 .o-editor-app_header {
-  padding: 24px 42px 18px 42px;
+  padding: 24px 36px 24px 42px;
   background: var(--wp-admin-theme-color);
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
@@ -286,6 +315,7 @@
 .o-editor-app_header h2 {
   color: rgb(255, 255, 255);
   margin: 0;
+  font-size: 26px;
 }
 .o-editor-app_header h2 .subtitle {
   padding-left: 12px;
@@ -294,6 +324,9 @@
 }
 .o-editor-app_header .tools {
   margin-left: auto;
+}
+.o-editor-app_header .tools .dashicon {
+  margin: 0 !important;
 }
 .o-editor-app_header .tools .components-dropdown-menu__toggle {
   color: rgb(255, 255, 255);
@@ -348,7 +381,7 @@
   gap: 18px;
 }
 .o-editor-app.is-reusable .o-editor-app_header {
-  background: #EBCF6B;
+  background: #a68de3;
 }
 .o-editor-app.is-reusable .components-dropdown-menu__toggle {
   color: rgb(255, 255, 255);
@@ -431,16 +464,71 @@
   background-color: white;
 }
 .is-reusable-block .o-editor-app_body::-webkit-scrollbar-thumb {
-  background: #EBCF6B;
+  background: #a68de3;
 }
 .is-reusable-block .o-editor-app_body .description {
-  background: #FCF2DE;
+  background: #ffe7a7;
 }
 .is-reusable-block .o-editor-app_footer .components-button.is-primary {
-  background: #EBCF6B;
+  background: #a68de3;
 }
 .is-reusable-block .o-editor-app_footer .components-button.is-primary:hover {
-  background: #EBCF6B;
+  background: #866ec1;
+}
+
+@keyframes o-loader {
+  0% {
+    border-width: 0.2em;
+    border-radius: 50% 45% 40% 40%;
+    transform: translate(-50%, -45%) scale(0.5) rotateX(-25deg) rotateY(0) rotateZ(10deg) skewY(0);
+  }
+  20% {
+    border-width: 0.1em;
+    border-radius: 45% 50% 50% 50%;
+    transform: translate(-47%, -50%) scale(0.6) rotateX(10deg) rotateY(10deg) rotateZ(-5deg) skewY(10deg);
+  }
+  40% {
+    border-width: 0.2em;
+    border-radius: 45% 40% 60% 40%;
+    transform: translate(-45%, -50%) scale(0.5) rotateX(0deg) rotateY(30deg) rotateZ(10deg) skewY(-10deg);
+  }
+  60% {
+    border-width: 0.15em;
+    border-radius: 50% 45% 45% 50%;
+    transform: translate(-53%, -55%) scale(0.5) rotateX(25deg) rotateY(-20deg) rotateZ(-20deg) skewY(0);
+  }
+  80% {
+    border-width: 0.15em;
+    border-radius: 45% 40% 50% 40%;
+    transform: translate(-45%, -55%) scale(0.5) rotateX(30deg) rotateY(10deg) rotateZ(-15deg) skewY(0);
+  }
+  100% {
+    border-width: 0.2em;
+    border-radius: 50% 45% 40% 40%;
+    transform: translate(-50%, -45%) scale(0.5) rotateX(-25deg) rotateY(0) rotateZ(10deg) skewY(0);
+  }
+}
+.o-loader {
+  width: 1em;
+  height: 1em;
+  font-size: 50px;
+  background: var(--wp-admin-theme-color);
+  border-radius: 0.4em;
+  position: relative;
+  perspective: 1.5em;
+}
+.o-loader:after {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 1em;
+  height: 1em;
+  border: 0.2em solid white;
+  border-radius: 50% 45% 40% 40%;
+  transform: translate(-50%, -50%) scale(0.5) rotateX(-25deg) rotateY(0) rotateZ(0);
+  animation: o-loader 2s cubic-bezier(0.955, 0.01, 0.075, 0.99) infinite;
 }
 
 .o-preview-iframe {
@@ -971,7 +1059,7 @@
   border-top-right-radius: 10px;
 }
 .o-edit-zone_header:has(.is-reusable) {
-  background: #EBCF6B;
+  background: #a68de3;
 }
 .o-edit-zone_header h2 {
   color: rgb(255, 255, 255);
@@ -1042,10 +1130,10 @@
   background-color: white;
 }
 .is-reusable-block .o-edit-zone_body::-webkit-scrollbar-thumb {
-  background: #EBCF6B;
+  background: #a68de3;
 }
 .is-reusable-block .o-edit-zone_body .description {
-  background: #FCF2DE;
+  background: #ffe7a7;
 }
 .o-edit-zone_footer {
   display: flex;
@@ -1057,10 +1145,10 @@
   gap: 18px;
 }
 .is-reusable-block .o-edit-zone_footer .components-button.is-primary {
-  background: #EBCF6B;
+  background: #a68de3;
 }
 .is-reusable-block .o-edit-zone_footer .components-button.is-primary:hover {
-  background: #EBCF6B;
+  background: #866ec1;
 }
 
 .o-editor .wpe-component_edit_placeholder {
@@ -1198,6 +1286,17 @@
   transform: translateY(-50%) translateX(-50%);
   transition: all 0.3s ease-in-out;
 }
+.o-editor .o-toolbar-container .o-toolbar:after {
+  content: " ";
+  position: absolute;
+  border-style: solid;
+  border-color: white transparent transparent transparent;
+  top: calc(100% - 1px);
+  left: 35%;
+  margin-left: -12.5px;
+  border-width: 12.5px;
+  transform: skewX(-30deg);
+}
 .o-editor .o-toolbar-container .o-toolbar .separator {
   margin: 0 25px;
   width: 1px;
@@ -1207,14 +1306,14 @@
 .o-editor .o-toolbar-container .o-toolbar .title {
   font-size: 0.75em;
   font-weight: 600;
-  -webkit-padding-end: 18px;
-          padding-inline-end: 18px;
+  -webkit-padding-end: 6px;
+          padding-inline-end: 6px;
   -webkit-padding-start: 6px;
           padding-inline-start: 6px;
   color: rgba(0, 0, 0, 0.6);
 }
 .o-editor .o-toolbar-container .o-toolbar .title h2 {
-  color: #EBCF6B;
+  color: #ffb900;
 }
 .o-editor .o-toolbar-container .o-toolbar .is-primary {
   box-shadow: none;
@@ -1237,10 +1336,10 @@
   color: rgb(255, 255, 255);
 }
 .o-editor .is-reusable .is-primary {
-  background: #EBCF6B;
+  background: #a68de3;
 }
 .o-editor .is-reusable .is-primary:hover {
-  background: #EBCF6B;
+  background: #866ec1;
 }
 .o-editor .wp-block.block-list-appender {
   border: 1px dashed var(--wp-admin-theme-color);
@@ -1869,7 +1968,7 @@
   border-color: #d8eef8 !important;
 }
 .o-editor .block-editor-media-placeholder:focus {
-  border-color: #47A8E7 !important;
+  border-color: #47a8e7 !important;
 }
 .o-editor .block-editor-media-placeholder ~ .components-input-control__backdrop {
   display: none !important;
@@ -1888,7 +1987,7 @@
   border-color: #d8eef8 !important;
 }
 .o-editor .components-input-control__container .components-select-control__input:focus {
-  border-color: #47A8E7 !important;
+  border-color: #47a8e7 !important;
 }
 .o-editor .components-input-control__container .components-select-control__input ~ .components-input-control__backdrop {
   display: none !important;
@@ -1910,7 +2009,7 @@
   border-color: #d8eef8 !important;
 }
 .o-editor .components-text-control__input:focus {
-  border-color: #47A8E7 !important;
+  border-color: #47a8e7 !important;
 }
 .o-editor .components-text-control__input ~ .components-input-control__backdrop {
   display: none !important;
@@ -1929,7 +2028,7 @@
   border-color: #d8eef8 !important;
 }
 .o-editor .components-textarea-control__input:focus {
-  border-color: #47A8E7 !important;
+  border-color: #47a8e7 !important;
 }
 .o-editor .components-textarea-control__input ~ .components-input-control__backdrop {
   display: none !important;

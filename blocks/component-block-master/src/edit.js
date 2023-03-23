@@ -54,13 +54,18 @@ class WpeComponent extends WpeComponentBase {
         // it seems that it's a bad idea cause it's slower...
         // (async () => {
         //     if (!this._$iframes) {
-        //         this._$iframes = Array.from(document.querySelectorAll('.o-preview-iframe') ?? []);
+        //         this._$iframes = Array.from(
+        //             document.querySelectorAll(".o-preview-iframe") ?? []
+        //         );
         //         for (let [idx, $iframe] of this._$iframes.entries()) {
         //             await new Promise((resolve) => {
-        //                 $iframe.addEventListener('load', () => {
+        //                 $iframe.addEventListener("load", () => {
         //                     resolve();
         //                 });
-        //                 $iframe.setAttribute('src', $iframe.getAttribute('data-src'));
+        //                 $iframe.setAttribute(
+        //                     "src",
+        //                     $iframe.getAttribute("data-src")
+        //                 );
         //             });
         //         }
         //     }
@@ -281,7 +286,9 @@ export default (block_spec, current_user_can_edit_posts, theme_spec) =>
                           )
                         : null,
                 parentsBlock,
-                blockInstance: select("core/block-editor").getBlock(props.clientId)
+                blockInstance: select("core/block-editor").getBlock(
+                    props.clientId
+                ),
             };
         }),
         withDispatch((dispatch) => {

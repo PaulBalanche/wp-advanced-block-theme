@@ -13,7 +13,7 @@ export default class OEditorInspector {
     }
 
     renderTitle() {
-        return <h2>Editor Blocks List</h2>;
+        return <h2>Inspector</h2>;
     }
 
     renderTools() {
