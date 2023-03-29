@@ -69,7 +69,7 @@ export class WpeComponentBase extends Component {
         if (typeof this.props.parentsBlock == "object") {
             for (var i in this.props.parentsBlock) {
                 if (isReusableBlock(this.props.parentsBlock[i])) {
-                    return this.props.parentsBlock[i];
+                    return this.props.parentsBlock[i].attributes.ref;
                 }
             }
         }
@@ -211,6 +211,42 @@ export class WpeComponentBase extends Component {
                     }
                 >
                     {groupSpecificTools}
+                </MenuGroup>
+            );
+        }
+
+        if ( this.getReusableBlock() != null ) {
+            menuGroup.push(
+                <MenuGroup
+                    key={this.props.clientId + "-toolsDropdownMenu-reusable"}
+                >
+                    <MenuItem
+                        key={
+                            this.props.clientId +
+                            "-toolsDropdownMenu-reusable-manage-all"
+                        }
+                        onClick={() => window.open(js_const.admin_url + 'edit.php?post_type=wp_block', "_blank")}
+                    >
+                        Manage all reusable blocks
+                    </MenuItem>
+                    <MenuItem
+                        key={
+                            this.props.clientId +
+                            "-toolsDropdownMenu-reusable-convert-to-regular"
+                        }
+                        onClick={() => window.open(js_const.admin_url + 'post.php?post=' + this.getReusableBlock() + '&action=edit', "_blank")}
+                    >
+                        Convert to regular blocks
+                    </MenuItem>
+                    <MenuItem
+                        key={
+                            this.props.clientId +
+                            "-toolsDropdownMenu-reusable-manage"
+                        }
+                        onClick={() => window.open(js_const.admin_url + 'post.php?post=' + this.getReusableBlock() + '&action=edit', "_blank")}
+                    >
+                        Manage this reusable block
+                    </MenuItem>
                 </MenuGroup>
             );
         }

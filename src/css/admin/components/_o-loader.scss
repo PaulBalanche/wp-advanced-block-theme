@@ -58,6 +58,6 @@
         border-radius: 50% 45% 40% 40%;
         transform: translate(-50%, -50%) scale(0.5) rotateX(-25deg) rotateY(0)
             rotateZ(0);
-        animation: o-loader 2s cubic-bezier(0.955, 0.01, 0.075, 0.99) infinite;
+        animation: o-loader 2s linear infinite;
     }
 }

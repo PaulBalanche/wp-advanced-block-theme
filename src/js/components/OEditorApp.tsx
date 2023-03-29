@@ -58,6 +58,26 @@ export default class OEditorApp extends Component {
         for (var i in globalData.componentInstances) {
             globalData.componentInstances[i].forceUpdate();
         }
+
+        // Force first of reusable block selection
+        if (this.props.context.selectedBlockClientId != null) {
+            for (var i in this.props.context.blocksList) {
+                if (
+                    this.props.context.blocksList[i].clientId ==
+                        this.props.context.selectedBlockClientId &&
+                    typeof this.props.context.blocksList[i].isReusable !=
+                        "undefined" &&
+                    this.props.context.blocksList[i].isReusable &&
+                    typeof this.props.context.blocksList[i].children !=
+                        "undefined" &&
+                    this.props.context.blocksList[i].children.length > 0
+                ) {
+                    this.props.context.selectBlock(
+                        this.props.context.blocksList[i].children[0].clientId
+                    );
+                }
+            }
+        }
     }
 
     _initMouseEvents() {}

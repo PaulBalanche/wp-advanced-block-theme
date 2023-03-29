@@ -528,7 +528,7 @@
   border: 0.2em solid white;
   border-radius: 50% 45% 40% 40%;
   transform: translate(-50%, -50%) scale(0.5) rotateX(-25deg) rotateY(0) rotateZ(0);
-  animation: o-loader 2s cubic-bezier(0.955, 0.01, 0.075, 0.99) infinite;
+  animation: o-loader 2s linear infinite;
 }
 
 .o-preview-iframe {
@@ -1256,7 +1256,10 @@
 .o-editor .is-root-container:has(.block-editor-block-list__block.is-selected) .has-child-selected .block-editor-block-list__block:not(.is-selected):not(.has-child-selected):not(.is-selected > .block-editor-block-list__block):not(:hover) {
   opacity: 0.1;
 }
-.o-editor .is-root-container:has(.block-editor-block-list__block.is-pre-selected) .block-editor-block-list__block:not(.is-pre-selected):not(.is-pre-selected .block-editor-block-list__block):not(.block-editor-block-list__block .block-editor-block-list__block):not(:hover) {
+.o-editor .is-root-container:has(.block-editor-block-list__block.is-pre-selected) .block-editor-block-list__block:not(.is-pre-selected):not(.has-child-pre-selected):not(.is-pre-selected .block-editor-block-list__block):not(.block-editor-block-list__block .block-editor-block-list__block):not(:hover) {
+  opacity: 0.5;
+}
+.o-editor .is-root-container:has(.block-editor-block-list__block.is-pre-selected) .has-child-pre-selected .block-editor-block-list__block:not(.is-pre-selected):not(.has-child-pre-selected):not(.is-pre-selected > .block-editor-block-list__block):not(:hover) {
   opacity: 0.5;
 }
 .o-editor .o-toolbar-container {

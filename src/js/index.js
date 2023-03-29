@@ -76,6 +76,30 @@ function OEditorAppDisplay(props) {
 const OEditorAppContext = compose([
     withSelect((select) => {
         const blocksList = select("core/block-editor").getBlocks();
+        for (var i in blocksList) {
+            if (
+                blocksList[i].name == "core/block" &&
+                typeof blocksList[i].attributes.ref != "undefined" &&
+                blocksList[i].innerBlocks == 0
+            ) {
+                let wpReusableBlock = select("core").getEntityRecord(
+                    "postType",
+                    "wp_block",
+                    blocksList[i].attributes.ref
+                );
+                if (typeof wpReusableBlock != "undefined") {
+                    blocksList[i].postName = wpReusableBlock.title.raw;
+                }
+
+                let childrenBlocksList = select("core/block-editor").getBlocks(
+                    blocksList[i].clientId
+                );
+                if (childrenBlocksList.length > 0) {
+                    blocksList[i].isReusable = true;
+                    blocksList[i].children = childrenBlocksList;
+                }
+            }
+        }
         const selectedBlockClientId =
             select("core/block-editor").getSelectedBlockClientId();
 

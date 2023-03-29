@@ -68,6 +68,20 @@ const BlockListItem = ({ block, selectBlock }) => {
         anchor.match(/^[a-z0-9]+-[a-z0-9]+-[a-z0-9]+-[a-z0-9]+-[a-z0-9]+$/) ==
             null;
     const domBlock = document.querySelector("#block-" + block.clientId);
+    
+    const parentDomBlocks = [];
+    var closestParent = domBlock;
+    while( true ) {
+        closestParent = closestParent.parentNode;
+        if( closestParent.classList.contains('is-root-container') ) {
+            break;
+        }
+        if( closestParent.classList.contains('block-editor-block-list__block') ) {
+            parentDomBlocks.push(closestParent);
+        }
+    }
+
+    const blockName = ( block.name == "core/block" && typeof block.postName != 'undefined' ) ? block.postName + " (" + getBlockType(block.name).title + ")" : getBlockType(block.name).title;
 
     return (
         <li key={"o-inspector-block-" + block.clientId}>
@@ -80,21 +94,34 @@ const BlockListItem = ({ block, selectBlock }) => {
                         block: "center",
                     });
                     domBlock?.classList.add("is-pre-selected");
+                    for(var i in parentDomBlocks) {
+                        parentDomBlocks[i].classList.add("has-child-pre-selected");
+                    }
                 }}
                 onMouseOut={() => {
                     domBlock?.classList.remove("is-pre-selected");
+                    for(var i in parentDomBlocks) {
+                        parentDomBlocks[i].classList.remove("has-child-pre-selected");
+                    }
                 }}
                 onMouseDown={() => {
                     selectBlock(block.clientId);
                 }}
             >
                 <Dashicon icon="arrow-right-alt2" />
-                {getBlockType(block.name).title}
+                {blockName}
                 {displayAnchor && <span className="anchor">#{anchor}</span>}
             </Button>
             {block.innerBlocks.length > 0 && (
                 <BlockList
                     blocksList={block.innerBlocks}
+                    selectBlock={selectBlock}
+                    isChildren={true}
+                />
+            )}
+            { typeof block.children != 'undefined' && (
+                <BlockList
+                    blocksList={block.children}
                     selectBlock={selectBlock}
                     isChildren={true}
                 />

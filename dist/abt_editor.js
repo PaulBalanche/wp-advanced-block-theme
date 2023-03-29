@@ -14607,7 +14607,7 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
     if (typeof this.props.parentsBlock == "object") {
       for (var i in this.props.parentsBlock) {
         if ((0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_4__.isReusableBlock)(this.props.parentsBlock[i])) {
-          return this.props.parentsBlock[i];
+          return this.props.parentsBlock[i].attributes.ref;
         }
       }
     }
@@ -14676,6 +14676,20 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
       menuGroup.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.MenuGroup, {
         key: this.props.clientId + "-toolsDropdownMenu-SpecificTools"
       }, groupSpecificTools));
+    }
+    if (this.getReusableBlock() != null) {
+      menuGroup.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.MenuGroup, {
+        key: this.props.clientId + "-toolsDropdownMenu-reusable"
+      }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.MenuItem, {
+        key: this.props.clientId + "-toolsDropdownMenu-reusable-manage-all",
+        onClick: () => window.open(js_const.admin_url + 'edit.php?post_type=wp_block', "_blank")
+      }, "Manage all reusable blocks"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.MenuItem, {
+        key: this.props.clientId + "-toolsDropdownMenu-reusable-convert-to-regular",
+        onClick: () => window.open(js_const.admin_url + 'post.php?post=' + this.getReusableBlock() + '&action=edit', "_blank")
+      }, "Convert to regular blocks"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.MenuItem, {
+        key: this.props.clientId + "-toolsDropdownMenu-reusable-manage",
+        onClick: () => window.open(js_const.admin_url + 'post.php?post=' + this.getReusableBlock() + '&action=edit', "_blank")
+      }, "Manage this reusable block")));
     }
     if (typeof this.props.removeBlock != "undefined") {
       menuGroup.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.MenuGroup, {
@@ -15899,6 +15913,15 @@ class OEditorApp extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Compone
     for (var i in _global__WEBPACK_IMPORTED_MODULE_7__["default"].componentInstances) {
       _global__WEBPACK_IMPORTED_MODULE_7__["default"].componentInstances[i].forceUpdate();
     }
+
+    // Force first of reusable block selection
+    if (this.props.context.selectedBlockClientId != null) {
+      for (var i in this.props.context.blocksList) {
+        if (this.props.context.blocksList[i].clientId == this.props.context.selectedBlockClientId && typeof this.props.context.blocksList[i].isReusable != 'undefined' && this.props.context.blocksList[i].isReusable && typeof this.props.context.blocksList[i].children != 'undefined' && this.props.context.blocksList[i].children.length > 0) {
+          this.props.context.selectBlock(this.props.context.blocksList[i].children[0].clientId);
+        }
+      }
+    }
   }
   _initMouseEvents() {}
   _initShortcuts() {
@@ -16201,6 +16224,18 @@ const BlockListItem = _ref => {
   const anchor = block.attributes?.anchor;
   const displayAnchor = typeof anchor != "undefined" && anchor.match(/^[a-z0-9]+-[a-z0-9]+-[a-z0-9]+-[a-z0-9]+-[a-z0-9]+$/) == null;
   const domBlock = document.querySelector("#block-" + block.clientId);
+  const parentDomBlocks = [];
+  var closestParent = domBlock;
+  while (true) {
+    closestParent = closestParent.parentNode;
+    if (closestParent.classList.contains('is-root-container')) {
+      break;
+    }
+    if (closestParent.classList.contains('block-editor-block-list__block')) {
+      parentDomBlocks.push(closestParent);
+    }
+  }
+  const blockName = block.name == "core/block" && typeof block.postName != 'undefined' ? block.postName + " (" + (0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_2__.getBlockType)(block.name).title + ")" : (0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_2__.getBlockType)(block.name).title;
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", {
     key: "o-inspector-block-" + block.clientId
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Button, {
@@ -16212,19 +16247,29 @@ const BlockListItem = _ref => {
         block: "center"
       });
       domBlock?.classList.add("is-pre-selected");
+      for (var i in parentDomBlocks) {
+        parentDomBlocks[i].classList.add("has-child-pre-selected");
+      }
     },
     onMouseOut: () => {
       domBlock?.classList.remove("is-pre-selected");
+      for (var i in parentDomBlocks) {
+        parentDomBlocks[i].classList.remove("has-child-pre-selected");
+      }
     },
     onMouseDown: () => {
       selectBlock(block.clientId);
     }
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Dashicon, {
     icon: "arrow-right-alt2"
-  }), (0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_2__.getBlockType)(block.name).title, displayAnchor && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+  }), blockName, displayAnchor && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "anchor"
   }, "#", anchor)), block.innerBlocks.length > 0 && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(BlockList, {
     blocksList: block.innerBlocks,
+    selectBlock: selectBlock,
+    isChildren: true
+  }), typeof block.children != 'undefined' && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(BlockList, {
+    blocksList: block.children,
     selectBlock: selectBlock,
     isChildren: true
   }));
@@ -40512,6 +40557,19 @@ function OEditorAppDisplay(props) {
 }
 const OEditorAppContext = (0,_wordpress_compose__WEBPACK_IMPORTED_MODULE_2__.compose)([(0,_wordpress_data__WEBPACK_IMPORTED_MODULE_3__.withSelect)(select => {
   const blocksList = select("core/block-editor").getBlocks();
+  for (var i in blocksList) {
+    if (blocksList[i].name == 'core/block' && typeof blocksList[i].attributes.ref != 'undefined' && blocksList[i].innerBlocks == 0) {
+      let wpReusableBlock = select('core').getEntityRecord('postType', 'wp_block', blocksList[i].attributes.ref);
+      if (typeof wpReusableBlock != 'undefined') {
+        blocksList[i].postName = wpReusableBlock.title.raw;
+      }
+      let childrenBlocksList = select("core/block-editor").getBlocks(blocksList[i].clientId);
+      if (childrenBlocksList.length > 0) {
+        blocksList[i].isReusable = true;
+        blocksList[i].children = childrenBlocksList;
+      }
+    }
+  }
   const selectedBlockClientId = select("core/block-editor").getSelectedBlockClientId();
   return {
     blocksList,
