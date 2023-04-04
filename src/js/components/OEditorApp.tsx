@@ -32,6 +32,7 @@ export default class OEditorApp extends Component {
 
         this.state = {
             route: null,
+            needToBeMounted: true
         };
 
         // @ts-ignore
@@ -43,40 +44,68 @@ export default class OEditorApp extends Component {
     }
 
     componentDidMount() {
+
         // init shortcuts and mouse events
         this._initShortcuts();
         this._initMouseEvents();
+
+        if( this.props.context.editorMode == 'visual' && this.state.needToBeMounted && this.props.context.blocksList.length > 0 ) {
+            this._mount();
+        }
+    }
+
+    _mount() {
 
         // Route the Editor App related to anchor
         this._routing();
 
         this._hideEditorLoadingZone();
         this._showEditorApp();
+
+        this.setState({ needToBeMounted: false });
+    }
+
+    _unmount() {
+        this._showEditorLoadingZone();
+        this._hideEditorApp();
+
+        this.setState({ needToBeMounted: true });
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
-        for (var i in globalData.componentInstances) {
-            globalData.componentInstances[i].forceUpdate();
-        }
 
-        // Force first of reusable block selection
-        if (this.props.context.selectedBlockClientId != null) {
-            for (var i in this.props.context.blocksList) {
-                if (
-                    this.props.context.blocksList[i].clientId ==
-                        this.props.context.selectedBlockClientId &&
-                    typeof this.props.context.blocksList[i].isReusable !=
-                        "undefined" &&
-                    this.props.context.blocksList[i].isReusable &&
-                    typeof this.props.context.blocksList[i].children !=
-                        "undefined" &&
-                    this.props.context.blocksList[i].children.length > 0
-                ) {
-                    this.props.context.selectBlock(
-                        this.props.context.blocksList[i].children[0].clientId
-                    );
+        if( this.props.context.editorMode == 'visual' ) {
+            
+            if( this.state.needToBeMounted && this.props.context.blocksList.length > 0 ) {
+                this._mount();
+            }
+
+            for (var i in globalData.componentInstances) {
+                globalData.componentInstances[i].forceUpdate();
+            }
+    
+            // Force first of reusable block selection
+            if (this.props.context.selectedBlockClientId != null) {
+                for (var i in this.props.context.blocksList) {
+                    if (
+                        this.props.context.blocksList[i].clientId ==
+                            this.props.context.selectedBlockClientId &&
+                        typeof this.props.context.blocksList[i].isReusable !=
+                            "undefined" &&
+                        this.props.context.blocksList[i].isReusable &&
+                        typeof this.props.context.blocksList[i].children !=
+                            "undefined" &&
+                        this.props.context.blocksList[i].children.length > 0
+                    ) {
+                        this.props.context.selectBlock(
+                            this.props.context.blocksList[i].children[0].clientId
+                        );
+                    }
                 }
             }
+        }
+        else if( ! this.state.needToBeMounted ) {
+            this._unmount();
         }
     }
 
@@ -127,6 +156,16 @@ export default class OEditorApp extends Component {
         });
     }
 
+    _showEditorLoadingZone() {
+        const $loadingZone = document.querySelector(".o-editor-loading-zone");
+        if (!$loadingZone) {
+            return;
+        }
+        $loadingZone.classList.remove("hide");
+        $loadingZone.classList.remove("close");
+        $loadingZone.classList.remove("removed");
+    }
+
     _hideEditorLoadingZone() {
         const $loadingZone = document.querySelector(".o-editor-loading-zone");
         if (!$loadingZone) {
@@ -136,7 +175,8 @@ export default class OEditorApp extends Component {
         setTimeout(() => {
             $loadingZone.classList.add("close");
             setTimeout(() => {
-                $loadingZone.remove();
+                // $loadingZone.remove();
+                $loadingZone.classList.add("removed");
             }, 500);
         }, 1000);
     }
@@ -145,6 +185,10 @@ export default class OEditorApp extends Component {
         setTimeout(() => {
             this._$editAppContainer.classList.add("show");
         }, 1200);
+    }
+    
+    _hideEditorApp() {
+        this._$editAppContainer.classList.remove("show");
     }
 
     _routing() {
@@ -276,6 +320,10 @@ export default class OEditorApp extends Component {
     }
 
     render() {
+
+        if( this.props.context.editorMode != 'visual' )
+            return null;
+       
         switch (this.state.route) {
             case "settings":
                 var componentToRender = new __OEditorSettings();

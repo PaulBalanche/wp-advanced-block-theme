@@ -159,7 +159,11 @@ class WpeComponent extends WpeComponentBase {
                 key={this.props.clientId + "-loaderLiveRenderingIframe"}
                 className="loaderLiveRenderingIframe"
                 style={!this.state.iframeLoaded ? { display: "block" } : {}}
-            ></div>
+            >
+                <div className="_inner">
+                    <div className="o-loader"></div>
+                </div>
+            </div>
         );
     }
 

@@ -2,3 +2,21 @@
     width: 100%;
     transition: all 0.6s ease-in-out;
 }
+
+
+.loaderLiveRenderingIframe {
+
+    display: none;
+
+    ._inner {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        height: 100%;
+    }
+
+    .o-loader {
+        font-size: 75px;
+    }
+}

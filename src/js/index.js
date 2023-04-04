@@ -29,18 +29,18 @@ class OEditor {
         const $editorContainer = document.querySelector(
             ".interface-interface-skeleton__content"
         );
-        if (!$editorContainer) {
-            throw new Error(`The editor container "" does not exist...`);
+        if ($editorContainer) {
+
+            $editorContainer.classList?.add?.("o-editor");
+
+            // create the container for our app
+            const $editorApp = document.createElement("div");
+            $editorApp.classList.add("o-editor-container");
+            $editorContainer.appendChild($editorApp);
+
+            // render our app
+            __ReactDom.render(<OEditorAppContext />, $editorApp);
         }
-        $editorContainer.classList?.add?.("o-editor");
-
-        // create the container for our app
-        const $editorApp = document.createElement("div");
-        $editorApp.classList.add("o-editor-container");
-        $editorContainer.appendChild($editorApp);
-
-        // render our app
-        __ReactDom.render(<OEditorAppContext />, $editorApp);
     }
 
     /**
@@ -102,10 +102,17 @@ const OEditorAppContext = compose([
         }
         const selectedBlockClientId =
             select("core/block-editor").getSelectedBlockClientId();
+        
+        const editorMode =
+            select("core/edit-post").getEditorMode();
+        
+        // console.log( "isNavigationMode : " + select("core/block-editor").isNavigationMode() );
 
         return {
             blocksList,
             selectedBlockClientId,
+            editorMode
+
         };
     }),
     withDispatch((dispatch) => {

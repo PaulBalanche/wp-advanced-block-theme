@@ -37,7 +37,14 @@ export class DraftEditor extends Component {
                               },
                           ])
                       )
-                    : EditorState.createEmpty(),
+                    : EditorState.createEmpty(
+                        new CompositeDecorator([
+                            {
+                                strategy: this.findLinkEntities,
+                                component: this.Link,
+                            },
+                        ])
+                    )
         };
         this.onChange = (editorState) => this.handleChange(editorState);
         this.toggleBlockType = this._toggleBlockType.bind(this);
@@ -427,6 +434,7 @@ export class DraftEditor extends Component {
                                 onToggle={this.toggleColorStyle}
                             />
                             <div className="toolbox">
+                                <div className="title">Tools :</div>
                                 <LinkControl
                                     editorState={this.state.editorState}
                                     onSubmit={this.confirmLink}

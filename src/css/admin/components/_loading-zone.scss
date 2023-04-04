@@ -68,4 +68,9 @@
         opacity: 0;
         pointer-events: none;
     }
+    
+    &.removed,
+    body:has( #editor .is-mode-text) & {
+        display: none;
+    }
 }

@@ -1,7 +1,5 @@
-import React from "react";
-
+import { Fragment } from "@wordpress/element";
 import { getBlockType } from "@wordpress/blocks";
-
 import { Button, Dashicon } from "@wordpress/components";
 
 import __OEditorApp from "./OEditorApp";
@@ -49,13 +47,13 @@ const BlockList = (props) => {
                 <div className="separator"></div>
             )}
             {props.blocksList.map((block) => (
-                <>
+                <Fragment key={"o-inspector-blockContainer-" + block.clientId }>
                     <BlockListItem
                         block={block}
                         selectBlock={props.selectBlock}
                     />
                     <li className="separator"></li>
-                </>
+                </Fragment>
             ))}
         </ul>
     );
@@ -112,20 +110,20 @@ const BlockListItem = ({ block, selectBlock }) => {
                 {blockName}
                 {displayAnchor && <span className="anchor">#{anchor}</span>}
             </Button>
-            {block.innerBlocks.length > 0 && (
+            {/* {block.innerBlocks.length > 0 && (
                 <BlockList
                     blocksList={block.innerBlocks}
                     selectBlock={selectBlock}
                     isChildren={true}
                 />
-            )}
-            { typeof block.children != 'undefined' && (
+            )} */}
+            {/* { typeof block.children != 'undefined' && (
                 <BlockList
                     blocksList={block.children}
                     selectBlock={selectBlock}
                     isChildren={true}
                 />
-            )}
+            )} */}
         </li>
     );
 };

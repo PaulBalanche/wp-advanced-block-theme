@@ -52,15 +52,23 @@
     .toolbox {
         display: flex;
         align-items: center;
-        height: 34px;
-        border: 1px solid $border300;
-        border-radius: $o-border-radius;
         flex-grow: 1;
         padding: 0 5px;
 
+        .title {
+            padding-right: 5px;
+            color: rgb(200 200 200);
+        }
+
         .components-button {
-            height: auto;
-            padding: 2px;
+
+            &:hover, &.is-active {
+                background: #d8eef8;
+            }
+
+            .dashicon {
+                margin: 0;
+            }
         }
     }
 

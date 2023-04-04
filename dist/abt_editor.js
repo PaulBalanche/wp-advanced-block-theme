@@ -11550,7 +11550,11 @@ class WpeComponent extends _src_js_Models_WpeComponentBase__WEBPACK_IMPORTED_MOD
       style: !this.state.iframeLoaded ? {
         display: "block"
       } : {}
-    });
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "_inner"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "o-loader"
+    })));
   }
   renderIframePreview() {
     const $iframe = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("iframe", {
@@ -13728,7 +13732,10 @@ class DraftEditor extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Compon
       editorState: this.rawDraftContentState != null ? draft_js__WEBPACK_IMPORTED_MODULE_1__.EditorState.createWithContent((0,draft_js__WEBPACK_IMPORTED_MODULE_1__.convertFromRaw)(this.rawDraftContentState), new draft_js__WEBPACK_IMPORTED_MODULE_1__.CompositeDecorator([{
         strategy: this.findLinkEntities,
         component: this.Link
-      }])) : draft_js__WEBPACK_IMPORTED_MODULE_1__.EditorState.createEmpty()
+      }])) : draft_js__WEBPACK_IMPORTED_MODULE_1__.EditorState.createEmpty(new draft_js__WEBPACK_IMPORTED_MODULE_1__.CompositeDecorator([{
+        strategy: this.findLinkEntities,
+        component: this.Link
+      }]))
     };
     this.onChange = editorState => this.handleChange(editorState);
     this.toggleBlockType = this._toggleBlockType.bind(this);
@@ -14008,7 +14015,9 @@ class DraftEditor extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Compon
       onToggle: this.toggleColorStyle
     }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "toolbox"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_LinkControl__WEBPACK_IMPORTED_MODULE_3__.LinkControl, {
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "title"
+    }, "Tools :"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_LinkControl__WEBPACK_IMPORTED_MODULE_3__.LinkControl, {
       editorState: this.state.editorState,
       onSubmit: this.confirmLink,
       onRemove: this.removeLink
@@ -14212,6 +14221,16 @@ class LinkControl extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Compon
     // this.removeLink = this._removeLink.bind(this);
   }
 
+  componentDidUpdate() {
+    const selectionState = this.props.editorState.getSelection();
+    const anchorKey = selectionState.getAnchorKey();
+    const contentState = this.props.editorState.getCurrentContent();
+    const blockWithLink = contentState.getBlockForKey(anchorKey);
+    const start = selectionState.getStartOffset();
+    const linkKey = blockWithLink.getEntityAt(start);
+    const linkData = linkKey ? contentState.getEntity(linkKey).getData() : null;
+    this.editionMode = linkData && linkData.url ? true : false;
+  }
   initValue() {
     const selectionState = this.props.editorState.getSelection();
     const anchorKey = selectionState.getAnchorKey();
@@ -14227,7 +14246,6 @@ class LinkControl extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Compon
       url: linkData && linkData.url ? linkData.url : "",
       openInNewTab: linkData && linkData.openInNewTab ? true : false
     });
-    this.editionMode = linkData && linkData.url ? true : false;
     if (!this.editionMode && selectedText == "") {
       this.isValid = false;
       return;
@@ -14304,6 +14322,7 @@ class LinkControl extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Compon
     const title = this.editionMode ? "Edit link" : "Add link";
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
       variant: "tertiary",
+      className: this.editionMode ? "is-active" : "",
       onClick: this.open
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
       icon: "admin-links"
@@ -14799,13 +14818,15 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
         content: currentEditCat
       });
     }
+    const portalContainer = document.querySelector(".o-editor-app.block .o-editor-app_body");
+    if (!portalContainer) return null;
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createPortal)((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Placeholder, {
       key: this.props.clientId + "-ConfigurationPlaceholder",
       isColumnLayout: true,
       className: "wpe-component_edit_placeholder"
     }, _Static_Render__WEBPACK_IMPORTED_MODULE_3__.Render.tabPanelComponent(this.props.clientId, tabPanel, function (tabPanel) {
       return tabPanel.content;
-    })), document.querySelector(".o-editor-app.block .o-editor-app_body"));
+    })), portalContainer);
   }
   showModal(modal) {
     let once = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
@@ -15889,7 +15910,8 @@ class OEditorApp extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Compone
   constructor(props) {
     super(props);
     this.state = {
-      route: null
+      route: null,
+      needToBeMounted: true
     };
 
     // @ts-ignore
@@ -15903,24 +15925,45 @@ class OEditorApp extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Compone
     // init shortcuts and mouse events
     this._initShortcuts();
     this._initMouseEvents();
-
+    if (this.props.context.editorMode == 'visual' && this.state.needToBeMounted && this.props.context.blocksList.length > 0) {
+      this._mount();
+    }
+  }
+  _mount() {
     // Route the Editor App related to anchor
     this._routing();
     this._hideEditorLoadingZone();
     this._showEditorApp();
+    this.setState({
+      needToBeMounted: false
+    });
+  }
+  _unmount() {
+    this._showEditorLoadingZone();
+    this._hideEditorApp();
+    this.setState({
+      needToBeMounted: true
+    });
   }
   componentDidUpdate(prevProps, prevState, snapshot) {
-    for (var i in _global__WEBPACK_IMPORTED_MODULE_7__["default"].componentInstances) {
-      _global__WEBPACK_IMPORTED_MODULE_7__["default"].componentInstances[i].forceUpdate();
-    }
+    if (this.props.context.editorMode == 'visual') {
+      if (this.state.needToBeMounted && this.props.context.blocksList.length > 0) {
+        this._mount();
+      }
+      for (var i in _global__WEBPACK_IMPORTED_MODULE_7__["default"].componentInstances) {
+        _global__WEBPACK_IMPORTED_MODULE_7__["default"].componentInstances[i].forceUpdate();
+      }
 
-    // Force first of reusable block selection
-    if (this.props.context.selectedBlockClientId != null) {
-      for (var i in this.props.context.blocksList) {
-        if (this.props.context.blocksList[i].clientId == this.props.context.selectedBlockClientId && typeof this.props.context.blocksList[i].isReusable != 'undefined' && this.props.context.blocksList[i].isReusable && typeof this.props.context.blocksList[i].children != 'undefined' && this.props.context.blocksList[i].children.length > 0) {
-          this.props.context.selectBlock(this.props.context.blocksList[i].children[0].clientId);
+      // Force first of reusable block selection
+      if (this.props.context.selectedBlockClientId != null) {
+        for (var i in this.props.context.blocksList) {
+          if (this.props.context.blocksList[i].clientId == this.props.context.selectedBlockClientId && typeof this.props.context.blocksList[i].isReusable != "undefined" && this.props.context.blocksList[i].isReusable && typeof this.props.context.blocksList[i].children != "undefined" && this.props.context.blocksList[i].children.length > 0) {
+            this.props.context.selectBlock(this.props.context.blocksList[i].children[0].clientId);
+          }
         }
       }
+    } else if (!this.state.needToBeMounted) {
+      this._unmount();
     }
   }
   _initMouseEvents() {}
@@ -15968,6 +16011,15 @@ class OEditorApp extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Compone
       }
     });
   }
+  _showEditorLoadingZone() {
+    const $loadingZone = document.querySelector(".o-editor-loading-zone");
+    if (!$loadingZone) {
+      return;
+    }
+    $loadingZone.classList.remove("hide");
+    $loadingZone.classList.remove("close");
+    $loadingZone.classList.remove("removed");
+  }
   _hideEditorLoadingZone() {
     const $loadingZone = document.querySelector(".o-editor-loading-zone");
     if (!$loadingZone) {
@@ -15977,7 +16029,8 @@ class OEditorApp extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Compone
     setTimeout(() => {
       $loadingZone.classList.add("close");
       setTimeout(() => {
-        $loadingZone.remove();
+        // $loadingZone.remove();
+        $loadingZone.classList.add("removed");
       }, 500);
     }, 1000);
   }
@@ -15985,6 +16038,9 @@ class OEditorApp extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Compone
     setTimeout(() => {
       this._$editAppContainer.classList.add("show");
     }, 1200);
+  }
+  _hideEditorApp() {
+    this._$editAppContainer.classList.remove("show");
   }
   _routing() {
     if (document.location.hash === "#settings") {
@@ -16085,6 +16141,7 @@ class OEditorApp extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Compone
     }), "Back")) : null;
   }
   render() {
+    if (this.props.context.editorMode != 'visual') return null;
     switch (this.state.route) {
       case "settings":
         var componentToRender = new _OEditorSettings__WEBPACK_IMPORTED_MODULE_5__["default"]();
@@ -16167,13 +16224,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/blocks */ "@wordpress/blocks");
-/* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _OEditorApp__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./OEditorApp */ "./src/js/components/OEditorApp.tsx");
+/* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/blocks */ "@wordpress/blocks");
+/* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _OEditorApp__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./OEditorApp */ "./src/js/components/OEditorApp.tsx");
 
 
 
@@ -16188,11 +16243,11 @@ class OEditorInspector {
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h2", null, "Inspector");
   }
   renderTools() {
-    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Button, {
+    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Button, {
       key: "o-editor-zone-button-help",
       variant: "primary",
-      onMouseDown: () => _OEditorApp__WEBPACK_IMPORTED_MODULE_4__["default"].getInstance().routeTo("help")
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Dashicon, {
+      onMouseDown: () => _OEditorApp__WEBPACK_IMPORTED_MODULE_3__["default"].getInstance().routeTo("help")
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Dashicon, {
       icon: "editor-help"
     }));
   }
@@ -16209,7 +16264,9 @@ class OEditorInspector {
 const BlockList = props => {
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", null, typeof props.isChildren != "undefined" && props.isChildren && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "separator"
-  }), props.blocksList.map(block => (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(BlockListItem, {
+  }), props.blocksList.map(block => (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
+    key: "o-inspector-blockContainer-" + block.clientId
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(BlockListItem, {
     block: block,
     selectBlock: props.selectBlock
   }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", {
@@ -16235,10 +16292,10 @@ const BlockListItem = _ref => {
       parentDomBlocks.push(closestParent);
     }
   }
-  const blockName = block.name == "core/block" && typeof block.postName != 'undefined' ? block.postName + " (" + (0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_2__.getBlockType)(block.name).title + ")" : (0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_2__.getBlockType)(block.name).title;
+  const blockName = block.name == "core/block" && typeof block.postName != 'undefined' ? block.postName + " (" + (0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__.getBlockType)(block.name).title + ")" : (0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__.getBlockType)(block.name).title;
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", {
     key: "o-inspector-block-" + block.clientId
-  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Button, {
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Button, {
     variant: "tertiary",
     className: "animate",
     onMouseOver: () => {
@@ -16260,19 +16317,11 @@ const BlockListItem = _ref => {
     onMouseDown: () => {
       selectBlock(block.clientId);
     }
-  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Dashicon, {
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Dashicon, {
     icon: "arrow-right-alt2"
   }), blockName, displayAnchor && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "anchor"
-  }, "#", anchor)), block.innerBlocks.length > 0 && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(BlockList, {
-    blocksList: block.innerBlocks,
-    selectBlock: selectBlock,
-    isChildren: true
-  }), typeof block.children != 'undefined' && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(BlockList, {
-    blocksList: block.children,
-    selectBlock: selectBlock,
-    isChildren: true
-  }));
+  }, "#", anchor)));
 };
 
 /***/ }),
@@ -40518,18 +40567,17 @@ class OEditor {
 
     // add the scoping class "o-editor"
     const $editorContainer = document.querySelector(".interface-interface-skeleton__content");
-    if (!$editorContainer) {
-      throw new Error(`The editor container "" does not exist...`);
+    if ($editorContainer) {
+      $editorContainer.classList?.add?.("o-editor");
+
+      // create the container for our app
+      const $editorApp = document.createElement("div");
+      $editorApp.classList.add("o-editor-container");
+      $editorContainer.appendChild($editorApp);
+
+      // render our app
+      react_dom__WEBPACK_IMPORTED_MODULE_1__.render((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(OEditorAppContext, null), $editorApp);
     }
-    $editorContainer.classList?.add?.("o-editor");
-
-    // create the container for our app
-    const $editorApp = document.createElement("div");
-    $editorApp.classList.add("o-editor-container");
-    $editorContainer.appendChild($editorApp);
-
-    // render our app
-    react_dom__WEBPACK_IMPORTED_MODULE_1__.render((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(OEditorAppContext, null), $editorApp);
   }
 
   /**
@@ -40558,9 +40606,9 @@ function OEditorAppDisplay(props) {
 const OEditorAppContext = (0,_wordpress_compose__WEBPACK_IMPORTED_MODULE_2__.compose)([(0,_wordpress_data__WEBPACK_IMPORTED_MODULE_3__.withSelect)(select => {
   const blocksList = select("core/block-editor").getBlocks();
   for (var i in blocksList) {
-    if (blocksList[i].name == 'core/block' && typeof blocksList[i].attributes.ref != 'undefined' && blocksList[i].innerBlocks == 0) {
-      let wpReusableBlock = select('core').getEntityRecord('postType', 'wp_block', blocksList[i].attributes.ref);
-      if (typeof wpReusableBlock != 'undefined') {
+    if (blocksList[i].name == "core/block" && typeof blocksList[i].attributes.ref != "undefined" && blocksList[i].innerBlocks == 0) {
+      let wpReusableBlock = select("core").getEntityRecord("postType", "wp_block", blocksList[i].attributes.ref);
+      if (typeof wpReusableBlock != "undefined") {
         blocksList[i].postName = wpReusableBlock.title.raw;
       }
       let childrenBlocksList = select("core/block-editor").getBlocks(blocksList[i].clientId);
@@ -40571,9 +40619,14 @@ const OEditorAppContext = (0,_wordpress_compose__WEBPACK_IMPORTED_MODULE_2__.com
     }
   }
   const selectedBlockClientId = select("core/block-editor").getSelectedBlockClientId();
+  const editorMode = select("core/edit-post").getEditorMode();
+
+  // console.log( "isNavigationMode : " + select("core/block-editor").isNavigationMode() );
+
   return {
     blocksList,
-    selectedBlockClientId
+    selectedBlockClientId,
+    editorMode
   };
 }), (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_3__.withDispatch)(dispatch => {
   const {

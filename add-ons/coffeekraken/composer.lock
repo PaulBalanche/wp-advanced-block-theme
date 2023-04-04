@@ -45,16 +45,16 @@
         },
         {
             "name": "eftec/bladeone",
-            "version": "4.8",
+            "version": "4.8.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/EFTEC/BladeOne.git",
-                "reference": "26b79fc337a7c584c7d222dc1dbc6d34771d0394"
+                "reference": "20e2b1c14b74a3b84b8a3cebb653f8a0d8b1ee84"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/EFTEC/BladeOne/zipball/26b79fc337a7c584c7d222dc1dbc6d34771d0394",
-                "reference": "26b79fc337a7c584c7d222dc1dbc6d34771d0394",
+                "url": "https://api.github.com/repos/EFTEC/BladeOne/zipball/20e2b1c14b74a3b84b8a3cebb653f8a0d8b1ee84",
+                "reference": "20e2b1c14b74a3b84b8a3cebb653f8a0d8b1ee84",
                 "shasum": ""
             },
             "require": {
@@ -98,9 +98,9 @@
             ],
             "support": {
                 "issues": "https://github.com/EFTEC/BladeOne/issues",
-                "source": "https://github.com/EFTEC/BladeOne/tree/4.8"
+                "source": "https://github.com/EFTEC/BladeOne/tree/4.8.2"
             },
-            "time": "2023-01-12T01:22:51+00:00"
+            "time": "2023-03-19T11:08:35+00:00"
         },
         {
             "name": "symfony/polyfill-ctype",

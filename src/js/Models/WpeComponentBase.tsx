@@ -406,6 +406,10 @@ export class WpeComponentBase extends Component {
             });
         }
 
+        const portalContainer = document.querySelector(".o-editor-app.block .o-editor-app_body")
+        if ( ! portalContainer)
+            return null;
+
         return createPortal(
             <Placeholder
                 key={this.props.clientId + "-ConfigurationPlaceholder"}
@@ -420,7 +424,7 @@ export class WpeComponentBase extends Component {
                     }
                 )}
             </Placeholder>,
-            document.querySelector(".o-editor-app.block .o-editor-app_body")
+            portalContainer
         );
     }
 

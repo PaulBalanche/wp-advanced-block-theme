@@ -222,6 +222,9 @@
   opacity: 0;
   pointer-events: none;
 }
+.o-editor-loading-zone.removed, body:has(#editor .is-mode-text) .o-editor-loading-zone {
+  display: none;
+}
 
 .o-editor-app {
   position: fixed;
@@ -536,6 +539,20 @@
   transition: all 0.6s ease-in-out;
 }
 
+.loaderLiveRenderingIframe {
+  display: none;
+}
+.loaderLiveRenderingIframe ._inner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 100%;
+}
+.loaderLiveRenderingIframe .o-loader {
+  font-size: 75px;
+}
+
 .o-editor .components-panel {
   position: relative;
   border: 1px solid #e8e8e8;
@@ -562,7 +579,7 @@
 .o-editor .components-panel > .is-opened.components-panel__body > .components-panel__body-title {
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
-  background: #fcfcfc !important;
+  background: #d8eef8 !important;
   margin: -15px -16px 0 -16px !important;
 }
 .o-editor .components-panel > .components-panel__body > .components-panel__row {
@@ -570,13 +587,13 @@
   flex-direction: column;
   gap: 30px;
 }
-.o-editor .components-panel:hover, .o-editor .components-panel:focus, .o-editor .components-panel:focus-within {
+.o-editor .components-panel:hover, .o-editor .components-panel:focus, .o-editor .components-panel:focus-within, .o-editor .components-panel:has(> .is-opened.components-panel__body) {
   border-color: transparent !important;
 }
-.o-editor .components-panel:hover:after, .o-editor .components-panel:focus:after, .o-editor .components-panel:focus-within:after {
+.o-editor .components-panel:hover:after, .o-editor .components-panel:focus:after, .o-editor .components-panel:focus-within:after, .o-editor .components-panel:has(> .is-opened.components-panel__body):after {
   opacity: 1;
 }
-.o-editor .components-panel:hover > .components-panel__body > .components-panel__body-title, .o-editor .components-panel:focus > .components-panel__body > .components-panel__body-title, .o-editor .components-panel:focus-within > .components-panel__body > .components-panel__body-title {
+.o-editor .components-panel:hover > .components-panel__body > .components-panel__body-title, .o-editor .components-panel:focus > .components-panel__body > .components-panel__body-title, .o-editor .components-panel:focus-within > .components-panel__body > .components-panel__body-title, .o-editor .components-panel:has(> .is-opened.components-panel__body) > .components-panel__body > .components-panel__body-title {
   background: #d8eef8 !important;
 }
 
@@ -1666,15 +1683,18 @@
 .DraftEditor-Container .toolbox {
   display: flex;
   align-items: center;
-  height: 34px;
-  border: 1px solid var(--border300, rgb(235, 235, 235));
-  border-radius: 10px;
   flex-grow: 1;
   padding: 0 5px;
 }
-.DraftEditor-Container .toolbox .components-button {
-  height: auto;
-  padding: 2px;
+.DraftEditor-Container .toolbox .title {
+  padding-right: 5px;
+  color: rgb(200, 200, 200);
+}
+.DraftEditor-Container .toolbox .components-button:hover, .DraftEditor-Container .toolbox .components-button.is-active {
+  background: #d8eef8;
+}
+.DraftEditor-Container .toolbox .components-button .dashicon {
+  margin: 0;
 }
 .DraftEditor-Container .border-style {
   border-radius: 10px;
@@ -1958,23 +1978,10 @@
 }
 
 .o-editor .block-editor-media-placeholder {
-  border-radius: 10px !important;
-  border: 1px solid #e8e8e8 !important;
-  padding: 18px 24px !important;
+  padding: 0;
+  min-height: 0;
   box-shadow: none !important;
   outline: none !important;
-  height: auto !important;
-  transition: all 0.1s ease-in-out !important;
-  min-height: 0;
-}
-.o-editor .block-editor-media-placeholder:hover {
-  border-color: #d8eef8 !important;
-}
-.o-editor .block-editor-media-placeholder:focus {
-  border-color: #47a8e7 !important;
-}
-.o-editor .block-editor-media-placeholder ~ .components-input-control__backdrop {
-  display: none !important;
 }
 
 .o-editor .components-input-control__container .components-select-control__input {
