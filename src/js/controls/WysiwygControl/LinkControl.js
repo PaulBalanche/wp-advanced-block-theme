@@ -22,6 +22,22 @@ export class LinkControl extends Component {
         // this.removeLink = this._removeLink.bind(this);
     }
 
+    componentDidUpdate() {
+        
+        const selectionState = this.props.editorState.getSelection();
+        const anchorKey = selectionState.getAnchorKey();
+        const contentState = this.props.editorState.getCurrentContent();
+        const blockWithLink = contentState.getBlockForKey(anchorKey);
+
+        const start = selectionState.getStartOffset();
+
+        const linkKey = blockWithLink.getEntityAt(start);
+        const linkData = linkKey
+            ? contentState.getEntity(linkKey).getData()
+            : null;
+        this.editionMode = linkData && linkData.url ? true : false;
+    }
+
     initValue() {
         const selectionState = this.props.editorState.getSelection();
         const anchorKey = selectionState.getAnchorKey();
@@ -43,8 +59,6 @@ export class LinkControl extends Component {
             openInNewTab: linkData && linkData.openInNewTab ? true : false,
         });
 
-        this.editionMode = linkData && linkData.url ? true : false;
-
         if (!this.editionMode && selectedText == "") {
             this.isValid = false;
             return;
@@ -54,7 +68,7 @@ export class LinkControl extends Component {
 
     open = () => {
         this.initValue();
-    };
+    }
 
     _close() {
         this.setState({
@@ -137,7 +151,7 @@ export class LinkControl extends Component {
 
         return (
             <>
-                <Button variant="tertiary" onClick={this.open}>
+                <Button variant="tertiary" className={ ( this.editionMode ) ? "is-active" : "" } onClick={this.open}>
                     <Dashicon icon="admin-links" />
                 </Button>
                 {this.isValid && this.state.isOpen && (

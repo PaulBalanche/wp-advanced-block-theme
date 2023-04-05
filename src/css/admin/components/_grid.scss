@@ -39,9 +39,20 @@
             cursor: pointer;
             align-items: center;
             justify-content: center;
+            visibility: hidden;
+
+            &:hover {
+                border-style: solid;
+            }
 
             .dashicon {
                 margin-right: 10px;
+            }
+        }
+
+        &:hover {
+            .o-grid-add-column {
+                visibility: visible;
             }
         }
     }

@@ -11,8 +11,20 @@
             padding-top: 80px !important;
         }
 
-        &:hover > .block-list-appender {
-            visibility: visible !important;
+        & > .block-list-appender {
+            width: 100%;
+            max-width: 100%;
+        }
+
+        &:hover {
+
+            & > .block-list-appender {
+                visibility: visible;
+            }
+
+            & > .block-editor-block-list__block {
+                z-index: 20;
+            }
         }
 
         &:not([contenteditable])::focus::after {

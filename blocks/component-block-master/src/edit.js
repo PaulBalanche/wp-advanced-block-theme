@@ -16,6 +16,8 @@ import apiFetch from "@wordpress/api-fetch";
 
 import { Devices } from "../../../src/js/Singleton/Devices";
 
+import __OEditorApp from "../../../src/js/components/OEditorApp";
+
 class WpeComponent extends WpeComponentBase {
     _$iframes;
 
@@ -52,13 +54,18 @@ class WpeComponent extends WpeComponentBase {
         // it seems that it's a bad idea cause it's slower...
         // (async () => {
         //     if (!this._$iframes) {
-        //         this._$iframes = Array.from(document.querySelectorAll('.o-preview-iframe') ?? []);
+        //         this._$iframes = Array.from(
+        //             document.querySelectorAll(".o-preview-iframe") ?? []
+        //         );
         //         for (let [idx, $iframe] of this._$iframes.entries()) {
         //             await new Promise((resolve) => {
-        //                 $iframe.addEventListener('load', () => {
+        //                 $iframe.addEventListener("load", () => {
         //                     resolve();
         //                 });
-        //                 $iframe.setAttribute('src', $iframe.getAttribute('data-src'));
+        //                 $iframe.setAttribute(
+        //                     "src",
+        //                     $iframe.getAttribute("data-src")
+        //                 );
         //             });
         //         }
         //     }
@@ -142,15 +149,23 @@ class WpeComponent extends WpeComponentBase {
             iFrame.parentNode.style.height = heightIframe;
             iFrame.contentWindow.document.body.style.overflowY = "hidden";
         }
+
+        __OEditorApp.getInstance().refreshScroll();
     }
 
     renderLoaderPreview() {
+
+        const className = ( this.state.iframeLoaded ) ? "loaderLiveRenderingIframe closed" : "loaderLiveRenderingIframe";
+
         return (
             <div
                 key={this.props.clientId + "-loaderLiveRenderingIframe"}
-                className="loaderLiveRenderingIframe"
-                style={!this.state.iframeLoaded ? { display: "block" } : {}}
-            ></div>
+                className={className}
+            >
+                <div className="_inner">
+                    <div className="o-loader"></div>
+                </div>
+            </div>
         );
     }
 
@@ -160,7 +175,6 @@ class WpeComponent extends WpeComponentBase {
                 className="o-preview-iframe"
                 key={this.props.clientId + "-LiveRenderingIframe"}
                 id={this.props.clientId + "-LiveRenderingIframe"}
-                style={{ width: "100%" }}
                 src={this.previewUrl}
                 onLoad={this.iframeResize}
             ></iframe>
@@ -192,7 +206,8 @@ class WpeComponent extends WpeComponentBase {
                             key={this.props.clientId + "-LiveRenderingMessage"}
                             className="liveRenderingMessage"
                         >
-                            {this.renderButtonEditZone()}
+                            Click to edit
+                            {/* {this.renderButtonEditZone()} */}
                         </div>
                     );
                 } else {

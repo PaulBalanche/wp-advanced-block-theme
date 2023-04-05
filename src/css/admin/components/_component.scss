@@ -43,6 +43,10 @@
 
         & > .wp-block {
 
+            &:has( > .loaderLiveRenderingIframe ) {
+                height: 100vh;
+            }
+
             &:first-child {
                 margin-top: 0;
             }
@@ -50,22 +54,8 @@
                 margin-bottom: 0;
             }
 
-            &.block-list-appender {
-                border: 1px dashed white;
-                background: none;
-                width: 100%;
-                padding: initial;
-                
-                .components-button {
-                    box-shadow: none;
-                    
-                    svg {
-                        color: white;
-                    }
-                }
-            }
             .block-list-appender {
-                // visibility: hidden;
+                visibility: hidden;
             }
 
             & > .wp-block {
@@ -85,6 +75,7 @@
                 padding: 80px 100px 50px 100px;
                 color: white;
                 position: relative;
+                z-index: 20;
 
                 .abtButtonEditZone {
                     display: inline-flex;
@@ -92,5 +83,4 @@
             }
         }
     }
-
 }

@@ -221,12 +221,15 @@ class ComponentBlocks extends ServiceBase {
             }
          }
          else {
+            // if(
+            //     count($attributes) == 0 ||
+            //     ( count($attributes) == 1 && isset($attributes['id_component']) ) ||
+            //     ( count($attributes) == 2 && isset($attributes['id_component'], $attributes['anchor']) )
+            // ) {
+            //     wp_send_json_error( [ 'isEmpty' => true ]  );
+            // }
 
-            if( count($attributes) == 1 && isset($attributes['id_component']) ) {
-                wp_send_json_error( [ 'isEmpty' => true ]  );
-            }
-
-            wp_send_json_error( 'Edit all required fields.' );
+            wp_send_json_error( 'Please edit required fields.' );
          }
         
         wp_send_json_error( 'Error during attributes_autosaves_post' );

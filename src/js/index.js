@@ -1,8 +1,13 @@
+import * as __ReactDom from "react-dom";
+
+import { compose } from "@wordpress/compose";
+import { withDispatch, withSelect } from "@wordpress/data";
+
+import { store as blockEditorStore } from "@wordpress/block-editor";
+
 import "../css/admin/_index.scss";
 
 import OEditorApp from "./components/OEditorApp";
-
-import * as __ReactDom from 'react-dom';
 
 import "../../blocks/component-block-master/src/index";
 import "../../blocks/layout/wpe-column/src/index";
@@ -22,20 +27,20 @@ class OEditor {
 
         // add the scoping class "o-editor"
         const $editorContainer = document.querySelector(
-            ".edit-post-visual-editor"
+            ".interface-interface-skeleton__content"
         );
-        if (!$editorContainer) {
-            throw new Error(`The editor container "" does not exist...`);
+        if ($editorContainer) {
+
+            $editorContainer.classList?.add?.("o-editor");
+
+            // create the container for our app
+            const $editorApp = document.createElement("div");
+            $editorApp.classList.add("o-editor-container");
+            $editorContainer.appendChild($editorApp);
+
+            // render our app
+            __ReactDom.render(<OEditorAppContext />, $editorApp);
         }
-        $editorContainer.classList?.add?.("o-editor");
-
-        // create the container for our app
-        const $editorApp = document.createElement("div");
-        $editorApp.classList.add("o-editor-container");
-        $editorContainer.appendChild($editorApp);
-
-        // render our app
-        __ReactDom.render(<OEditorApp></OEditorApp>, $editorApp);
     }
 
     /**
@@ -63,6 +68,62 @@ class OEditor {
         }
     }
 }
+
+function OEditorAppDisplay(props) {
+    return <OEditorApp context={props} />;
+}
+
+const OEditorAppContext = compose([
+    withSelect((select) => {
+        const blocksList = select("core/block-editor").getBlocks();
+        for (var i in blocksList) {
+            if (
+                blocksList[i].name == "core/block" &&
+                typeof blocksList[i].attributes.ref != "undefined" &&
+                blocksList[i].innerBlocks == 0
+            ) {
+                let wpReusableBlock = select("core").getEntityRecord(
+                    "postType",
+                    "wp_block",
+                    blocksList[i].attributes.ref
+                );
+                if (typeof wpReusableBlock != "undefined") {
+                    blocksList[i].postName = wpReusableBlock.title.raw;
+                }
+
+                let childrenBlocksList = select("core/block-editor").getBlocks(
+                    blocksList[i].clientId
+                );
+                if (childrenBlocksList.length > 0) {
+                    blocksList[i].isReusable = true;
+                    blocksList[i].children = childrenBlocksList;
+                }
+            }
+        }
+        const selectedBlockClientId =
+            select("core/block-editor").getSelectedBlockClientId();
+        
+        const editorMode =
+            select("core/edit-post").getEditorMode();
+        
+        // console.log( "isNavigationMode : " + select("core/block-editor").isNavigationMode() );
+
+        return {
+            blocksList,
+            selectedBlockClientId,
+            editorMode
+
+        };
+    }),
+    withDispatch((dispatch) => {
+        const { selectBlock, resetSelection } = dispatch(blockEditorStore);
+
+        return {
+            selectBlock,
+            resetSelection,
+        };
+    }),
+])(OEditorAppDisplay);
 
 window.addEventListener("load", function () {
     setTimeout(() => {

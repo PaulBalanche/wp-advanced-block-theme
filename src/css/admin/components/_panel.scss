@@ -28,7 +28,7 @@
         > .is-opened.components-panel__body > .components-panel__body-title {
             border-bottom-left-radius: 0;
             border-bottom-right-radius: 0;
-            background: $o-background-color !important;
+            background: $o-accent-color-border !important;
             // border-bottom: 1px solid $o-main-color-border;
             margin: -15px -16px 0 -16px !important;
         }
@@ -41,7 +41,8 @@
 
         &:hover,
         &:focus,
-        &:focus-within {
+        &:focus-within,
+        &:has( > .is-opened.components-panel__body ) {
 
             border-color: transparent !important;
 

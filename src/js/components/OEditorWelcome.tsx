@@ -1,21 +1,53 @@
 import React from "react";
 
+import { Button, Dashicon } from "@wordpress/components";
+
+import __OEditorApp from "./OEditorApp";
+
 export default class OEditorWelcome {
     constructor() {}
 
     renderTitle() {
-        return <h2>Inspector</h2>;
-    }
-
-    renderTools() {
-        return <h4>tools</h4>;
-    }
-
-    renderFooter() {
-        return <h1>footer</h1>;
+        return <h2>Help</h2>;
     }
 
     render() {
-        return <h1>Welcome</h1>;
+        return (
+            <ul>
+                <li>
+                    <Button
+                        key="o-editor-help-settings"
+                        variant="tertiary"
+                        onMouseDown={() =>
+                            __OEditorApp.getInstance().routeTo("settings")
+                        }
+                    >
+                        <Dashicon icon="admin-settings" />
+                        User preferences
+                    </Button>
+                </li>
+            </ul>
+        );
+    }
+
+    renderFooter() {
+        return (
+            <>
+                <div className="o-flex-grow"></div>
+                <Button
+                    key={"buttonCloseEditZone"}
+                    className="abtButtonCloseEditZone"
+                    variant="secondary"
+                    onMouseDown={() => __OEditorApp.getInstance().clean()}
+                >
+                    <Dashicon icon="no-alt" />
+                    Close
+                </Button>
+            </>
+        );
+    }
+
+    getExtraClassName() {
+        return "help";
     }
 }
