@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2f09705ebd5ed8b0f718538d9f9e81d6",
+    "content-hash": "6f4da1373c16669b3002f50bf5c5fd16",
     "packages": [
         {
             "name": "coffeekraken/coffeekraken",
-            "version": "dev-master",
+            "version": "dev-develop",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Coffeekraken/coffeekraken.git",
-                "reference": "227e8e1d8c6a1e515332ae6c86b1242c1d64f946"
+                "reference": "743ba81cdb76db9989391af10feb74c74572b325"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Coffeekraken/coffeekraken/zipball/227e8e1d8c6a1e515332ae6c86b1242c1d64f946",
-                "reference": "227e8e1d8c6a1e515332ae6c86b1242c1d64f946",
+                "url": "https://api.github.com/repos/Coffeekraken/coffeekraken/zipball/743ba81cdb76db9989391af10feb74c74572b325",
+                "reference": "743ba81cdb76db9989391af10feb74c74572b325",
                 "shasum": ""
             },
             "require": {
@@ -27,7 +27,6 @@
             "require-dev": {
                 "phpunit/phpunit": "^9"
             },
-            "default-branch": true,
             "type": "library",
             "autoload": {
                 "files": [
@@ -39,9 +38,9 @@
             "homepage": "https://coffeekraken.io",
             "support": {
                 "issues": "https://github.com/Coffeekraken/coffeekraken/issues",
-                "source": "https://github.com/Coffeekraken/coffeekraken/tree/master"
+                "source": "https://github.com/Coffeekraken/coffeekraken/tree/develop"
             },
-            "time": "2023-02-16T10:15:12+00:00"
+            "time": "2023-04-04T14:27:41+00:00"
         },
         {
             "name": "eftec/bladeone",
