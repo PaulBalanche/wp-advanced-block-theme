@@ -11544,12 +11544,10 @@ class WpeComponent extends _src_js_Models_WpeComponentBase__WEBPACK_IMPORTED_MOD
     _src_js_components_OEditorApp__WEBPACK_IMPORTED_MODULE_7__["default"].getInstance().refreshScroll();
   }
   renderLoaderPreview() {
+    const className = this.state.iframeLoaded ? "loaderLiveRenderingIframe closed" : "loaderLiveRenderingIframe";
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       key: this.props.clientId + "-loaderLiveRenderingIframe",
-      className: "loaderLiveRenderingIframe",
-      style: !this.state.iframeLoaded ? {
-        display: "block"
-      } : {}
+      className: className
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "_inner"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {

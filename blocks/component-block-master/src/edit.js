@@ -154,11 +154,13 @@ class WpeComponent extends WpeComponentBase {
     }
 
     renderLoaderPreview() {
+
+        const className = ( this.state.iframeLoaded ) ? "loaderLiveRenderingIframe closed" : "loaderLiveRenderingIframe";
+
         return (
             <div
                 key={this.props.clientId + "-loaderLiveRenderingIframe"}
-                className="loaderLiveRenderingIframe"
-                style={!this.state.iframeLoaded ? { display: "block" } : {}}
+                className={className}
             >
                 <div className="_inner">
                     <div className="o-loader"></div>

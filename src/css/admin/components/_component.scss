@@ -43,6 +43,10 @@
 
         & > .wp-block {
 
+            &:has( > .loaderLiveRenderingIframe ) {
+                height: 100vh;
+            }
+
             &:first-child {
                 margin-top: 0;
             }

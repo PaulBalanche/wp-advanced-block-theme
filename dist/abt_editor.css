@@ -58,6 +58,9 @@
   border-bottom: none !important;
   height: auto !important;
 }
+.o-editor .block-editor-block-list__layout > .wp-block:has(> .loaderLiveRenderingIframe) {
+  height: 100vh;
+}
 .o-editor .block-editor-block-list__layout > .wp-block:first-child {
   margin-top: 0;
 }
@@ -540,6 +543,12 @@
 }
 
 .loaderLiveRenderingIframe {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: var(--abt-background-editor, "white");
+}
+.loaderLiveRenderingIframe.closed {
   display: none;
 }
 .loaderLiveRenderingIframe ._inner {
