@@ -72,13 +72,37 @@
 
             .liveRenderingMessage {
                 text-align: center;
-                padding: 80px 100px 50px 100px;
+                padding: 100px 0;
                 color: white;
                 position: relative;
                 z-index: 20;
 
                 .abtButtonEditZone {
                     display: inline-flex;
+                }
+
+                .diagonal1,
+                .diagonal2 {
+                    content: '';
+                    position: absolute;
+                    top: 5%;
+                    left: 5%;
+                    width: 90%;
+                    height: 90%;
+                    background: var(--wp-admin-theme-color);
+                    opacity: 0.5;
+                }
+                .diagonal1 {
+                    clip-path: polygon(0% 0%, 100% calc(100% - 1px), 100% 100%, 0% calc(0% + 1px));
+                }
+                .diagonal2 {
+                    clip-path: polygon(0% calc(100% - 1px), 100% 0%, 100% calc(0% + 1px), 0% 100%);
+                }
+                .inner{
+                    position: relative;
+                    padding: 60px 160px;
+                    background: radial-gradient(circle, var(--abt-background-editor, "white") 60%, rgba(0,212,255,0) 100%);
+                    font-size: 16px;
                 }
             }
         }

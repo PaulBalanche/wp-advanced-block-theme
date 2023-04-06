@@ -456,6 +456,12 @@ export class WpeComponentBase extends Component {
         return this.state.modal[modal];
     }
 
+    updatePreview() {
+        if( typeof this.state.needPreviewUpdate != "undefined" ) {
+            this.setState({ needPreviewUpdate: true });
+        }
+    }
+
     renderFooter() {
         return (
             <>

@@ -150,7 +150,7 @@ class WpeComponent extends WpeComponentBase {
             iFrame.contentWindow.document.body.style.overflowY = "hidden";
         }
 
-        __OEditorApp.getInstance().refreshScroll();
+        // __OEditorApp.getInstance().refreshScrollrefreshScroll();
     }
 
     renderLoaderPreview() {
@@ -206,7 +206,9 @@ class WpeComponent extends WpeComponentBase {
                             key={this.props.clientId + "-LiveRenderingMessage"}
                             className="liveRenderingMessage"
                         >
-                            Click to edit
+                            <span className="diagonal1"></span>
+                            <span className="diagonal2"></span>
+                            <span className="inner">Click to edit</span>
                             {/* {this.renderButtonEditZone()} */}
                         </div>
                     );
@@ -217,7 +219,9 @@ class WpeComponent extends WpeComponentBase {
                             key={this.props.clientId + "-LiveRenderingMessage"}
                             className="liveRenderingMessage"
                         >
-                            {error}
+                            <span className="diagonal1"></span>
+                            <span className="diagonal2"></span>
+                            <span className="inner">{error}</span>
                         </div>
                     );
                 }

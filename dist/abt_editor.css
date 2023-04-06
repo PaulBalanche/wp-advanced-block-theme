@@ -81,13 +81,38 @@
 }
 .o-editor .block-editor-block-list__layout > .wp-block .liveRenderingMessage {
   text-align: center;
-  padding: 80px 100px 50px 100px;
+  padding: 100px 0;
   color: white;
   position: relative;
   z-index: 20;
 }
 .o-editor .block-editor-block-list__layout > .wp-block .liveRenderingMessage .abtButtonEditZone {
   display: inline-flex;
+}
+.o-editor .block-editor-block-list__layout > .wp-block .liveRenderingMessage .diagonal1,
+.o-editor .block-editor-block-list__layout > .wp-block .liveRenderingMessage .diagonal2 {
+  content: "";
+  position: absolute;
+  top: 5%;
+  left: 5%;
+  width: 90%;
+  height: 90%;
+  background: var(--wp-admin-theme-color);
+  opacity: 0.5;
+}
+.o-editor .block-editor-block-list__layout > .wp-block .liveRenderingMessage .diagonal1 {
+  -webkit-clip-path: polygon(0% 0%, 100% calc(100% - 1px), 100% 100%, 0% calc(0% + 1px));
+          clip-path: polygon(0% 0%, 100% calc(100% - 1px), 100% 100%, 0% calc(0% + 1px));
+}
+.o-editor .block-editor-block-list__layout > .wp-block .liveRenderingMessage .diagonal2 {
+  -webkit-clip-path: polygon(0% calc(100% - 1px), 100% 0%, 100% calc(0% + 1px), 0% 100%);
+          clip-path: polygon(0% calc(100% - 1px), 100% 0%, 100% calc(0% + 1px), 0% 100%);
+}
+.o-editor .block-editor-block-list__layout > .wp-block .liveRenderingMessage .inner {
+  position: relative;
+  padding: 60px 160px;
+  background: radial-gradient(circle, var(--abt-background-editor, "white") 60%, rgba(0, 212, 255, 0) 100%);
+  font-size: 16px;
 }
 
 .o-editor .block-editor-block-parent-selector {

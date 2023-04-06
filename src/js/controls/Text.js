@@ -30,6 +30,10 @@ export function renderText(
                     componentInstance
                 )
             }
+            onBlur={(e) => {
+                console.log('onBlur');
+                componentInstance.updatePreview();
+            }}
         />
     );
 }

@@ -11541,8 +11541,10 @@ class WpeComponent extends _src_js_Models_WpeComponentBase__WEBPACK_IMPORTED_MOD
       iFrame.parentNode.style.height = heightIframe;
       iFrame.contentWindow.document.body.style.overflowY = "hidden";
     }
-    _src_js_components_OEditorApp__WEBPACK_IMPORTED_MODULE_7__["default"].getInstance().refreshScroll();
+
+    // __OEditorApp.getInstance().refreshScrollrefreshScroll();
   }
+
   renderLoaderPreview() {
     const className = this.state.iframeLoaded ? "loaderLiveRenderingIframe closed" : "loaderLiveRenderingIframe";
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -11579,13 +11581,25 @@ class WpeComponent extends _src_js_Models_WpeComponentBase__WEBPACK_IMPORTED_MOD
           render.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
             key: this.props.clientId + "-LiveRenderingMessage",
             className: "liveRenderingMessage"
-          }, "Click to edit"));
+          }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+            className: "diagonal1"
+          }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+            className: "diagonal2"
+          }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+            className: "inner"
+          }, "Click to edit")));
         } else {
           render.push(this.renderEditFormZone());
           render.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
             key: this.props.clientId + "-LiveRenderingMessage",
             className: "liveRenderingMessage"
-          }, error));
+          }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+            className: "diagonal1"
+          }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+            className: "diagonal2"
+          }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+            className: "inner"
+          }, error)));
         }
       } else if (!previewReady) {
         render.push(this.renderEditFormZone());
@@ -13627,7 +13641,11 @@ function renderText(componentInstance, id, label, keys, valueProp, objectValue) 
     ,
     type: "text",
     value: objectValue,
-    onChange: newValue => _Static_Attributes__WEBPACK_IMPORTED_MODULE_2__.Attributes.updateAttributes(keys, valueProp, newValue, false, componentInstance)
+    onChange: newValue => _Static_Attributes__WEBPACK_IMPORTED_MODULE_2__.Attributes.updateAttributes(keys, valueProp, newValue, false, componentInstance),
+    onBlur: e => {
+      console.log('onBlur');
+      componentInstance.updatePreview();
+    }
   });
 }
 
@@ -13659,7 +13677,11 @@ function renderTextarea(componentInstance, id, label, keys, valueProp, objectVal
     key: id,
     label: label,
     value: objectValue,
-    onChange: newValue => _Static_Attributes__WEBPACK_IMPORTED_MODULE_2__.Attributes.updateAttributes(keys, valueProp, newValue, false, componentInstance)
+    onChange: newValue => {
+      _Static_Attributes__WEBPACK_IMPORTED_MODULE_2__.Attributes.updateAttributes(keys, valueProp, newValue, false, componentInstance);
+
+      // componentInstance.updatePreview();
+    }
   });
 }
 
@@ -14849,6 +14871,13 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
   }
   displayModal(modal) {
     return this.state.modal[modal];
+  }
+  updatePreview() {
+    if (typeof this.state.needPreviewUpdate != "undefined") {
+      this.setState({
+        needPreviewUpdate: true
+      });
+    }
   }
   renderFooter() {
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, typeof this.state.needPreviewUpdate != "undefined" && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
@@ -40618,7 +40647,7 @@ const OEditorAppContext = (0,_wordpress_compose__WEBPACK_IMPORTED_MODULE_2__.com
   }
   const selectedBlockClientId = select("core/block-editor").getSelectedBlockClientId();
   const editorMode = select("core/edit-post").getEditorMode();
-
+  console.log(blocksList);
   // console.log( "isNavigationMode : " + select("core/block-editor").isNavigationMode() );
 
   return {

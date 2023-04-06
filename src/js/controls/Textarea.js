@@ -18,15 +18,17 @@ export function renderTextarea(
             key={id}
             label={label}
             value={objectValue}
-            onChange={(newValue) =>
+            onChange={(newValue) => {
                 Attributes.updateAttributes(
                     keys,
                     valueProp,
                     newValue,
                     false,
                     componentInstance
-                )
-            }
+                );
+
+                // componentInstance.updatePreview();
+            }}
         />
     );
 }

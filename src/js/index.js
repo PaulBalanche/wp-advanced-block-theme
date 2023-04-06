@@ -105,7 +105,7 @@ const OEditorAppContext = compose([
         
         const editorMode =
             select("core/edit-post").getEditorMode();
-        
+        console.log(blocksList);
         // console.log( "isNavigationMode : " + select("core/block-editor").isNavigationMode() );
 
         return {
