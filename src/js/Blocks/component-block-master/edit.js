@@ -6,17 +6,11 @@ import {
 } from "@wordpress/block-editor";
 import { compose } from "@wordpress/compose";
 import { withDispatch, withSelect } from "@wordpress/data";
-import { WpeComponentBase } from "../../../src/js/Models/WpeComponentBase";
-
-// import { store as reusableBlocksStore } from '@wordpress/reusable-blocks';
+import { WpeComponentBase } from "../../Components/WpeComponentBase";
 
 import apiFetch from "@wordpress/api-fetch";
 
-// import { store as preferencesStore } from '@wordpress/preferences';
-
-import { Devices } from "../../../src/js/Singleton/Devices";
-
-import __OEditorApp from "../../../src/js/components/OEditorApp";
+import __OEditorApp from "../../Components/OEditorApp";
 
 class WpeComponent extends WpeComponentBase {
     _$iframes;
@@ -44,7 +38,6 @@ class WpeComponent extends WpeComponentBase {
     }
 
     componentDidMount() {
-        Devices.getInstance().addComponent(this);
 
         setTimeout(() => {
             this.apiFetch();
@@ -119,17 +112,6 @@ class WpeComponent extends WpeComponentBase {
                     error: res.data,
                     needPreviewUpdate: false,
                 });
-
-                console.log(
-                    js_const.rest_api_namespace +
-                        js_const.componentblock_attr_autosaves_rest_api_resource_path +
-                        "/" +
-                        js_const.post_id +
-                        "/" +
-                        this.props.clientId +
-                        " error: " +
-                        res.data
-                );
             }
         });
     }

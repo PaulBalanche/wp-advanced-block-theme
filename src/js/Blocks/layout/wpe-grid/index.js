@@ -8,7 +8,7 @@ import { __ } from '@wordpress/i18n';
 
 import * as gridIcons from './icons';
 
-import { Attributes } from '../../../../src/js/Static/Attributes';
+import { Attributes } from '../../../Static/Attributes';
 
 /**
  * Internal dependencies

@@ -1,4 +1,5 @@
 import {
+    ButtonGroup,
     Button,
     Dashicon,
     Panel,
@@ -6,11 +7,14 @@ import {
     PanelRow,
     TabPanel,
 } from "@wordpress/components";
+import { Fragment } from "react";
 
 import { Attributes } from "./Attributes";
 import { Controls } from "./Controls";
 
 import { Sortable } from "./Sortable";
+
+import __ODevices from "../Components/ODevices";
 
 export class Render {
     static tabPanelComponent(
@@ -277,6 +281,44 @@ export class Render {
                     {labelKey}
                 </div>
                 {itemsProp}
+            </div>
+        );
+    }
+
+    static responsiveTabComponent(
+        id,
+        tabs,
+        inner,
+        onSelect = null,
+    ) {
+
+        const icons = {
+            mobile: 'smartphone',
+            tablet: 'tablet',
+            desktop: 'laptop',
+            wide: 'desktop'
+        };
+
+        return (
+            <div
+                key={id + "-responsiveTabPanel"}
+                className={"responsive-tab-panel-wpe-component"}
+            >
+                {inner}
+                <ButtonGroup className="responsive-buttons">
+                    { tabs.map((layout) => {
+                        
+                        const label = ( typeof icons[layout.name] != 'undefined' ) ? <Dashicon icon={icons[layout.name]} /> : layout.name;
+
+                        return <Button
+                            key={id + "-responsiveTabPanel-Button-" + layout.name}
+                            onMouseDown={() => {
+                                onSelect(layout.name)
+                            }}
+                            variant={ (layout.active) ? "secondary" : null }
+                        >{label}</Button>
+                    }) }
+                </ButtonGroup>
             </div>
         );
     }

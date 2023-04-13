@@ -137,9 +137,9 @@ class CoreBlock extends ModelBase {
      */
     public function render( $block_content, $block ) {
 
-        if( file_exists( ABT_PLUGIN_DIR . 'blocks/' . $this->get_ID() . '/rendered_attributes.php' ) ) {
+        if( file_exists( ABT_PLUGIN_DIR . 'inc/Blocks/' . $this->get_ID() . '/rendered_attributes.php' ) ) {
 
-            $attributes = include( ABT_PLUGIN_DIR . 'blocks/' . $this->get_ID() . '/rendered_attributes.php' );
+            $attributes = include( ABT_PLUGIN_DIR . 'inc/Blocks/' . $this->get_ID() . '/rendered_attributes.php' );
             $block_content = RenderService::render( $this->get_view_path(), $attributes );
         }
 

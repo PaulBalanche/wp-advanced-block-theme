@@ -14,20 +14,20 @@ export function renderRelation(
 ) {
     if (
         typeof entity == "undefined" ||
-        typeof this.props.relations[entity] == "undefined" ||
-        this.props.relations[entity] == null ||
-        Object.keys(this.props.relations[entity]).length == 0
+        typeof componentInstance.props.relations[entity] == "undefined" ||
+        componentInstance.props.relations[entity] == null ||
+        Object.keys(componentInstance.props.relations[entity]).length == 0
     )
         return null;
 
-    label = required ? label + "*" : label;
+    label = required && label != null ? label + "*" : label;
 
     return (
         <SelectControl
             key={id}
             label={label}
             value={objectValue}
-            options={this.props.relations[entity].map(function (value) {
+            options={componentInstance.props.relations[entity].map(function (value) {
                 return { label: value.title.raw, value: value.id };
             })}
             onChange={(newValue) =>

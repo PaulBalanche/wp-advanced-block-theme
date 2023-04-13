@@ -12,7 +12,7 @@ export function renderToggle(
     objectValue,
     required = false
 ) {
-    label = required ? label + "*" : label;
+    label = required && label != null ? label + "*" : label;
 
     return (
         <ToggleControl

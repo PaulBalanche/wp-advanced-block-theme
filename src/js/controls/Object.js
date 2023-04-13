@@ -26,7 +26,7 @@ export function renderObject(
 
     if (label == null) return fieldsetObject;
 
-    label = required ? label + "*" : label;
+    label = required && label != null ? label + "*" : label;
 
     // let currentValueAttribute = valueProp;
     // keys.forEach( element => { currentValueAttribute = ( currentValueAttribute != null && typeof currentValueAttribute == 'object' && currentValueAttribute.hasOwnProperty(element) && typeof currentValueAttribute[element] != "undefined" ) ? currentValueAttribute[element] : ""; } );

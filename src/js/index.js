@@ -7,15 +7,15 @@ import { store as blockEditorStore } from "@wordpress/block-editor";
 
 import "../css/admin/_index.scss";
 
-import OEditorApp from "./components/OEditorApp";
+import OEditorApp from "./Components/OEditorApp";
 
-import "../../blocks/component-block-master/src/index";
-import "../../blocks/layout/wpe-column/src/index";
-import "../../blocks/layout/wpe-container/src/index";
-import "../../blocks/layout/wpe-gallery/src/index";
-import "../../blocks/layout/wpe-grid/src/index";
-import "../../blocks/layout/wpe-slide/src/index";
-import "../../blocks/layout/wpe-slider/src/index";
+import "./Blocks/component-block-master/index";
+import "./Blocks/layout/wpe-column/index";
+import "./Blocks/layout/wpe-container/index";
+import "./Blocks/layout/wpe-gallery/index";
+import "./Blocks/layout/wpe-grid/index";
+import "./Blocks/layout/wpe-slide/index";
+import "./Blocks/layout/wpe-slider/index";
 
 class OEditor {
     constructor() {
@@ -105,8 +105,6 @@ const OEditorAppContext = compose([
         
         const editorMode =
             select("core/edit-post").getEditorMode();
-        console.log(blocksList);
-        // console.log( "isNavigationMode : " + select("core/block-editor").isNavigationMode() );
 
         return {
             blocksList,

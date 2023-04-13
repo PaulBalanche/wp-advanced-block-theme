@@ -15,7 +15,7 @@ export function renderSelect(
 ) {
     if (typeof options == "undefined") return null;
 
-    label = required ? label + "*" : label;
+    label = required && label != null ? label + "*" : label;
 
     const defaultLabel =
         defaultValue != null ? "Default (" + defaultValue + ")" : "Default";

@@ -142,6 +142,7 @@ export function renderFile(
             </div>
         );
     }
+
     let inner = Render.fieldContainer(
         id + "_file",
         <MediaPlaceholder
@@ -212,10 +213,14 @@ export function renderFile(
             addToGallery={type == "gallery" && !!objectValue}
             value={objectValue}
             disableDropZone={true}
+            labels={{
+                title: null
+            }}
         >
             {preview}
         </MediaPlaceholder>
     );
 
-    return Render.panelComponent(id, label, inner, false);
+    return inner;
+    // return Render.panelComponent(id, label, inner, false);
 }

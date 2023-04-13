@@ -2,7 +2,7 @@
  * WordPress dependencies
  */
 import { createBlock } from '@wordpress/blocks';
-import { WpeComponentBase } from '../../../../src/js/Models/WpeComponentBase';
+import { WpeComponentBase } from '../../../Components/WpeComponentBase';
 import { compose } from '@wordpress/compose';
 import {
     useBlockProps,
@@ -24,8 +24,7 @@ import {
 import { withSelect, withDispatch, dispatch } from '@wordpress/data';
 import { get, map, times } from 'lodash';
 
-
-import { Devices } from '../../../../src/js/Singleton/Devices';
+import __ODevices from "../../../Components/ODevices";
 
 /**
  * Add some columns in wpe-container based on variation selected
@@ -56,7 +55,7 @@ class WpeGrid extends WpeComponentBase {
 
         // Define rowStart fo the new colums added
         let initLayout = {};
-        Object.keys( Devices.getInstance().getMediaQueries() ).forEach( ( layout ) => {
+        Object.keys( __ODevices.getInstance().getMediaQueries() ).forEach( ( layout ) => {
 
             initLayout[ layout ] = {
                 columnStart: 1,

@@ -1,7 +1,7 @@
 /**
  * WordPress dependencies
  */
-import { WpeComponentBase } from '../../../../src/js/Models/WpeComponentBase';
+import { WpeComponentBase } from '../../../Components/WpeComponentBase';
 import { withSelect, withDispatch, dispatch } from '@wordpress/data';
 import { compose } from '@wordpress/compose';
 import {

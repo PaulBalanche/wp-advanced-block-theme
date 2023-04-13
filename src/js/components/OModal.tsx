@@ -4,7 +4,7 @@ import { Button, Dashicon } from "@wordpress/components";
 
 import __OUserPreferences from "./OUserPreferences";
 
-import { WpeModal } from "../Models/Modal";
+import { WpeModal } from "./Modal";
 
 export default class OModal extends Component {
     static _instance;

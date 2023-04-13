@@ -55,6 +55,32 @@
             }
 
         }
-    }
 
+        .responsive-tab-panel-wpe-component {
+            position: relative;
+            width: 100%;
+            padding-top: $o-space-20;
+
+            .components-button-group.responsive-buttons {
+                position: absolute;
+                top: 0;
+                right: 0;
+                background: $background300;
+                border-radius: $o-border-radius-small;
+                padding: $o-space-10;
+
+                .components-button {
+                    margin-bottom: 0;
+                }
+            }
+
+            .tab-panel-wpe-component.videoType {
+                margin-top: $o-space-40;
+
+                .components-tab-panel__tabs {
+                    background: $background300;
+                }
+            }
+        }
+    }
 }

@@ -1,5 +1,5 @@
 import { DateTimePicker } from "@wordpress/components";
-
+import { withState } from "@wordpress/compose";
 import { Attributes } from "../Static/Attributes";
 import { Render } from "../Static/Render";
 
@@ -12,7 +12,7 @@ export function renderDateTime(
     objectValue,
     required = false
 ) {
-    label = required ? label + "*" : label;
+    label = required && label != null ? label + "*" : label;
 
     const MyDateTimePicker = withState({
         date: objectValue ? objectValue : new Date(),

@@ -7,7 +7,7 @@ import {
     __experimentalInputControl as InputControl,
 } from "@wordpress/components";
 
-import { WpeModal } from "../../Models/Modal";
+import { WpeModal } from "../../Components/Modal";
 
 export class LinkControl extends Component {
     constructor() {

@@ -11,7 +11,7 @@ export function renderTextarea(
     objectValue,
     required = false
 ) {
-    label = required ? label + "*" : label;
+    label = required && label != null ? label + "*" : label;
 
     return (
         <TextareaControl

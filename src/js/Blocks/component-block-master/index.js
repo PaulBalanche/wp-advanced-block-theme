@@ -7,7 +7,7 @@ import { InnerBlocks, useBlockProps } from "@wordpress/block-editor";
  */
 import edit from "./edit";
 
-import { Attributes } from "../../../src/js/Static/Attributes";
+import { Attributes } from "../../Static/Attributes";
 
 var current_user_can_edit_posts = global_localized.current_user_can_edit_posts;
 

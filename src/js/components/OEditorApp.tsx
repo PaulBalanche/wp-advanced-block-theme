@@ -12,6 +12,7 @@ import __OEditorWelcome from "./OEditorWelcome";
 import globalData from "../global";
 
 import OModal from "./OModal";
+import ODevices from "./ODevices";
 import OUserPreferences from "./OUserPreferences";
 
 export default class OEditorApp extends Component {
@@ -32,7 +33,8 @@ export default class OEditorApp extends Component {
 
         this.state = {
             route: null,
-            needToBeMounted: true
+            needToBeMounted: true,
+            currentDevice: null
         };
 
         // @ts-ignore
@@ -52,6 +54,15 @@ export default class OEditorApp extends Component {
         if( this.props.context.editorMode == 'visual' && this.state.needToBeMounted && this.props.context.blocksList.length > 0 ) {
             this._mount();
         }
+    }
+
+    getCurrentDevice() {
+        return this.state.currentDevice;
+    }
+
+    setCurrentDevice(newDevice) {
+
+        this.setState( { currentDevice: newDevice } );
     }
 
     _mount() {
@@ -350,6 +361,7 @@ export default class OEditorApp extends Component {
 
         return (
             <>
+                <ODevices />
                 <section
                     key="o-editor-app"
                     className={`o-editor-app ${componentToRender?.getExtraClassName?.()}`}

@@ -10,7 +10,7 @@ import {
 
 import { merge } from "merge-anything";
 
-import { Devices } from "../../../src/js/Singleton/Devices";
+import __ODevices from "../../Components/ODevices";
 
 export class MarginControls extends Component {
     constructor(attr) {
@@ -54,7 +54,7 @@ export class MarginControls extends Component {
             margin: {},
         };
 
-        Object.keys(Devices.getInstance().getMediaQueries()).forEach(
+        Object.keys(__ODevices.getInstance().getMediaQueries()).forEach(
             (layout) => {
                 this.state.padding[layout] = {
                     all: undefined,
@@ -121,7 +121,7 @@ export class MarginControls extends Component {
 
     resetPadding(deviceType) {
         let newPadding = {};
-        Object.keys(Devices.getInstance().getMediaQueries()).forEach(
+        Object.keys(__ODevices.getInstance().getMediaQueries()).forEach(
             (layout) => {
                 newPadding[layout] =
                     deviceType == layout ? {} : this.state.padding[layout];
@@ -134,7 +134,7 @@ export class MarginControls extends Component {
 
     resetMargin(deviceType) {
         let newMargin = {};
-        Object.keys(Devices.getInstance().getMediaQueries()).forEach(
+        Object.keys(__ODevices.getInstance().getMediaQueries()).forEach(
             (layout) => {
                 newMargin[layout] =
                     deviceType == layout ? {} : this.state.margin[layout];
@@ -201,9 +201,9 @@ export class MarginControls extends Component {
                     <TabPanel
                         className="padding-tab-panel"
                         activeClass="active-tab"
-                        initialTabName={Devices.getInstance().getCurrentDevice()}
+                        initialTabName={__ODevices.getInstance().getCurrentDevice()}
                         tabs={Object.keys(
-                            Devices.getInstance().getMediaQueries()
+                            __ODevices.getInstance().getMediaQueries()
                         ).map((layout) => {
                             return {
                                 name: layout,
@@ -338,9 +338,9 @@ export class MarginControls extends Component {
                     <TabPanel
                         className="margin-tab-panel"
                         activeClass="active-tab"
-                        initialTabName={Devices.getInstance().getCurrentDevice()}
+                        initialTabName={__ODevices.getInstance().getCurrentDevice()}
                         tabs={Object.keys(
-                            Devices.getInstance().getMediaQueries()
+                            __ODevices.getInstance().getMediaQueries()
                         ).map((layout) => {
                             return {
                                 name: layout,

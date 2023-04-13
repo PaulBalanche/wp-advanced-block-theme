@@ -1,7 +1,7 @@
 /**
  * WordPress dependencies
  */
-import { WpeComponentBase } from '../../../../src/js/Models/WpeComponentBase';
+import { WpeComponentBase } from '../../../Components/WpeComponentBase';
 import { compose } from '@wordpress/compose';
 import {
     InnerBlocks,
@@ -19,9 +19,8 @@ import {
 
 import { withSelect, withDispatch, dispatch } from '@wordpress/data';
 
-import { Devices } from '../../../../src/js/Singleton/Devices';
-import { Render } from '../../../../src/js/Static/Render';
-import { EditZone } from '../../../../src/js/Singleton/EditZone';
+import __ODevices from "../../../Components/ODevices";
+import { Render } from '../../../Static/Render';
 
 /**
  * registerBlockType edit function
@@ -61,7 +60,7 @@ class WpeColumn extends WpeComponentBase {
                 'Layout',
                 Render.tabPanelComponent(
                     this.props.clientId,
-                    Object.keys( Devices.getInstance().getMediaQueries() ).map( ( layout ) => {
+                    Object.keys( __ODevices.getInstance().getMediaQueries() ).map( ( layout ) => {
                         return {
                             name: layout,
                             title: layout.charAt(0).toUpperCase() + layout.slice(1),
@@ -114,7 +113,7 @@ class WpeColumn extends WpeComponentBase {
                     },
                     this.state.currentBodyDevice,
                     ( tabName ) => {
-                        Devices.getInstance().setCurrentDevice(tabName);
+                        __ODevices.getInstance().setCurrentDevice(tabName);
                     }
                 )
             )

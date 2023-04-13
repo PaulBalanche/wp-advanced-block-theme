@@ -6,7 +6,7 @@ import { useBlockProps, useInnerBlocksProps } from '@wordpress/block-editor';
 import { __ } from '@wordpress/i18n';
 import { addFilter } from '@wordpress/hooks';
 
-import { Attributes } from '../../../../src/js/Static/Attributes';
+import { Attributes } from '../../../Static/Attributes';
 
 /**
  * Internal dependencies

@@ -15,7 +15,6 @@ class Config {
         $frontendRelativePath               = ABT_FRONTEND_RELATIVE_PATH,
         $templateViewsLocation              = ABT_TEMPLATE_VIEWS_LOCATION,
         $templateComponentsSubLocation      = ABT_TEMPLATE_COMPONENTS_SUB_LOCATION,
-        $componentMasterBlocksLocation      = 'blocks/component-block-master/',
         $componentBlocksLocation            = 'blocks/',
         $layoutBlocksLocation               = 'blocks/layout/',
         $wpDefaultBlockTypes                = [

@@ -18,7 +18,7 @@ export function renderLink(
         objectValue = {};
     }
 
-    label = required ? label + "*" : label;
+    label = required && label != null ? label + "*" : label;
 
     let inner = Render.fieldContainer(
         id + "_link",

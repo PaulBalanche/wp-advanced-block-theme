@@ -1,6 +1,7 @@
 import { renderDateTime } from "../Controls/DateTime";
 import { renderFile } from "../Controls/File";
-import { renderImageVideo } from "../Controls/ImageVideo";
+import { renderImage } from "../Controls/Image";
+import { renderVideo } from "../Controls/Video";
 import { renderLink } from "../Controls/Link";
 import { renderObject } from "../Controls/Object";
 import { renderRadio } from "../Controls/Radio";
@@ -49,10 +50,20 @@ export class Controls {
                 );
 
             case "image":
-            case "video":
-                return renderImageVideo(
+                return renderImage(
                     componentInstance,
-                    args.type,
+                    args.args,
+                    id,
+                    label,
+                    keys,
+                    valueProp,
+                    objectValue,
+                    required
+                );
+
+            case "video":
+                return renderVideo(
+                    componentInstance,
                     args.args,
                     id,
                     label,
@@ -140,7 +151,7 @@ export class Controls {
                     componentInstance,
                     id,
                     label,
-                    props.help,
+                    args.help,
                     keys,
                     valueProp,
                     objectValue,

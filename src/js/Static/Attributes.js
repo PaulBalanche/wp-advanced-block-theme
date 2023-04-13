@@ -1,4 +1,4 @@
-import { Devices } from "../Singleton/Devices";
+import __ODevices from "../Components/ODevices";
 import { Render } from "./Render";
 
 export class Attributes {
@@ -182,6 +182,7 @@ export class Attributes {
                             ? prop.image
                             : {},
                 };
+                prop.responsive = true;
                 break;
             case "video":
                 args = {
@@ -191,10 +192,12 @@ export class Attributes {
                             ? prop.video
                             : {},
                 };
+                prop.responsive = true;
                 break;
             case "file":
             case "gallery":
                 args = { type: type };
+                prop.responsive = true;
                 break;
             case "object":
                 if (typeof prop.props != "object") {
@@ -214,12 +217,12 @@ export class Attributes {
                 Render.panelComponent(
                     blockKey,
                     required_field && label != null
-                        ? label + ' <span class="o-required">*</span>'
+                        ? <>{label}<span className="o-required">*</span></>
                         : label,
-                    Render.tabPanelComponent(
+                    Render.responsiveTabComponent(
                         blockKey,
                         Object.keys(
-                            Devices.getInstance().getMediaQueries()
+                            __ODevices.getInstance().getMediaQueries()
                         ).map((layout) => {
                             return {
                                 name: layout,
@@ -227,25 +230,22 @@ export class Attributes {
                                     layout.charAt(0).toUpperCase() +
                                     layout.slice(1),
                                 className: "tab-" + layout,
+                                active: ( __ODevices.getInstance().getCurrentDevice() == layout ) ? true : false
                             };
                         }),
-                        (tab) => {
-                            return Render.control(
+                        Render.control(
                                 type,
                                 componentInstance,
-                                blockKey + "-" + tab.name,
+                                blockKey + "-" + __ODevices.getInstance().getCurrentDevice(),
                                 null,
-                                keys.concat(tab.name),
+                                keys.concat(__ODevices.getInstance().getCurrentDevice()),
                                 valueProp,
-                                currentValueAttribute[tab.name],
+                                currentValueAttribute[__ODevices.getInstance().getCurrentDevice()],
                                 repeatable,
                                 required_field,
                                 args
-                            );
-                        },
-                        Devices.getInstance().getCurrentDevice(),
-                        null,
-                        "tabPanelResponsiveProp"
+                        ),
+                        ( newDevice ) => { __ODevices.getInstance().setCurrentDevice(newDevice) }
                     ),
                     type == "object" ? false : true,
                     "responsive"
