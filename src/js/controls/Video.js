@@ -1,5 +1,5 @@
 import { MediaPlaceholder } from "@wordpress/block-editor";
-
+import { Fragment } from "react";
 import { Button, RadioControl, TextControl, Dashicon } from "@wordpress/components";
 import { withState } from "@wordpress/compose";
 import { Attributes } from "../Static/Attributes";
@@ -17,60 +17,56 @@ export function renderVideo(
 ) {
     const typeVideoPanel = [];
 
+    let initialTabName = null;
+
     // File
     if( typeof args.file == 'undefined' || !! args.file ) {
 
-        let preview = false;
-        if (
-            objectValue &&
-            objectValue.file &&
-            typeof objectValue.file == "object"
-        ) {
-            preview = (
-                <>
-                    <img
-                        key={id + "-filePreview"}
-                        alt="Edit file"
-                        title="Edit file"
-                        className="edit-file-preview"
-                        src={objectValue.file.preview}
-                    />
-                    <div key={id + "-fileDetails"} className="file-details">
-                        {objectValue.file.name}
-                        <br />
-                        {objectValue.file.mime}
-                        <br />
-                        {Attributes.fileSizeFormat(objectValue.file.size)}
-                    </div>
-                </>
-            );
-
-            preview = (
-                <div
-                    key={id + "-mediaPreviewContainer"}
-                    className="media-preview-container"
-                >
-                    {preview}
-                    <Button
-                        key={id + "-removeMedia"}
-                        isSecondary
-                        isSmall
-                        className="reset-button"
-                        onMouseDown={() =>
-                            Attributes.updateAttributes(
-                                keys.concat("file"),
-                                valueProp,
-                                undefined,
-                                false,
-                                componentInstance
-                            )
-                        }
-                    >
-                        Remove
-                    </Button>
+        const preview = ( objectValue && objectValue.file && typeof objectValue.file == "object" ) ?
+            <div
+                key={id + "-mediaPreviewContainer"}
+                className="media-preview-container"
+            >
+                <img
+                    key={id + "-filePreview"}
+                    alt="Edit file"
+                    title="Edit file"
+                    className="edit-file-preview"
+                    src={objectValue.file.preview}
+                />
+                <div key={id + "-fileDetails"} className="file-details">
+                    {objectValue.file.name}
+                    <br />
+                    {objectValue.file.mime}
+                    <br />
+                    {Attributes.fileSizeFormat(objectValue.file.size)}
                 </div>
-            );
-        }
+                <Button
+                    key={id + "-removeMedia"}
+                    variant="primary"
+                    className="reset-button is-destructive"
+                    onMouseDown={() =>
+                        Attributes.updateAttributes(
+                            keys.concat("file"),
+                            valueProp,
+                            undefined,
+                            false,
+                            componentInstance
+                        )
+                    }
+                >
+                    <Dashicon icon="trash" />
+                </Button>
+            </div>
+            :
+            <div
+                key={id + "-mediaPreviewContainer"}
+                className="media-preview-container empty"
+                >
+                    <span className="diagonal1"></span>
+                    <span className="diagonal2"></span>
+                    <span className="inner">No video...</span>
+            </div>
         
         const file = Render.fieldContainer(
             id + "_file",
@@ -121,7 +117,11 @@ export function renderVideo(
             name: 'file',
             title: 'File',
             content: file
-        })
+        });
+
+        if( initialTabName == null && objectValue && objectValue.file ) {
+            initialTabName = 'file';
+        }
     }
     else {
         typeVideoPanel.push({
@@ -135,6 +135,7 @@ export function renderVideo(
     
     // Embed
     if( typeof args.embed == 'undefined' || !! args.embed ) {
+        
         typeVideoPanel.push({
             name: 'embed',
             title: 'Embed',
@@ -160,7 +161,11 @@ export function renderVideo(
                     }
                 />
             )
-        })
+        });
+
+        if( initialTabName == null && objectValue && objectValue.embed ) {
+            initialTabName = 'embed';
+        }
     }
     else {
         typeVideoPanel.push({
@@ -171,19 +176,19 @@ export function renderVideo(
         })
     }
 
-    return <>
-        <div>Upload a media file or pick one from your media library.</div>
+    return <Fragment key={id + "-fragment"}>
+        <div key={id + "-instructions"}>Upload a media file or pick one from your media library.</div>
         { Render.tabPanelComponent(
             id + '-videoType',
             typeVideoPanel,
             function (typeVideoPanel) {
                 return typeVideoPanel.content;
             },
-            null,
+            initialTabName,
             null,
             'videoType'
         ) }
-    </>
+    </Fragment>
 
     return imageVideoControl;
 }

@@ -41,7 +41,8 @@
   padding-left: 10px;
 }
 .o-editor .components-base-control .components-base-control__label,
-.o-editor .components-base-control .components-input-control__label {
+.o-editor .components-base-control .components-input-control__label,
+.o-editor .components-base-control__forced_label {
   display: flex !important;
   align-items: center !important;
   text-transform: none !important;
@@ -140,6 +141,13 @@
   border-radius: 4px;
 }
 
+.o-editor .components-datetime {
+  border-radius: 10px;
+  background: rgb(250, 250, 250);
+  padding: 30px;
+  box-sizing: border-box;
+}
+
 .o-editor .basicField {
   width: 100%;
 }
@@ -192,63 +200,6 @@
   max-width: 75%;
   margin: auto;
   margin-top: 40px;
-}
-
-.o-editor .image .media-preview-container {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 16/9;
-  padding: 24px;
-  box-sizing: border-box;
-}
-.o-editor .image .media-preview-container.empty {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgb(250, 250, 250);
-}
-.o-editor .image .media-preview-container.empty .diagonal1,
-.o-editor .image .media-preview-container.empty .diagonal2 {
-  content: "";
-  position: absolute;
-  top: 5%;
-  left: 5%;
-  width: 90%;
-  height: 90%;
-  background: rgb(220, 220, 220);
-}
-.o-editor .image .media-preview-container.empty .diagonal1 {
-  -webkit-clip-path: polygon(0% 0%, 100% calc(100% - 1px), 100% 100%, 0% calc(0% + 1px));
-          clip-path: polygon(0% 0%, 100% calc(100% - 1px), 100% 100%, 0% calc(0% + 1px));
-}
-.o-editor .image .media-preview-container.empty .diagonal2 {
-  -webkit-clip-path: polygon(0% calc(100% - 1px), 100% 0%, 100% calc(0% + 1px), 0% 100%);
-          clip-path: polygon(0% calc(100% - 1px), 100% 0%, 100% calc(0% + 1px), 0% 100%);
-}
-.o-editor .image .media-preview-container.empty .inner {
-  position: relative;
-  padding: 100px;
-  background: radial-gradient(circle, rgb(250, 250, 250) 60%, rgba(0, 212, 255, 0) 100%);
-  color: #a0a0a0;
-}
-.o-editor .image .media-preview-container img {
-  -o-object-fit: contain;
-     object-fit: contain;
-  width: 100%;
-  height: 100%;
-}
-.o-editor .image .media-preview-container .reset-button {
-  display: none;
-  position: absolute;
-  top: 10px;
-  right: 10px;
-}
-.o-editor .image .media-preview-container .reset-button .dashicon {
-  -webkit-margin-end: 0;
-          margin-inline-end: 0;
-}
-.o-editor .image .media-preview-container:hover > .reset-button {
-  display: block;
 }
 
 @keyframes o-loading-in {
@@ -309,6 +260,69 @@
 }
 .o-editor-loading-zone.removed, body:has(#editor .is-mode-text) .o-editor-loading-zone {
   display: none;
+}
+
+.o-editor .media-preview-container {
+  position: relative;
+  width: 100%;
+  text-align: center;
+  background: rgb(250, 250, 250);
+  padding: 24px;
+  box-sizing: border-box;
+}
+.o-editor .media-preview-container.empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.o-editor .media-preview-container.empty .diagonal1,
+.o-editor .media-preview-container.empty .diagonal2 {
+  content: "";
+  position: absolute;
+  top: 5%;
+  left: 5%;
+  width: 90%;
+  height: 90%;
+  background: rgb(220, 220, 220);
+}
+.o-editor .media-preview-container.empty .diagonal1 {
+  -webkit-clip-path: polygon(0% 0%, 100% calc(100% - 1px), 100% 100%, 0% calc(0% + 1px));
+          clip-path: polygon(0% 0%, 100% calc(100% - 1px), 100% 100%, 0% calc(0% + 1px));
+}
+.o-editor .media-preview-container.empty .diagonal2 {
+  -webkit-clip-path: polygon(0% calc(100% - 1px), 100% 0%, 100% calc(0% + 1px), 0% 100%);
+          clip-path: polygon(0% calc(100% - 1px), 100% 0%, 100% calc(0% + 1px), 0% 100%);
+}
+.o-editor .media-preview-container.empty .inner {
+  position: relative;
+  padding: 80px 200px;
+  background: radial-gradient(circle, rgb(250, 250, 250) 60%, rgba(0, 212, 255, 0) 100%);
+  color: #a0a0a0;
+}
+.o-editor .media-preview-container .reset-button {
+  display: none;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+.o-editor .media-preview-container .reset-button .dashicon {
+  -webkit-margin-end: 0;
+          margin-inline-end: 0;
+}
+.o-editor .media-preview-container:hover > .reset-button {
+  display: block;
+}
+.o-editor .image .media-preview-container {
+  aspect-ratio: 16/9;
+}
+.o-editor .image .media-preview-container img {
+  -o-object-fit: contain;
+     object-fit: contain;
+  width: 100%;
+  height: 100%;
+}
+.o-editor .image .media-preview-container.empty .inner {
+  padding: 100px;
 }
 
 .o-editor-app {
@@ -692,22 +706,36 @@
   width: 100%;
   padding-top: 12px;
 }
-.o-editor .components-panel .responsive-tab-panel-wpe-component .components-button-group.responsive-buttons {
-  position: absolute;
-  top: 0;
-  right: 0;
+.o-editor .components-panel .responsive-tab-panel-wpe-component .responsive-buttons-container {
+  display: flex;
+  justify-content: flex-end;
+}
+.o-editor .components-panel .responsive-tab-panel-wpe-component .responsive-buttons-container .components-button-group {
   background: var(--background300, rgb(245, 245, 245));
   border-radius: 4px;
   padding: 6px;
+  margin-bottom: 6px;
 }
-.o-editor .components-panel .responsive-tab-panel-wpe-component .components-button-group.responsive-buttons .components-button {
+.o-editor .components-panel .responsive-tab-panel-wpe-component .responsive-buttons-container .components-button-group .components-button {
   margin-bottom: 0;
+}
+.o-editor .components-panel .responsive-tab-panel-wpe-component.image .responsive-buttons-container, .o-editor .components-panel .responsive-tab-panel-wpe-component.file .responsive-buttons-container, .o-editor .components-panel .responsive-tab-panel-wpe-component.gallery .responsive-buttons-container, .o-editor .components-panel .responsive-tab-panel-wpe-component.video .responsive-buttons-container {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  right: 0;
 }
 .o-editor .components-panel .responsive-tab-panel-wpe-component .tab-panel-wpe-component.videoType {
   margin-top: 24px;
 }
 .o-editor .components-panel .responsive-tab-panel-wpe-component .tab-panel-wpe-component.videoType .components-tab-panel__tabs {
+  position: relative;
+  z-index: 1;
   background: var(--background300, rgb(245, 245, 245));
+}
+
+.o-editor .radio-control-container .components-radio-control__option {
+  padding: 6px;
 }
 
 .o-editor .repeatableAddElt {

@@ -245,9 +245,10 @@ export class Attributes {
                                 required_field,
                                 args
                         ),
-                        ( newDevice ) => { __ODevices.getInstance().setCurrentDevice(newDevice) }
+                        ( newDevice ) => { __ODevices.getInstance().setCurrentDevice(newDevice) },
+                        type
                     ),
-                    type == "object" ? false : true,
+                    false,
                     "responsive"
                 )
             );
@@ -363,7 +364,7 @@ export class Attributes {
                     break;
                 case "gallery":
                     attributes[key] = {
-                        type: "array",
+                        type: "object",
                     };
                     break;
                 case "date":

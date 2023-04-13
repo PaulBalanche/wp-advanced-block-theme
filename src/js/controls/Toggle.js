@@ -14,18 +14,18 @@ export function renderToggle(
 ) {
     label = required && label != null ? label + "*" : label;
 
-    return (
+    return <>
+        <label className="components-base-control__forced_label">{label}</label>
         <ToggleControl
             key={id}
-            label={label}
-            help={
+            label={
                 typeof help == "object" &&
                 Array.isArray(help) &&
                 help.length == 2
                     ? !!objectValue
                         ? help[1]
                         : help[0]
-                    : false
+                    : null
             }
             checked={objectValue}
             onChange={(newValue) =>
@@ -38,5 +38,5 @@ export function renderToggle(
                 )
             }
         />
-    );
+    </>;
 }

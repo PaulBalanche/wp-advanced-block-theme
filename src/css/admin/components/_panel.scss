@@ -61,16 +61,33 @@
             width: 100%;
             padding-top: $o-space-20;
 
-            .components-button-group.responsive-buttons {
-                position: absolute;
-                top: 0;
-                right: 0;
-                background: $background300;
-                border-radius: $o-border-radius-small;
-                padding: $o-space-10;
+            .responsive-buttons-container {
 
-                .components-button {
-                    margin-bottom: 0;
+                display: flex;
+                justify-content: flex-end;
+
+                .components-button-group {
+                    background: $background300;
+                    border-radius: $o-border-radius-small;
+                    padding: $o-space-10;
+                    margin-bottom: $o-space-10;
+    
+                    .components-button {
+                        margin-bottom: 0;
+                    }
+                }
+            }
+            
+            &.image,
+            &.file,
+            &.gallery,
+            &.video {
+
+                .responsive-buttons-container {
+                    position: absolute;
+                    z-index: 1;
+                    top: 0;
+                    right: 0;
                 }
             }
 
@@ -78,6 +95,8 @@
                 margin-top: $o-space-40;
 
                 .components-tab-panel__tabs {
+                    position: relative;
+                    z-index: 1;
                     background: $background300;
                 }
             }

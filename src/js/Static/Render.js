@@ -7,7 +7,6 @@ import {
     PanelRow,
     TabPanel,
 } from "@wordpress/components";
-import { Fragment } from "react";
 
 import { Attributes } from "./Attributes";
 import { Controls } from "./Controls";
@@ -290,6 +289,7 @@ export class Render {
         tabs,
         inner,
         onSelect = null,
+        type
     ) {
 
         const icons = {
@@ -302,23 +302,25 @@ export class Render {
         return (
             <div
                 key={id + "-responsiveTabPanel"}
-                className={"responsive-tab-panel-wpe-component"}
+                className={"responsive-tab-panel-wpe-component " + type}
             >
-                {inner}
-                <ButtonGroup className="responsive-buttons">
-                    { tabs.map((layout) => {
-                        
-                        const label = ( typeof icons[layout.name] != 'undefined' ) ? <Dashicon icon={icons[layout.name]} /> : layout.name;
+                <div className="responsive-buttons-container">
+                    <ButtonGroup>
+                        { tabs.map((layout) => {
+                            
+                            const label = ( typeof icons[layout.name] != 'undefined' ) ? <Dashicon icon={icons[layout.name]} /> : layout.name;
 
-                        return <Button
-                            key={id + "-responsiveTabPanel-Button-" + layout.name}
-                            onMouseDown={() => {
-                                onSelect(layout.name)
-                            }}
-                            variant={ (layout.active) ? "secondary" : null }
-                        >{label}</Button>
-                    }) }
-                </ButtonGroup>
+                            return <Button
+                                key={id + "-responsiveTabPanel-Button-" + layout.name}
+                                onMouseDown={() => {
+                                    onSelect(layout.name)
+                                }}
+                                variant={ (layout.active) ? "secondary" : null }
+                            >{label}</Button>
+                        }) }
+                    </ButtonGroup>
+                </div>
+                {inner}
             </div>
         );
     }

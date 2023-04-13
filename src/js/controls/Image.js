@@ -17,7 +17,7 @@ export function renderImage(
 ) {
     label = label && required ? label + "*" : label;
 
-    const preview = (typeof objectValue == "object" && objectValue.preview) ?
+    const preview = (typeof objectValue == "object" && objectValue.url) ?
         <div
             key={id + "-mediaPreviewContainer"}
             className="media-preview-container"
@@ -27,12 +27,11 @@ export function renderImage(
                 alt="Edit image"
                 title="Edit image"
                 className="edit-image-preview"
-                src={objectValue.preview}
+                src={objectValue.url}
             />
             <Button
                 key={id + "-removeMedia"}
                 variant="primary"
-                isSmall
                 className="reset-button is-destructive"
                 onMouseDown={() => {
                     Attributes.updateAttributes(
@@ -79,7 +78,7 @@ export function renderImage(
                 if (typeof value.id != "undefined") {
                     newValue = {
                         id: value.id,
-                        preview: value.url,
+                        url: value.url,
                     };
                 }
 

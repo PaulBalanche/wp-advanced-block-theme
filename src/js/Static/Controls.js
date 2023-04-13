@@ -1,5 +1,6 @@
 import { renderDateTime } from "../Controls/DateTime";
 import { renderFile } from "../Controls/File";
+import { renderGallery } from "../Controls/Gallery";
 import { renderImage } from "../Controls/Image";
 import { renderVideo } from "../Controls/Video";
 import { renderLink } from "../Controls/Link";
@@ -37,10 +38,19 @@ export class Controls {
                 );
 
             case "file":
-            case "gallery":
                 return renderFile(
                     componentInstance,
-                    args.type,
+                    id,
+                    label,
+                    keys,
+                    valueProp,
+                    objectValue,
+                    required
+                );
+
+            case "gallery":
+                return renderGallery(
+                    componentInstance,
                     id,
                     label,
                     keys,

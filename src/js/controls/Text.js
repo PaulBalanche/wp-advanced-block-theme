@@ -32,7 +32,7 @@ export function renderText(
             }
             onBlur={(e) => {
                 console.log('onBlur');
-                componentInstance.updatePreview();
+                // componentInstance.updatePreview();
             }}
         />
     );

@@ -21,7 +21,8 @@
     }
 
     .components-base-control .components-base-control__label,
-    .components-base-control .components-input-control__label {
+    .components-base-control .components-input-control__label,
+    .components-base-control__forced_label {
         display: flex  !important;
         align-items: center  !important;
         text-transform: none !important;

@@ -3,6 +3,8 @@ import { RadioControl } from "@wordpress/components";
 import { withState } from "@wordpress/compose";
 import { Attributes } from "../Static/Attributes";
 
+import { useState } from '@wordpress/element';
+
 export function renderRadio(
     componentInstance,
     id,
@@ -17,28 +19,23 @@ export function renderRadio(
 
     label = required && label != null ? label + "*" : label;
 
-    const MyRadioControl = withState({
-        option: objectValue,
-    })(({ option, setState }) => (
-        <RadioControl
-            key={id}
-            label={label}
-            selected={option}
-            options={options.map(function (value) {
-                return { label: value.name, value: value.value };
-            })}
-            onChange={(newValue) => {
-                setState({ newValue });
-                Attributes.updateAttributes(
-                    keys,
-                    valueProp,
-                    newValue,
-                    false,
-                    componentInstance
-                );
-            }}
-        />
-    ));
+    const MyRadioControl = <RadioControl
+        key={id}
+        label={label}
+        selected={objectValue}
+        options={options.map(function (value) {
+            return { label: value.name, value: value.value.toString() };
+        })}
+        onChange={(newValue) => {
+            Attributes.updateAttributes(
+                keys,
+                valueProp,
+                newValue,
+                false,
+                componentInstance
+            );
+        }}
+    />
 
     return (
         <div
@@ -53,7 +50,7 @@ export function renderRadio(
                     key={id + "-RadioControlContainer"}
                     className="radio-control-container"
                 >
-                    <MyRadioControl />
+                    {MyRadioControl}
                 </div>
             </div>
         </div>

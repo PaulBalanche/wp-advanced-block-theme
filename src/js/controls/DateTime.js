@@ -31,13 +31,14 @@ export function renderDateTime(
                 );
             }}
             is12Hour={false}
+            __nextRemoveHelpButton
+            __nextRemoveResetButton
         />
     ));
 
-    return (
-        <div key={id + "-dateTimeContainer"} className="dateTime-container">
-            {Render.label(id, label)}
-            <MyDateTimePicker />
-        </div>
+    return Render.panelComponent(
+        id,
+        label,
+        <MyDateTimePicker />
     );
 }
