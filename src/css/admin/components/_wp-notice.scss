@@ -5,6 +5,10 @@
     top: calc($o-space-50 + 60px);
     left: $o-space-50;
 
+    &.components-editor-notices__dismissible {
+        display: none;
+    }
+
     .components-notice {
         border-radius: $o-border-radius;
         margin-block-end: $o-space-30;

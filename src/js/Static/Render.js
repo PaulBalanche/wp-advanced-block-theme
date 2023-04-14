@@ -155,7 +155,8 @@ export class Render {
         controllerValue,
         repeatable,
         required_field,
-        args
+        args,
+        isMissing = false
     ) {
         var control = [];
 
@@ -211,7 +212,7 @@ export class Render {
 
         if (label == null) return control;
 
-        return Render.fieldContainer(blockKey, control);
+        return Render.fieldContainer(blockKey, control, ( isMissing ) ? 'has-error' : '' );
     }
 
     static repeatableObjectLabelFormatting(blockKey, valueProp, keyLoop) {

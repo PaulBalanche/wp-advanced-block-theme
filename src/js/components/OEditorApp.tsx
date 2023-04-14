@@ -56,10 +56,6 @@ export default class OEditorApp extends Component {
         }
     }
 
-    getCurrentDevice() {
-        return this.state.currentDevice;
-    }
-
     setCurrentDevice(newDevice) {
 
         this.setState( { currentDevice: newDevice } );

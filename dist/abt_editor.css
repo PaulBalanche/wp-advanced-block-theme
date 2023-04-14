@@ -149,7 +149,17 @@
 }
 
 .o-editor .basicField {
+  position: relative;
   width: 100%;
+}
+.o-editor .basicField.has-error::before {
+  content: "";
+  background: rgba(220, 50, 50, 0.5);
+  width: 6px;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: -42px;
 }
 
 .o-editor .block-editor-block-list__block[data-type="custom/wpe-grid"] > * > .o-toolbar {
@@ -330,8 +340,7 @@
   right: 40px;
   top: 91px;
   width: 320px;
-  height: calc(50vh + 61px + 30px);
-  max-height: calc(100vh - 61px - 60px);
+  height: calc(100vh - 61px - 60px);
   background: white;
   border-radius: 10px;
   z-index: 99999;
@@ -891,7 +900,8 @@
   z-index: 9;
 }
 .o-editor .components-tab-panel__tabs button {
-  margin: 0 12px !important;
+  position: relative;
+  margin: 0 18px !important;
   padding: 24px 0;
   border-bottom: 2px solid transparent;
   transition: all 0.1s ease-in-out;
@@ -901,6 +911,20 @@
 }
 .o-editor .components-tab-panel__tabs button:first-child {
   margin-left: 0 !important;
+}
+.o-editor .components-tab-panel__tabs button .missing-attributes {
+  position: absolute;
+  top: 1px;
+  right: -16px;
+  background: #DC3232;
+  color: white;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
 }
 .o-editor .components-tab-panel__tab-content {
   display: flex;
@@ -917,6 +941,9 @@
   z-index: 100;
   top: 90px;
   left: 30px;
+}
+.components-notice-list.components-editor-notices__dismissible {
+  display: none;
 }
 .components-notice-list .components-notice {
   border-radius: 10px;
@@ -1521,17 +1548,18 @@
 #editor .interface-interface-skeleton__header .edit-post-header__toolbar .edit-post-visual-editor__post-title-wrapper {
   margin: 0;
   margin-left: 5rem;
+  flex: auto;
 }
 #editor .interface-interface-skeleton__header .edit-post-header__toolbar .edit-post-visual-editor__post-title-wrapper h1 {
-  margin: 0 auto;
-}
-#editor .interface-interface-skeleton__header .edit-post-header__toolbar .edit-post-visual-editor__post-title-wrapper h1:after {
-  content: none;
+  margin: 0;
+  border: 1px solid var(--background300, rgb(245, 245, 245));
+  line-height: initial;
+  padding: 6px 12px;
 }
 
 #devicesButtonGroupContainer {
-  position: absolute;
-  top: 6px;
+  position: fixed;
+  top: 70px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 9999;

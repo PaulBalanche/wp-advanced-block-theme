@@ -179,10 +179,10 @@ class WpeComponent extends WpeComponentBase {
             if (error != null) {
                 if (
                     typeof error == "object" &&
-                    error?.isEmpty &&
-                    error.isEmpty
+                    error?.missing_attributes &&
+                    error.missing_attributes
                 ) {
-                    render.push(this.renderEditFormZone(null, true));
+                    render.push(this.renderEditFormZone());
                     render.push(
                         <div
                             key={this.props.clientId + "-LiveRenderingMessage"}

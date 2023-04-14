@@ -14,14 +14,14 @@
 
                 margin: 0;
                 margin-left: 5rem;
+                flex: auto;
         
                 h1 {
         
-                    margin: 0 auto;
-                    
-                    &:after {
-                        content: none;
-                    }
+                    margin: 0;
+                    border: 1px solid $background300;
+                    line-height: initial;
+                    padding: $o-space-10 $o-space-20;
                 }
             }
         } 

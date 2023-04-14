@@ -117,13 +117,13 @@ const BlockListItem = ({ block, selectBlock }) => {
                     isChildren={true}
                 />
             )}
-            {/* { typeof block.children != 'undefined' && (
+            { typeof block.children != 'undefined' && (
                 <BlockList
                     blocksList={block.children}
                     selectBlock={selectBlock}
                     isChildren={true}
                 />
-            )} */}
+            )}
         </li>
     );
 };

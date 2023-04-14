@@ -408,7 +408,7 @@ class ComponentBlock extends ModelBase {
 
                 if( isset($prop['required']) && $prop['required'] && ( ! isset($attributes[$key_prop]) || ! $attributes[$key_prop] || empty($attributes[$key_prop]) ) ){
 
-                    $missing_required_attributes[] = ( isset( $prop['label'] ) ) ? $prop['label'] : $key_prop;
+                    $missing_required_attributes[] = $key_prop;
                 }
             }
         }

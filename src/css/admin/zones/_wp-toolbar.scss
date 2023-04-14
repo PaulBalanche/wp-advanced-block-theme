@@ -1,6 +1,6 @@
 #devicesButtonGroupContainer {
-    position: absolute;
-    top: $o-space-10;
+    position: fixed;
+    top: 70px;
     left: 50%;
     transform: translateX(-50%);
     z-index: 9999;

@@ -1,6 +1,19 @@
 .o-editor {
 
     .basicField {
+        position: relative;
         width: 100%;
+
+        &.has-error {
+            &::before{
+                content: "";
+                background: rgb(220 50 50 / 50%);
+                width: $o-space-10;
+                height: 100%;
+                position: absolute;
+                top: 0;
+                left: -$o-space-70;
+            }
+        }
     }
 }

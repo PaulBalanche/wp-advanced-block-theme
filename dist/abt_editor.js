@@ -11566,8 +11566,8 @@ class WpeComponent extends _Components_WpeComponentBase__WEBPACK_IMPORTED_MODULE
       } = this.state;
       var render = [];
       if (error != null) {
-        if (typeof error == "object" && error?.isEmpty && error.isEmpty) {
-          render.push(this.renderEditFormZone(null, true));
+        if (typeof error == "object" && error?.missing_attributes && error.missing_attributes) {
+          render.push(this.renderEditFormZone());
           render.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
             key: this.props.clientId + "-LiveRenderingMessage",
             className: "liveRenderingMessage"
@@ -13188,9 +13188,6 @@ class OEditorApp extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Compone
       this._mount();
     }
   }
-  getCurrentDevice() {
-    return this.state.currentDevice;
-  }
   setCurrentDevice(newDevice) {
     this.setState({
       currentDevice: newDevice
@@ -13590,6 +13587,10 @@ const BlockListItem = _ref => {
     className: "anchor"
   }, "#", anchor)), block.innerBlocks.length > 0 && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(BlockList, {
     blocksList: block.innerBlocks,
+    selectBlock: selectBlock,
+    isChildren: true
+  }), typeof block.children != 'undefined' && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(BlockList, {
+    blocksList: block.children,
     selectBlock: selectBlock,
     isChildren: true
   }));
@@ -14161,6 +14162,7 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
     for (const [keyCat, valCat] of Object.entries(catReOrder)) {
       if (valCat.props.length == 0) continue;
       let currentEditCat = [];
+      let errorAttributes = 0;
       forEachCatProps: for (const [keyProp, prop] of Object.entries(valCat.props)) {
         // Conditional treatment
         if (typeof prop.conditional == "object") {
@@ -14170,17 +14172,27 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
             if (this.getAttribute(conditionalFieldKey) != conditionalFieldValue) continue forEachCatProps;
           }
         }
+        let currentAttributeError = false;
+        if (typeof this.state.error == 'object' && this.state.error != null && typeof this.state.error.missing_attributes == 'object') {
+          if (this.state.error.missing_attributes.includes(keyProp)) {
+            errorAttributes++;
+            currentAttributeError = true;
+          }
+        }
         let valueProp = this.getAttribute(keyProp);
         currentEditCat.push(_Static_Attributes__WEBPACK_IMPORTED_MODULE_2__.Attributes.renderProp(prop, [keyProp], {
           [keyProp]: valueProp
-        }, this));
+        }, this, currentAttributeError));
       }
       if (keyCat == "block_settings") {
         currentEditCat.push(this.renderInspectorControls());
       }
+      const titleTab = errorAttributes > 0 ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, valCat.name, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+        className: "missing-attributes"
+      }, errorAttributes)) : valCat.name;
       tabPanel.push({
         name: keyCat,
-        title: valCat.name,
+        title: titleTab,
         content: currentEditCat
       });
     }
@@ -16092,6 +16104,7 @@ class Attributes {
     return objectReturned;
   }
   static renderProp(prop, keys, valueProp, componentInstance) {
+    let isMissing = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : false;
     const type = prop.type.toLowerCase();
     const blockKey = componentInstance.props.clientId + "-" + keys.join("-");
     const repeatable = typeof prop.repeatable != "undefined" && !!prop.repeatable ? true : false;
@@ -16186,9 +16199,9 @@ class Attributes {
         };
       }), _Render__WEBPACK_IMPORTED_MODULE_2__.Render.control(type, componentInstance, blockKey + "-" + _Components_ODevices__WEBPACK_IMPORTED_MODULE_1__["default"].getInstance().getCurrentDevice(), null, keys.concat(_Components_ODevices__WEBPACK_IMPORTED_MODULE_1__["default"].getInstance().getCurrentDevice()), valueProp, currentValueAttribute[_Components_ODevices__WEBPACK_IMPORTED_MODULE_1__["default"].getInstance().getCurrentDevice()], repeatable, required_field, args), newDevice => {
         _Components_ODevices__WEBPACK_IMPORTED_MODULE_1__["default"].getInstance().setCurrentDevice(newDevice);
-      }, type), false, "responsive"));
+      }, type), false, "responsive"), isMissing ? 'has-error' : '');
     }
-    return _Render__WEBPACK_IMPORTED_MODULE_2__.Render.control(type, componentInstance, blockKey, label, keys, valueProp, currentValueAttribute, repeatable, required_field, args);
+    return _Render__WEBPACK_IMPORTED_MODULE_2__.Render.control(type, componentInstance, blockKey, label, keys, valueProp, currentValueAttribute, repeatable, required_field, args, isMissing);
   }
   static initComponentAttributes(attributes, props) {
     for (const [key, value] of Object.entries(props)) {
@@ -16447,6 +16460,7 @@ class Render {
   // }
 
   static control(type, componentInstance, blockKey, label, keys, valueProp, controllerValue, repeatable, required_field, args) {
+    let isMissing = arguments.length > 10 && arguments[10] !== undefined ? arguments[10] : false;
     var control = [];
     if (repeatable) {
       if (controllerValue == null || typeof controllerValue != "object" || controllerValue.length == 0) {
@@ -16468,7 +16482,7 @@ class Render {
       control.push(_Controls__WEBPACK_IMPORTED_MODULE_3__.Controls.render(type, componentInstance, blockKey, label, keys, valueProp, typeof controllerValue != "undefined" ? controllerValue : "", required_field, args));
     }
     if (label == null) return control;
-    return Render.fieldContainer(blockKey, control);
+    return Render.fieldContainer(blockKey, control, isMissing ? 'has-error' : '');
   }
   static repeatableObjectLabelFormatting(blockKey, valueProp, keyLoop) {
     var labelKey = _Attributes__WEBPACK_IMPORTED_MODULE_2__.Attributes.returnStringOrNumber(keyLoop, true) + 1;

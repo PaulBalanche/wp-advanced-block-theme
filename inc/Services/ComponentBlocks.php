@@ -230,7 +230,7 @@ class ComponentBlocks extends ServiceBase {
             // }
 
             // wp_send_json_error( 'Please edit required fields.' );
-            wp_send_json_error( 'Empty block...' );
+            wp_send_json_error( [ 'missing_attributes' => $missing_required_attributes ] );
          }
         
         wp_send_json_error( 'Error during attributes_autosaves_post' );
