@@ -266,61 +266,36 @@ class ComponentBlock extends ModelBase {
                     
                     switch( $currentType ) {
                         case 'string':
-                            $currentType = 'string';
-                            break;
                         case 'text':
-                            $currentType = 'string';
-                            break;
                         case 'richText':
-                            $currentType = 'string';
-                            break;
-                        case 'wysiwyg':
-                            $currentType = 'object';
-                            break;
-                        case 'boolean':
-                            $currentType = 'boolean';
-                            break;
                         case 'select':
-                            $currentType = 'string';
-                            break;
                         case 'color':
-                            $currentType = 'string';
-                            break;
                         case 'radio':
-                            $currentType = 'string';
-                            break;
                         case 'relation':
-                            $currentType = 'string';
-                            break;
-                        case 'array':
-                            $currentType = 'array';
-                            break;
-                        case 'object':
-                            $currentType = 'object';
-                            break;
-                        case 'link':
-                            $currentType = 'object';
-                            break;
                         case 'number':
+                        case 'integer':
+                        case 'date':                            
                             $currentType = 'string';
                             break;
+                        
+                        case 'wysiwyg':
+                        case 'object':
+                        case 'link':
                         case 'image':
-                            $currentType = 'object';
-                            break;
                         case 'video':
-                            $currentType = 'object';
-                            break;
                         case 'file':
                             $currentType = 'object';
                             break;
+
+                        case 'array':
                         case 'gallery':
-                            $currentType = 'array';
-                            break;
+                        case 'checkbox':
                         case 'image[]':
                             $currentType = 'array';
                             break;
-                        case 'date':
-                            $currentType = 'string';
+                        
+                        case 'boolean':
+                            $currentType = 'boolean';
                             break;
                     }
 

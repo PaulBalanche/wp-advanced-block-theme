@@ -65,17 +65,6 @@
 
                 display: flex;
                 justify-content: flex-end;
-
-                .components-button-group {
-                    background: $background300;
-                    border-radius: $o-border-radius-small;
-                    padding: $o-space-10;
-                    margin-bottom: $o-space-10;
-    
-                    .components-button {
-                        margin-bottom: 0;
-                    }
-                }
             }
             
             &.image,

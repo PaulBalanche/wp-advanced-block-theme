@@ -110,13 +110,13 @@ const BlockListItem = ({ block, selectBlock }) => {
                 {blockName}
                 {displayAnchor && <span className="anchor">#{anchor}</span>}
             </Button>
-            {/* {block.innerBlocks.length > 0 && (
+            {block.innerBlocks.length > 0 && (
                 <BlockList
                     blocksList={block.innerBlocks}
                     selectBlock={selectBlock}
                     isChildren={true}
                 />
-            )} */}
+            )}
             {/* { typeof block.children != 'undefined' && (
                 <BlockList
                     blocksList={block.children}

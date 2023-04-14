@@ -13021,6 +13021,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _OUserPreferences__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./OUserPreferences */ "./src/js/Components/OUserPreferences.tsx");
 /* harmony import */ var _OEditorApp__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./OEditorApp */ "./src/js/Components/OEditorApp.tsx");
+/* harmony import */ var _Static_Render__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../Static/Render */ "./src/js/Static/Render.js");
+
 
 
 
@@ -13039,17 +13041,10 @@ class ODevices extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Component
 
     // @ts-ignore
     this.constructor._instance = this;
-    this.componentInstance = {};
     this.mediaQueries = {};
     this.defaultMediaQuery = null;
   }
   componentDidMount() {
-    const devicesButtonGroupContainer = document.createElement("div");
-    devicesButtonGroupContainer.setAttribute("id", "devicesButtonGroupContainer");
-    // document
-    //     .querySelector(".edit-post-header__toolbar")
-    //     .appendChild(devicesButtonGroupContainer);
-    document.querySelector(".o-editor-container").appendChild(devicesButtonGroupContainer);
     if (theme_spec?.media?.queries && typeof theme_spec.media.queries == "object") {
       this.mediaQueries = this.sortMediaQueries(theme_spec.media.queries);
       if (this.getCurrentDevice() == null || theme_spec?.media?.defaultMedia && typeof this.mediaQueries[theme_spec.media.defaultMedia] != "undefined") {
@@ -13103,15 +13098,9 @@ class ODevices extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Component
     if (typeof this.getMediaQueries()[currentDevice] == 'undefined') {
       return null;
     }
-    const minText = this.getMediaQueries()[currentDevice]["minWidth"] != null && this.getMediaQueries()[currentDevice]["minWidth"] > 0 ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, this.getMediaQueries()[currentDevice]["minWidth"] + "px", (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
-      icon: "arrow-left-alt2"
-    })) : null;
-    const maxText = this.getMediaQueries()[currentDevice]["maxWidth"] != null ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
-      icon: "arrow-left-alt2"
-    }), this.getMediaQueries()[currentDevice]["maxWidth"] + "px") : null;
-    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "devicesInfo"
-    }, minText, currentDevice.charAt(0).toUpperCase() + currentDevice.slice(1), maxText), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.ButtonGroup, {
+    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      id: "devicesButtonGroupContainer"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.ButtonGroup, {
       key: "devicesButtonGroup",
       className: "devicesButtonGroup"
     }, Object.keys(this.getMediaQueries()).map(layout => {
@@ -13121,12 +13110,12 @@ class ODevices extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Component
         onMouseDown: () => {
           this.setCurrentDevice(layout);
         }
-      }, layout.charAt(0).toUpperCase() + layout.slice(1));
+      }, _Static_Render__WEBPACK_IMPORTED_MODULE_4__.Render.getDeviceLabel(layout));
     })));
   }
   render() {
     // return null;
-    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createPortal)(this.getButtonGroup(), document.querySelector(".o-editor-container"));
+    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createPortal)(this.getButtonGroup(), document.querySelector(".o-editor"));
   }
 }
 
@@ -13599,7 +13588,11 @@ const BlockListItem = _ref => {
     icon: "arrow-right-alt2"
   }), blockName, displayAnchor && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "anchor"
-  }, "#", anchor)));
+  }, "#", anchor)), block.innerBlocks.length > 0 && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(BlockList, {
+    blocksList: block.innerBlocks,
+    selectBlock: selectBlock,
+    isChildren: true
+  }));
 };
 
 /***/ }),
@@ -13993,7 +13986,7 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
     this.props.setAttributes(attributes);
   }
   propsExists() {
-    return typeof this.props.block_spec.props == "object" && Object.keys(this.props.block_spec.props).length > 0;
+    return typeof this.props == "object" && typeof this.props.block_spec != 'undefined' && typeof this.props.block_spec == 'object' && typeof this.props.block_spec.props != 'undefined' && typeof this.props.block_spec.props == "object" && Object.keys(this.props.block_spec.props).length > 0;
   }
   isReusableBlock() {
     if (typeof this.props.parentsBlock == "object") {
@@ -14344,6 +14337,78 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
     render.push(this.renderRemoveModal());
     return render;
   }
+}
+
+/***/ }),
+
+/***/ "./src/js/Controls/Checkbox.js":
+/*!*************************************!*\
+  !*** ./src/js/Controls/Checkbox.js ***!
+  \*************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "renderCheckbox": () => (/* binding */ renderCheckbox)
+/* harmony export */ });
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _Static_Attributes__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Static/Attributes */ "./src/js/Static/Attributes.js");
+
+
+
+
+function renderCheckbox(componentInstance, id, label, options, keys, valueProp, objectValue) {
+  let required = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : false;
+  label = required && label != null ? label + "*" : label;
+  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
+    key: id + "-fragment"
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+    className: "components-base-control__forced_label",
+    key: id + "-label"
+  }, label), options.map(option => {
+    let isChecked = false;
+    if (typeof objectValue == 'object') {
+      objectValue.forEach(element => {
+        if (element.value == option.value) {
+          isChecked = true;
+          return;
+        }
+      });
+    }
+    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.CheckboxControl, {
+      key: id + "-" + option.value,
+      label: option.name,
+      help: null,
+      checked: isChecked,
+      onChange: newValue => {
+        const newObjectValue = [];
+        if (newValue) {
+          if (typeof objectValue != 'object') {
+            objectValue = [];
+          }
+          objectValue.forEach(element => {
+            newObjectValue.push(element);
+          });
+          newObjectValue.push({
+            value: option.value
+          });
+        } else {
+          if (typeof objectValue == 'object') {
+            objectValue.forEach(element => {
+              if (element.value != option.value) {
+                newObjectValue.push(element);
+              }
+            });
+          }
+        }
+        _Static_Attributes__WEBPACK_IMPORTED_MODULE_2__.Attributes.updateAttributes(keys, valueProp, newObjectValue, false, componentInstance);
+      }
+    });
+  }));
 }
 
 /***/ }),
@@ -14868,6 +14933,7 @@ function renderRelation(componentInstance, id, label, entity, keys, valueProp, o
     key: id,
     label: label,
     value: objectValue,
+    help: "Choose an item inside " + entity + " post type",
     options: componentInstance.props.relations[entity].map(function (value) {
       return {
         label: value.title.raw,
@@ -14948,10 +15014,8 @@ function renderText(componentInstance, id, label, keys, valueProp, objectValue) 
   label = required && label != null ? label + "*" : label;
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.TextControl, {
     key: id,
-    label: label
-    // type={ !! isNumber ? "number" : "text" }
-    ,
-    type: "text",
+    label: label,
+    type: !!isNumber ? "number" : "text",
     value: objectValue,
     onChange: newValue => _Static_Attributes__WEBPACK_IMPORTED_MODULE_2__.Attributes.updateAttributes(keys, valueProp, newValue, false, componentInstance),
     onBlur: e => {
@@ -15018,11 +15082,15 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 function renderToggle(componentInstance, id, label, help, keys, valueProp, objectValue) {
   let required = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : false;
   label = required && label != null ? label + "*" : label;
-  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
-    className: "components-base-control__forced_label"
+  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
+    key: id + "-fragment"
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+    className: "components-base-control__forced_label",
+    key: id + "-label"
   }, label), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.ToggleControl, {
     key: id,
     label: typeof help == "object" && Array.isArray(help) && help.length == 2 ? !!objectValue ? help[1] : help[0] : null,
@@ -16042,6 +16110,11 @@ class Attributes {
         break;
       case "number":
         args = {
+          isNumber: false
+        };
+        break;
+      case "integer":
+        args = {
           isNumber: true
         };
         break;
@@ -16058,6 +16131,7 @@ class Attributes {
         };
         break;
       case "radio":
+      case "checkbox":
         args = {
           options: prop.options
         };
@@ -16123,93 +16197,39 @@ class Attributes {
       currentType = typeof value.responsive != "undefined" && value.responsive ? "object" : currentType;
       switch (currentType) {
         case "string":
-          attributes[key] = {
-            type: "string"
-          };
-          break;
         case "text":
-          attributes[key] = {
-            type: "string"
-          };
-          break;
         case "richText":
+        case "select":
+        case "color":
+        case "radio":
+        case "relation":
+        case "date":
+        case "number":
+        case "integer":
           attributes[key] = {
             type: "string"
           };
           break;
+        case "object":
+        case "link":
+        case "image":
+        case "video":
+        case "file":
+        case "gallery":
         case "wysiwyg":
           attributes[key] = {
             type: "object"
           };
           break;
-        case "boolean":
-          attributes[key] = {
-            type: "boolean"
-          };
-          break;
-        case "select":
-          attributes[key] = {
-            type: "string"
-          };
-          break;
-        case "color":
-          attributes[key] = {
-            type: "string"
-          };
-          break;
-        case "radio":
-          attributes[key] = {
-            type: "string"
-          };
-          break;
-        case "relation":
-          attributes[key] = {
-            type: "string"
-          };
-          break;
         case "array":
+        case "checkbox":
           attributes[key] = {
             type: "array"
           };
           break;
-        case "object":
+        case "boolean":
           attributes[key] = {
-            type: "object"
-          };
-          break;
-        case "link":
-          attributes[key] = {
-            type: "object"
-          };
-          break;
-        case "number":
-          attributes[key] = {
-            type: "string"
-          };
-          break;
-        case "image":
-          attributes[key] = {
-            type: "object"
-          };
-          break;
-        case "video":
-          attributes[key] = {
-            type: "object"
-          };
-          break;
-        case "file":
-          attributes[key] = {
-            type: "object"
-          };
-          break;
-        case "gallery":
-          attributes[key] = {
-            type: "object"
-          };
-          break;
-        case "date":
-          attributes[key] = {
-            type: "string"
+            type: "boolean"
           };
           break;
       }
@@ -16240,12 +16260,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Controls_Link__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../Controls/Link */ "./src/js/Controls/Link.js");
 /* harmony import */ var _Controls_Object__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../Controls/Object */ "./src/js/Controls/Object.js");
 /* harmony import */ var _Controls_Radio__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../Controls/Radio */ "./src/js/Controls/Radio.js");
-/* harmony import */ var _Controls_Relation__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../Controls/Relation */ "./src/js/Controls/Relation.js");
-/* harmony import */ var _Controls_Select__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../Controls/Select */ "./src/js/Controls/Select.js");
-/* harmony import */ var _Controls_Text__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../Controls/Text */ "./src/js/Controls/Text.js");
-/* harmony import */ var _Controls_Textarea__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../Controls/Textarea */ "./src/js/Controls/Textarea.js");
-/* harmony import */ var _Controls_Toggle__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../Controls/Toggle */ "./src/js/Controls/Toggle.js");
-/* harmony import */ var _Controls_WysiwygControl_WysiwygControl__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ../Controls/WysiwygControl/WysiwygControl */ "./src/js/Controls/WysiwygControl/WysiwygControl.js");
+/* harmony import */ var _Controls_Checkbox__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../Controls/Checkbox */ "./src/js/Controls/Checkbox.js");
+/* harmony import */ var _Controls_Relation__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../Controls/Relation */ "./src/js/Controls/Relation.js");
+/* harmony import */ var _Controls_Select__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../Controls/Select */ "./src/js/Controls/Select.js");
+/* harmony import */ var _Controls_Text__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../Controls/Text */ "./src/js/Controls/Text.js");
+/* harmony import */ var _Controls_Textarea__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../Controls/Textarea */ "./src/js/Controls/Textarea.js");
+/* harmony import */ var _Controls_Toggle__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ../Controls/Toggle */ "./src/js/Controls/Toggle.js");
+/* harmony import */ var _Controls_WysiwygControl_WysiwygControl__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ../Controls/WysiwygControl/WysiwygControl */ "./src/js/Controls/WysiwygControl/WysiwygControl.js");
+
 
 
 
@@ -16280,23 +16302,26 @@ class Controls {
         return (0,_Controls_Link__WEBPACK_IMPORTED_MODULE_6__.renderLink)(componentInstance, id, label, keys, valueProp, objectValue, required);
       case "radio":
         return (0,_Controls_Radio__WEBPACK_IMPORTED_MODULE_8__.renderRadio)(componentInstance, id, label, args.options, keys, valueProp, objectValue, required);
+      case "checkbox":
+        return (0,_Controls_Checkbox__WEBPACK_IMPORTED_MODULE_9__.renderCheckbox)(componentInstance, id, label, args.options, keys, valueProp, objectValue, required);
       case "relation":
-        return (0,_Controls_Relation__WEBPACK_IMPORTED_MODULE_9__.renderRelation)(componentInstance, id, label, args.entity, keys, valueProp, objectValue, required);
+        return (0,_Controls_Relation__WEBPACK_IMPORTED_MODULE_10__.renderRelation)(componentInstance, id, label, args.entity, keys, valueProp, objectValue, required);
       case "select":
       case "color":
-        return (0,_Controls_Select__WEBPACK_IMPORTED_MODULE_10__.renderSelect)(componentInstance, id, label, args.options, args.default, keys, valueProp, objectValue, required);
+        return (0,_Controls_Select__WEBPACK_IMPORTED_MODULE_11__.renderSelect)(componentInstance, id, label, args.options, args.default, keys, valueProp, objectValue, required);
       case "string":
       case "number":
-        return (0,_Controls_Text__WEBPACK_IMPORTED_MODULE_11__.renderText)(componentInstance, id, label, keys, valueProp, objectValue, args.isNumber, required);
+      case "integer":
+        return (0,_Controls_Text__WEBPACK_IMPORTED_MODULE_12__.renderText)(componentInstance, id, label, keys, valueProp, objectValue, args.isNumber, required);
       case "text":
-        return (0,_Controls_Textarea__WEBPACK_IMPORTED_MODULE_12__.renderTextarea)(componentInstance, id, label, keys, valueProp, objectValue, required);
+        return (0,_Controls_Textarea__WEBPACK_IMPORTED_MODULE_13__.renderTextarea)(componentInstance, id, label, keys, valueProp, objectValue, required);
       case "boolean":
-        return (0,_Controls_Toggle__WEBPACK_IMPORTED_MODULE_13__.renderToggle)(componentInstance, id, label, args.help, keys, valueProp, objectValue, required);
+        return (0,_Controls_Toggle__WEBPACK_IMPORTED_MODULE_14__.renderToggle)(componentInstance, id, label, args.help, keys, valueProp, objectValue, required);
       case "object":
         return (0,_Controls_Object__WEBPACK_IMPORTED_MODULE_7__.renderObject)(componentInstance, id, label, keys, valueProp, args.props, typeof args.initialOpen != "undefined" ? args.initialOpen : false, required);
       case "richText":
       case "wysiwyg":
-        return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Controls_WysiwygControl_WysiwygControl__WEBPACK_IMPORTED_MODULE_14__["default"], {
+        return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Controls_WysiwygControl_WysiwygControl__WEBPACK_IMPORTED_MODULE_15__["default"], {
           key: id + "-WysiwygControl",
           id: id,
           label: label,
@@ -16498,29 +16523,31 @@ class Render {
   static responsiveTabComponent(id, tabs, inner) {
     let onSelect = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
     let type = arguments.length > 4 ? arguments[4] : undefined;
-    const icons = {
-      mobile: 'smartphone',
-      tablet: 'tablet',
-      desktop: 'laptop',
-      wide: 'desktop'
-    };
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       key: id + "-responsiveTabPanel",
       className: "responsive-tab-panel-wpe-component " + type
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "responsive-buttons-container"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.ButtonGroup, null, tabs.map(layout => {
-      const label = typeof icons[layout.name] != 'undefined' ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
-        icon: icons[layout.name]
-      }) : layout.name;
       return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
         key: id + "-responsiveTabPanel-Button-" + layout.name,
         onMouseDown: () => {
           onSelect(layout.name);
         },
-        variant: layout.active ? "secondary" : null
-      }, label);
+        isPressed: layout.active
+      }, Render.getDeviceLabel(layout.name));
     }))), inner);
+  }
+  static getDeviceLabel(device) {
+    const icons = {
+      mobile: 'smartphone',
+      tablet: 'tablet',
+      desktop: 'laptop',
+      wide: 'desktop'
+    };
+    return typeof icons[device] != 'undefined' ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
+      icon: icons[device]
+    }) : device.charAt(0).toUpperCase() + device.slice(1);
   }
 }
 

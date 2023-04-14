@@ -5,6 +5,8 @@ import __OUserPreferences from "./OUserPreferences";
 
 import __OEditorApp from "./OEditorApp";
 
+import { Render } from "../Static/Render";
+
 export default class ODevices extends Component {
     static _instance;
     static getInstance() {
@@ -21,25 +23,11 @@ export default class ODevices extends Component {
         // @ts-ignore
         this.constructor._instance = this;
 
-
-        this.componentInstance = {};
         this.mediaQueries = {};
         this.defaultMediaQuery = null;
     }
 
     componentDidMount() {
-
-        const devicesButtonGroupContainer = document.createElement("div");
-            devicesButtonGroupContainer.setAttribute(
-                "id",
-                "devicesButtonGroupContainer"
-            );
-            // document
-            //     .querySelector(".edit-post-header__toolbar")
-            //     .appendChild(devicesButtonGroupContainer);
-            document
-                .querySelector(".o-editor-container")
-                .appendChild(devicesButtonGroupContainer);
 
         if (
             theme_spec?.media?.queries &&
@@ -122,32 +110,9 @@ export default class ODevices extends Component {
         if( typeof this.getMediaQueries()[currentDevice] == 'undefined' ) {
             return null;
         }
-        const minText =
-            this.getMediaQueries()[currentDevice]["minWidth"] != null &&
-            this.getMediaQueries()[currentDevice]["minWidth"] > 0 ? (
-                <>
-                    {this.getMediaQueries()[currentDevice]["minWidth"] +
-                        "px"}
-                    <Dashicon icon="arrow-left-alt2" />
-                </>
-            ) : null;
-        const maxText =
-            this.getMediaQueries()[currentDevice]["maxWidth"] != null ? (
-                <>
-                    <Dashicon icon="arrow-left-alt2" />
-                    {this.getMediaQueries()[currentDevice]["maxWidth"] +
-                        "px"}
-                </>
-            ) : null;
 
         return (
-            <>
-                <div className="devicesInfo">
-                    {minText}
-                    {currentDevice.charAt(0).toUpperCase() +
-                        currentDevice.slice(1)}
-                    {maxText}
-                </div>
+            <div id="devicesButtonGroupContainer">
                 <ButtonGroup
                     key="devicesButtonGroup"
                     className="devicesButtonGroup"
@@ -161,13 +126,12 @@ export default class ODevices extends Component {
                                     this.setCurrentDevice(layout);
                                 }}
                             >
-                                {layout.charAt(0).toUpperCase() +
-                                    layout.slice(1)}
+                                {Render.getDeviceLabel(layout)}
                             </Button>
                         );
                     })}
                 </ButtonGroup>
-            </>
+            </div>
         );
     }
 
@@ -175,7 +139,7 @@ export default class ODevices extends Component {
         // return null;
         return createPortal(
             this.getButtonGroup(),
-            document.querySelector(".o-editor-container")
+            document.querySelector(".o-editor")
         );
     }
 }

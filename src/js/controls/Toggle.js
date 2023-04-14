@@ -1,5 +1,5 @@
 import { ToggleControl } from "@wordpress/components";
-
+import { Fragment } from "@wordpress/element";
 import { Attributes } from "../Static/Attributes";
 
 export function renderToggle(
@@ -14,8 +14,8 @@ export function renderToggle(
 ) {
     label = required && label != null ? label + "*" : label;
 
-    return <>
-        <label className="components-base-control__forced_label">{label}</label>
+    return <Fragment key={id + "-fragment"}>
+        <label className="components-base-control__forced_label" key={id + "-label"}>{label}</label>
         <ToggleControl
             key={id}
             label={
@@ -38,5 +38,5 @@ export function renderToggle(
                 )
             }
         />
-    </>;
+    </Fragment>;
 }

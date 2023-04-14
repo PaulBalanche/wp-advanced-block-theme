@@ -6,6 +6,7 @@ import { renderVideo } from "../Controls/Video";
 import { renderLink } from "../Controls/Link";
 import { renderObject } from "../Controls/Object";
 import { renderRadio } from "../Controls/Radio";
+import { renderCheckbox } from "../Controls/Checkbox";
 import { renderRelation } from "../Controls/Relation";
 import { renderSelect } from "../Controls/Select";
 import { renderText } from "../Controls/Text";
@@ -105,6 +106,18 @@ export class Controls {
                     objectValue,
                     required
                 );
+            
+            case "checkbox":
+                return renderCheckbox(
+                    componentInstance,
+                    id,
+                    label,
+                    args.options,
+                    keys,
+                    valueProp,
+                    objectValue,
+                    required
+                );
 
             case "relation":
                 return renderRelation(
@@ -134,6 +147,7 @@ export class Controls {
 
             case "string":
             case "number":
+            case "integer":
                 return renderText(
                     componentInstance,
                     id,

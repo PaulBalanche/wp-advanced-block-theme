@@ -22,23 +22,22 @@ export function renderRelation(
 
     label = required && label != null ? label + "*" : label;
 
-    return (
-        <SelectControl
-            key={id}
-            label={label}
-            value={objectValue}
-            options={componentInstance.props.relations[entity].map(function (value) {
-                return { label: value.title.raw, value: value.id };
-            })}
-            onChange={(newValue) =>
-                Attributes.updateAttributes(
-                    keys,
-                    valueProp,
-                    newValue,
-                    false,
-                    componentInstance
-                )
-            }
-        />
-    );
+    return <SelectControl
+        key={id}
+        label={label}
+        value={objectValue}
+        help={"Choose an item inside " + entity + " post type"}
+        options={componentInstance.props.relations[entity].map(function (value) {
+            return { label: value.title.raw, value: value.id };
+        })}
+        onChange={(newValue) =>
+            Attributes.updateAttributes(
+                keys,
+                valueProp,
+                newValue,
+                false,
+                componentInstance
+            )
+        }
+    />
 }

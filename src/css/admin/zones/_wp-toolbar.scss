@@ -1,52 +1,47 @@
 #devicesButtonGroupContainer {
-    display: flex;
-    position: relative;
-    align-items: center;
-    justify-content: flex-end;
-    margin-left: auto;
-    margin-right: $o-space-50;
-    padding-inline-end: $o-space-60;
-
-    &:after {
-        content: '';
-        display: block;
-        position: absolute;
-        top: 0; right: 0;
-        width: 1px; height: 100%;
-        background-color: $o-main-color-border;
-    }
-
-    .devicesInfo {
-        margin-right: 30px;
-        display: flex;
-        align-items: center;
-
-        .dashicon {
-            font-size: 1.2em;
-            height: auto;
-            width: auto;
-            margin: 2px 5px 0 5px;
-        }
-    }
+    position: absolute;
+    top: $o-space-10;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    background: $background300;
+    border-radius: $o-border-radius-small;
+    padding: $o-space-10;
 
     .devicesButtonGroup {
 
-        button {
+        .components-button {
             
-            box-shadow: inset 0 0 0 1px $border300;
-            background: $background300;
-
-            &:first-child {
-                border-top-left-radius: $o-border-radius;
-                border-bottom-left-radius: $o-border-radius;
-            }
-            &:last-child {
-                border-top-right-radius: $o-border-radius;
-                border-bottom-right-radius: $o-border-radius;
-            }
+            border-radius: 0;
+            color: rgb(160 160 160);
 
             &.is-pressed {
-                background: var(--wp-admin-theme-color);
+                background: none;
+                color: var(--wp-admin-theme-color);
+            }
+        }
+    }
+}
+
+.o-editor {
+
+    .responsive-buttons-container {
+
+        .components-button-group {
+            background: $background300;
+            border-radius: $o-border-radius-small;
+            padding: $o-space-10;
+            margin-bottom: $o-space-10;
+
+            .components-button {
+                margin-bottom: 0;
+                border-radius: 0;
+                color: rgb(160 160 160);
+
+                &.is-pressed {
+                    background: none;
+                    color: var(--wp-admin-theme-color);
+                }
             }
         }
     }

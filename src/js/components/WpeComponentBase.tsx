@@ -55,7 +55,7 @@ export class WpeComponentBase extends Component {
 
     propsExists() {
         return (
-            typeof this.props.block_spec.props == "object" &&
+            typeof this.props == "object" && typeof this.props.block_spec != 'undefined' && typeof this.props.block_spec == 'object' && typeof this.props.block_spec.props != 'undefined' && typeof this.props.block_spec.props == "object" &&
             Object.keys(this.props.block_spec.props).length > 0
         );
     }

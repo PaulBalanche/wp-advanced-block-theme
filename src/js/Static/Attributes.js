@@ -153,6 +153,9 @@ export class Attributes {
                 args = { isNumber: false };
                 break;
             case "number":
+                args = { isNumber: false };
+                break;
+            case "integer":
                 args = { isNumber: true };
                 break;
             case "boolean":
@@ -169,6 +172,7 @@ export class Attributes {
                 };
                 break;
             case "radio":
+            case "checkbox":
                 args = { options: prop.options };
                 break;
             case "relation":
@@ -283,93 +287,42 @@ export class Attributes {
 
             switch (currentType) {
                 case "string":
-                    attributes[key] = {
-                        type: "string",
-                    };
-                    break;
                 case "text":
-                    attributes[key] = {
-                        type: "string",
-                    };
-                    break;
                 case "richText":
+                case "select":
+                case "color":
+                case "radio":
+                case "relation":
+                case "date":
+                case "number":
+                case "integer":
                     attributes[key] = {
                         type: "string",
                     };
-                    break;
+                    break; 
+
+                case "object":
+                case "link":
+                case "image":
+                case "video":
+                case "file":
+                case "gallery":
                 case "wysiwyg":
                     attributes[key] = {
                         type: "object",
                     };
                     break;
-                case "boolean":
-                    attributes[key] = {
-                        type: "boolean",
-                    };
-                    break;
-                case "select":
-                    attributes[key] = {
-                        type: "string",
-                    };
-                    break;
-                case "color":
-                    attributes[key] = {
-                        type: "string",
-                    };
-                    break;
-                case "radio":
-                    attributes[key] = {
-                        type: "string",
-                    };
-                    break;
-                case "relation":
-                    attributes[key] = {
-                        type: "string",
-                    };
-                    break;
+
                 case "array":
+                case "checkbox":                    
                     attributes[key] = {
                         type: "array",
                     };
                     break;
-                case "object":
+
+                case "boolean":
                     attributes[key] = {
-                        type: "object",
-                    };
-                    break;
-                case "link":
-                    attributes[key] = {
-                        type: "object",
-                    };
-                    break;
-                case "number":
-                    attributes[key] = {
-                        type: "string",
-                    };
-                    break;
-                case "image":
-                    attributes[key] = {
-                        type: "object",
-                    };
-                    break;
-                case "video":
-                    attributes[key] = {
-                        type: "object",
-                    };
-                    break;
-                case "file":
-                    attributes[key] = {
-                        type: "object",
-                    };
-                    break;
-                case "gallery":
-                    attributes[key] = {
-                        type: "object",
-                    };
-                    break;
-                case "date":
-                    attributes[key] = {
-                        type: "string",
+                        type: "boolean",
                     };
                     break;
             }

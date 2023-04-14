@@ -18,8 +18,7 @@ export function renderText(
         <TextControl
             key={id}
             label={label}
-            // type={ !! isNumber ? "number" : "text" }
-            type="text"
+            type={ !! isNumber ? "number" : "text" }
             value={objectValue}
             onChange={(newValue) =>
                 Attributes.updateAttributes(

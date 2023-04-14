@@ -292,13 +292,6 @@ export class Render {
         type
     ) {
 
-        const icons = {
-            mobile: 'smartphone',
-            tablet: 'tablet',
-            desktop: 'laptop',
-            wide: 'desktop'
-        };
-
         return (
             <div
                 key={id + "-responsiveTabPanel"}
@@ -307,21 +300,31 @@ export class Render {
                 <div className="responsive-buttons-container">
                     <ButtonGroup>
                         { tabs.map((layout) => {
-                            
-                            const label = ( typeof icons[layout.name] != 'undefined' ) ? <Dashicon icon={icons[layout.name]} /> : layout.name;
 
                             return <Button
                                 key={id + "-responsiveTabPanel-Button-" + layout.name}
                                 onMouseDown={() => {
                                     onSelect(layout.name)
                                 }}
-                                variant={ (layout.active) ? "secondary" : null }
-                            >{label}</Button>
+                                isPressed={(layout.active)}
+                            >{Render.getDeviceLabel(layout.name)}</Button>
                         }) }
                     </ButtonGroup>
                 </div>
                 {inner}
             </div>
         );
+    }
+
+    static getDeviceLabel( device ) {
+
+        const icons = {
+            mobile: 'smartphone',
+            tablet: 'tablet',
+            desktop: 'laptop',
+            wide: 'desktop'
+        };
+        
+        return ( typeof icons[device] != 'undefined' ) ? <Dashicon icon={icons[device]} /> : device.charAt(0).toUpperCase() + device.slice(1);
     }
 }
