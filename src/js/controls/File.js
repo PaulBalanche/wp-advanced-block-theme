@@ -46,7 +46,8 @@ export function renderFile(
                         undefined,
                         false,
                         componentInstance
-                    )
+                    );
+                    componentInstance.updatePreview();
                 }}
             >
                 <Dashicon icon="trash" />
@@ -75,7 +76,7 @@ export function renderFile(
                         preview: value.icon,
                         name: value.filename,
                         mime: value.mime,
-                        size: value.filesizeInBytes,
+                        size: value.filesizeInBytes
                     };
                 }
 
@@ -91,6 +92,7 @@ export function renderFile(
                         false,
                         componentInstance
                     );
+                    componentInstance.updatePreview();
             }}
             value={objectValue}
             disableDropZone={true}

@@ -48,6 +48,9 @@ export function renderLink(
                                 componentInstance
                             );
                         }}
+                        onBlur={(e) => {
+                            componentInstance.updatePreview();
+                        }}
                     />
                     <LinkControl
                         key={id + "-LinkControl"}
@@ -82,6 +85,7 @@ export function renderLink(
                                 false,
                                 componentInstance
                             );
+                            componentInstance.updatePreview();
                         }}
                     />
                 </div>

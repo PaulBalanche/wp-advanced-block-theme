@@ -65,8 +65,9 @@ export function renderCheckbox(
                         newObjectValue,
                         false,
                         componentInstance
-                    )
-                } }
+                    );
+                    componentInstance.updatePreview();
+                }}
             />
         } ) }
     </Fragment>

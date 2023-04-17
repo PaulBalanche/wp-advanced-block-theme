@@ -30,15 +30,16 @@ export function renderSelect(
                     return { label: value.name, value: value.value };
                 })
             )}
-            onChange={(newValue) =>
+            onChange={(newValue) => {
                 Attributes.updateAttributes(
                     keys,
                     valueProp,
                     newValue,
                     false,
                     componentInstance
-                )
-            }
+                );
+                componentInstance.updatePreview();
+            }}
         />
     );
 }

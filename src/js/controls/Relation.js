@@ -30,14 +30,15 @@ export function renderRelation(
         options={componentInstance.props.relations[entity].map(function (value) {
             return { label: value.title.raw, value: value.id };
         })}
-        onChange={(newValue) =>
+        onChange={(newValue) => {
             Attributes.updateAttributes(
                 keys,
                 valueProp,
                 newValue,
                 false,
                 componentInstance
-            )
-        }
+            );
+            componentInstance.updatePreview();
+        }}
     />
 }

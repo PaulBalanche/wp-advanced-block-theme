@@ -41,6 +41,7 @@ export function renderImage(
                         false,
                         componentInstance
                     );
+                    componentInstance.updatePreview();
                 }}
             >
                 <Dashicon icon="trash" />
@@ -94,6 +95,7 @@ export function renderImage(
                         false,
                         componentInstance
                     );
+                    componentInstance.updatePreview();
             }}
             value={objectValue ? objectValue : false}
             disableDropZone={true}

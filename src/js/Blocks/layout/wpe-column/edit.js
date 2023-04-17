@@ -53,69 +53,73 @@ class WpeColumn extends WpeComponentBase {
 
     renderInspectorControls() {
 
+        const currentDevice = __ODevices.getInstance().getCurrentDevice();
+
         return Render.fieldContainer(
             this.props.clientId + '_layout',
             Render.panelComponent(
                 this.props.clientId + '_layout',
                 'Layout',
-                Render.tabPanelComponent(
+                Render.responsiveTabComponent(
                     this.props.clientId,
-                    Object.keys( __ODevices.getInstance().getMediaQueries() ).map( ( layout ) => {
+                    Object.keys(
+                        __ODevices.getInstance().getMediaQueries()
+                    ).map((layout) => {
                         return {
                             name: layout,
-                            title: layout.charAt(0).toUpperCase() + layout.slice(1),
-                            className: 'tab-' + layout
+                            title:
+                                layout.charAt(0).toUpperCase() +
+                                layout.slice(1),
+                            className: "tab-" + layout,
+                            active: ( currentDevice == layout ) ? true : false
                         };
-                    } ),
-                    ( tab ) => {
-                        return <>
-                            <div className='flex'>
-                                { Render.fieldContainer( this.props.clientId + "_columnStart_" + tab.name,
-                                    <RangeControl
-                                        label="Column start"
-                                        value={ this.getLayout( 'columnStart', tab.name ) }
-                                        onChange={ ( value ) => this.setLayout( 'columnStart', Number.parseInt(value), tab.name ) }
-                                        min={ 1 }
-                                        max={ this.getLayout( 'columnStart', tab.name ) + 1 }
-                                    />
-                                ) }
-                                { Render.fieldContainer( this.props.clientId + "_width_" + tab.name,
-                                    <RangeControl
-                                        label="Width"
-                                        value={ this.getLayout( 'width', tab.name ) }
-                                        onChange={ ( value ) => this.setLayout( 'width', Number.parseInt(value), tab.name ) }
-                                        min={ 1 }
-                                        max={ this.getLayout( 'width', tab.name ) + 1 }
-                                    />
-                                ) }
-                            </div>
-                            <div className='flex'>
-                                { Render.fieldContainer( this.props.clientId + "_rowStart_" + tab.name,
-                                    <RangeControl
-                                        label="Row start"
-                                        value={ this.getLayout( 'rowStart', tab.name ) }
-                                        onChange={ ( value ) => this.setLayout( 'rowStart', Number.parseInt(value), tab.name ) }
-                                        min={ 1 }
-                                        max={ this.getLayout( 'rowStart', tab.name ) + 1 }
-                                    />
-                                ) }
-                                { Render.fieldContainer( this.props.clientId + "_height_" + tab.name,
-                                    <RangeControl
-                                        label="Height"
-                                        value={ this.getLayout( 'height', tab.name ) }
-                                        onChange={ ( value ) => this.setLayout( 'height', Number.parseInt(value), tab.name ) }
-                                        min={ 1 }
-                                        max={ this.getLayout( 'height', tab.name ) + 1 }
-                                    />
-                                ) }
-                            </div>
-                        </>
-                    },
-                    this.state.currentBodyDevice,
-                    ( tabName ) => {
-                        __ODevices.getInstance().setCurrentDevice(tabName);
-                    }
-                )
+                    }),
+                    <>
+                        <div className='flex'>
+                            { Render.fieldContainer( this.props.clientId + "_columnStart_" + currentDevice,
+                                <RangeControl
+                                    label="Column start"
+                                    value={ this.getLayout( 'columnStart', currentDevice ) }
+                                    onChange={ ( value ) => this.setLayout( 'columnStart', Number.parseInt(value), currentDevice ) }
+                                    min={ 1 }
+                                    max={ this.getLayout( 'columnStart', currentDevice ) + 1 }
+                                />
+                            ) }
+                            { Render.fieldContainer( this.props.clientId + "_width_" + currentDevice,
+                                <RangeControl
+                                    label="Width"
+                                    value={ this.getLayout( 'width', currentDevice ) }
+                                    onChange={ ( value ) => this.setLayout( 'width', Number.parseInt(value), currentDevice ) }
+                                    min={ 1 }
+                                    max={ this.getLayout( 'width', currentDevice ) + 1 }
+                                />
+                            ) }
+                        </div>
+                        <div className='flex'>
+                            { Render.fieldContainer( this.props.clientId + "_rowStart_" + currentDevice,
+                                <RangeControl
+                                    label="Row start"
+                                    value={ this.getLayout( 'rowStart', currentDevice ) }
+                                    onChange={ ( value ) => this.setLayout( 'rowStart', Number.parseInt(value), currentDevice ) }
+                                    min={ 1 }
+                                    max={ this.getLayout( 'rowStart', currentDevice ) + 1 }
+                                />
+                            ) }
+                            { Render.fieldContainer( this.props.clientId + "_height_" + currentDevice,
+                                <RangeControl
+                                    label="Height"
+                                    value={ this.getLayout( 'height', currentDevice ) }
+                                    onChange={ ( value ) => this.setLayout( 'height', Number.parseInt(value), currentDevice ) }
+                                    min={ 1 }
+                                    max={ this.getLayout( 'height', currentDevice ) + 1 }
+                                />
+                            ) }
+                        </div>
+                    </>,
+                    ( newDevice ) => { __ODevices.getInstance().setCurrentDevice(newDevice) },
+                    'column-layout'
+                ),
+                true
             )
         );
     }
@@ -129,12 +133,17 @@ class WpeColumn extends WpeComponentBase {
             innerBlocksProps.className += ' is-empty'
         }
 
-        innerBlocksProps.style = {
-            gridColumnStart: this.getLayout( 'columnStart', this.state.currentBodyDevice ),
-            gridColumnEnd: this.getLayout( 'columnStart', this.state.currentBodyDevice ) + this.getLayout( 'width', this.state.currentBodyDevice ),
-            gridRowStart: this.getLayout( 'rowStart', this.state.currentBodyDevice ),
-            gridRowEnd: this.getLayout( 'rowStart', this.state.currentBodyDevice ) + this.getLayout( 'height', this.state.currentBodyDevice )
-        };
+        if( typeof __ODevices.getInstance() != 'undefined' ) {
+
+            const currentDevice = __ODevices.getInstance().getCurrentDevice();
+
+            innerBlocksProps.style = {
+                gridColumnStart: this.getLayout( 'columnStart', currentDevice ),
+                gridColumnEnd: this.getLayout( 'columnStart', currentDevice ) + this.getLayout( 'width', currentDevice ),
+                gridRowStart: this.getLayout( 'rowStart', currentDevice ),
+                gridRowEnd: this.getLayout( 'rowStart', currentDevice ) + this.getLayout( 'height', currentDevice )
+            };
+        }
 
         return <div {...innerBlocksProps}>
             { this.renderEditFormZone() }

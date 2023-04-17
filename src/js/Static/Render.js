@@ -135,16 +135,6 @@ export class Render {
         );
     }
 
-    // static sortableUpdate( newOrder, initialControllerValue, keys, valueProp, componentInstance ) {
-
-    //     var newControllerValue = [];
-    //     for( var i in newOrder ) {
-    //         newControllerValue.push( ( typeof initialControllerValue[ newOrder[i] ] != 'undefined' ) ? initialControllerValue[ newOrder[i] ] : null );
-    //     }
-
-    //     Attributes.updateAttributes( keys, valueProp, newControllerValue, false, componentInstance );
-    // }
-
     static control(
         type,
         componentInstance,
@@ -156,9 +146,19 @@ export class Render {
         repeatable,
         required_field,
         args,
-        isMissing = false
+        isMissing = false,
+        isResponsive = false
     ) {
         var control = [];
+
+        const keyControl = keys.join('-');
+        const currentDevice = __ODevices.getInstance().getCurrentDevice();
+
+        if( isResponsive ) {
+            blockKey = blockKey + "-" + currentDevice;
+            keys.push(currentDevice);
+            controllerValue = (typeof controllerValue == "object" && typeof controllerValue[currentDevice] != "undefined" ) ? controllerValue[currentDevice] : "";
+        }
 
         if (repeatable) {
             if (
@@ -207,6 +207,42 @@ export class Render {
                     required_field,
                     args
                 )
+            );
+        }
+
+        if( isResponsive ) {
+            control = Render.responsiveTabComponent(
+                blockKey,
+                Object.keys(
+                    __ODevices.getInstance().getMediaQueries()
+                ).map((layout) => {
+                    return {
+                        name: layout,
+                        title:
+                            layout.charAt(0).toUpperCase() +
+                            layout.slice(1),
+                        className: "tab-" + layout,
+                        active: ( currentDevice == layout ) ? true : false
+                    };
+                }),
+                control,
+                ( newDevice ) => {
+                    componentInstance.setState( { currentEditedProp: keyControl });
+                    __ODevices.getInstance().setCurrentDevice(newDevice);
+                },
+                type
+            );
+        }
+
+        if( [ 'file', 'video', 'gallery', 'image' ].includes(type) ) {
+
+            control = Render.panelComponent(
+                blockKey,
+                required_field && label != null
+                    ? <>{label}<span className="o-required">*</span></>
+                    : label,
+                control,
+                ( componentInstance.getCurrentEditedProp() == keyControl ) ? true : false
             );
         }
 

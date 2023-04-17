@@ -211,54 +211,6 @@ export class Attributes {
                 break;
         }
 
-        if (typeof prop.responsive != "undefined" && !!prop.responsive) {
-            if (typeof currentValueAttribute != "object") {
-                currentValueAttribute = {};
-            }
-
-            return Render.fieldContainer(
-                blockKey,
-                Render.panelComponent(
-                    blockKey,
-                    required_field && label != null
-                        ? <>{label}<span className="o-required">*</span></>
-                        : label,
-                    Render.responsiveTabComponent(
-                        blockKey,
-                        Object.keys(
-                            __ODevices.getInstance().getMediaQueries()
-                        ).map((layout) => {
-                            return {
-                                name: layout,
-                                title:
-                                    layout.charAt(0).toUpperCase() +
-                                    layout.slice(1),
-                                className: "tab-" + layout,
-                                active: ( __ODevices.getInstance().getCurrentDevice() == layout ) ? true : false
-                            };
-                        }),
-                        Render.control(
-                                type,
-                                componentInstance,
-                                blockKey + "-" + __ODevices.getInstance().getCurrentDevice(),
-                                null,
-                                keys.concat(__ODevices.getInstance().getCurrentDevice()),
-                                valueProp,
-                                currentValueAttribute[__ODevices.getInstance().getCurrentDevice()],
-                                repeatable,
-                                required_field,
-                                args
-                        ),
-                        ( newDevice ) => { __ODevices.getInstance().setCurrentDevice(newDevice) },
-                        type
-                    ),
-                    false,
-                    "responsive"
-                ),
-                ( isMissing ) ? 'has-error' : ''
-            );
-        }
-
         return Render.control(
             type,
             componentInstance,
@@ -270,7 +222,8 @@ export class Attributes {
             repeatable,
             required_field,
             args,
-            isMissing
+            isMissing,
+            ( typeof prop.responsive != "undefined" && !!prop.responsive ) ? true : false
         );
     }
 

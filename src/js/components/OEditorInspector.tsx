@@ -4,6 +4,8 @@ import { Button, Dashicon } from "@wordpress/components";
 
 import __OEditorApp from "./OEditorApp";
 
+import globalData from "../global";
+
 export default class OEditorInspector {
     constructor(blocksList, selectBlock) {
         this.blocksList = blocksList;
@@ -27,6 +29,7 @@ export default class OEditorInspector {
     }
 
     render() {
+
         return (
             <BlockList
                 blocksList={this.blocksList}
@@ -79,7 +82,15 @@ const BlockListItem = ({ block, selectBlock }) => {
         }
     }
 
-    const blockName = ( block.name == "core/block" && typeof block.postName != 'undefined' ) ? block.postName + " (" + getBlockType(block.name).title + ")" : getBlockType(block.name).title;
+    let blockName = ( block.name == "core/block" && typeof block.postName != 'undefined' ) ? block.postName + " (" + getBlockType(block.name).title + ")" : getBlockType(block.name).title;
+
+    if( typeof globalData.componentInstances == 'object' && typeof globalData.componentInstances[block.clientId] != 'undefined' && typeof globalData.componentInstances[block.clientId].state.error == 'object' && globalData.componentInstances[block.clientId].state.error != null && typeof globalData.componentInstances[block.clientId].state.error.missing_attributes == 'object' && globalData.componentInstances[block.clientId].state.error.missing_attributes.length > 0 ) {
+
+        blockName = <>
+            {blockName}
+            <span className="missing-attributes">{globalData.componentInstances[block.clientId].state.error.missing_attributes.length}</span>
+        </>
+    }
 
     return (
         <li key={"o-inspector-block-" + block.clientId}>

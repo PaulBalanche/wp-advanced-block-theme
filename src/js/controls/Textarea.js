@@ -26,8 +26,9 @@ export function renderTextarea(
                     false,
                     componentInstance
                 );
-
-                // componentInstance.updatePreview();
+            }}
+            onBlur={(e) => {
+                componentInstance.updatePreview();
             }}
         />
     );

@@ -29,6 +29,7 @@ export function renderDateTime(
                     false,
                     componentInstance
                 );
+                componentInstance.updatePreview();
             }}
             is12Hour={false}
             __nextRemoveHelpButton

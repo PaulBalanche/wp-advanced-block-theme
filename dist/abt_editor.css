@@ -37,6 +37,13 @@
   border: none;
 }
 
+.o-editor-app .basicField .column-layout .flex > .basicField {
+  margin-right: 5%;
+}
+.o-editor-app .basicField .column-layout .flex > .basicField:last-child {
+  margin-right: 0;
+}
+
 .o-editor .block-editor-block-inspector .child-range-control {
   padding-left: 10px;
 }
@@ -160,6 +167,25 @@
   position: absolute;
   top: 0;
   left: -42px;
+}
+.o-editor .basicField .responsive-tab-panel-wpe-component {
+  position: relative;
+  width: 100%;
+  padding-top: 12px;
+}
+.o-editor .basicField .responsive-tab-panel-wpe-component .responsive-buttons-container {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  right: 0;
+}
+.o-editor .basicField .responsive-tab-panel-wpe-component .tab-panel-wpe-component.videoType {
+  margin-top: 24px;
+}
+.o-editor .basicField .responsive-tab-panel-wpe-component .tab-panel-wpe-component.videoType .components-tab-panel__tabs {
+  position: relative;
+  z-index: 1;
+  background: var(--background300, rgb(245, 245, 245));
 }
 
 .o-editor .block-editor-block-list__block[data-type="custom/wpe-grid"] > * > .o-toolbar {
@@ -522,6 +548,7 @@
   overflow: hidden;
 }
 .o-editor-app.inspector .is-tertiary, .o-editor-app.help .is-tertiary, .o-editor-app.settings .is-tertiary {
+  position: relative;
   display: flex;
   align-items: center;
   width: 100%;
@@ -548,6 +575,20 @@
   font-weight: 400;
   font-size: 0.8em;
   margin-left: 6px;
+}
+.o-editor-app.inspector .is-tertiary .missing-attributes, .o-editor-app.help .is-tertiary .missing-attributes, .o-editor-app.settings .is-tertiary .missing-attributes {
+  position: relative;
+  top: -6px;
+  margin-left: 4px;
+  background: #DC3232;
+  color: white;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
 }
 .o-editor-app.help .is-tertiary {
   font-weight: initial;
@@ -709,29 +750,6 @@
 }
 .o-editor .components-panel:hover > .components-panel__body > .components-panel__body-title, .o-editor .components-panel:focus > .components-panel__body > .components-panel__body-title, .o-editor .components-panel:focus-within > .components-panel__body > .components-panel__body-title, .o-editor .components-panel:has(> .is-opened.components-panel__body) > .components-panel__body > .components-panel__body-title {
   background: #d8eef8 !important;
-}
-.o-editor .components-panel .responsive-tab-panel-wpe-component {
-  position: relative;
-  width: 100%;
-  padding-top: 12px;
-}
-.o-editor .components-panel .responsive-tab-panel-wpe-component .responsive-buttons-container {
-  display: flex;
-  justify-content: flex-end;
-}
-.o-editor .components-panel .responsive-tab-panel-wpe-component.image .responsive-buttons-container, .o-editor .components-panel .responsive-tab-panel-wpe-component.file .responsive-buttons-container, .o-editor .components-panel .responsive-tab-panel-wpe-component.gallery .responsive-buttons-container, .o-editor .components-panel .responsive-tab-panel-wpe-component.video .responsive-buttons-container {
-  position: absolute;
-  z-index: 1;
-  top: 0;
-  right: 0;
-}
-.o-editor .components-panel .responsive-tab-panel-wpe-component .tab-panel-wpe-component.videoType {
-  margin-top: 24px;
-}
-.o-editor .components-panel .responsive-tab-panel-wpe-component .tab-panel-wpe-component.videoType .components-tab-panel__tabs {
-  position: relative;
-  z-index: 1;
-  background: var(--background300, rgb(245, 245, 245));
 }
 
 .o-editor .radio-control-container .components-radio-control__option {
@@ -914,13 +932,13 @@
 }
 .o-editor .components-tab-panel__tabs button .missing-attributes {
   position: absolute;
-  top: 1px;
+  top: 2px;
   right: -16px;
   background: #DC3232;
   color: white;
   border-radius: 50%;
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   display: inline-flex;
   align-items: center;
   justify-content: center;

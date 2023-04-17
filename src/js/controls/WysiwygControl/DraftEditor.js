@@ -461,6 +461,7 @@ export class DraftEditor extends Component {
                         customStyleMap={this.styleMap}
                         handleKeyCommand={this.handleKeyCommand}
                         keyBindingFn={this.handleSoftNewLine}
+                        onBlur={this.props.onBlur}
                     />
                 </div>
             </Fragment>

@@ -34,6 +34,7 @@ export function renderRadio(
                 false,
                 componentInstance
             );
+            componentInstance.updatePreview();
         }}
     />
 

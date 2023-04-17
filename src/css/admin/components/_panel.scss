@@ -55,40 +55,5 @@
             }
 
         }
-
-        .responsive-tab-panel-wpe-component {
-            position: relative;
-            width: 100%;
-            padding-top: $o-space-20;
-
-            .responsive-buttons-container {
-
-                display: flex;
-                justify-content: flex-end;
-            }
-            
-            &.image,
-            &.file,
-            &.gallery,
-            &.video {
-
-                .responsive-buttons-container {
-                    position: absolute;
-                    z-index: 1;
-                    top: 0;
-                    right: 0;
-                }
-            }
-
-            .tab-panel-wpe-component.videoType {
-                margin-top: $o-space-40;
-
-                .components-tab-panel__tabs {
-                    position: relative;
-                    z-index: 1;
-                    background: $background300;
-                }
-            }
-        }
-    }
+    } 
 }

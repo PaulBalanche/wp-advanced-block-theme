@@ -195,13 +195,16 @@ export class MarginControls extends Component {
     }
 
     render() {
+
+        const currentDevice = __ODevices.getInstance().getCurrentDevice();
+
         return (
             <>
                 <PanelBody title={"Padding"} initialOpen={false}>
                     <TabPanel
                         className="padding-tab-panel"
                         activeClass="active-tab"
-                        initialTabName={__ODevices.getInstance().getCurrentDevice()}
+                        initialTabName={currentDevice}
                         tabs={Object.keys(
                             __ODevices.getInstance().getMediaQueries()
                         ).map((layout) => {
@@ -338,7 +341,7 @@ export class MarginControls extends Component {
                     <TabPanel
                         className="margin-tab-panel"
                         activeClass="active-tab"
-                        initialTabName={__ODevices.getInstance().getCurrentDevice()}
+                        initialTabName={currentDevice}
                         tabs={Object.keys(
                             __ODevices.getInstance().getMediaQueries()
                         ).map((layout) => {

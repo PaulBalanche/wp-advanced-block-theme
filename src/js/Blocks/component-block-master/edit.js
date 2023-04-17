@@ -113,6 +113,8 @@ class WpeComponent extends WpeComponentBase {
                     needPreviewUpdate: false,
                 });
             }
+
+            __OEditorApp.getInstance().forceUpdate();
         });
     }
 

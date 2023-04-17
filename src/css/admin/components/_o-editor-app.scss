@@ -227,6 +227,7 @@
         }
 
         .is-tertiary {
+            position: relative;
             display: flex;
             align-items: center;
             width: 100%;
@@ -255,6 +256,21 @@
                 font-weight: 400;
                 font-size: 0.8em;
                 margin-left: $o-space-10;
+            }
+
+            .missing-attributes {
+                position: relative;
+                top: -6px;
+                margin-left: 4px;
+                background: $o-accent-red-color;
+                color: white;
+                border-radius: 50%;
+                width: 18px;
+                height: 18px;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 10px;
             }
         }
     }

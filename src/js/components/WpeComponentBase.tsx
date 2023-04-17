@@ -59,6 +59,10 @@ export class WpeComponentBase extends Component {
             Object.keys(this.props.block_spec.props).length > 0
         );
     }
+    
+    getCurrentEditedProp() {
+        return ( typeof this.state.currentEditedProp != 'undefined' ) ? this.state.currentEditedProp : null;
+    }
 
     isReusableBlock() {
         if (typeof this.props.parentsBlock == "object") {
@@ -473,7 +477,7 @@ export class WpeComponentBase extends Component {
     renderFooter() {
         return (
             <>
-                {typeof this.state.needPreviewUpdate != "undefined" && (
+                {/* {typeof this.state.needPreviewUpdate != "undefined" && (
                     <Button
                         key={this.props.clientId + "-buttonUpdatePreview"}
                         className="abtButtonUpdatePreview"
@@ -488,7 +492,7 @@ export class WpeComponentBase extends Component {
                         <Dashicon icon="update" />
                         Update preview
                     </Button>
-                )}
+                )} */}
                 {typeof this.previewUrl != "undefined" && (
                     <Button
                         key={this.props.clientId + "-buttonPreviewUrl"}

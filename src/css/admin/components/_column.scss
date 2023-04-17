@@ -31,5 +31,24 @@
             border: none;
         }
     }
+}
 
+.o-editor-app {
+
+    .basicField {
+
+        .column-layout {
+
+            .flex {
+
+                & > .basicField {
+                    margin-right: 5%;
+
+                    &:last-child {
+                        margin-right: 0;
+                    }
+                }
+            }
+        }
+    }
 }

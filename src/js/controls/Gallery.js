@@ -100,6 +100,7 @@ export function renderGallery(
                         false,
                         componentInstance
                     );
+                    componentInstance.updatePreview();
             }}
             multiple={true}
             addToGallery={true}

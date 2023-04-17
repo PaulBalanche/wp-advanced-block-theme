@@ -45,15 +45,16 @@ export function renderVideo(
                     key={id + "-removeMedia"}
                     variant="primary"
                     className="reset-button is-destructive"
-                    onMouseDown={() =>
+                    onMouseDown={() => {
                         Attributes.updateAttributes(
                             keys.concat("file"),
                             valueProp,
                             undefined,
                             false,
                             componentInstance
-                        )
-                    }
+                        );
+                        componentInstance.updatePreview();
+                    }}
                 >
                     <Dashicon icon="trash" />
                 </Button>
@@ -96,6 +97,7 @@ export function renderVideo(
                             false,
                             componentInstance
                         );
+                        componentInstance.updatePreview();
                     }
                 }}
                 value={
@@ -150,15 +152,16 @@ export function renderVideo(
                             ? objectValue.embed
                             : ""
                     }
-                    onChange={(newValue) =>
+                    onChange={(newValue) => {
                         Attributes.updateAttributes(
                             keys.concat("embed"),
                             valueProp,
                             newValue,
                             false,
                             componentInstance
-                        )
-                    }
+                        );
+                        componentInstance.updatePreview();
+                    }}
                 />
             )
         });

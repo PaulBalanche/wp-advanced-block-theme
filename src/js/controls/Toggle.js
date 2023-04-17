@@ -28,15 +28,16 @@ export function renderToggle(
                     : null
             }
             checked={objectValue}
-            onChange={(newValue) =>
+            onChange={(newValue) => {
                 Attributes.updateAttributes(
                     keys,
                     valueProp,
                     newValue,
                     false,
                     componentInstance
-                )
-            }
+                );
+                componentInstance.updatePreview();
+            }}
         />
     </Fragment>;
 }
