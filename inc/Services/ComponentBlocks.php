@@ -5,6 +5,7 @@ namespace Abt\Services;
 use Abt\Models\ComponentBlockMaster;
 use Abt\Main;
 use Abt\Singleton\Config;
+use Abt\Helpers\Attributes;
 
 class ComponentBlocks extends ServiceBase {
 
@@ -212,28 +213,21 @@ class ComponentBlocks extends ServiceBase {
 
         $componentBlockInstance = Main::getInstance()->get_component_block_instance( $request['component_id'] );
 
-         // Check missing required attributes
-         $missing_required_attributes = $componentBlockInstance->get_missing_required_attributes( $attributes );
-         if( count($missing_required_attributes) == 0 ) {
+        $block_spec = $componentBlockInstance->get_block_spec();
+        if( is_array($block_spec) ) {
 
-            if( $componentBlockInstance->attributes_autosaves_post( $attributes, $post_id, $client_id ) ) {
-                wp_send_json_success();
+            $error = null;
+            Attributes::formatting( $attributes, $block_spec, $error );
+
+            if( is_null($error) ) {
+                if( $componentBlockInstance->attributes_autosaves_post( $attributes, $post_id, $client_id ) ) {
+                    wp_send_json_success();
+                }
             }
-         }
-         else {
-            // if(
-            //     count($attributes) == 0 ||
-            //     ( count($attributes) == 1 && isset($attributes['id_component']) ) ||
-            //     ( count($attributes) == 2 && isset($attributes['id_component'], $attributes['anchor']) )
-            // ) {
-            //     wp_send_json_error( [ 'isEmpty' => true ]  );
-            // }
-
-            // wp_send_json_error( 'Please edit required fields.' );
-            wp_send_json_error( [ 'missing_attributes' => $missing_required_attributes ] );
-         }
-        
-        wp_send_json_error( 'Error during attributes_autosaves_post' );
+            else {
+                wp_send_json_error( $error );
+            }
+        }
     }
 
 

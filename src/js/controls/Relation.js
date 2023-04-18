@@ -20,8 +20,6 @@ export function renderRelation(
     )
         return null;
 
-    label = required && label != null ? label + "*" : label;
-
     return <SelectControl
         key={id}
         label={label}

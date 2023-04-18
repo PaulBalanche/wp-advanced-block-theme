@@ -11567,7 +11567,7 @@ class WpeComponent extends _Components_WpeComponentBase__WEBPACK_IMPORTED_MODULE
       } = this.state;
       var render = [];
       if (error != null) {
-        if (typeof error == "object" && error?.missing_attributes && error.missing_attributes) {
+        if (typeof error == "object") {
           render.push(this.renderEditFormZone());
           render.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
             key: this.props.clientId + "-LiveRenderingMessage",
@@ -13563,10 +13563,10 @@ const BlockListItem = _ref => {
     }
   }
   let blockName = block.name == "core/block" && typeof block.postName != 'undefined' ? block.postName + " (" + (0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__.getBlockType)(block.name).title + ")" : (0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__.getBlockType)(block.name).title;
-  if (typeof _global__WEBPACK_IMPORTED_MODULE_4__["default"].componentInstances == 'object' && typeof _global__WEBPACK_IMPORTED_MODULE_4__["default"].componentInstances[block.clientId] != 'undefined' && typeof _global__WEBPACK_IMPORTED_MODULE_4__["default"].componentInstances[block.clientId].state.error == 'object' && _global__WEBPACK_IMPORTED_MODULE_4__["default"].componentInstances[block.clientId].state.error != null && typeof _global__WEBPACK_IMPORTED_MODULE_4__["default"].componentInstances[block.clientId].state.error.missing_attributes == 'object' && _global__WEBPACK_IMPORTED_MODULE_4__["default"].componentInstances[block.clientId].state.error.missing_attributes.length > 0) {
+  if (typeof _global__WEBPACK_IMPORTED_MODULE_4__["default"].componentInstances == 'object' && typeof _global__WEBPACK_IMPORTED_MODULE_4__["default"].componentInstances[block.clientId] != 'undefined' && typeof _global__WEBPACK_IMPORTED_MODULE_4__["default"].componentInstances[block.clientId].state.error == 'object' && _global__WEBPACK_IMPORTED_MODULE_4__["default"].componentInstances[block.clientId].state.error != null) {
     blockName = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, blockName, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
       className: "missing-attributes"
-    }, _global__WEBPACK_IMPORTED_MODULE_4__["default"].componentInstances[block.clientId].state.error.missing_attributes.length));
+    }, Object.keys(_global__WEBPACK_IMPORTED_MODULE_4__["default"].componentInstances[block.clientId].state.error).length));
   }
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", {
     key: "o-inspector-block-" + block.clientId
@@ -14187,11 +14187,9 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
           }
         }
         let currentAttributeError = false;
-        if (typeof this.state.error == 'object' && this.state.error != null && typeof this.state.error.missing_attributes == 'object') {
-          if (this.state.error.missing_attributes.includes(keyProp)) {
-            errorAttributes++;
-            currentAttributeError = true;
-          }
+        if (typeof this.state.error == 'object' && this.state.error != null && typeof this.state.error[keyProp] != 'undefined') {
+          errorAttributes++;
+          currentAttributeError = this.state.error[keyProp];
         }
         let valueProp = this.getAttribute(keyProp);
         currentEditCat.push(_Static_Attributes__WEBPACK_IMPORTED_MODULE_2__.Attributes.renderProp(prop, [keyProp], {
@@ -14377,7 +14375,6 @@ __webpack_require__.r(__webpack_exports__);
 
 function renderCheckbox(componentInstance, id, label, options, keys, valueProp, objectValue) {
   let required = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : false;
-  label = required && label != null ? label + "*" : label;
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
     key: id + "-fragment"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
@@ -14454,7 +14451,6 @@ __webpack_require__.r(__webpack_exports__);
 
 function renderDateTime(componentInstance, id, label, keys, valueProp, objectValue) {
   let required = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : false;
-  label = required && label != null ? label + "*" : label;
   const MyDateTimePicker = (0,_wordpress_compose__WEBPACK_IMPORTED_MODULE_2__.withState)({
     date: objectValue ? objectValue : new Date()
   })(_ref => {
@@ -14787,7 +14783,6 @@ function renderLink(componentInstance, id, label, keys, valueProp, objectValue) 
   if (typeof objectValue == "undefined") {
     objectValue = {};
   }
-  label = required && label != null ? label + "*" : label;
   let inner = _Static_Render__WEBPACK_IMPORTED_MODULE_4__.Render.fieldContainer(id + "_link", (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     key: id + "-LinkControlComponentsBaseControl",
     className: "components-base-control"
@@ -14863,7 +14858,6 @@ function renderObject(componentInstance, id, label, keys, valueProp, objectValue
     fieldsetObject.push(_Static_Attributes__WEBPACK_IMPORTED_MODULE_0__.Attributes.renderProp(valueSubProp, keys.concat(keySubProp), valueProp, componentInstance));
   }
   if (label == null) return fieldsetObject;
-  label = required && label != null ? label + "*" : label;
 
   // let currentValueAttribute = valueProp;
   // keys.forEach( element => { currentValueAttribute = ( currentValueAttribute != null && typeof currentValueAttribute == 'object' && currentValueAttribute.hasOwnProperty(element) && typeof currentValueAttribute[element] != "undefined" ) ? currentValueAttribute[element] : ""; } );
@@ -14902,7 +14896,6 @@ __webpack_require__.r(__webpack_exports__);
 function renderRadio(componentInstance, id, label, options, keys, valueProp, objectValue) {
   let required = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : false;
   if (typeof options == "undefined") return null;
-  label = required && label != null ? label + "*" : label;
   const MyRadioControl = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.RadioControl, {
     key: id,
     label: label,
@@ -14954,7 +14947,6 @@ __webpack_require__.r(__webpack_exports__);
 function renderRelation(componentInstance, id, label, entity, keys, valueProp, objectValue) {
   let required = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : false;
   if (typeof entity == "undefined" || typeof componentInstance.props.relations[entity] == "undefined" || componentInstance.props.relations[entity] == null || Object.keys(componentInstance.props.relations[entity]).length == 0) return null;
-  label = required && label != null ? label + "*" : label;
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.SelectControl, {
     key: id,
     label: label,
@@ -14997,7 +14989,6 @@ __webpack_require__.r(__webpack_exports__);
 function renderSelect(componentInstance, id, label, options, defaultValue, keys, valueProp, objectValue) {
   let required = arguments.length > 8 && arguments[8] !== undefined ? arguments[8] : false;
   if (typeof options == "undefined") return null;
-  label = required && label != null ? label + "*" : label;
   const defaultLabel = defaultValue != null ? "Default (" + defaultValue + ")" : "Default";
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.SelectControl, {
     key: id,
@@ -15043,7 +15034,6 @@ __webpack_require__.r(__webpack_exports__);
 function renderText(componentInstance, id, label, keys, valueProp, objectValue) {
   let isNumber = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : false;
   let required = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : false;
-  label = required && label != null ? label + "*" : label;
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.TextControl, {
     key: id,
     label: label,
@@ -15079,7 +15069,6 @@ __webpack_require__.r(__webpack_exports__);
 
 function renderTextarea(componentInstance, id, label, keys, valueProp, objectValue) {
   let required = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : false;
-  label = required && label != null ? label + "*" : label;
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.TextareaControl, {
     key: id,
     label: label,
@@ -15117,7 +15106,6 @@ __webpack_require__.r(__webpack_exports__);
 
 function renderToggle(componentInstance, id, label, help, keys, valueProp, objectValue) {
   let required = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : false;
-  label = required && label != null ? label + "*" : label;
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
     key: id + "-fragment"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
@@ -16041,7 +16029,6 @@ class WysiwygControl extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Com
       repeatable = false,
       required = false
     } = this.props;
-    label = required && label != null ? label + "*" : label;
     if (repeatable) {
       label = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, label, _Static_Render__WEBPACK_IMPORTED_MODULE_2__.Render.buttonRemoveRepeatableElt(id, () => {
         _Static_Attributes__WEBPACK_IMPORTED_MODULE_1__.Attributes.removeEltRepeatable(keys, valueProp, this.props.componentInstance);
@@ -16133,7 +16120,7 @@ class Attributes {
     return objectReturned;
   }
   static renderProp(prop, keys, valueProp, componentInstance) {
-    let isMissing = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : false;
+    let error = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : false;
     const type = prop.type.toLowerCase();
     const blockKey = componentInstance.props.clientId + "-" + keys.join("-");
     const repeatable = typeof prop.repeatable != "undefined" && !!prop.repeatable ? true : false;
@@ -16213,7 +16200,7 @@ class Attributes {
         };
         break;
     }
-    return _Render__WEBPACK_IMPORTED_MODULE_1__.Render.control(type, componentInstance, blockKey, label, keys, valueProp, currentValueAttribute, repeatable, required_field, args, isMissing, typeof prop.responsive != "undefined" && !!prop.responsive ? true : false);
+    return _Render__WEBPACK_IMPORTED_MODULE_1__.Render.control(type, componentInstance, blockKey, label, keys, valueProp, currentValueAttribute, repeatable, required_field, args, error, typeof prop.responsive != "undefined" && !!prop.responsive ? true : false);
   }
   static initComponentAttributes(attributes, props) {
     for (const [key, value] of Object.entries(props)) {
@@ -16461,11 +16448,19 @@ class Render {
     }), " Remove");
   }
   static control(type, componentInstance, blockKey, label, keys, valueProp, controllerValue, repeatable, required_field, args) {
-    let isMissing = arguments.length > 10 && arguments[10] !== undefined ? arguments[10] : false;
+    let error = arguments.length > 10 && arguments[10] !== undefined ? arguments[10] : false;
     let isResponsive = arguments.length > 11 && arguments[11] !== undefined ? arguments[11] : false;
     var control = [];
     const keyControl = keys.join('-');
     const currentDevice = _Components_ODevices__WEBPACK_IMPORTED_MODULE_5__["default"].getInstance().getCurrentDevice();
+    label = required_field && label != null ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, label, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+      className: "o-required"
+    }, "*")) : label;
+    label = error ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, label, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "error"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
+      icon: "info"
+    }), error)) : label;
     if (isResponsive) {
       blockKey = blockKey + "-" + currentDevice;
       keys.push(currentDevice);
@@ -16486,7 +16481,7 @@ class Render {
         required_field: required_field,
         args: args
       }));
-      control = label != null ? Render.panelComponent(blockKey, required_field ? label + "*" : label, control, true) : control;
+      control = label != null ? Render.panelComponent(blockKey, label, control, true) : control;
     } else {
       control.push(_Controls__WEBPACK_IMPORTED_MODULE_3__.Controls.render(type, componentInstance, blockKey, label, keys, valueProp, typeof controllerValue != "undefined" ? controllerValue : "", required_field, args));
     }
@@ -16506,12 +16501,10 @@ class Render {
       }, type);
     }
     if (['file', 'video', 'gallery', 'image'].includes(type)) {
-      control = Render.panelComponent(blockKey, required_field && label != null ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, label, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-        className: "o-required"
-      }, "*")) : label, control, componentInstance.getCurrentEditedProp() == keyControl ? true : false);
+      control = Render.panelComponent(blockKey, label, control, componentInstance.getCurrentEditedProp() == keyControl ? true : false);
     }
     if (label == null) return control;
-    return Render.fieldContainer(blockKey, control, isMissing ? 'has-error' : '');
+    return Render.fieldContainer(blockKey, control, error ? 'has-error' : '');
   }
   static repeatableObjectLabelFormatting(blockKey, valueProp, keyLoop) {
     var labelKey = _Attributes__WEBPACK_IMPORTED_MODULE_2__.Attributes.returnStringOrNumber(keyLoop, true) + 1;

@@ -179,11 +179,7 @@ class WpeComponent extends WpeComponentBase {
             var render = [];
 
             if (error != null) {
-                if (
-                    typeof error == "object" &&
-                    error?.missing_attributes &&
-                    error.missing_attributes
-                ) {
+                if( typeof error == "object" ) {
                     render.push(this.renderEditFormZone());
                     render.push(
                         <div

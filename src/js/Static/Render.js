@@ -146,13 +146,16 @@ export class Render {
         repeatable,
         required_field,
         args,
-        isMissing = false,
+        error = false,
         isResponsive = false
     ) {
         var control = [];
 
         const keyControl = keys.join('-');
         const currentDevice = __ODevices.getInstance().getCurrentDevice();
+
+        label = ( required_field && label != null ) ? <>{label}<span className="o-required">*</span></> : label;
+        label = ( error ) ? <>{label}<div className="error"><Dashicon icon="info" />{error}</div></> : label;
 
         if( isResponsive ) {
             blockKey = blockKey + "-" + currentDevice;
@@ -187,7 +190,7 @@ export class Render {
                 label != null
                     ? Render.panelComponent(
                           blockKey,
-                          required_field ? label + "*" : label,
+                          label,
                           control,
                           true
                       )
@@ -238,9 +241,7 @@ export class Render {
 
             control = Render.panelComponent(
                 blockKey,
-                required_field && label != null
-                    ? <>{label}<span className="o-required">*</span></>
-                    : label,
+                label,
                 control,
                 ( componentInstance.getCurrentEditedProp() == keyControl ) ? true : false
             );
@@ -248,7 +249,7 @@ export class Render {
 
         if (label == null) return control;
 
-        return Render.fieldContainer(blockKey, control, ( isMissing ) ? 'has-error' : '' );
+        return Render.fieldContainer(blockKey, control, ( error ) ? 'has-error' : '' );
     }
 
     static repeatableObjectLabelFormatting(blockKey, valueProp, keyLoop) {

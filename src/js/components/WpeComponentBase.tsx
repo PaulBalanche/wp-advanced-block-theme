@@ -386,11 +386,9 @@ export class WpeComponentBase extends Component {
 
                 let currentAttributeError = false;
 
-                if( typeof this.state.error == 'object' && this.state.error != null && typeof this.state.error.missing_attributes == 'object' ) {
-                    if( this.state.error.missing_attributes.includes(keyProp) ) {
-                        errorAttributes++;
-                        currentAttributeError = true;
-                    }
+                if( typeof this.state.error == 'object' && this.state.error != null && typeof this.state.error[keyProp] != 'undefined' ) {
+                    errorAttributes++;
+                    currentAttributeError = this.state.error[keyProp];
                 }
 
                 let valueProp = this.getAttribute(keyProp);

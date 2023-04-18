@@ -12,7 +12,6 @@ export function renderCheckbox(
     objectValue,
     required = false
 ) {
-    label = required && label != null ? label + "*" : label;
 
     return <Fragment key={id + "-fragment"}>
         <label className="components-base-control__forced_label" key={id + "-label"}>{label}</label>

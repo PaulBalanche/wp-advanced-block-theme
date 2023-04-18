@@ -119,7 +119,7 @@ export class Attributes {
         return objectReturned;
     }
 
-    static renderProp(prop, keys, valueProp, componentInstance, isMissing = false) {
+    static renderProp(prop, keys, valueProp, componentInstance, error = false) {
         const type = prop.type.toLowerCase();
         const blockKey =
             componentInstance.props.clientId + "-" + keys.join("-");
@@ -222,7 +222,7 @@ export class Attributes {
             repeatable,
             required_field,
             args,
-            isMissing,
+            error,
             ( typeof prop.responsive != "undefined" && !!prop.responsive ) ? true : false
         );
     }

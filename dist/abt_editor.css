@@ -168,6 +168,21 @@
   top: 0;
   left: -42px;
 }
+.o-editor .basicField .error {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0 0 0 18px;
+  color: #d63638;
+  box-shadow: none;
+  display: flex;
+  align-items: center;
+  font-weight: 400;
+  font-size: 13px;
+}
+.o-editor .basicField .error .dashicon {
+  margin-right: 6px;
+}
 .o-editor .basicField .responsive-tab-panel-wpe-component {
   position: relative;
   width: 100%;

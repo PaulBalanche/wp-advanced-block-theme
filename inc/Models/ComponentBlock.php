@@ -6,7 +6,8 @@ use Abt\Helpers\Request;
 use Abt\Services\Render as RenderService;
 use Abt\Singleton\Config;
 use Abt\Main;
-use \Abt\Helpers\Anchor;
+use Abt\Helpers\Anchor;
+use Abt\Helpers\Attributes;
 
 class ComponentBlock extends ModelBase {
 
@@ -362,29 +363,21 @@ class ComponentBlock extends ModelBase {
             $content =  $this->get_content();
             $render_attributes['anchor'] = Anchor::get( $this->get_config()->get('blocksNamespace') . '-' . $this->get_config()->get('componentBlockPrefixName'), $content );
 
-            // Filters spacing
-            // $render_attributes['margin'] = apply_filters( 'Abt\block_spacing_formatting', ( isset($render_attributes['margin']) ) ? $render_attributes['margin'] : '', 'margin' );
-            // $render_attributes['padding'] = apply_filters( 'Abt\block_spacing_formatting', ( isset($render_attributes['padding']) ) ? $render_attributes['padding'] : '', 'padding' );
-
             // Formatting attributes
-            $render_attributes = apply_filters( 'Abt\attributes_formatting', $render_attributes, $block_spec );
-
-            // Start rendering
-            if( apply_filters( 'Abt\display_component_block_' . $this->get_ID(), true, $render_attributes ) ) {
-
-                // Check missing required attributes
-                $missing_required_attributes = $this->get_missing_required_attributes( $render_attributes );
-                if( count($missing_required_attributes) == 0 ) {
-
+            // echo '<pre>';print_r($render_attributes);
+            // echo '<pre>';print_r($block_spec);
+            $error = null;
+            $render_attributes = Attributes::formatting( $render_attributes, $block_spec, $error );
+            // echo '<pre>';print_r($render_attributes);die;
+            if( is_null($error) ) {
+                
+                // Start rendering
+                if( apply_filters( 'Abt\display_component_block_' . $this->get_ID(), true, $render_attributes ) ) {
                     $render = apply_filters( 'Abt\render_component_block_' . $this->get_ID(), RenderService::render( $block_spec['path'], $render_attributes ) );
                 }
-                else if( Request::is_admin_editor_request() ) {
-
-                    $render = '<div class="alert">Some required fields are missing: <ul><li>' . implode('</li><li>', $missing_required_attributes) . '</li></ul></div>';
+                else if( isset($render_attributes['admin_error_message']) && Request::is_admin_editor_request() ) {
+                    $render = '<div class="alert">' . $render_attributes['admin_error_message'] . '</div>';
                 }
-            }
-            else if( isset($render_attributes['admin_error_message']) && Request::is_admin_editor_request() ) {
-                $render = '<div class="alert">' . $render_attributes['admin_error_message'] . '</div>';
             }
         }
 

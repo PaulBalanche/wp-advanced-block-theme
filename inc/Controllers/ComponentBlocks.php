@@ -45,9 +45,6 @@ class ComponentBlocks extends ControllerBase {
 
         // Allow all custom/wpe-component registered
         add_filter( 'Abt\allowed_block_types_all', [ $this->componentBlocksService, 'allowed_block_types_all' ] );
-
-        // Fromat attributes before rendering
-        add_filter( 'Abt\attributes_formatting', 'Abt\Helpers\Attributes::formatting', 10, 2 );
     }
 
 

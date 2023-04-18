@@ -19,7 +19,7 @@ class Attributes {
      * Loop on each attribute and format it if necessary
      * 
      */
-    public static function formatting( $attributes, $component_spec ) {
+    public static function formatting( $attributes, $component_spec, &$error = null ) {
 
         if( isset($component_spec['props']) && is_array($component_spec['props']) && count($component_spec['props']) > 0 ) {
             foreach( $component_spec['props'] as $key_prop => $prop ) {
@@ -72,6 +72,14 @@ class Attributes {
                             Wysiwyg::format( $attributes, $key_prop, $prop );
                             break;
                     }
+                }
+
+                if( isset($prop['required']) && $prop['required'] && ( ! isset($attributes[$key_prop]) || ! $attributes[$key_prop] || empty($attributes[$key_prop]) ) ) {
+                    if( ! is_array($error) ) {
+                        $error = [];
+                    }
+
+                    $error[$key_prop] = 'Required field';
                 }
             }
         }

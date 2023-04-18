@@ -84,11 +84,11 @@ const BlockListItem = ({ block, selectBlock }) => {
 
     let blockName = ( block.name == "core/block" && typeof block.postName != 'undefined' ) ? block.postName + " (" + getBlockType(block.name).title + ")" : getBlockType(block.name).title;
 
-    if( typeof globalData.componentInstances == 'object' && typeof globalData.componentInstances[block.clientId] != 'undefined' && typeof globalData.componentInstances[block.clientId].state.error == 'object' && globalData.componentInstances[block.clientId].state.error != null && typeof globalData.componentInstances[block.clientId].state.error.missing_attributes == 'object' && globalData.componentInstances[block.clientId].state.error.missing_attributes.length > 0 ) {
+    if( typeof globalData.componentInstances == 'object' && typeof globalData.componentInstances[block.clientId] != 'undefined' && typeof globalData.componentInstances[block.clientId].state.error == 'object' && globalData.componentInstances[block.clientId].state.error != null ) {
 
         blockName = <>
             {blockName}
-            <span className="missing-attributes">{globalData.componentInstances[block.clientId].state.error.missing_attributes.length}</span>
+            <span className="missing-attributes">{Object.keys(globalData.componentInstances[block.clientId].state.error).length}</span>
         </>
     }
 

@@ -141,8 +141,6 @@ class WysiwygControl extends Component {
             required = false,
         } = this.props;
 
-        label = required && label != null ? label + "*" : label;
-
         if (repeatable) {
             label = (
                 <>

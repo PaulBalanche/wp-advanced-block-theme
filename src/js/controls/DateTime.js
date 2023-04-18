@@ -12,7 +12,6 @@ export function renderDateTime(
     objectValue,
     required = false
 ) {
-    label = required && label != null ? label + "*" : label;
 
     const MyDateTimePicker = withState({
         date: objectValue ? objectValue : new Date(),

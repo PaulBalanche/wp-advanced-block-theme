@@ -17,8 +17,6 @@ export function renderRadio(
 ) {
     if (typeof options == "undefined") return null;
 
-    label = required && label != null ? label + "*" : label;
-
     const MyRadioControl = <RadioControl
         key={id}
         label={label}

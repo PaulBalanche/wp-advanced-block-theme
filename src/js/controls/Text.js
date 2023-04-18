@@ -12,7 +12,6 @@ export function renderText(
     isNumber = false,
     required = false
 ) {
-    label = required && label != null ? label + "*" : label;
 
     return (
         <TextControl
