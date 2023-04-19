@@ -6,7 +6,7 @@ use Abt\Helpers\Attributes;
 
 class Link {
     
-    public static function format( &$attributes, $key_prop, $prop ) {
+    public static function format( &$attributes, $key_prop, $prop, &$error = null ) {
         
         if( isset($attributes[$key_prop]) && is_array($attributes[$key_prop]) ) {
 
@@ -19,6 +19,22 @@ class Link {
                 Attributes::responsive( $attributes[$key_prop], $prop );
             }
             else {
+
+                $errorMessage = [];
+
+                if( ! isset($attributes[$key_prop]['url']) || empty($attributes[$key_prop]['url']) ) {
+                    $errorMessage[] = 'URL\'s missing';
+                }
+
+                if( ! isset($attributes[$key_prop]['text']) || empty($attributes[$key_prop]['text']) ) {
+                    $errorMessage[] = 'Text\'s missing';
+                }
+
+                if( ! is_array($error) ) {
+                    $error = [];
+                }
+                
+                $error[$key_prop] = implode(' - ', $errorMessage);
                 $attributes[$key_prop] = null;
             }
         }

@@ -24,7 +24,8 @@ export class Controls {
         valueProp,
         objectValue,
         required = false,
-        args = {}
+        args = {},
+        error = false
     ) {
         switch (type) {
             case "date":
@@ -193,7 +194,8 @@ export class Controls {
                     typeof args.initialOpen != "undefined"
                         ? args.initialOpen
                         : false,
-                    required
+                    required,
+                    error
                 );
 
             case "richText":

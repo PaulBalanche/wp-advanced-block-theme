@@ -364,11 +364,8 @@ class ComponentBlock extends ModelBase {
             $render_attributes['anchor'] = Anchor::get( $this->get_config()->get('blocksNamespace') . '-' . $this->get_config()->get('componentBlockPrefixName'), $content );
 
             // Formatting attributes
-            // echo '<pre>';print_r($render_attributes);
-            // echo '<pre>';print_r($block_spec);
             $error = null;
             $render_attributes = Attributes::formatting( $render_attributes, $block_spec, $error );
-            // echo '<pre>';print_r($render_attributes);die;
             if( is_null($error) ) {
                 
                 // Start rendering

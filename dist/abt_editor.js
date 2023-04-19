@@ -11513,6 +11513,7 @@ class WpeComponent extends _Components_WpeComponentBase__WEBPACK_IMPORTED_MODULE
           needPreviewUpdate: false
         });
       } else {
+        this.cleanError(res.data);
         this.setState({
           error: res.data,
           needPreviewUpdate: false
@@ -11520,6 +11521,18 @@ class WpeComponent extends _Components_WpeComponentBase__WEBPACK_IMPORTED_MODULE
       }
       _Components_OEditorApp__WEBPACK_IMPORTED_MODULE_6__["default"].getInstance().forceUpdate();
     });
+  }
+  cleanError(errorObject) {
+    for (var i in errorObject) {
+      if (errorObject[i] == null) {
+        delete errorObject[i];
+      } else if (typeof errorObject[i] == 'object') {
+        this.cleanError(errorObject[i]);
+        if (Object.keys(errorObject[i]).length == 0) {
+          delete errorObject[i];
+        }
+      }
+    }
   }
   _iframeResize() {
     this.setState({
@@ -14780,8 +14793,12 @@ __webpack_require__.r(__webpack_exports__);
 
 function renderLink(componentInstance, id, label, keys, valueProp, objectValue) {
   let required = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : false;
-  if (typeof objectValue == "undefined") {
-    objectValue = {};
+  if (typeof objectValue == "undefined" || typeof objectValue == "string") {
+    objectValue = {
+      text: ''
+    };
+  } else if (typeof objectValue == "object" && typeof objectValue.text == "undefined") {
+    objectValue.text = '';
   }
   let inner = _Static_Render__WEBPACK_IMPORTED_MODULE_4__.Render.fieldContainer(id + "_link", (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     key: id + "-LinkControlComponentsBaseControl",
@@ -14853,9 +14870,11 @@ __webpack_require__.r(__webpack_exports__);
 function renderObject(componentInstance, id, label, keys, valueProp, objectValue) {
   let initialOpen = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : false;
   let required = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : false;
+  let error = arguments.length > 8 && arguments[8] !== undefined ? arguments[8] : false;
   let fieldsetObject = [];
   for (const [keySubProp, valueSubProp] of Object.entries(objectValue)) {
-    fieldsetObject.push(_Static_Attributes__WEBPACK_IMPORTED_MODULE_0__.Attributes.renderProp(valueSubProp, keys.concat(keySubProp), valueProp, componentInstance));
+    const subPropError = error && typeof error == 'object' && error != null && typeof error[keySubProp] != 'undefined' ? error[keySubProp] : false;
+    fieldsetObject.push(_Static_Attributes__WEBPACK_IMPORTED_MODULE_0__.Attributes.renderProp(valueSubProp, keys.concat(keySubProp), valueProp, componentInstance, subPropError));
   }
   if (label == null) return fieldsetObject;
 
@@ -16205,7 +16224,7 @@ class Attributes {
   static initComponentAttributes(attributes, props) {
     for (const [key, value] of Object.entries(props)) {
       if (typeof value != "object" || value == null) continue;
-      let currentType = typeof value.repeatable != "undefined" && value.repeatable ? "array" : value.type.toLowerCase();
+      let currentType = typeof value.repeatable != "undefined" && value.repeatable && !['image', 'video', 'file', 'gallery'].includes(value.type.toLowerCase()) ? "array" : value.type.toLowerCase();
       currentType = typeof value.responsive != "undefined" && value.responsive ? "object" : currentType;
       switch (currentType) {
         case "string":
@@ -16299,6 +16318,7 @@ class Controls {
   static render(type, componentInstance, id, label, keys, valueProp, objectValue) {
     let required = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : false;
     let args = arguments.length > 8 && arguments[8] !== undefined ? arguments[8] : {};
+    let error = arguments.length > 9 && arguments[9] !== undefined ? arguments[9] : false;
     switch (type) {
       case "date":
         return (0,_Controls_DateTime__WEBPACK_IMPORTED_MODULE_1__.renderDateTime)(componentInstance, id, label, keys, valueProp, objectValue, required);
@@ -16330,7 +16350,7 @@ class Controls {
       case "boolean":
         return (0,_Controls_Toggle__WEBPACK_IMPORTED_MODULE_14__.renderToggle)(componentInstance, id, label, args.help, keys, valueProp, objectValue, required);
       case "object":
-        return (0,_Controls_Object__WEBPACK_IMPORTED_MODULE_7__.renderObject)(componentInstance, id, label, keys, valueProp, args.props, typeof args.initialOpen != "undefined" ? args.initialOpen : false, required);
+        return (0,_Controls_Object__WEBPACK_IMPORTED_MODULE_7__.renderObject)(componentInstance, id, label, keys, valueProp, args.props, typeof args.initialOpen != "undefined" ? args.initialOpen : false, required, error);
       case "richText":
       case "wysiwyg":
         return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Controls_WysiwygControl_WysiwygControl__WEBPACK_IMPORTED_MODULE_15__["default"], {
@@ -16456,7 +16476,7 @@ class Render {
     label = required_field && label != null ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, label, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
       className: "o-required"
     }, "*")) : label;
-    label = error ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, label, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    label = error && typeof error == 'string' ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, label, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "error"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
       icon: "info"
@@ -16483,7 +16503,7 @@ class Render {
       }));
       control = label != null ? Render.panelComponent(blockKey, label, control, true) : control;
     } else {
-      control.push(_Controls__WEBPACK_IMPORTED_MODULE_3__.Controls.render(type, componentInstance, blockKey, label, keys, valueProp, typeof controllerValue != "undefined" ? controllerValue : "", required_field, args));
+      control.push(_Controls__WEBPACK_IMPORTED_MODULE_3__.Controls.render(type, componentInstance, blockKey, label, keys, valueProp, typeof controllerValue != "undefined" ? controllerValue : "", required_field, args, error));
     }
     if (isResponsive) {
       control = Render.responsiveTabComponent(blockKey, Object.keys(_Components_ODevices__WEBPACK_IMPORTED_MODULE_5__["default"].getInstance().getMediaQueries()).map(layout => {

@@ -14,8 +14,14 @@ export function renderLink(
     objectValue,
     required = false
 ) {
-    if (typeof objectValue == "undefined") {
-        objectValue = {};
+
+    if(typeof objectValue == "undefined" || typeof objectValue == "string") {
+        objectValue = {
+            text: ''
+        };
+    }
+    else if(typeof objectValue == "object" && typeof objectValue.text == "undefined") {
+        objectValue.text = '';
     }
 
     let inner = Render.fieldContainer(

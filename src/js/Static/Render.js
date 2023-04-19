@@ -155,7 +155,7 @@ export class Render {
         const currentDevice = __ODevices.getInstance().getCurrentDevice();
 
         label = ( required_field && label != null ) ? <>{label}<span className="o-required">*</span></> : label;
-        label = ( error ) ? <>{label}<div className="error"><Dashicon icon="info" />{error}</div></> : label;
+        label = ( error && typeof error == 'string' ) ? <>{label}<div className="error"><Dashicon icon="info" />{error}</div></> : label;
 
         if( isResponsive ) {
             blockKey = blockKey + "-" + currentDevice;
@@ -208,7 +208,8 @@ export class Render {
                         ? controllerValue
                         : "",
                     required_field,
-                    args
+                    args,
+                    error
                 )
             );
         }

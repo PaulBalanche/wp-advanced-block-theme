@@ -9,17 +9,22 @@ export function renderObject(
     valueProp,
     objectValue,
     initialOpen = false,
-    required = false
+    required = false,
+    error = false
 ) {
     let fieldsetObject = [];
 
     for (const [keySubProp, valueSubProp] of Object.entries(objectValue)) {
+
+        const subPropError = ( error && typeof error == 'object' && error != null && typeof error[keySubProp] != 'undefined' ) ? error[keySubProp] : false;
+
         fieldsetObject.push(
             Attributes.renderProp(
                 valueSubProp,
                 keys.concat(keySubProp),
                 valueProp,
-                componentInstance
+                componentInstance,
+                subPropError
             )
         );
     }

@@ -212,17 +212,16 @@ class ComponentBlocks extends ServiceBase {
         }
 
         $componentBlockInstance = Main::getInstance()->get_component_block_instance( $request['component_id'] );
-
         $block_spec = $componentBlockInstance->get_block_spec();
         if( is_array($block_spec) ) {
+
+            $componentBlockInstance->attributes_autosaves_post( $attributes, $post_id, $client_id );
 
             $error = null;
             Attributes::formatting( $attributes, $block_spec, $error );
 
             if( is_null($error) ) {
-                if( $componentBlockInstance->attributes_autosaves_post( $attributes, $post_id, $client_id ) ) {
-                    wp_send_json_success();
-                }
+                wp_send_json_success();
             }
             else {
                 wp_send_json_error( $error );

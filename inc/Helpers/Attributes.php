@@ -24,6 +24,11 @@ class Attributes {
         if( isset($component_spec['props']) && is_array($component_spec['props']) && count($component_spec['props']) > 0 ) {
             foreach( $component_spec['props'] as $key_prop => $prop ) {
 
+                if( ! is_array($error) ) {
+                    $error = [];
+                }
+                $error[$key_prop] = null;
+
                 if( isset($attributes[$key_prop]) && ( ! isset($prop['repeatable']) || ! $prop['repeatable']) ) {
                     self::setDefaultValue( $attributes, $key_prop, $prop );
                 }
@@ -37,7 +42,7 @@ class Attributes {
                             break;
 
                         case 'image':
-                            Image::format( $attributes, $key_prop, $prop );
+                            Image::format( $attributes, $key_prop, $prop, $error );
                             break;
 
                         case 'gallery':
@@ -57,11 +62,11 @@ class Attributes {
                             break;
 
                         case 'object':
-                            RecursiveObject::format( $attributes, $key_prop, $prop );
+                            RecursiveObject::format( $attributes, $key_prop, $prop, $error[$key_prop] );
                             break;
 
                         case 'link':
-                            Link::format( $attributes, $key_prop, $prop );
+                            Link::format( $attributes, $key_prop, $prop, $error );
                             break;
 
                         case 'date':
@@ -74,12 +79,15 @@ class Attributes {
                     }
                 }
 
-                if( isset($prop['required']) && $prop['required'] && ( ! isset($attributes[$key_prop]) || ! $attributes[$key_prop] || empty($attributes[$key_prop]) ) ) {
+                if( isset($prop['required']) && $prop['required'] && ( ! isset($attributes[$key_prop]) || ! $attributes[$key_prop] || empty($attributes[$key_prop]) || is_null($attributes[$key_prop]) ) ) {
+
                     if( ! is_array($error) ) {
                         $error = [];
                     }
 
-                    $error[$key_prop] = 'Required field';
+                    if( ! isset($error[$key_prop]) ) {
+                        $error[$key_prop] = 'Required field';
+                    }
                 }
             }
         }

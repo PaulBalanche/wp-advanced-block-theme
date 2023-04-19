@@ -102,12 +102,14 @@ class WpeComponent extends WpeComponentBase {
             method: "POST",
             data: attributes == null ? this.props.attributes : attributes,
         }).then((res) => {
+            
             if (res.success) {
                 this.setState({
                     previewReady: true,
                     needPreviewUpdate: false,
                 });
             } else {
+                this.cleanError(res.data);
                 this.setState({
                     error: res.data,
                     needPreviewUpdate: false,
@@ -116,6 +118,21 @@ class WpeComponent extends WpeComponentBase {
 
             __OEditorApp.getInstance().forceUpdate();
         });
+    }
+
+    cleanError( errorObject ) {
+
+        for( var i in errorObject ) {
+            if( errorObject[i] == null ) {
+                delete errorObject[i];
+            }
+            else if( typeof errorObject[i] == 'object' ) {
+                this.cleanError(errorObject[i]);
+                if( Object.keys(errorObject[i]).length == 0 ) {
+                    delete errorObject[i];
+                }
+            }
+        }
     }
 
     _iframeResize() {
