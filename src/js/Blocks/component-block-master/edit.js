@@ -115,7 +115,7 @@ class WpeComponent extends WpeComponentBase {
                     needPreviewUpdate: false,
                 });
             }
-
+console.log(res.data);
             __OEditorApp.getInstance().forceUpdate();
         });
     }

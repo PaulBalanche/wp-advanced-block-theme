@@ -5,17 +5,17 @@
         border: 1px solid $o-main-color-border;
         border-radius: $o-border-radius;
 
-        &:after {
-            content: '';
-            position: absolute;
-            top: 0; left: 0;
-            width: calc(100% - 1px);
-            height: calc(100% - 1px);
-            border: 1px solid $o-accent-color-border;
-            border-radius: $o-border-radius;
-            opacity: 0;
-            pointer-events: none;
-        }
+        // &:after {
+        //     content: '';
+        //     position: absolute;
+        //     top: 0; left: 0;
+        //     width: calc(100% - 1px);
+        //     height: calc(100% - 1px);
+        //     border: 1px solid $o-accent-color-border;
+        //     border-radius: $o-border-radius;
+        //     opacity: 0;
+        //     pointer-events: none;
+        // }
 
         > .components-panel__body > .components-panel__body-title {
             border-radius: $o-border-radius;
@@ -44,11 +44,12 @@
         &:focus-within,
         &:has( > .is-opened.components-panel__body ) {
 
-            border-color: transparent !important;
+            // border-color: transparent !important;
+            border-color: $o-accent-color-border;
 
-            &:after {
-                opacity: 1;
-            }
+            // &:after {
+            //     opacity: 1;
+            // }
 
             > .components-panel__body > .components-panel__body-title {
                 background: $o-accent-color-border !important;

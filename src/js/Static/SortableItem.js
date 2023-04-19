@@ -24,13 +24,16 @@ export function SortableItem(props) {
         transform: CSS.Translate.toString(transform),
     };
 
+
+    const errorClassName = ( props.error ) ? 'has-error' : '';
+
     return (
         <li
             key={props.id + "-SortableItemContainer"}
             ref={setNodeRef}
             style={style}
             {...attributes}
-            className={"repeatableItem " + props.type}
+            className={"repeatableItem " + props.type + " " + errorClassName}
         >
             <div className="sortableItemInner">{props.children}</div>
             <Button

@@ -11,8 +11,16 @@ class RecursiveObject {
         if( isset($attributes[$key_prop]) ) {
             
             if( isset($prop['repeatable']) && $prop['repeatable'] ) {
+
+                if( ! is_array($error) ) {
+                    $error = [];
+                }
+
                 foreach( $attributes[$key_prop] as $key => $val ) {
-                    $attributes[$key_prop][$key] = Attributes::formatting( $val, $prop, $error );
+
+                    $error[$key] = null;
+
+                    $attributes[$key_prop][$key] = Attributes::formatting( $val, $prop, $error[$key] );
                     Attributes::responsive( $attributes[$key_prop][$key], $prop );
                 }
             }

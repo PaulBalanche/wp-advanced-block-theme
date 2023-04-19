@@ -35,6 +35,10 @@
                 padding-inline-end: 2.5em;
             }
 
+            &.has-error > .sortableItemInner > .components-panel {
+                border-color: rgba(220, 50, 50, 0.5);
+            }
+
             .sortableItemInner {
 
                 .repeatableObjectLabel {

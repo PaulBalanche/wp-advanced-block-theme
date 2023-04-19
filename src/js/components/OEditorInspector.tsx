@@ -84,7 +84,7 @@ const BlockListItem = ({ block, selectBlock }) => {
 
     let blockName = ( block.name == "core/block" && typeof block.postName != 'undefined' ) ? block.postName + " (" + getBlockType(block.name).title + ")" : getBlockType(block.name).title;
 
-    if( typeof globalData.componentInstances == 'object' && typeof globalData.componentInstances[block.clientId] != 'undefined' && typeof globalData.componentInstances[block.clientId].state.error == 'object' && globalData.componentInstances[block.clientId].state.error != null ) {
+    if( typeof globalData.componentInstances == 'object' && typeof globalData.componentInstances[block.clientId] != 'undefined' && typeof globalData.componentInstances[block.clientId].state.error == 'object' && globalData.componentInstances[block.clientId].state.error != null && Object.keys(globalData.componentInstances[block.clientId].state.error).length > 0 ) {
 
         blockName = <>
             {blockName}

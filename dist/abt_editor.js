@@ -11519,6 +11519,7 @@ class WpeComponent extends _Components_WpeComponentBase__WEBPACK_IMPORTED_MODULE
           needPreviewUpdate: false
         });
       }
+      console.log(res.data);
       _Components_OEditorApp__WEBPACK_IMPORTED_MODULE_6__["default"].getInstance().forceUpdate();
     });
   }
@@ -13576,7 +13577,7 @@ const BlockListItem = _ref => {
     }
   }
   let blockName = block.name == "core/block" && typeof block.postName != 'undefined' ? block.postName + " (" + (0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__.getBlockType)(block.name).title + ")" : (0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__.getBlockType)(block.name).title;
-  if (typeof _global__WEBPACK_IMPORTED_MODULE_4__["default"].componentInstances == 'object' && typeof _global__WEBPACK_IMPORTED_MODULE_4__["default"].componentInstances[block.clientId] != 'undefined' && typeof _global__WEBPACK_IMPORTED_MODULE_4__["default"].componentInstances[block.clientId].state.error == 'object' && _global__WEBPACK_IMPORTED_MODULE_4__["default"].componentInstances[block.clientId].state.error != null) {
+  if (typeof _global__WEBPACK_IMPORTED_MODULE_4__["default"].componentInstances == 'object' && typeof _global__WEBPACK_IMPORTED_MODULE_4__["default"].componentInstances[block.clientId] != 'undefined' && typeof _global__WEBPACK_IMPORTED_MODULE_4__["default"].componentInstances[block.clientId].state.error == 'object' && _global__WEBPACK_IMPORTED_MODULE_4__["default"].componentInstances[block.clientId].state.error != null && Object.keys(_global__WEBPACK_IMPORTED_MODULE_4__["default"].componentInstances[block.clientId].state.error).length > 0) {
     blockName = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, blockName, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
       className: "missing-attributes"
     }, Object.keys(_global__WEBPACK_IMPORTED_MODULE_4__["default"].componentInstances[block.clientId].state.error).length));
@@ -16499,7 +16500,8 @@ class Render {
         valueProp: valueProp,
         controllerValue: controllerValue,
         required_field: required_field,
-        args: args
+        args: args,
+        error: error
       }));
       control = label != null ? Render.panelComponent(blockKey, label, control, true) : control;
     } else {
@@ -16705,14 +16707,16 @@ class Sortable extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Component
   renderItems() {
     var renderItems = [];
     for (var keyLoop in this.state.items) {
+      const error = this.props.error && typeof this.props.error == 'object' && this.props.error != null && typeof this.props.error[keyLoop] != 'undefined' ? this.props.error[keyLoop] : false;
       const labelRepeatableItem = this.props.type == "object" ? _Render__WEBPACK_IMPORTED_MODULE_7__.Render.repeatableObjectLabelFormatting(this.props.blockKey + "-" + keyLoop, this.props.controllerValue, keyLoop) : null;
       renderItems.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_SortableItem__WEBPACK_IMPORTED_MODULE_4__.SortableItem, {
         key: this.props.blockKey + "-" + keyLoop + "-SortableItem",
         id: this.state.items[keyLoop],
         blockKey: this.props.blockKey,
         onRemove: this.handleRemove,
-        type: this.props.type
-      }, _Controls__WEBPACK_IMPORTED_MODULE_6__.Controls.render(this.props.type, this.props.componentInstance, this.props.blockKey + "-" + keyLoop, labelRepeatableItem, this.props.keys.concat(keyLoop), this.props.valueProp, this.props.controllerValue[keyLoop], this.props.required_field, this.props.args)));
+        type: this.props.type,
+        error: error
+      }, _Controls__WEBPACK_IMPORTED_MODULE_6__.Controls.render(this.props.type, this.props.componentInstance, this.props.blockKey + "-" + keyLoop, labelRepeatableItem, this.props.keys.concat(keyLoop), this.props.valueProp, this.props.controllerValue[keyLoop], this.props.required_field, this.props.args, error)));
     }
     return renderItems;
   }
@@ -16794,12 +16798,13 @@ function SortableItem(props) {
     transition,
     transform: _dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_3__.CSS.Translate.toString(transform)
   };
+  const errorClassName = props.error ? 'has-error' : '';
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("li", (0,_babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_0__["default"])({
     key: props.id + "-SortableItemContainer",
     ref: setNodeRef,
     style: style
   }, attributes, {
-    className: "repeatableItem " + props.type
+    className: "repeatableItem " + props.type + " " + errorClassName
   }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("div", {
     className: "sortableItemInner"
   }, props.children), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.Button, (0,_babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_0__["default"])({

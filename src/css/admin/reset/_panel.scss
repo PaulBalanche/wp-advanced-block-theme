@@ -2,6 +2,9 @@
 
     .components-panel__body {
         border: none !important;
-    }
 
+        &:not(.is-opened) {
+            margin-top: 0 !important;
+        }
+    }
 }

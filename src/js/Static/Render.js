@@ -183,6 +183,7 @@ export class Render {
                     controllerValue={controllerValue}
                     required_field={required_field}
                     args={args}
+                    error={error}
                 />
             );
 

@@ -12,6 +12,9 @@
 .o-editor .components-panel__body {
   border: none !important;
 }
+.o-editor .components-panel__body:not(.is-opened) {
+  margin-top: 0 !important;
+}
 
 .o-editor .block-editor-block-list__block[data-type="custom/wpe-column"] {
   width: 100%;
@@ -167,6 +170,12 @@
   position: absolute;
   top: 0;
   left: -42px;
+}
+.o-editor .basicField.has-error:has(> .components-panel)::before {
+  content: none;
+}
+.o-editor .basicField.has-error:has(> .components-panel) > .components-panel {
+  border-color: rgba(220, 50, 50, 0.5) !important;
 }
 .o-editor .basicField .error {
   background: none;
@@ -728,18 +737,6 @@
   border: 1px solid #e8e8e8;
   border-radius: 10px;
 }
-.o-editor .components-panel:after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: calc(100% - 1px);
-  height: calc(100% - 1px);
-  border: 1px solid #d8eef8;
-  border-radius: 10px;
-  opacity: 0;
-  pointer-events: none;
-}
 .o-editor .components-panel > .components-panel__body > .components-panel__body-title {
   border-radius: 10px;
 }
@@ -758,10 +755,7 @@
   gap: 30px;
 }
 .o-editor .components-panel:hover, .o-editor .components-panel:focus, .o-editor .components-panel:focus-within, .o-editor .components-panel:has(> .is-opened.components-panel__body) {
-  border-color: transparent !important;
-}
-.o-editor .components-panel:hover:after, .o-editor .components-panel:focus:after, .o-editor .components-panel:focus-within:after, .o-editor .components-panel:has(> .is-opened.components-panel__body):after {
-  opacity: 1;
+  border-color: #d8eef8;
 }
 .o-editor .components-panel:hover > .components-panel__body > .components-panel__body-title, .o-editor .components-panel:focus > .components-panel__body > .components-panel__body-title, .o-editor .components-panel:focus-within > .components-panel__body > .components-panel__body-title, .o-editor .components-panel:has(> .is-opened.components-panel__body) > .components-panel__body > .components-panel__body-title {
   background: #d8eef8 !important;
@@ -804,6 +798,9 @@
 .o-editor .repeatableContainer .repeatableItem:hover {
   -webkit-padding-end: 2.5em;
           padding-inline-end: 2.5em;
+}
+.o-editor .repeatableContainer .repeatableItem.has-error > .sortableItemInner > .components-panel {
+  border-color: rgba(220, 50, 50, 0.5);
 }
 .o-editor .repeatableContainer .repeatableItem .sortableItemInner .repeatableObjectLabel {
   display: flex;

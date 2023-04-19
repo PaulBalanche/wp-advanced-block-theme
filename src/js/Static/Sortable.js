@@ -117,6 +117,9 @@ export class Sortable extends Component {
     renderItems() {
         var renderItems = [];
         for (var keyLoop in this.state.items) {
+
+            const error = ( this.props.error && typeof this.props.error == 'object' && this.props.error != null && typeof this.props.error[keyLoop] != 'undefined' ) ? this.props.error[keyLoop] : false;
+
             const labelRepeatableItem =
                 this.props.type == "object"
                     ? Render.repeatableObjectLabelFormatting(
@@ -132,6 +135,7 @@ export class Sortable extends Component {
                     blockKey={this.props.blockKey}
                     onRemove={this.handleRemove}
                     type={this.props.type}
+                    error={error}
                 >
                     {Controls.render(
                         this.props.type,
@@ -142,7 +146,8 @@ export class Sortable extends Component {
                         this.props.valueProp,
                         this.props.controllerValue[keyLoop],
                         this.props.required_field,
-                        this.props.args
+                        this.props.args,
+                        error
                     )}
                 </SortableItem>
             );
