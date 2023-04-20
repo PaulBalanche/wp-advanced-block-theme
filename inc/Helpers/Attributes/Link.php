@@ -2,42 +2,47 @@
 
 namespace Abt\Helpers\Attributes;
 
-use Abt\Helpers\Attributes;
-
-class Link {
+class Link extends Base {
     
-    public static function format( &$attributes, $key_prop, $prop, &$error = null ) {
+    public static function isValid( &$propInstance ) {
         
-        if( isset($attributes[$key_prop]) && is_array($attributes[$key_prop]) ) {
+        $value = $propInstance->getValue();
+        if( is_array($value) ) {
 
-            if( isset($attributes[$key_prop]['url'], $attributes[$key_prop]['text']) && ! empty($attributes[$key_prop]['url']) && ! empty($attributes[$key_prop]['text']) ) {
-                $attributes[$key_prop] = [
-                    'url' => ( isset($attributes[$key_prop]['url']) ) ? $attributes[$key_prop]['url'] : '',
-                    'text' => ( isset($attributes[$key_prop]['text']) ) ? $attributes[$key_prop]['text'] : '',
-                    'target' => ( isset($attributes[$key_prop]['opensInNewTab']) && $attributes[$key_prop]['opensInNewTab'] == '1' ) ? true : false
-                ];
-                Attributes::responsive( $attributes[$key_prop], $prop );
+            if( isset($value['url'], $value['text']) && ! empty($value['url']) && ! empty($value['text']) ) {
+                return true;
             }
             else {
 
-                $errorMessage = [];
-
-                if( ! isset($attributes[$key_prop]['url']) || empty($attributes[$key_prop]['url']) ) {
-                    $errorMessage[] = 'URL\'s missing';
+                if( ! isset($value['url']) || empty($value['url']) ) {
+                    $propInstance->addError( 'URL\'s missing' );
                 }
 
-                if( ! isset($attributes[$key_prop]['text']) || empty($attributes[$key_prop]['text']) ) {
-                    $errorMessage[] = 'Text\'s missing';
+                if( ! isset($value['text']) || empty($value['text']) ) {
+                    $propInstance->addError( 'Text\'s missing' );
                 }
-
-                if( ! is_array($error) ) {
-                    $error = [];
-                }
-                
-                $error[$key_prop] = implode(' - ', $errorMessage);
-                $attributes[$key_prop] = null;
             }
         }
+
+        return false;
+    }
+
+
+    public static function format( &$propInstance ) {
+                    
+        $value = $propInstance->getValue();
+        if( is_array($value) ) {
+
+            if( isset($value['url'], $value['text']) && ! empty($value['url']) && ! empty($value['text']) ) {
+                return [
+                    'url' => $value['url'],
+                    'text' => $value['text'],
+                    'target' => ( isset($value['opensInNewTab']) && $value['opensInNewTab'] == '1' ) ? true : false
+                ];
+            }
+        }
+
+        return null;
     }
 
 }

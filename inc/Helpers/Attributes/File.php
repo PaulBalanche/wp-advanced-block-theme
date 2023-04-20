@@ -2,15 +2,14 @@
 
 namespace Abt\Helpers\Attributes;
 
-use Abt\Helpers\Attributes;
-
-class File {
+class File extends Base {
     
-    public static function format( &$attributes, $key_prop, $prop ) {
-        
-        if( isset($attributes[$key_prop]) && is_array($attributes[$key_prop]) ) {
+    public static function format( &$propInstance ) {
+                    
+        $value = $propInstance->getValue();
+        if( is_array($value) ) {
 
-            $files = ( $prop['repeatable'] ) ? $attributes[$key_prop] : [ $attributes[$key_prop] ];
+            $files = ( $prop['repeatable'] ) ? $value : [ $value ];
             foreach( $files as $key_file => $current_file ) {
 
                 if( is_array($current_file) && isset($current_file['id']) ) {
@@ -26,9 +25,10 @@ class File {
                 }
             }
 
-            $attributes[$key_prop] = ( $prop['repeatable'] ) ? $files : $files[0];
-            Attributes::responsive( $attributes[$key_prop], $prop );
+            return ( $prop['repeatable'] ) ? $files : $files[0];
         }
+
+        return null;
     }
 
 }

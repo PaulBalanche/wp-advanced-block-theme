@@ -2,15 +2,13 @@
 
 namespace Abt\Helpers\Attributes;
 
-use Abt\Helpers\Attributes;
-
-class Gallery {
+class Gallery extends Base {
     
-    public static function format( &$attributes, $key_prop, $prop ) {
+    public static function format( &$propInstance ) {
         
-        if( isset($attributes[$key_prop]) && is_array($attributes[$key_prop]) ) {
-        
-            $images = $attributes[$key_prop];
+        $images = $propInstance->getValue();
+        if( is_array($images) ) {
+
             foreach( $images as $key_image => $current_image ) {
 
                 if( is_array($current_image) && isset($current_image['id']) ) {
@@ -29,9 +27,10 @@ class Gallery {
                 }
             }
 
-            $attributes[$key_prop] = $images;
-            Attributes::responsive( $attributes[$key_prop], $prop );
+            return $images;
         }
+
+        return null;
     }
 
 }

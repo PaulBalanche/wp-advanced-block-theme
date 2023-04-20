@@ -5,7 +5,6 @@ namespace Abt\Services;
 use Abt\Models\ComponentBlockMaster;
 use Abt\Main;
 use Abt\Singleton\Config;
-use Abt\Helpers\Attributes;
 
 class ComponentBlocks extends ServiceBase {
 
@@ -216,15 +215,12 @@ class ComponentBlocks extends ServiceBase {
         if( is_array($block_spec) ) {
 
             $componentBlockInstance->attributes_autosaves_post( $attributes, $post_id, $client_id );
-
-            $error = null;
-            Attributes::formatting( $attributes, $block_spec, $error );
-
-            if( is_null($error) ) {
+            $componentBlockInstance->validateProps($attributes, false, false);
+            if( $componentBlockInstance->arePropsValid() ) {
                 wp_send_json_success();
             }
             else {
-                wp_send_json_error( $error );
+                wp_send_json_error( $componentBlockInstance->getPropsErrors() );
             }
         }
     }

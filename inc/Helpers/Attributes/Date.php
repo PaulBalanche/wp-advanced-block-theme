@@ -2,20 +2,18 @@
 
 namespace Abt\Helpers\Attributes;
 
-use Abt\Helpers\Attributes;
-
-class Date {
+class Date extends Base {
     
-    public static function format( &$attributes, $key_prop, $prop ) {
+    public static function format( &$propInstance ) {
+                    
+        $value = $propInstance->getValue();
         
-        if( isset($attributes[$key_prop]) ) {
-
-            $date = \DateTime::createFromFormat('Y-m-d\TH:i:s', $attributes[$key_prop], wp_timezone() );
-            if( $date ) {
-                $attributes[$key_prop] = $date->format('U');
-                Attributes::responsive( $attributes[$key_prop], $prop );
-            }
+        $date = \DateTime::createFromFormat('Y-m-d\TH:i:s', $value, wp_timezone() );
+        if( $date ) {
+            return $date->format('U');
         }
+
+        return null;
     }
 
 }

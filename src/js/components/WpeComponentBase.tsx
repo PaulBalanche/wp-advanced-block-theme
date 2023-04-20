@@ -386,7 +386,7 @@ export class WpeComponentBase extends Component {
 
                 let currentAttributeError = false;
 
-                if( typeof this.state.error == 'object' && this.state.error != null && typeof this.state.error[keyProp] != 'undefined' ) {
+                if( typeof this.state.error == 'object' && this.state.error != null && typeof this.state.error[keyProp] == 'object' ) {
                     errorAttributes++;
                     currentAttributeError = this.state.error[keyProp];
                 }

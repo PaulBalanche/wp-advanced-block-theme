@@ -2,11 +2,11 @@
 
 namespace Abt\Helpers\Attributes;
 
-use Abt\Helpers\Attributes;
-
-class Video {
+class Video extends Base {
     
-    public static function format( &$attributes, $key_prop, $prop ) {
+    public static function format( &$propInstance ) {
+                    
+        $value = $propInstance->getValue();
         
         if( isset($attributes[$key_prop]) && is_array($attributes[$key_prop]) ) {
 
@@ -65,9 +65,9 @@ class Video {
             if( count($attributes[$key_prop]) == 1 && isset($attributes[$key_prop]['default']) ) {
                 $attributes[$key_prop] = $attributes[$key_prop]['default'];
             }
-
-            Attributes::responsive( $attributes[$key_prop], $prop );
         }
+
+        return null;
     }
 
 }

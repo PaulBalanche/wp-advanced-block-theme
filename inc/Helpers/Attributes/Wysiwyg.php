@@ -2,18 +2,13 @@
 
 namespace Abt\Helpers\Attributes;
 
-use Abt\Helpers\Attributes;
 use Abt\Helpers\DraftJsToHtml;
 
-class Wysiwyg {
+class Wysiwyg extends Base {
     
-    public static function format( &$attributes, $key_prop, $prop ) {
+    public static function format( &$propInstance ) {
                     
-        if( isset($attributes[$key_prop]) ) {
-
-            $attributes[$key_prop] = DraftJsToHtml::rawToHtml( $attributes[$key_prop] );
-            Attributes::responsive( $attributes[$key_prop], $prop );
-        }
+        return DraftJsToHtml::rawToHtml( $propInstance->getValue() );
     }
 
 }

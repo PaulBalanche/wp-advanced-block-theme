@@ -11434,6 +11434,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @wordpress/api-fetch */ "@wordpress/api-fetch");
 /* harmony import */ var _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_5__);
 /* harmony import */ var _Components_OEditorApp__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../Components/OEditorApp */ "./src/js/Components/OEditorApp.tsx");
+/* harmony import */ var _Helpers_Error__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../Helpers/Error */ "./src/js/Helpers/Error.js");
+
 
 
 
@@ -11507,33 +11509,22 @@ class WpeComponent extends _Components_WpeComponentBase__WEBPACK_IMPORTED_MODULE
       method: "POST",
       data: attributes == null ? this.props.attributes : attributes
     }).then(res => {
+      // const error = ( ! res.success ) ? Errors.cleanError(res.data) : null;
+
       if (res.success) {
         this.setState({
           previewReady: true,
           needPreviewUpdate: false
         });
-      } else {
-        this.cleanError(res.data);
+      }
+      {
         this.setState({
           error: res.data,
           needPreviewUpdate: false
         });
       }
-      console.log(res.data);
       _Components_OEditorApp__WEBPACK_IMPORTED_MODULE_6__["default"].getInstance().forceUpdate();
     });
-  }
-  cleanError(errorObject) {
-    for (var i in errorObject) {
-      if (errorObject[i] == null) {
-        delete errorObject[i];
-      } else if (typeof errorObject[i] == 'object') {
-        this.cleanError(errorObject[i]);
-        if (Object.keys(errorObject[i]).length == 0) {
-          delete errorObject[i];
-        }
-      }
-    }
   }
   _iframeResize() {
     this.setState({
@@ -14201,7 +14192,7 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
           }
         }
         let currentAttributeError = false;
-        if (typeof this.state.error == 'object' && this.state.error != null && typeof this.state.error[keyProp] != 'undefined') {
+        if (typeof this.state.error == 'object' && this.state.error != null && typeof this.state.error[keyProp] == 'object') {
           errorAttributes++;
           currentAttributeError = this.state.error[keyProp];
         }
@@ -16077,6 +16068,38 @@ class WysiwygControl extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Com
 
 /***/ }),
 
+/***/ "./src/js/Helpers/Error.js":
+/*!*********************************!*\
+  !*** ./src/js/Helpers/Error.js ***!
+  \*********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "Errors": () => (/* binding */ Errors)
+/* harmony export */ });
+class Errors {
+  static cleanError(errorObject) {
+    for (var i in errorObject) {
+      if (errorObject[i] == null) {
+        delete errorObject[i];
+      } else if (typeof errorObject[i] == 'object') {
+        Errors.cleanError(errorObject[i]);
+        if (Object.keys(errorObject[i]).length == 0) {
+          delete errorObject[i];
+        }
+      }
+    }
+    if (Object.keys(errorObject).length == 0) {
+      errorObject = null;
+    }
+    return errorObject;
+  }
+}
+
+/***/ }),
+
 /***/ "./src/js/Static/Attributes.js":
 /*!*************************************!*\
   !*** ./src/js/Static/Attributes.js ***!
@@ -16477,11 +16500,13 @@ class Render {
     label = required_field && label != null ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, label, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
       className: "o-required"
     }, "*")) : label;
-    label = error && typeof error == 'string' ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, label, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    label = error && typeof error == 'object' ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, label, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "error"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
       icon: "info"
-    }), error)) : label;
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", null, error.map(elt => {
+      return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, elt);
+    })))) : label;
     if (isResponsive) {
       blockKey = blockKey + "-" + currentDevice;
       keys.push(currentDevice);

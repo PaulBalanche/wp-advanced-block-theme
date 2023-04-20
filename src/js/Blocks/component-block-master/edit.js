@@ -12,6 +12,8 @@ import apiFetch from "@wordpress/api-fetch";
 
 import __OEditorApp from "../../Components/OEditorApp";
 
+import { Errors } from "../../Helpers/Error";
+
 class WpeComponent extends WpeComponentBase {
     _$iframes;
 
@@ -103,36 +105,22 @@ class WpeComponent extends WpeComponentBase {
             data: attributes == null ? this.props.attributes : attributes,
         }).then((res) => {
             
-            if (res.success) {
+            // const error = ( ! res.success ) ? Errors.cleanError(res.data) : null;
+
+            if( res.success ) {
                 this.setState({
                     previewReady: true,
                     needPreviewUpdate: false,
                 });
-            } else {
-                this.cleanError(res.data);
+            } {
                 this.setState({
                     error: res.data,
                     needPreviewUpdate: false,
                 });
-            }
-console.log(res.data);
+            }  
+
             __OEditorApp.getInstance().forceUpdate();
         });
-    }
-
-    cleanError( errorObject ) {
-
-        for( var i in errorObject ) {
-            if( errorObject[i] == null ) {
-                delete errorObject[i];
-            }
-            else if( typeof errorObject[i] == 'object' ) {
-                this.cleanError(errorObject[i]);
-                if( Object.keys(errorObject[i]).length == 0 ) {
-                    delete errorObject[i];
-                }
-            }
-        }
     }
 
     _iframeResize() {
@@ -195,7 +183,7 @@ console.log(res.data);
 
             var render = [];
 
-            if (error != null) {
+            if (error != null ) {
                 if( typeof error == "object" ) {
                     render.push(this.renderEditFormZone());
                     render.push(
@@ -206,7 +194,6 @@ console.log(res.data);
                             <span className="diagonal1"></span>
                             <span className="diagonal2"></span>
                             <span className="inner">Click to edit</span>
-                            {/* {this.renderButtonEditZone()} */}
                         </div>
                     );
                 } else {

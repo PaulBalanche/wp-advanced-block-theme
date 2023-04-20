@@ -7,14 +7,14 @@ use Abt\Services\Render as RenderService;
 use Abt\Singleton\Config;
 use Abt\Main;
 use Abt\Helpers\Anchor;
-use Abt\Helpers\Attributes;
 
 class ComponentBlock extends ModelBase {
 
     private $blockId = null,
             $blockSpec = null,
             $attributes,
-            $content;
+            $content,
+            $propsErrors = [];
 
     public function __construct( $blockId = null ) {
         parent::__construct();
@@ -43,6 +43,20 @@ class ComponentBlock extends ModelBase {
             $this->blockId = self::format_id( $blockId );
             Main::getInstance()->add_component_block_instance( $this );
         }        
+    }
+
+
+
+    public function arePropsValid() {
+        return ( count($this->getPropsErrors()) == 0 );
+    }
+
+    public function getPropsErrors() {
+        return $this->propsErrors;
+    }
+    
+    public function addPropError( $propInstance ) {
+        $this->propsErrors[ $propInstance->getId() ] = $propInstance->getErrors();
     }
 
 
@@ -346,8 +360,6 @@ class ComponentBlock extends ModelBase {
      * 
      */
     public function render() {
-
-        $render = null;
         
         $block_spec = $this->get_block_spec();
         if( is_array($block_spec) ) {
@@ -363,47 +375,56 @@ class ComponentBlock extends ModelBase {
             $content =  $this->get_content();
             $render_attributes['anchor'] = Anchor::get( $this->get_config()->get('blocksNamespace') . '-' . $this->get_config()->get('componentBlockPrefixName'), $content );
 
-            // Formatting attributes
-            $error = null;
-            $render_attributes = Attributes::formatting( $render_attributes, $block_spec, $error );
-            if( is_null($error) ) {
-                
+            // Validate and format props
+            if( $this->validateProps($render_attributes) ) {
+
                 // Start rendering
                 if( apply_filters( 'Abt\display_component_block_' . $this->get_ID(), true, $render_attributes ) ) {
-                    $render = apply_filters( 'Abt\render_component_block_' . $this->get_ID(), RenderService::render( $block_spec['path'], $render_attributes ) );
+                    return apply_filters( 'Abt\render_component_block_' . $this->get_ID(), RenderService::render( $block_spec['path'], $render_attributes ) );
                 }
                 else if( isset($render_attributes['admin_error_message']) && Request::is_admin_editor_request() ) {
-                    $render = '<div class="alert">' . $render_attributes['admin_error_message'] . '</div>';
+                    return '<div class="alert">' . $render_attributes['admin_error_message'] . '</div>';
                 }
             }
         }
 
-        return $render;
+        return null;
     }
 
 
 
-    /**
-     * Check missing required attributes
-     * 
-     */
-    public function get_missing_required_attributes( $attributes ) {
-
-        $missing_required_attributes = [];
+    public function validateProps( &$render_attributes, $stopError = true, $format = true ) {
         
         $block_spec = $this->get_block_spec();
         if( is_array($block_spec) && isset($block_spec['props']) && is_array($block_spec['props']) && count($block_spec['props']) > 0 ) {
-                            
             foreach( $block_spec['props'] as $key_prop => $prop ) {
 
-                if( isset($prop['required']) && $prop['required'] && ( ! isset($attributes[$key_prop]) || ! $attributes[$key_prop] || empty($attributes[$key_prop]) ) ){
+                $propInstance = new Prop($key_prop, ( isset($render_attributes[$key_prop]) ) ? $render_attributes[$key_prop] : null, $prop );
 
-                    $missing_required_attributes[] = $key_prop;
+                if( $propInstance->isValid() ) {
+
+                    if( $format ) {
+                        $render_attributes[$key_prop] = $propInstance->format();
+                    }
                 }
+                else {
+                    if( $propInstance->isRequired() ) {
+                        $this->addPropError($propInstance);
+
+                        if( $stopError ) {
+                            return false;
+                        }
+                    }
+                    else {
+                        if( $format ) {
+                            unset($render_attributes[$key_prop]);
+                        }
+                    }
+                }                
             }
         }
 
-        return $missing_required_attributes;
+        return true;
     }
 
 

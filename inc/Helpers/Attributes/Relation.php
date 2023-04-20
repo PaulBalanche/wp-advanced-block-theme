@@ -2,27 +2,27 @@
 
 namespace Abt\Helpers\Attributes;
 
-use Abt\Helpers\Attributes;
-
-class Relation {
+class Relation extends Base {
     
-    public static function format( &$attributes, $key_prop, $prop, $componentId ) {
+    public static function isValid( &$propInstance ) {
         
-        if( isset($attributes[$key_prop]) ) {
-            if( isset($prop['repeatable']) && $prop['repeatable'] && is_array($attributes[$key_prop]) && count($attributes[$key_prop]) > 0 ) {
-                $attributes[$key_prop] = get_posts([
-                    'post_type' => $prop['entity'],
-                    'post__in' => $attributes[$key_prop],
-                    'orderby' => 'post__in'
-                ]);
-            }
-            elseif( ( ! isset($prop['repeatable']) || ! $prop['repeatable'] ) && is_numeric($attributes[$key_prop]) ) {
-                $attributes[$key_prop] = get_post($attributes[$key_prop]);
-            }
+        return is_numeric( $propInstance->getValue() );
+    }
 
-            $attributes[$key_prop] = apply_filters( 'Abt\pre_render_component_relation', $attributes[$key_prop], $componentId, $key_prop );
-            Attributes::responsive( $attributes[$key_prop], $prop );
+    public static function format( &$propInstance ) {
+
+        if( $propInstance->isRepeatable() ) {
+            return get_posts([
+                'post_type' => $propInstance->getSpecs()['entity'],
+                'post__in' => $propInstance->getValue(),
+                'orderby' => 'post__in'
+            ]);
         }
+        elseif( ( ! isset($prop['repeatable']) || ! $prop['repeatable'] ) && is_numeric($attributes[$key_prop]) ) {
+            return get_post($propInstance->getValue());
+        }
+
+        return null;
     }
 
 }
