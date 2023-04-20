@@ -16504,8 +16504,10 @@ class Render {
       className: "error"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
       icon: "info"
-    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", null, error.map(elt => {
-      return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, elt);
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", null, error.map((elt, index) => {
+      return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", {
+        key: keyControl + "-error-" + index
+      }, elt);
     })))) : label;
     if (isResponsive) {
       blockKey = blockKey + "-" + currentDevice;

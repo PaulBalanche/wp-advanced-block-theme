@@ -32,7 +32,6 @@ class Prop {
         $this->value = $value;
 
         $this->_initSpecs($specs);
-        $this->_initDefaultValue();
         $this->isValid = $this->_validate();
     }
 
@@ -58,14 +57,8 @@ class Prop {
         $this->default = ( isset($specs['default']) ) ? $specs['default'] : null;
     }
 
-    public function _initDefaultValue() {
-
-        if(
-            ! is_null($this->default) &&
-            ( is_null($this->value) || empty($this->value) )
-        ) {
-            $this->value = $this->default;
-        }
+    public function getDefaultValue() {
+        return $this->default;
     }
 
     public function getType() {
@@ -73,6 +66,10 @@ class Prop {
     }
 
     public function format() {
+
+        if( is_null($this->value) || empty($this->value) ) {
+            return $this->getDefaultValue();
+        }
 
         switch( $this->getType() ) {
                         
@@ -115,6 +112,10 @@ class Prop {
     public function _validate() {
 
         if( is_null($this->value) || empty($this->value) ) {
+
+            if( ! is_null($this->getDefaultValue()) ) {
+                return true;
+            }
 
             $this->addError( 'Required' );
             return false;

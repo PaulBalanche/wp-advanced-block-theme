@@ -380,6 +380,7 @@ class ComponentBlock extends ModelBase {
 
                 // Start rendering
                 if( apply_filters( 'Abt\display_component_block_' . $this->get_ID(), true, $render_attributes ) ) {
+                    // echo '<pre>';print_r($render_attributes);die;
                     return apply_filters( 'Abt\render_component_block_' . $this->get_ID(), RenderService::render( $block_spec['path'], $render_attributes ) );
                 }
                 else if( isset($render_attributes['admin_error_message']) && Request::is_admin_editor_request() ) {

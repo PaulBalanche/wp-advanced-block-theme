@@ -155,7 +155,7 @@ export class Render {
         const currentDevice = __ODevices.getInstance().getCurrentDevice();
 
         label = ( required_field && label != null ) ? <>{label}<span className="o-required">*</span></> : label;
-        label = ( error && typeof error == 'object' ) ? <>{label}<div className="error"><Dashicon icon="info" /><ul>{error.map((elt) => { return <li>{elt}</li>})}</ul></div></> : label;
+        label = ( error && typeof error == 'object' ) ? <>{label}<div className="error"><Dashicon icon="info" /><ul>{error.map((elt, index) => { return <li key={keyControl + "-error-" + index}>{elt}</li>})}</ul></div></> : label;
 
         if( isResponsive ) {
             blockKey = blockKey + "-" + currentDevice;

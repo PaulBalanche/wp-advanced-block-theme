@@ -192,6 +192,12 @@
 .o-editor .basicField .error .dashicon {
   margin-right: 6px;
 }
+.o-editor .basicField .error ul {
+  margin: 0;
+}
+.o-editor .basicField .error ul li {
+  margin: 0;
+}
 .o-editor .basicField .responsive-tab-panel-wpe-component {
   position: relative;
   width: 100%;

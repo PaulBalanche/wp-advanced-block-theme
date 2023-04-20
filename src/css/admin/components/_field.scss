@@ -42,6 +42,14 @@
             .dashicon {
                 margin-right: $o-space-10;
             }
+
+            ul {
+                margin: 0;
+
+                li {
+                    margin: 0;
+                }
+            }
         }
 
         .responsive-tab-panel-wpe-component {
