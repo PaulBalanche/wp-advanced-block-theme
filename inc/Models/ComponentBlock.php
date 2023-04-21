@@ -411,7 +411,7 @@ class ComponentBlock extends ModelBase {
                 else {
                     if( $propInstance->isRequired() ) {
                         $this->addPropError($propInstance);
-
+                        // echo '<pre>';print_r($this->getPropsErrors());die;
                         if( $stopError ) {
                             return false;
                         }

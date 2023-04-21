@@ -14855,8 +14855,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "renderObject": () => (/* binding */ renderObject)
 /* harmony export */ });
-/* harmony import */ var _Static_Attributes__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Static/Attributes */ "./src/js/Static/Attributes.js");
-/* harmony import */ var _Static_Render__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Static/Render */ "./src/js/Static/Render.js");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _Static_Attributes__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Static/Attributes */ "./src/js/Static/Attributes.js");
+/* harmony import */ var _Static_Render__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Static/Render */ "./src/js/Static/Render.js");
+
 
 
 function renderObject(componentInstance, id, label, keys, valueProp, objectValue) {
@@ -14865,8 +14868,8 @@ function renderObject(componentInstance, id, label, keys, valueProp, objectValue
   let error = arguments.length > 8 && arguments[8] !== undefined ? arguments[8] : false;
   let fieldsetObject = [];
   for (const [keySubProp, valueSubProp] of Object.entries(objectValue)) {
-    const subPropError = error && typeof error == 'object' && error != null && typeof error[keySubProp] != 'undefined' ? error[keySubProp] : false;
-    fieldsetObject.push(_Static_Attributes__WEBPACK_IMPORTED_MODULE_0__.Attributes.renderProp(valueSubProp, keys.concat(keySubProp), valueProp, componentInstance, subPropError));
+    const subPropError = error && typeof error == 'object' && error != null && typeof error.items == 'object' && typeof error.items[keySubProp] != 'undefined' ? error.items[keySubProp] : false;
+    fieldsetObject.push(_Static_Attributes__WEBPACK_IMPORTED_MODULE_1__.Attributes.renderProp(valueSubProp, keys.concat(keySubProp), valueProp, componentInstance, subPropError));
   }
   if (label == null) return fieldsetObject;
 
@@ -14876,7 +14879,7 @@ function renderObject(componentInstance, id, label, keys, valueProp, objectValue
   //     initialOpen = true;
   // }
 
-  return _Static_Render__WEBPACK_IMPORTED_MODULE_1__.Render.panelComponent(id, label, fieldsetObject, initialOpen);
+  return _Static_Render__WEBPACK_IMPORTED_MODULE_2__.Render.panelComponent(id, label, fieldsetObject, initialOpen);
 }
 
 /***/ }),
@@ -15000,7 +15003,7 @@ __webpack_require__.r(__webpack_exports__);
 function renderSelect(componentInstance, id, label, options, defaultValue, keys, valueProp, objectValue) {
   let required = arguments.length > 8 && arguments[8] !== undefined ? arguments[8] : false;
   if (typeof options == "undefined") return null;
-  const defaultLabel = defaultValue != null ? "Default (" + defaultValue + ")" : "Default";
+  const defaultLabel = defaultValue != null ? "Default (" + defaultValue.value + ")" : "Default";
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.SelectControl, {
     key: id,
     label: label,
@@ -16500,11 +16503,11 @@ class Render {
     label = required_field && label != null ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, label, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
       className: "o-required"
     }, "*")) : label;
-    label = error && typeof error == 'object' ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, label, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    label = error && typeof error == 'object' && typeof error.root == 'object' ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, label, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "error"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
       icon: "info"
-    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", null, error.map((elt, index) => {
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", null, error.root.map((elt, index) => {
       return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", {
         key: keyControl + "-error-" + index
       }, elt);
@@ -16518,6 +16521,7 @@ class Render {
       if (controllerValue == null || typeof controllerValue != "object" || controllerValue.length == 0) {
         controllerValue = [""];
       }
+      const itemsError = error && typeof error == 'object' && typeof error.items == 'object' ? error.items : null;
       control.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Sortable__WEBPACK_IMPORTED_MODULE_4__.Sortable, {
         key: blockKey + "-Sortable",
         type: type,
@@ -16528,7 +16532,7 @@ class Render {
         controllerValue: controllerValue,
         required_field: required_field,
         args: args,
-        error: error
+        error: itemsError
       }));
       control = label != null ? Render.panelComponent(blockKey, label, control, true) : control;
     } else {
@@ -16735,7 +16739,16 @@ class Sortable extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Component
     var renderItems = [];
     for (var keyLoop in this.state.items) {
       const error = this.props.error && typeof this.props.error == 'object' && this.props.error != null && typeof this.props.error[keyLoop] != 'undefined' ? this.props.error[keyLoop] : false;
-      const labelRepeatableItem = this.props.type == "object" ? _Render__WEBPACK_IMPORTED_MODULE_7__.Render.repeatableObjectLabelFormatting(this.props.blockKey + "-" + keyLoop, this.props.controllerValue, keyLoop) : null;
+      let labelRepeatableItem = this.props.type == "object" ? _Render__WEBPACK_IMPORTED_MODULE_7__.Render.repeatableObjectLabelFormatting(this.props.blockKey + "-" + keyLoop, this.props.controllerValue, keyLoop) : null;
+      labelRepeatableItem = error && typeof error == 'object' && typeof error.root == 'object' ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, labelRepeatableItem, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+        className: "error"
+      }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
+        icon: "info"
+      }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", null, error.root.map((elt, index) => {
+        return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", {
+          key: this.state.items[keyLoop] + "-error-" + index
+        }, elt);
+      })))) : labelRepeatableItem;
       renderItems.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_SortableItem__WEBPACK_IMPORTED_MODULE_4__.SortableItem, {
         key: this.props.blockKey + "-" + keyLoop + "-SortableItem",
         id: this.state.items[keyLoop],
@@ -16748,16 +16761,7 @@ class Sortable extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Component
     return renderItems;
   }
   render() {
-    // const sensors = useSensors(
-    //     useSensor(PointerSensor),
-    //     useSensor(KeyboardSensor, {
-    //         coordinateGetter: sortableKeyboardCoordinates,
-    //     })
-    // );
-
-    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_dnd_kit_core__WEBPACK_IMPORTED_MODULE_2__.DndContext
-    // sensors={sensors}
-    , {
+    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_dnd_kit_core__WEBPACK_IMPORTED_MODULE_2__.DndContext, {
       collisionDetection: _dnd_kit_core__WEBPACK_IMPORTED_MODULE_2__.closestCenter,
       onDragEnd: this.handleDragEnd,
       measuring: {

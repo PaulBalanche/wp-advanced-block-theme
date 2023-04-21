@@ -16,7 +16,7 @@ export function renderSelect(
     if (typeof options == "undefined") return null;
 
     const defaultLabel =
-        defaultValue != null ? "Default (" + defaultValue + ")" : "Default";
+        defaultValue != null ? "Default (" + defaultValue.value + ")" : "Default";
 
     return (
         <SelectControl

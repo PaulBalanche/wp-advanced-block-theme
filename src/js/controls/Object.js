@@ -1,3 +1,7 @@
+import {
+    Dashicon
+} from "@wordpress/components";
+
 import { Attributes } from "../Static/Attributes";
 import { Render } from "../Static/Render";
 
@@ -13,10 +17,10 @@ export function renderObject(
     error = false
 ) {
     let fieldsetObject = [];
-
+    
     for (const [keySubProp, valueSubProp] of Object.entries(objectValue)) {
 
-        const subPropError = ( error && typeof error == 'object' && error != null && typeof error[keySubProp] != 'undefined' ) ? error[keySubProp] : false;
+        const subPropError = ( error && typeof error == 'object' && error != null && typeof error.items == 'object' && typeof error.items[keySubProp] != 'undefined' ) ? error.items[keySubProp] : false;
 
         fieldsetObject.push(
             Attributes.renderProp(

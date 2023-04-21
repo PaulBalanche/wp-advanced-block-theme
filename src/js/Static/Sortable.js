@@ -120,7 +120,7 @@ export class Sortable extends Component {
 
             const error = ( this.props.error && typeof this.props.error == 'object' && this.props.error != null && typeof this.props.error[keyLoop] != 'undefined' ) ? this.props.error[keyLoop] : false;
 
-            const labelRepeatableItem =
+            let labelRepeatableItem =
                 this.props.type == "object"
                     ? Render.repeatableObjectLabelFormatting(
                           this.props.blockKey + "-" + keyLoop,
@@ -128,6 +128,9 @@ export class Sortable extends Component {
                           keyLoop
                       )
                     : null;
+
+            labelRepeatableItem = ( error && typeof error == 'object' && typeof error.root == 'object' ) ? <>{labelRepeatableItem}<div className="error"><Dashicon icon="info" /><ul>{error.root.map((elt, index) => { return <li key={this.state.items[keyLoop] + "-error-" + index}>{elt}</li> })}</ul></div></> : labelRepeatableItem;
+
             renderItems.push(
                 <SortableItem
                     key={this.props.blockKey + "-" + keyLoop + "-SortableItem"}
@@ -156,16 +159,8 @@ export class Sortable extends Component {
     }
 
     render() {
-        // const sensors = useSensors(
-        //     useSensor(PointerSensor),
-        //     useSensor(KeyboardSensor, {
-        //         coordinateGetter: sortableKeyboardCoordinates,
-        //     })
-        // );
-
         return (
             <DndContext
-                // sensors={sensors}
                 collisionDetection={closestCenter}
                 onDragEnd={this.handleDragEnd}
                 measuring={{

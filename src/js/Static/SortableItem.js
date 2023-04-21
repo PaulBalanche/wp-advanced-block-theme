@@ -24,7 +24,6 @@ export function SortableItem(props) {
         transform: CSS.Translate.toString(transform),
     };
 
-
     const errorClassName = ( props.error ) ? 'has-error' : '';
 
     return (

@@ -155,7 +155,7 @@ export class Render {
         const currentDevice = __ODevices.getInstance().getCurrentDevice();
 
         label = ( required_field && label != null ) ? <>{label}<span className="o-required">*</span></> : label;
-        label = ( error && typeof error == 'object' ) ? <>{label}<div className="error"><Dashicon icon="info" /><ul>{error.map((elt, index) => { return <li key={keyControl + "-error-" + index}>{elt}</li>})}</ul></div></> : label;
+        label = ( error && typeof error == 'object' && typeof error.root == 'object' ) ? <>{label}<div className="error"><Dashicon icon="info" /><ul>{error.root.map((elt, index) => { return <li key={keyControl + "-error-" + index}>{elt}</li> })}</ul></div></> : label;
 
         if( isResponsive ) {
             blockKey = blockKey + "-" + currentDevice;
@@ -172,6 +172,7 @@ export class Render {
                 controllerValue = [""];
             }
 
+            const itemsError = ( error && typeof error == 'object' && typeof error.items == 'object' ) ? error.items : null;
             control.push(
                 <Sortable
                     key={blockKey + "-Sortable"}
@@ -183,7 +184,7 @@ export class Render {
                     controllerValue={controllerValue}
                     required_field={required_field}
                     args={args}
-                    error={error}
+                    error={itemsError}
                 />
             );
 

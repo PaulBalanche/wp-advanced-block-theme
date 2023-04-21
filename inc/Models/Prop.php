@@ -67,51 +67,73 @@ class Prop {
 
     public function format() {
 
-        if( is_null($this->value) || empty($this->value) ) {
+        if( is_null($this->getValue()) || empty($this->getValue()) ) {
             return $this->getDefaultValue();
         }
 
-        switch( $this->getType() ) {
-                        
-            case 'boolean':
-                return Boolean::format( $this );
+        if( $this->isRepeatable() ) {
 
-            case 'image':
-                return Image::format( $this );
+            if( is_array($this->getValue()) && count($this->getValue()) > 0 ) {
+            
+                $valueFormatted = [];
+                foreach( $this->getValue() as $key_repeatableValue => $repeatableValue ) {
 
-            case 'gallery':
-                return Gallery::format( $this );
+                    $repeatableValueInstance = new Prop($key_repeatableValue, $repeatableValue, array_merge($this->getSpecs(), ['repeatable' => false]) );
+                    if( $repeatableValueInstance->isValid() ) {
+                        $valueFormatted[$key_repeatableValue] = $repeatableValueInstance->format();
+                    }
+                }
 
-            case 'video':
-                return Video::format( $this );
+                return $valueFormatted;
+            }
+            else {
+                return null;
+            }
+        }
+        else {
 
-            case 'file':
-                return File::format( $this );
+            switch( $this->getType() ) {
+                            
+                case 'boolean':
+                    return Boolean::format( $this );
 
-            case 'relation':
-                return Relation::format( $this );
+                case 'image':
+                    return Image::format( $this );
 
-            case 'object':
-                return RecursiveObject::format( $this );
+                case 'gallery':
+                    return Gallery::format( $this );
 
-            case 'link':
-                return Link::format( $this );
+                case 'video':
+                    return Video::format( $this );
 
-            case 'date':
-                return Date::format( $this );
+                case 'file':
+                    return File::format( $this );
 
-            case 'wysiwyg':
-            case 'richText':
-                return Wysiwyg::format( $this );
+                case 'relation':
+                    return Relation::format( $this );
 
-            default:
-                return Base::format( $this );
+                case 'object':
+                    return RecursiveObject::format( $this );
+
+                case 'link':
+                    return Link::format( $this );
+
+                case 'date':
+                    return Date::format( $this );
+
+                case 'wysiwyg':
+                case 'richText':
+                    return Wysiwyg::format( $this );
+
+                default:
+                    return Base::format( $this );
+            }
         }
     }
 
     public function _validate() {
 
-        if( is_null($this->value) || empty($this->value) ) {
+        if( is_null($this->getValue()) || empty($this->getValue()) ) {
 
             if( ! is_null($this->getDefaultValue()) ) {
                 return true;
@@ -121,41 +143,82 @@ class Prop {
             return false;
         }
 
-        switch( $this->getType() ) {
-                        
-            case 'boolean':
-                return Boolean::isValid( $this );
+        if( $this->isRepeatable() ) {
+            
+            if( is_array($this->getValue()) && count($this->getValue()) > 0 ) {
+            
+                $countValidItems = 0;
+                $errorsRepeatableItem = [];
 
-            case 'image':
-                return Image::isValid( $this );
+                foreach( $this->getValue() as $keyRepeatableValue => $repeatableValue ) {
 
-            case 'gallery':
-                return Gallery::isValid( $this );
+                    $specRepeatableValue = array_merge($this->getSpecs(), [
+                        'required' => false,
+                        'repeatable' => false
+                    ]);
+                    $repeatableValueInstance = new Prop($keyRepeatableValue, $repeatableValue, $specRepeatableValue );
+                    if( $repeatableValueInstance->isValid() ) {
+                        $countValidItems++;
+                    }
+                    else {
+                        $errorsRepeatableItem[ $repeatableValueInstance->getId() ] = $repeatableValueInstance->getErrors();
+                    }
+                }
 
-            case 'video':
-                return Video::isValid( $this );
+                if( count($errorsRepeatableItem) > 0 ) {
+                    $this->addError( $errorsRepeatableItem, 'items' );
+                }
 
-            case 'file':
-                return File::isValid( $this );
+                if( $countValidItems < 3 ) {
+                    $this->addError( 'Required minimun 3 items' );
+                    return false;
+                }
 
-            case 'relation':
-                return Relation::isValid( $this );
+                return ( count($this->getErrors()) == 0 );
+            }
+            else {
+                $this->addError( 'Required' );
+                return false;
+            }
+        }
+        else {
 
-            case 'object':
-                return RecursiveObject::isValid( $this );
+            switch( $this->getType() ) {
+                            
+                case 'boolean':
+                    return Boolean::isValid( $this );
 
-            case 'link':
-                return Link::isValid( $this );
+                case 'image':
+                    return Image::isValid( $this );
 
-            case 'date':
-                return Date::isValid( $this );
+                case 'gallery':
+                    return Gallery::isValid( $this );
 
-            case 'wysiwyg':
-            case 'richText':
-                return Wysiwyg::isValid( $this );
+                case 'video':
+                    return Video::isValid( $this );
 
-            default:
-                return Base::isValid( $this );
+                case 'file':
+                    return File::isValid( $this );
+
+                case 'relation':
+                    return Relation::isValid( $this );
+
+                case 'object':
+                    return RecursiveObject::isValid( $this );
+
+                case 'link':
+                    return Link::isValid( $this );
+
+                case 'date':
+                    return Date::isValid( $this );
+
+                case 'wysiwyg':
+                case 'richText':
+                    return Wysiwyg::isValid( $this );
+
+                default:
+                    return Base::isValid( $this );
+            }
         }
     }
 
@@ -175,8 +238,22 @@ class Prop {
         return ( $this->repeatable );
     }
 
-    public function addError( $error ) {
-        $this->errors[] = $error;
+    public function addError( $error, $key = null ) {
+
+        $key = ( is_null($key) ) ? 'root' : $key;
+
+        if( $key == 'root' ) {
+
+            if( ! isset($this->errors[$key]) || ! is_array($this->errors[$key]) ) {
+                $this->errors[$key] = [];
+            }
+
+            $this->errors[$key][] = $error;
+
+        }
+        else {
+            $this->errors[$key] = $error;
+        }        
     }
     
     public function getErrors( ) {
