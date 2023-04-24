@@ -44,6 +44,7 @@ class Image extends Base {
                 // }
 
                 $propInstance->addError( 'Image missing for default device (' . $defaultDevice . ')' );
+                return false;
             }
         }
 

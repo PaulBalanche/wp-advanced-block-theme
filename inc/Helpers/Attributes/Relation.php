@@ -2,6 +2,8 @@
 
 namespace Abt\Helpers\Attributes;
 
+use Abt\Models\RepeatableProp;
+
 class Relation extends Base {
     
     public static function isValid( &$propInstance ) {
@@ -11,7 +13,7 @@ class Relation extends Base {
 
     public static function format( &$propInstance ) {
 
-        if( $propInstance->isRepeatable() ) {
+        if( $propInstance instanceof RepeatableProp ) {
             return get_posts([
                 'post_type' => $propInstance->getSpecs()['entity'],
                 'post__in' => $propInstance->getValue(),

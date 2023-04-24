@@ -374,10 +374,10 @@ class ComponentBlock extends ModelBase {
             // Anchor detection
             $content =  $this->get_content();
             $render_attributes['anchor'] = Anchor::get( $this->get_config()->get('blocksNamespace') . '-' . $this->get_config()->get('componentBlockPrefixName'), $content );
-
+            // echo '<pre>';print_r($render_attributes);
             // Validate and format props
             if( $this->validateProps($render_attributes) ) {
-
+                
                 // Start rendering
                 if( apply_filters( 'Abt\display_component_block_' . $this->get_ID(), true, $render_attributes ) ) {
                     // echo '<pre>';print_r($render_attributes);die;
@@ -401,16 +401,17 @@ class ComponentBlock extends ModelBase {
             foreach( $block_spec['props'] as $key_prop => $prop ) {
 
                 $propInstance = new Prop($key_prop, ( isset($render_attributes[$key_prop]) ) ? $render_attributes[$key_prop] : null, $prop );
+                $this->addPropError($propInstance);
 
                 if( $propInstance->isValid() ) {
-
+                    
                     if( $format ) {
                         $render_attributes[$key_prop] = $propInstance->format();
                     }
                 }
                 else {
                     if( $propInstance->isRequired() ) {
-                        $this->addPropError($propInstance);
+                        // $this->addPropError($propInstance);
                         // echo '<pre>';print_r($this->getPropsErrors());die;
                         if( $stopError ) {
                             return false;
