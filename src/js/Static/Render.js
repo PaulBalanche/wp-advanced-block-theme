@@ -155,7 +155,8 @@ export class Render {
         const currentDevice = __ODevices.getInstance().getCurrentDevice();
 
         label = ( required_field && label != null ) ? <>{label}<span className="o-required">*</span></> : label;
-        label = ( error && typeof error == 'object' && typeof error.message == 'string' ) ? <>{label}<div className="error"><Dashicon icon="info" />{error.message}</div></> : label;
+        label = ( error && typeof error == 'object' && typeof error.error == 'string' ) ? <>{label}<div className="error"><Dashicon icon="info" />{error.error}</div></> : label;
+        label = ( error && typeof error == 'object' && typeof error.warning == 'string' ) ? <>{label}<div className="warning"><Dashicon icon="info" />{error.warning}</div></> : label;
 
         if( isResponsive ) {
             blockKey = blockKey + "-" + currentDevice;
@@ -172,7 +173,7 @@ export class Render {
                 controllerValue = [""];
             }
 
-            const itemsError = ( error && typeof error == 'object' && typeof error.data == 'object' && Object.keys(error.data).length > 0 ) ? error.data : null;
+            const itemsError = ( error && typeof error == 'object' && typeof error.props == 'object' && Object.keys(error.props).length > 0 ) ? error.props : null;
             control.push(
                 <Sortable
                     key={blockKey + "-Sortable"}
@@ -252,7 +253,7 @@ export class Render {
 
         if (label == null) return control;
 
-        return Render.fieldContainer(blockKey, control, ( error ) ? 'has-error' : '' );
+        return Render.fieldContainer(blockKey, control, ( error && typeof error == 'object' && typeof error.error != 'undefined' ) ? 'has-error' : ( ( error && typeof error == 'object' && typeof error.warning != 'undefined' ) ? 'has-warning' : '' ) );
     }
 
     static repeatableObjectLabelFormatting(blockKey, valueProp, keyLoop) {

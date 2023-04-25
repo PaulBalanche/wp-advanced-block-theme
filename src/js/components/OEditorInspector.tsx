@@ -86,10 +86,28 @@ const BlockListItem = ({ block, selectBlock }) => {
 
     if( typeof globalData.componentInstances == 'object' && typeof globalData.componentInstances[block.clientId] != 'undefined' && typeof globalData.componentInstances[block.clientId].state.error == 'object' && globalData.componentInstances[block.clientId].state.error != null && Object.keys(globalData.componentInstances[block.clientId].state.error).length > 0 ) {
 
-        blockName = <>
-            {blockName}
-            <span className="missing-attributes">{Object.keys(globalData.componentInstances[block.clientId].state.error).length}</span>
-        </>
+        let errorsBlock = 0;
+        let warningsBlock = 0;
+        for( var i in globalData.componentInstances[block.clientId].state.error ) {
+            if( typeof globalData.componentInstances[block.clientId].state.error[i].error != 'undefined' ) {
+                errorsBlock++;
+            }
+            if( typeof globalData.componentInstances[block.clientId].state.error[i].warning != 'undefined' ) {
+                warningsBlock++;
+            }
+        }
+        if( errorsBlock > 0 ) {
+            blockName = <>
+                {blockName}
+                <span className="error-attributes">{errorsBlock}</span>
+            </>
+        }
+        else if (warningsBlock > 0) {
+            blockName = <>
+                {blockName}
+                <span className="warning-attributes">{warningsBlock}</span>
+            </>
+        }
     }
 
     return (

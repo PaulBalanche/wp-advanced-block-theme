@@ -11,19 +11,20 @@ class RecursiveObject extends Base {
         $value = $propInstance->getValue();
         $spec = $propInstance->getSpecs();
 
+        $isValid = true;
         if( isset($spec['props']) && is_array($spec['props']) && count($spec['props']) > 0 ) {
             
             foreach( $spec['props'] as $key_subProp => $subProp ) {
 
                 $subPropInstance = new Prop($key_subProp, ( isset($value[$key_subProp]) ) ? $value[$key_subProp] : null, $subProp );
-                if( ! $subPropInstance->isValid() ) {
-                    $propInstance->addError( $subPropInstance->getErrors(), $subPropInstance->getId() );
+                $propInstance->addSubPropStatus( $subPropInstance );
+                if( $isValid && $subPropInstance->isRequired() && ! $subPropInstance->isValid() ) {
+                    $isValid = false;
                 }
             }
         }
 
-        return false;
-        return ( is_null($propInstance->getErrors()['errors']) );
+        return $isValid;
     }
 
     public static function format( &$propInstance ) {

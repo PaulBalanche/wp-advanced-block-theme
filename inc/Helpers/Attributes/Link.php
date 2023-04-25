@@ -15,11 +15,11 @@ class Link extends Base {
             else {
 
                 if( ! isset($value['url']) || empty($value['url']) ) {
-                    $propInstance->addError( 'URL\'s missing' );
+                    return $propInstance->falseWithError( 'URL\'s missing' );
                 }
 
                 if( ! isset($value['text']) || empty($value['text']) ) {
-                    $propInstance->addError( 'Text\'s missing' );
+                    return $propInstance->falseWithError( 'Text\'s missing' );
                 }
             }
         }

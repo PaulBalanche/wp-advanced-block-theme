@@ -129,7 +129,8 @@ export class Sortable extends Component {
                       )
                     : null;
 
-            labelRepeatableItem = ( error && typeof error == 'object' && typeof error.message == 'string' ) ? <>{labelRepeatableItem}<div className="error"><Dashicon icon="info" />{error.message}</div></> : labelRepeatableItem;
+            labelRepeatableItem = ( error && typeof error == 'object' && typeof error.error == 'string' ) ? <>{labelRepeatableItem}<div className="error"><Dashicon icon="info" />{error.error}</div></> : labelRepeatableItem;
+            labelRepeatableItem = ( error && typeof error == 'object' && typeof error.warning == 'string' ) ? <>{labelRepeatableItem}<div className="warning"><Dashicon icon="info" />{error.warning}</div></> : labelRepeatableItem;
 
             renderItems.push(
                 <SortableItem

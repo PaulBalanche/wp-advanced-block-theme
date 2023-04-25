@@ -13569,9 +13569,25 @@ const BlockListItem = _ref => {
   }
   let blockName = block.name == "core/block" && typeof block.postName != 'undefined' ? block.postName + " (" + (0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__.getBlockType)(block.name).title + ")" : (0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__.getBlockType)(block.name).title;
   if (typeof _global__WEBPACK_IMPORTED_MODULE_4__["default"].componentInstances == 'object' && typeof _global__WEBPACK_IMPORTED_MODULE_4__["default"].componentInstances[block.clientId] != 'undefined' && typeof _global__WEBPACK_IMPORTED_MODULE_4__["default"].componentInstances[block.clientId].state.error == 'object' && _global__WEBPACK_IMPORTED_MODULE_4__["default"].componentInstances[block.clientId].state.error != null && Object.keys(_global__WEBPACK_IMPORTED_MODULE_4__["default"].componentInstances[block.clientId].state.error).length > 0) {
-    blockName = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, blockName, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-      className: "missing-attributes"
-    }, Object.keys(_global__WEBPACK_IMPORTED_MODULE_4__["default"].componentInstances[block.clientId].state.error).length));
+    let errorsBlock = 0;
+    let warningsBlock = 0;
+    for (var i in _global__WEBPACK_IMPORTED_MODULE_4__["default"].componentInstances[block.clientId].state.error) {
+      if (typeof _global__WEBPACK_IMPORTED_MODULE_4__["default"].componentInstances[block.clientId].state.error[i].error != 'undefined') {
+        errorsBlock++;
+      }
+      if (typeof _global__WEBPACK_IMPORTED_MODULE_4__["default"].componentInstances[block.clientId].state.error[i].warning != 'undefined') {
+        warningsBlock++;
+      }
+    }
+    if (errorsBlock > 0) {
+      blockName = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, blockName, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+        className: "error-attributes"
+      }, errorsBlock));
+    } else if (warningsBlock > 0) {
+      blockName = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, blockName, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+        className: "warning-attributes"
+      }, warningsBlock));
+    }
   }
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", {
     key: "o-inspector-block-" + block.clientId
@@ -14182,6 +14198,7 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
       if (valCat.props.length == 0) continue;
       let currentEditCat = [];
       let errorAttributes = 0;
+      let warningAttributes = 0;
       forEachCatProps: for (const [keyProp, prop] of Object.entries(valCat.props)) {
         // Conditional treatment
         if (typeof prop.conditional == "object") {
@@ -14193,8 +14210,13 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
         }
         let currentAttributeError = false;
         if (typeof this.state.error == 'object' && this.state.error != null && typeof this.state.error[keyProp] == 'object') {
-          errorAttributes++;
           currentAttributeError = this.state.error[keyProp];
+          if (typeof this.state.error[keyProp].error != 'undefined') {
+            errorAttributes++;
+          }
+          if (typeof this.state.error[keyProp].warning != 'undefined') {
+            warningAttributes++;
+          }
         }
         let valueProp = this.getAttribute(keyProp);
         currentEditCat.push(_Static_Attributes__WEBPACK_IMPORTED_MODULE_2__.Attributes.renderProp(prop, [keyProp], {
@@ -14204,9 +14226,16 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
       if (keyCat == "block_settings") {
         currentEditCat.push(this.renderInspectorControls());
       }
-      const titleTab = errorAttributes > 0 ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, valCat.name, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-        className: "missing-attributes"
-      }, errorAttributes)) : valCat.name;
+      let titleTab = valCat.name;
+      if (errorAttributes > 0) {
+        titleTab = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, titleTab, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+          className: "error-attributes"
+        }, errorAttributes));
+      } else if (warningAttributes > 0) {
+        titleTab = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, titleTab, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+          className: "warning-attributes"
+        }, warningAttributes));
+      }
       tabPanel.push({
         name: keyCat,
         title: titleTab,
@@ -14868,7 +14897,7 @@ function renderObject(componentInstance, id, label, keys, valueProp, objectValue
   let error = arguments.length > 8 && arguments[8] !== undefined ? arguments[8] : false;
   let fieldsetObject = [];
   for (const [keySubProp, valueSubProp] of Object.entries(objectValue)) {
-    const subPropError = error && typeof error == 'object' && error != null && typeof error.data == 'object' && typeof error.data[keySubProp] != 'undefined' ? error.data[keySubProp] : false;
+    const subPropError = error && typeof error == 'object' && error != null && typeof error.props == 'object' && typeof error.props[keySubProp] != 'undefined' ? error.props[keySubProp] : false;
     fieldsetObject.push(_Static_Attributes__WEBPACK_IMPORTED_MODULE_1__.Attributes.renderProp(valueSubProp, keys.concat(keySubProp), valueProp, componentInstance, subPropError));
   }
   if (label == null) return fieldsetObject;
@@ -16251,7 +16280,7 @@ class Attributes {
   static initComponentAttributes(attributes, props) {
     for (const [key, value] of Object.entries(props)) {
       if (typeof value != "object" || value == null) continue;
-      let currentType = typeof value.repeatable != "undefined" && value.repeatable && !['image', 'video', 'file', 'gallery'].includes(value.type.toLowerCase()) ? "array" : value.type.toLowerCase();
+      let currentType = typeof value.repeatable != "undefined" && value.repeatable && !['image', 'video', 'file', 'image'].includes(value.type.toLowerCase()) ? "array" : value.type.toLowerCase();
       currentType = typeof value.responsive != "undefined" && value.responsive ? "object" : currentType;
       switch (currentType) {
         case "string":
@@ -16503,11 +16532,16 @@ class Render {
     label = required_field && label != null ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, label, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
       className: "o-required"
     }, "*")) : label;
-    label = error && typeof error == 'object' && typeof error.message == 'string' ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, label, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    label = error && typeof error == 'object' && typeof error.error == 'string' ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, label, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "error"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
       icon: "info"
-    }), error.message)) : label;
+    }), error.error)) : label;
+    label = error && typeof error == 'object' && typeof error.warning == 'string' ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, label, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "warning"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
+      icon: "info"
+    }), error.warning)) : label;
     if (isResponsive) {
       blockKey = blockKey + "-" + currentDevice;
       keys.push(currentDevice);
@@ -16517,7 +16551,7 @@ class Render {
       if (controllerValue == null || typeof controllerValue != "object" || controllerValue.length == 0) {
         controllerValue = [""];
       }
-      const itemsError = error && typeof error == 'object' && typeof error.data == 'object' && Object.keys(error.data).length > 0 ? error.data : null;
+      const itemsError = error && typeof error == 'object' && typeof error.props == 'object' && Object.keys(error.props).length > 0 ? error.props : null;
       control.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Sortable__WEBPACK_IMPORTED_MODULE_4__.Sortable, {
         key: blockKey + "-Sortable",
         type: type,
@@ -16553,7 +16587,7 @@ class Render {
       control = Render.panelComponent(blockKey, label, control, componentInstance.getCurrentEditedProp() == keyControl ? true : false);
     }
     if (label == null) return control;
-    return Render.fieldContainer(blockKey, control, error ? 'has-error' : '');
+    return Render.fieldContainer(blockKey, control, error && typeof error == 'object' && typeof error.error != 'undefined' ? 'has-error' : error && typeof error == 'object' && typeof error.warning != 'undefined' ? 'has-warning' : '');
   }
   static repeatableObjectLabelFormatting(blockKey, valueProp, keyLoop) {
     var labelKey = _Attributes__WEBPACK_IMPORTED_MODULE_2__.Attributes.returnStringOrNumber(keyLoop, true) + 1;
@@ -16736,11 +16770,16 @@ class Sortable extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Component
     for (var keyLoop in this.state.items) {
       const error = this.props.error && typeof this.props.error == 'object' && this.props.error != null && typeof this.props.error[keyLoop] != 'undefined' ? this.props.error[keyLoop] : false;
       let labelRepeatableItem = this.props.type == "object" ? _Render__WEBPACK_IMPORTED_MODULE_7__.Render.repeatableObjectLabelFormatting(this.props.blockKey + "-" + keyLoop, this.props.controllerValue, keyLoop) : null;
-      labelRepeatableItem = error && typeof error == 'object' && typeof error.message == 'string' ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, labelRepeatableItem, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      labelRepeatableItem = error && typeof error == 'object' && typeof error.error == 'string' ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, labelRepeatableItem, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
         className: "error"
       }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
         icon: "info"
-      }), error.message)) : labelRepeatableItem;
+      }), error.error)) : labelRepeatableItem;
+      labelRepeatableItem = error && typeof error == 'object' && typeof error.warning == 'string' ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, labelRepeatableItem, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+        className: "warning"
+      }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
+        icon: "info"
+      }), error.warning)) : labelRepeatableItem;
       renderItems.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_SortableItem__WEBPACK_IMPORTED_MODULE_4__.SortableItem, {
         key: this.props.blockKey + "-" + keyLoop + "-SortableItem",
         id: this.state.items[keyLoop],
@@ -16821,7 +16860,7 @@ function SortableItem(props) {
     transition,
     transform: _dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_3__.CSS.Translate.toString(transform)
   };
-  const errorClassName = props.error ? 'has-error' : '';
+  const errorClassName = props.error && typeof props.error == 'object' && typeof props.error.error != 'undefined' ? 'has-error' : props.error && typeof props.error == 'object' && typeof props.error.warning != 'undefined' ? 'has-warning' : '';
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("li", (0,_babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_0__["default"])({
     key: props.id + "-SortableItemContainer",
     ref: setNodeRef,

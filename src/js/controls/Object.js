@@ -20,7 +20,7 @@ export function renderObject(
 
     for (const [keySubProp, valueSubProp] of Object.entries(objectValue)) {
 
-        const subPropError = ( error && typeof error == 'object' && error != null && typeof error.data == 'object' && typeof error.data[keySubProp] != 'undefined' ) ? error.data[keySubProp] : false;
+        const subPropError = ( error && typeof error == 'object' && error != null && typeof error.props == 'object' && typeof error.props[keySubProp] != 'undefined' ) ? error.props[keySubProp] : false;
 
         fieldsetObject.push(
             Attributes.renderProp(

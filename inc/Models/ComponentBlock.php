@@ -14,7 +14,7 @@ class ComponentBlock extends ModelBase {
             $blockSpec = null,
             $attributes,
             $content,
-            $propsErrors = [];
+            $propsStatus = [];
 
     public function __construct( $blockId = null ) {
         parent::__construct();
@@ -48,15 +48,18 @@ class ComponentBlock extends ModelBase {
 
 
     public function arePropsValid() {
-        return ( count($this->getPropsErrors()) == 0 );
+        return ( count($this->getPropsStatus()) == 0 );
     }
 
-    public function getPropsErrors() {
-        return $this->propsErrors;
+    public function getPropsStatus() {
+        return $this->propsStatus;
     }
     
-    public function addPropError( $propInstance ) {
-        $this->propsErrors[ $propInstance->getId() ] = $propInstance->getErrors();
+    public function addPropStatus( $propInstance ) {
+        $propStatus = $propInstance->getStatus();
+        if( ! is_null($propStatus) ) {
+            $this->propsStatus[ $propInstance->getId() ] = $propStatus;
+        }
     }
 
 
@@ -401,7 +404,7 @@ class ComponentBlock extends ModelBase {
             foreach( $block_spec['props'] as $key_prop => $prop ) {
 
                 $propInstance = new Prop($key_prop, ( isset($render_attributes[$key_prop]) ) ? $render_attributes[$key_prop] : null, $prop );
-                $this->addPropError($propInstance);
+                $this->addPropStatus($propInstance);
 
                 if( $propInstance->isValid() ) {
                     
@@ -411,8 +414,6 @@ class ComponentBlock extends ModelBase {
                 }
                 else {
                     if( $propInstance->isRequired() ) {
-                        // $this->addPropError($propInstance);
-                        // echo '<pre>';print_r($this->getPropsErrors());die;
                         if( $stopError ) {
                             return false;
                         }

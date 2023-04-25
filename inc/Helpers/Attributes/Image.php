@@ -29,7 +29,7 @@ class Image extends Base {
             }
 
             if( $imageObject->isValid() ) {
-                    return true;
+                return true;
             }
             else{
 
@@ -43,13 +43,11 @@ class Image extends Base {
                 //     $errorMessage = 'Image is define for ' . implode(', ', $errorMessage) . ' but missing for default device (' . $defaultDevice . ')';
                 // }
 
-                $propInstance->addError( 'Image missing for default device (' . $defaultDevice . ')' );
-                return false;
+                return $propInstance->falseWithError( 'Image missing for default device (' . $defaultDevice . ')' );
             }
         }
 
-        $propInstance->addError( 'Required' );
-        return false;
+        return $propInstance->falseWithError( 'Required' );
     }
     
     public static function format( &$propInstance ) {

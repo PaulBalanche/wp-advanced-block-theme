@@ -220,7 +220,7 @@ class ComponentBlocks extends ServiceBase {
                 wp_send_json_success();
             }
             else {
-                wp_send_json_error( $componentBlockInstance->getPropsErrors() );
+                wp_send_json_error( $componentBlockInstance->getPropsStatus() );
             }
         }
     }

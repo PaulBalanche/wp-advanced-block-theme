@@ -38,6 +38,9 @@
             &.has-error > .sortableItemInner > .components-panel {
                 border-color: rgba(220, 50, 50, 0.5);
             }
+            &.has-warning > .sortableItemInner > .components-panel {
+                border-color: rgb(255 105 0 / 50%);
+            }
 
             .sortableItemInner {
 

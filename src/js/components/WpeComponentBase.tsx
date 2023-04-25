@@ -363,6 +363,7 @@ export class WpeComponentBase extends Component {
 
             let currentEditCat = [];
             let errorAttributes = 0;
+            let warningAttributes = 0;
 
             forEachCatProps: for (const [keyProp, prop] of Object.entries(
                 valCat.props
@@ -387,8 +388,14 @@ export class WpeComponentBase extends Component {
                 let currentAttributeError = false;
 
                 if( typeof this.state.error == 'object' && this.state.error != null && typeof this.state.error[keyProp] == 'object' ) {
-                    errorAttributes++;
                     currentAttributeError = this.state.error[keyProp];
+
+                    if( typeof this.state.error[keyProp].error != 'undefined' ) {
+                        errorAttributes++;
+                    }
+                    if( typeof this.state.error[keyProp].warning != 'undefined' ) {
+                        warningAttributes++;
+                    }
                 }
 
                 let valueProp = this.getAttribute(keyProp);
@@ -407,8 +414,14 @@ export class WpeComponentBase extends Component {
                 currentEditCat.push(this.renderInspectorControls());
             }
 
-            const titleTab = ( errorAttributes > 0 ) ? <>{valCat.name}<span className="missing-attributes">{errorAttributes}</span></> : valCat.name;
-
+            let titleTab = valCat.name;
+            if( errorAttributes > 0 ) {
+                titleTab = <>{titleTab}<span className="error-attributes">{errorAttributes}</span></>
+            }
+            else if( warningAttributes > 0 ) {
+                titleTab = <>{titleTab}<span className="warning-attributes">{warningAttributes}</span></>
+            }
+            
             tabPanel.push({
                 name: keyCat,
                 title: titleTab,

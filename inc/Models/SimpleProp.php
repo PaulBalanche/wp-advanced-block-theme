@@ -23,14 +23,8 @@ class SimpleProp {
             $type = null,
             $default = null,
             $isValid = false,
-            $errors = [
-                'message' => null,
-                'data' => []
-            ],
-            $warning = [
-                'message' => null,
-                'data' => []
-            ];
+            $errorMessage = null,
+            $subPropsStatus = [];
 
     function __construct( $key, $value, $specs ) {
         $this->key = $key;
@@ -84,8 +78,7 @@ class SimpleProp {
                 return true;
             }
 
-            $this->addError( 'Required' );
-            return false;
+            return $this->falseWithError( 'Required' );
         }
 
         switch( $this->getType() ) {
@@ -170,54 +163,37 @@ class SimpleProp {
         }
     }
 
-    public function addError( $error, $key = null ) {
+    public function falseWithError( $error ) {
 
-        if( is_null($key) ) {
-            if( $this->isRequired() ) {
-                $this->errors['message'] = $error;
-            }
-            else {
-                $this->warning['message'] = $error;
-            }
-        }
-        else {
-            if( $this->isRequired() ) {
-                $this->errors['data'][$key] = $error;
-            }
-            else {
-                $this->warning['data'][$key] = $error;
-            }
-        }   
+        $this->errorMessage = $error;
+        return false;
     }
 
-    public function getErrors( ) {
+    public function addSubPropStatus( $subPropInstance ) {
+
+        $subPropsStatus = $subPropInstance->getStatus();
+        if( ! is_null($subPropsStatus) ) {
+            $this->subPropsStatus[ $subPropInstance->getId() ] = $subPropsStatus;
+        }
+    }
+
+    public function getStatus( ) {
         
-        $returnedErrors = [
-            'errors' => null,
-            'warning' => null
-        ];
+        $status = [];
 
-        if(
-            ( is_null($this->errors['message']) || empty($this->errors['message']) ) &&
-            count($this->errors['data']) == 0
-        ) {
-            $returnedErrors['errors'] = null;
-        }
-        else {
-            $returnedErrors['errors'] = $this->errors;
+        if( ! is_null($this->errorMessage) ) {
+            $status[ ( $this->isRequired() ) ? 'error' : 'warning' ] = $this->errorMessage;
         }
 
-        if(
-            ( is_null($this->warning['message']) || empty($this->warning['message']) ) &&
-            count($this->warning['data']) == 0
-        ) {
-            $returnedErrors['warning'] = null;
-        }
-        else {
-            $returnedErrors['warning'] = $this->warning;
+        if( count($this->subPropsStatus) > 0 ) {
+            $status['props'] = $this->subPropsStatus;
+            
+            if( ! isset($status[ ( $this->isRequired() ) ? 'error' : 'warning' ]) ) {
+                $status[ ( $this->isRequired() ) ? 'error' : 'warning' ] = true;
+            }
         }
 
-        return $returnedErrors;
+        return ( count($status) > 0 ) ? $status : null;
     }
 
 }

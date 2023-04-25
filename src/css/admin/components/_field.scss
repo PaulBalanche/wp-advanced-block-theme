@@ -26,13 +26,34 @@
                 }
             }
         }
+        &.has-warning {
 
-        .error {
+            &::before{
+                content: "";
+                background: rgb(255 105 0 / 50%) !important;
+                width: $o-space-10;
+                height: 100%;
+                position: absolute;
+                top: 0;
+                left: -$o-space-70;
+            }
+
+            &:has( > .components-panel ) {
+
+                &::before {
+                    content: none;
+                }
+                & > .components-panel {
+                    border-color: rgb(255 105 0 / 50%) !important;
+                }
+            }
+        }
+
+        .error, .warning {
             background: none;
             border: none;
             padding: 0;
             margin: 0 0 0 $o-space-30;
-            color: #d63638;
             box-shadow: none;
             display: flex;
             align-items: center;
@@ -50,6 +71,12 @@
                     margin: 0;
                 }
             }
+        }
+        .error {
+            color: #d63638;
+        }
+        .warning {
+            color: var(--wp--preset--color--luminous-vivid-orange);
         }
 
         .responsive-tab-panel-wpe-component {

@@ -4,7 +4,7 @@ namespace Abt\Models;
 
 class RepeatableProp extends SimpleProp {
 
-    private $requiredValidItems = 1;
+    private $requiredValidItems = 4;
 
     function __construct( $key, $value, $specs ) {
         parent::__construct( $key, $value, $specs );
@@ -22,26 +22,22 @@ class RepeatableProp extends SimpleProp {
                 return true;
             }
 
-            $this->addError( 'Required' );
-            return false;
+            return $this->falseWithError( 'Required' );
         }
 
         $countValidItems = 0;
         foreach( $this->getValue() as $keyRepeatableValue => $repeatableValue ) {
 
             $SimplePropInstance = new SimpleProp($keyRepeatableValue, $repeatableValue, $this->getSpecs() );
-            if( ! $SimplePropInstance->isValid() ) {
-                $this->addError( $SimplePropInstance->getErrors(), $SimplePropInstance->getId() );
-            }
-            else {
+            $this->addSubPropStatus( $SimplePropInstance );
+            if( $SimplePropInstance->isValid() ) {
                 $countValidItems++;
             }
         }
 
         if( $countValidItems < $this->getRequiredValidItems() ) {
 
-            $this->addError( sprintf( _n( 'Required minimun %s item', 'Required minimun %s items', $this->getRequiredValidItems(), ABT_PLUGIN_TEXTDOMAIN ), number_format_i18n( $this->getRequiredValidItems() ) ) );
-            return false;
+            return $this->falseWithError( sprintf( _n( 'Required minimun %s item', 'Required minimun %s items', $this->getRequiredValidItems(), ABT_PLUGIN_TEXTDOMAIN ), number_format_i18n( $this->getRequiredValidItems() ) ) );
         }
         
         return true;

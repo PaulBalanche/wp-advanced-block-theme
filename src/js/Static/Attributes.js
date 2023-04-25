@@ -232,7 +232,7 @@ export class Attributes {
             if (typeof value != "object" || value == null) continue;
 
             let currentType =
-                typeof value.repeatable != "undefined" && value.repeatable && ! ['image', 'video', 'file', 'gallery'].includes(value.type.toLowerCase())
+                typeof value.repeatable != "undefined" && value.repeatable && ! ['image', 'video', 'file', 'image'].includes(value.type.toLowerCase())
                     ? "array"
                     : value.type.toLowerCase();
             currentType =

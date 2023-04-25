@@ -34,8 +34,8 @@ class Prop {
         return $this->getInstance()->getId();
     }
 
-    public function getErrors( ) {
-        return $this->getInstance()->getErrors();
+    public function getStatus( ) {
+        return $this->getInstance()->getStatus();
     }
 
     public function format( ) {

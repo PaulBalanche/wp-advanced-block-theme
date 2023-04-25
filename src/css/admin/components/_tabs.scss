@@ -30,11 +30,10 @@
                 margin-left: 0 !important;
             }
 
-            .missing-attributes {
+            .error-attributes, .warning-attributes {
                 position: absolute;
                 top: 2px;
                 right: -16px;
-                background: $o-accent-red-color;
                 color: white;
                 border-radius: 50%;
                 width: 18px;
@@ -43,6 +42,12 @@
                 align-items: center;
                 justify-content: center;
                 font-size: 10px;
+            }
+            .error-attributes {
+                background: $o-accent-red-color;
+            }
+            .warning-attributes {
+                background: var(--wp--preset--color--luminous-vivid-orange);
             }
         }
 

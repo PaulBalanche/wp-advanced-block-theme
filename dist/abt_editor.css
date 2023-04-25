@@ -177,26 +177,46 @@
 .o-editor .basicField.has-error:has(> .components-panel) > .components-panel {
   border-color: rgba(220, 50, 50, 0.5) !important;
 }
-.o-editor .basicField .error {
+.o-editor .basicField.has-warning::before {
+  content: "";
+  background: rgba(255, 105, 0, 0.5) !important;
+  width: 6px;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: -42px;
+}
+.o-editor .basicField.has-warning:has(> .components-panel)::before {
+  content: none;
+}
+.o-editor .basicField.has-warning:has(> .components-panel) > .components-panel {
+  border-color: rgba(255, 105, 0, 0.5) !important;
+}
+.o-editor .basicField .error, .o-editor .basicField .warning {
   background: none;
   border: none;
   padding: 0;
   margin: 0 0 0 18px;
-  color: #d63638;
   box-shadow: none;
   display: flex;
   align-items: center;
   font-weight: 400;
   font-size: 13px;
 }
-.o-editor .basicField .error .dashicon {
+.o-editor .basicField .error .dashicon, .o-editor .basicField .warning .dashicon {
   margin-right: 6px;
 }
-.o-editor .basicField .error ul {
+.o-editor .basicField .error ul, .o-editor .basicField .warning ul {
   margin: 0;
 }
-.o-editor .basicField .error ul li {
+.o-editor .basicField .error ul li, .o-editor .basicField .warning ul li {
   margin: 0;
+}
+.o-editor .basicField .error {
+  color: #d63638;
+}
+.o-editor .basicField .warning {
+  color: var(--wp--preset--color--luminous-vivid-orange);
 }
 .o-editor .basicField .responsive-tab-panel-wpe-component {
   position: relative;
@@ -606,11 +626,10 @@
   font-size: 0.8em;
   margin-left: 6px;
 }
-.o-editor-app.inspector .is-tertiary .missing-attributes, .o-editor-app.help .is-tertiary .missing-attributes, .o-editor-app.settings .is-tertiary .missing-attributes {
+.o-editor-app.inspector .is-tertiary .error-attributes, .o-editor-app.inspector .is-tertiary .warning-attributes, .o-editor-app.help .is-tertiary .error-attributes, .o-editor-app.help .is-tertiary .warning-attributes, .o-editor-app.settings .is-tertiary .error-attributes, .o-editor-app.settings .is-tertiary .warning-attributes {
   position: relative;
   top: -6px;
   margin-left: 4px;
-  background: #DC3232;
   color: white;
   border-radius: 50%;
   width: 18px;
@@ -619,6 +638,12 @@
   align-items: center;
   justify-content: center;
   font-size: 10px;
+}
+.o-editor-app.inspector .is-tertiary .error-attributes, .o-editor-app.help .is-tertiary .error-attributes, .o-editor-app.settings .is-tertiary .error-attributes {
+  background: #DC3232;
+}
+.o-editor-app.inspector .is-tertiary .warning-attributes, .o-editor-app.help .is-tertiary .warning-attributes, .o-editor-app.settings .is-tertiary .warning-attributes {
+  background: var(--wp--preset--color--luminous-vivid-orange);
 }
 .o-editor-app.help .is-tertiary {
   font-weight: initial;
@@ -808,6 +833,9 @@
 .o-editor .repeatableContainer .repeatableItem.has-error > .sortableItemInner > .components-panel {
   border-color: rgba(220, 50, 50, 0.5);
 }
+.o-editor .repeatableContainer .repeatableItem.has-warning > .sortableItemInner > .components-panel {
+  border-color: rgba(255, 105, 0, 0.5);
+}
 .o-editor .repeatableContainer .repeatableItem .sortableItemInner .repeatableObjectLabel {
   display: flex;
   gap: 12px;
@@ -948,11 +976,10 @@
 .o-editor .components-tab-panel__tabs button:first-child {
   margin-left: 0 !important;
 }
-.o-editor .components-tab-panel__tabs button .missing-attributes {
+.o-editor .components-tab-panel__tabs button .error-attributes, .o-editor .components-tab-panel__tabs button .warning-attributes {
   position: absolute;
   top: 2px;
   right: -16px;
-  background: #DC3232;
   color: white;
   border-radius: 50%;
   width: 18px;
@@ -961,6 +988,12 @@
   align-items: center;
   justify-content: center;
   font-size: 10px;
+}
+.o-editor .components-tab-panel__tabs button .error-attributes {
+  background: #DC3232;
+}
+.o-editor .components-tab-panel__tabs button .warning-attributes {
+  background: var(--wp--preset--color--luminous-vivid-orange);
 }
 .o-editor .components-tab-panel__tab-content {
   display: flex;
