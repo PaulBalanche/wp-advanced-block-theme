@@ -150,19 +150,51 @@ export class Attributes {
         var args = {};
         switch (type) {
             case "string":
-                args = { isNumber: false };
+                args = {
+                    isNumber: false,
+                    default:
+                        typeof prop.default != "undefined"
+                            ? prop.default
+                            : null
+                };
                 break;
             case "number":
-                args = { isNumber: false };
+                args = {
+                    isNumber: false,
+                    default:
+                        typeof prop.default != "undefined"
+                            ? prop.default
+                            : null
+                };
                 break;
             case "integer":
-                args = { isNumber: true };
+                args = {
+                    isNumber: true,
+                    default:
+                        typeof prop.default != "undefined"
+                            ? prop.default
+                            : null
+                };
+                break;
+            case "text":
+                args = {
+                    default:
+                        typeof prop.default != "undefined"
+                            ? prop.default
+                            : null
+                };
                 break;
             case "boolean":
-                args = { help: prop.help };
+            case "switch":
+                args = {
+                    help: typeof prop.help != "undefined"
+                    ? prop.help
+                    : null
+                };
                 break;
             case "select":
             case "color":
+            case "spaces":
                 args = {
                     options: prop.options,
                     default:
@@ -209,6 +241,18 @@ export class Attributes {
                 }
                 args = { props: prop.props };
                 break;
+            case "date":
+            case "datetime":
+                if( typeof prop.format != "undefined" && prop.format == 'YYYY-MM-DD' ) {
+                    args = { type: "date" };
+                }
+                else if( typeof prop.format != "undefined" && prop.format == 'HH:mm' ) {
+                    args = { type: "time" };
+                }
+                else {
+                    args = { type: "datetime" };
+                }
+                break;
         }
 
         return Render.control(
@@ -245,10 +289,12 @@ export class Attributes {
                 case "text":
                 case "richText":
                 case "select":
+                case "spaces":
                 case "color":
                 case "radio":
                 case "relation":
                 case "date":
+                case "datetime":
                 case "number":
                 case "integer":
                     attributes[key] = {
@@ -276,6 +322,7 @@ export class Attributes {
                     break;
 
                 case "boolean":
+                case "switch":
                     attributes[key] = {
                         type: "boolean",
                     };

@@ -10,8 +10,10 @@ export function renderText(
     valueProp,
     objectValue,
     isNumber = false,
-    required = false
+    required = false,
+    defaultValue = null
 ) {
+
 
     return (
         <TextControl
@@ -31,6 +33,7 @@ export function renderText(
             onBlur={(e) => {
                 componentInstance.updatePreview();
             }}
+            placeholder={ ( defaultValue != null && typeof defaultValue == 'object' ) ? defaultValue.value : null }
         />
     );
 }

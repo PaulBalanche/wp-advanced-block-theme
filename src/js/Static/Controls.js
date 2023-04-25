@@ -29,6 +29,7 @@ export class Controls {
     ) {
         switch (type) {
             case "date":
+            case "datetime":
                 return renderDateTime(
                     componentInstance,
                     id,
@@ -36,7 +37,8 @@ export class Controls {
                     keys,
                     valueProp,
                     objectValue,
-                    required
+                    required,
+                    args.type
                 );
 
             case "file":
@@ -134,6 +136,7 @@ export class Controls {
 
             case "select":
             case "color":
+            case "spaces":
                 return renderSelect(
                     componentInstance,
                     id,
@@ -157,7 +160,8 @@ export class Controls {
                     valueProp,
                     objectValue,
                     args.isNumber,
-                    required
+                    required,
+                    args.default
                 );
 
             case "text":
@@ -168,10 +172,12 @@ export class Controls {
                     keys,
                     valueProp,
                     objectValue,
-                    required
+                    required,
+                    args.default
                 );
 
             case "boolean":
+            case "switch":
                 return renderToggle(
                     componentInstance,
                     id,

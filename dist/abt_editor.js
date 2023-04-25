@@ -14180,7 +14180,7 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
       // 2. Loop Props
       for (const [keyProp, valueProp] of Object.entries(this.props.block_spec.props)) {
         if (typeof valueProp != "object" || valueProp == null) continue;
-        const currentCatToPush = typeof valueProp.category != "undefined" && valueProp.category != null && valueProp.category in catReOrder ? valueProp.category : ["margin", "padding", "gap"].includes(keyProp) ? "spacing" : "default";
+        const currentCatToPush = typeof valueProp.category != "undefined" && valueProp.category != null && valueProp.category in catReOrder ? valueProp.category : ["margin", "padding", "gap", "spaces"].includes(keyProp) ? "spacing" : "default";
         catReOrder[currentCatToPush].props[keyProp] = valueProp;
       }
     }
@@ -14485,28 +14485,81 @@ __webpack_require__.r(__webpack_exports__);
 
 function renderDateTime(componentInstance, id, label, keys, valueProp, objectValue) {
   let required = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : false;
-  const MyDateTimePicker = (0,_wordpress_compose__WEBPACK_IMPORTED_MODULE_2__.withState)({
-    date: objectValue ? objectValue : new Date()
-  })(_ref => {
-    let {
-      date,
-      setState
-    } = _ref;
-    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.DateTimePicker, {
-      key: id,
-      currentDate: date,
-      onChange: newDate => {
-        setState({
-          date: newDate
+  let type = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : null;
+  let MyDateTimePicker = null;
+  switch (type) {
+    case 'date':
+      MyDateTimePicker = (0,_wordpress_compose__WEBPACK_IMPORTED_MODULE_2__.withState)({
+        date: objectValue ? objectValue : new Date()
+      })(_ref => {
+        let {
+          date,
+          setState
+        } = _ref;
+        return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.DatePicker, {
+          key: id,
+          currentDate: date,
+          onChange: newDate => {
+            setState({
+              date: newDate
+            });
+            _Static_Attributes__WEBPACK_IMPORTED_MODULE_3__.Attributes.updateAttributes(keys, valueProp, newDate, false, componentInstance);
+            componentInstance.updatePreview();
+          },
+          is12Hour: false,
+          __nextRemoveHelpButton: true,
+          __nextRemoveResetButton: true
         });
-        _Static_Attributes__WEBPACK_IMPORTED_MODULE_3__.Attributes.updateAttributes(keys, valueProp, newDate, false, componentInstance);
-        componentInstance.updatePreview();
-      },
-      is12Hour: false,
-      __nextRemoveHelpButton: true,
-      __nextRemoveResetButton: true
-    });
-  });
+      });
+      break;
+    case 'time':
+      MyDateTimePicker = (0,_wordpress_compose__WEBPACK_IMPORTED_MODULE_2__.withState)({
+        date: objectValue ? objectValue : new Date()
+      })(_ref2 => {
+        let {
+          date,
+          setState
+        } = _ref2;
+        return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.TimePicker, {
+          key: id,
+          currentDate: date,
+          onChange: newDate => {
+            setState({
+              date: newDate
+            });
+            _Static_Attributes__WEBPACK_IMPORTED_MODULE_3__.Attributes.updateAttributes(keys, valueProp, newDate, false, componentInstance);
+            componentInstance.updatePreview();
+          },
+          is12Hour: false,
+          __nextRemoveHelpButton: true,
+          __nextRemoveResetButton: true
+        });
+      });
+      break;
+    default:
+      MyDateTimePicker = (0,_wordpress_compose__WEBPACK_IMPORTED_MODULE_2__.withState)({
+        date: objectValue ? objectValue : new Date()
+      })(_ref3 => {
+        let {
+          date,
+          setState
+        } = _ref3;
+        return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.DateTimePicker, {
+          key: id,
+          currentDate: date,
+          onChange: newDate => {
+            setState({
+              date: newDate
+            });
+            _Static_Attributes__WEBPACK_IMPORTED_MODULE_3__.Attributes.updateAttributes(keys, valueProp, newDate, false, componentInstance);
+            componentInstance.updatePreview();
+          },
+          is12Hour: false,
+          __nextRemoveHelpButton: true,
+          __nextRemoveResetButton: true
+        });
+      });
+  }
   return _Static_Render__WEBPACK_IMPORTED_MODULE_4__.Render.panelComponent(id, label, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(MyDateTimePicker, null));
 }
 
@@ -15077,6 +15130,7 @@ __webpack_require__.r(__webpack_exports__);
 function renderText(componentInstance, id, label, keys, valueProp, objectValue) {
   let isNumber = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : false;
   let required = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : false;
+  let defaultValue = arguments.length > 8 && arguments[8] !== undefined ? arguments[8] : null;
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.TextControl, {
     key: id,
     label: label,
@@ -15085,7 +15139,8 @@ function renderText(componentInstance, id, label, keys, valueProp, objectValue) 
     onChange: newValue => _Static_Attributes__WEBPACK_IMPORTED_MODULE_2__.Attributes.updateAttributes(keys, valueProp, newValue, false, componentInstance),
     onBlur: e => {
       componentInstance.updatePreview();
-    }
+    },
+    placeholder: defaultValue != null && typeof defaultValue == 'object' ? defaultValue.value : null
   });
 }
 
@@ -15112,6 +15167,7 @@ __webpack_require__.r(__webpack_exports__);
 
 function renderTextarea(componentInstance, id, label, keys, valueProp, objectValue) {
   let required = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : false;
+  let defaultValue = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : null;
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.TextareaControl, {
     key: id,
     label: label,
@@ -15121,7 +15177,8 @@ function renderTextarea(componentInstance, id, label, keys, valueProp, objectVal
     },
     onBlur: e => {
       componentInstance.updatePreview();
-    }
+    },
+    placeholder: defaultValue != null && typeof defaultValue == 'object' ? defaultValue.value : null
   });
 }
 
@@ -16209,26 +16266,36 @@ class Attributes {
     switch (type) {
       case "string":
         args = {
-          isNumber: false
+          isNumber: false,
+          default: typeof prop.default != "undefined" ? prop.default : null
         };
         break;
       case "number":
         args = {
-          isNumber: false
+          isNumber: false,
+          default: typeof prop.default != "undefined" ? prop.default : null
         };
         break;
       case "integer":
         args = {
-          isNumber: true
+          isNumber: true,
+          default: typeof prop.default != "undefined" ? prop.default : null
+        };
+        break;
+      case "text":
+        args = {
+          default: typeof prop.default != "undefined" ? prop.default : null
         };
         break;
       case "boolean":
+      case "switch":
         args = {
-          help: prop.help
+          help: typeof prop.help != "undefined" ? prop.help : null
         };
         break;
       case "select":
       case "color":
+      case "spaces":
         args = {
           options: prop.options,
           default: typeof prop.default != "undefined" ? prop.default : null
@@ -16274,6 +16341,22 @@ class Attributes {
           props: prop.props
         };
         break;
+      case "date":
+      case "datetime":
+        if (typeof prop.format != "undefined" && prop.format == 'YYYY-MM-DD') {
+          args = {
+            type: "date"
+          };
+        } else if (typeof prop.format != "undefined" && prop.format == 'HH:mm') {
+          args = {
+            type: "time"
+          };
+        } else {
+          args = {
+            type: "datetime"
+          };
+        }
+        break;
     }
     return _Render__WEBPACK_IMPORTED_MODULE_1__.Render.control(type, componentInstance, blockKey, label, keys, valueProp, currentValueAttribute, repeatable, required_field, args, error, typeof prop.responsive != "undefined" && !!prop.responsive ? true : false);
   }
@@ -16287,10 +16370,12 @@ class Attributes {
         case "text":
         case "richText":
         case "select":
+        case "spaces":
         case "color":
         case "radio":
         case "relation":
         case "date":
+        case "datetime":
         case "number":
         case "integer":
           attributes[key] = {
@@ -16315,6 +16400,7 @@ class Attributes {
           };
           break;
         case "boolean":
+        case "switch":
           attributes[key] = {
             type: "boolean"
           };
@@ -16377,7 +16463,8 @@ class Controls {
     let error = arguments.length > 9 && arguments[9] !== undefined ? arguments[9] : false;
     switch (type) {
       case "date":
-        return (0,_Controls_DateTime__WEBPACK_IMPORTED_MODULE_1__.renderDateTime)(componentInstance, id, label, keys, valueProp, objectValue, required);
+      case "datetime":
+        return (0,_Controls_DateTime__WEBPACK_IMPORTED_MODULE_1__.renderDateTime)(componentInstance, id, label, keys, valueProp, objectValue, required, args.type);
       case "file":
         return (0,_Controls_File__WEBPACK_IMPORTED_MODULE_2__.renderFile)(componentInstance, id, label, keys, valueProp, objectValue, required);
       case "gallery":
@@ -16396,14 +16483,16 @@ class Controls {
         return (0,_Controls_Relation__WEBPACK_IMPORTED_MODULE_10__.renderRelation)(componentInstance, id, label, args.entity, keys, valueProp, objectValue, required);
       case "select":
       case "color":
+      case "spaces":
         return (0,_Controls_Select__WEBPACK_IMPORTED_MODULE_11__.renderSelect)(componentInstance, id, label, args.options, args.default, keys, valueProp, objectValue, required);
       case "string":
       case "number":
       case "integer":
-        return (0,_Controls_Text__WEBPACK_IMPORTED_MODULE_12__.renderText)(componentInstance, id, label, keys, valueProp, objectValue, args.isNumber, required);
+        return (0,_Controls_Text__WEBPACK_IMPORTED_MODULE_12__.renderText)(componentInstance, id, label, keys, valueProp, objectValue, args.isNumber, required, args.default);
       case "text":
-        return (0,_Controls_Textarea__WEBPACK_IMPORTED_MODULE_13__.renderTextarea)(componentInstance, id, label, keys, valueProp, objectValue, required);
+        return (0,_Controls_Textarea__WEBPACK_IMPORTED_MODULE_13__.renderTextarea)(componentInstance, id, label, keys, valueProp, objectValue, required, args.default);
       case "boolean":
+      case "switch":
         return (0,_Controls_Toggle__WEBPACK_IMPORTED_MODULE_14__.renderToggle)(componentInstance, id, label, args.help, keys, valueProp, objectValue, required);
       case "object":
         return (0,_Controls_Object__WEBPACK_IMPORTED_MODULE_7__.renderObject)(componentInstance, id, label, keys, valueProp, args.props, typeof args.initialOpen != "undefined" ? args.initialOpen : false, required, error);

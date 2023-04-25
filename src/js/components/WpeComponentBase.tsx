@@ -342,7 +342,7 @@ export class WpeComponentBase extends Component {
                     valueProp.category != null &&
                     valueProp.category in catReOrder
                         ? valueProp.category
-                        : ["margin", "padding", "gap"].includes(keyProp)
+                        : ["margin", "padding", "gap", "spaces"].includes(keyProp)
                         ? "spacing"
                         : "default";
                 catReOrder[currentCatToPush].props[keyProp] = valueProp;

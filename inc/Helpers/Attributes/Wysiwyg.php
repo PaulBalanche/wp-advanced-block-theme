@@ -10,5 +10,4 @@ class Wysiwyg extends Base {
                     
         return DraftJsToHtml::rawToHtml( $propInstance->getValue() );
     }
-
 }

@@ -9,7 +9,8 @@ export function renderTextarea(
     keys,
     valueProp,
     objectValue,
-    required = false
+    required = false,
+    defaultValue = null
 ) {
 
     return (
@@ -29,6 +30,7 @@ export function renderTextarea(
             onBlur={(e) => {
                 componentInstance.updatePreview();
             }}
+            placeholder={ ( defaultValue != null && typeof defaultValue == 'object' ) ? defaultValue.value : null }
         />
     );
 }

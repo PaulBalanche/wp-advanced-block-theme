@@ -632,12 +632,12 @@
   margin-left: 4px;
   color: white;
   border-radius: 50%;
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: 10px;
+  font-size: 9px;
 }
 .o-editor-app.inspector .is-tertiary .error-attributes, .o-editor-app.help .is-tertiary .error-attributes, .o-editor-app.settings .is-tertiary .error-attributes {
   background: #DC3232;
@@ -978,16 +978,16 @@
 }
 .o-editor .components-tab-panel__tabs button .error-attributes, .o-editor .components-tab-panel__tabs button .warning-attributes {
   position: absolute;
-  top: 2px;
+  top: 4px;
   right: -16px;
   color: white;
   border-radius: 50%;
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: 10px;
+  font-size: 9px;
 }
 .o-editor .components-tab-panel__tabs button .error-attributes {
   background: #DC3232;
