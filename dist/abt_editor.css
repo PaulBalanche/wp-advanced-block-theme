@@ -237,6 +237,26 @@
   z-index: 1;
   background: var(--background300, rgb(245, 245, 245));
 }
+.o-editor .basicField .default-overlay-container {
+  position: absolute;
+  top: -5px;
+  left: -10px;
+  width: calc(100% + 20px);
+  height: calc(100% + 10px);
+  background: rgba(252, 252, 252, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+}
+.o-editor .basicField .default-overlay-container .components-button {
+  opacity: 0;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3) !important;
+  transition: all 0.3s ease-in-out;
+}
+.o-editor .basicField .default-overlay-container:hover .components-button {
+  opacity: 1;
+}
 
 .o-editor .block-editor-block-list__block[data-type="custom/wpe-grid"] > * > .o-toolbar {
   top: -80px;

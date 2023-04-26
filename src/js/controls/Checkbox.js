@@ -10,7 +10,8 @@ export function renderCheckbox(
     keys,
     valueProp,
     objectValue,
-    required = false
+    required = false,
+    defaultValue = null
 ) {
 
     return <Fragment key={id + "-fragment"}>
@@ -27,11 +28,27 @@ export function renderCheckbox(
                 });
             }
 
+            let label = option.name;
+            let disabled = false;
+
+            if( defaultValue?.value?.length ) {
+
+                for( var i in defaultValue.value ) {
+                    if( typeof defaultValue.value[i] == 'object' && defaultValue.value[i].value == option.value ) {
+                        label += ' (default)';
+                        isChecked = true;
+                        disabled = true;
+                        break;
+                    }
+                }
+            }
+
             return <CheckboxControl
                 key={id + "-" + option.value}
-                label={option.name}
+                label={label}
                 help={null}
                 checked={isChecked}
+                disabled={disabled}
                 onChange={(newValue) => {
 
                     const newObjectValue = [];

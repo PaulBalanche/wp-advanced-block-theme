@@ -14409,6 +14409,7 @@ __webpack_require__.r(__webpack_exports__);
 
 function renderCheckbox(componentInstance, id, label, options, keys, valueProp, objectValue) {
   let required = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : false;
+  let defaultValue = arguments.length > 8 && arguments[8] !== undefined ? arguments[8] : null;
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
     key: id + "-fragment"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
@@ -14424,11 +14425,24 @@ function renderCheckbox(componentInstance, id, label, options, keys, valueProp, 
         }
       });
     }
+    let label = option.name;
+    let disabled = false;
+    if (defaultValue?.value?.length) {
+      for (var i in defaultValue.value) {
+        if (typeof defaultValue.value[i] == 'object' && defaultValue.value[i].value == option.value) {
+          label += ' (default)';
+          isChecked = true;
+          disabled = true;
+          break;
+        }
+      }
+    }
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.CheckboxControl, {
       key: id + "-" + option.value,
-      label: option.name,
+      label: label,
       help: null,
       checked: isChecked,
+      disabled: disabled,
       onChange: newValue => {
         const newObjectValue = [];
         if (newValue) {
@@ -15082,10 +15096,11 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-function renderSelect(componentInstance, id, label, options, defaultValue, keys, valueProp, objectValue) {
-  let required = arguments.length > 8 && arguments[8] !== undefined ? arguments[8] : false;
-  if (typeof options == "undefined") return null;
-  const defaultLabel = defaultValue != null ? "Default (" + defaultValue.value + ")" : "Default";
+function renderSelect(componentInstance, id, label, options, keys, valueProp, objectValue) {
+  let required = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : false;
+  let defaultValue = arguments.length > 8 && arguments[8] !== undefined ? arguments[8] : null;
+  if (typeof options == "undefined" || options == null) return null;
+  const defaultLabel = defaultValue?.value?.length ? "Default" : '--';
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.SelectControl, {
     key: id,
     label: label,
@@ -15094,8 +15109,17 @@ function renderSelect(componentInstance, id, label, options, defaultValue, keys,
       label: defaultLabel,
       value: ""
     }].concat(options.map(function (value) {
+      let currentLabel = value.name;
+      if (defaultValue?.value?.length) {
+        for (var i in defaultValue.value) {
+          if (typeof defaultValue.value[i] == 'object' && defaultValue.value[i].value == value.value) {
+            currentLabel += ' (default)';
+            break;
+          }
+        }
+      }
       return {
-        label: value.name,
+        label: currentLabel,
         value: value.value
       };
     })),
@@ -15127,20 +15151,38 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 function renderText(componentInstance, id, label, keys, valueProp, objectValue) {
   let isNumber = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : false;
-  let required = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : false;
-  let defaultValue = arguments.length > 8 && arguments[8] !== undefined ? arguments[8] : null;
-  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.TextControl, {
-    key: id,
-    label: label,
-    type: !!isNumber ? "number" : "text",
-    value: objectValue,
-    onChange: newValue => _Static_Attributes__WEBPACK_IMPORTED_MODULE_2__.Attributes.updateAttributes(keys, valueProp, newValue, false, componentInstance),
-    onBlur: e => {
-      componentInstance.updatePreview();
-    },
-    placeholder: defaultValue != null && typeof defaultValue == 'object' ? defaultValue.value : null
+  let defaultValue = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : null;
+  defaultValue = objectValue == '' && typeof defaultValue.value != 'undefined' ? defaultValue.value : null;
+  const MyTextControl = props => {
+    const [hasDefaultOverlay, hideOverlay] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(props.defaultValue != null);
+    const valueToDisplay = hasDefaultOverlay ? props.defaultValue : objectValue;
+    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.TextControl, {
+      key: id,
+      label: label,
+      type: !!isNumber ? "number" : "text",
+      value: valueToDisplay,
+      onChange: newValue => _Static_Attributes__WEBPACK_IMPORTED_MODULE_2__.Attributes.updateAttributes(keys, valueProp, newValue, false, componentInstance),
+      onBlur: e => {
+        componentInstance.updatePreview();
+      }
+    }), hasDefaultOverlay && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      key: id + "defaultContainer",
+      className: "default-overlay-container"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
+      key: id + "defaultContainer-button",
+      onMouseDown: () => {
+        hideOverlay(state => !state);
+      },
+      variant: "primary"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
+      icon: "edit"
+    }), " Override default value")));
+  };
+  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(MyTextControl, {
+    defaultValue: defaultValue
   });
 }
 
@@ -15204,21 +15246,40 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-function renderToggle(componentInstance, id, label, help, keys, valueProp, objectValue) {
-  let required = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : false;
+function renderToggle(componentInstance, id, label, help, keys, valueProp, objectValue, defaultValue) {
+  defaultValue = typeof objectValue != 'boolean' && typeof defaultValue.value != 'undefined' ? defaultValue.value : null;
+  const MyToggleControl = props => {
+    const [hasDefaultOverlay, hideOverlay] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(props.defaultValue != null);
+    const valueToDisplay = hasDefaultOverlay ? props.defaultValue : objectValue;
+    const labelToggleControl = typeof help == "object" && Array.isArray(help) && help.length == 2 ? !!valueToDisplay ? help[1] : help[0] : null;
+    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.ToggleControl, {
+      key: id,
+      label: labelToggleControl,
+      checked: valueToDisplay,
+      onChange: newValue => {
+        _Static_Attributes__WEBPACK_IMPORTED_MODULE_2__.Attributes.updateAttributes(keys, valueProp, newValue, false, componentInstance);
+        componentInstance.updatePreview();
+      }
+    }), hasDefaultOverlay && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      key: id + "defaultContainer",
+      className: "default-overlay-container"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
+      key: id + "defaultContainer-button",
+      onMouseDown: () => {
+        hideOverlay(state => !state);
+      },
+      variant: "primary"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
+      icon: "edit"
+    }), " Override default value")));
+  };
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
     key: id + "-fragment"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
     className: "components-base-control__forced_label",
     key: id + "-label"
-  }, label), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.ToggleControl, {
-    key: id,
-    label: typeof help == "object" && Array.isArray(help) && help.length == 2 ? !!objectValue ? help[1] : help[0] : null,
-    checked: objectValue,
-    onChange: newValue => {
-      _Static_Attributes__WEBPACK_IMPORTED_MODULE_2__.Attributes.updateAttributes(keys, valueProp, newValue, false, componentInstance);
-      componentInstance.updatePreview();
-    }
+  }, label), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(MyToggleControl, {
+    defaultValue: defaultValue
   }));
 }
 
@@ -16224,6 +16285,7 @@ class Attributes {
     let isNumber = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
     let componentInstance = arguments.length > 4 ? arguments[4] : undefined;
     const newValueToUpdate = Attributes.recursiveUpdateObjectFromObject(arrayKey, currentValue, newValue, isNumber);
+    console.log(newValueToUpdate);
     componentInstance.setAttributes({
       [arrayKey[0]]: newValueToUpdate[arrayKey[0]]
     });
@@ -16236,7 +16298,9 @@ class Attributes {
     let objectReturned = Array.isArray(fromObject) ? [] : {};
     for (const [key, val] of Object.entries(fromObject)) {
       if (key == firstElement) {
-        if (currentArrayKey.length > 0) objectReturned[key] = Attributes.recursiveUpdateObjectFromObject(currentArrayKey, val, newValue, isNumber);else if (!!newValue) objectReturned[key] = Attributes.returnStringOrNumber(newValue, isNumber);
+        if (currentArrayKey.length > 0) objectReturned[key] = Attributes.recursiveUpdateObjectFromObject(currentArrayKey, val, newValue, isNumber);
+        // else if (!!newValue)
+        else objectReturned[key] = Attributes.returnStringOrNumber(newValue, isNumber);
       } else objectReturned[key] = val;
     }
     if (typeof objectReturned[firstElement] == "undefined") {
@@ -16262,99 +16326,64 @@ class Attributes {
     keys.forEach(element => {
       currentValueAttribute = currentValueAttribute != null && typeof currentValueAttribute == "object" && currentValueAttribute.hasOwnProperty(element) && typeof currentValueAttribute[element] != "undefined" ? currentValueAttribute[element] : "";
     });
-    var args = {};
+    var args = {
+      default: typeof prop.default != "undefined" ? prop.default : null
+    };
     switch (type) {
       case "string":
-        args = {
-          isNumber: false,
-          default: typeof prop.default != "undefined" ? prop.default : null
-        };
+        args.isNumber = false;
         break;
       case "number":
-        args = {
-          isNumber: false,
-          default: typeof prop.default != "undefined" ? prop.default : null
-        };
+        args.isNumber = false;
         break;
       case "integer":
-        args = {
-          isNumber: true,
-          default: typeof prop.default != "undefined" ? prop.default : null
-        };
-        break;
-      case "text":
-        args = {
-          default: typeof prop.default != "undefined" ? prop.default : null
-        };
+        args.isNumber = true;
         break;
       case "boolean":
       case "switch":
-        args = {
-          help: typeof prop.help != "undefined" ? prop.help : null
-        };
+        args.help = typeof prop.help != "undefined" ? prop.help : null;
         break;
       case "select":
       case "color":
       case "spaces":
-        args = {
-          options: prop.options,
-          default: typeof prop.default != "undefined" ? prop.default : null
-        };
+        args.options = typeof prop.options != "undefined" ? prop.options : null;
         break;
       case "radio":
       case "checkbox":
-        args = {
-          options: prop.options
-        };
+        args.options = typeof prop.options != "undefined" ? prop.options : null;
         break;
       case "relation":
-        args = {
-          entity: prop.entity
-        };
+        args.entity = typeof prop.entity != "undefined" ? prop.entity : null;
         break;
       case "image":
-        args = {
-          type: type,
-          args: prop.image && typeof prop.image == "object" ? prop.image : {}
-        };
+        args.type = typeof prop.type != "undefined" ? prop.type : null;
+        args.args = prop.image && typeof prop.image == "object" ? prop.image : {};
         prop.responsive = true;
         break;
       case "video":
-        args = {
-          type: type,
-          args: prop.video && typeof prop.video == "object" ? prop.video : {}
-        };
+        args.type = typeof prop.type != "undefined" ? prop.type : null;
+        args.args = prop.video && typeof prop.video == "object" ? prop.video : {};
         prop.responsive = true;
         break;
       case "file":
       case "gallery":
-        args = {
-          type: type
-        };
+        args.type = typeof prop.type != "undefined" ? prop.type : null;
         prop.responsive = true;
         break;
       case "object":
         if (typeof prop.props != "object") {
           return;
         }
-        args = {
-          props: prop.props
-        };
+        args.props = prop.props;
         break;
       case "date":
       case "datetime":
         if (typeof prop.format != "undefined" && prop.format == 'YYYY-MM-DD') {
-          args = {
-            type: "date"
-          };
+          args.type = "date";
         } else if (typeof prop.format != "undefined" && prop.format == 'HH:mm') {
-          args = {
-            type: "time"
-          };
+          args.type = "time";
         } else {
-          args = {
-            type: "datetime"
-          };
+          args.type = "datetime";
         }
         break;
     }
@@ -16478,22 +16507,22 @@ class Controls {
       case "radio":
         return (0,_Controls_Radio__WEBPACK_IMPORTED_MODULE_8__.renderRadio)(componentInstance, id, label, args.options, keys, valueProp, objectValue, required);
       case "checkbox":
-        return (0,_Controls_Checkbox__WEBPACK_IMPORTED_MODULE_9__.renderCheckbox)(componentInstance, id, label, args.options, keys, valueProp, objectValue, required);
+        return (0,_Controls_Checkbox__WEBPACK_IMPORTED_MODULE_9__.renderCheckbox)(componentInstance, id, label, args.options, keys, valueProp, objectValue, required, args.default);
       case "relation":
         return (0,_Controls_Relation__WEBPACK_IMPORTED_MODULE_10__.renderRelation)(componentInstance, id, label, args.entity, keys, valueProp, objectValue, required);
       case "select":
       case "color":
       case "spaces":
-        return (0,_Controls_Select__WEBPACK_IMPORTED_MODULE_11__.renderSelect)(componentInstance, id, label, args.options, args.default, keys, valueProp, objectValue, required);
+        return (0,_Controls_Select__WEBPACK_IMPORTED_MODULE_11__.renderSelect)(componentInstance, id, label, args.options, keys, valueProp, objectValue, required, args.default);
       case "string":
       case "number":
       case "integer":
-        return (0,_Controls_Text__WEBPACK_IMPORTED_MODULE_12__.renderText)(componentInstance, id, label, keys, valueProp, objectValue, args.isNumber, required, args.default);
+        return (0,_Controls_Text__WEBPACK_IMPORTED_MODULE_12__.renderText)(componentInstance, id, label, keys, valueProp, objectValue, args.isNumber, args.default);
       case "text":
         return (0,_Controls_Textarea__WEBPACK_IMPORTED_MODULE_13__.renderTextarea)(componentInstance, id, label, keys, valueProp, objectValue, required, args.default);
       case "boolean":
       case "switch":
-        return (0,_Controls_Toggle__WEBPACK_IMPORTED_MODULE_14__.renderToggle)(componentInstance, id, label, args.help, keys, valueProp, objectValue, required);
+        return (0,_Controls_Toggle__WEBPACK_IMPORTED_MODULE_14__.renderToggle)(componentInstance, id, label, args.help, keys, valueProp, objectValue, args.default);
       case "object":
         return (0,_Controls_Object__WEBPACK_IMPORTED_MODULE_7__.renderObject)(componentInstance, id, label, keys, valueProp, args.props, typeof args.initialOpen != "undefined" ? args.initialOpen : false, required, error);
       case "richText":

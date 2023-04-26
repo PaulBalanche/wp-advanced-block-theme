@@ -119,7 +119,8 @@ export class Controls {
                     keys,
                     valueProp,
                     objectValue,
-                    required
+                    required,
+                    args.default
                 );
 
             case "relation":
@@ -142,11 +143,11 @@ export class Controls {
                     id,
                     label,
                     args.options,
-                    args.default,
                     keys,
                     valueProp,
                     objectValue,
-                    required
+                    required,
+                    args.default
                 );
 
             case "string":
@@ -160,7 +161,6 @@ export class Controls {
                     valueProp,
                     objectValue,
                     args.isNumber,
-                    required,
                     args.default
                 );
 
@@ -186,7 +186,7 @@ export class Controls {
                     keys,
                     valueProp,
                     objectValue,
-                    required
+                    args.default
                 );
 
             case "object":

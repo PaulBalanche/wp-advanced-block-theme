@@ -45,12 +45,14 @@ export class Attributes {
         isNumber = false,
         componentInstance
     ) {
+
         const newValueToUpdate = Attributes.recursiveUpdateObjectFromObject(
             arrayKey,
             currentValue,
             newValue,
             isNumber
         );
+        console.log(newValueToUpdate);
         componentInstance.setAttributes({
             [arrayKey[0]]: newValueToUpdate[arrayKey[0]],
         });
@@ -73,7 +75,7 @@ export class Attributes {
             fromObject = isNaN(firstElement) ? {} : [];
 
         let objectReturned = Array.isArray(fromObject) ? [] : {};
-
+        
         for (const [key, val] of Object.entries(fromObject)) {
             if (key == firstElement) {
                 if (currentArrayKey.length > 0)
@@ -84,7 +86,8 @@ export class Attributes {
                             newValue,
                             isNumber
                         );
-                else if (!!newValue)
+                // else if (!!newValue)
+                else
                     objectReturned[key] = Attributes.returnStringOrNumber(
                         newValue,
                         isNumber
@@ -147,110 +150,87 @@ export class Attributes {
                     : "";
         });
 
-        var args = {};
+        var args = {
+            default:
+                typeof prop.default != "undefined"
+                    ? prop.default
+                    : null
+        };
         switch (type) {
             case "string":
-                args = {
-                    isNumber: false,
-                    default:
-                        typeof prop.default != "undefined"
-                            ? prop.default
-                            : null
-                };
+                args.isNumber = false;
                 break;
             case "number":
-                args = {
-                    isNumber: false,
-                    default:
-                        typeof prop.default != "undefined"
-                            ? prop.default
-                            : null
-                };
+                args.isNumber = false;
                 break;
             case "integer":
-                args = {
-                    isNumber: true,
-                    default:
-                        typeof prop.default != "undefined"
-                            ? prop.default
-                            : null
-                };
-                break;
-            case "text":
-                args = {
-                    default:
-                        typeof prop.default != "undefined"
-                            ? prop.default
-                            : null
-                };
+                args.isNumber = true;
                 break;
             case "boolean":
             case "switch":
-                args = {
-                    help: typeof prop.help != "undefined"
+                args.help = typeof prop.help != "undefined"
                     ? prop.help
-                    : null
-                };
+                    : null;
                 break;
             case "select":
             case "color":
             case "spaces":
-                args = {
-                    options: prop.options,
-                    default:
-                        typeof prop.default != "undefined"
-                            ? prop.default
-                            : null,
-                };
+                args.options = typeof prop.options != "undefined"
+                    ? prop.options
+                    : null;
                 break;
             case "radio":
             case "checkbox":
-                args = { options: prop.options };
+                args.options = typeof prop.options != "undefined"
+                    ? prop.options
+                    : null;
                 break;
             case "relation":
-                args = { entity: prop.entity };
+                args.entity = typeof prop.entity != "undefined"
+                    ? prop.entity
+                    : null;
                 break;
             case "image":
-                args = {
-                    type: type,
-                    args:
-                        prop.image && typeof prop.image == "object"
-                            ? prop.image
-                            : {},
-                };
+                args.type = typeof prop.type != "undefined"
+                    ? prop.type
+                    : null;
+                args.args = prop.image && typeof prop.image == "object"
+                    ? prop.image
+                    : {};
                 prop.responsive = true;
                 break;
             case "video":
-                args = {
-                    type: type,
-                    args:
-                        prop.video && typeof prop.video == "object"
-                            ? prop.video
-                            : {},
-                };
+                args.type = typeof prop.type != "undefined"
+                    ? prop.type
+                    : null;
+                args.args = prop.video && typeof prop.video == "object"
+                    ? prop.video
+                    : {};
                 prop.responsive = true;
                 break;
             case "file":
             case "gallery":
-                args = { type: type };
+                args.type = typeof prop.type != "undefined"
+                    ? prop.type
+                    : null;
                 prop.responsive = true;
                 break;
             case "object":
                 if (typeof prop.props != "object") {
                     return;
                 }
-                args = { props: prop.props };
+                args.props = prop.props;
                 break;
             case "date":
             case "datetime":
                 if( typeof prop.format != "undefined" && prop.format == 'YYYY-MM-DD' ) {
-                    args = { type: "date" };
+                    args.type = "date";
                 }
                 else if( typeof prop.format != "undefined" && prop.format == 'HH:mm' ) {
-                    args = { type: "time" };
+                    args.type = "time";
                 }
                 else {
-                    args = { type: "datetime" };
+                    args.type = "datetime";
                 }
                 break;
         }

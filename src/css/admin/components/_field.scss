@@ -102,5 +102,31 @@
             }
         
         }
+
+        .default-overlay-container {
+            position: absolute;
+            top: -5px;
+            left: -10px;
+            width: calc(100% + 20px);
+            height: calc(100% + 10px);
+            background: rgb(252 252 252 / 80%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1;
+
+            .components-button {
+                opacity: 0;
+                box-shadow: 2px 2px 10px rgb(0 0 0 / 30%) !important;
+                transition: $o-transition-default;
+            }
+
+            &:hover {
+
+                .components-button {
+                    opacity: 1;
+                }
+            }
+        }
     }
 }

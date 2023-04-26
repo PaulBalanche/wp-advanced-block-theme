@@ -7,16 +7,16 @@ export function renderSelect(
     id,
     label,
     options,
-    defaultValue,
     keys,
     valueProp,
     objectValue,
-    required = false
+    required = false,
+    defaultValue = null
 ) {
-    if (typeof options == "undefined") return null;
 
-    const defaultLabel =
-        defaultValue != null ? "Default (" + defaultValue.value + ")" : "Default";
+    if (typeof options == "undefined" || options == null) return null;
+
+    const defaultLabel = ( defaultValue?.value?.length ) ? "Default" : '--';
 
     return (
         <SelectControl
@@ -25,7 +25,20 @@ export function renderSelect(
             value={objectValue}
             options={[{ label: defaultLabel, value: "" }].concat(
                 options.map(function (value) {
-                    return { label: value.name, value: value.value };
+
+                    let currentLabel = value.name;
+
+                    if( defaultValue?.value?.length ) {
+
+                        for( var i in defaultValue.value ) {
+                            if( typeof defaultValue.value[i] == 'object' && defaultValue.value[i].value == value.value ) {
+                                currentLabel += ' (default)';
+                                break;
+                            }
+                        }
+                    }
+
+                    return { label: currentLabel, value: value.value };
                 })
             )}
             onChange={(newValue) => {

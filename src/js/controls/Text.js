@@ -1,5 +1,9 @@
-import { TextControl } from "@wordpress/components";
-
+import { 
+    TextControl,
+    Button,
+    Dashicon
+} from "@wordpress/components";
+import { useState } from "@wordpress/element";
 import { Attributes } from "../Static/Attributes";
 
 export function renderText(
@@ -10,30 +14,47 @@ export function renderText(
     valueProp,
     objectValue,
     isNumber = false,
-    required = false,
     defaultValue = null
 ) {
+    defaultValue = ( objectValue == '' && typeof defaultValue.value != 'undefined' ) ? defaultValue.value : null
 
+    const MyTextControl = ( props ) => {
 
-    return (
-        <TextControl
-            key={id}
-            label={label}
-            type={ !! isNumber ? "number" : "text" }
-            value={objectValue}
-            onChange={(newValue) =>
-                Attributes.updateAttributes(
-                    keys,
-                    valueProp,
-                    newValue,
-                    false,
-                    componentInstance
-                )
+        const [ hasDefaultOverlay, hideOverlay ] = useState( props.defaultValue != null );
+        const valueToDisplay = ( hasDefaultOverlay ) ? props.defaultValue : objectValue
+
+        return <>
+            <TextControl
+                key={id}
+                label={label}
+                type={ !! isNumber ? "number" : "text" }
+                value={valueToDisplay}
+                onChange={(newValue) =>
+                    Attributes.updateAttributes(
+                        keys,
+                        valueProp,
+                        newValue,
+                        false,
+                        componentInstance
+                    )
+                }
+                onBlur={(e) => {
+                    componentInstance.updatePreview();
+                }}
+            />
+            { hasDefaultOverlay &&
+                <div key={id + "defaultContainer"} className="default-overlay-container">
+                    <Button
+                        key={id + "defaultContainer-button"}
+                        onMouseDown={ () => { hideOverlay( ( state ) => ! state ) } }
+                        variant="primary"
+                    >
+                        <Dashicon icon="edit" /> Override default value
+                    </Button>
+                </div>
             }
-            onBlur={(e) => {
-                componentInstance.updatePreview();
-            }}
-            placeholder={ ( defaultValue != null && typeof defaultValue == 'object' ) ? defaultValue.value : null }
-        />
-    );
+        </>
+    };
+
+    return <MyTextControl defaultValue={defaultValue} />
 }
