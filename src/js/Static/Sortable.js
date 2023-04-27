@@ -12,7 +12,8 @@ import {
 import { SortableItem } from "./SortableItem";
 
 import { Attributes } from "./Attributes";
-import { Controls } from "./Controls";
+// import { Controls } from "./Controls";
+import { Control } from "./Control";
 import { Render } from "./Render";
 
 export class Sortable extends Component {
@@ -141,7 +142,19 @@ export class Sortable extends Component {
                     type={this.props.type}
                     error={error}
                 >
-                    {Controls.render(
+                    <Control
+                        type={this.props.type}
+                        componentInstance={this.props.componentInstance}
+                        blockKey={this.props.blockKey + "-" + keyLoop}
+                        label={labelRepeatableItem}
+                        keys={this.props.keys.concat(keyLoop)}
+                        valueProp={this.props.valueProp}
+                        objectValue={this.props.controllerValue[keyLoop]}
+                        required_field={this.props.required_field}
+                        args={this.props.args}
+                        error={error}
+                    />
+                    {/* {Controls.render(
                         this.props.type,
                         this.props.componentInstance,
                         this.props.blockKey + "-" + keyLoop,
@@ -152,7 +165,7 @@ export class Sortable extends Component {
                         this.props.required_field,
                         this.props.args,
                         error
-                    )}
+                    )} */}
                 </SortableItem>
             );
         }

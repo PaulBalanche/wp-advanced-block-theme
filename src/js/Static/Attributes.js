@@ -1,5 +1,6 @@
 import __ODevices from "../Components/ODevices";
 import { Render } from "./Render";
+import { Control } from './Control';
 
 export class Attributes {
     static returnStringOrNumber(value, isNumber = false) {
@@ -234,6 +235,21 @@ export class Attributes {
                 break;
         }
 
+        return <Control
+            key={blockKey + "-Control"}
+            keys={keys}
+            blockKey={blockKey}
+            label={label}
+            type={type}
+            valueProp={valueProp}
+            controllerValue={currentValueAttribute}
+            required_field={required_field}
+            repeatable={repeatable}
+            isResponsive={ ( typeof prop.responsive != "undefined" && !!prop.responsive ) ? true : false }
+            args={args}
+            error={error}
+            componentInstance={componentInstance}
+        />
         return Render.control(
             type,
             componentInstance,

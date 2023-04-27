@@ -1,56 +1,36 @@
-import { SelectControl } from "@wordpress/components";
+import { 
+    SelectControl
+} from "@wordpress/components";
+import { BaseControl } from "../components/BaseControl";
 
-import { Attributes } from "../Static/Attributes";
+export class Select extends BaseControl {
 
-export function renderSelect(
-    componentInstance,
-    id,
-    label,
-    options,
-    keys,
-    valueProp,
-    objectValue,
-    required = false,
-    defaultValue = null
-) {
+    constructor() {
+        super(...arguments);
+    }
 
-    if (typeof options == "undefined" || options == null) return null;
+    render() {
 
-    const defaultLabel = ( defaultValue?.value?.length ) ? "Default" : '--';
+        if (typeof this.props.options == "undefined" || this.props.options == null) return null;
 
-    return (
-        <SelectControl
-            key={id}
-            label={label}
-            value={objectValue}
-            options={[{ label: defaultLabel, value: "" }].concat(
-                options.map(function (value) {
+        const defaultLabel = ( this.props.defaultValue?.value?.length ) ? "Default" : '--';
+        const valueToDisplay = ( this.state.editMode ) ? ( this.state.value != null ) ? this.state.value : null : this.props.defaultValue.value;
 
-                    let currentLabel = value.name;
-
-                    if( defaultValue?.value?.length ) {
-
-                        for( var i in defaultValue.value ) {
-                            if( typeof defaultValue.value[i] == 'object' && defaultValue.value[i].value == value.value ) {
-                                currentLabel += ' (default)';
-                                break;
-                            }
-                        }
-                    }
-
-                    return { label: currentLabel, value: value.value };
-                })
-            )}
-            onChange={(newValue) => {
-                Attributes.updateAttributes(
-                    keys,
-                    valueProp,
-                    newValue,
-                    false,
-                    componentInstance
-                );
-                componentInstance.updatePreview();
-            }}
-        />
-    );
+        return <>
+            <SelectControl
+                label={this.props.label}
+                value={valueToDisplay}
+                options={[{ label: defaultLabel, value: "" }].concat(
+                    this.props.options.map(function (value) {
+                        return { label: value.name, value: value.value };
+                    })
+                )}
+                onChange={(newValue) => {
+                    this.setState({ value: newValue, needUpdate: true });
+                }}
+            />
+            { this.renderSavedButton() }
+            { this.renderDefaultValueOverlay() }
+        </>
+    }
 }

@@ -9,7 +9,7 @@ import { renderRadio } from "../Controls/Radio";
 import { renderCheckbox } from "../Controls/Checkbox";
 import { renderRelation } from "../Controls/Relation";
 import { renderSelect } from "../Controls/Select";
-import { renderText } from "../Controls/Text";
+import { Text } from "../Controls/Text";
 import { renderTextarea } from "../Controls/Textarea";
 import { renderToggle } from "../Controls/Toggle";
 import WysiwygControl from "../Controls/WysiwygControl/WysiwygControl";
@@ -153,16 +153,16 @@ export class Controls {
             case "string":
             case "number":
             case "integer":
-                return renderText(
-                    componentInstance,
-                    id,
-                    label,
-                    keys,
-                    valueProp,
-                    objectValue,
-                    args.isNumber,
-                    args.default
-                );
+                return <Text
+                    componentInstance={componentInstance}
+                    id={id}
+                    label={label}
+                    keys={keys}
+                    valueProp={valueProp}
+                    objectValue={objectValue}
+                    isNumber={args.isNumber}
+                    defaultValue={args.default}
+                />
 
             case "text":
                 return renderTextarea(

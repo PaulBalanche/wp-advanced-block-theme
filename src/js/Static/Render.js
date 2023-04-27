@@ -9,7 +9,7 @@ import {
 } from "@wordpress/components";
 
 import { Attributes } from "./Attributes";
-import { Controls } from "./Controls";
+import { Control } from "./Control";
 
 import { Sortable } from "./Sortable";
 
@@ -151,109 +151,121 @@ export class Render {
     ) {
         var control = [];
 
-        const keyControl = keys.join('-');
+        // const keyControl = keys.join('-');
         const currentDevice = __ODevices.getInstance().getCurrentDevice();
 
-        label = ( required_field && label != null ) ? <>{label}<span className="o-required">*</span></> : label;
-        label = ( error && typeof error == 'object' && typeof error.error == 'string' ) ? <>{label}<div className="error"><Dashicon icon="info" />{error.error}</div></> : label;
-        label = ( error && typeof error == 'object' && typeof error.warning == 'string' ) ? <>{label}<div className="warning"><Dashicon icon="info" />{error.warning}</div></> : label;
+        // label = ( required_field && label != null ) ? <>{label}<span className="o-required">*</span></> : label;
+        // label = ( error && typeof error == 'object' && typeof error.error == 'string' ) ? <>{label}<div className="error"><Dashicon icon="info" />{error.error}</div></> : label;
+        // label = ( error && typeof error == 'object' && typeof error.warning == 'string' ) ? <>{label}<div className="warning"><Dashicon icon="info" />{error.warning}</div></> : label;
 
-        if( isResponsive ) {
-            blockKey = blockKey + "-" + currentDevice;
-            keys.push(currentDevice);
-            controllerValue = ( controllerValue != null && typeof controllerValue == "object" && typeof controllerValue[currentDevice] != "undefined" ) ? controllerValue[currentDevice] : "";
-        }
+        // if( isResponsive ) {
+            // blockKey = blockKey + "-" + currentDevice;
+            // keys.push(currentDevice);
+            // controllerValue = ( controllerValue != null && typeof controllerValue == "object" && typeof controllerValue[currentDevice] != "undefined" ) ? controllerValue[currentDevice] : "";
+        // }
 
         if (repeatable) {
-            if (
-                controllerValue == null ||
-                typeof controllerValue != "object" ||
-                controllerValue.length == 0
-            ) {
-                controllerValue = [""];
-            }
+            // if (
+            //     controllerValue == null ||
+            //     typeof controllerValue != "object" ||
+            //     controllerValue.length == 0
+            // ) {
+            //     controllerValue = [""];
+            // }
 
-            const itemsError = ( error && typeof error == 'object' && typeof error.props == 'object' && Object.keys(error.props).length > 0 ) ? error.props : null;
+            // const itemsError = ( error && typeof error == 'object' && typeof error.props == 'object' && Object.keys(error.props).length > 0 ) ? error.props : null;
+            // control.push(
+            //     <Sortable
+            //         key={blockKey + "-Sortable"}
+            //         type={type}
+            //         componentInstance={componentInstance}
+            //         blockKey={blockKey}
+            //         keys={keys}
+            //         valueProp={valueProp}
+            //         controllerValue={controllerValue}
+            //         required_field={required_field}
+            //         args={args}
+            //         error={itemsError}
+            //     />
+            // );
+
+            // control =
+            //     label != null
+            //         ? Render.panelComponent(
+            //               blockKey,
+            //               label,
+            //               control,
+            //               true
+            //           )
+            //         : control;
+        } else {
             control.push(
-                <Sortable
-                    key={blockKey + "-Sortable"}
+                <Control
                     type={type}
                     componentInstance={componentInstance}
                     blockKey={blockKey}
+                    label={label}
                     keys={keys}
                     valueProp={valueProp}
-                    controllerValue={controllerValue}
+                    objectValue={controllerValue}
                     required_field={required_field}
                     args={args}
-                    error={itemsError}
+                    error={error}
                 />
-            );
-
-            control =
-                label != null
-                    ? Render.panelComponent(
-                          blockKey,
-                          label,
-                          control,
-                          true
-                      )
-                    : control;
-        } else {
-            control.push(
-                Controls.render(
-                    type,
-                    componentInstance,
-                    blockKey,
-                    label,
-                    keys,
-                    valueProp,
-                    typeof controllerValue != "undefined"
-                        ? controllerValue
-                        : "",
-                    required_field,
-                    args,
-                    error
-                )
+                // Controls.render(
+                //     type,
+                //     componentInstance,
+                //     blockKey,
+                //     label,
+                //     keys,
+                //     valueProp,
+                //     typeof controllerValue != "undefined"
+                //         ? controllerValue
+                //         : "",
+                //     required_field,
+                //     args,
+                //     error
+                // )
             );
         }
 
         if( isResponsive ) {
-            control = Render.responsiveTabComponent(
-                blockKey,
-                Object.keys(
-                    __ODevices.getInstance().getMediaQueries()
-                ).map((layout) => {
-                    return {
-                        name: layout,
-                        title:
-                            layout.charAt(0).toUpperCase() +
-                            layout.slice(1),
-                        className: "tab-" + layout,
-                        active: ( currentDevice == layout ) ? true : false
-                    };
-                }),
-                control,
-                ( newDevice ) => {
-                    componentInstance.setState( { currentEditedProp: keyControl });
-                    __ODevices.getInstance().setCurrentDevice(newDevice);
-                },
-                type
-            );
+            // control = Render.responsiveTabComponent(
+            //     blockKey,
+            //     Object.keys(
+            //         __ODevices.getInstance().getMediaQueries()
+            //     ).map((layout) => {
+            //         return {
+            //             name: layout,
+            //             title:
+            //                 layout.charAt(0).toUpperCase() +
+            //                 layout.slice(1),
+            //             className: "tab-" + layout,
+            //             active: ( currentDevice == layout ) ? true : false
+            //         };
+            //     }),
+            //     control,
+            //     ( newDevice ) => {
+            //         componentInstance.setState( { currentEditedProp: keyControl });
+            //         __ODevices.getInstance().setCurrentDevice(newDevice);
+            //     },
+            //     type
+            // );
         }
 
-        if( [ 'file', 'video', 'gallery', 'image' ].includes(type) ) {
+        // if( [ 'file', 'video', 'gallery', 'image' ].includes(type) ) {
 
-            control = Render.panelComponent(
-                blockKey,
-                label,
-                control,
-                ( componentInstance.getCurrentEditedProp() == keyControl ) ? true : false
-            );
-        }
+        //     control = Render.panelComponent(
+        //         blockKey,
+        //         label,
+        //         control,
+        //         ( componentInstance.getCurrentEditedProp() == keyControl ) ? true : false
+        //     );
+        // }
 
-        if (label == null) return control;
+        // if (label == null) return control;
 
-        return Render.fieldContainer(blockKey, control, ( error && typeof error == 'object' && typeof error.error != 'undefined' ) ? 'has-error' : ( ( error && typeof error == 'object' && typeof error.warning != 'undefined' ) ? 'has-warning' : '' ) );
+        // return Render.fieldContainer(blockKey, control, ( error && typeof error == 'object' && typeof error.error != 'undefined' ) ? 'has-error' : ( ( error && typeof error == 'object' && typeof error.warning != 'undefined' ) ? 'has-warning' : '' ) );
     }
 
     static repeatableObjectLabelFormatting(blockKey, valueProp, keyLoop) {

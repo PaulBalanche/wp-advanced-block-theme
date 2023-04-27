@@ -1,41 +1,29 @@
 import { 
-    TextControl,
-    Button,
-    Dashicon
+    TextControl
 } from "@wordpress/components";
-import { useState } from "@wordpress/element";
-import { Attributes } from "../Static/Attributes";
-import { StatedControl } from "../controls/StatedControl";
+import { BaseControl } from "../components/BaseControl";
 
-export function renderText(
-    componentInstance,
-    id,
-    label,
-    keys,
-    valueProp,
-    objectValue,
-    isNumber = false,
-    defaultValue = null
-) {
+export class Text extends BaseControl {
 
-    const valueToDisplay = ( objectValue != null || typeof defaultValue?.value == 'undefined'  ) ? ( objectValue != null ) ? objectValue : '' : defaultValue.value
+    constructor() {
+        super(...arguments);
+    }
 
-    return <StatedControl
-        key={id}
-        keys={keys}
-        valueProp={valueProp}
-        defaultValue={defaultValue}
-        componentInstance={componentInstance}
-        value={objectValue}
-    >
-        <TextControl
-            key={id}
-            label={label}
-            type={ !! isNumber ? "number" : "text" }
-            value={valueToDisplay}
-            onChange={(newValue) => {
-                setValue( newValue );
-            }}
-        />
-    </StatedControl>
+    render() {
+
+        const valueToDisplay = ( this.state.editMode ) ? ( this.state.value != null ) ? this.state.value : '' : this.props.defaultValue.value;
+
+        return <>
+            <TextControl
+                label={this.props.label}
+                type={ !! this.props.isNumber ? "number" : "text" }
+                value={valueToDisplay}
+                onChange={(newValue) => {
+                    this.setState({ value: newValue, needUpdate: true });
+                }}
+            />
+            { this.renderSavedButton() }
+            { this.renderDefaultValueOverlay() }
+        </>
+    }
 }
