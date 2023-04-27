@@ -5,6 +5,7 @@ import {
 } from "@wordpress/components";
 import { useState } from "@wordpress/element";
 import { Attributes } from "../Static/Attributes";
+import { StatedControl } from "../controls/StatedControl";
 
 export function renderText(
     componentInstance,
@@ -16,45 +17,25 @@ export function renderText(
     isNumber = false,
     defaultValue = null
 ) {
-    defaultValue = ( objectValue == '' && typeof defaultValue.value != 'undefined' ) ? defaultValue.value : null
 
-    const MyTextControl = ( props ) => {
+    const valueToDisplay = ( objectValue != null || typeof defaultValue?.value == 'undefined'  ) ? ( objectValue != null ) ? objectValue : '' : defaultValue.value
 
-        const [ hasDefaultOverlay, hideOverlay ] = useState( props.defaultValue != null );
-        const valueToDisplay = ( hasDefaultOverlay ) ? props.defaultValue : objectValue
-
-        return <>
-            <TextControl
-                key={id}
-                label={label}
-                type={ !! isNumber ? "number" : "text" }
-                value={valueToDisplay}
-                onChange={(newValue) =>
-                    Attributes.updateAttributes(
-                        keys,
-                        valueProp,
-                        newValue,
-                        false,
-                        componentInstance
-                    )
-                }
-                onBlur={(e) => {
-                    componentInstance.updatePreview();
-                }}
-            />
-            { hasDefaultOverlay &&
-                <div key={id + "defaultContainer"} className="default-overlay-container">
-                    <Button
-                        key={id + "defaultContainer-button"}
-                        onMouseDown={ () => { hideOverlay( ( state ) => ! state ) } }
-                        variant="primary"
-                    >
-                        <Dashicon icon="edit" /> Override default value
-                    </Button>
-                </div>
-            }
-        </>
-    };
-
-    return <MyTextControl defaultValue={defaultValue} />
+    return <StatedControl
+        key={id}
+        keys={keys}
+        valueProp={valueProp}
+        defaultValue={defaultValue}
+        componentInstance={componentInstance}
+        value={objectValue}
+    >
+        <TextControl
+            key={id}
+            label={label}
+            type={ !! isNumber ? "number" : "text" }
+            value={valueToDisplay}
+            onChange={(newValue) => {
+                setValue( newValue );
+            }}
+        />
+    </StatedControl>
 }

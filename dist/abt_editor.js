@@ -14417,7 +14417,7 @@ function renderCheckbox(componentInstance, id, label, options, keys, valueProp, 
     key: id + "-label"
   }, label), options.map(option => {
     let isChecked = false;
-    if (typeof objectValue == 'object') {
+    if (objectValue != null && typeof objectValue == 'object') {
       objectValue.forEach(element => {
         if (element.value == option.value) {
           isChecked = true;
@@ -14446,7 +14446,7 @@ function renderCheckbox(componentInstance, id, label, options, keys, valueProp, 
       onChange: newValue => {
         const newObjectValue = [];
         if (newValue) {
-          if (typeof objectValue != 'object') {
+          if (objectValue == null || typeof objectValue != 'object') {
             objectValue = [];
           }
           objectValue.forEach(element => {
@@ -14881,7 +14881,7 @@ __webpack_require__.r(__webpack_exports__);
 
 function renderLink(componentInstance, id, label, keys, valueProp, objectValue) {
   let required = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : false;
-  if (typeof objectValue == "undefined" || typeof objectValue == "string") {
+  if (objectValue == null || typeof objectValue == "undefined" || typeof objectValue == "string") {
     objectValue = {
       text: ''
     };
@@ -15148,6 +15148,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _Static_Attributes__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Static/Attributes */ "./src/js/Static/Attributes.js");
+/* harmony import */ var _controls_StatedControl__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../controls/StatedControl */ "./src/js/controls/StatedControl.js");
+
 
 
 
@@ -15155,35 +15157,23 @@ __webpack_require__.r(__webpack_exports__);
 function renderText(componentInstance, id, label, keys, valueProp, objectValue) {
   let isNumber = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : false;
   let defaultValue = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : null;
-  defaultValue = objectValue == '' && typeof defaultValue.value != 'undefined' ? defaultValue.value : null;
-  const MyTextControl = props => {
-    const [hasDefaultOverlay, hideOverlay] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(props.defaultValue != null);
-    const valueToDisplay = hasDefaultOverlay ? props.defaultValue : objectValue;
-    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.TextControl, {
-      key: id,
-      label: label,
-      type: !!isNumber ? "number" : "text",
-      value: valueToDisplay,
-      onChange: newValue => _Static_Attributes__WEBPACK_IMPORTED_MODULE_2__.Attributes.updateAttributes(keys, valueProp, newValue, false, componentInstance),
-      onBlur: e => {
-        componentInstance.updatePreview();
-      }
-    }), hasDefaultOverlay && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      key: id + "defaultContainer",
-      className: "default-overlay-container"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
-      key: id + "defaultContainer-button",
-      onMouseDown: () => {
-        hideOverlay(state => !state);
-      },
-      variant: "primary"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
-      icon: "edit"
-    }), " Override default value")));
-  };
-  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(MyTextControl, {
-    defaultValue: defaultValue
-  });
+  const valueToDisplay = objectValue != null || typeof defaultValue?.value == 'undefined' ? objectValue != null ? objectValue : '' : defaultValue.value;
+  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_controls_StatedControl__WEBPACK_IMPORTED_MODULE_3__.StatedControl, {
+    key: id,
+    keys: keys,
+    valueProp: valueProp,
+    defaultValue: defaultValue,
+    componentInstance: componentInstance,
+    value: objectValue
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.TextControl, {
+    key: id,
+    label: label,
+    type: !!isNumber ? "number" : "text",
+    value: valueToDisplay,
+    onChange: newValue => {
+      setValue(newValue);
+    }
+  }));
 }
 
 /***/ }),
@@ -15207,20 +15197,51 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 function renderTextarea(componentInstance, id, label, keys, valueProp, objectValue) {
   let required = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : false;
   let defaultValue = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : null;
-  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.TextareaControl, {
-    key: id,
-    label: label,
+  const StatedControl = props => {
+    const [value, setValue] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(props.value);
+    const [editMode, setEditMode] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(props.value != null || typeof defaultValue?.value == 'undefined');
+    const valueToDisplay = editMode ? value != null ? value : '' : defaultValue.value;
+    const needUpdate = value != props.value;
+    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.TextareaControl, {
+      key: id,
+      label: label,
+      value: valueToDisplay,
+      onChange: newValue => {
+        setValue(newValue);
+      }
+    }), editMode && needUpdate && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      key: id + "submitChangesContainer",
+      className: "submit-changes-container"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
+      key: id + "submitChangesContainer-button",
+      onMouseDown: () => props.onSubmitChanges(value),
+      variant: "primary"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
+      icon: "saved"
+    }), " Save changes")), !editMode && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      key: id + "defaultOverlayContainer",
+      className: "default-overlay-container"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
+      key: id + "defaultOverlayContainer-button",
+      onMouseDown: () => {
+        setEditMode(true);
+      },
+      variant: "primary"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
+      icon: "edit"
+    }), " Override default value")));
+  };
+  const submitChanges = newValue => {
+    _Static_Attributes__WEBPACK_IMPORTED_MODULE_2__.Attributes.updateAttributes(keys, valueProp, newValue, false, componentInstance);
+    componentInstance.updatePreview();
+  };
+  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(StatedControl, {
     value: objectValue,
-    onChange: newValue => {
-      _Static_Attributes__WEBPACK_IMPORTED_MODULE_2__.Attributes.updateAttributes(keys, valueProp, newValue, false, componentInstance);
-    },
-    onBlur: e => {
-      componentInstance.updatePreview();
-    },
-    placeholder: defaultValue != null && typeof defaultValue == 'object' ? defaultValue.value : null
+    onSubmitChanges: submitChanges
   });
 }
 
@@ -16285,7 +16306,6 @@ class Attributes {
     let isNumber = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
     let componentInstance = arguments.length > 4 ? arguments[4] : undefined;
     const newValueToUpdate = Attributes.recursiveUpdateObjectFromObject(arrayKey, currentValue, newValue, isNumber);
-    console.log(newValueToUpdate);
     componentInstance.setAttributes({
       [arrayKey[0]]: newValueToUpdate[arrayKey[0]]
     });
@@ -16324,7 +16344,7 @@ class Attributes {
     const required_field = typeof prop.required != "undefined" && prop.required ? true : false;
     let currentValueAttribute = valueProp;
     keys.forEach(element => {
-      currentValueAttribute = currentValueAttribute != null && typeof currentValueAttribute == "object" && currentValueAttribute.hasOwnProperty(element) && typeof currentValueAttribute[element] != "undefined" ? currentValueAttribute[element] : "";
+      currentValueAttribute = currentValueAttribute != null && typeof currentValueAttribute == "object" && currentValueAttribute.hasOwnProperty(element) && typeof currentValueAttribute[element] != "undefined" ? currentValueAttribute[element] : null;
     });
     var args = {
       default: typeof prop.default != "undefined" ? prop.default : null
@@ -16663,7 +16683,7 @@ class Render {
     if (isResponsive) {
       blockKey = blockKey + "-" + currentDevice;
       keys.push(currentDevice);
-      controllerValue = typeof controllerValue == "object" && typeof controllerValue[currentDevice] != "undefined" ? controllerValue[currentDevice] : "";
+      controllerValue = controllerValue != null && typeof controllerValue == "object" && typeof controllerValue[currentDevice] != "undefined" ? controllerValue[currentDevice] : "";
     }
     if (repeatable) {
       if (controllerValue == null || typeof controllerValue != "object" || controllerValue.length == 0) {
@@ -17002,6 +17022,66 @@ function SortableItem(props) {
     isSmall: true,
     icon: "trash"
   }));
+}
+
+/***/ }),
+
+/***/ "./src/js/controls/StatedControl.js":
+/*!******************************************!*\
+  !*** ./src/js/controls/StatedControl.js ***!
+  \******************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "StatedControl": () => (/* binding */ StatedControl)
+/* harmony export */ });
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _Static_Attributes__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Static/Attributes */ "./src/js/Static/Attributes.js");
+
+
+
+
+class StatedControl extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Component {
+  constructor() {
+    super(...arguments);
+    this.state = {
+      value: this.props.value,
+      editMode: this.props.value != null || typeof this.props.defaultValue?.value == 'undefined'
+    };
+  }
+  submitChanges(newValue) {
+    _Static_Attributes__WEBPACK_IMPORTED_MODULE_2__.Attributes.updateAttributes(this.props.keys, this.props.valueProp, newValue, false, this.props.componentInstance);
+    this.props.componentInstance.updatePreview();
+  }
+  render() {
+    const needUpdate = this.state.value != this.props.value;
+    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, this.props.children, this.state.editMode && needUpdate && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      key: this.props.id + "submitChangesContainer",
+      className: "submit-changes-container"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
+      key: this.props.id + "submitChangesContainer-button",
+      onMouseDown: () => this.submitChanges(this.state.value),
+      variant: "primary"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
+      icon: "saved"
+    }), " Save changes")), !this.state.editMode && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      key: this.props.id + "defaultOverlayContainer",
+      className: "default-overlay-container"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
+      key: this.props.id + "defaultOverlayContainer-button",
+      onMouseDown: () => {
+        setEditMode(true);
+      },
+      variant: "primary"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
+      icon: "edit"
+    }), " Override default value")));
+  }
 }
 
 /***/ }),

@@ -15,7 +15,7 @@ export function renderLink(
     required = false
 ) {
 
-    if(typeof objectValue == "undefined" || typeof objectValue == "string") {
+    if( objectValue == null || typeof objectValue == "undefined" || typeof objectValue == "string") {
         objectValue = {
             text: ''
         };

@@ -161,7 +161,7 @@ export class Render {
         if( isResponsive ) {
             blockKey = blockKey + "-" + currentDevice;
             keys.push(currentDevice);
-            controllerValue = (typeof controllerValue == "object" && typeof controllerValue[currentDevice] != "undefined" ) ? controllerValue[currentDevice] : "";
+            controllerValue = ( controllerValue != null && typeof controllerValue == "object" && typeof controllerValue[currentDevice] != "undefined" ) ? controllerValue[currentDevice] : "";
         }
 
         if (repeatable) {

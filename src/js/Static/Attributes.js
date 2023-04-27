@@ -52,7 +52,6 @@ export class Attributes {
             newValue,
             isNumber
         );
-        console.log(newValueToUpdate);
         componentInstance.setAttributes({
             [arrayKey[0]]: newValueToUpdate[arrayKey[0]],
         });
@@ -147,7 +146,7 @@ export class Attributes {
                 currentValueAttribute.hasOwnProperty(element) &&
                 typeof currentValueAttribute[element] != "undefined"
                     ? currentValueAttribute[element]
-                    : "";
+                    : null;
         });
 
         var args = {

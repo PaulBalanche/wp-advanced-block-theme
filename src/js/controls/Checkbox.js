@@ -19,7 +19,7 @@ export function renderCheckbox(
         { options.map( (option) => {
 
             let isChecked = false;
-            if( typeof objectValue == 'object' ) {
+            if( objectValue != null && typeof objectValue == 'object' ) {
                 objectValue.forEach(element => {
                     if( element.value == option.value ) {
                         isChecked = true;
@@ -55,7 +55,7 @@ export function renderCheckbox(
 
                     if( newValue ) {
                         
-                        if( typeof objectValue != 'object' ) {
+                        if( objectValue == null || typeof objectValue != 'object' ) {
                             objectValue = [];
                         }
                         
