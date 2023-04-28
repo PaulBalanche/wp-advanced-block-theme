@@ -1,36 +1,18 @@
-import { 
-    SelectControl
-} from "@wordpress/components";
-import { BaseControl } from "../components/BaseControl";
+import { SelectControl } from "@wordpress/components";
 
-export class Select extends BaseControl {
+export function Select({id, label, options, value, onChange}) {
 
-    constructor() {
-        super(...arguments);
-    }
+    if( typeof options == "undefined" || options == null) return null;
 
-    render() {
-
-        if (typeof this.props.options == "undefined" || this.props.options == null) return null;
-
-        const defaultLabel = ( this.props.defaultValue?.value?.length ) ? "Default" : '--';
-        const valueToDisplay = ( this.state.editMode ) ? ( this.state.value != null ) ? this.state.value : null : this.props.defaultValue.value;
-
-        return <>
-            <SelectControl
-                label={this.props.label}
-                value={valueToDisplay}
-                options={[{ label: defaultLabel, value: "" }].concat(
-                    this.props.options.map(function (value) {
-                        return { label: value.name, value: value.value };
-                    })
-                )}
-                onChange={(newValue) => {
-                    this.setState({ value: newValue, needUpdate: true });
-                }}
-            />
-            { this.renderSavedButton() }
-            { this.renderDefaultValueOverlay() }
-        </>
-    }
+    return <SelectControl
+        key={id}
+        label={label}
+        value={value}
+        options={[{ label: "--", value: "" }].concat(
+            options.map(function (value) {
+                return { label: value.name, value: value.value };
+            })
+        )}
+        onChange={(newValue) => onChange(newValue)}
+    />
 }

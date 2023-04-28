@@ -1,0 +1,3219 @@
+# Copyright (C) 2022 Buzz Brothers
+# This file is distributed under the same license as the RealDay plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: RealDay 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/realday\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2022-05-17T09:24:41+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.4.0\n"
+
+#. Plugin Name of the plugin
+msgid "RealDay"
+msgstr ""
+
+#. Author of the plugin
+msgid "Buzz Brothers"
+msgstr ""
+
+#: inc/Controllers/Codes.php:40
+msgid "BOOM! What a nice shot. You just earnt %s codes instead of 1, what else?!"
+msgstr ""
+
+#: inc/Controllers/Codes.php:45
+msgid "Boom! Your code has been registered and you're good to go."
+msgstr ""
+
+#: inc/Controllers/Codes.php:59
+#: modules/FeedbackForm/Services/FeedbackForm.php:212
+msgid "An error occur. Please try again later."
+msgstr ""
+
+#: inc/cron-events.php:10
+msgid "Once every 5 minutes"
+msgstr ""
+
+#: inc/Dashboard/ConsumersModeration.php:63
+msgid "There is %s new user"
+msgid_plural "There are %s new users"
+msgstr[0] ""
+msgstr[1] ""
+
+#: inc/Helpers/Helpers.php:284
+msgctxt "0, 5-20, other"
+msgid "code"
+msgstr ""
+
+#: inc/Helpers/Helpers.php:287
+msgctxt "end with 1"
+msgid "code"
+msgstr ""
+
+#: inc/Helpers/Helpers.php:291
+msgctxt "end with 1"
+msgid "codes"
+msgstr ""
+
+#: inc/Helpers/Helpers.php:294
+msgctxt "end with 2,3,4 "
+msgid "codes"
+msgstr ""
+
+#: inc/Helpers/Helpers.php:297
+msgctxt "0, 5-20, other"
+msgid "codes"
+msgstr ""
+
+#: inc/Helpers/MailerHelpers.php:22
+msgid "View"
+msgstr ""
+
+#: inc/Helpers/MailerHelpers.php:25
+msgid "online version"
+msgstr ""
+
+#: inc/Helpers/MailerHelpers.php:30
+msgid "LD footer"
+msgstr ""
+
+#: inc/Helpers/MailerHelpers.php:33
+msgid "Do you want to contact us?"
+msgstr ""
+
+#: inc/Helpers/MailerHelpers.php:36
+msgid "Feedback form"
+msgstr ""
+
+#: inc/Helpers/MailerHelpers.php:39
+msgid "<strong>WARNING!</strong> Smoking seriously harms you and others around you."
+msgstr ""
+
+#: inc/Helpers/MailerHelpers.php:40
+msgid "2022 © JT International"
+msgstr ""
+
+#: inc/Helpers/MailerHelpers.php:56
+msgid "LD logo"
+msgstr ""
+
+#: inc/Helpers/MailerHelpers.php:60
+#: inc/Helpers/MailerHelpers.php:79
+#: inc/Helpers/MailerHelpers.php:122
+msgid "LD header"
+msgstr ""
+
+#: inc/Helpers/MailerHelpers.php:108
+#: inc/Helpers/MailerHelpers.php:133
+msgid "Boom! Your account has been created successfully."
+msgstr ""
+
+#: inc/Helpers/MailerHelpers.php:109
+msgid "Welcome to LD!"
+msgstr ""
+
+#: inc/Helpers/MailerHelpers.php:110
+#: modules/Notifications/Services/ReferralNotifications.php:235
+msgid "Welcome to LD, %s!"
+msgstr ""
+
+#: inc/Helpers/MailerHelpers.php:112
+#: modules/Notifications/Services/ReferralNotifications.php:240
+msgid "You're good to go."
+msgstr ""
+
+#: inc/Helpers/MailerHelpers.php:113
+msgid "We've verified your info and just like that, boom! You're in. You've now got full access to LD's exclusive content and rewards."
+msgstr ""
+
+#: inc/Helpers/MailerHelpers.php:114
+msgid "So what are you waiting for?<br />Dive in. Here. Now."
+msgstr ""
+
+#: inc/Helpers/MailerHelpers.php:118
+#: inc/Helpers/MailerHelpers.php:364
+msgid "Log in now"
+msgstr ""
+
+#: inc/Helpers/MailerHelpers.php:151
+#: inc/Helpers/MailerHelpers.php:167
+msgid "Almost there, %s!"
+msgstr ""
+
+#: inc/Helpers/MailerHelpers.php:152
+msgid "We're verifying your info."
+msgstr ""
+
+#: inc/Helpers/MailerHelpers.php:153
+msgid "We need to check your details"
+msgstr ""
+
+#: inc/Helpers/MailerHelpers.php:155
+msgid "We're on it, %s"
+msgstr ""
+
+#: inc/Helpers/MailerHelpers.php:156
+msgid "You made some changes to your ID info when registering your account, so we need some time to <strong>double check that everything matches</strong> up to your ID."
+msgstr ""
+
+#: inc/Helpers/MailerHelpers.php:157
+msgid "It won't take long, and you'll be able to access the full site when it's finished. Don't hesitate to <strong>give us a shout</strong> if you have any questions."
+msgstr ""
+
+#: inc/Helpers/MailerHelpers.php:161
+#: inc/Helpers/MailerHelpers.php:331
+#: modules/Notifications/Services/ReceivedGiftNotification.php:118
+#: modules/Notifications/Services/ReceivedGiftNotification.php:228
+msgid "Contact us"
+msgstr ""
+
+#: inc/Helpers/MailerHelpers.php:185
+#: inc/Helpers/MailerHelpers.php:201
+#: inc/Helpers/MailerHelpers.php:219
+#: inc/Helpers/MailerHelpers.php:235
+#: inc/Helpers/MailerHelpers.php:253
+#: inc/Helpers/MailerHelpers.php:269
+#: inc/Helpers/MailerHelpers.php:287
+#: inc/Helpers/MailerHelpers.php:303
+msgid "Oops! There's a problem with your ID, %s."
+msgstr ""
+
+#: inc/Helpers/MailerHelpers.php:186
+#: inc/Helpers/MailerHelpers.php:254
+#: inc/Helpers/MailerHelpers.php:288
+msgid "Did you make a mistake?"
+msgstr ""
+
+#: inc/Helpers/MailerHelpers.php:187
+#: inc/Helpers/MailerHelpers.php:255
+msgid "Update your details"
+msgstr ""
+
+#: inc/Helpers/MailerHelpers.php:189
+#: inc/Helpers/MailerHelpers.php:257
+msgid "There's a problem with your ID info"
+msgstr ""
+
+#: inc/Helpers/MailerHelpers.php:190
+msgid "You made some changes to your ID info when registering your account, but <strong>some of the details don't match</strong>. It looks like your First name / Last name <strong>you entered isn't the same</strong> as what's listed on the ID you uploaded."
+msgstr ""
+
+#: inc/Helpers/MailerHelpers.php:191
+#: inc/Helpers/MailerHelpers.php:259
+msgid "It's an easy fix, though. Just click the button below and enter the correct details to get full access to the LD website."
+msgstr ""
+
+#: inc/Helpers/MailerHelpers.php:195
+#: inc/Helpers/MailerHelpers.php:263
+msgid "Update details"
+msgstr ""
+
+#: inc/Helpers/MailerHelpers.php:220
+msgid "Please upload a new photo of your ID"
+msgstr ""
+
+#: inc/Helpers/MailerHelpers.php:221
+#: inc/Helpers/MailerHelpers.php:289
+msgid "Reupload your ID"
+msgstr ""
+
+#: inc/Helpers/MailerHelpers.php:223
+#: inc/Helpers/MailerHelpers.php:291
+msgid "There's a problem with your ID photo"
+msgstr ""
+
+#: inc/Helpers/MailerHelpers.php:224
+msgid "You have to upload a photo of your ID to register your LD account. Unfortunately, <strong>the photo you uploaded is blurry</strong>, so we can't check your details."
+msgstr ""
+
+#: inc/Helpers/MailerHelpers.php:225
+msgid "Don't worry, it's an easy fix. Just click the button below and <strong>upload a clear photo of your ID</strong> to get full access to the LD website."
+msgstr ""
+
+#: inc/Helpers/MailerHelpers.php:229
+#: inc/Helpers/MailerHelpers.php:297
+msgid "Update photo"
+msgstr ""
+
+#: inc/Helpers/MailerHelpers.php:258
+msgid "You made some changes to your ID info when registering your account, but <strong>some of the details don't match with your ID card</strong>."
+msgstr ""
+
+#: inc/Helpers/MailerHelpers.php:292
+msgid "You have to upload a photo of your ID to register your LD account. But it looks like <strong>the image you uploaded isn't your ID</strong>. Don't worry, mistakes happen."
+msgstr ""
+
+#: inc/Helpers/MailerHelpers.php:293
+msgid "It's an easy fix. Just click the button below and <strong>update the correct photo of your ID</strong> to get full access to the LD website."
+msgstr ""
+
+#: inc/Helpers/MailerHelpers.php:322
+#: inc/Helpers/MailerHelpers.php:337
+msgid "We've had to block your account, %s."
+msgstr ""
+
+#: inc/Helpers/MailerHelpers.php:323
+msgid "Drop us a line to work it out."
+msgstr ""
+
+#: inc/Helpers/MailerHelpers.php:324
+msgid "Your account has been blocked"
+msgstr ""
+
+#: inc/Helpers/MailerHelpers.php:326
+msgid "Let's work it out"
+msgstr ""
+
+#: inc/Helpers/MailerHelpers.php:327
+msgid "Sorry, %s, but <strong>we've had to block your account</strong>. But all hope isn't lost! Click the button below and drop us a line to request your account be unblocked."
+msgstr ""
+
+#: inc/Helpers/MailerHelpers.php:355
+#: inc/Helpers/MailerHelpers.php:375
+msgid "Your password's been reset, %s."
+msgstr ""
+
+#: inc/Helpers/MailerHelpers.php:356
+msgid "You're all good to log in to your LD account."
+msgstr ""
+
+#: inc/Helpers/MailerHelpers.php:357
+msgid "Password reset"
+msgstr ""
+
+#: inc/Helpers/MailerHelpers.php:359
+msgid "You're all set"
+msgstr ""
+
+#: inc/Helpers/MailerHelpers.php:360
+msgid "You've <strong>successfully changed your password</strong> and can slide back into your LD account when you're ready. Click the button below to log in."
+msgstr ""
+
+#: languages/dynamic_translations.php:6
+msgid "General error"
+msgstr ""
+
+#: languages/dynamic_translations.php:7
+msgid "Contact with passed contactid not found. Send contact update without specifying contactid, get new contacted and overwrite old contactid with it"
+msgstr ""
+
+#: languages/dynamic_translations.php:8
+msgid "Code not found"
+msgstr ""
+
+#: languages/dynamic_translations.php:9
+msgid "Code expired"
+msgstr ""
+
+#: languages/dynamic_translations.php:10
+msgid "Code blocked"
+msgstr ""
+
+#: languages/dynamic_translations.php:11
+msgid "Code spent"
+msgstr ""
+
+#: languages/dynamic_translations.php:12
+msgid "The gift is not available for order"
+msgstr ""
+
+#: languages/dynamic_translations.php:13
+msgid "Insufficient balance on the wallet to order a gift"
+msgstr ""
+
+#: languages/dynamic_translations.php:14
+msgid "General constraint error"
+msgstr ""
+
+#: languages/dynamic_translations.php:15
+msgid "Code already redeemed"
+msgstr ""
+
+#: languages/dynamic_translations.php:16
+msgid "The registration limit for a group of codes has been reached"
+msgstr ""
+
+#: languages/dynamic_translations.php:17
+#: modules/Draws/Controllers/Draws.php:206
+#: modules/Gift/Services/CartProcess.php:249
+#: modules/Gift/Services/CartProcess.php:253
+msgid "Oops! An error occurred. Please try again, or contact us if the issue still persists."
+msgstr ""
+
+#: languages/dynamic_translations.php:18
+msgid "Your code was not accepted. The registration limit (20 codes per day) has been reached today. Register codes after 00:00"
+msgstr ""
+
+#: languages/dynamic_translations.php:19
+msgid "Your code was not accepted. Five wrong codes were entered during the day. Now you can only register a code after 00:00"
+msgstr ""
+
+#: languages/dynamic_translations.php:22
+msgid "121"
+msgstr ""
+
+#: languages/dynamic_translations.php:23
+msgid "RC"
+msgstr ""
+
+#: languages/dynamic_translations.php:24
+msgid "Courier"
+msgstr ""
+
+#: languages/dynamic_translations.php:25
+msgid "Web"
+msgstr ""
+
+#: languages/dynamic_translations.php:26
+msgid "Telegram"
+msgstr ""
+
+#: languages/dynamic_translations.php:27
+#: languages/dynamic_translations.php:32
+msgid "Delivered"
+msgstr ""
+
+#: languages/dynamic_translations.php:28
+msgid "For delivery"
+msgstr ""
+
+#: languages/dynamic_translations.php:29
+msgid "Return"
+msgstr ""
+
+#: languages/dynamic_translations.php:30
+msgid "Cancelled"
+msgstr ""
+
+#: languages/dynamic_translations.php:31
+msgid "Created"
+msgstr ""
+
+#: languages/dynamic_translations.php:35
+msgid "Catalog replenishment"
+msgstr ""
+
+#: languages/dynamic_translations.php:36
+msgid "Catalog renewal"
+msgstr ""
+
+#: languages/dynamic_translations.php:37
+msgid "Draws results"
+msgstr ""
+
+#: languages/dynamic_translations.php:38
+msgid "New Draws"
+msgstr ""
+
+#: languages/dynamic_translations.php:39
+msgid "Auctions results"
+msgstr ""
+
+#: languages/dynamic_translations.php:40
+msgid "New auctions"
+msgstr ""
+
+#: languages/dynamic_translations.php:41
+msgid "Previous campaign participation (NCP)"
+msgstr ""
+
+#: languages/dynamic_translations.php:42
+msgid "Refer friends"
+msgstr ""
+
+#: languages/dynamic_translations.php:43
+msgid "New products"
+msgstr ""
+
+#: languages/dynamic_translations.php:44
+msgid "Email to use for communications"
+msgstr ""
+
+#: languages/dynamic_translations.php:45
+msgid "Newsletter subscription"
+msgstr ""
+
+#: languages/dynamic_translations.php:46
+msgid "Catalog replenishment emails"
+msgstr ""
+
+#: languages/dynamic_translations.php:47
+msgid "Catalog renewal emails"
+msgstr ""
+
+#: languages/dynamic_translations.php:48
+msgid "Draws results emails"
+msgstr ""
+
+#: languages/dynamic_translations.php:49
+msgid "New Draws emails"
+msgstr ""
+
+#: languages/dynamic_translations.php:50
+msgid "Auctions results emails"
+msgstr ""
+
+#: languages/dynamic_translations.php:51
+msgid "New auctions emails"
+msgstr ""
+
+#: languages/dynamic_translations.php:52
+msgid "Previous campaign participation (NCP) emails"
+msgstr ""
+
+#: languages/dynamic_translations.php:53
+msgid "Member Get Member (MGM) emails"
+msgstr ""
+
+#: languages/dynamic_translations.php:54
+msgid "New products emails"
+msgstr ""
+
+#: modules/Admin/Services/Admin.php:30
+msgid "<strong>Error</strong>: Oops, that's not a valid password. Please try again.<ul><li>- Your password must be constructed using at least 8 characters</li><li>- With uppercase letter(s)</li><li>- With lowercase letter(s)</li><li>- With numeric character(s) (0,9)</li><li>- With non-alphanumeric character(s) (e.g. %, @, /, -, ?, ., etc.)</li></ul>"
+msgstr ""
+
+#: modules/Auctions/Services/Auctions.php:548
+msgid "User does not exist."
+msgstr ""
+
+#: modules/Auctions/Services/Auctions.php:553
+msgid "missing required parameters"
+msgstr ""
+
+#: modules/Auctions/Services/FrontRender.php:18
+#: modules/Profile/inc/Services/InviteFriends.php:139
+msgid "History"
+msgstr ""
+
+#: modules/Auctions/Services/FrontRender.php:19
+msgid "These are the 5 highest bids placed in this auction."
+msgstr ""
+
+#: modules/Auctions/Services/FrontRender.php:20
+#: modules/Auctions/Services/FrontRender.php:93
+msgid "codes"
+msgstr ""
+
+#: modules/Auctions/Services/FrontRender.php:31
+msgid "Live feed"
+msgstr ""
+
+#: modules/Auctions/Services/FrontRender.php:34
+#: modules/Auctions/Services/FrontRender.php:42
+msgid "speedup"
+msgstr ""
+
+#: modules/Auctions/Services/FrontRender.php:35
+msgid "Don't wait and <blue>speed up</blue> the auction!"
+msgstr ""
+
+#: modules/Auctions/Services/FrontRender.php:38
+msgid "speedup-nude"
+msgstr ""
+
+#: modules/Auctions/Services/FrontRender.php:39
+msgid "<blue>%username</blue> has <red>speed up</red> the auction by <orange>1 minute</orange>!"
+msgstr ""
+
+#: modules/Auctions/Services/FrontRender.php:43
+msgid "Genius! <red>You just</red> <blue>speed up</blue> the auction by <orange>1 minute</orange>"
+msgstr ""
+
+#: modules/Auctions/Services/FrontRender.php:46
+msgid "egg-%type"
+msgstr ""
+
+#: modules/Auctions/Services/FrontRender.php:47
+msgid "What a talent! <red>You just found the</red> <orange>[%type] booster</orange> and got %codes extra codes"
+msgstr ""
+
+#: modules/Auctions/Services/FrontRender.php:50
+msgid "egg-%type-nude"
+msgstr ""
+
+#: modules/Auctions/Services/FrontRender.php:51
+msgid "<red>%username</red> found the <orange>[%type]</orange> and got %codes extra codes"
+msgstr ""
+
+#: modules/Auctions/Services/FrontRender.php:54
+msgid "laurier-grey"
+msgstr ""
+
+#: modules/Auctions/Services/FrontRender.php:55
+msgid "Ho noooo... <red>%username just took the lead</red>"
+msgstr ""
+
+#: modules/Auctions/Services/FrontRender.php:58
+msgid "leader"
+msgstr ""
+
+#: modules/Auctions/Services/FrontRender.php:59
+msgid "Well done, <red>you took the lead!</red>"
+msgstr ""
+
+#: modules/Auctions/Services/FrontRender.php:62
+msgid "clap"
+msgstr ""
+
+#: modules/Auctions/Services/FrontRender.php:63
+msgid "Let's go, you can bid now!"
+msgstr ""
+
+#: modules/Auctions/Services/FrontRender.php:76
+msgid "Time left to bid"
+msgstr ""
+
+#: modules/Auctions/Services/FrontRender.php:77
+#: modules/Survey/Services/Render.php:133
+msgid "hours"
+msgstr ""
+
+#: modules/Auctions/Services/FrontRender.php:78
+#: modules/Survey/Services/Render.php:134
+msgid "minutes"
+msgstr ""
+
+#: modules/Auctions/Services/FrontRender.php:79
+#: modules/Survey/Services/Render.php:135
+msgid "seconds"
+msgstr ""
+
+#: modules/Auctions/Services/FrontRender.php:80
+msgid "Finalizing auction..."
+msgstr ""
+
+#: modules/Auctions/Services/FrontRender.php:81
+#: modules/Gift/Models/Gift.php:220
+msgid "Please wait..."
+msgstr ""
+
+#: modules/Auctions/Services/FrontRender.php:92
+msgid "Current bid"
+msgstr ""
+
+#: modules/Auctions/Services/FrontRender.php:94
+msgid "You can speed up the<br/>time by 1 min"
+msgstr ""
+
+#: modules/Auctions/Services/FrontRender.php:105
+msgid "Others auctions"
+msgstr ""
+
+#: modules/Auctions/Services/FrontRender.php:106
+msgid "Wanna get in on some more action? Here are the other auctions running today."
+msgstr ""
+
+#: modules/Auctions/Services/FrontRender.php:107
+msgid "%count auction(s) more planned for today"
+msgstr ""
+
+#: modules/Auctions/Services/FrontRender.php:109
+msgid "Go to auctions"
+msgstr ""
+
+#: modules/Auctions/Services/FrontRender.php:234
+msgid "You won the auction!"
+msgstr ""
+
+#: modules/Auctions/Services/FrontRender.php:235
+#: modules/Auctions/Services/FrontRender.php:241
+msgid "Congratulation! You just won a %prizeName for %codes codes!"
+msgstr ""
+
+#: modules/Auctions/Services/FrontRender.php:236
+msgid "Congratulations"
+msgstr ""
+
+#: modules/Auctions/Services/FrontRender.php:237
+msgid "Receive my prize!"
+msgstr ""
+
+#: modules/Auctions/Services/FrontRender.php:240
+msgid "You lose the auction!"
+msgstr ""
+
+#: modules/Auctions/Services/FrontRender.php:242
+#: modules/Gift/Services/Cart.php:245
+#: modules/Registration/inc/Services/Registration.php:58
+msgid "Sorry"
+msgstr ""
+
+#: modules/Auctions/Services/FrontRender.php:243
+msgid "Prizes catalog!"
+msgstr ""
+
+#: modules/Auctions/Services/FrontRender.php:245
+msgid "Next auction in"
+msgstr ""
+
+#: modules/Auctions/Services/FrontRender.php:249
+msgid "Auction not found!"
+msgstr ""
+
+#: modules/Auctions/Services/FrontRender.php:250
+#: modules/Auctions/Services/FrontRender.php:255
+msgid "The auction you are looking for does not exist or has been closed."
+msgstr ""
+
+#: modules/Auctions/Services/FrontRender.php:251
+#: modules/Auctions/Services/FrontRender.php:256
+msgid "Visite our website!"
+msgstr ""
+
+#: modules/Auctions/Services/FrontRender.php:254
+msgid "You have already won!"
+msgstr ""
+
+#: modules/Auctions/Services/FrontRender.php:259
+#: modules/Auctions/Services/FrontRender.php:290
+msgid "Something wrong..."
+msgstr ""
+
+#: modules/Auctions/Services/FrontRender.php:262
+msgid "Skip bid confirmations, If activated, bids will be placed without any confirmation."
+msgstr ""
+
+#: modules/Auctions/Services/FrontRender.php:263
+msgid "Place bid"
+msgstr ""
+
+#: modules/Auctions/Services/FrontRender.php:264
+msgid "Confirm my %codes bid!"
+msgstr ""
+
+#: modules/Auctions/Services/FrontRender.php:266
+msgid "Speed up by 1 minute"
+msgstr ""
+
+#: modules/Auctions/Services/FrontRender.php:267
+msgid "You can only speed up if you are the leader"
+msgstr ""
+
+#: modules/Auctions/Services/FrontRender.php:271
+msgid "The auction will start soon"
+msgstr ""
+
+#: modules/Auctions/Services/FrontRender.php:272
+msgid "Take you mark !"
+msgstr ""
+
+#: modules/Auctions/Services/FrontRender.php:274
+msgid "The auction will start in"
+msgstr ""
+
+#: modules/Auctions/Services/FrontRender.php:278
+msgid "If you don't win this auction, don't worry, 2 more auctions are planned for today."
+msgstr ""
+
+#: modules/Auctions/Services/FrontRender.php:281
+msgid "This is the last auction for this prize today. Make sure to win it !!!"
+msgstr ""
+
+#: modules/Auctions/Services/FrontRender.php:284
+msgid "You don't have enough codes to play anymore"
+msgstr ""
+
+#: modules/Auctions/Services/FrontRender.php:285
+msgid "Hurry up and register new codes"
+msgstr ""
+
+#: modules/Auctions/Services/FrontRender.php:286
+msgid "Enter code from pack"
+msgstr ""
+
+#: modules/Auctions/Services/FrontRender.php:287
+#: modules/Draws/Services/Tickets.php:225
+#: modules/Gift/Models/Gift.php:201
+#: modules/Theme/Services/Filters.php:227
+#: modules/Theme/Services/Theme.php:394
+msgid "Register code"
+msgstr ""
+
+#: modules/Auctions/Services/FrontRender.php:291
+msgid "The requested auction does not exists or has been closed"
+msgstr ""
+
+#: modules/Auctions/Services/FrontRender.php:292
+msgid "User not found"
+msgstr ""
+
+#: modules/Auctions/Services/FrontRender.php:293
+msgid "Your bid is too low. Please try again"
+msgstr ""
+
+#: modules/Auctions/Services/FrontRender.php:294
+msgid "You don't have enough codes to bid"
+msgstr ""
+
+#: modules/Auctions/Services/FrontRender.php:295
+msgid "You don't have enough codes to speed up"
+msgstr ""
+
+#: modules/Auctions/Services/FrontRender.php:296
+msgid "You must be the current top bidder to speed up"
+msgstr ""
+
+#: modules/Auctions/Services/FrontRender.php:297
+msgid "You are already connected to this auction"
+msgstr ""
+
+#: modules/BonusCodes/Services/BonusCodes.php:71
+msgid "Processing Bonus codes import..."
+msgstr ""
+
+#: modules/BonusCodes/Services/BonusCodes.php:189
+msgid "CampaignId is missing"
+msgstr ""
+
+#: modules/BonusCodes/Services/BonusCodes.php:195
+msgid "No Bonus codes available !"
+msgstr ""
+
+#: modules/BonusCodes/Services/ToolsService.php:90
+msgid "Expired Bonus codes delete successfully !"
+msgstr ""
+
+#: modules/BonusCodes/Services/UploadService.php:120
+msgid "Possible file upload attack!"
+msgstr ""
+
+#: modules/BonusCodes/Services/UploadService.php:123
+msgid "Error ! The MIME type of the uploaded file : \""
+msgstr ""
+
+#: modules/BonusCodes/Services/UploadService.php:126
+msgid "Error retrieving the MIME type of the uploaded file !"
+msgstr ""
+
+#: modules/BonusCodes/Services/UploadService.php:129
+msgid "Incorrect nonce !"
+msgstr ""
+
+#: modules/Draws/Controllers/Draws.php:211
+msgid "Missing Draw Id !"
+msgstr ""
+
+#: modules/Draws/Services/Filters.php:68
+msgid "Time left before the next Super Prize Draw opening:"
+msgstr ""
+
+#: modules/Draws/Services/Filters.php:81
+msgid "Time left to get tickets for the next Super Prize Draw:"
+msgstr ""
+
+#: modules/Draws/Services/Filters.php:94
+msgid "Join the live stream to watch the Super Prize Draw in:"
+msgstr ""
+
+#: modules/Draws/Services/Filters.php:112
+msgid "Days"
+msgstr ""
+
+#: modules/Draws/Services/Filters.php:113
+msgid "Hours"
+msgstr ""
+
+#: modules/Draws/Services/Filters.php:114
+msgid "Minutes"
+msgstr ""
+
+#: modules/Draws/Services/Filters.php:115
+msgid "Seconds"
+msgstr ""
+
+#: modules/Draws/Services/Filters.php:121
+msgid "Feeling lucky? Redeem your LD pack codes for the chance to win <strong>%s</strong>!"
+msgstr ""
+
+#: modules/Draws/Services/Filters.php:167
+msgid "Winning ticket"
+msgstr ""
+
+#: modules/Draws/Services/Filters.php:169
+msgid "Watch it now"
+msgstr ""
+
+#: modules/Draws/Services/Filters.php:223
+msgid "Super prize"
+msgstr ""
+
+#: modules/Draws/Services/Filters.php:227
+msgid "Weekly prize"
+msgstr ""
+
+#: modules/Draws/Services/Filters.php:231
+msgid "Special prize"
+msgstr ""
+
+#: modules/Draws/Services/Filters.php:278
+msgid "Winner of %s"
+msgstr ""
+
+#: modules/Draws/Services/Filters.php:279
+msgid "Joined LD community on: %s"
+msgstr ""
+
+#: modules/Draws/Services/Filters.php:358
+#: modules/Survey/Services/Render.php:129
+msgid "to"
+msgstr ""
+
+#: modules/Draws/Services/Filters.php:359
+msgid "Show more"
+msgstr ""
+
+#: modules/Draws/Services/Tickets.php:145
+msgid "Ticket ID:"
+msgstr ""
+
+#: modules/Draws/Services/Tickets.php:151
+msgid "Your participation ticket purchase has been validated."
+msgstr ""
+
+#: modules/Draws/Services/Tickets.php:158
+msgid "Not enough code !"
+msgstr ""
+
+#: modules/Draws/Services/Tickets.php:164
+msgid "Participation Gift is missing from Draw definition !"
+msgstr ""
+
+#: modules/Draws/Services/Tickets.php:223
+msgid "Secure your ticket"
+msgstr ""
+
+#: modules/Draws/Services/Tickets.php:227
+msgid "You have %s ticket for this draw"
+msgid_plural "You have %s tickets for this draw"
+msgstr[0] ""
+msgstr[1] ""
+
+#: modules/Draws/Services/Tickets.php:228
+msgid "Get in on the action with %s code"
+msgid_plural "Get in on the action with %s code"
+msgstr[0] ""
+msgstr[1] ""
+
+#: modules/Draws/Services/Tickets.php:228
+#: modules/Profile/inc/Services/MyCodes.php:187
+msgid "Current balance"
+msgstr ""
+
+#: modules/Draws/Services/Tickets.php:231
+msgid "Upcoming"
+msgstr ""
+
+#: modules/FeedbackForm/Services/FeedbackForm.php:57
+msgid "Subject"
+msgstr ""
+
+#: modules/FeedbackForm/Services/FeedbackForm.php:61
+msgid "Please choose a subject and try again."
+msgstr ""
+
+#: modules/FeedbackForm/Services/FeedbackForm.php:66
+#: modules/FeedbackForm/Services/FeedbackForm.php:68
+msgid "Your message"
+msgstr ""
+
+#: modules/FeedbackForm/Services/FeedbackForm.php:71
+#: modules/FeedbackForm/Services/FeedbackForm.php:290
+msgid "Don't miss your chance to say something! Leave your comments and try again."
+msgstr ""
+
+#: modules/FeedbackForm/Services/FeedbackForm.php:76
+msgid "Tell us now"
+msgstr ""
+
+#: modules/FeedbackForm/Services/FeedbackForm.php:82
+#: modules/FeedbackForm/Services/FeedbackForm.php:89
+#: modules/FeedbackForm/Services/FeedbackForm.php:221
+#: modules/Gift/Services/Cart.php:251
+#: modules/Profile/inc/Services/Login.php:249
+#: modules/Profile/inc/Services/ResetPassword.php:265
+#: modules/Profile/inc/Services/ResetPassword.php:331
+#: modules/Profile/inc/Services/ResetPassword.php:412
+#: modules/Profile/inc/Services/ResetPassword.php:440
+#: modules/Registration/inc/Services/Registration.php:44
+#: modules/Registration/inc/Services/Registration.php:69
+#: modules/Registration/inc/Services/Registration.php:151
+#: modules/Registration/inc/Services/Registration.php:220
+#: modules/Registration/inc/Services/Registration.php:300
+#: modules/Registration/inc/Services/Registration.php:354
+#: modules/Registration/inc/Services/Registration.php:452
+#: modules/Registration/inc/Services/Registration.php:508
+#: modules/Registration/inc/Services/Registration.php:532
+msgid "feedback form"
+msgstr ""
+
+#: modules/FeedbackForm/Services/FeedbackForm.php:90
+msgid "Have questions? Got something to say? Fill out the feedback form below using the mobile number you registered your account with."
+msgstr ""
+
+#: modules/FeedbackForm/Services/FeedbackForm.php:93
+#: modules/FeedbackForm/Services/FeedbackForm.php:95
+#: modules/Profile/inc/Services/MyAccount.php:134
+#: modules/Profile/inc/Services/MyAccount.php:136
+#: modules/Registration/inc/Services/Registration.php:394
+#: modules/Registration/inc/Services/Registration.php:396
+msgid "First name"
+msgstr ""
+
+#: modules/FeedbackForm/Services/FeedbackForm.php:98
+#: modules/FeedbackForm/Services/FeedbackForm.php:263
+msgid "You missed this. Please provide a first name and try again."
+msgstr ""
+
+#: modules/FeedbackForm/Services/FeedbackForm.php:103
+#: modules/FeedbackForm/Services/FeedbackForm.php:105
+#: modules/Profile/inc/Services/MyAccount.php:144
+#: modules/Profile/inc/Services/MyAccount.php:146
+#: modules/Registration/inc/Services/Registration.php:404
+#: modules/Registration/inc/Services/Registration.php:406
+msgid "Last name"
+msgstr ""
+
+#: modules/FeedbackForm/Services/FeedbackForm.php:108
+#: modules/FeedbackForm/Services/FeedbackForm.php:268
+msgid "Forget something?  Please provide a last name and try again."
+msgstr ""
+
+#: modules/FeedbackForm/Services/FeedbackForm.php:115
+#: modules/Profile/inc/Services/Login.php:201
+#: modules/Profile/inc/Services/MyAccount.php:202
+#: modules/Profile/inc/Services/ResetPassword.php:237
+#: modules/Registration/inc/Services/Registration.php:107
+msgid "Prefix"
+msgstr ""
+
+#: modules/FeedbackForm/Services/FeedbackForm.php:123
+#: modules/FeedbackForm/Services/FeedbackForm.php:125
+#: modules/Profile/inc/Services/Login.php:209
+#: modules/Profile/inc/Services/Login.php:211
+#: modules/Profile/inc/Services/MyAccount.php:212
+#: modules/Profile/inc/Services/ResetPassword.php:247
+#: modules/Registration/inc/Services/Registration.php:115
+#: modules/Registration/inc/Services/Registration.php:117
+msgid "Mobile number"
+msgstr ""
+
+#: modules/FeedbackForm/Services/FeedbackForm.php:130
+#: modules/FeedbackForm/Services/FeedbackForm.php:131
+#: modules/FeedbackForm/Services/FeedbackForm.php:132
+#: modules/FeedbackForm/Services/FeedbackForm.php:273
+#: modules/FeedbackForm/Services/FeedbackForm.php:278
+#: modules/Profile/inc/Services/Login.php:39
+#: modules/Profile/inc/Services/Login.php:44
+#: modules/Profile/inc/Services/Login.php:217
+#: modules/Profile/inc/Services/Login.php:218
+#: modules/Profile/inc/Services/MyAccount.php:217
+#: modules/Profile/inc/Services/MyAccount.php:219
+#: modules/Profile/inc/Services/MyAccount.php:494
+#: modules/Profile/inc/Services/MyAccount.php:500
+#: modules/Profile/inc/Services/ResetPassword.php:44
+#: modules/Profile/inc/Services/ResetPassword.php:49
+#: modules/Profile/inc/Services/ResetPassword.php:252
+#: modules/Profile/inc/Services/ResetPassword.php:254
+#: modules/Registration/inc/Services/Registration.php:122
+#: modules/Registration/inc/Services/Registration.php:124
+#: modules/Registration/inc/Services/RegistrationProcess.php:55
+#: modules/Registration/inc/Services/RegistrationProcess.php:60
+msgid "Oops! Please provide a valid mobile number with at least 10 digits and try again."
+msgstr ""
+
+#: modules/FeedbackForm/Services/FeedbackForm.php:137
+#: modules/FeedbackForm/Services/FeedbackForm.php:139
+#: modules/Profile/inc/Services/MyAccount.php:167
+#: modules/Profile/inc/Services/MyAccount.php:169
+#: modules/Registration/inc/Services/Registration.php:427
+#: modules/Registration/inc/Services/Registration.php:429
+msgid "Email address"
+msgstr ""
+
+#: modules/FeedbackForm/Services/FeedbackForm.php:142
+msgid "Hold on, you need to enter an email address."
+msgstr ""
+
+#: modules/FeedbackForm/Services/FeedbackForm.php:144
+#: modules/FeedbackForm/Services/FeedbackForm.php:283
+#: modules/Profile/inc/Services/MyAccount.php:174
+#: modules/Registration/inc/Services/Registration.php:434
+#: modules/Registration/inc/Services/RegistrationProcess.php:373
+msgid "Something's not right. Please provide a valid email address and try again."
+msgstr ""
+
+#: modules/FeedbackForm/Services/FeedbackForm.php:148
+msgid "Want to access the site?"
+msgstr ""
+
+#: modules/FeedbackForm/Services/FeedbackForm.php:151
+#: modules/FeedbackForm/Services/FeedbackForm.php:202
+#: modules/Profile/inc/Services/ResetPassword.php:434
+#: modules/Registration/inc/Services/Registration.php:502
+msgid "Login"
+msgstr ""
+
+#: modules/FeedbackForm/Services/FeedbackForm.php:158
+msgid "Cancel feedback"
+msgstr ""
+
+#: modules/FeedbackForm/Services/FeedbackForm.php:187
+msgid "We got the message"
+msgstr ""
+
+#: modules/FeedbackForm/Services/FeedbackForm.php:188
+msgid "That's for the shout, we appreciate your feedback."
+msgstr ""
+
+#: modules/FeedbackForm/Services/FeedbackForm.php:189
+msgid "We'll have a look at your message and get back to you as soon as we can."
+msgstr ""
+
+#: modules/FeedbackForm/Services/FeedbackForm.php:192
+msgid "Give more feedback"
+msgstr ""
+
+#: modules/FeedbackForm/Services/FeedbackForm.php:197
+msgid "Feedback create successfully"
+msgstr ""
+
+#: modules/FeedbackForm/Services/FeedbackForm.php:198
+msgid "Thanks for taking the time to get in touch with us."
+msgstr ""
+
+#: modules/FeedbackForm/Services/FeedbackForm.php:199
+msgid "Your message is winging its way to us now. We'll review it and get back to you as soon as possible."
+msgstr ""
+
+#: modules/FeedbackForm/Services/FeedbackForm.php:210
+msgid "We are sorry"
+msgstr ""
+
+#: modules/FeedbackForm/Services/FeedbackForm.php:218
+msgid "Need to contact us again?"
+msgstr ""
+
+#: modules/FeedbackForm/Services/FeedbackForm.php:295
+#: modules/Profile/inc/Services/Login.php:56
+#: modules/Profile/inc/Services/ResetPassword.php:76
+#: modules/Profile/inc/Services/ResetPassword.php:113
+#: modules/Profile/inc/Services/ResetPassword.php:163
+#: modules/Registration/inc/Services/RegistrationProcess.php:66
+#: modules/Registration/inc/Services/RegistrationProcess.php:122
+#: modules/Registration/inc/Services/RegistrationProcess.php:168
+#: modules/Registration/inc/Services/RegistrationProcess.php:261
+#: modules/Registration/inc/Services/RegistrationProcess.php:385
+msgid "reCAPTCHA error. Please try again."
+msgstr ""
+
+#: modules/Gift/Models/Cart.php:758
+msgid "Oops, there's no address registered to your account. Enter a delivery address below."
+msgstr ""
+
+#: modules/Gift/Models/Cart.php:788
+msgid "Deliver to a different address"
+msgstr ""
+
+#: modules/Gift/Models/Cart.php:794
+#: modules/Profile/inc/Services/MyAddress.php:47
+msgid "Select a city"
+msgstr ""
+
+#: modules/Gift/Models/Cart.php:801
+#: modules/Profile/inc/Services/MyAddress.php:52
+#: modules/Profile/inc/Services/MyAddress.php:54
+msgid "Street name"
+msgstr ""
+
+#: modules/Gift/Models/Cart.php:808
+#: modules/Profile/inc/Services/MyAddress.php:58
+#: modules/Profile/inc/Services/MyAddress.php:60
+msgid "Street number"
+msgstr ""
+
+#: modules/Gift/Models/Cart.php:814
+#: modules/Profile/inc/Services/MyAddress.php:64
+#: modules/Profile/inc/Services/MyAddress.php:66
+msgid "Apartement number"
+msgstr ""
+
+#: modules/Gift/Models/Cart.php:820
+#: modules/Profile/inc/Services/MyAddress.php:70
+#: modules/Profile/inc/Services/MyAddress.php:72
+msgid "Zip Code"
+msgstr ""
+
+#: modules/Gift/Models/Cart.php:827
+#: modules/Profile/inc/Services/MyAddress.php:76
+#: modules/Profile/inc/Services/MyAddress.php:78
+msgid "Notes for delivery"
+msgstr ""
+
+#: modules/Gift/Models/Cart.php:837
+msgid "Update your personal address with the provided information for future orders"
+msgstr ""
+
+#: modules/Gift/Models/Gift.php:156
+msgid "You already have this prize!"
+msgstr ""
+
+#: modules/Gift/Models/Gift.php:164
+msgid "Out of stock"
+msgstr ""
+
+#: modules/Gift/Models/Gift.php:178
+msgid "Bid now"
+msgstr ""
+
+#: modules/Gift/Models/Gift.php:183
+msgid "Bid"
+msgstr ""
+
+#: modules/Gift/Models/Gift.php:189
+msgid "Coming soon"
+msgstr ""
+
+#: modules/Gift/Models/Gift.php:210
+msgid "Get it now"
+msgstr ""
+
+#: modules/Gift/Models/Gift.php:213
+msgid "This prize is out of stock, but you can special order one!"
+msgstr ""
+
+#: modules/Gift/Models/Gift.php:214
+msgid "Vip"
+msgstr ""
+
+#: modules/Gift/Models/Gift.php:219
+msgid "Order it"
+msgstr ""
+
+#: modules/Gift/Models/Gift.php:221
+msgid "I confirm my order"
+msgstr ""
+
+#: modules/Gift/Models/Gift.php:222
+msgid "You have successfully redeemed this prize!"
+msgstr ""
+
+#: modules/Gift/Models/Gift.php:223
+msgid "Something goes wrong sorry. Please retry later..."
+msgstr ""
+
+#: modules/Gift/Models/Gift.php:231
+msgid "Redeem now"
+msgstr ""
+
+#: modules/Gift/Models/Gift.php:242
+msgid "unit available"
+msgid_plural "units available"
+msgstr[0] ""
+msgstr[1] ""
+
+#: modules/Gift/Models/Gift.php:251
+msgid "New"
+msgstr ""
+
+#: modules/Gift/Services/Cart.php:63
+msgid "Step 1/2"
+msgstr ""
+
+#: modules/Gift/Services/Cart.php:69
+#: modules/Gift/Services/Cart.php:175
+msgid "Cancel order"
+msgstr ""
+
+#: modules/Gift/Services/Cart.php:72
+#: modules/Gift/Services/Cart.php:180
+msgid "How do you want to get your prizes?"
+msgstr ""
+
+#: modules/Gift/Services/Cart.php:78
+msgid "You can either grab your prizes at one of our pick-up stores or get them delivered to you at home."
+msgstr ""
+
+#: modules/Gift/Services/Cart.php:82
+msgid "Delivery method"
+msgstr ""
+
+#: modules/Gift/Services/Cart.php:85
+msgid "Pick-up"
+msgstr ""
+
+#: modules/Gift/Services/Cart.php:90
+msgid "At-home delivery"
+msgstr ""
+
+#: modules/Gift/Services/Cart.php:107
+msgid "Hang on. You need to choose a pick-up to continue."
+msgstr ""
+
+#: modules/Gift/Services/Cart.php:115
+#: modules/Theme/Services/Filters.php:163
+msgid "Map"
+msgstr ""
+
+#: modules/Gift/Services/Cart.php:116
+#: modules/Theme/Services/Filters.php:164
+msgid "List"
+msgstr ""
+
+#: modules/Gift/Services/Cart.php:119
+#: modules/Theme/Services/Filters.php:167
+msgid "Search a store or select a city"
+msgstr ""
+
+#: modules/Gift/Services/Cart.php:122
+#: modules/Theme/Services/Filters.php:170
+msgid "Working hours"
+msgstr ""
+
+#: modules/Gift/Services/Cart.php:125
+#: modules/Theme/Services/Filters.php:173
+msgid "Holidays"
+msgstr ""
+
+#: modules/Gift/Services/Cart.php:131
+msgid "Pick-up location (based on your registred address this is the closest redemption center):"
+msgstr ""
+
+#: modules/Gift/Services/Cart.php:132
+msgid "Standard delivery to your registered address"
+msgstr ""
+
+#: modules/Gift/Services/Cart.php:133
+msgid "Confirm delivery method"
+msgstr ""
+
+#: modules/Gift/Services/Cart.php:134
+#: modules/Gift/Services/Cart.php:188
+#: modules/Gift/Services/Cart.php:196
+msgid "Summary"
+msgstr ""
+
+#: modules/Gift/Services/Cart.php:160
+msgid "You are going to redeem"
+msgstr ""
+
+#: modules/Gift/Services/Cart.php:161
+msgid "Balance after redeem:"
+msgstr ""
+
+#: modules/Gift/Services/Cart.php:169
+msgid "Step 2/2"
+msgstr ""
+
+#: modules/Gift/Services/Cart.php:182
+msgid "Prize details"
+msgstr ""
+
+#: modules/Gift/Services/Cart.php:186
+msgid "Edit"
+msgstr ""
+
+#: modules/Gift/Services/Cart.php:194
+msgid "Ok, all set. Here's a summary of your prize and how it's getting to you."
+msgstr ""
+
+#: modules/Gift/Services/Cart.php:195
+msgid "Get my prize!"
+msgstr ""
+
+#: modules/Gift/Services/Cart.php:217
+msgid "TADAA!"
+msgstr ""
+
+#: modules/Gift/Services/Cart.php:219
+msgid "%s is all yours!"
+msgstr ""
+
+#: modules/Gift/Services/Cart.php:222
+msgid "Check out more prizes"
+msgstr ""
+
+#: modules/Gift/Services/Cart.php:240
+msgid "Unfortunatly, an error has occurred."
+msgstr ""
+
+#: modules/Gift/Services/Cart.php:248
+#: modules/Profile/inc/Services/Login.php:246
+#: modules/Profile/inc/Services/ResetPassword.php:262
+#: modules/Profile/inc/Services/ResetPassword.php:328
+#: modules/Profile/inc/Services/ResetPassword.php:409
+#: modules/Profile/inc/Services/ResetPassword.php:437
+#: modules/Registration/inc/Services/Registration.php:41
+#: modules/Registration/inc/Services/Registration.php:66
+#: modules/Registration/inc/Services/Registration.php:148
+#: modules/Registration/inc/Services/Registration.php:217
+#: modules/Registration/inc/Services/Registration.php:297
+#: modules/Registration/inc/Services/Registration.php:351
+#: modules/Registration/inc/Services/Registration.php:449
+#: modules/Registration/inc/Services/Registration.php:505
+#: modules/Registration/inc/Services/Registration.php:529
+msgid "Need to contact us?<br />Hit us up on the"
+msgstr ""
+
+#: modules/Gift/Services/Cart.php:267
+msgid "Ho no, Too late..."
+msgstr ""
+
+#: modules/Gift/Services/Cart.php:268
+msgid "It seems that there is no more stock for this prize..."
+msgstr ""
+
+#: modules/Gift/Services/Cart.php:273
+msgid "Check out our other prizes!"
+msgstr ""
+
+#: modules/Gift/Services/CartProcess.php:99
+#: modules/Gift/Services/CartProcess.php:105
+#: modules/Gift/Services/CartProcess.php:111
+#: modules/Gift/Services/CartProcess.php:117
+#: modules/Profile/inc/Services/MyAddress.php:101
+#: modules/Profile/inc/Services/MyAddress.php:107
+#: modules/Profile/inc/Services/MyAddress.php:113
+#: modules/Profile/inc/Services/MyAddress.php:119
+#: modules/Profile/inc/Services/MyAddress.php:125
+#: modules/Profile/inc/Services/MyAddress.php:131
+msgid "Please review the provided information and try again."
+msgstr ""
+
+#: modules/Gift/Services/CartProcess.php:220
+msgid "%s has been ordered!"
+msgstr ""
+
+#: modules/Gift/Services/CartProcess.php:232
+msgid "Codes spent: %s"
+msgstr ""
+
+#: modules/Gift/Services/GiftFilters.php:38
+msgid "Your one-stop-shop to redeem codes for cool prizes."
+msgstr ""
+
+#: modules/Notifications/Classes/AuctionCompletionNotification.php:31
+msgid "An Auction for %s has finished !"
+msgstr ""
+
+#: modules/Notifications/Classes/AuctionCompletionNotification.php:41
+#: modules/Notifications/Classes/AuctionNewNotification.php:41
+msgid "Auction"
+msgstr ""
+
+#: modules/Notifications/Classes/AuctionNewNotification.php:31
+msgid "A new Auction for %s has been added ! Take a look !"
+msgstr ""
+
+#: modules/Notifications/Classes/BonusCodeNcpNotification.php:30
+msgid "NCP notification"
+msgstr ""
+
+#: modules/Notifications/Classes/CatalogRenewalNotification.php:35
+#: modules/Notifications/Classes/CatalogReplenishmentNotification.php:29
+#: modules/Profile/inc/Services/MyRewards.php:203
+msgid "Prize catalogue"
+msgstr ""
+
+#: modules/Notifications/Classes/CatalogRenewalNotification.php:46
+#: modules/Notifications/Services/PrizesNotifications.php:106
+msgid "The %s prize has been added to the list. Don't miss out, you can get it from today!"
+msgstr ""
+
+#: modules/Notifications/Classes/CatalogReplenishmentNotification.php:57
+msgid "The catalogue has been updated at %s. Don't miss your favourite prizes!"
+msgstr ""
+
+#: modules/Notifications/Classes/DrawCompletionNotification.php:56
+msgid "Draw results notification"
+msgstr ""
+
+#: modules/Notifications/Classes/DrawCompletionNotification.php:61
+msgid "Super prize draw"
+msgstr ""
+
+#: modules/Notifications/Classes/DrawCompletionNotification.php:65
+msgid "Weekly prize draw"
+msgstr ""
+
+#: modules/Notifications/Classes/DrawCompletionNotification.php:69
+msgid "MGM prize draw"
+msgstr ""
+
+#: modules/Notifications/Classes/DrawCompletionNotification.php:73
+msgid "Prize draw"
+msgstr ""
+
+#: modules/Notifications/Classes/DrawCompletionNotification.php:88
+#: modules/Notifications/Classes/DrawCompletionNotification.php:96
+#: modules/Notifications/Classes/DrawCompletionNotification.php:100
+msgid "You won, what a champion! We'll be in touch soon!"
+msgstr ""
+
+#: modules/Notifications/Classes/DrawCompletionNotification.php:92
+msgid "You won, what a champion! We'll be in touch soon! Let's start it again!"
+msgstr ""
+
+#: modules/Notifications/Classes/DrawCompletionNotification.php:107
+msgid "Oh no, you didn't win this time. Don't give up, you could have better luck with the next one!"
+msgstr ""
+
+#: modules/Notifications/Classes/DrawCompletionNotification.php:111
+msgid "Oh no, you didn't win this time. Don't give up, you could have better luck with the next one! Let's try it again!"
+msgstr ""
+
+#: modules/Notifications/Classes/DrawCompletionNotification.php:115
+#: modules/Notifications/Classes/DrawCompletionNotification.php:119
+msgid "Oh no, you didn't win this time. Don't give up, you could have better luck next week!"
+msgstr ""
+
+#: modules/Notifications/Classes/DrawNewNotification.php:37
+msgid "New Super prize draw"
+msgstr ""
+
+#: modules/Notifications/Classes/DrawNewNotification.php:41
+msgid "New Weekly prize draw"
+msgstr ""
+
+#: modules/Notifications/Classes/DrawNewNotification.php:45
+msgid "New prize draw"
+msgstr ""
+
+#: modules/Notifications/Classes/DrawNewNotification.php:61
+msgid "Drumroll please! A new super prize draw is available! Don't miss it! It could be yours."
+msgstr ""
+
+#: modules/Notifications/Classes/DrawNewNotification.php:65
+msgid "Drumroll please! A new weekly prize draw is available! Don't miss it! It could be yours."
+msgstr ""
+
+#: modules/Notifications/Classes/DrawNewNotification.php:69
+msgid "Drumroll please! A new draw is available! Don't miss it! It could be yours."
+msgstr ""
+
+#: modules/Notifications/Classes/ProductNewNotification.php:37
+msgid "Product portfolio"
+msgstr ""
+
+#: modules/Notifications/Classes/ProductNewNotification.php:46
+msgid "The %s product has been added to the portfolio. Check it out now!"
+msgstr ""
+
+#: modules/Notifications/Classes/ReceivedGiftNotification.php:37
+msgid "Prize ordering"
+msgstr ""
+
+#: modules/Notifications/Classes/ReceivedGiftNotification.php:47
+msgid "Your order has been delivered to the pick-up center. Get your hands on it now!"
+msgstr ""
+
+#: modules/Notifications/Classes/ReferralGodfatherCompleteNotification.php:37
+#: modules/Notifications/Classes/ReferralGodfatherIncompleteNotification.php:38
+msgid "Friend referral"
+msgstr ""
+
+#: modules/Notifications/Classes/ReferralGodfatherCompleteNotification.php:50
+msgid "Your friend %s just joined the community thanks to you! We are pleased to reward you with a mobile top-up and to inform you you will join the MGM prize draw!"
+msgstr ""
+
+#: modules/Notifications/Classes/ReferralGodfatherIncompleteNotification.php:51
+msgid "Your friend %s just joined the community thanks to you! We are pleased to reward you with a mobile top-up!"
+msgstr ""
+
+#: modules/Notifications/Classes/ReferralGodfatherIncompleteNotification.php:52
+msgid "Invite %s more friend and you'll join the MGM prize draw!"
+msgid_plural "Invite %s more friends and you'll join the MGM prize draw!"
+msgstr[0] ""
+msgstr[1] ""
+
+#: modules/Notifications/Classes/ReferralGodsonBonusCodeNotification.php:33
+msgid "Bonus codes"
+msgstr ""
+
+#: modules/Notifications/Classes/ReferralGodsonBonusCodeNotification.php:43
+msgid "Boom! To thank you for having ordered your 1st code, we are offering you 2 bonus codes! Enjoy it!"
+msgstr ""
+
+#: modules/Notifications/Classes/ReferralGodsonNotification.php:33
+msgid "Welcome!"
+msgstr ""
+
+#: modules/Notifications/Classes/ReferralGodsonNotification.php:43
+msgid "To thank you for joining us, please register your 1st code and we'll automatically offer you 2 bonus codes!"
+msgstr ""
+
+#: modules/Notifications/Controllers/Notifications.php:207
+msgid "Notifications pulled successfully !"
+msgstr ""
+
+#: modules/Notifications/Controllers/Notifications.php:238
+msgid "Notification(s) marked as read successfully !"
+msgstr ""
+
+#: modules/Notifications/Controllers/Notifications.php:266
+msgid "All notifications marked as read successfully !"
+msgstr ""
+
+#: modules/Notifications/Services/DrawsNotifications.php:193
+#: modules/Notifications/Services/DrawsNotifications.php:207
+msgid "You won the Special Prize Draw, %s ✌"
+msgstr ""
+
+#: modules/Notifications/Services/DrawsNotifications.php:194
+#: modules/Notifications/Services/DrawsNotifications.php:208
+#: modules/Notifications/Services/DrawsNotifications.php:230
+msgid "Congratulations! The %s is all yours!"
+msgstr ""
+
+#: modules/Notifications/Services/DrawsNotifications.php:195
+#: modules/Notifications/Services/DrawsNotifications.php:209
+msgid "Holy $#!^! You're our Special Prize Draw winner!"
+msgstr ""
+
+#: modules/Notifications/Services/DrawsNotifications.php:197
+#: modules/Notifications/Services/DrawsNotifications.php:211
+msgid "Woooo hooooooo!"
+msgstr ""
+
+#: modules/Notifications/Services/DrawsNotifications.php:198
+#: modules/Notifications/Services/DrawsNotifications.php:212
+msgid "Against all the odds, you won the Special Prize Draw! Congratulations! We're genuinely thrilled you picked up the win. Here's how to get your hands on your new %s."
+msgstr ""
+
+#: modules/Notifications/Services/DrawsNotifications.php:199
+#: modules/Notifications/Services/DrawsNotifications.php:213
+#: modules/Notifications/Services/DrawsNotifications.php:236
+msgid "One of our customer service agents will call you to arrange prize delivery."
+msgstr ""
+
+#: modules/Notifications/Services/DrawsNotifications.php:200
+#: modules/Notifications/Services/DrawsNotifications.php:214
+msgid "Want to see the moment your name was drawn? Click the button below to watch a replay of the Super Prize Draw live stream. Here. Now."
+msgstr ""
+
+#: modules/Notifications/Services/DrawsNotifications.php:202
+#: modules/Notifications/Services/DrawsNotifications.php:216
+#: modules/Notifications/Services/DrawsNotifications.php:263
+#: modules/Notifications/Services/DrawsNotifications.php:277
+msgid "Watch draw replay"
+msgstr ""
+
+#: modules/Notifications/Services/DrawsNotifications.php:229
+msgid "You won the Weekly Prize Draw, % !"
+msgstr ""
+
+#: modules/Notifications/Services/DrawsNotifications.php:231
+msgid "You won the Weekly Prize Draw!"
+msgstr ""
+
+#: modules/Notifications/Services/DrawsNotifications.php:233
+msgid "Clap clap clap clap!!"
+msgstr ""
+
+#: modules/Notifications/Services/DrawsNotifications.php:234
+msgid "You've only gone and won the Weekly Prize Draw 😎 ! Congratulations! We're over the moon for you. You can find all the details of the prize below."
+msgstr ""
+
+#: modules/Notifications/Services/DrawsNotifications.php:237
+msgid "Ready to get in on next week's action? Check out our upcoming prize draws. Here. Now."
+msgstr ""
+
+#: modules/Notifications/Services/DrawsNotifications.php:239
+#: modules/Notifications/Services/DrawsNotifications.php:294
+msgid "Upcoming prize draws"
+msgstr ""
+
+#: modules/Notifications/Services/DrawsNotifications.php:254
+#: modules/Notifications/Services/DrawsNotifications.php:268
+#: modules/Notifications/Services/DrawsNotifications.php:286
+msgid "Better luck next time, %."
+msgstr ""
+
+#: modules/Notifications/Services/DrawsNotifications.php:255
+#: modules/Notifications/Services/DrawsNotifications.php:269
+msgid "You didn't win the Special Prize Draw this time around."
+msgstr ""
+
+#: modules/Notifications/Services/DrawsNotifications.php:256
+#: modules/Notifications/Services/DrawsNotifications.php:270
+#: modules/Notifications/Services/DrawsNotifications.php:288
+msgid "Sorry, you didn't win the Special Prize."
+msgstr ""
+
+#: modules/Notifications/Services/DrawsNotifications.php:258
+#: modules/Notifications/Services/DrawsNotifications.php:272
+#: modules/Notifications/Services/DrawsNotifications.php:290
+msgid "There's always next time."
+msgstr ""
+
+#: modules/Notifications/Services/DrawsNotifications.php:259
+#: modules/Notifications/Services/DrawsNotifications.php:273
+msgid "Thanks for entering our latest Special Prize Draw. We're sorry to say that <strong>you weren't our lucky winner this time.</strong>"
+msgstr ""
+
+#: modules/Notifications/Services/DrawsNotifications.php:260
+#: modules/Notifications/Services/DrawsNotifications.php:274
+msgid "Bummer, we know. Don't worry, though! There'll be a new Super Prize Draw again very soon, so keep an eye out for news on the LD website."
+msgstr ""
+
+#: modules/Notifications/Services/DrawsNotifications.php:261
+#: modules/Notifications/Services/DrawsNotifications.php:275
+msgid "Want to watch the Super Prize Draw as it happened? Click the button below to <strong>watch a replay of the Super Prize Draw</strong> live stream. Here. Now."
+msgstr ""
+
+#: modules/Notifications/Services/DrawsNotifications.php:287
+msgid "You didn't win the Weekly Prize Draw this time around."
+msgstr ""
+
+#: modules/Notifications/Services/DrawsNotifications.php:291
+msgid "Thanks for entering our latest Weekly Prize Draw. We're sorry to say that <strong>you weren't our lucky winner this time.</strong>"
+msgstr ""
+
+#: modules/Notifications/Services/DrawsNotifications.php:292
+msgid "Bummer, we know. But there'll be a <strong>new Weekly Prize Draw again very soon</strong>, so check out what's dropping next. Here. Now."
+msgstr ""
+
+#: modules/Notifications/Services/DrawsNotifications.php:342
+msgid "You're in the Super Prize Draw, %s ✌"
+msgstr ""
+
+#: modules/Notifications/Services/DrawsNotifications.php:343
+msgid "You're in the running!"
+msgstr ""
+
+#: modules/Notifications/Services/DrawsNotifications.php:344
+msgid "Good luck winning %s."
+msgstr ""
+
+#: modules/Notifications/Services/DrawsNotifications.php:346
+msgid "Good luck in the Super Prize Draw!"
+msgstr ""
+
+#: modules/Notifications/Services/DrawsNotifications.php:347
+msgid "Your ticket is secured and <strong>you're in with a chance of winning our Super Prize Draw!</strong> You can find all the draw details below. "
+msgstr ""
+
+#: modules/Notifications/Services/DrawsNotifications.php:348
+msgid "Next Super Prize Draw"
+msgstr ""
+
+#: modules/Notifications/Services/DrawsNotifications.php:351
+msgid "Good luck in the competition, and we hope to see you at the live drawing on %s!"
+msgstr ""
+
+#: modules/Notifications/Services/DrawsNotifications.php:352
+msgid "In the mean time, you can view info on the Super Prize Draw and check out the full prize list by clicking the button below."
+msgstr ""
+
+#: modules/Notifications/Services/DrawsNotifications.php:354
+#: modules/Notifications/Services/ReceivedGiftNotification.php:96
+#: modules/Notifications/Services/ReceivedGiftNotification.php:206
+msgid "View prizes"
+msgstr ""
+
+#: modules/Notifications/Services/DrawsNotifications.php:393
+msgid "LIVE NOW: We're choosing the Super Prize Draw winner!"
+msgstr ""
+
+#: modules/Notifications/Services/DrawsNotifications.php:395
+msgid "Watch live now"
+msgstr ""
+
+#: modules/Notifications/Services/DrawsNotifications.php:396
+msgid "Watch the Super Prize Draw live stream "
+msgstr ""
+
+#: modules/Notifications/Services/DrawsNotifications.php:399
+msgid "Fingers crossed for you!"
+msgstr ""
+
+#: modules/Notifications/Services/DrawsNotifications.php:400
+msgid "Want to <strong>find out if you're the winner of our Super Prize Draw live?</strong> "
+msgstr ""
+
+#: modules/Notifications/Services/DrawsNotifications.php:402
+msgid "Join in the fun and see if you're the lucky winner of %s live now. We are announcing the winner, so it's sure to be a good time all around."
+msgstr ""
+
+#: modules/Notifications/Services/DrawsNotifications.php:404
+msgid "Click the button below to <strong>watch live and see if you've won!</strong>"
+msgstr ""
+
+#: modules/Notifications/Services/DrawsNotifications.php:413
+msgid "It's time to see if you're a winner, %s !"
+msgstr ""
+
+#: modules/Notifications/Services/Preferences.php:70
+msgid "Communications"
+msgstr ""
+
+#: modules/Notifications/Services/Preferences.php:71
+msgid "Take a break from communications. They will turn back on automatically when the timer's up."
+msgstr ""
+
+#: modules/Notifications/Services/Preferences.php:75
+msgid "Pause all for..."
+msgstr ""
+
+#: modules/Notifications/Services/Preferences.php:80
+msgid "Resume comms"
+msgstr ""
+
+#: modules/Notifications/Services/Preferences.php:81
+msgid "Communications resumes in"
+msgstr ""
+
+#: modules/Notifications/Services/Preferences.php:98
+msgid "Notifications Preferences"
+msgstr ""
+
+#: modules/Notifications/Services/Preferences.php:103
+msgid "Email Preferences"
+msgstr ""
+
+#: modules/Notifications/Services/Preferences.php:104
+msgid "Customize the types of information you want to receive by email"
+msgstr ""
+
+#: modules/Notifications/Services/Preferences.php:106
+msgid "Update email"
+msgstr ""
+
+#: modules/Notifications/Services/Preferences.php:111
+msgid "SMS Preferences"
+msgstr ""
+
+#: modules/Notifications/Services/Preferences.php:112
+msgid "If you want to unsuscribe from our SMS, please contact our LD hotline."
+msgstr ""
+
+#: modules/Notifications/Services/Preferences.php:204
+msgid "This is not a valid email..."
+msgstr ""
+
+#: modules/Notifications/Services/Preferences.php:219
+msgid "Update my email"
+msgstr ""
+
+#: modules/Notifications/Services/Preferences.php:362
+msgid "The email is invalid."
+msgstr ""
+
+#: modules/Notifications/Services/Preferences.php:386
+msgid "Invalid %s preference name"
+msgstr ""
+
+#: modules/Notifications/Services/ReceivedGiftNotification.php:66
+msgid "pick-up center"
+msgstr ""
+
+#: modules/Notifications/Services/ReceivedGiftNotification.php:66
+msgid "delivery"
+msgstr ""
+
+#: modules/Notifications/Services/ReceivedGiftNotification.php:69
+msgid "picked-up"
+msgstr ""
+
+#: modules/Notifications/Services/ReceivedGiftNotification.php:69
+msgid "ship"
+msgstr ""
+
+#: modules/Notifications/Services/ReceivedGiftNotification.php:87
+msgid "%s is all yours, %s!"
+msgstr ""
+
+#: modules/Notifications/Services/ReceivedGiftNotification.php:88
+msgid "We hope you love it!"
+msgstr ""
+
+#: modules/Notifications/Services/ReceivedGiftNotification.php:89
+msgid "We've reserved your prize."
+msgstr ""
+
+#: modules/Notifications/Services/ReceivedGiftNotification.php:91
+msgid "Nice work, %s!"
+msgstr ""
+
+#: modules/Notifications/Services/ReceivedGiftNotification.php:92
+msgid "Congrats on saving up enough points for a %s! We've reserved it for you, so you're good to go."
+msgstr ""
+
+#: modules/Notifications/Services/ReceivedGiftNotification.php:93
+msgid "You've chosen to get your gift via %s, and we're getting it ready for you now. We'll send you another email as soon as your prize is ready to be %s."
+msgstr ""
+
+#: modules/Notifications/Services/ReceivedGiftNotification.php:94
+#: modules/Notifications/Services/ReceivedGiftNotification.php:204
+msgid "View your reward and check out the full prize list by clicking the button below."
+msgstr ""
+
+#: modules/Notifications/Services/ReceivedGiftNotification.php:109
+msgid "Your LD %s Pre-order  ✅"
+msgstr ""
+
+#: modules/Notifications/Services/ReceivedGiftNotification.php:110
+msgid "Confirmation of your order & delivery."
+msgstr ""
+
+#: modules/Notifications/Services/ReceivedGiftNotification.php:111
+msgid "Your pre-order is in the works"
+msgstr ""
+
+#: modules/Notifications/Services/ReceivedGiftNotification.php:113
+msgid "Thank you for pre-ordering a %s from our LD catalogue. Just a couple more hoops to jump through until you've got it in your hands. Here's the low down."
+msgstr ""
+
+#: modules/Notifications/Services/ReceivedGiftNotification.php:116
+#: modules/Notifications/Services/ReceivedGiftNotification.php:226
+msgid "Have questions? Need help? Give us a ring on %s. Here. Now."
+msgstr ""
+
+#: modules/Notifications/Services/ReceivedGiftNotification.php:196
+msgid "%s is ready, %s!"
+msgstr ""
+
+#: modules/Notifications/Services/ReceivedGiftNotification.php:197
+msgid "Your prize is waiting to be picked up."
+msgstr ""
+
+#: modules/Notifications/Services/ReceivedGiftNotification.php:198
+msgid "Your prize is ready for pick-up"
+msgstr ""
+
+#: modules/Notifications/Services/ReceivedGiftNotification.php:200
+msgid "It's ready!"
+msgstr ""
+
+#: modules/Notifications/Services/ReceivedGiftNotification.php:201
+msgid "Just a quick note to let you know that your prize has been delivered and is ready for you to pick up. You can find all the details for the pick-up center below."
+msgstr ""
+
+#: modules/Notifications/Services/ReceivedGiftNotification.php:203
+msgid "You can pick up your prize at the selected location"
+msgstr ""
+
+#: modules/Notifications/Services/ReceivedGiftNotification.php:219
+msgid "Your LD %s is ready to be picked up 🥳"
+msgstr ""
+
+#: modules/Notifications/Services/ReceivedGiftNotification.php:220
+msgid "Your pick-up info is inside this email."
+msgstr ""
+
+#: modules/Notifications/Services/ReceivedGiftNotification.php:221
+msgid "We hope you enjoy your %s!"
+msgstr ""
+
+#: modules/Notifications/Services/ReceivedGiftNotification.php:223
+msgid "Thank you for pre-ordering a %s from our LD catalogue. The item is now ready to be picked up from your chosen location. You can find details and directions below."
+msgstr ""
+
+#: modules/Notifications/Services/ReferralNotifications.php:71
+msgid "Your friend, %s, joined the LD community!"
+msgstr ""
+
+#: modules/Notifications/Services/ReferralNotifications.php:72
+msgid "Thanks for introducing us!"
+msgstr ""
+
+#: modules/Notifications/Services/ReferralNotifications.php:73
+msgid "Introduce 2 more friends to LD to join the Special Draw!"
+msgstr ""
+
+#: modules/Notifications/Services/ReferralNotifications.php:76
+#: modules/Notifications/Services/ReferralNotifications.php:96
+#: modules/Notifications/Services/ReferralNotifications.php:172
+msgid "Hi %s,"
+msgstr ""
+
+#: modules/Notifications/Services/ReferralNotifications.php:78
+msgid "Nice one 👍 ! You only need to invite 2 more friends to the LD community before the end of the week to be in with a chance of winning our Special Draw for %s! Your friend %s has joined already and we've given you 1 mobile top up to say thanks."
+msgstr ""
+
+#: modules/Notifications/Services/ReferralNotifications.php:83
+msgid "So what are you waiting for? Our next Special Draw is on %s, so invite your friends to the LD community. Here. Now."
+msgstr ""
+
+#: modules/Notifications/Services/ReferralNotifications.php:91
+msgid "Your friend, %s, joined the LD community 💫"
+msgstr ""
+
+#: modules/Notifications/Services/ReferralNotifications.php:92
+msgid "You sure are popular"
+msgstr ""
+
+#: modules/Notifications/Services/ReferralNotifications.php:93
+msgid "2 invites down, 1 to go!"
+msgstr ""
+
+#: modules/Notifications/Services/ReferralNotifications.php:98
+msgid "Alright! Your friend %s has joined the LD community! That means you only need to invite one more friend before the end of the week for an entry into our Special Draw for %s! We've added 1 mobile top up to your account to thank you."
+msgstr ""
+
+#: modules/Notifications/Services/ReferralNotifications.php:103
+msgid "You're super close now - get another friend in on the LD action before %s for an entry into our Special Draw. Invite your besties. Here. Now."
+msgstr ""
+
+#: modules/Notifications/Services/ReferralNotifications.php:119
+#: modules/Profile/inc/Services/InviteFriends.php:64
+msgid "Invite friends"
+msgstr ""
+
+#: modules/Notifications/Services/ReferralNotifications.php:174
+msgid "Boom💥 ! Your friend %s has joined the LD community! You've not only scored 1 mobile top up, but you've also picked up an entry into our Special Draw for %s on %s!"
+msgstr ""
+
+#: modules/Notifications/Services/ReferralNotifications.php:179
+msgid "Keep an eye on the LD website for the draw results.  We're rooting for you pick up the win. Here. Now."
+msgstr ""
+
+#: modules/Notifications/Services/ReferralNotifications.php:182
+msgid "Your friend, %s, joined the LD community 💯"
+msgstr ""
+
+#: modules/Notifications/Services/ReferralNotifications.php:186
+msgid "You've only gone and done it!"
+msgstr ""
+
+#: modules/Notifications/Services/ReferralNotifications.php:187
+msgid "You're in the running for the Special Draw!"
+msgstr ""
+
+#: modules/Notifications/Services/ReferralNotifications.php:191
+msgid "Visit My Account"
+msgstr ""
+
+#: modules/Notifications/Services/ReferralNotifications.php:231
+msgid "We've verified your info and just like that, boom💥 ! You're in. You’ve now got full access to LD's exclusive content and rewards and we've given you 2 bonus codes to say thanks."
+msgstr ""
+
+#: modules/Notifications/Services/ReferralNotifications.php:232
+msgid "Head to your account now to dive in and check out our current prizes. You're sure to find something cool. Here. Now."
+msgstr ""
+
+#: modules/Notifications/Services/ReferralNotifications.php:239
+msgid "You're in for a world of rewards and prizes!"
+msgstr ""
+
+#: modules/Notifications/Services/ReferralNotifications.php:244
+msgid "See Prize Catalogue"
+msgstr ""
+
+#: modules/ProductPortfolio/Models/Product.php:102
+msgid "Tar"
+msgstr ""
+
+#: modules/ProductPortfolio/Models/Product.php:103
+msgid "Tar lorem ipsum dolor sit amet"
+msgstr ""
+
+#: modules/ProductPortfolio/Models/Product.php:112
+msgid "Nicotine level"
+msgstr ""
+
+#: modules/ProductPortfolio/Models/Product.php:113
+msgid "Nicotine level lorem ipsum dolor sit amet"
+msgstr ""
+
+#: modules/ProductPortfolio/Models/Product.php:115
+msgid "ng/ml"
+msgstr ""
+
+#: modules/ProductPortfolio/Models/Product.php:122
+msgid "Sticks in pack"
+msgstr ""
+
+#: modules/ProductPortfolio/Models/Product.php:123
+msgid "Sticks in pack lorem ipsum dolor sit amet"
+msgstr ""
+
+#: modules/ProductPortfolio/Models/Product.php:125
+msgid "sticks"
+msgstr ""
+
+#: modules/ProductPortfolio/Models/Product.php:132
+msgid "Flavours"
+msgstr ""
+
+#: modules/ProductPortfolio/Models/Product.php:133
+msgid "Flavours lorem ipsum dolor sit amet"
+msgstr ""
+
+#: modules/ProductPortfolio/Services/ProductPortfolio.php:18
+msgid "Explore variants"
+msgstr ""
+
+#: modules/ProductPortfolio/Services/ProductPortfolio.php:19
+msgid "More images"
+msgstr ""
+
+#: modules/ProductPortfolio/Services/ProductPortfolio.php:20
+msgid "Quality +"
+msgstr ""
+
+#: modules/Profile/inc/Controllers/MyCommunications.php:86
+msgid "Preferences updated successfully !"
+msgstr ""
+
+#: modules/Profile/inc/Filters/MyAccount.php:110
+#: modules/Profile/inc/Filters/MyAccount.php:157
+msgid "Successful"
+msgstr ""
+
+#: modules/Profile/inc/Filters/MyAccount.php:112
+msgid "Fun fact ! Your number is changed"
+msgstr ""
+
+#: modules/Profile/inc/Filters/MyAccount.php:159
+msgid "Fun fact ! Your password is changed"
+msgstr ""
+
+#: modules/Profile/inc/Services/InviteFriends.php:65
+msgid "Pick up extra codes and entries into special draws when you refer adult smoker friends."
+msgstr ""
+
+#: modules/Profile/inc/Services/InviteFriends.php:69
+msgid "How to I join special draws?"
+msgstr ""
+
+#: modules/Profile/inc/Services/InviteFriends.php:70
+msgid "Every week invite %s friends to register on the website by using your unique share link."
+msgstr ""
+
+#: modules/Profile/inc/Services/InviteFriends.php:73
+msgid "Copy and share your link"
+msgstr ""
+
+#: modules/Profile/inc/Services/InviteFriends.php:74
+msgid "Share your unique referral link with an adult smoker friend"
+msgstr ""
+
+#: modules/Profile/inc/Services/InviteFriends.php:78
+msgid "Your friend creates an LD account"
+msgstr ""
+
+#: modules/Profile/inc/Services/InviteFriends.php:79
+msgid "They can create their account by following the 4 simple steps"
+msgstr ""
+
+#: modules/Profile/inc/Services/InviteFriends.php:83
+msgid "They register a code from a pack"
+msgstr ""
+
+#: modules/Profile/inc/Services/InviteFriends.php:84
+msgid "They register a code from the pack and you access the special draw"
+msgstr ""
+
+#: modules/Profile/inc/Services/InviteFriends.php:91
+msgid "Your unique share link"
+msgstr ""
+
+#: modules/Profile/inc/Services/InviteFriends.php:126
+msgid "You have to invite up to %s new adult smoker friends each week to join the draw."
+msgstr ""
+
+#: modules/Profile/inc/Services/InviteFriends.php:126
+msgid "<a href=\"%s\">Read Terms & Conditions</a>"
+msgstr ""
+
+#: modules/Profile/inc/Services/InviteFriends.php:129
+msgid "Weekly invitations"
+msgstr ""
+
+#: modules/Profile/inc/Services/InviteFriends.php:131
+msgid "Get new invitations on"
+msgstr ""
+
+#: modules/Profile/inc/Services/InviteFriends.php:134
+msgid "Invite a friend"
+msgstr ""
+
+#: modules/Profile/inc/Services/InviteFriends.php:142
+msgid "What's going on there...! You still have no godson... Let's start it and share your unique share link!"
+msgstr ""
+
+#: modules/Profile/inc/Services/InviteFriends.php:163
+msgid "Verifying ID"
+msgstr ""
+
+#: modules/Profile/inc/Services/InviteFriends.php:163
+msgid "Registered"
+msgstr ""
+
+#: modules/Profile/inc/Services/Login.php:50
+#: modules/Profile/inc/Services/Login.php:228
+msgid "Oops! Please provide a valid password and try again."
+msgstr ""
+
+#: modules/Profile/inc/Services/Login.php:67
+#: modules/Profile/inc/Services/ResetPassword.php:69
+#: modules/Registration/inc/Services/RegistrationProcess.php:85
+msgid "Hold up, we need to verify your account. We will notify you once everything has been verified."
+msgstr ""
+
+#: modules/Profile/inc/Services/Login.php:87
+msgid "Hang on, it looks like you initiated a reset password without completing it. Please try again to reset password."
+msgstr ""
+
+#: modules/Profile/inc/Services/Login.php:90
+#: modules/Profile/inc/Services/ResetPassword.php:62
+msgid "Hang on, that mobile number isn't registered. Please review it and try again. If you aren't registered yet, you can <a href=\"%s\">create an account</a>."
+msgstr ""
+
+#: modules/Profile/inc/Services/Login.php:99
+msgid "Something's not right here. Please review and try again."
+msgstr ""
+
+#: modules/Profile/inc/Services/Login.php:190
+msgid "Exclusive<br />content & prizes"
+msgstr ""
+
+#: modules/Profile/inc/Services/Login.php:191
+msgid "Already registered? Enter your mobile number to log in"
+msgstr ""
+
+#: modules/Profile/inc/Services/Login.php:216
+#: modules/Profile/inc/Services/MyAccount.php:218
+#: modules/Registration/inc/Services/Registration.php:123
+msgid "Wait, what? Please provide a valid mobile number with at least 10 digits and try again."
+msgstr ""
+
+#: modules/Profile/inc/Services/Login.php:223
+#: modules/Profile/inc/Services/Login.php:225
+#: modules/Registration/inc/Services/Registration.php:257
+#: modules/Registration/inc/Services/Registration.php:259
+msgid "Password"
+msgstr ""
+
+#: modules/Profile/inc/Services/Login.php:234
+msgid "Let's go"
+msgstr ""
+
+#: modules/Profile/inc/Services/Login.php:237
+msgid "Reset password"
+msgstr ""
+
+#: modules/Profile/inc/Services/Login.php:239
+msgid "Don't have an account yet?"
+msgstr ""
+
+#: modules/Profile/inc/Services/Login.php:243
+msgid "Create account"
+msgstr ""
+
+#: modules/Profile/inc/Services/MyAccount.php:58
+msgid "Account"
+msgstr ""
+
+#: modules/Profile/inc/Services/MyAccount.php:77
+msgid "Details"
+msgstr ""
+
+#: modules/Profile/inc/Services/MyAccount.php:104
+#: modules/Registration/inc/Services/Registration.php:336
+#: modules/Registration/inc/Services/Registration.php:469
+msgid "Picture"
+msgstr ""
+
+#: modules/Profile/inc/Services/MyAccount.php:111
+msgid "Choose image"
+msgstr ""
+
+#: modules/Profile/inc/Services/MyAccount.php:112
+#: modules/Registration/inc/Services/Registration.php:346
+#: modules/Registration/inc/Services/Registration.php:480
+msgid "Upload a new ID card"
+msgstr ""
+
+#: modules/Profile/inc/Services/MyAccount.php:113
+msgid "Continue"
+msgstr ""
+
+#: modules/Profile/inc/Services/MyAccount.php:114
+msgid "If your ID has expired, if you've been issued a new one, or if any of your details have changed, please upload your new ID."
+msgstr ""
+
+#: modules/Profile/inc/Services/MyAccount.php:139
+#: modules/Profile/inc/Services/MyAccount.php:415
+#: modules/Profile/inc/Services/MyAccount.php:421
+#: modules/Registration/inc/Services/Registration.php:399
+#: modules/Registration/inc/Services/RegistrationProcess.php:327
+#: modules/Registration/inc/Services/RegistrationProcess.php:333
+msgid "Please provide a first name with less than 20 characters and try again."
+msgstr ""
+
+#: modules/Profile/inc/Services/MyAccount.php:149
+#: modules/Profile/inc/Services/MyAccount.php:427
+#: modules/Profile/inc/Services/MyAccount.php:433
+#: modules/Registration/inc/Services/Registration.php:409
+#: modules/Registration/inc/Services/RegistrationProcess.php:339
+#: modules/Registration/inc/Services/RegistrationProcess.php:345
+msgid "Please provide a last name with less than 20 characters and try again."
+msgstr ""
+
+#: modules/Profile/inc/Services/MyAccount.php:155
+#: modules/Profile/inc/Services/MyAccount.php:157
+#: modules/Registration/inc/Services/Registration.php:415
+#: modules/Registration/inc/Services/Registration.php:417
+msgid "Date of birth"
+msgstr ""
+
+#: modules/Profile/inc/Services/MyAccount.php:160
+#: modules/Profile/inc/Services/MyAccount.php:162
+#: modules/Profile/inc/Services/MyAccount.php:439
+#: modules/Profile/inc/Services/MyAccount.php:453
+#: modules/Registration/inc/Services/Registration.php:420
+#: modules/Registration/inc/Services/Registration.php:422
+#: modules/Registration/inc/Services/RegistrationProcess.php:351
+#: modules/Registration/inc/Services/RegistrationProcess.php:366
+msgid "Please review the info provided and try again."
+msgstr ""
+
+#: modules/Profile/inc/Services/MyAccount.php:172
+#: modules/Profile/inc/Services/MyAccount.php:459
+#: modules/Registration/inc/Services/Registration.php:432
+msgid "Forget something? Please provide an email address and try again."
+msgstr ""
+
+#: modules/Profile/inc/Services/MyAccount.php:178
+msgid "Save"
+msgstr ""
+
+#: modules/Profile/inc/Services/MyAccount.php:192
+msgid "Contact"
+msgstr ""
+
+#: modules/Profile/inc/Services/MyAccount.php:223
+msgid "Change number"
+msgstr ""
+
+#: modules/Profile/inc/Services/MyAccount.php:225
+#: modules/Profile/inc/Services/ResetPassword.php:260
+#: modules/Profile/inc/Services/ResetPassword.php:326
+#: modules/Registration/inc/Services/Registration.php:85
+msgid "An SMS with a code will be sent to verify your mobile number."
+msgstr ""
+
+#: modules/Profile/inc/Services/MyAccount.php:230
+#: modules/Registration/inc/Services/Registration.php:173
+msgid "Edit mobile number"
+msgstr ""
+
+#: modules/Profile/inc/Services/MyAccount.php:240
+#: modules/Profile/inc/Services/ResetPassword.php:304
+#: modules/Profile/inc/Services/ResetPassword.php:306
+#: modules/Registration/inc/Services/Registration.php:194
+#: modules/Registration/inc/Services/Registration.php:196
+msgid "SMS Code"
+msgstr ""
+
+#: modules/Profile/inc/Services/MyAccount.php:244
+#: modules/Profile/inc/Services/MyAccount.php:526
+#: modules/Profile/inc/Services/ResetPassword.php:107
+#: modules/Profile/inc/Services/ResetPassword.php:310
+#: modules/Registration/inc/Services/Registration.php:200
+#: modules/Registration/inc/Services/RegistrationProcess.php:116
+msgid "Forget something? Please enter your code and try again."
+msgstr ""
+
+#: modules/Profile/inc/Services/MyAccount.php:247
+#: modules/Profile/inc/Services/ResetPassword.php:314
+#: modules/Registration/inc/Services/Registration.php:204
+msgid "Didn't get an SMS?"
+msgstr ""
+
+#: modules/Profile/inc/Services/MyAccount.php:249
+#: modules/Profile/inc/Services/ResetPassword.php:316
+#: modules/Registration/inc/Services/Registration.php:206
+msgid "Resend your code."
+msgstr ""
+
+#: modules/Profile/inc/Services/MyAccount.php:258
+#: modules/Registration/inc/Services/Registration.php:215
+msgid "Verify code"
+msgstr ""
+
+#: modules/Profile/inc/Services/MyAccount.php:272
+#: modules/Profile/inc/Services/MyAccount.php:290
+msgid "Change password"
+msgstr ""
+
+#: modules/Profile/inc/Services/MyAccount.php:282
+msgid "Current password"
+msgstr ""
+
+#: modules/Profile/inc/Services/MyAccount.php:286
+#: modules/Profile/inc/Services/MyAccount.php:303
+#: modules/Profile/inc/Services/MyAccount.php:344
+#: modules/Profile/inc/Services/MyAccount.php:602
+#: modules/Profile/inc/Services/MyAccount.php:608
+#: modules/Profile/inc/Services/MyAccount.php:622
+#: modules/Profile/inc/Services/MyAccount.php:628
+#: modules/Profile/inc/Services/MyAccount.php:636
+#: modules/Profile/inc/Services/ResetPassword.php:151
+#: modules/Profile/inc/Services/ResetPassword.php:157
+#: modules/Profile/inc/Services/ResetPassword.php:171
+#: modules/Profile/inc/Services/ResetPassword.php:375
+#: modules/Profile/inc/Services/ResetPassword.php:401
+#: modules/Registration/inc/Services/Registration.php:263
+#: modules/Registration/inc/Services/Registration.php:289
+#: modules/Registration/inc/Services/RegistrationProcess.php:156
+#: modules/Registration/inc/Services/RegistrationProcess.php:162
+#: modules/Registration/inc/Services/RegistrationProcess.php:176
+msgid "Oops, something's wrong. Please review and try again."
+msgstr ""
+
+#: modules/Profile/inc/Services/MyAccount.php:299
+#: modules/Profile/inc/Services/ResetPassword.php:369
+#: modules/Profile/inc/Services/ResetPassword.php:371
+msgid "New password"
+msgstr ""
+
+#: modules/Profile/inc/Services/MyAccount.php:307
+#: modules/Profile/inc/Services/ResetPassword.php:379
+#: modules/Registration/inc/Services/Registration.php:267
+msgid "Your password must follow the following requirements:"
+msgstr ""
+
+#: modules/Profile/inc/Services/MyAccount.php:312
+msgid "At least 8 characters"
+msgstr ""
+
+#: modules/Profile/inc/Services/MyAccount.php:317
+msgid "Uppercase letters"
+msgstr ""
+
+#: modules/Profile/inc/Services/MyAccount.php:322
+msgid "Lowercase letters"
+msgstr ""
+
+#: modules/Profile/inc/Services/MyAccount.php:327
+msgid "Numeric characters (0,9)"
+msgstr ""
+
+#: modules/Profile/inc/Services/MyAccount.php:332
+msgid "Non-alphanumeric characters (e.g. %, @, /, -, ?, ., etc.)"
+msgstr ""
+
+#: modules/Profile/inc/Services/MyAccount.php:340
+#: modules/Profile/inc/Services/ResetPassword.php:395
+#: modules/Profile/inc/Services/ResetPassword.php:397
+msgid "Confirm new password"
+msgstr ""
+
+#: modules/Profile/inc/Services/MyAccount.php:345
+#: modules/Profile/inc/Services/MyAccount.php:644
+#: modules/Profile/inc/Services/ResetPassword.php:179
+#: modules/Profile/inc/Services/ResetPassword.php:402
+msgid "Oops! Your confirm password doesn't match your new password. Please review and try again."
+msgstr ""
+
+#: modules/Profile/inc/Services/MyAccount.php:349
+#: modules/Registration/inc/Services/Registration.php:283
+#: modules/Registration/inc/Services/Registration.php:285
+msgid "Confirm password"
+msgstr ""
+
+#: modules/Profile/inc/Services/MyAccount.php:367
+#: modules/Profile/inc/Services/MyAccount.php:380
+#: modules/Profile/inc/Services/MyAccount.php:390
+#: modules/Registration/inc/Services/Registration.php:339
+#: modules/Registration/inc/Services/RegistrationProcess.php:226
+#: modules/Registration/inc/Services/RegistrationProcess.php:239
+msgid "Please upload a photo of the front of the ID card."
+msgstr ""
+
+#: modules/Profile/inc/Services/MyAccount.php:384
+#: modules/Registration/inc/Services/RegistrationProcess.php:243
+msgid "Error occurs with the file submitted."
+msgstr ""
+
+#: modules/Profile/inc/Services/MyAccount.php:449
+#: modules/Registration/inc/Services/RegistrationProcess.php:362
+msgid "Sorry, you must be over 21."
+msgstr ""
+
+#: modules/Profile/inc/Services/MyAccount.php:506
+msgid "Oops! You must enter a new mobile number."
+msgstr ""
+
+#: modules/Profile/inc/Services/MyAccount.php:537
+msgid "An error occur. Please review the provided mobile number, or try again later."
+msgstr ""
+
+#: modules/Profile/inc/Services/MyAccount.php:542
+#: modules/Profile/inc/Services/ResetPassword.php:128
+#: modules/Registration/inc/Services/RegistrationProcess.php:133
+msgid "Oops, that's not the right code. Please review and try again."
+msgstr ""
+
+#: modules/Profile/inc/Services/MyAccount.php:652
+#: modules/Profile/inc/Services/ResetPassword.php:90
+#: modules/Profile/inc/Services/ResetPassword.php:192
+#: modules/Registration/inc/Services/RegistrationProcess.php:195
+msgid "Error occurs during reset password."
+msgstr ""
+
+#: modules/Profile/inc/Services/MyAddress.php:40
+msgid "My address"
+msgstr ""
+
+#: modules/Profile/inc/Services/MyAddress.php:81
+msgid "Save address"
+msgstr ""
+
+#: modules/Profile/inc/Services/MyCodes.php:83
+msgid "+1"
+msgstr ""
+
+#: modules/Profile/inc/Services/MyCodes.php:84
+msgid "Registered code"
+msgstr ""
+
+#: modules/Profile/inc/Services/MyCodes.php:86
+msgid "Source"
+msgstr ""
+
+#: modules/Profile/inc/Services/MyCodes.php:90
+#: modules/Profile/inc/Services/MyRewards.php:126
+msgid "Date"
+msgstr ""
+
+#: modules/Profile/inc/Services/MyCodes.php:94
+#: modules/Profile/inc/Services/MyCodes.php:125
+#: modules/Theme/Services/Theme.php:369
+msgctxt "КОД"
+msgid "code"
+msgstr ""
+
+#: modules/Profile/inc/Services/MyCodes.php:98
+#: modules/Profile/inc/Services/MyCodes.php:129
+msgid "Balance"
+msgstr ""
+
+#: modules/Profile/inc/Services/MyCodes.php:118
+msgid "Redeemed codes"
+msgstr ""
+
+#: modules/Profile/inc/Services/MyCodes.php:120
+msgid "Concept"
+msgstr ""
+
+#: modules/Profile/inc/Services/MyCodes.php:191
+msgid "Total codes spent"
+msgstr ""
+
+#: modules/Profile/inc/Services/MyCodes.php:195
+msgid "Total codes registered"
+msgstr ""
+
+#: modules/Profile/inc/Services/MyCodes.php:200
+msgid "Rules & policies"
+msgstr ""
+
+#: modules/Profile/inc/Services/MyCodes.php:202
+msgid "Code history"
+msgstr ""
+
+#: modules/Profile/inc/Services/MyCodes.php:204
+msgid "Nothing to see here! Start registering codes to trade for LD prizes, draws, and much more!"
+msgstr ""
+
+#: modules/Profile/inc/Services/MyCommunications.php:35
+msgid "My communication preferences"
+msgstr ""
+
+#: modules/Profile/inc/Services/MyLifestyle.php:34
+msgid "My smoking preferences"
+msgstr ""
+
+#: modules/Profile/inc/Services/MyLifestyle.php:40
+msgid "Save changes"
+msgstr ""
+
+#: modules/Profile/inc/Services/MyLifestyle.php:44
+msgid "Are you a smoker?"
+msgstr ""
+
+#: modules/Profile/inc/Services/MyLifestyle.php:48
+#: modules/Registration/inc/Services/Registration.php:35
+#: modules/Registration/inc/Services/Registration.php:138
+msgid "No"
+msgstr ""
+
+#: modules/Profile/inc/Services/MyLifestyle.php:53
+#: modules/Registration/inc/Services/Registration.php:30
+#: modules/Registration/inc/Services/Registration.php:133
+msgid "Yes"
+msgstr ""
+
+#: modules/Profile/inc/Services/MyLifestyle.php:61
+msgid "Choose brand"
+msgstr ""
+
+#: modules/Profile/inc/Services/MyLifestyle.php:62
+msgid "Which cigarette brand is your fave?"
+msgstr ""
+
+#: modules/Profile/inc/Services/MyLifestyle.php:67
+msgid "Choose style"
+msgstr ""
+
+#: modules/Profile/inc/Services/MyLifestyle.php:68
+msgid "Which cigarette style is your fave?"
+msgstr ""
+
+#: modules/Profile/inc/Services/MyLifestyle.php:73
+msgid "Choose length of time"
+msgstr ""
+
+#: modules/Profile/inc/Services/MyLifestyle.php:74
+msgid "How long have you been smoking?"
+msgstr ""
+
+#: modules/Profile/inc/Services/MyLifestyle.php:77
+msgid "Less than 1 month"
+msgstr ""
+
+#: modules/Profile/inc/Services/MyLifestyle.php:81
+msgid "1-3 months"
+msgstr ""
+
+#: modules/Profile/inc/Services/MyLifestyle.php:85
+msgid "4-6 months"
+msgstr ""
+
+#: modules/Profile/inc/Services/MyLifestyle.php:89
+msgid "7-11 months"
+msgstr ""
+
+#: modules/Profile/inc/Services/MyLifestyle.php:93
+msgid "1-3 years"
+msgstr ""
+
+#: modules/Profile/inc/Services/MyLifestyle.php:97
+msgid "4-5 years"
+msgstr ""
+
+#: modules/Profile/inc/Services/MyLifestyle.php:101
+msgid "More than 5 years"
+msgstr ""
+
+#: modules/Profile/inc/Services/MyRewards.php:117
+msgid "Ticket ID"
+msgstr ""
+
+#: modules/Profile/inc/Services/MyRewards.php:122
+msgid "Reward"
+msgstr ""
+
+#: modules/Profile/inc/Services/MyRewards.php:130
+msgid "Delivery"
+msgstr ""
+
+#: modules/Profile/inc/Services/MyRewards.php:193
+msgid "Rewards History"
+msgstr ""
+
+#: modules/Profile/inc/Services/MyRewards.php:195
+msgid "Nothing to see here! Trade your pack codes for LD prizes, drawings, and much more!"
+msgstr ""
+
+#: modules/Profile/inc/Services/ProfileSubMenu.php:100
+msgid "Log out"
+msgstr ""
+
+#: modules/Profile/inc/Services/ProfileSubMenu.php:102
+msgid "We're logging you out now. We'd've stayed but you do you!"
+msgstr ""
+
+#: modules/Profile/inc/Services/ResetPassword.php:213
+#: modules/Profile/inc/Services/ResetPassword.php:281
+#: modules/Profile/inc/Services/ResetPassword.php:347
+msgid "Reset your password"
+msgstr ""
+
+#: modules/Profile/inc/Services/ResetPassword.php:214
+#: modules/Registration/inc/Services/Registration.php:84
+msgid "Step 1"
+msgstr ""
+
+#: modules/Profile/inc/Services/ResetPassword.php:215
+msgid "Forgot your passoword? No worries, it happens to the best of us. Enter the mobile number you used to create your account."
+msgstr ""
+
+#: modules/Profile/inc/Services/ResetPassword.php:220
+msgid "Step 1/3"
+msgstr ""
+
+#: modules/Profile/inc/Services/ResetPassword.php:226
+#: modules/Profile/inc/Services/ResetPassword.php:295
+#: modules/Profile/inc/Services/ResetPassword.php:360
+msgid "Cancel reset"
+msgstr ""
+
+#: modules/Profile/inc/Services/ResetPassword.php:253
+msgid "Forget something? Please enter your mobile number and try again."
+msgstr ""
+
+#: modules/Profile/inc/Services/ResetPassword.php:259
+msgid "Send sms"
+msgstr ""
+
+#: modules/Profile/inc/Services/ResetPassword.php:282
+#: modules/Registration/inc/Services/Registration.php:166
+msgid "Step 2"
+msgstr ""
+
+#: modules/Profile/inc/Services/ResetPassword.php:283
+#: modules/Registration/inc/Services/Registration.php:167
+msgid "Nice one. We've sent the code to:"
+msgstr ""
+
+#: modules/Profile/inc/Services/ResetPassword.php:289
+msgid "Step 2/3"
+msgstr ""
+
+#: modules/Profile/inc/Services/ResetPassword.php:311
+#: modules/Registration/inc/Services/Registration.php:201
+#: modules/Theme/Services/Theme.php:389
+msgid "Oops! Please provide a valid code and try again."
+msgstr ""
+
+#: modules/Profile/inc/Services/ResetPassword.php:325
+msgid "Verify"
+msgstr ""
+
+#: modules/Profile/inc/Services/ResetPassword.php:348
+#: modules/Registration/inc/Services/Registration.php:235
+msgid "Step 3"
+msgstr ""
+
+#: modules/Profile/inc/Services/ResetPassword.php:349
+msgid "Almost finished. Enter your new password below and you're all set."
+msgstr ""
+
+#: modules/Profile/inc/Services/ResetPassword.php:354
+msgid "Step 3/3"
+msgstr ""
+
+#: modules/Profile/inc/Services/ResetPassword.php:384
+#: modules/Registration/inc/Services/Registration.php:272
+msgid "At least 5 characters long. "
+msgstr ""
+
+#: modules/Profile/inc/Services/ResetPassword.php:389
+#: modules/Registration/inc/Services/Registration.php:277
+msgid "Numbers and/or signs and/or Latin characters only (cyrillic characters cannot be entered)."
+msgstr ""
+
+#: modules/Profile/inc/Services/ResetPassword.php:407
+msgctxt "submit"
+msgid "Reset password"
+msgstr ""
+
+#: modules/Profile/inc/Services/ResetPassword.php:428
+msgid "Boom.<br />Password reset."
+msgstr ""
+
+#: modules/Profile/inc/Services/ResetPassword.php:430
+msgid "Your password has been changed and you're good to go."
+msgstr ""
+
+#: modules/Profile/inc/Services/ResetPassword.php:431
+msgid "You can now enjoy full access to LD's exclusive content and rewards again."
+msgstr ""
+
+#: modules/Registration/inc/Services/Filters.php:209
+#: modules/Registration/inc/Services/Filters.php:217
+msgid "The entered data doesn't match the uploaded ID. Pleasew review the data or upload a new photo."
+msgstr ""
+
+#: modules/Registration/inc/Services/Filters.php:213
+msgid "The uploaded photo is too fuzzy and cannot be verified. Please upload a new photo."
+msgstr ""
+
+#: modules/Registration/inc/Services/Filters.php:221
+msgid "The uploaded photo is not an ID card format. Please upload your ID card."
+msgstr ""
+
+#: modules/Registration/inc/Services/Registration.php:28
+msgid "Are you over 21 ?"
+msgstr ""
+
+#: modules/Registration/inc/Services/Registration.php:39
+msgid "You have to be 21 years old or older to view this website."
+msgstr ""
+
+#: modules/Registration/inc/Services/Registration.php:59
+msgid "You're not old enough to enter."
+msgstr ""
+
+#: modules/Registration/inc/Services/Registration.php:61
+msgid "Go back to signin"
+msgstr ""
+
+#: modules/Registration/inc/Services/Registration.php:83
+#: modules/Registration/inc/Services/Registration.php:165
+#: modules/Registration/inc/Services/Registration.php:234
+#: modules/Registration/inc/Services/Registration.php:314
+#: modules/Registration/inc/Services/Registration.php:372
+msgid "Create your account"
+msgstr ""
+
+#: modules/Registration/inc/Services/Registration.php:90
+msgid "Step 1/4"
+msgstr ""
+
+#: modules/Registration/inc/Services/Registration.php:96
+#: modules/Registration/inc/Services/Registration.php:185
+#: modules/Registration/inc/Services/Registration.php:248
+#: modules/Registration/inc/Services/Registration.php:327
+#: modules/Registration/inc/Services/Registration.php:384
+msgid "Cancel registration"
+msgstr ""
+
+#: modules/Registration/inc/Services/Registration.php:130
+msgid "Do you smoke?"
+msgstr ""
+
+#: modules/Registration/inc/Services/Registration.php:146
+msgid "Send code"
+msgstr ""
+
+#: modules/Registration/inc/Services/Registration.php:179
+msgid "Step 2/4"
+msgstr ""
+
+#: modules/Registration/inc/Services/Registration.php:236
+msgid "Let's keep your account secure. Set your password below."
+msgstr ""
+
+#: modules/Registration/inc/Services/Registration.php:242
+msgid "Step 3/4"
+msgstr ""
+
+#: modules/Registration/inc/Services/Registration.php:290
+#: modules/Registration/inc/Services/RegistrationProcess.php:184
+msgid "Oops! Your confirm password doesn't match your password. Please review and try again."
+msgstr ""
+
+#: modules/Registration/inc/Services/Registration.php:295
+#: modules/Registration/inc/Services/Registration.php:347
+#: modules/Registration/inc/Services/Registration.php:481
+msgid "Next"
+msgstr ""
+
+#: modules/Registration/inc/Services/Registration.php:315
+#: modules/Registration/inc/Services/Registration.php:373
+msgid "Step 4"
+msgstr ""
+
+#: modules/Registration/inc/Services/Registration.php:316
+#: modules/Registration/inc/Services/Registration.php:462
+msgid "Almost finished. Upload a photo of the front of your ID card and you're all set."
+msgstr ""
+
+#: modules/Registration/inc/Services/Registration.php:321
+#: modules/Registration/inc/Services/Registration.php:378
+msgid "Step 4/4"
+msgstr ""
+
+#: modules/Registration/inc/Services/Registration.php:341
+#: modules/Registration/inc/Services/RegistrationProcess.php:249
+#: modules/Registration/inc/Services/RegistrationProcess.php:255
+msgid "The ID card must be a JPEG or PNG file, less than %sMB"
+msgstr ""
+
+#: modules/Registration/inc/Services/Registration.php:345
+#: modules/Registration/inc/Services/Registration.php:479
+msgid "Upload your ID card"
+msgstr ""
+
+#: modules/Registration/inc/Services/Registration.php:439
+msgid "I have read and agree to the <a href=\"#\">terms and conditions</a>."
+msgstr ""
+
+#: modules/Registration/inc/Services/Registration.php:442
+#: modules/Registration/inc/Services/RegistrationProcess.php:379
+msgid "Please read and agree to the T&Cs"
+msgstr ""
+
+#: modules/Registration/inc/Services/Registration.php:447
+msgid "Register"
+msgstr ""
+
+#: modules/Registration/inc/Services/Registration.php:472
+msgid "The card picture is required"
+msgstr ""
+
+#: modules/Registration/inc/Services/Registration.php:496
+msgid "Account created successfully"
+msgstr ""
+
+#: modules/Registration/inc/Services/Registration.php:498
+msgid "You're all good. You can now enjoy full access to LD's exclusive content and rewards."
+msgstr ""
+
+#: modules/Registration/inc/Services/Registration.php:499
+msgid "Welcome to the LD community!"
+msgstr ""
+
+#: modules/Registration/inc/Services/Registration.php:524
+msgid "Hold up, we need to verify your account."
+msgstr ""
+
+#: modules/Registration/inc/Services/Registration.php:526
+msgid "You've made some changes to your details, so we have to make sure they're correct."
+msgstr ""
+
+#: modules/Registration/inc/Services/Registration.php:527
+msgid "It shouldn't take long. We'll notify you once everything's been verified."
+msgstr ""
+
+#: modules/Registration/inc/Services/RegistrationProcess.php:45
+msgid "Please tell us whether or not you smoke."
+msgstr ""
+
+#: modules/Registration/inc/Services/RegistrationProcess.php:49
+msgid "Sorry, this website is only available to current smokers."
+msgstr ""
+
+#: modules/Registration/inc/Services/RegistrationProcess.php:77
+msgid "Wait, that sounds familiar. That mobile number has already been registered. Please <a href=\"%s\">log in</a>.<br />Can't remember your password? You can reset it <a href=\"%s\">here</a>."
+msgstr ""
+
+#: modules/Registration/inc/Services/RegistrationProcess.php:97
+msgid "Error occurs during user registration."
+msgstr ""
+
+#: modules/Registration/inc/Services/RegistrationProcess.php:408
+msgid "Error occurs during registration finish."
+msgstr ""
+
+#: modules/Survey/Controllers/Survey.php:171
+msgid "LD REALDDAY Survey"
+msgstr ""
+
+#: modules/Survey/Services/Render.php:124
+msgid "Step"
+msgstr ""
+
+#: modules/Survey/Services/Render.php:125
+msgid "Back"
+msgstr ""
+
+#: modules/Survey/Services/Render.php:128
+msgid "Between"
+msgstr ""
+
+#: modules/Survey/Services/Render.php:130
+msgid "add reminder"
+msgstr ""
+
+#: modules/Survey/Services/Render.php:131
+msgid "The survey will start in:"
+msgstr ""
+
+#: modules/Survey/Services/Render.php:132
+msgid "days"
+msgstr ""
+
+#: modules/Survey/Services/Render.php:172
+msgid "yes"
+msgstr ""
+
+#: modules/Survey/Services/Render.php:173
+msgid "no"
+msgstr ""
+
+#: modules/Survey/Services/Render.php:199
+msgid "Start survey"
+msgstr ""
+
+#: modules/Survey/Services/Render.php:208
+msgid "Participate"
+msgstr ""
+
+#: modules/Survey/Services/Survey.php:41
+msgid "Survey results successfully collected."
+msgstr ""
+
+#: modules/Survey/Services/Survey.php:43
+msgid "An error occured. The survey results have not been saved"
+msgstr ""
+
+#: modules/Survey/Services/Survey.php:47
+msgid "Missing or incorrect parameters."
+msgstr ""
+
+#: modules/Survey/Services/SurveyResults.php:71
+msgid "Survey results"
+msgstr ""
+
+#: modules/Theme/Services/Filters.php:124
+msgid "Home"
+msgstr ""
+
+#: modules/Theme/Services/Theme.php:228
+msgid "Warning! Smoking seriously harms you and others around you."
+msgstr ""
+
+#: modules/Theme/Services/Theme.php:230
+msgid "2021"
+msgstr ""
+
+#: modules/Theme/Services/Theme.php:231
+msgid "© JT International"
+msgstr ""
+
+#: modules/Theme/Services/Theme.php:243
+msgid "Mark all as read"
+msgstr ""
+
+#: modules/Theme/Services/Theme.php:244
+msgid "Manage preferences"
+msgstr ""
+
+#: modules/Theme/Services/Theme.php:246
+msgid "You have no notifications for now..."
+msgstr ""
+
+#: modules/Theme/Services/Theme.php:249
+msgid "last year"
+msgstr ""
+
+#: modules/Theme/Services/Theme.php:250
+msgid "this year"
+msgstr ""
+
+#: modules/Theme/Services/Theme.php:251
+msgid "next year"
+msgstr ""
+
+#: modules/Theme/Services/Theme.php:253
+msgid "{0} year ago"
+msgstr ""
+
+#: modules/Theme/Services/Theme.php:254
+msgid "{0} years ago"
+msgstr ""
+
+#: modules/Theme/Services/Theme.php:257
+msgid "in {0} year"
+msgstr ""
+
+#: modules/Theme/Services/Theme.php:258
+msgid "in {0} years"
+msgstr ""
+
+#: modules/Theme/Services/Theme.php:262
+msgid "last quarter"
+msgstr ""
+
+#: modules/Theme/Services/Theme.php:263
+msgid "this quarter"
+msgstr ""
+
+#: modules/Theme/Services/Theme.php:264
+msgid "next quarter"
+msgstr ""
+
+#: modules/Theme/Services/Theme.php:266
+msgid "{0} quarter ago"
+msgstr ""
+
+#: modules/Theme/Services/Theme.php:267
+msgid "{0} quarters ago"
+msgstr ""
+
+#: modules/Theme/Services/Theme.php:270
+msgid "in {0} quarter"
+msgstr ""
+
+#: modules/Theme/Services/Theme.php:271
+msgid "in {0} quarters"
+msgstr ""
+
+#: modules/Theme/Services/Theme.php:275
+msgid "last month"
+msgstr ""
+
+#: modules/Theme/Services/Theme.php:276
+msgid "this month"
+msgstr ""
+
+#: modules/Theme/Services/Theme.php:277
+msgid "next month"
+msgstr ""
+
+#: modules/Theme/Services/Theme.php:279
+msgid "{0} month ago"
+msgstr ""
+
+#: modules/Theme/Services/Theme.php:280
+msgid "{0} months ago"
+msgstr ""
+
+#: modules/Theme/Services/Theme.php:283
+msgid "in {0} month"
+msgstr ""
+
+#: modules/Theme/Services/Theme.php:284
+msgid "in {0} months"
+msgstr ""
+
+#: modules/Theme/Services/Theme.php:288
+msgid "last week"
+msgstr ""
+
+#: modules/Theme/Services/Theme.php:289
+msgid "this week"
+msgstr ""
+
+#: modules/Theme/Services/Theme.php:290
+msgid "next week"
+msgstr ""
+
+#: modules/Theme/Services/Theme.php:292
+msgid "{0} week ago"
+msgstr ""
+
+#: modules/Theme/Services/Theme.php:293
+msgid "{0} weeks ago"
+msgstr ""
+
+#: modules/Theme/Services/Theme.php:296
+msgid "in {0} week"
+msgstr ""
+
+#: modules/Theme/Services/Theme.php:297
+msgid "in {0} weeks"
+msgstr ""
+
+#: modules/Theme/Services/Theme.php:301
+msgid "yesterday"
+msgstr ""
+
+#: modules/Theme/Services/Theme.php:302
+msgid "today"
+msgstr ""
+
+#: modules/Theme/Services/Theme.php:303
+msgid "tomorrow"
+msgstr ""
+
+#: modules/Theme/Services/Theme.php:305
+msgid "{0} day ago"
+msgstr ""
+
+#: modules/Theme/Services/Theme.php:306
+msgid "{0} days ago"
+msgstr ""
+
+#: modules/Theme/Services/Theme.php:309
+msgid "in {0} day"
+msgstr ""
+
+#: modules/Theme/Services/Theme.php:310
+msgid "in {0} days"
+msgstr ""
+
+#: modules/Theme/Services/Theme.php:314
+msgid "this hour"
+msgstr ""
+
+#: modules/Theme/Services/Theme.php:316
+msgid "{0} hour ago"
+msgstr ""
+
+#: modules/Theme/Services/Theme.php:317
+msgid "{0} hours ago"
+msgstr ""
+
+#: modules/Theme/Services/Theme.php:320
+msgid "in {0} hour"
+msgstr ""
+
+#: modules/Theme/Services/Theme.php:321
+msgid "in {0} hours"
+msgstr ""
+
+#: modules/Theme/Services/Theme.php:325
+msgid "this minute"
+msgstr ""
+
+#: modules/Theme/Services/Theme.php:327
+msgid "{0} minute ago"
+msgstr ""
+
+#: modules/Theme/Services/Theme.php:328
+msgid "{0} minutes ago"
+msgstr ""
+
+#: modules/Theme/Services/Theme.php:331
+msgid "in {0} minute"
+msgstr ""
+
+#: modules/Theme/Services/Theme.php:332
+msgid "in {0} minutes"
+msgstr ""
+
+#: modules/Theme/Services/Theme.php:336
+msgid "now"
+msgstr ""
+
+#: modules/Theme/Services/Theme.php:338
+msgid "{0} second ago"
+msgstr ""
+
+#: modules/Theme/Services/Theme.php:339
+msgid "{0} seconds ago"
+msgstr ""
+
+#: modules/Theme/Services/Theme.php:342
+msgid "in {0} second"
+msgstr ""
+
+#: modules/Theme/Services/Theme.php:343
+msgid "in {0} seconds"
+msgstr ""
+
+#: modules/Theme/Services/Theme.php:368
+msgctxt "ВВЕСТИ"
+msgid "Register"
+msgstr ""
+
+#: modules/Theme/Services/Theme.php:371
+msgid "Got codes from LD packs?"
+msgstr ""
+
+#: modules/Theme/Services/Theme.php:372
+msgid "They're good for ordering prizes and participate to draws!"
+msgstr ""
+
+#: modules/Theme/Services/Theme.php:383
+msgid "Enter your pack's code"
+msgstr ""
+
+#: modules/Theme/Services/Theme.php:388
+msgctxt "Register code component"
+msgid "Forget something? Please enter your code and try again."
+msgstr ""
+
+#: modules/Theme/Services/Theme.php:419
+msgid "Congrats you found our 404 page."
+msgstr ""
+
+#: modules/Theme/Services/Theme.php:420
+msgid "Usually this means something went wrong."
+msgstr ""
+
+#: modules/Theme/Services/Theme.php:422
+msgid "Go back to the homepage"
+msgstr ""

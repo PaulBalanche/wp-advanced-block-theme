@@ -84,6 +84,7 @@ class SimpleProp {
         switch( $this->getType() ) {
                         
             case 'boolean':
+            case 'switch':
                 return Boolean::isValid( $this );
 
             case 'image':
@@ -128,6 +129,7 @@ class SimpleProp {
         switch( $this->getType() ) {
                         
             case 'boolean':
+            case 'switch':
                 return Boolean::format( $this );
 
             case 'image':

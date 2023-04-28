@@ -1,56 +1,51 @@
-import { Component } from "@wordpress/element";
+
 import { Dashicon } from "@wordpress/components";
 import { Sortable } from "./Sortable";
 import __ODevices from "../Components/ODevices";
 import { Render } from './Render';
+import { Attributes } from "./Attributes";
+import { BaseControl } from "../controls/BaseControl";
+import WysiwygControl from "../controls/WysiwygControl/WysiwygControl";
 
-import { Text } from "../controls/Text";
-import { Select } from "../controls/Select";
-import WysiwygControl from "../Controls/WysiwygControl/WysiwygControl";
+export function Control(props){
 
-export class Control extends Component {
+    const id = props.keys.join('-');
+    const key = props.blockKey;
+    const label = props.label;
+    const type = props.type;
+    const keys = props.keys;
+    const valueProp = props.valueProp;
+    const controllerValue = props.controllerValue;
+    const required_field = props.required_field;
+    const repeatable = props.repeatable;
+    const isResponsive = props.isResponsive;
+    const args = props.args;
+    const error = props.error;
+    const componentInstance = props.componentInstance;
 
-    constructor() {
-        super(...arguments);
+    function getLabel() {
 
-        this.id = this.props.keys.join('-')
-        this.key = this.props.blockKey
-        this.label = this.props.label
-        this.type = this.props.type
-        this.keys = this.props.keys
-        this.valueProp = this.props.valueProp
-        this.controllerValue = this.props.controllerValue
-        this.required_field = this.props.required_field
-        this.repeatable = this.props.repeatable
-        this.isResponsive = this.props.isResponsive
-        this.args = this.props.args
-        this.error = this.props.error
-        this.componentInstance = this.props.componentInstance
-    }
+        let labelFormatted = [ label ];
 
-    getLabel() {
-
-        let labelFormatted = [ this.label ];
-
-        if( this.required_field && this.label != null ) {
-            labelFormatted.push(<span key={this.getKey() + '-label-required'} className="o-required">*</span>)
+        if( required_field && label != null ) {
+            labelFormatted.push(<span key={getKey() + '-label-required'} className="o-required">*</span>)
         }
 
-        if( this.error && typeof this.error == 'object' && typeof this.error.error == 'string' ) {
-            labelFormatted.push(<div key={this.getKey() + '-label-error'} className="error"> <Dashicon icon="info" /> {this.error.error} </div>)
+        if( error && typeof error == 'object' && typeof error.error == 'string' ) {
+            labelFormatted.push(<div key={getKey() + '-label-error'} className="error"> <Dashicon icon="info" /> {error.error} </div>)
         }
 
-        if( this.error && typeof this.error == 'object' && typeof this.error.warning == 'string' ) {
-            labelFormatted.push(<div key={this.getKey() + '-label-warging'} className="warning"><Dashicon icon="info" />{this.error.warning}</div>)
+        if( error && typeof error == 'object' && typeof error.warning == 'string' ) {
+            labelFormatted.push(<div key={getKey() + '-label-warging'} className="warning"><Dashicon icon="info" />{error.warning}</div>)
         }
 
         return labelFormatted;
     }
 
-    getKey() {
-        let keyFormatted = Object.assign( [], this.key );
+    function getKey() {
+        let keyFormatted = Object.assign( [], key );
 
-        if( this.isResponsive ) {
+        if( isResponsive ) {
             const currentDevice = __ODevices.getInstance().getCurrentDevice();
             keyFormatted = keyFormatted + "-" + currentDevice;
         }
@@ -58,11 +53,11 @@ export class Control extends Component {
         return keyFormatted;
     }
 
-    getKeys() {
+    function getKeys() {
 
-        let keysFormatted = Object.assign( [], this.keys );
+        let keysFormatted = Object.assign( [], keys );
 
-        if( this.isResponsive ) {
+        if( isResponsive ) {
             const currentDevice = __ODevices.getInstance().getCurrentDevice();
             keysFormatted.push(currentDevice);
         }
@@ -70,18 +65,18 @@ export class Control extends Component {
         return keysFormatted;
     }
 
-    getControllerValue() {
+    function getControllerValue() {
     
-        let controllerValueFormatted = ( this.controllerValue != null && typeof this.controllerValue == "object" ) ? Object.assign( [], this.controllerValue ) : this.controllerValue;
+        let controllerValueFormatted = ( controllerValue != null && typeof controllerValue == "object" ) ? Object.assign( [], controllerValue ) : controllerValue;
 
-        if( this.isResponsive ) {
+        if( isResponsive ) {
             const currentDevice = __ODevices.getInstance().getCurrentDevice();
             if( controllerValueFormatted != null && typeof controllerValueFormatted == "object" && typeof controllerValueFormatted[currentDevice] != "undefined" ) {
                 controllerValueFormatted = controllerValueFormatted[currentDevice];
             }
         }
 
-        if( this.repeatable ) {
+        if( repeatable ) {
             if ( controllerValueFormatted == null || typeof controllerValueFormatted != "object" || controllerValueFormatted.length == 0 ) {
                 controllerValueFormatted = [""];
             }
@@ -90,144 +85,119 @@ export class Control extends Component {
         return controllerValueFormatted;
     }
 
-    renderText() {
-
-        return <Text
-            key={this.getKey()}
-            label={this.getLabel()}
-            keys={this.getKeys()}
-            valueProp={this.valueProp}
-            objectValue={this.getControllerValue()}
-            isNumber={this.args.isNumber}
-            defaultValue={this.args.default}
-            componentInstance={this.componentInstance}
-        />
-    }
-    
-    renderSelect() {
-
-        return <Select
-            key={this.getKey()}
-            label={this.getLabel()}
-            keys={this.getKeys()}
-            valueProp={this.valueProp}
-            objectValue={this.getControllerValue()}
-            options={this.args.options}
-            defaultValue={this.args.default}
-            componentInstance={this.componentInstance}
-        />
-    }
-
-    renderWysiwyg() {
+    function renderWysiwyg() {
 
         return <WysiwygControl
-            id={this.getKey()}
-            key={this.getKey()}
-            label={this.getLabel()}
-            keys={this.getKeys()}
-            valueProp={this.valueProp}
-            objectValue={this.getControllerValue()}
-            required={this.required_field}
-            componentInstance={this.componentInstance}
+            id={getKey()}
+            key={getKey()}
+            label={getLabel()}
+            keys={getKeys()}
+            valueProp={valueProp}
+            objectValue={getControllerValue()}
+            required={required_field}
+            componentInstance={componentInstance}
         />
     }
-    
-    render() {
 
-        let render = [];
 
-        if( this.repeatable ) {
 
-            const itemsError = ( this.error && typeof this.error == 'object' && typeof this.error.props == 'object' && Object.keys(this.error.props).length > 0 ) ? this.error.props : null;
+    /** Rendering */
+    let render = [];
 
-            render.push( <Sortable
-                key={this.getKey() + "-Sortable"}
-                type={this.type}
-                componentInstance={this.componentInstance}
-                blockKey={this.getKey()}
-                keys={this.getKeys()}
-                valueProp={this.valueProp}
-                controllerValue={this.getControllerValue()}
-                required_field={this.required_field}
-                args={this.args}
-                error={itemsError}
-            /> )
+    if( repeatable ) {
 
-            render =
-                this.getLabel() != null
-                    ? Render.panelComponent(
-                        this.getKey(),
-                        this.getLabel(),
-                        render,
-                        true
-                      )
-                    : render;
-        }
-        else {
-            
-            switch( this.props.type ) {
+        const itemsError = ( error && typeof error == 'object' && typeof error.props == 'object' && Object.keys(error.props).length > 0 ) ? error.props : null;
 
-                case "string":
-                case "number":
-                case "integer":
-                    render.push( this.renderText() )
-                    break;
+        render.push( <Sortable
+            key={getKey() + "-Sortable"}
+            type={type}
+            componentInstance={componentInstance}
+            blockKey={getKey()}
+            keys={getKeys()}
+            valueProp={valueProp}
+            controllerValue={getControllerValue()}
+            required_field={required_field}
+            args={args}
+            error={itemsError}
+        /> )
 
-                case "richText":
-                case "wysiwyg":
-                    render.push( this.renderWysiwyg() )
-                    break;
-
-                case "select":
-                case "color":
-                case "spaces":
-                    render.push( this.renderSelect() )
-                    break;
-        }
-        }
-
-        if( this.isResponsive ) {
-
-            const currentDevice = __ODevices.getInstance().getCurrentDevice();
-
-            render = Render.responsiveTabComponent(
-                this.getKey(),
-                Object.keys(
-                    __ODevices.getInstance().getMediaQueries()
-                ).map((layout) => {
-                    return {
-                        name: layout,
-                        title:
-                            layout.charAt(0).toUpperCase() +
-                            layout.slice(1),
-                        className: "tab-" + layout,
-                        active: ( currentDevice == layout ) ? true : false
-                    };
-                }),
-                render,
-                ( newDevice ) => {
-                    this.componentInstance.setState( { currentEditedProp: this.id });
-                    __ODevices.getInstance().setCurrentDevice(newDevice);
-                },
-                this.type
-            );
-        }
-
-        if( [ 'file', 'video', 'gallery', 'image' ].includes(this.type) ) {
-
-            render = Render.panelComponent(
-                this.getKey(),
-                this.getLabel(),
-                render,
-                ( this.componentInstance.getCurrentEditedProp() == this.id ) ? true : false
-            );
-        }
-
-        if( this.getLabel() == null ) {
-            return render;
-        }
-
-        return Render.fieldContainer(this.getKey(), render, ( this.error && typeof this.error == 'object' && typeof this.error.error != 'undefined' ) ? 'has-error' : ( ( this.error && typeof this.error == 'object' && typeof this.error.warning != 'undefined' ) ? 'has-warning' : '' ) );
+        render =
+            getLabel() != null
+                ? Render.panelComponent(
+                    getKey(),
+                    getLabel(),
+                    render,
+                    true
+                    )
+                : render;
     }
+    else {
+        
+        render.push( <BaseControl
+            key={getKey()}
+            keys={getKeys()}
+            valueProp={valueProp}
+            id={getKey()}
+            label={getLabel()}
+            value={getControllerValue()}
+            defaultValue={args.default}
+            type={type}
+            args={args}
+            onSubmit={ (newValue) => {
+                Attributes.updateAttributes(
+                    getKeys(),
+                    valueProp,
+                    newValue,
+                    false,
+                    componentInstance
+                );
+                componentInstance.updatePreview();
+            }}
+            componentInstance={componentInstance}
+        /> )
+    }
+
+    if( isResponsive ) {
+
+        const currentDevice = __ODevices.getInstance().getCurrentDevice();
+
+        render = Render.responsiveTabComponent(
+            getKey(),
+            Object.keys(
+                __ODevices.getInstance().getMediaQueries()
+            ).map((layout) => {
+                return {
+                    name: layout,
+                    title:
+                        layout.charAt(0).toUpperCase() +
+                        layout.slice(1),
+                    className: "tab-" + layout,
+                    active: ( currentDevice == layout ) ? true : false
+                };
+            }),
+            render,
+            ( newDevice ) => {
+                componentInstance.setState( { currentEditedProp: id });
+                __ODevices.getInstance().setCurrentDevice(newDevice);
+            },
+            type
+        );
+    }
+
+    if( [ 'file', 'video', 'gallery', 'image' ].includes(type) ) {
+
+        render = Render.panelComponent(
+            getKey(),
+            getLabel(),
+            render,
+            ( componentInstance.getCurrentEditedProp() == id ) ? true : false
+        );
+    }
+
+    if( getLabel() == null ) {
+        return render;
+    }
+
+    return Render.fieldContainer(getKey(), render, ( error && typeof error == 'object' && typeof error.error != 'undefined' ) ? 'has-error' : ( ( error && typeof error == 'object' && typeof error.warning != 'undefined' ) ? 'has-warning' : '' ) );
 
 }

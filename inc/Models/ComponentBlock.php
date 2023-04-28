@@ -313,6 +313,7 @@ class ComponentBlock extends ModelBase {
                             break;
                         
                         case 'boolean':
+                        case 'switch':                            
                             $currentType = 'boolean';
                             break;
                     }

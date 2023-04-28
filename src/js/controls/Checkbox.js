@@ -1,26 +1,14 @@
 import { CheckboxControl } from "@wordpress/components";
-import { Fragment } from "@wordpress/element";
-import { Attributes } from "../Static/Attributes";
 
-export function renderCheckbox(
-    componentInstance,
-    id,
-    label,
-    options,
-    keys,
-    valueProp,
-    objectValue,
-    required = false,
-    defaultValue = null
-) {
+export function Checkbox({id, label, options, value, onChange}) {
 
-    return <Fragment key={id + "-fragment"}>
-        <label className="components-base-control__forced_label" key={id + "-label"}>{label}</label>
+    return <>
+        <label key={id + "-label"} className="components-base-control__forced_label">{label}</label>
         { options.map( (option) => {
 
             let isChecked = false;
-            if( objectValue != null && typeof objectValue == 'object' ) {
-                objectValue.forEach(element => {
+            if( value != null && typeof value == 'object' ) {
+                value.forEach(element => {
                     if( element.value == option.value ) {
                         isChecked = true;
                         return;
@@ -28,46 +16,28 @@ export function renderCheckbox(
                 });
             }
 
-            let label = option.name;
-            let disabled = false;
-
-            if( defaultValue?.value?.length ) {
-
-                for( var i in defaultValue.value ) {
-                    if( typeof defaultValue.value[i] == 'object' && defaultValue.value[i].value == option.value ) {
-                        label += ' (default)';
-                        isChecked = true;
-                        disabled = true;
-                        break;
-                    }
-                }
-            }
-
             return <CheckboxControl
-                key={id + "-" + option.value}
-                label={label}
+                key={id + "-checkbox-" + option.value}
+                label={option.name}
                 help={null}
                 checked={isChecked}
-                disabled={disabled}
-                onChange={(newValue) => {
+                onChange={ (checked) => {
 
                     const newObjectValue = [];
 
-                    if( newValue ) {
+                    if( checked ) {
                         
-                        if( objectValue == null || typeof objectValue != 'object' ) {
-                            objectValue = [];
+                        if( value != null && typeof value == 'object' ) {
+                            value.forEach(element => {
+                                newObjectValue.push(element);
+                            });
                         }
-                        
-                        objectValue.forEach(element => {
-                            newObjectValue.push(element);
-                        });
                         newObjectValue.push( { value: option.value } );
                     }
                     else {
-                        if( typeof objectValue == 'object' ) {
+                        if( value != null && typeof value == 'object' ) {
 
-                            objectValue.forEach(element => {
+                            value.forEach(element => {
                                 if( element.value != option.value ) {
                                     newObjectValue.push(element);
                                 }
@@ -75,16 +45,9 @@ export function renderCheckbox(
                         }
                     }
 
-                    Attributes.updateAttributes(
-                        keys,
-                        valueProp,
-                        newObjectValue,
-                        false,
-                        componentInstance
-                    );
-                    componentInstance.updatePreview();
+                    onChange(newObjectValue);
                 }}
             />
         } ) }
-    </Fragment>
+    </>
 }

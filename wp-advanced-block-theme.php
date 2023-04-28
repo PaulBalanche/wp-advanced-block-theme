@@ -48,6 +48,7 @@ define(
     defined("CONTAINER_CLASS_NAME") ? CONTAINER_CLASS_NAME : "container"
 );
 define("ABT_FRONT_ENV", defined("FRONT_ENV") ? FRONT_ENV : "production");
+define("ABT_PLUGIN_TEXTDOMAIN", "abt-plugin" );
 
 /**
  * Dependencies
@@ -59,8 +60,18 @@ require ABT_PLUGIN_DIR . "vendor/autoload.php";
  * Initialize WPE Gutenberg blocks plugin
  *
  */
-add_action("plugins_loaded", "_abt_init");
-function _abt_init()
+add_action("plugins_loaded", "_abt_plugin_init");
+function _abt_plugin_init()
 {
     Abt\Main::getInstance();
 }
+
+/**
+ *  Loads a plugin’s translated strings.
+ * 
+//  */
+// add_action("init", "_abt_plugin_load_textdomain");
+// function _abt_plugin_load_textdomain() {
+
+//     load_plugin_textdomain( ABT_PLUGIN_TEXTDOMAIN, false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
+// }

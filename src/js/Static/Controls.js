@@ -1,18 +1,18 @@
-import { renderDateTime } from "../Controls/DateTime";
-import { renderFile } from "../Controls/File";
-import { renderGallery } from "../Controls/Gallery";
-import { renderImage } from "../Controls/Image";
-import { renderVideo } from "../Controls/Video";
-import { renderLink } from "../Controls/Link";
-import { renderObject } from "../Controls/Object";
-import { renderRadio } from "../Controls/Radio";
-import { renderCheckbox } from "../Controls/Checkbox";
-import { renderRelation } from "../Controls/Relation";
-import { renderSelect } from "../Controls/Select";
-import { Text } from "../Controls/Text";
-import { renderTextarea } from "../Controls/Textarea";
-import { renderToggle } from "../Controls/Toggle";
-import WysiwygControl from "../Controls/WysiwygControl/WysiwygControl";
+// import { renderDateTime } from "../Controls/DateTime";
+// import { renderFile } from "../Controls/File";
+// import { renderGallery } from "../Controls/Gallery";
+// import { renderImage } from "../Controls/Image";
+// import { renderVideo } from "../Controls/Video";
+// import { renderLink } from "../Controls/Link";
+// import { renderObject } from "../Controls/Object";
+// import { renderRadio } from "../Controls/Radio";
+// import { renderCheckbox } from "../Controls/Checkbox";
+// import { renderRelation } from "../Controls/Relation";
+// import { renderSelect } from "../Controls/Select";
+// import { Text } from "../Controls/Text";
+// import { renderTextarea } from "../Controls/Textarea";
+// import { renderToggle } from "../Controls/Toggle";
+// import WysiwygControl from "../Controls/WysiwygControl/WysiwygControl";
 
 export class Controls {
     static render(
@@ -28,29 +28,29 @@ export class Controls {
         error = false
     ) {
         switch (type) {
-            case "date":
-            case "datetime":
-                return renderDateTime(
-                    componentInstance,
-                    id,
-                    label,
-                    keys,
-                    valueProp,
-                    objectValue,
-                    required,
-                    args.type
-                );
+            // case "date":
+            // case "datetime":
+            //     return renderDateTime(
+            //         componentInstance,
+            //         id,
+            //         label,
+            //         keys,
+            //         valueProp,
+            //         objectValue,
+            //         required,
+            //         args.type
+            //     );
 
-            case "file":
-                return renderFile(
-                    componentInstance,
-                    id,
-                    label,
-                    keys,
-                    valueProp,
-                    objectValue,
-                    required
-                );
+            // case "file":
+            //     return renderFile(
+            //         componentInstance,
+            //         id,
+            //         label,
+            //         keys,
+            //         valueProp,
+            //         objectValue,
+            //         required
+            //     );
 
             case "gallery":
                 return renderGallery(
@@ -63,29 +63,29 @@ export class Controls {
                     required
                 );
 
-            case "image":
-                return renderImage(
-                    componentInstance,
-                    args.args,
-                    id,
-                    label,
-                    keys,
-                    valueProp,
-                    objectValue,
-                    required
-                );
+            // case "image":
+            //     return renderImage(
+            //         componentInstance,
+            //         args.args,
+            //         id,
+            //         label,
+            //         keys,
+            //         valueProp,
+            //         objectValue,
+            //         required
+            //     );
 
-            case "video":
-                return renderVideo(
-                    componentInstance,
-                    args.args,
-                    id,
-                    label,
-                    keys,
-                    valueProp,
-                    objectValue,
-                    required
-                );
+            // case "video":
+            //     return renderVideo(
+            //         componentInstance,
+            //         args.args,
+            //         id,
+            //         label,
+            //         keys,
+            //         valueProp,
+            //         objectValue,
+            //         required
+            //     );
 
             case "link":
                 return renderLink(
@@ -110,18 +110,18 @@ export class Controls {
                     required
                 );
             
-            case "checkbox":
-                return renderCheckbox(
-                    componentInstance,
-                    id,
-                    label,
-                    args.options,
-                    keys,
-                    valueProp,
-                    objectValue,
-                    required,
-                    args.default
-                );
+            // case "checkbox":
+            //     return renderCheckbox(
+            //         componentInstance,
+            //         id,
+            //         label,
+            //         args.options,
+            //         keys,
+            //         valueProp,
+            //         objectValue,
+            //         required,
+            //         args.default
+            //     );
 
             case "relation":
                 return renderRelation(
@@ -135,34 +135,34 @@ export class Controls {
                     required
                 );
 
-            case "select":
-            case "color":
-            case "spaces":
-                return renderSelect(
-                    componentInstance,
-                    id,
-                    label,
-                    args.options,
-                    keys,
-                    valueProp,
-                    objectValue,
-                    required,
-                    args.default
-                );
+            // case "select":
+            // case "color":
+            // case "spaces":
+            //     return renderSelect(
+            //         componentInstance,
+            //         id,
+            //         label,
+            //         args.options,
+            //         keys,
+            //         valueProp,
+            //         objectValue,
+            //         required,
+            //         args.default
+            //     );
 
-            case "string":
-            case "number":
-            case "integer":
-                return <Text
-                    componentInstance={componentInstance}
-                    id={id}
-                    label={label}
-                    keys={keys}
-                    valueProp={valueProp}
-                    objectValue={objectValue}
-                    isNumber={args.isNumber}
-                    defaultValue={args.default}
-                />
+            // case "string":
+            // case "number":
+            // case "integer":
+            //     return <Text
+            //         componentInstance={componentInstance}
+            //         id={id}
+            //         label={label}
+            //         keys={keys}
+            //         valueProp={valueProp}
+            //         objectValue={objectValue}
+            //         isNumber={args.isNumber}
+            //         defaultValue={args.default}
+            //     />
 
             case "text":
                 return renderTextarea(
@@ -176,33 +176,33 @@ export class Controls {
                     args.default
                 );
 
-            case "boolean":
-            case "switch":
-                return renderToggle(
-                    componentInstance,
-                    id,
-                    label,
-                    args.help,
-                    keys,
-                    valueProp,
-                    objectValue,
-                    args.default
-                );
+            // case "boolean":
+            // case "switch":
+            //     return renderToggle(
+            //         componentInstance,
+            //         id,
+            //         label,
+            //         args.help,
+            //         keys,
+            //         valueProp,
+            //         objectValue,
+            //         args.default
+            //     );
 
-            case "object":
-                return renderObject(
-                    componentInstance,
-                    id,
-                    label,
-                    keys,
-                    valueProp,
-                    args.props,
-                    typeof args.initialOpen != "undefined"
-                        ? args.initialOpen
-                        : false,
-                    required,
-                    error
-                );
+            // case "object":
+            //     return renderObject(
+            //         componentInstance,
+            //         id,
+            //         label,
+            //         keys,
+            //         valueProp,
+            //         args.props,
+            //         typeof args.initialOpen != "undefined"
+            //             ? args.initialOpen
+            //             : false,
+            //         required,
+            //         error
+            //     );
 
             case "richText":
             case "wysiwyg":
