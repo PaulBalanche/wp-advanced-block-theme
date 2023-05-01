@@ -14575,7 +14575,6 @@ class Attributes {
       error: error,
       componentInstance: componentInstance
     });
-    return _Render__WEBPACK_IMPORTED_MODULE_2__.Render.control(type, componentInstance, blockKey, label, keys, valueProp, currentValueAttribute, repeatable, required_field, args, error, typeof prop.responsive != "undefined" && !!prop.responsive ? true : false);
   }
   static initComponentAttributes(attributes, props) {
     for (const [key, value] of Object.entries(props)) {
@@ -14656,6 +14655,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 function Control(props) {
   const id = props.keys.join('-');
   const key = props.blockKey;
@@ -14663,13 +14663,28 @@ function Control(props) {
   const type = props.type;
   const keys = props.keys;
   const valueProp = props.valueProp;
-  const controllerValue = props.controllerValue;
   const required_field = props.required_field;
   const repeatable = props.repeatable;
   const isResponsive = props.isResponsive;
   const args = props.args;
   const error = props.error;
   const componentInstance = props.componentInstance;
+  const [value, setValue] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(props.controllerValue);
+  const [updating, setUpdating] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
+  const [editMode, setEditMode] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(props.controllerValue != null || typeof props.args.default == 'undefined' || props.args.default == null || typeof props.args.default.value == 'undefined');
+  function onChange(newValue) {
+    setValue(newValue);
+    setUpdating(true);
+  }
+  function onSubmit() {
+    _Attributes__WEBPACK_IMPORTED_MODULE_5__.Attributes.updateAttributes(getKeys(), valueProp, value, false, componentInstance);
+    setUpdating(false);
+    componentInstance.updatePreview();
+  }
+  function onCancel() {
+    setValue(props.controllerValue);
+    setUpdating(false);
+  }
   function getLabel() {
     let labelFormatted = [label];
     if (required_field && label != null) {
@@ -14712,20 +14727,70 @@ function Control(props) {
     }
     return keysFormatted;
   }
-  function getControllerValue() {
-    let controllerValueFormatted = controllerValue != null && typeof controllerValue == "object" ? Object.assign([], controllerValue) : controllerValue;
+  function getValue() {
+    let getValue = value != null && typeof value == "object" ? Object.assign([], value) : value;
     if (isResponsive) {
       const currentDevice = _Components_ODevices__WEBPACK_IMPORTED_MODULE_3__["default"].getInstance().getCurrentDevice();
-      if (controllerValueFormatted != null && typeof controllerValueFormatted == "object" && typeof controllerValueFormatted[currentDevice] != "undefined") {
-        controllerValueFormatted = controllerValueFormatted[currentDevice];
+      if (getValue != null && typeof getValue == "object" && typeof getValue[currentDevice] != "undefined") {
+        getValue = getValue[currentDevice];
       }
     }
     if (repeatable) {
-      if (controllerValueFormatted == null || typeof controllerValueFormatted != "object" || controllerValueFormatted.length == 0) {
-        controllerValueFormatted = [""];
+      if (getValue == null || typeof getValue != "object" || getValue.length == 0) {
+        getValue = [""];
       }
     }
-    return controllerValueFormatted;
+    if (!editMode) {
+      getValue = args.default.value;
+    }
+    return getValue;
+  }
+  function getContainerClassName() {
+    const className = [];
+    if (error && error != null && typeof error == 'object') {
+      if (typeof error.error != 'undefined') {
+        className.push('has-error');
+      } else if (typeof error.warning != 'undefined') {
+        className.push('has-warning');
+      }
+    }
+    if (updating) {
+      className.push('updating');
+    }
+    return className.length > 0 ? className.join(' ') : '';
+  }
+  function renderSavedButton() {
+    return editMode && updating ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      key: getKey() + "buttonsChangesContainer",
+      className: "buttons-changes-container"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
+      key: getKey() + "submitChanges-button",
+      onMouseDown: () => onSubmit(),
+      variant: "primary"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
+      icon: "saved"
+    }), " Save changes"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
+      key: getKey() + "cancelChanges-button",
+      onMouseDown: () => onCancel(),
+      variant: "secondary",
+      className: "is-destructive"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
+      icon: "no"
+    }), " Cancel")) : null;
+  }
+  function renderDefaultValueOverlay() {
+    return !editMode ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      key: getKey() + "defaultOverlayContainer",
+      className: "default-overlay-container"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
+      key: getKey() + "defaultOverlayContainer-button",
+      onMouseDown: () => {
+        setEditMode(true);
+      },
+      variant: "primary"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
+      icon: "edit"
+    }), " Override default value")) : null;
   }
   function render() {
     /** Rendering */
@@ -14739,7 +14804,7 @@ function Control(props) {
         blockKey: getKey(),
         keys: getKeys(),
         valueProp: valueProp,
-        controllerValue: getControllerValue(),
+        controllerValue: getValue(),
         required_field: required_field,
         args: args,
         error: itemsError
@@ -14752,15 +14817,13 @@ function Control(props) {
         valueProp: valueProp,
         id: getKey(),
         label: getLabel(),
-        value: getControllerValue(),
+        value: getValue(),
         defaultValue: args.default,
         type: type,
         args: args,
         error: error,
-        onSubmit: newValue => {
-          _Attributes__WEBPACK_IMPORTED_MODULE_5__.Attributes.updateAttributes(getKeys(), valueProp, newValue, false, componentInstance);
-          componentInstance.updatePreview();
-        },
+        onChange: newValue => onChange(newValue),
+        onSubmit: () => onSubmit(),
         componentInstance: componentInstance
       }));
     }
@@ -14785,7 +14848,7 @@ function Control(props) {
     }
     return render;
   }
-  return render();
+  return _Render__WEBPACK_IMPORTED_MODULE_4__.Render.fieldContainer(getKey(), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, render(), renderSavedButton(), renderDefaultValueOverlay()), getContainerClassName());
 }
 
 /***/ }),
@@ -14888,111 +14951,6 @@ class Render {
       icon: "no-alt"
     }), " Remove");
   }
-  static control(type, componentInstance, blockKey, label, keys, valueProp, controllerValue, repeatable, required_field, args) {
-    let error = arguments.length > 10 && arguments[10] !== undefined ? arguments[10] : false;
-    let isResponsive = arguments.length > 11 && arguments[11] !== undefined ? arguments[11] : false;
-    var control = [];
-
-    // const keyControl = keys.join('-');
-    const currentDevice = _Components_ODevices__WEBPACK_IMPORTED_MODULE_5__["default"].getInstance().getCurrentDevice();
-
-    // label = ( required_field && label != null ) ? <>{label}<span className="o-required">*</span></> : label;
-    // label = ( error && typeof error == 'object' && typeof error.error == 'string' ) ? <>{label}<div className="error"><Dashicon icon="info" />{error.error}</div></> : label;
-    // label = ( error && typeof error == 'object' && typeof error.warning == 'string' ) ? <>{label}<div className="warning"><Dashicon icon="info" />{error.warning}</div></> : label;
-
-    // if( isResponsive ) {
-    // blockKey = blockKey + "-" + currentDevice;
-    // keys.push(currentDevice);
-    // controllerValue = ( controllerValue != null && typeof controllerValue == "object" && typeof controllerValue[currentDevice] != "undefined" ) ? controllerValue[currentDevice] : "";
-    // }
-
-    if (repeatable) {
-      // if (
-      //     controllerValue == null ||
-      //     typeof controllerValue != "object" ||
-      //     controllerValue.length == 0
-      // ) {
-      //     controllerValue = [""];
-      // }
-
-      // const itemsError = ( error && typeof error == 'object' && typeof error.props == 'object' && Object.keys(error.props).length > 0 ) ? error.props : null;
-      // control.push(
-      //     <Sortable
-      //         key={blockKey + "-Sortable"}
-      //         type={type}
-      //         componentInstance={componentInstance}
-      //         blockKey={blockKey}
-      //         keys={keys}
-      //         valueProp={valueProp}
-      //         controllerValue={controllerValue}
-      //         required_field={required_field}
-      //         args={args}
-      //         error={itemsError}
-      //     />
-      // );
-
-      // control =
-      //     label != null
-      //         ? Render.panelComponent(
-      //               blockKey,
-      //               label,
-      //               control,
-      //               true
-      //           )
-      //         : control;
-    } else {
-      control.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Control__WEBPACK_IMPORTED_MODULE_3__.Control, {
-        type: type,
-        componentInstance: componentInstance,
-        blockKey: blockKey,
-        label: label,
-        keys: keys,
-        valueProp: valueProp,
-        objectValue: controllerValue,
-        required_field: required_field,
-        args: args,
-        error: error
-      }));
-    }
-    if (isResponsive) {
-      // control = Render.responsiveTabComponent(
-      //     blockKey,
-      //     Object.keys(
-      //         __ODevices.getInstance().getMediaQueries()
-      //     ).map((layout) => {
-      //         return {
-      //             name: layout,
-      //             title:
-      //                 layout.charAt(0).toUpperCase() +
-      //                 layout.slice(1),
-      //             className: "tab-" + layout,
-      //             active: ( currentDevice == layout ) ? true : false
-      //         };
-      //     }),
-      //     control,
-      //     ( newDevice ) => {
-      //         componentInstance.setState( { currentEditedProp: keyControl });
-      //         __ODevices.getInstance().setCurrentDevice(newDevice);
-      //     },
-      //     type
-      // );
-    }
-
-    // if( [ 'file', 'video', 'gallery', 'image' ].includes(type) ) {
-
-    //     control = Render.panelComponent(
-    //         blockKey,
-    //         label,
-    //         control,
-    //         ( componentInstance.getCurrentEditedProp() == keyControl ) ? true : false
-    //     );
-    // }
-
-    // if (label == null) return control;
-
-    // return Render.fieldContainer(blockKey, control, ( error && typeof error == 'object' && typeof error.error != 'undefined' ) ? 'has-error' : ( ( error && typeof error == 'object' && typeof error.warning != 'undefined' ) ? 'has-warning' : '' ) );
-  }
-
   static repeatableObjectLabelFormatting(blockKey, valueProp, keyLoop) {
     var labelKey = _Attributes__WEBPACK_IMPORTED_MODULE_2__.Attributes.returnStringOrNumber(keyLoop, true) + 1;
     labelKey = labelKey < 10 ? "0" + labelKey : labelKey;
@@ -15317,24 +15275,19 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _Static_Render__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Static/Render */ "./src/js/Static/Render.js");
-/* harmony import */ var _Checkbox__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Checkbox */ "./src/js/controls/Checkbox.js");
-/* harmony import */ var _DateTime__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./DateTime */ "./src/js/controls/DateTime.js");
-/* harmony import */ var _File__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./File */ "./src/js/controls/File.js");
-/* harmony import */ var _Link__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./Link */ "./src/js/controls/Link.js");
-/* harmony import */ var _PropsObject__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./PropsObject */ "./src/js/controls/PropsObject.js");
-/* harmony import */ var _Radio__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./Radio */ "./src/js/controls/Radio.js");
-/* harmony import */ var _Relation__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./Relation */ "./src/js/controls/Relation.js");
-/* harmony import */ var _Select__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./Select */ "./src/js/controls/Select.js");
-/* harmony import */ var _Text__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./Text */ "./src/js/controls/Text.js");
-/* harmony import */ var _Textarea__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./Textarea */ "./src/js/controls/Textarea.js");
-/* harmony import */ var _Toggle__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./Toggle */ "./src/js/controls/Toggle.js");
-/* harmony import */ var _Video__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./Video */ "./src/js/controls/Video.js");
-/* harmony import */ var _WysiwygControl_WysiwygControl__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./WysiwygControl/WysiwygControl */ "./src/js/controls/WysiwygControl/WysiwygControl.js");
-
-
+/* harmony import */ var _Checkbox__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Checkbox */ "./src/js/controls/Checkbox.js");
+/* harmony import */ var _DateTime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./DateTime */ "./src/js/controls/DateTime.js");
+/* harmony import */ var _File__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./File */ "./src/js/controls/File.js");
+/* harmony import */ var _Link__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Link */ "./src/js/controls/Link.js");
+/* harmony import */ var _PropsObject__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./PropsObject */ "./src/js/controls/PropsObject.js");
+/* harmony import */ var _Radio__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./Radio */ "./src/js/controls/Radio.js");
+/* harmony import */ var _Relation__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./Relation */ "./src/js/controls/Relation.js");
+/* harmony import */ var _Select__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./Select */ "./src/js/controls/Select.js");
+/* harmony import */ var _Text__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./Text */ "./src/js/controls/Text.js");
+/* harmony import */ var _Textarea__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./Textarea */ "./src/js/controls/Textarea.js");
+/* harmony import */ var _Toggle__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./Toggle */ "./src/js/controls/Toggle.js");
+/* harmony import */ var _Video__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./Video */ "./src/js/controls/Video.js");
+/* harmony import */ var _WysiwygControl_WysiwygControl__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./WysiwygControl/WysiwygControl */ "./src/js/controls/WysiwygControl/WysiwygControl.js");
 
 
 
@@ -15351,216 +15304,164 @@ __webpack_require__.r(__webpack_exports__);
 
 
 function BaseControl(props) {
-  const [value, setValue] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(props.value);
-  const [editMode, setEditMode] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(props.value != null || typeof props.defaultValue?.value == 'undefined');
-  const [needUpdate, setNeedUpdate] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
-  function submitChanges() {
-    setNeedUpdate(false);
-    props.onSubmit(value);
+  // const [value, setValue] = useState( props.value );
+
+  function onChange(newValue) {
+    // setValue(newValue);
+    props.onChange(newValue);
   }
-  function renderSavedButton() {
-    return editMode && needUpdate ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      key: props.id + "submitChangesContainer",
-      className: "submit-changes-container"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
-      key: props.id + "submitChangesContainer-button",
-      onMouseDown: () => submitChanges(),
-      variant: "primary"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
-      icon: "saved"
-    }), " Save changes")) : null;
-  }
-  function renderDefaultValueOverlay() {
-    return !editMode ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      key: props.id + "defaultOverlayContainer",
-      className: "default-overlay-container"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
-      key: props.id + "defaultOverlayContainer-button",
-      onMouseDown: () => {
-        setEditMode(true);
-      },
-      variant: "primary"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
-      icon: "edit"
-    }), " Override default value")) : null;
-  }
-  function controlOnChange(newValue) {
-    setValue(newValue);
-    setNeedUpdate(true);
-  }
-  function renderControl() {
+  function render() {
     switch (props.type) {
       case "string":
       case "number":
       case "integer":
-        return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Text__WEBPACK_IMPORTED_MODULE_11__.Text, {
+        return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Text__WEBPACK_IMPORTED_MODULE_9__.Text, {
           key: props.id,
           id: props.id,
           label: props.label,
           type: !!props.args.isNumber ? "number" : "text",
-          value: editMode ? value != null ? value : '' : props.defaultValue.value,
-          onChange: newValue => controlOnChange(newValue)
+          value: props.value != null ? props.value : '',
+          onChange: newValue => onChange(newValue)
         });
         break;
       case "select":
       case "color":
       case "spaces":
-        return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Select__WEBPACK_IMPORTED_MODULE_10__.Select, {
+        return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Select__WEBPACK_IMPORTED_MODULE_8__.Select, {
           key: props.id,
           id: props.id,
           label: props.label,
           options: props.args.options,
-          value: editMode ? value != null ? value : undefined : props.defaultValue.value,
-          onChange: newValue => controlOnChange(newValue)
+          value: props.value != null ? props.value : undefined,
+          onChange: newValue => onChange(newValue)
         });
         break;
       case "checkbox":
-        return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Checkbox__WEBPACK_IMPORTED_MODULE_3__.Checkbox, {
+        return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Checkbox__WEBPACK_IMPORTED_MODULE_1__.Checkbox, {
           key: props.id,
           id: props.id,
           label: props.label,
           options: props.args.options,
-          value: editMode ? value : props.defaultValue.value,
-          onChange: newValue => controlOnChange(newValue)
+          value: props.value,
+          onChange: newValue => onChange(newValue)
         });
         break;
       case "boolean":
       case "switch":
-        return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Toggle__WEBPACK_IMPORTED_MODULE_13__.Toggle, {
+        return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Toggle__WEBPACK_IMPORTED_MODULE_11__.Toggle, {
           key: props.id,
           id: props.id,
           label: props.label,
           help: props.args.help,
-          value: editMode ? value != null ? value : false : props.defaultValue.value,
-          onChange: newValue => controlOnChange(newValue)
+          value: props.value != null ? props.value : false,
+          onChange: newValue => onChange(newValue)
         });
         break;
       case "date":
       case "datetime":
-        return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_DateTime__WEBPACK_IMPORTED_MODULE_4__.DateTime, {
+        return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_DateTime__WEBPACK_IMPORTED_MODULE_2__.DateTime, {
           key: props.id,
           id: props.id,
           label: props.label,
           type: props.args.type,
-          value: editMode ? value : props.defaultValue.value,
-          onChange: newValue => controlOnChange(newValue)
+          value: props.value,
+          onChange: newValue => onChange(newValue)
         });
         break;
       case "image":
       case "file":
-        return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_File__WEBPACK_IMPORTED_MODULE_5__.File, {
+        return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_File__WEBPACK_IMPORTED_MODULE_3__.File, {
           key: props.id,
           id: props.id,
           label: props.label,
-          value: editMode ? value != null ? value : undefined : props.defaultValue.value,
-          onChange: newValue => controlOnChange(newValue)
+          value: props.value != null ? props.value : undefined,
+          onChange: newValue => onChange(newValue)
         });
         break;
       case "gallery":
-        return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_File__WEBPACK_IMPORTED_MODULE_5__.File, {
+        return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_File__WEBPACK_IMPORTED_MODULE_3__.File, {
           key: props.id,
           id: props.id,
           label: props.label,
-          value: editMode ? value != null ? value : undefined : props.defaultValue.value,
+          value: props.value != null ? props.value : undefined,
           multiple: true,
-          onChange: newValue => controlOnChange(newValue)
+          onChange: newValue => onChange(newValue)
         });
         break;
       case "video":
-        return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Video__WEBPACK_IMPORTED_MODULE_14__.Video, {
+        return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Video__WEBPACK_IMPORTED_MODULE_12__.Video, {
           key: props.id,
           id: props.id,
           label: props.label,
-          value: editMode ? value != null ? value : undefined : props.defaultValue.value,
-          onChange: newValue => controlOnChange(newValue)
+          value: props.value != null ? props.value : undefined,
+          onChange: newValue => onChange(newValue)
         });
         break;
       case "object":
-        return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_PropsObject__WEBPACK_IMPORTED_MODULE_7__.PropsObject, {
+        return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_PropsObject__WEBPACK_IMPORTED_MODULE_5__.PropsObject, {
           key: props.id,
           id: props.id,
           label: props.label,
           keys: props.keys,
           valueProp: props.valueProp,
           props: props.args.props,
-          onChange: newValue => controlOnChange(newValue),
+          onChange: newValue => onChange(newValue),
           componentInstance: props.componentInstance
         });
         break;
       case "richText":
       case "wysiwyg":
-        return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_WysiwygControl_WysiwygControl__WEBPACK_IMPORTED_MODULE_15__["default"], {
+        return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_WysiwygControl_WysiwygControl__WEBPACK_IMPORTED_MODULE_13__["default"], {
           key: props.id,
           id: props.id,
           label: props.label,
           keys: props.keys,
           valueProp: props.valueProp,
-          objectValue: value != null ? value : '',
+          objectValue: props.value != null ? props.value : '',
           componentInstance: props.componentInstance
         });
         break;
       case "text":
-        return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Textarea__WEBPACK_IMPORTED_MODULE_12__.Textarea, {
+        return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Textarea__WEBPACK_IMPORTED_MODULE_10__.Textarea, {
           key: props.id,
           id: props.id,
           label: props.label,
-          value: editMode ? value != null ? value : '' : props.defaultValue.value,
-          onChange: newValue => controlOnChange(newValue)
+          value: props.value != null ? props.value : '',
+          onChange: newValue => onChange(newValue)
         });
         break;
       case "link":
-        return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Link__WEBPACK_IMPORTED_MODULE_6__.Link, {
+        return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Link__WEBPACK_IMPORTED_MODULE_4__.Link, {
           key: props.id,
           id: props.id,
           label: props.label,
-          value: editMode ? value : props.defaultValue.value,
-          onChange: newValue => controlOnChange(newValue)
+          value: props.value,
+          onChange: newValue => onChange(newValue)
         });
         break;
       case "radio":
-        return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Radio__WEBPACK_IMPORTED_MODULE_8__.Radio, {
+        return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Radio__WEBPACK_IMPORTED_MODULE_6__.Radio, {
           key: props.id,
           id: props.id,
           label: props.label,
           options: props.args.options,
-          value: editMode ? value : props.defaultValue.value,
-          onChange: newValue => controlOnChange(newValue)
+          value: props.value,
+          onChange: newValue => onChange(newValue)
         });
         break;
       case "relation":
-        return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Relation__WEBPACK_IMPORTED_MODULE_9__.Relation, {
+        return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Relation__WEBPACK_IMPORTED_MODULE_7__.Relation, {
           key: props.id,
           id: props.id,
           label: props.label,
           entity: props.args.entity,
           relations: props.componentInstance.props.relations[props.args.entity],
-          value: editMode ? value != null ? value : undefined : props.defaultValue.value,
-          onChange: newValue => controlOnChange(newValue)
+          value: props.value != null ? props.value : undefined,
+          onChange: newValue => onChange(newValue)
         });
         break;
     }
     return null;
-  }
-  function getContainerClass() {
-    const className = [];
-    if (props.error && props.error != null && typeof props.error == 'object') {
-      if (typeof props.error.error != 'undefined') {
-        className.push('has-error');
-      } else if (typeof props.error.warning != 'undefined') {
-        className.push('has-warning');
-      }
-    }
-    if (needUpdate) {
-      className.push('updating');
-    }
-    return className.length > 0 ? className.join(' ') : '';
-  }
-  function render() {
-    const inner = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, renderControl(), renderSavedButton(), renderDefaultValueOverlay());
-    if (props.label == null) {
-      return inner;
-    }
-    return _Static_Render__WEBPACK_IMPORTED_MODULE_2__.Render.fieldContainer(props.id, inner, getContainerClass());
   }
   return render();
 }
@@ -15655,6 +15556,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);
 
 
+
 function DateTime(_ref) {
   let {
     id,
@@ -15663,9 +15565,10 @@ function DateTime(_ref) {
     type,
     onChange
   } = _ref;
+  let control = null;
   switch (type) {
     case 'date':
-      return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.DatePicker, {
+      control = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.DatePicker, {
         key: id,
         currentDate: value,
         onChange: newValue => onChange(newValue),
@@ -15674,7 +15577,7 @@ function DateTime(_ref) {
       });
       break;
     case 'time':
-      return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.TimePicker, {
+      control = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.TimePicker, {
         key: id,
         currentDate: value,
         onChange: newValue => onChange(newValue),
@@ -15684,7 +15587,7 @@ function DateTime(_ref) {
       });
       break;
     default:
-      return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.DateTimePicker, {
+      control = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.DateTimePicker, {
         key: id,
         currentDate: value,
         onChange: newValue => onChange(newValue),
@@ -15694,6 +15597,12 @@ function DateTime(_ref) {
       });
       break;
   }
+  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
+    key: id + "-fragment"
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+    className: "components-base-control__forced_label",
+    key: id + "-label"
+  }, label), control);
 }
 
 /***/ }),

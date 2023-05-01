@@ -253,11 +253,28 @@
   border-radius: 4px;
 }
 
-.o-editor .components-datetime {
+.o-editor .components-datetime, .o-editor .components-datetime__date, .o-editor .components-datetime__time {
   border-radius: 10px;
-  background: rgb(250, 250, 250);
-  padding: 30px;
+  border: 1px solid #e8e8e8;
+  background: white;
+  padding: 24px;
   box-sizing: border-box;
+  max-width: 460px;
+  margin-bottom: 6px;
+}
+.o-editor .components-datetime .components-input-control__container .components-select-control__input, .o-editor .components-datetime__date .components-input-control__container .components-select-control__input, .o-editor .components-datetime__time .components-input-control__container .components-select-control__input {
+  padding: 2 18px !important;
+}
+.o-editor .components-datetime .components-datetime__time-separator, .o-editor .components-datetime__date .components-datetime__time-separator, .o-editor .components-datetime__time .components-datetime__time-separator {
+  border: none;
+}
+.o-editor .components-datetime .components-input-control__container .components-input-control__backdrop, .o-editor .components-datetime__date .components-input-control__container .components-input-control__backdrop, .o-editor .components-datetime__time .components-input-control__container .components-input-control__backdrop {
+  border-radius: 10px;
+  border: 1px solid #e8e8e8;
+}
+.o-editor .components-datetime .components-datetime__time-field-time .components-datetime__time-field-hours-input .components-input-control__input, .o-editor .components-datetime .components-datetime__time-field-time .components-datetime__time-field-minutes-input .components-input-control__input, .o-editor .components-datetime__date .components-datetime__time-field-time .components-datetime__time-field-hours-input .components-input-control__input, .o-editor .components-datetime__date .components-datetime__time-field-time .components-datetime__time-field-minutes-input .components-input-control__input, .o-editor .components-datetime__time .components-datetime__time-field-time .components-datetime__time-field-hours-input .components-input-control__input, .o-editor .components-datetime__time .components-datetime__time-field-time .components-datetime__time-field-minutes-input .components-input-control__input {
+  padding-left: 6px !important;
+  padding-right: 6px !important;
 }
 
 .o-editor .basicField {
@@ -358,6 +375,30 @@
 }
 .o-editor .basicField .default-overlay-container:hover .components-button {
   opacity: 1;
+}
+.o-editor .basicField:after {
+  background: rgba(252, 252, 252, 0.9);
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: none;
+}
+.o-editor .basicField .buttons-changes-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.o-editor .basicField .buttons-changes-container .components-button {
+  margin: 0;
+}
+.o-editor .tab-panel-wpe-component {
+  width: 100%;
+}
+.o-editor .tab-panel-wpe-component:has(.basicField.updating) .basicField:not(.updating):after {
+  display: block;
 }
 
 .o-editor .block-editor-block-list__block[data-type="custom/wpe-grid"] > * > .o-toolbar {
@@ -1075,9 +1116,6 @@
 
 .o-editor .tab-panel-wpe-component {
   width: 100%;
-}
-.o-editor .tab-panel-wpe-component:has(.basicField.updating) .basicField:not(.updating) {
-  opacity: 0.2;
 }
 .o-editor .components-tab-panel__tabs-item {
   border-radius: 0 !important;

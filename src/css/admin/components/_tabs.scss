@@ -2,13 +2,6 @@
 
     .tab-panel-wpe-component {
         width: 100%;
-
-        &:has(.basicField.updating) {
-
-            .basicField:not(.updating) {
-                opacity: 0.2;
-            }
-        }
     }
 
     .components-tab-panel__tabs-item {

@@ -128,5 +128,38 @@
                 }
             }
         }
+
+        &:after {
+            background: rgba(252, 252, 252, 0.9);
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+        }
+
+        .buttons-changes-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+
+            .components-button {
+                margin: 0;
+            }
+        }
+    }
+
+    .tab-panel-wpe-component {
+        width: 100%;
+
+        &:has(.basicField.updating) {
+
+            .basicField:not(.updating):after {
+                display: block;
+            }
+        }
     }
 }

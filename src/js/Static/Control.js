@@ -1,5 +1,6 @@
 
-import { Dashicon } from "@wordpress/components";
+import { Button, Dashicon } from "@wordpress/components";
+import { useState } from "@wordpress/element";
 
 import { Sortable } from "./Sortable";
 import __ODevices from "../Components/ODevices";
@@ -15,13 +16,41 @@ export function Control(props){
     const type = props.type;
     const keys = props.keys;
     const valueProp = props.valueProp;
-    const controllerValue = props.controllerValue;
     const required_field = props.required_field;
     const repeatable = props.repeatable;
     const isResponsive = props.isResponsive;
     const args = props.args;
     const error = props.error;
     const componentInstance = props.componentInstance;
+
+    const [value, setValue] = useState( props.controllerValue );
+    const [updating, setUpdating] = useState( false );
+    const [editMode, setEditMode] = useState( ( props.controllerValue != null ||  typeof props.args.default == 'undefined' || props.args.default == null || typeof props.args.default.value == 'undefined' ) );
+
+    function onChange(newValue) {
+
+        setValue(newValue);
+        setUpdating(true);
+    }
+
+    function onSubmit() {
+
+        Attributes.updateAttributes(
+            getKeys(),
+            valueProp,
+            value,
+            false,
+            componentInstance
+        );
+        setUpdating(false);
+        componentInstance.updatePreview();
+    }
+
+    function onCancel() {
+
+        setValue(props.controllerValue);
+        setUpdating(false);
+    }
 
     function getLabel() {
 
@@ -65,24 +94,85 @@ export function Control(props){
         return keysFormatted;
     }
 
-    function getControllerValue() {
+    function getValue() {
     
-        let controllerValueFormatted = ( controllerValue != null && typeof controllerValue == "object" ) ? Object.assign( [], controllerValue ) : controllerValue;
+        let getValue = ( value != null && typeof value == "object" ) ? Object.assign( [], value ) : value;
 
         if( isResponsive ) {
             const currentDevice = __ODevices.getInstance().getCurrentDevice();
-            if( controllerValueFormatted != null && typeof controllerValueFormatted == "object" && typeof controllerValueFormatted[currentDevice] != "undefined" ) {
-                controllerValueFormatted = controllerValueFormatted[currentDevice];
+            if( getValue != null && typeof getValue == "object" && typeof getValue[currentDevice] != "undefined" ) {
+                getValue = getValue[currentDevice];
             }
         }
 
         if( repeatable ) {
-            if ( controllerValueFormatted == null || typeof controllerValueFormatted != "object" || controllerValueFormatted.length == 0 ) {
-                controllerValueFormatted = [""];
+            if ( getValue == null || typeof getValue != "object" || getValue.length == 0 ) {
+                getValue = [""];
             }
         }
 
-        return controllerValueFormatted;
+        if( ! editMode ) {
+            getValue = args.default.value;
+        }
+        
+        return getValue;
+    }
+
+    function getContainerClassName() {
+
+        const className = [];
+        if( error && error != null && typeof error == 'object' ) {
+            if( typeof error.error != 'undefined' ) {
+                className.push('has-error')
+            }
+            else if( typeof error.warning != 'undefined' ) {
+                className.push('has-warning')
+            }
+        }
+
+        if( updating ) {
+            className.push('updating');
+        }
+
+        return ( className.length > 0 ) ? className.join(' ') : '';
+    }
+
+    function renderSavedButton() {
+
+        return ( editMode && updating ) ?
+            <div key={getKey() + "buttonsChangesContainer"} className="buttons-changes-container">
+                <Button
+                    key={getKey() + "submitChanges-button"}
+                    onMouseDown={ () => onSubmit() }
+                    variant="primary"
+                >
+                    <Dashicon icon="saved" /> Save changes
+                </Button>
+                <Button
+                    key={getKey() + "cancelChanges-button"}
+                    onMouseDown={ () => onCancel() }
+                    variant="secondary"
+                    className="is-destructive"
+                >
+                    <Dashicon icon="no" /> Cancel
+                </Button>
+            </div>
+        : null;
+    }
+    
+    function renderDefaultValueOverlay() {
+
+        return ( ! editMode ) ?
+            <div key={getKey() + "defaultOverlayContainer"} className="default-overlay-container">
+                <Button
+                    key={getKey() + "defaultOverlayContainer-button"}
+                    onMouseDown={ () => { setEditMode(true) } }
+                    variant="primary"
+                >
+                    <Dashicon icon="edit" /> Override default value
+                </Button>
+            </div>
+        : null;
     }
 
     function render() {
@@ -101,7 +191,7 @@ export function Control(props){
                 blockKey={getKey()}
                 keys={getKeys()}
                 valueProp={valueProp}
-                controllerValue={getControllerValue()}
+                controllerValue={getValue()}
                 required_field={required_field}
                 args={args}
                 error={itemsError}
@@ -125,21 +215,13 @@ export function Control(props){
                 valueProp={valueProp}
                 id={getKey()}
                 label={getLabel()}
-                value={getControllerValue()}
+                value={getValue()}
                 defaultValue={args.default}
                 type={type}
                 args={args}
                 error={error}
-                onSubmit={ (newValue) => {
-                    Attributes.updateAttributes(
-                        getKeys(),
-                        valueProp,
-                        newValue,
-                        false,
-                        componentInstance
-                    );
-                    componentInstance.updatePreview();
-                }}
+                onChange={ (newValue) => onChange(newValue) }
+                onSubmit={ () => onSubmit() }
                 componentInstance={componentInstance}
             /> )
         }
@@ -180,9 +262,17 @@ export function Control(props){
                 ( componentInstance.getCurrentEditedProp() == id ) ? true : false
             );
         }
-
+        
         return render;
     }
 
-    return render();
+    return Render.fieldContainer(
+        getKey(),
+        <>
+            {render()}
+            {renderSavedButton()}
+            {renderDefaultValueOverlay()}
+        </>,
+        getContainerClassName()
+    ) 
 }

@@ -250,20 +250,6 @@ export class Attributes {
             error={error}
             componentInstance={componentInstance}
         />
-        return Render.control(
-            type,
-            componentInstance,
-            blockKey,
-            label,
-            keys,
-            valueProp,
-            currentValueAttribute,
-            repeatable,
-            required_field,
-            args,
-            error,
-            ( typeof prop.responsive != "undefined" && !!prop.responsive ) ? true : false
-        );
     }
 
     static initComponentAttributes(attributes, props) {
