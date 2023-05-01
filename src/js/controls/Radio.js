@@ -1,40 +1,8 @@
 import { RadioControl } from "@wordpress/components";
 
-import { withState } from "@wordpress/compose";
-import { Attributes } from "../Static/Attributes";
+export function Radio({id, label, options, value, onChange}) {
 
-import { useState } from '@wordpress/element';
-
-export function renderRadio(
-    componentInstance,
-    id,
-    label,
-    options,
-    keys,
-    valueProp,
-    objectValue,
-    required = false
-) {
-    if (typeof options == "undefined") return null;
-
-    const MyRadioControl = <RadioControl
-        key={id}
-        label={label}
-        selected={objectValue}
-        options={options.map(function (value) {
-            return { label: value.name, value: value.value.toString() };
-        })}
-        onChange={(newValue) => {
-            Attributes.updateAttributes(
-                keys,
-                valueProp,
-                newValue,
-                false,
-                componentInstance
-            );
-            componentInstance.updatePreview();
-        }}
-    />
+    if( typeof options == "undefined" || options == null) return null;
 
     return (
         <div
@@ -49,7 +17,15 @@ export function renderRadio(
                     key={id + "-RadioControlContainer"}
                     className="radio-control-container"
                 >
-                    {MyRadioControl}
+                    <RadioControl
+                        key={id}
+                        label={label}
+                        selected={value}
+                        options={options.map(function (value) {
+                            return { label: value.name, value: value.value.toString() };
+                        })}
+                        onChange={(newValue) => onChange(newValue) }
+                    />
                 </div>
             </div>
         </div>

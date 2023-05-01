@@ -137,8 +137,7 @@ class WysiwygControl extends Component {
             keys,
             valueProp,
             objectValue,
-            repeatable = false,
-            required = false,
+            repeatable = false
         } = this.props;
 
         if (repeatable) {

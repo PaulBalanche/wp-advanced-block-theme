@@ -212,20 +212,6 @@ export class Render {
                     args={args}
                     error={error}
                 />
-                // Controls.render(
-                //     type,
-                //     componentInstance,
-                //     blockKey,
-                //     label,
-                //     keys,
-                //     valueProp,
-                //     typeof controllerValue != "undefined"
-                //         ? controllerValue
-                //         : "",
-                //     required_field,
-                //     args,
-                //     error
-                // )
             );
         }
 

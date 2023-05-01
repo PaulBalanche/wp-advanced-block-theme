@@ -154,18 +154,6 @@ export class Sortable extends Component {
                         args={this.props.args}
                         error={error}
                     />
-                    {/* {Controls.render(
-                        this.props.type,
-                        this.props.componentInstance,
-                        this.props.blockKey + "-" + keyLoop,
-                        labelRepeatableItem,
-                        this.props.keys.concat(keyLoop),
-                        this.props.valueProp,
-                        this.props.controllerValue[keyLoop],
-                        this.props.required_field,
-                        this.props.args,
-                        error
-                    )} */}
                 </SortableItem>
             );
         }

@@ -2,10 +2,9 @@
 
 @import './reset/_import';
 
-@import './components/_import';
 @import './generic/_import';
+@import './components/_import';
+@import './controls/_import';
 @import './layout/_import';
 @import './toCheck/_import';
 @import './zones/_import';
-
-@import '../../js/_import';

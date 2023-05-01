@@ -1,42 +1,25 @@
 import { SelectControl } from "@wordpress/components";
 
-import { Attributes } from "../Static/Attributes";
+export function Relation({id, label, entity, relations, value, onChange}) {
 
-export function renderRelation(
-    componentInstance,
-    id,
-    label,
-    entity,
-    keys,
-    valueProp,
-    objectValue,
-    required = false
-) {
     if (
         typeof entity == "undefined" ||
-        typeof componentInstance.props.relations[entity] == "undefined" ||
-        componentInstance.props.relations[entity] == null ||
-        Object.keys(componentInstance.props.relations[entity]).length == 0
-    )
+        typeof relations == "undefined" ||
+        relations == null ||
+        Object.keys(relations).length == 0
+    ) {
         return null;
+    }
+
 
     return <SelectControl
         key={id}
         label={label}
-        value={objectValue}
+        value={value}
         help={"Choose an item inside " + entity + " post type"}
-        options={componentInstance.props.relations[entity].map(function (value) {
+        options={relations.map(function (value) {
             return { label: value.title.raw, value: value.id };
         })}
-        onChange={(newValue) => {
-            Attributes.updateAttributes(
-                keys,
-                valueProp,
-                newValue,
-                false,
-                componentInstance
-            );
-            componentInstance.updatePreview();
-        }}
+        onChange={(newValue) => onChange(newValue)}
     />
 }

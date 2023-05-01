@@ -1,11 +1,11 @@
 
 import { Dashicon } from "@wordpress/components";
+
 import { Sortable } from "./Sortable";
 import __ODevices from "../Components/ODevices";
 import { Render } from './Render';
 import { Attributes } from "./Attributes";
 import { BaseControl } from "../controls/BaseControl";
-import WysiwygControl from "../controls/WysiwygControl/WysiwygControl";
 
 export function Control(props){
 
@@ -85,119 +85,104 @@ export function Control(props){
         return controllerValueFormatted;
     }
 
-    function renderWysiwyg() {
+    function render() {
 
-        return <WysiwygControl
-            id={getKey()}
-            key={getKey()}
-            label={getLabel()}
-            keys={getKeys()}
-            valueProp={valueProp}
-            objectValue={getControllerValue()}
-            required={required_field}
-            componentInstance={componentInstance}
-        />
-    }
+        /** Rendering */
+        let render = [];
 
+        if( repeatable ) {
 
+            const itemsError = ( error && typeof error == 'object' && typeof error.props == 'object' && Object.keys(error.props).length > 0 ) ? error.props : null;
 
-    /** Rendering */
-    let render = [];
+            render.push( <Sortable
+                key={getKey() + "-Sortable"}
+                type={type}
+                componentInstance={componentInstance}
+                blockKey={getKey()}
+                keys={getKeys()}
+                valueProp={valueProp}
+                controllerValue={getControllerValue()}
+                required_field={required_field}
+                args={args}
+                error={itemsError}
+            /> )
 
-    if( repeatable ) {
+            render =
+                getLabel() != null
+                    ? Render.panelComponent(
+                        getKey(),
+                        getLabel(),
+                        render,
+                        true
+                        )
+                    : render;
+        }
+        else {
+            
+            render.push( <BaseControl
+                key={getKey()}
+                keys={getKeys()}
+                valueProp={valueProp}
+                id={getKey()}
+                label={getLabel()}
+                value={getControllerValue()}
+                defaultValue={args.default}
+                type={type}
+                args={args}
+                error={error}
+                onSubmit={ (newValue) => {
+                    Attributes.updateAttributes(
+                        getKeys(),
+                        valueProp,
+                        newValue,
+                        false,
+                        componentInstance
+                    );
+                    componentInstance.updatePreview();
+                }}
+                componentInstance={componentInstance}
+            /> )
+        }
 
-        const itemsError = ( error && typeof error == 'object' && typeof error.props == 'object' && Object.keys(error.props).length > 0 ) ? error.props : null;
+        if( isResponsive ) {
 
-        render.push( <Sortable
-            key={getKey() + "-Sortable"}
-            type={type}
-            componentInstance={componentInstance}
-            blockKey={getKey()}
-            keys={getKeys()}
-            valueProp={valueProp}
-            controllerValue={getControllerValue()}
-            required_field={required_field}
-            args={args}
-            error={itemsError}
-        /> )
+            const currentDevice = __ODevices.getInstance().getCurrentDevice();
 
-        render =
-            getLabel() != null
-                ? Render.panelComponent(
-                    getKey(),
-                    getLabel(),
-                    render,
-                    true
-                    )
-                : render;
-    }
-    else {
-        
-        render.push( <BaseControl
-            key={getKey()}
-            keys={getKeys()}
-            valueProp={valueProp}
-            id={getKey()}
-            label={getLabel()}
-            value={getControllerValue()}
-            defaultValue={args.default}
-            type={type}
-            args={args}
-            onSubmit={ (newValue) => {
-                Attributes.updateAttributes(
-                    getKeys(),
-                    valueProp,
-                    newValue,
-                    false,
-                    componentInstance
-                );
-                componentInstance.updatePreview();
-            }}
-            componentInstance={componentInstance}
-        /> )
-    }
+            render = Render.responsiveTabComponent(
+                getKey(),
+                Object.keys(
+                    __ODevices.getInstance().getMediaQueries()
+                ).map((layout) => {
+                    return {
+                        name: layout,
+                        title:
+                            layout.charAt(0).toUpperCase() +
+                            layout.slice(1),
+                        className: "tab-" + layout,
+                        active: ( currentDevice == layout ) ? true : false
+                    };
+                }),
+                render,
+                ( newDevice ) => {
+                    componentInstance.setState( { currentEditedProp: id });
+                    __ODevices.getInstance().setCurrentDevice(newDevice);
+                },
+                type
+            );
+        }
 
-    if( isResponsive ) {
+        if( [ 'file', 'video', 'gallery', 'image' ].includes(type) ) {
 
-        const currentDevice = __ODevices.getInstance().getCurrentDevice();
+            render = Render.panelComponent(
+                getKey(),
+                getLabel(),
+                render,
+                ( componentInstance.getCurrentEditedProp() == id ) ? true : false
+            );
+        }
 
-        render = Render.responsiveTabComponent(
-            getKey(),
-            Object.keys(
-                __ODevices.getInstance().getMediaQueries()
-            ).map((layout) => {
-                return {
-                    name: layout,
-                    title:
-                        layout.charAt(0).toUpperCase() +
-                        layout.slice(1),
-                    className: "tab-" + layout,
-                    active: ( currentDevice == layout ) ? true : false
-                };
-            }),
-            render,
-            ( newDevice ) => {
-                componentInstance.setState( { currentEditedProp: id });
-                __ODevices.getInstance().setCurrentDevice(newDevice);
-            },
-            type
-        );
-    }
-
-    if( [ 'file', 'video', 'gallery', 'image' ].includes(type) ) {
-
-        render = Render.panelComponent(
-            getKey(),
-            getLabel(),
-            render,
-            ( componentInstance.getCurrentEditedProp() == id ) ? true : false
-        );
-    }
-
-    if( getLabel() == null ) {
         return render;
     }
 
-    return Render.fieldContainer(getKey(), render, ( error && typeof error == 'object' && typeof error.error != 'undefined' ) ? 'has-error' : ( ( error && typeof error == 'object' && typeof error.warning != 'undefined' ) ? 'has-warning' : '' ) );
-
+    return render();
 }

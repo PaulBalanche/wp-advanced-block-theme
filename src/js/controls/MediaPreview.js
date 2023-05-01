@@ -1,16 +1,21 @@
 import apiFetch from '@wordpress/api-fetch';
+import { addQueryArgs } from '@wordpress/url';
 import { Button, Dashicon } from "@wordpress/components";
 import { useState } from "@wordpress/element";
 
-export function MediaPreview({id, value, onChange}) {
+export function MediaPreview({id, value, onChange, multiple = false}) {
 
     const [preview, setPreview] = useState( null );
 
     function fetchMedia() {
 
-        apiFetch( { path: '/wp/v2/media/' + value } ).then( ( posts ) => {
+        const queryParams = { include: [value] };
+
+        apiFetch( { path: addQueryArgs('/wp/v2/media', queryParams) } ).then( ( posts ) => {
+
+            console.log(posts);
             if( typeof posts == 'object' && posts != null && typeof posts.media_type != undefined ) {
-                console.log(posts);
+
                 switch( posts.media_type ) {
 
                     case "image":
@@ -40,10 +45,39 @@ export function MediaPreview({id, value, onChange}) {
             }
 
             setPreview(false);
+
+            // const countColumns = ( objectValue.length > 5 ) ? 5 : objectValue.length;
+            // const preview = ( objectValue && typeof objectValue == "object" && objectValue.length > 0 ) ?
+            //     <div
+            //         key={id + "-mediaPreviewContainer"}
+            //         className="media-preview-container"
+            //     >
+            //         <figure
+            //             key={id + "-galleryImagefigure"}
+            //             className={"wp-block-gallery columns-" + countColumns}
+            //         >
+            //             <ul
+            //                 key={id + "-galleryImageContainerUl"}
+            //                 className="blocks-gallery-grid"
+            //             >
+            //                 { objectValue.map((image) => {
+            //                     return <li
+            //                         key={id + "-galleryImageContainerLi" + image.id}
+            //                         className="blocks-gallery-item"
+            //                     >
+            //                         <img
+            //                             key={id + "-galleryImage_" + image.id}
+            //                             src={image.url}
+            //                         />
+            //                     </li>
+            //                 }) }
+            //             </ul>
+            //         </figure>
+            //     </div>
         } );
     }
 
-    if( value && Number.isInteger(value) ) {
+    if( value && ( Number.isInteger(value) || ( value != null && typeof value != 'object' ) ) ) {
 
         if( preview == null ) {
 
