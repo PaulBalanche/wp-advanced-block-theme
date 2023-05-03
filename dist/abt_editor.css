@@ -537,24 +537,6 @@
 .o-editor .media-preview-container.empty {
   aspect-ratio: 16/9;
 }
-.o-editor .media-preview-container.empty .diagonal1,
-.o-editor .media-preview-container.empty .diagonal2 {
-  content: "";
-  position: absolute;
-  top: 5%;
-  left: 5%;
-  width: 90%;
-  height: 90%;
-  background: rgb(220, 220, 220);
-}
-.o-editor .media-preview-container.empty .diagonal1 {
-  -webkit-clip-path: polygon(0% 0%, 100% calc(100% - 1px), 100% 100%, 0% calc(0% + 1px));
-          clip-path: polygon(0% 0%, 100% calc(100% - 1px), 100% 100%, 0% calc(0% + 1px));
-}
-.o-editor .media-preview-container.empty .diagonal2 {
-  -webkit-clip-path: polygon(0% calc(100% - 1px), 100% 0%, 100% calc(0% + 1px), 0% 100%);
-          clip-path: polygon(0% calc(100% - 1px), 100% 0%, 100% calc(0% + 1px), 0% 100%);
-}
 .o-editor .media-preview-container.empty .inner {
   position: relative;
   padding: 80px 200px;
@@ -1548,29 +1530,40 @@
   min-height: 0;
   box-shadow: none !important;
   outline: none !important;
-  background: var(--background300, rgb(245, 245, 245));
+  background: none;
   border-radius: 4px;
+  padding: 24px;
 }
 .o-editor .block-editor-media-placeholder .components-placeholder__fieldset {
+  display: flex;
+  justify-content: center;
+  -moz-column-gap: 12px;
+       column-gap: 12px;
+}
+.o-editor .block-editor-media-placeholder .components-placeholder__fieldset:has(.media-preview-container) {
   display: grid;
+  justify-content: initial;
+}
+.o-editor .block-editor-media-placeholder .components-placeholder__fieldset:has(.media-preview-container) .components-button {
+  width: 100%;
 }
 .o-editor .block-editor-media-placeholder .components-placeholder__fieldset .components-button {
   margin: 0;
   justify-content: center;
   display: inline-flex;
-  width: 100%;
   align-items: center;
   margin-bottom: 6px;
+  width: 120px;
 }
 .o-editor .block-editor-media-placeholder .components-placeholder__fieldset .media-preview-container {
   grid-column-start: 1;
-  grid-column-end: 8;
+  grid-column-end: 4;
   grid-row-start: 1;
   grid-row-end: 5;
 }
 .o-editor .block-editor-media-placeholder .components-placeholder__fieldset .components-form-file-upload, .o-editor .block-editor-media-placeholder .components-placeholder__fieldset .components-button.is-tertiary, .o-editor .block-editor-media-placeholder .components-placeholder__fieldset .components-button.is-destructive {
-  grid-column-start: 9;
-  grid-column-end: 10;
+  grid-column-start: 4;
+  grid-column-end: 5;
 }
 .o-editor .block-editor-media-placeholder .components-placeholder__fieldset .components-form-file-upload {
   grid-row-start: 1;

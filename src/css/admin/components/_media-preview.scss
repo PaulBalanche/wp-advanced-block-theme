@@ -11,22 +11,6 @@
 
             aspect-ratio: 16/9;
 
-            .diagonal1,
-            .diagonal2 {
-                content: '';
-                position: absolute;
-                top: 5%;
-                left: 5%;
-                width: 90%;
-                height: 90%;
-                background: rgb(220,220,220);
-            }
-            .diagonal1 {
-                clip-path: polygon(0% 0%, 100% calc(100% - 1px), 100% 100%, 0% calc(0% + 1px));
-            }
-            .diagonal2 {
-                clip-path: polygon(0% calc(100% - 1px), 100% 0%, 100% calc(0% + 1px), 0% 100%);
-            }
             .inner{
                 position: relative;
                 padding: 80px 200px;

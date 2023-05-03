@@ -23,31 +23,53 @@ export function Control(props) {
     const error = props.error;
     const componentInstance = props.componentInstance;
     const isSortableItem = ( typeof props.sortableIndex != 'undefined' );
+    const directSubmission = ( [ 'file', 'video', 'gallery', 'image', 'datetime', 'checkbox', 'boolean', 'switch' ].includes(props.type) );
 
     const [value, setValue] = useState( props.controllerValue );
     const [updating, setUpdating] = useState( false );
     const [editMode, setEditMode] = useState( ( props.controllerValue != null ||  typeof props.args.default == 'undefined' || props.args.default == null || typeof props.args.default.value == 'undefined' ) );
+    const [defaultDeviceOverlay, setDefaultDeviceOverlay] = useState( true );
 
     function onChange(newValue) {
 
+        if( isResponsive ) {
+            newValue = { ...value, ...{ [ __ODevices.getInstance().getCurrentDevice() ]: newValue} };
+        }
         setValue(newValue);
-        setUpdating(true);
-
+    
         if( isSortableItem && typeof props.onChange != 'undefined' ) {
             props.onChange( newValue, [props.sortableIndex] );
+        }
+
+        if( directSubmission ) {
+            directSubmit(newValue);
+        }
+        else {
+            setUpdating(true);
         }
     }
     
     function onSubmit() {
 
         Attributes.updateAttributes(
-            getKeys(),
+            keys,
             valueProp,
             value,
             false,
             componentInstance
         );
         setUpdating(false);
+        componentInstance.updatePreview();
+    }
+
+    function directSubmit(newValue) {
+        Attributes.updateAttributes(
+            keys,
+            valueProp,
+            newValue,
+            false,
+            componentInstance
+        );
         componentInstance.updatePreview();
     }
 
@@ -91,7 +113,7 @@ export function Control(props) {
         return keyFormatted;
     }
 
-    function getKeys() {
+    function getKeys( ) {
 
         let keysFormatted = Object.assign( [], keys );
 
@@ -104,27 +126,34 @@ export function Control(props) {
     }
 
     function getValue() {
-    
-        let getValue = ( value != null && typeof value == "object" ) ? Object.assign( [], value ) : value;
 
+        if( ! editMode ) {
+            return args.default.value;
+        }
+    
         if( isResponsive ) {
+
             const currentDevice = __ODevices.getInstance().getCurrentDevice();
-            if( getValue != null && typeof getValue == "object" && typeof getValue[currentDevice] != "undefined" ) {
-                getValue = getValue[currentDevice];
+            if( value != null && typeof value == "object" && typeof value[currentDevice] != "undefined" ) {
+                return value[currentDevice];
+            }
+            else {
+                return "";
             }
         }
 
         if( repeatable ) {
-            if ( getValue == null || typeof getValue != "object" || getValue.length == 0 ) {
-                getValue = [""];
+            if ( value == null || typeof value != "object" || value.length == 0 ) {
+                return [""];
             }
         }
-
-        if( ! editMode ) {
-            getValue = args.default.value;
-        }
         
-        return getValue;
+        return value;
+    }
+
+    function defaultDeviceIsDefined() {
+
+        return ( value != null && typeof value == "object" && typeof value[ __ODevices.getInstance().getDefaultDevice() ] != "undefined" );
     }
 
     function getContainerClassName() {
@@ -139,7 +168,7 @@ export function Control(props) {
             }
         }
 
-        if( updating && ! isSortableItem) {
+        if( updating && ! isSortableItem && ! directSubmission ) {
             className.push('updating');
         }
 
@@ -148,7 +177,7 @@ export function Control(props) {
 
     function renderSavedButton() {
 
-        return ( editMode && updating && ! isSortableItem ) ?
+        return ( editMode && updating && ! isSortableItem && ! directSubmission ) ?
             <div key={getKey() + "buttonsChangesContainer"} className="buttons-changes-container">
                 <Button
                     key={getKey() + "submitChanges-button"}
@@ -179,6 +208,21 @@ export function Control(props) {
                     variant="primary"
                 >
                     <Dashicon icon="edit" /> Override default value
+                </Button>
+            </div>
+        : null;
+    }
+
+    function renderDefaultDeviceOverlay() {
+
+        return ( isResponsive && defaultDeviceIsDefined() && __ODevices.getInstance().getCurrentDevice() != __ODevices.getInstance().getDefaultDevice() && defaultDeviceOverlay && typeof value[__ODevices.getInstance().getCurrentDevice()] == "undefined") ?
+            <div key={getKey() + "defaultDeviceContainer"} className="default-overlay-container">
+                <Button
+                    key={getKey() + "defaultDeviceContainer-button"}
+                    onMouseDown={ () => { setDefaultDeviceOverlay(false) } }
+                    variant="primary"
+                >
+                    <Dashicon icon="edit" /> Override {__ODevices.getInstance().getDefaultDevice()} value
                 </Button>
             </div>
         : null;
@@ -228,7 +272,7 @@ export function Control(props) {
             /> )
         }
 
-        if( isResponsive ) {
+        if( isResponsive && defaultDeviceIsDefined() ) {
 
             const currentDevice = __ODevices.getInstance().getCurrentDevice();
 
@@ -264,6 +308,7 @@ export function Control(props) {
             {render()}
             {renderSavedButton()}
             {renderDefaultValueOverlay()}
+            {renderDefaultDeviceOverlay()}
         </>,
         getContainerClassName()
     ) 

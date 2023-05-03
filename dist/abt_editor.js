@@ -13081,6 +13081,9 @@ class ODevices extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Component
   getCurrentDevice() {
     return this.state.currentDevice;
   }
+  getDefaultDevice() {
+    return this.defaultMediaQuery;
+  }
   setCurrentDevice(newDevice) {
     this.setState({
       currentDevice: newDevice
@@ -14670,19 +14673,37 @@ function Control(props) {
   const error = props.error;
   const componentInstance = props.componentInstance;
   const isSortableItem = typeof props.sortableIndex != 'undefined';
+  const directSubmission = ['file', 'video', 'gallery', 'image', 'datetime', 'checkbox', 'boolean', 'switch'].includes(props.type);
   const [value, setValue] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(props.controllerValue);
   const [updating, setUpdating] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   const [editMode, setEditMode] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(props.controllerValue != null || typeof props.args.default == 'undefined' || props.args.default == null || typeof props.args.default.value == 'undefined');
+  const [defaultDeviceOverlay, setDefaultDeviceOverlay] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(true);
   function onChange(newValue) {
+    if (isResponsive) {
+      newValue = {
+        ...value,
+        ...{
+          [_Components_ODevices__WEBPACK_IMPORTED_MODULE_3__["default"].getInstance().getCurrentDevice()]: newValue
+        }
+      };
+    }
     setValue(newValue);
-    setUpdating(true);
     if (isSortableItem && typeof props.onChange != 'undefined') {
       props.onChange(newValue, [props.sortableIndex]);
     }
+    if (directSubmission) {
+      directSubmit(newValue);
+    } else {
+      setUpdating(true);
+    }
   }
   function onSubmit() {
-    _Attributes__WEBPACK_IMPORTED_MODULE_5__.Attributes.updateAttributes(getKeys(), valueProp, value, false, componentInstance);
+    _Attributes__WEBPACK_IMPORTED_MODULE_5__.Attributes.updateAttributes(keys, valueProp, value, false, componentInstance);
     setUpdating(false);
+    componentInstance.updatePreview();
+  }
+  function directSubmit(newValue) {
+    _Attributes__WEBPACK_IMPORTED_MODULE_5__.Attributes.updateAttributes(keys, valueProp, newValue, false, componentInstance);
     componentInstance.updatePreview();
   }
 
@@ -14738,22 +14759,26 @@ function Control(props) {
     return keysFormatted;
   }
   function getValue() {
-    let getValue = value != null && typeof value == "object" ? Object.assign([], value) : value;
+    if (!editMode) {
+      return args.default.value;
+    }
     if (isResponsive) {
       const currentDevice = _Components_ODevices__WEBPACK_IMPORTED_MODULE_3__["default"].getInstance().getCurrentDevice();
-      if (getValue != null && typeof getValue == "object" && typeof getValue[currentDevice] != "undefined") {
-        getValue = getValue[currentDevice];
+      if (value != null && typeof value == "object" && typeof value[currentDevice] != "undefined") {
+        return value[currentDevice];
+      } else {
+        return "";
       }
     }
     if (repeatable) {
-      if (getValue == null || typeof getValue != "object" || getValue.length == 0) {
-        getValue = [""];
+      if (value == null || typeof value != "object" || value.length == 0) {
+        return [""];
       }
     }
-    if (!editMode) {
-      getValue = args.default.value;
-    }
-    return getValue;
+    return value;
+  }
+  function defaultDeviceIsDefined() {
+    return value != null && typeof value == "object" && typeof value[_Components_ODevices__WEBPACK_IMPORTED_MODULE_3__["default"].getInstance().getDefaultDevice()] != "undefined";
   }
   function getContainerClassName() {
     const className = [];
@@ -14764,13 +14789,13 @@ function Control(props) {
         className.push('has-warning');
       }
     }
-    if (updating && !isSortableItem) {
+    if (updating && !isSortableItem && !directSubmission) {
       className.push('updating');
     }
     return className.length > 0 ? className.join(' ') : '';
   }
   function renderSavedButton() {
-    return editMode && updating && !isSortableItem ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    return editMode && updating && !isSortableItem && !directSubmission ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       key: getKey() + "buttonsChangesContainer",
       className: "buttons-changes-container"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
@@ -14794,6 +14819,20 @@ function Control(props) {
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
       icon: "edit"
     }), " Override default value")) : null;
+  }
+  function renderDefaultDeviceOverlay() {
+    return isResponsive && defaultDeviceIsDefined() && _Components_ODevices__WEBPACK_IMPORTED_MODULE_3__["default"].getInstance().getCurrentDevice() != _Components_ODevices__WEBPACK_IMPORTED_MODULE_3__["default"].getInstance().getDefaultDevice() && defaultDeviceOverlay && typeof value[_Components_ODevices__WEBPACK_IMPORTED_MODULE_3__["default"].getInstance().getCurrentDevice()] == "undefined" ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      key: getKey() + "defaultDeviceContainer",
+      className: "default-overlay-container"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
+      key: getKey() + "defaultDeviceContainer-button",
+      onMouseDown: () => {
+        setDefaultDeviceOverlay(false);
+      },
+      variant: "primary"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
+      icon: "edit"
+    }), " Override ", _Components_ODevices__WEBPACK_IMPORTED_MODULE_3__["default"].getInstance().getDefaultDevice(), " value")) : null;
   }
   function render() {
     /** Rendering */
@@ -14832,7 +14871,7 @@ function Control(props) {
         componentInstance: componentInstance
       }));
     }
-    if (isResponsive) {
+    if (isResponsive && defaultDeviceIsDefined()) {
       const currentDevice = _Components_ODevices__WEBPACK_IMPORTED_MODULE_3__["default"].getInstance().getCurrentDevice();
       render = _Render__WEBPACK_IMPORTED_MODULE_4__.Render.responsiveTabComponent(getKey(), Object.keys(_Components_ODevices__WEBPACK_IMPORTED_MODULE_3__["default"].getInstance().getMediaQueries()).map(layout => {
         return {
@@ -14850,7 +14889,7 @@ function Control(props) {
     }
     return render;
   }
-  return _Render__WEBPACK_IMPORTED_MODULE_4__.Render.fieldContainer(getKey(), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, render(), renderSavedButton(), renderDefaultValueOverlay()), getContainerClassName());
+  return _Render__WEBPACK_IMPORTED_MODULE_4__.Render.fieldContainer(getKey(), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, render(), renderSavedButton(), renderDefaultValueOverlay(), renderDefaultDeviceOverlay()), getContainerClassName());
 }
 
 /***/ }),
@@ -15805,9 +15844,18 @@ function MediaPreview(_ref) {
     multiple = false
   } = _ref;
   const [preview, setPreview] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
-  function fetchMedia() {
+  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (typeof value != 'undefined' && value != null && value != '') {
+      fetchMedia(value);
+    } else {
+      setPreview(null);
+    }
+  }, [value]);
+  function fetchMedia(newValue) {
+    console.log('apiFetch' + newValue);
+    setPreview(true);
     const queryParams = {
-      include: [value]
+      include: [newValue]
     };
     _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_1___default()({
       path: (0,_wordpress_url__WEBPACK_IMPORTED_MODULE_2__.addQueryArgs)('/wp/v2/media', queryParams)
@@ -15876,60 +15924,38 @@ function MediaPreview(_ref) {
     });
   }
 
-  if (value && (Number.isInteger(value) || value != null && typeof value != 'object')) {
-    if (preview == null) {
-      fetchMedia();
-      return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(PreviewContainer, {
-        key: id + "-PreviewContainer",
-        id: id,
-        isEmpty: true
-      }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-        className: "diagonal1"
-      }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-        className: "diagonal2"
-      }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-        className: "inner"
-      }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-        className: "o-loader"
-      })));
-    } else if (preview) {
-      return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Button, {
-        key: id + "-removeMedia",
-        variant: "secondary",
-        className: "is-destructive",
-        onMouseDown: () => onChange(undefined)
-      }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Dashicon, {
-        icon: "trash"
-      }), " Remove"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(PreviewContainer, {
-        key: id + "-PreviewContainer",
-        id: id
-      }, preview));
-    } else {
-      return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(PreviewContainer, {
-        key: id + "-PreviewContainer",
-        id: id,
-        isEmpty: true
-      }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-        className: "diagonal1"
-      }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-        className: "diagonal2"
-      }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-        className: "inner"
-      }, "No available preview..."));
-    }
-  } else {
+  if (preview === true) {
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(PreviewContainer, {
       key: id + "-PreviewContainer",
       id: id,
       isEmpty: true
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-      className: "diagonal1"
-    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-      className: "diagonal2"
-    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
       className: "inner"
-    }, "No media..."));
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "o-loader"
+    })));
+  } else if (preview) {
+    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Button, {
+      key: id + "-removeMedia",
+      variant: "secondary",
+      className: "is-destructive",
+      onMouseDown: () => onChange(undefined)
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Dashicon, {
+      icon: "trash"
+    }), " Remove"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(PreviewContainer, {
+      key: id + "-PreviewContainer",
+      id: id
+    }, preview));
+  } else if (preview === false) {
+    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(PreviewContainer, {
+      key: id + "-PreviewContainer",
+      id: id,
+      isEmpty: true
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+      className: "inner"
+    }, "No available preview..."));
   }
+  return null;
 }
 function PreviewContainer(_ref2) {
   let {

@@ -17,14 +17,14 @@ class Image extends Base {
             // Get default image (desktop...)
             $configMedia = Config::getInstance()->get_spec('media');
             $defaultDevice = ( $configMedia && is_array($configMedia) && isset($configMedia['defaultMedia']) ) ? $configMedia['defaultMedia'] : 'desktop';
-            if( isset($value[$defaultDevice]) && is_array($value[$defaultDevice]) && isset($value[$defaultDevice]['id']) ) {
-                $imageObject->init($value[$defaultDevice]['id']);
+            if( isset($value[$defaultDevice]) ) {
+                $imageObject->init($value[$defaultDevice]);
             }
 
             // Media images treatment
             foreach( $value as $device => $image_device ) {
-                if( $device != $defaultDevice && is_array($image_device) && isset($image_device['id']) ) {
-                    $imageObject->addMedia($image_device['id'], $device);
+                if( $device != $defaultDevice ) {
+                    $imageObject->addMedia($image_device, $device);
                 }
             }
 
@@ -60,14 +60,14 @@ class Image extends Base {
             // Get default image (desktop...)
             $configMedia = Config::getInstance()->get_spec('media');
             $defaultDevice = ( $configMedia && is_array($configMedia) && isset($configMedia['defaultMedia']) ) ? $configMedia['defaultMedia'] : 'desktop';
-            if( isset($value[$defaultDevice]) && is_array($value[$defaultDevice]) && isset($value[$defaultDevice]['id']) ) {
-                $imageObject->init($value[$defaultDevice]['id']);
+            if( isset($value[$defaultDevice]) ) {
+                $imageObject->init($value[$defaultDevice]);
             }
 
             // Media images treatment
             foreach( $value as $device => $image_device ) {
-                if( $device != $defaultDevice && is_array($image_device) && isset($image_device['id']) ) {
-                    $imageObject->addMedia($image_device['id'], $device);
+                if( $device != $defaultDevice ) {
+                    $imageObject->addMedia($image_device, $device);
                 }
             }
 

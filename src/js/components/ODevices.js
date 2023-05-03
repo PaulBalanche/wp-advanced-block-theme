@@ -71,6 +71,10 @@ export default class ODevices extends Component {
         return this.state.currentDevice;
     }
 
+    getDefaultDevice() {
+        return this.defaultMediaQuery;
+    }
+
     setCurrentDevice(newDevice) {
 
         this.setState( { currentDevice: newDevice } );

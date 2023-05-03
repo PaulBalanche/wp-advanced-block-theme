@@ -1,15 +1,28 @@
 import apiFetch from '@wordpress/api-fetch';
 import { addQueryArgs } from '@wordpress/url';
 import { Button, Dashicon } from "@wordpress/components";
-import { useState } from "@wordpress/element";
+import { useState, useEffect } from "@wordpress/element";
 
 export function MediaPreview({id, value, onChange, multiple = false}) {
 
     const [preview, setPreview] = useState( null );
 
-    function fetchMedia() {
+    useEffect(() => {
 
-        const queryParams = { include: [value] };
+        if( typeof value != 'undefined' && value != null && value != '' ) {
+            fetchMedia(value);
+        }
+        else {
+            setPreview(null);
+        }
+      }, [value]);
+
+    function fetchMedia( newValue ) {
+
+        console.log('apiFetch' + newValue);
+        setPreview(true);
+
+        const queryParams = { include: [newValue] };
 
         apiFetch( { path: addQueryArgs('/wp/v2/media', queryParams) } ).then( ( posts ) => {
 
@@ -87,51 +100,37 @@ export function MediaPreview({id, value, onChange, multiple = false}) {
         } );
     }
 
-    if( value && ( Number.isInteger(value) || ( value != null && typeof value != 'object' ) ) ) {
+    if( preview === true ) {
 
-        if( preview == null ) {
-
-            fetchMedia();
-
-            return <PreviewContainer key={id + "-PreviewContainer"} id={id} isEmpty={true}>
-                <span className="diagonal1"></span>
-                <span className="diagonal2"></span>
-                <span className="inner">
-                    <div className="o-loader"></div>
-                </span>
-            </PreviewContainer>
-        }
-        else if( preview ) {
-
-            return <>
-                <Button
-                        key={id + "-removeMedia"}
-                        variant="secondary"
-                        className="is-destructive"
-                        onMouseDown={() => onChange(undefined)}
-                    >
-                        <Dashicon icon="trash" /> Remove
-                </Button>
-                <PreviewContainer key={id + "-PreviewContainer"} id={id} >
-                    {preview}
-                </PreviewContainer>
-            </>
-        }
-        else {
-            return <PreviewContainer key={id + "-PreviewContainer"} id={id} isEmpty={true}>
-                <span className="diagonal1"></span>
-                <span className="diagonal2"></span>
-                <span className="inner">No available preview...</span>
-            </PreviewContainer>
-        }
-    }
-    else {
         return <PreviewContainer key={id + "-PreviewContainer"} id={id} isEmpty={true}>
-            <span className="diagonal1"></span>
-            <span className="diagonal2"></span>
-            <span className="inner">No media...</span>
+            <span className="inner">
+                <div className="o-loader"></div>
+            </span>
         </PreviewContainer>
     }
+    else if( preview ) {
+
+        return <>
+            <Button
+                    key={id + "-removeMedia"}
+                    variant="secondary"
+                    className="is-destructive"
+                    onMouseDown={() => onChange(undefined)}
+                >
+                    <Dashicon icon="trash" /> Remove
+            </Button>
+            <PreviewContainer key={id + "-PreviewContainer"} id={id} >
+                {preview}
+            </PreviewContainer>
+        </>
+    }
+    else if( preview === false ) {
+        return <PreviewContainer key={id + "-PreviewContainer"} id={id} isEmpty={true}>
+            <span className="inner">No available preview...</span>
+        </PreviewContainer>
+    }
+    
+    return null;
 }
 
 
