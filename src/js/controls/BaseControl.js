@@ -1,4 +1,4 @@
-import { useState } from "@wordpress/element";
+import { Fragment } from "@wordpress/element";
 
 import { Checkbox } from "./Checkbox";
 import { DateTime } from "./DateTime";
@@ -17,10 +17,7 @@ import WysiwygControl from "./WysiwygControl/WysiwygControl";
 
 export function BaseControl(props) {
 
-    // const [value, setValue] = useState( props.value );
-
     function onChange(newValue) {
-        // setValue(newValue);
         props.onChange(newValue);
     }
 
@@ -193,6 +190,14 @@ export function BaseControl(props) {
 
         return null;
     }
-    
+
+    if( [ 'file', 'video', 'gallery', 'image', 'datetime', 'checkbox', 'boolean', 'switch' ].includes(props.type) ) {
+
+        return <Fragment key={props.id + "-fragment"}>
+            <label className="components-base-control__forced_label" key={props.id + "-label"}>{props.label}</label>
+            {render()}
+        </Fragment>
+    }
+
     return render();
 }

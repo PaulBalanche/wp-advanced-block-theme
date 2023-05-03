@@ -87,7 +87,7 @@
             .responsive-buttons-container {
                 position: absolute;
                 z-index: 1;
-                top: 0;
+                top: $o-space-10;
                 right: 0;
             }
         
@@ -138,13 +138,21 @@
             width: 100%;
             height: 100%;
             display: none;
+            z-index: 1;
         }
 
         .buttons-changes-container {
             display: flex;
             align-items: center;
-            justify-content: space-between;
-
+            justify-content: space-evenly;
+            position: absolute;
+            width: 100%;
+            z-index: 2;
+            left: 0;
+            top: calc(100% + 10px);
+            background: $background300;
+            padding: $o-space-50 0;
+            border-radius: $o-border-radius-small;
 
             .components-button {
                 margin: 0;
@@ -159,6 +167,12 @@
 
             .basicField:not(.updating):after {
                 display: block;
+            }
+            .basicField.updating .basicField:not(.updating):after {
+                display: none;
+            }
+            .basicField:has(.basicField.updating)::after {
+                display: none;
             }
         }
     }

@@ -33,6 +33,11 @@
 
             &:hover {
                 padding-inline-end: 2.5em;
+
+                &:has( > .sortableItemInner > .basicField > .components-panel > .components-panel__body.is-opened ) {
+                    padding-inline-end: initial;
+                }
+
             }
 
             &.has-error > .sortableItemInner > .components-panel {
@@ -71,7 +76,8 @@
                 padding: 0;
                 margin: 0;
                 color: $o-text-color;
-                opacity: 0;
+                opacity: 0.3;
+                display: none;
                 box-shadow: none !important;
                 transition: $o-transition-fast;
             
@@ -84,8 +90,15 @@
                     height: 1rem;
                 }
             }
-            &:hover .drag {
-                opacity: 0.3;
+            &:hover {
+
+                .drag {
+                    display: block;
+                }
+
+                &:has( > .sortableItemInner > .basicField > .components-panel > .components-panel__body.is-opened ) .drag {
+                    display: none;
+                }
             }
 
             .remove {
@@ -93,7 +106,8 @@
                 right: 0;
                 top: 2em;
                 color: $o-text-color;
-                opacity: 0;
+                opacity: 0.3;
+                display: none;
                 box-shadow: none !important;
                 transition: $o-transition-fast;
 
@@ -106,8 +120,16 @@
                     height: 1rem;
                 }
             }
-            &:hover .remove {
-                opacity: 0.3;
+
+            &:hover {
+
+                .remove {
+                    display: block;
+                }
+
+                &:has( > .sortableItemInner > .basicField > .components-panel > .components-panel__body.is-opened ) .remove {
+                    display: none;
+                }
             }
         }
     }

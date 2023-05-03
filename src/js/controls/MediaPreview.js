@@ -13,34 +13,44 @@ export function MediaPreview({id, value, onChange, multiple = false}) {
 
         apiFetch( { path: addQueryArgs('/wp/v2/media', queryParams) } ).then( ( posts ) => {
 
-            console.log(posts);
-            if( typeof posts == 'object' && posts != null && typeof posts.media_type != undefined ) {
+            if( typeof posts == 'object' && Array.isArray(posts) && posts.length > 0 ) {
 
-                switch( posts.media_type ) {
+                const preview = [];
+                posts.forEach((media) => {
+                    if( typeof media == 'object'  && media != null && typeof media.media_type != undefined ) {
 
-                    case "image":
-                        setPreview(
-                            <img
-                                key={id + "-imagePreview"}
-                                alt="Edit image"
-                                title="Edit image"
-                                className="edit-image-preview"
-                                src={posts.media_details.sizes.medium.source_url}
-                            />
-                        );
-                        return;
-                    
-                    case "file":
-                        setPreview(
-                            <img
-                                key={id + "-imagePreview"}
-                                alt="Edit image"
-                                title="Edit image"
-                                className="edit-image-preview"
-                                src={posts.media_details.sizes.medium.source_url}
-                            />
-                        );
-                        return;
+                        switch( media.media_type ) {
+
+                            case "image":
+                                preview.push(
+                                    <img
+                                        key={id + "-imagePreview"}
+                                        alt="Edit image"
+                                        title="Edit image"
+                                        className="edit-image-preview"
+                                        src={media.media_details.sizes.medium.source_url}
+                                    />
+                                );
+                                break;
+                            
+                            case "file":
+                                preview.push(
+                                    <img
+                                        key={id + "-imagePreview"}
+                                        alt="Edit image"
+                                        title="Edit image"
+                                        className="edit-image-preview"
+                                        src={media.media_details.sizes.medium.source_url}
+                                    />
+                                );
+                                break;
+                        }
+                    }
+                })
+
+                if( preview.length > 0 ) {
+                    setPreview(preview);
+                    return;
                 }
             }
 
@@ -93,17 +103,19 @@ export function MediaPreview({id, value, onChange, multiple = false}) {
         }
         else if( preview ) {
 
-            return <PreviewContainer key={id + "-PreviewContainer"} id={id} >
-                {preview}
+            return <>
                 <Button
-                    key={id + "-removeMedia"}
-                    variant="primary"
-                    className="reset-button is-destructive"
-                    onMouseDown={() => onChange(undefined)}
-                >
-                    <Dashicon icon="trash" />
+                        key={id + "-removeMedia"}
+                        variant="secondary"
+                        className="is-destructive"
+                        onMouseDown={() => onChange(undefined)}
+                    >
+                        <Dashicon icon="trash" /> Remove
                 </Button>
-            </PreviewContainer>
+                <PreviewContainer key={id + "-PreviewContainer"} id={id} >
+                    {preview}
+                </PreviewContainer>
+            </>
         }
         else {
             return <PreviewContainer key={id + "-PreviewContainer"} id={id} isEmpty={true}>

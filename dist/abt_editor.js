@@ -14669,23 +14669,33 @@ function Control(props) {
   const args = props.args;
   const error = props.error;
   const componentInstance = props.componentInstance;
+  const isSortableItem = typeof props.sortableIndex != 'undefined';
   const [value, setValue] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(props.controllerValue);
   const [updating, setUpdating] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   const [editMode, setEditMode] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(props.controllerValue != null || typeof props.args.default == 'undefined' || props.args.default == null || typeof props.args.default.value == 'undefined');
   function onChange(newValue) {
     setValue(newValue);
     setUpdating(true);
+    if (isSortableItem && typeof props.onChange != 'undefined') {
+      props.onChange(newValue, [props.sortableIndex]);
+    }
   }
   function onSubmit() {
     _Attributes__WEBPACK_IMPORTED_MODULE_5__.Attributes.updateAttributes(getKeys(), valueProp, value, false, componentInstance);
     setUpdating(false);
     componentInstance.updatePreview();
   }
-  function onCancel() {
-    setValue(props.controllerValue);
-    setUpdating(false);
-  }
+
+  // function onCancel() {
+
+  //     setValue(props.controllerValue);
+  //     setUpdating(false);
+  // }
+
   function getLabel() {
+    if (label == null) {
+      return null;
+    }
     let labelFormatted = [label];
     if (required_field && label != null) {
       labelFormatted.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
@@ -14754,13 +14764,13 @@ function Control(props) {
         className.push('has-warning');
       }
     }
-    if (updating) {
+    if (updating && !isSortableItem) {
       className.push('updating');
     }
     return className.length > 0 ? className.join(' ') : '';
   }
   function renderSavedButton() {
-    return editMode && updating ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    return editMode && updating && !isSortableItem ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       key: getKey() + "buttonsChangesContainer",
       className: "buttons-changes-container"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
@@ -14769,17 +14779,10 @@ function Control(props) {
       variant: "primary"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
       icon: "saved"
-    }), " Save changes"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
-      key: getKey() + "cancelChanges-button",
-      onMouseDown: () => onCancel(),
-      variant: "secondary",
-      className: "is-destructive"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
-      icon: "no"
-    }), " Cancel")) : null;
+    }), " Apply")) : null;
   }
   function renderDefaultValueOverlay() {
-    return !editMode ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    return !editMode && !isSortableItem ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       key: getKey() + "defaultOverlayContainer",
       className: "default-overlay-container"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
@@ -14799,17 +14802,19 @@ function Control(props) {
       const itemsError = error && typeof error == 'object' && typeof error.props == 'object' && Object.keys(error.props).length > 0 ? error.props : null;
       render.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Sortable__WEBPACK_IMPORTED_MODULE_2__.Sortable, {
         key: getKey() + "-Sortable",
+        id: getKey() + "-Sortable",
         type: type,
         componentInstance: componentInstance,
         blockKey: getKey(),
         keys: getKeys(),
         valueProp: valueProp,
-        controllerValue: getValue(),
+        value: getValue(),
         required_field: required_field,
         args: args,
-        error: itemsError
+        error: itemsError,
+        onChange: newValue => onChange(newValue),
+        label: getLabel()
       }));
-      render = getLabel() != null ? _Render__WEBPACK_IMPORTED_MODULE_4__.Render.panelComponent(getKey(), getLabel(), render, true) : render;
     } else {
       render.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_controls_BaseControl__WEBPACK_IMPORTED_MODULE_6__.BaseControl, {
         key: getKey(),
@@ -14842,9 +14847,6 @@ function Control(props) {
         });
         _Components_ODevices__WEBPACK_IMPORTED_MODULE_3__["default"].getInstance().setCurrentDevice(newDevice);
       }, type);
-    }
-    if (['file', 'video', 'gallery', 'image'].includes(type)) {
-      render = _Render__WEBPACK_IMPORTED_MODULE_4__.Render.panelComponent(getKey(), getLabel(), render, componentInstance.getCurrentEditedProp() == id ? true : false);
     }
     return render;
   }
@@ -15052,9 +15054,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _dnd_kit_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @dnd-kit/core */ "./node_modules/@dnd-kit/core/dist/core.esm.js");
 /* harmony import */ var _dnd_kit_sortable__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @dnd-kit/sortable */ "./node_modules/@dnd-kit/sortable/dist/sortable.esm.js");
 /* harmony import */ var _SortableItem__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./SortableItem */ "./src/js/Static/SortableItem.js");
-/* harmony import */ var _Attributes__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./Attributes */ "./src/js/Static/Attributes.js");
-/* harmony import */ var _Control__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./Control */ "./src/js/Static/Control.js");
-/* harmony import */ var _Render__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./Render */ "./src/js/Static/Render.js");
+/* harmony import */ var _Control__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./Control */ "./src/js/Static/Control.js");
+/* harmony import */ var _Render__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./Render */ "./src/js/Static/Render.js");
 
 
 
@@ -15062,131 +15063,115 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-// import { Controls } from "./Controls";
 
-
-class Sortable extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      items: Object.keys(this.props.controllerValue)
-    };
-    this.handleDragEnd = this._handleDragEnd.bind(this);
-    this.handleRemove = this._handleRemove.bind(this);
-    this.addItem = this._addItem.bind(this);
+function Sortable(props) {
+  const [items, setItems] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(Object.keys(props.value));
+  function updateValue(newValue) {
+    props.onChange(newValue);
   }
-  _handleDragEnd(event) {
+  function onChange(newValue, index) {
+    console.log(index);
+    console.log(newValue);
+    const newControllerValue = [];
+    for (var i in props.value) {
+      newControllerValue.push(i == index ? newValue : props.value[i]);
+    }
+    updateValue(newControllerValue);
+  }
+  function handleDragEnd(event) {
     const {
       active,
       over
     } = event;
     if (active.id !== over.id) {
-      const oldIndex = this.state.items.indexOf(active.id);
-      const newIndex = this.state.items.indexOf(over.id);
-      const newItems = (0,_dnd_kit_sortable__WEBPACK_IMPORTED_MODULE_3__.arrayMove)(this.state.items, oldIndex, newIndex);
-      this.setState({
-        items: newItems
-      });
+      const oldIndex = items.indexOf(active.id);
+      const newIndex = items.indexOf(over.id);
+      const newItems = (0,_dnd_kit_sortable__WEBPACK_IMPORTED_MODULE_3__.arrayMove)(items, oldIndex, newIndex);
+      setItems(newItems);
       const newControllerValue = [];
       for (var i in newItems) {
         if ((i < newIndex || newIndex > oldIndex && i == newIndex) && i != oldIndex) {
-          newControllerValue.push(this.props.controllerValue[i]);
+          newControllerValue.push(props.value[i]);
         }
       }
-      newControllerValue.push(this.props.controllerValue[oldIndex]);
+      newControllerValue.push(props.value[oldIndex]);
       for (var i in newItems) {
         if ((i > newIndex || newIndex < oldIndex && i == newIndex) && i != oldIndex) {
-          newControllerValue.push(this.props.controllerValue[i]);
+          newControllerValue.push(props.value[i]);
         }
       }
-      _Attributes__WEBPACK_IMPORTED_MODULE_5__.Attributes.updateAttributes(this.props.keys, this.props.valueProp, newControllerValue, false, this.props.componentInstance);
+      updateValue(newControllerValue);
     }
   }
-  _handleRemove(id) {
-    const indexToRemove = this.state.items.indexOf(id);
-    this.setState({
-      items: this.state.items.filter(item => item !== id)
-    });
-    const newControllerValue = Object.assign([], this.props.controllerValue);
+  function handleRemove(id) {
+    const indexToRemove = items.indexOf(id);
+    setItems(items.filter(item => item !== id));
+    const newControllerValue = Object.assign([], props.value);
     newControllerValue.splice(indexToRemove, 1);
-    _Attributes__WEBPACK_IMPORTED_MODULE_5__.Attributes.updateAttributes(this.props.keys, this.props.valueProp, newControllerValue, false, this.props.componentInstance);
+    updateValue(newControllerValue);
   }
-  _addItem(elt) {
-    var currentStateItems = this.state.items;
-    var newIndexToAdd = 0;
-    for (var i in currentStateItems) {
-      var currentItem = parseInt(currentStateItems[i]);
-      if (currentItem >= newIndexToAdd) {
-        newIndexToAdd = currentItem + 1;
-      }
-    }
-    currentStateItems.push("" + newIndexToAdd + "");
-    this.setState({
-      items: currentStateItems
-    });
-    const newControllerValue = Object.assign([], this.props.controllerValue);
-    newControllerValue.push("");
-    _Attributes__WEBPACK_IMPORTED_MODULE_5__.Attributes.updateAttributes(this.props.keys, this.props.valueProp, newControllerValue, false, this.props.componentInstance);
+  function addItem() {
+    setItems(items.concat(items.length));
+    updateValue(props.value.concat(""));
   }
-  renderItems() {
+  function renderItems() {
     var renderItems = [];
-    for (var keyLoop in this.state.items) {
-      const error = this.props.error && typeof this.props.error == 'object' && this.props.error != null && typeof this.props.error[keyLoop] != 'undefined' ? this.props.error[keyLoop] : false;
-      let labelRepeatableItem = this.props.type == "object" ? _Render__WEBPACK_IMPORTED_MODULE_7__.Render.repeatableObjectLabelFormatting(this.props.blockKey + "-" + keyLoop, this.props.controllerValue, keyLoop) : null;
-      labelRepeatableItem = error && typeof error == 'object' && typeof error.error == 'string' ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, labelRepeatableItem, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-        className: "error"
-      }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
-        icon: "info"
-      }), error.error)) : labelRepeatableItem;
-      labelRepeatableItem = error && typeof error == 'object' && typeof error.warning == 'string' ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, labelRepeatableItem, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-        className: "warning"
-      }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
-        icon: "info"
-      }), error.warning)) : labelRepeatableItem;
+    for (var keyLoop in items) {
+      const error = props.error && typeof props.error == 'object' && props.error != null && typeof props.error[keyLoop] != 'undefined' ? props.error[keyLoop] : false;
+      let labelRepeatableItem = props.type == "object" ? _Render__WEBPACK_IMPORTED_MODULE_6__.Render.repeatableObjectLabelFormatting(props.blockKey + "-" + keyLoop, props.value, keyLoop) : null;
+
+      // labelRepeatableItem = ( error && typeof error == 'object' && typeof error.error == 'string' ) ? <>{labelRepeatableItem}<div className="error"><Dashicon icon="info" />{error.error}</div></> : labelRepeatableItem;
+      // labelRepeatableItem = ( error && typeof error == 'object' && typeof error.warning == 'string' ) ? <>{labelRepeatableItem}<div className="warning"><Dashicon icon="info" />{error.warning}</div></> : labelRepeatableItem;
+
       renderItems.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_SortableItem__WEBPACK_IMPORTED_MODULE_4__.SortableItem, {
-        key: this.props.blockKey + "-" + keyLoop + "-SortableItem",
-        id: this.state.items[keyLoop],
-        blockKey: this.props.blockKey,
-        onRemove: this.handleRemove,
-        type: this.props.type,
+        key: props.blockKey + "-" + keyLoop + "-SortableItem",
+        id: items[keyLoop],
+        blockKey: props.blockKey,
+        onRemove: handleRemove,
+        type: props.type,
         error: error
-      }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Control__WEBPACK_IMPORTED_MODULE_6__.Control, {
-        type: this.props.type,
-        componentInstance: this.props.componentInstance,
-        blockKey: this.props.blockKey + "-" + keyLoop,
+      }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Control__WEBPACK_IMPORTED_MODULE_5__.Control, {
+        type: props.type,
+        componentInstance: props.componentInstance,
+        blockKey: props.blockKey + "-" + keyLoop,
         label: labelRepeatableItem,
-        keys: this.props.keys.concat(keyLoop),
-        valueProp: this.props.valueProp,
-        objectValue: this.props.controllerValue[keyLoop],
-        required_field: this.props.required_field,
-        args: this.props.args,
-        error: error
+        keys: props.keys.concat(keyLoop),
+        valueProp: props.valueProp,
+        controllerValue: props.value[keyLoop],
+        required_field: false,
+        args: props.args,
+        error: null,
+        onChange: (newValue, index) => onChange(newValue, index),
+        sortableIndex: keyLoop
       })));
     }
     return renderItems;
   }
-  render() {
-    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_dnd_kit_core__WEBPACK_IMPORTED_MODULE_2__.DndContext, {
-      collisionDetection: _dnd_kit_core__WEBPACK_IMPORTED_MODULE_2__.closestCenter,
-      onDragEnd: this.handleDragEnd,
-      measuring: {
-        droppable: {
-          strategy: _dnd_kit_core__WEBPACK_IMPORTED_MODULE_2__.MeasuringStrategy.Always
-        }
+  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
+    key: props.id + "-fragment"
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+    className: "components-base-control__forced_label",
+    key: props.id + "-label"
+  }, props.label), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_dnd_kit_core__WEBPACK_IMPORTED_MODULE_2__.DndContext, {
+    collisionDetection: _dnd_kit_core__WEBPACK_IMPORTED_MODULE_2__.closestCenter,
+    onDragEnd: handleDragEnd,
+    measuring: {
+      droppable: {
+        strategy: _dnd_kit_core__WEBPACK_IMPORTED_MODULE_2__.MeasuringStrategy.Always
       }
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_dnd_kit_sortable__WEBPACK_IMPORTED_MODULE_3__.SortableContext, {
-      items: this.state.items,
-      strategy: _dnd_kit_sortable__WEBPACK_IMPORTED_MODULE_3__.verticalListSortingStrategy
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", {
-      className: "repeatableContainer"
-    }, this.renderItems())), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
-      className: "repeatableAddElt",
-      onMouseDown: this.addItem,
-      variant: "secondary"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
-      icon: "insert"
-    }), " Add"));
-  }
+    }
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_dnd_kit_sortable__WEBPACK_IMPORTED_MODULE_3__.SortableContext, {
+    items: items,
+    strategy: _dnd_kit_sortable__WEBPACK_IMPORTED_MODULE_3__.verticalListSortingStrategy
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", {
+    className: "repeatableContainer"
+  }, renderItems())), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
+    className: "repeatableAddElt",
+    onMouseDown: addItem,
+    variant: "secondary"
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
+    icon: "insert"
+  }), " Add")));
 }
 
 /***/ }),
@@ -15304,10 +15289,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 function BaseControl(props) {
-  // const [value, setValue] = useState( props.value );
-
   function onChange(newValue) {
-    // setValue(newValue);
     props.onChange(newValue);
   }
   function render() {
@@ -15463,6 +15445,14 @@ function BaseControl(props) {
     }
     return null;
   }
+  if (['file', 'video', 'gallery', 'image', 'datetime', 'checkbox', 'boolean', 'switch'].includes(props.type)) {
+    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
+      key: props.id + "-fragment"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+      className: "components-base-control__forced_label",
+      key: props.id + "-label"
+    }, props.label), render());
+  }
   return render();
 }
 
@@ -15493,10 +15483,7 @@ function Checkbox(_ref) {
     value,
     onChange
   } = _ref;
-  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
-    key: id + "-label",
-    className: "components-base-control__forced_label"
-  }, label), options.map(option => {
+  return options.map(option => {
     let isChecked = false;
     if (value != null && typeof value == 'object') {
       value.forEach(element => {
@@ -15534,7 +15521,7 @@ function Checkbox(_ref) {
         onChange(newObjectValue);
       }
     });
-  }));
+  });
 }
 
 /***/ }),
@@ -15556,7 +15543,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);
 
 
-
 function DateTime(_ref) {
   let {
     id,
@@ -15565,10 +15551,9 @@ function DateTime(_ref) {
     type,
     onChange
   } = _ref;
-  let control = null;
   switch (type) {
     case 'date':
-      control = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.DatePicker, {
+      return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.DatePicker, {
         key: id,
         currentDate: value,
         onChange: newValue => onChange(newValue),
@@ -15577,7 +15562,7 @@ function DateTime(_ref) {
       });
       break;
     case 'time':
-      control = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.TimePicker, {
+      return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.TimePicker, {
         key: id,
         currentDate: value,
         onChange: newValue => onChange(newValue),
@@ -15587,7 +15572,7 @@ function DateTime(_ref) {
       });
       break;
     default:
-      control = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.DateTimePicker, {
+      return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.DateTimePicker, {
         key: id,
         currentDate: value,
         onChange: newValue => onChange(newValue),
@@ -15597,12 +15582,7 @@ function DateTime(_ref) {
       });
       break;
   }
-  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
-    key: id + "-fragment"
-  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
-    className: "components-base-control__forced_label",
-    key: id + "-label"
-  }, label), control);
+  return null;
 }
 
 /***/ }),
@@ -15633,12 +15613,12 @@ function File(_ref) {
     onChange,
     multiple = false
   } = _ref;
-  return _Static_Render__WEBPACK_IMPORTED_MODULE_1__.Render.fieldContainer(id + "_file", (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_MediaHandler__WEBPACK_IMPORTED_MODULE_2__.MediaHandler, {
+  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_MediaHandler__WEBPACK_IMPORTED_MODULE_2__.MediaHandler, {
     id: id,
     value: value,
     onChange: newValue => onChange(newValue),
     multiple: multiple
-  }), 'file');
+  });
 }
 
 /***/ }),
@@ -15832,27 +15812,35 @@ function MediaPreview(_ref) {
     _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_1___default()({
       path: (0,_wordpress_url__WEBPACK_IMPORTED_MODULE_2__.addQueryArgs)('/wp/v2/media', queryParams)
     }).then(posts => {
-      console.log(posts);
-      if (typeof posts == 'object' && posts != null && typeof posts.media_type != undefined) {
-        switch (posts.media_type) {
-          case "image":
-            setPreview((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
-              key: id + "-imagePreview",
-              alt: "Edit image",
-              title: "Edit image",
-              className: "edit-image-preview",
-              src: posts.media_details.sizes.medium.source_url
-            }));
-            return;
-          case "file":
-            setPreview((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
-              key: id + "-imagePreview",
-              alt: "Edit image",
-              title: "Edit image",
-              className: "edit-image-preview",
-              src: posts.media_details.sizes.medium.source_url
-            }));
-            return;
+      if (typeof posts == 'object' && Array.isArray(posts) && posts.length > 0) {
+        const preview = [];
+        posts.forEach(media => {
+          if (typeof media == 'object' && media != null && typeof media.media_type != undefined) {
+            switch (media.media_type) {
+              case "image":
+                preview.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
+                  key: id + "-imagePreview",
+                  alt: "Edit image",
+                  title: "Edit image",
+                  className: "edit-image-preview",
+                  src: media.media_details.sizes.medium.source_url
+                }));
+                break;
+              case "file":
+                preview.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
+                  key: id + "-imagePreview",
+                  alt: "Edit image",
+                  title: "Edit image",
+                  className: "edit-image-preview",
+                  src: media.media_details.sizes.medium.source_url
+                }));
+                break;
+            }
+          }
+        });
+        if (preview.length > 0) {
+          setPreview(preview);
+          return;
         }
       }
       setPreview(false);
@@ -15905,17 +15893,17 @@ function MediaPreview(_ref) {
         className: "o-loader"
       })));
     } else if (preview) {
-      return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(PreviewContainer, {
-        key: id + "-PreviewContainer",
-        id: id
-      }, preview, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Button, {
+      return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Button, {
         key: id + "-removeMedia",
-        variant: "primary",
-        className: "reset-button is-destructive",
+        variant: "secondary",
+        className: "is-destructive",
         onMouseDown: () => onChange(undefined)
       }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Dashicon, {
         icon: "trash"
-      })));
+      }), " Remove"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(PreviewContainer, {
+        key: id + "-PreviewContainer",
+        id: id
+      }, preview));
     } else {
       return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(PreviewContainer, {
         key: id + "-PreviewContainer",
@@ -16232,17 +16220,12 @@ function Toggle(_ref) {
     onChange
   } = _ref;
   const labelToggleControl = typeof help == "object" && Array.isArray(help) && help.length == 2 ? !!value ? help[1] : help[0] : null;
-  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
-    key: id + "-fragment"
-  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
-    className: "components-base-control__forced_label",
-    key: id + "-label"
-  }, label), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.ToggleControl, {
+  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.ToggleControl, {
     key: id,
     label: labelToggleControl,
     checked: value,
     onChange: newValue => onChange(newValue)
-  }));
+  });
 }
 
 /***/ }),

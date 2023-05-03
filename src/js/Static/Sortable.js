@@ -1,5 +1,4 @@
-import { Component } from "@wordpress/element";
-
+import { useState, Fragment } from "@wordpress/element";
 import { Button, Dashicon } from "@wordpress/components";
 
 import { closestCenter, DndContext, MeasuringStrategy } from "@dnd-kit/core";
@@ -11,32 +10,36 @@ import {
 
 import { SortableItem } from "./SortableItem";
 
-import { Attributes } from "./Attributes";
-// import { Controls } from "./Controls";
 import { Control } from "./Control";
 import { Render } from "./Render";
 
-export class Sortable extends Component {
-    constructor(props) {
-        super(props);
+export function Sortable(props) {
 
-        this.state = {
-            items: Object.keys(this.props.controllerValue),
-        };
+    const [items, setItems] = useState( Object.keys(props.value) );
 
-        this.handleDragEnd = this._handleDragEnd.bind(this);
-        this.handleRemove = this._handleRemove.bind(this);
-        this.addItem = this._addItem.bind(this);
+    function updateValue(newValue) {
+        props.onChange(newValue);
     }
 
-    _handleDragEnd(event) {
+    function onChange(newValue, index) {
+
+        console.log(index);
+        console.log(newValue);
+        const newControllerValue = [];
+        for( var i in props.value ) {
+            newControllerValue.push( ( i == index ) ? newValue : props.value[i] );
+        }
+        updateValue(newControllerValue);
+    }
+
+    function handleDragEnd(event) {
         const { active, over } = event;
         if (active.id !== over.id) {
-            const oldIndex = this.state.items.indexOf(active.id);
-            const newIndex = this.state.items.indexOf(over.id);
-            const newItems = arrayMove(this.state.items, oldIndex, newIndex);
+            const oldIndex = items.indexOf(active.id);
+            const newIndex = items.indexOf(over.id);
+            const newItems = arrayMove(items, oldIndex, newIndex);
 
-            this.setState({ items: newItems });
+            setItems(newItems);
 
             const newControllerValue = [];
             for (var i in newItems) {
@@ -44,115 +47,82 @@ export class Sortable extends Component {
                     (i < newIndex || (newIndex > oldIndex && i == newIndex)) &&
                     i != oldIndex
                 ) {
-                    newControllerValue.push(this.props.controllerValue[i]);
+                    newControllerValue.push(props.value[i]);
                 }
             }
 
-            newControllerValue.push(this.props.controllerValue[oldIndex]);
+            newControllerValue.push(props.value[oldIndex]);
             for (var i in newItems) {
                 if (
                     (i > newIndex || (newIndex < oldIndex && i == newIndex)) &&
                     i != oldIndex
                 ) {
-                    newControllerValue.push(this.props.controllerValue[i]);
+                    newControllerValue.push(props.value[i]);
                 }
             }
 
-            Attributes.updateAttributes(
-                this.props.keys,
-                this.props.valueProp,
-                newControllerValue,
-                false,
-                this.props.componentInstance
-            );
+            updateValue(newControllerValue);
         }
     }
 
-    _handleRemove(id) {
-        const indexToRemove = this.state.items.indexOf(id);
-        this.setState({
-            items: this.state.items.filter((item) => item !== id),
-        });
+    function handleRemove(id) {
+        const indexToRemove = items.indexOf(id);
+        setItems(items.filter((item) => item !== id));
 
         const newControllerValue = Object.assign(
             [],
-            this.props.controllerValue
+            props.value
         );
         newControllerValue.splice(indexToRemove, 1);
 
-        Attributes.updateAttributes(
-            this.props.keys,
-            this.props.valueProp,
-            newControllerValue,
-            false,
-            this.props.componentInstance
-        );
+        updateValue(newControllerValue);
     }
 
-    _addItem(elt) {
-        var currentStateItems = this.state.items;
-        var newIndexToAdd = 0;
-        for (var i in currentStateItems) {
-            var currentItem = parseInt(currentStateItems[i]);
-            if (currentItem >= newIndexToAdd) {
-                newIndexToAdd = currentItem + 1;
-            }
-        }
-        currentStateItems.push("" + newIndexToAdd + "");
-        this.setState({ items: currentStateItems });
-
-        const newControllerValue = Object.assign(
-            [],
-            this.props.controllerValue
-        );
-        newControllerValue.push("");
-        Attributes.updateAttributes(
-            this.props.keys,
-            this.props.valueProp,
-            newControllerValue,
-            false,
-            this.props.componentInstance
-        );
+    function addItem() {
+        setItems( items.concat(items.length) );
+        updateValue( props.value.concat("") );
     }
 
-    renderItems() {
+    function renderItems() {
         var renderItems = [];
-        for (var keyLoop in this.state.items) {
+        for (var keyLoop in items) {
 
-            const error = ( this.props.error && typeof this.props.error == 'object' && this.props.error != null && typeof this.props.error[keyLoop] != 'undefined' ) ? this.props.error[keyLoop] : false;
+            const error = ( props.error && typeof props.error == 'object' && props.error != null && typeof props.error[keyLoop] != 'undefined' ) ? props.error[keyLoop] : false;
 
             let labelRepeatableItem =
-                this.props.type == "object"
+                props.type == "object"
                     ? Render.repeatableObjectLabelFormatting(
-                          this.props.blockKey + "-" + keyLoop,
-                          this.props.controllerValue,
+                          props.blockKey + "-" + keyLoop,
+                          props.value,
                           keyLoop
                       )
                     : null;
 
-            labelRepeatableItem = ( error && typeof error == 'object' && typeof error.error == 'string' ) ? <>{labelRepeatableItem}<div className="error"><Dashicon icon="info" />{error.error}</div></> : labelRepeatableItem;
-            labelRepeatableItem = ( error && typeof error == 'object' && typeof error.warning == 'string' ) ? <>{labelRepeatableItem}<div className="warning"><Dashicon icon="info" />{error.warning}</div></> : labelRepeatableItem;
+            // labelRepeatableItem = ( error && typeof error == 'object' && typeof error.error == 'string' ) ? <>{labelRepeatableItem}<div className="error"><Dashicon icon="info" />{error.error}</div></> : labelRepeatableItem;
+            // labelRepeatableItem = ( error && typeof error == 'object' && typeof error.warning == 'string' ) ? <>{labelRepeatableItem}<div className="warning"><Dashicon icon="info" />{error.warning}</div></> : labelRepeatableItem;
 
             renderItems.push(
                 <SortableItem
-                    key={this.props.blockKey + "-" + keyLoop + "-SortableItem"}
-                    id={this.state.items[keyLoop]}
-                    blockKey={this.props.blockKey}
-                    onRemove={this.handleRemove}
-                    type={this.props.type}
+                    key={props.blockKey + "-" + keyLoop + "-SortableItem"}
+                    id={items[keyLoop]}
+                    blockKey={props.blockKey}
+                    onRemove={handleRemove}
+                    type={props.type}
                     error={error}
                 >
                     <Control
-                        type={this.props.type}
-                        componentInstance={this.props.componentInstance}
-                        blockKey={this.props.blockKey + "-" + keyLoop}
+                        type={props.type}
+                        componentInstance={props.componentInstance}
+                        blockKey={props.blockKey + "-" + keyLoop}
                         label={labelRepeatableItem}
-                        keys={this.props.keys.concat(keyLoop)}
-                        valueProp={this.props.valueProp}
-                        objectValue={this.props.controllerValue[keyLoop]}
-                        required_field={this.props.required_field}
-                        args={this.props.args}
-                        error={error}
+                        keys={props.keys.concat(keyLoop)}
+                        valueProp={props.valueProp}
+                        controllerValue={props.value[keyLoop]}
+                        required_field={false}
+                        args={props.args}
+                        error={null}
+                        onChange={ (newValue, index) => onChange(newValue, index) }
+                        sortableIndex={keyLoop}
                     />
                 </SortableItem>
             );
@@ -160,31 +130,30 @@ export class Sortable extends Component {
         return renderItems;
     }
 
-    render() {
-        return (
-            <DndContext
-                collisionDetection={closestCenter}
-                onDragEnd={this.handleDragEnd}
-                measuring={{
-                    droppable: { strategy: MeasuringStrategy.Always },
-                }}
+    return <Fragment key={props.id + "-fragment"}>
+        <label className="components-base-control__forced_label" key={props.id + "-label"}>{props.label}</label>
+        <DndContext
+            collisionDetection={closestCenter}
+            onDragEnd={handleDragEnd}
+            measuring={{
+                droppable: { strategy: MeasuringStrategy.Always },
+            }}
+        >
+            <SortableContext
+                items={items}
+                strategy={verticalListSortingStrategy}
             >
-                <SortableContext
-                    items={this.state.items}
-                    strategy={verticalListSortingStrategy}
-                >
-                    <ul className="repeatableContainer">
-                        {this.renderItems()}
-                    </ul>
-                </SortableContext>
-                <Button
-                    className="repeatableAddElt"
-                    onMouseDown={this.addItem}
-                    variant="secondary"
-                >
-                    <Dashicon icon="insert" /> Add
-                </Button>
-            </DndContext>
-        );
-    }
+                <ul className="repeatableContainer">
+                    {renderItems()}
+                </ul>
+            </SortableContext>
+            <Button
+                className="repeatableAddElt"
+                onMouseDown={addItem}
+                variant="secondary"
+            >
+                <Dashicon icon="insert" /> Add
+            </Button>
+        </DndContext>
+    </Fragment>
 }

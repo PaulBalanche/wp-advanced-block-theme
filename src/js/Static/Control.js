@@ -8,7 +8,7 @@ import { Render } from './Render';
 import { Attributes } from "./Attributes";
 import { BaseControl } from "../controls/BaseControl";
 
-export function Control(props){
+export function Control(props) {
 
     const id = props.keys.join('-');
     const key = props.blockKey;
@@ -22,6 +22,7 @@ export function Control(props){
     const args = props.args;
     const error = props.error;
     const componentInstance = props.componentInstance;
+    const isSortableItem = ( typeof props.sortableIndex != 'undefined' );
 
     const [value, setValue] = useState( props.controllerValue );
     const [updating, setUpdating] = useState( false );
@@ -31,8 +32,12 @@ export function Control(props){
 
         setValue(newValue);
         setUpdating(true);
-    }
 
+        if( isSortableItem && typeof props.onChange != 'undefined' ) {
+            props.onChange( newValue, [props.sortableIndex] );
+        }
+    }
+    
     function onSubmit() {
 
         Attributes.updateAttributes(
@@ -46,13 +51,17 @@ export function Control(props){
         componentInstance.updatePreview();
     }
 
-    function onCancel() {
+    // function onCancel() {
 
-        setValue(props.controllerValue);
-        setUpdating(false);
-    }
+    //     setValue(props.controllerValue);
+    //     setUpdating(false);
+    // }
 
     function getLabel() {
+
+        if( label == null ) {
+            return null;
+        }
 
         let labelFormatted = [ label ];
 
@@ -130,7 +139,7 @@ export function Control(props){
             }
         }
 
-        if( updating ) {
+        if( updating && ! isSortableItem) {
             className.push('updating');
         }
 
@@ -139,30 +148,30 @@ export function Control(props){
 
     function renderSavedButton() {
 
-        return ( editMode && updating ) ?
+        return ( editMode && updating && ! isSortableItem ) ?
             <div key={getKey() + "buttonsChangesContainer"} className="buttons-changes-container">
                 <Button
                     key={getKey() + "submitChanges-button"}
                     onMouseDown={ () => onSubmit() }
                     variant="primary"
                 >
-                    <Dashicon icon="saved" /> Save changes
+                    <Dashicon icon="saved" /> Apply
                 </Button>
-                <Button
+                {/* <Button
                     key={getKey() + "cancelChanges-button"}
                     onMouseDown={ () => onCancel() }
                     variant="secondary"
                     className="is-destructive"
                 >
                     <Dashicon icon="no" /> Cancel
-                </Button>
+                </Button> */}
             </div>
         : null;
     }
     
     function renderDefaultValueOverlay() {
 
-        return ( ! editMode ) ?
+        return ( ! editMode && ! isSortableItem ) ?
             <div key={getKey() + "defaultOverlayContainer"} className="default-overlay-container">
                 <Button
                     key={getKey() + "defaultOverlayContainer-button"}
@@ -186,26 +195,19 @@ export function Control(props){
 
             render.push( <Sortable
                 key={getKey() + "-Sortable"}
+                id={getKey() + "-Sortable"}
                 type={type}
                 componentInstance={componentInstance}
                 blockKey={getKey()}
                 keys={getKeys()}
                 valueProp={valueProp}
-                controllerValue={getValue()}
+                value={getValue()}
                 required_field={required_field}
                 args={args}
                 error={itemsError}
+                onChange={ (newValue) => onChange(newValue) }
+                label={getLabel()}
             /> )
-
-            render =
-                getLabel() != null
-                    ? Render.panelComponent(
-                        getKey(),
-                        getLabel(),
-                        render,
-                        true
-                        )
-                    : render;
         }
         else {
             
@@ -250,16 +252,6 @@ export function Control(props){
                     __ODevices.getInstance().setCurrentDevice(newDevice);
                 },
                 type
-            );
-        }
-
-        if( [ 'file', 'video', 'gallery', 'image' ].includes(type) ) {
-
-            render = Render.panelComponent(
-                getKey(),
-                getLabel(),
-                render,
-                ( componentInstance.getCurrentEditedProp() == id ) ? true : false
             );
         }
         

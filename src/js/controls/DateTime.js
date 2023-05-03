@@ -1,13 +1,11 @@
-import { Fragment } from "@wordpress/element";
 import { DateTimePicker, TimePicker, DatePicker } from "@wordpress/components";
 
 export function DateTime({id, label, value, type, onChange}) {
 
-    let control = null;
     switch( type ) {
 
         case 'date' :
-            control = <DatePicker
+            return <DatePicker
                 key={id}
                 currentDate={value}
                 onChange={(newValue) => onChange(newValue)}
@@ -17,7 +15,7 @@ export function DateTime({id, label, value, type, onChange}) {
             break;
 
         case 'time':
-            control = <TimePicker
+            return <TimePicker
                 key={id}
                 currentDate={value}
                 onChange={(newValue) => onChange(newValue)}
@@ -28,7 +26,7 @@ export function DateTime({id, label, value, type, onChange}) {
             break;
 
         default:
-            control = <DateTimePicker
+            return <DateTimePicker
                 key={id}
                 currentDate={value}
                 onChange={(newValue) => onChange(newValue)}
@@ -39,8 +37,5 @@ export function DateTime({id, label, value, type, onChange}) {
             break;
     }
 
-    return <Fragment key={id + "-fragment"}>
-        <label className="components-base-control__forced_label" key={id + "-label"}>{label}</label>
-        {control}
-    </Fragment>
+    return null
 }
