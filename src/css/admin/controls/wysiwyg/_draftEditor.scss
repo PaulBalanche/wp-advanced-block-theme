@@ -60,7 +60,7 @@
         .components-button {
 
             &:hover, &.is-active {
-                background: #d8eef8;
+                background: $o-accent-color-border;
             }
 
             .dashicon {

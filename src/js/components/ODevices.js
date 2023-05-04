@@ -110,6 +110,7 @@ export default class ODevices extends Component {
     getButtonGroup() {
 
         const currentDevice = this.getCurrentDevice();
+        const defaultDevice = this.getDefaultDevice();
 
         if( typeof this.getMediaQueries()[currentDevice] == 'undefined' ) {
             return null;
@@ -122,10 +123,12 @@ export default class ODevices extends Component {
                     className="devicesButtonGroup"
                 >
                     {Object.keys(this.getMediaQueries()).map((layout) => {
+                        const extraClass = ( defaultDevice == layout ) ? 'default' : null;
                         return (
                             <Button
                                 key={"layoutButton_" + layout}
                                 isPressed={currentDevice == layout}
+                                className={extraClass}
                                 onMouseDown={() => {
                                     this.setCurrentDevice(layout);
                                 }}

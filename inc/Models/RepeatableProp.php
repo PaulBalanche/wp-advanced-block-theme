@@ -4,7 +4,7 @@ namespace Abt\Models;
 
 class RepeatableProp extends SimpleProp {
 
-    private $requiredValidItems = 4;
+    private $requiredValidItems = 1;
 
     function __construct( $key, $value, $specs ) {
         parent::__construct( $key, $value, $specs );

@@ -121,6 +121,15 @@
                 transition: $o-transition-default;
             }
 
+            &.isResponsive {
+                top: 60px;
+                height: calc(100% - 55px);
+
+                .components-button{
+                    opacity: 1;
+                }
+            }
+
             &:hover {
 
                 .components-button {

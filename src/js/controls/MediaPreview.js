@@ -9,17 +9,16 @@ export function MediaPreview({id, value, onChange, multiple = false}) {
 
     useEffect(() => {
 
-        if( typeof value != 'undefined' && value != null && value != '' ) {
+        if( typeof value == 'number' ) {
             fetchMedia(value);
         }
         else {
             setPreview(null);
         }
-      }, [value]);
+    }, [value]);
 
     function fetchMedia( newValue ) {
 
-        console.log('apiFetch' + newValue);
         setPreview(true);
 
         const queryParams = { include: [newValue] };

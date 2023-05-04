@@ -11,13 +11,31 @@
     .devicesButtonGroup {
 
         .components-button {
-            
+            position: relative;
             border-radius: 0;
             color: rgb(160 160 160);
+
+            &:after {
+                font-family: dashicons;
+                position: absolute;
+                top: -2px;
+                right: 8px;
+                font-size: 12px;
+            }
 
             &.is-pressed {
                 background: none;
                 color: var(--wp-admin-theme-color);
+
+                &.default:after { 
+                    content: "\f155";
+                }
+            }
+
+            &.default {
+                &:after {
+                    content: "\f154";
+                }
             }
         }
     }
@@ -34,13 +52,40 @@
             margin-bottom: $o-space-10;
 
             .components-button {
+                position: relative;
                 margin-bottom: 0;
                 border-radius: 0;
                 color: rgb(160 160 160);
 
+                &:after {
+                    font-family: dashicons;
+                    position: absolute;
+                    top: -2px;
+                    right: 8px;
+                    font-size: 12px;
+                }
+
                 &.is-pressed {
                     background: none;
                     color: var(--wp-admin-theme-color);
+
+                    &.default:after { 
+                        content: "\f155";
+                    }
+                }
+
+                &.default {
+                    &:after {
+                        content: "\f154";
+                        color: var(--wp-admin-theme-color);
+                    }
+                }
+
+                &.valid {
+                    &:after {
+                        content: "\f15e";
+                        color: var(--wp-admin-theme-color);
+                    }
                 }
             }
         }

@@ -374,6 +374,13 @@
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3) !important;
   transition: all 0.3s ease-in-out;
 }
+.o-editor .basicField .default-overlay-container.isResponsive {
+  top: 60px;
+  height: calc(100% - 55px);
+}
+.o-editor .basicField .default-overlay-container.isResponsive .components-button {
+  opacity: 1;
+}
 .o-editor .basicField .default-overlay-container:hover .components-button {
   opacity: 1;
 }
@@ -1026,6 +1033,7 @@
 }
 .o-editor .repeatableContainer .repeatableItem .drag:hover {
   opacity: 1;
+  color: var(--wp-admin-theme-color);
 }
 .o-editor .repeatableContainer .repeatableItem .drag .dashicon {
   font-size: 1rem;
@@ -1037,10 +1045,36 @@
 .o-editor .repeatableContainer .repeatableItem:hover:has(> .sortableItemInner > .basicField > .components-panel > .components-panel__body.is-opened) .drag {
   display: none;
 }
-.o-editor .repeatableContainer .repeatableItem .remove {
+.o-editor .repeatableContainer .repeatableItem .duplicate {
   position: absolute;
   right: 0;
   top: 2em;
+  padding: 0;
+  margin: 0;
+  color: rgba(0, 0, 0, 0.6);
+  opacity: 0.3;
+  display: none;
+  box-shadow: none !important;
+  transition: all 0.1s ease-in-out;
+}
+.o-editor .repeatableContainer .repeatableItem .duplicate:hover {
+  opacity: 1;
+  color: var(--wp-admin-theme-color);
+}
+.o-editor .repeatableContainer .repeatableItem .duplicate .dashicon {
+  font-size: 1rem;
+  height: 1rem;
+}
+.o-editor .repeatableContainer .repeatableItem:hover .duplicate {
+  display: block;
+}
+.o-editor .repeatableContainer .repeatableItem:hover:has(> .sortableItemInner > .basicField > .components-panel > .components-panel__body.is-opened) .duplicate {
+  display: none;
+}
+.o-editor .repeatableContainer .repeatableItem .remove {
+  position: absolute;
+  right: 0;
+  top: 4em;
   color: rgba(0, 0, 0, 0.6);
   opacity: 0.3;
   display: none;
@@ -1554,6 +1588,7 @@
   align-items: center;
   margin-bottom: 6px;
   width: 120px;
+  opacity: 0.2;
 }
 .o-editor .block-editor-media-placeholder .components-placeholder__fieldset .media-preview-container {
   grid-column-start: 1;
@@ -1584,6 +1619,12 @@
 }
 .o-editor .block-editor-media-placeholder .components-placeholder__fieldset .components-button.is-destructive:hover {
   box-shadow: inset 0 0 0 1px #710d0d !important;
+}
+.o-editor .basicField:hover > .components-placeholder > .components-placeholder__fieldset > .components-button,
+.o-editor .basicField:hover > .components-placeholder > .components-placeholder__fieldset > .components-form-file-upload > .components-button,
+.o-editor .basicField:hover > .responsive-tab-panel-wpe-component > .components-placeholder > .components-placeholder__fieldset > .components-button,
+.o-editor .basicField:hover > .responsive-tab-panel-wpe-component > .components-placeholder > .components-placeholder__fieldset > .components-form-file-upload > .components-button {
+  opacity: 1;
 }
 
 .o-editor .components-input-control__container .components-select-control__input {
@@ -2161,12 +2202,26 @@
   padding: 6px;
 }
 #devicesButtonGroupContainer .devicesButtonGroup .components-button {
+  position: relative;
   border-radius: 0;
   color: rgb(160, 160, 160);
+}
+#devicesButtonGroupContainer .devicesButtonGroup .components-button:after {
+  font-family: dashicons;
+  position: absolute;
+  top: -2px;
+  right: 8px;
+  font-size: 12px;
 }
 #devicesButtonGroupContainer .devicesButtonGroup .components-button.is-pressed {
   background: none;
   color: var(--wp-admin-theme-color);
+}
+#devicesButtonGroupContainer .devicesButtonGroup .components-button.is-pressed.default:after {
+  content: "\f155";
+}
+#devicesButtonGroupContainer .devicesButtonGroup .components-button.default:after {
+  content: "\f154";
 }
 
 .o-editor .responsive-buttons-container .components-button-group {
@@ -2176,12 +2231,31 @@
   margin-bottom: 6px;
 }
 .o-editor .responsive-buttons-container .components-button-group .components-button {
+  position: relative;
   margin-bottom: 0;
   border-radius: 0;
   color: rgb(160, 160, 160);
 }
+.o-editor .responsive-buttons-container .components-button-group .components-button:after {
+  font-family: dashicons;
+  position: absolute;
+  top: -2px;
+  right: 8px;
+  font-size: 12px;
+}
 .o-editor .responsive-buttons-container .components-button-group .components-button.is-pressed {
   background: none;
+  color: var(--wp-admin-theme-color);
+}
+.o-editor .responsive-buttons-container .components-button-group .components-button.is-pressed.default:after {
+  content: "\f155";
+}
+.o-editor .responsive-buttons-container .components-button-group .components-button.default:after {
+  content: "\f154";
+  color: var(--wp-admin-theme-color);
+}
+.o-editor .responsive-buttons-container .components-button-group .components-button.valid:after {
+  content: "\f15e";
   color: var(--wp-admin-theme-color);
 }
 

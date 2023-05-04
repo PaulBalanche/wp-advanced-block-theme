@@ -1,4 +1,4 @@
-import { useState, Fragment } from "@wordpress/element";
+import { useState, useEffect, Fragment } from "@wordpress/element";
 import { Button, Dashicon } from "@wordpress/components";
 
 import { closestCenter, DndContext, MeasuringStrategy } from "@dnd-kit/core";
@@ -17,14 +17,12 @@ export function Sortable(props) {
 
     const [items, setItems] = useState( Object.keys(props.value) );
 
-    function updateValue(newValue) {
-        props.onChange(newValue);
+    function updateValue(newValue, directSubmit = false) {
+        props.onChange(newValue, directSubmit);
     }
 
     function onChange(newValue, index) {
 
-        console.log(index);
-        console.log(newValue);
         const newControllerValue = [];
         for( var i in props.value ) {
             newControllerValue.push( ( i == index ) ? newValue : props.value[i] );
@@ -33,6 +31,7 @@ export function Sortable(props) {
     }
 
     function handleDragEnd(event) {
+
         const { active, over } = event;
         if (active.id !== over.id) {
             const oldIndex = items.indexOf(active.id);
@@ -61,8 +60,28 @@ export function Sortable(props) {
                 }
             }
 
-            updateValue(newControllerValue);
+            updateValue(newControllerValue, true);
         }
+    }
+
+    function handleDuplicate(id) {
+        
+        const indexToDuplicate = items.indexOf(id);
+        const indexToInsert = indexToDuplicate + 1;
+        const newItems = Object.assign(
+            [],
+            items
+        );
+        newItems.splice(indexToInsert, 0, items.length.toString());
+        setItems( newItems );
+
+        const newControllerValue = Object.assign(
+            [],
+            props.value
+        );
+        newControllerValue.splice(indexToInsert, 0, props.value[indexToDuplicate]);
+
+        updateValue(newControllerValue, true);
     }
 
     function handleRemove(id) {
@@ -75,12 +94,12 @@ export function Sortable(props) {
         );
         newControllerValue.splice(indexToRemove, 1);
 
-        updateValue(newControllerValue);
+        updateValue(newControllerValue, true);
     }
 
     function addItem() {
-        setItems( items.concat(items.length) );
-        updateValue( props.value.concat("") );
+        setItems( items.concat(items.length.toString()) );
+        updateValue( props.value.concat(""), true );
     }
 
     function renderItems() {
@@ -106,6 +125,7 @@ export function Sortable(props) {
                     key={props.blockKey + "-" + keyLoop + "-SortableItem"}
                     id={items[keyLoop]}
                     blockKey={props.blockKey}
+                    onDuplicate={handleDuplicate}
                     onRemove={handleRemove}
                     type={props.type}
                     error={error}

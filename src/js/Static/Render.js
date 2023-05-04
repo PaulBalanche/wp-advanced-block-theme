@@ -9,10 +9,6 @@ import {
 } from "@wordpress/components";
 
 import { Attributes } from "./Attributes";
-import { Control } from "./Control";
-
-import { Sortable } from "./Sortable";
-
 import __ODevices from "../Components/ODevices";
 
 export class Render {
@@ -212,7 +208,6 @@ export class Render {
         onSelect = null,
         type
     ) {
-
         return (
             <div
                 key={id + "-responsiveTabPanel"}
@@ -222,12 +217,15 @@ export class Render {
                     <ButtonGroup>
                         { tabs.map((layout) => {
 
+                            const extraClass = ( layout.isDefault ) ? 'default' : ( ( layout.isValid ) ? ' valid' : '' );
+
                             return <Button
                                 key={id + "-responsiveTabPanel-Button-" + layout.name}
+                                isPressed={(layout.active)}
+                                className={extraClass}
                                 onMouseDown={() => {
                                     onSelect(layout.name)
                                 }}
-                                isPressed={(layout.active)}
                             >{Render.getDeviceLabel(layout.name)}</Button>
                         }) }
                     </ButtonGroup>

@@ -30,6 +30,7 @@
                 align-items: center;
                 margin-bottom: $o-space-10;
                 width: 120px;
+                opacity: 0.2;
             }
 
             .media-preview-container {
@@ -69,5 +70,12 @@
                 }
             }
         }
+    }
+
+    .basicField:hover > .components-placeholder > .components-placeholder__fieldset > .components-button,
+    .basicField:hover > .components-placeholder > .components-placeholder__fieldset > .components-form-file-upload > .components-button,
+    .basicField:hover > .responsive-tab-panel-wpe-component > .components-placeholder > .components-placeholder__fieldset > .components-button,
+    .basicField:hover > .responsive-tab-panel-wpe-component > .components-placeholder > .components-placeholder__fieldset > .components-form-file-upload > .components-button {
+        opacity: 1;
     }
 }

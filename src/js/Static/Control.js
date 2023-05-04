@@ -1,6 +1,5 @@
-
 import { Button, Dashicon } from "@wordpress/components";
-import { useState } from "@wordpress/element";
+import { useState, useEffect } from "@wordpress/element";
 
 import { Sortable } from "./Sortable";
 import __ODevices from "../Components/ODevices";
@@ -23,14 +22,59 @@ export function Control(props) {
     const error = props.error;
     const componentInstance = props.componentInstance;
     const isSortableItem = ( typeof props.sortableIndex != 'undefined' );
-    const directSubmission = ( [ 'file', 'video', 'gallery', 'image', 'datetime', 'checkbox', 'boolean', 'switch' ].includes(props.type) );
+    const directSubmission = ( ! [ 'string', 'number', 'integer', 'text', 'richText', 'wysiwyg' ].includes(props.type) );
 
     const [value, setValue] = useState( props.controllerValue );
     const [updating, setUpdating] = useState( false );
-    const [editMode, setEditMode] = useState( ( props.controllerValue != null ||  typeof props.args.default == 'undefined' || props.args.default == null || typeof props.args.default.value == 'undefined' ) );
-    const [defaultDeviceOverlay, setDefaultDeviceOverlay] = useState( true );
+    const [editMode, setEditMode] = useState( null );
 
-    function onChange(newValue) {
+    useEffect(() => {
+
+        if( !! editMode && editMode != __ODevices.getInstance().getCurrentDevice() ) {
+            setEditMode( null );
+        }
+    });
+
+    function haveToDisplayDefaultValue() {
+
+        if( !! editMode && editMode == __ODevices.getInstance().getCurrentDevice() ) {
+            return false;
+        }
+
+        if( isSortableItem || ( repeatable && getDefaultValue() != null && typeof getDefaultValue() != 'object' ) ) {
+            return false;
+        }
+
+        if( value == null && getDefaultValue() != null ) {
+            return true;
+        }
+
+        if( isResponsive && __ODevices.getInstance().getCurrentDevice() != __ODevices.getInstance().getDefaultDevice() && defaultDeviceIsDefined() && typeof value[__ODevices.getInstance().getCurrentDevice()] == "undefined" ) {
+            return true;
+        }
+
+        return false;
+    }
+
+    function getDefaultValue() {
+
+        if( isResponsive && __ODevices.getInstance().getCurrentDevice() != __ODevices.getInstance().getDefaultDevice() && defaultDeviceIsDefined() && typeof value[__ODevices.getInstance().getCurrentDevice()] == "undefined" ) {
+            return value[ __ODevices.getInstance().getDefaultDevice() ];
+        }
+
+        if( typeof args.default != 'undefined' && args.default != null && typeof args.default.value != 'undefined' ) {
+            return args.default.value;
+        }
+
+        return null;
+    }
+
+    function defaultDeviceIsDefined() {
+
+        return ( value != null && typeof value == "object" && typeof value[ __ODevices.getInstance().getDefaultDevice() ] != "undefined" );
+    }
+
+    function onChange(newValue, directSubmit = false) {
 
         if( isResponsive ) {
             newValue = { ...value, ...{ [ __ODevices.getInstance().getCurrentDevice() ]: newValue} };
@@ -41,8 +85,8 @@ export function Control(props) {
             props.onChange( newValue, [props.sortableIndex] );
         }
 
-        if( directSubmission ) {
-            directSubmit(newValue);
+        if( directSubmit || directSubmission ) {
+            onDirectSubmit(newValue);
         }
         else {
             setUpdating(true);
@@ -62,7 +106,7 @@ export function Control(props) {
         componentInstance.updatePreview();
     }
 
-    function directSubmit(newValue) {
+    function onDirectSubmit(newValue) {
         Attributes.updateAttributes(
             keys,
             valueProp,
@@ -72,12 +116,6 @@ export function Control(props) {
         );
         componentInstance.updatePreview();
     }
-
-    // function onCancel() {
-
-    //     setValue(props.controllerValue);
-    //     setUpdating(false);
-    // }
 
     function getLabel() {
 
@@ -127,8 +165,8 @@ export function Control(props) {
 
     function getValue() {
 
-        if( ! editMode ) {
-            return args.default.value;
+        if( haveToDisplayDefaultValue() ) {
+            return getDefaultValue();
         }
     
         if( isResponsive ) {
@@ -149,11 +187,6 @@ export function Control(props) {
         }
         
         return value;
-    }
-
-    function defaultDeviceIsDefined() {
-
-        return ( value != null && typeof value == "object" && typeof value[ __ODevices.getInstance().getDefaultDevice() ] != "undefined" );
     }
 
     function getContainerClassName() {
@@ -177,7 +210,7 @@ export function Control(props) {
 
     function renderSavedButton() {
 
-        return ( editMode && updating && ! isSortableItem && ! directSubmission ) ?
+        return ( ! haveToDisplayDefaultValue() && updating && ! isSortableItem && ! directSubmission ) ?
             <div key={getKey() + "buttonsChangesContainer"} className="buttons-changes-container">
                 <Button
                     key={getKey() + "submitChanges-button"}
@@ -200,29 +233,17 @@ export function Control(props) {
     
     function renderDefaultValueOverlay() {
 
-        return ( ! editMode && ! isSortableItem ) ?
-            <div key={getKey() + "defaultOverlayContainer"} className="default-overlay-container">
+        const text = ( isResponsive && defaultDeviceIsDefined() ) ? 'Define a specific image for ' + __ODevices.getInstance().getCurrentDevice() : 'Override default value';
+        const extraClass = ( isResponsive && defaultDeviceIsDefined() ) ? 'isResponsive' : null;
+
+        return ( haveToDisplayDefaultValue() && ! isSortableItem ) ?
+            <div key={getKey() + "defaultOverlayContainer"} className={"default-overlay-container " + extraClass}>
                 <Button
                     key={getKey() + "defaultOverlayContainer-button"}
-                    onMouseDown={ () => { setEditMode(true) } }
+                    onMouseDown={ () => { setEditMode( __ODevices.getInstance().getCurrentDevice() ) } }
                     variant="primary"
                 >
-                    <Dashicon icon="edit" /> Override default value
-                </Button>
-            </div>
-        : null;
-    }
-
-    function renderDefaultDeviceOverlay() {
-
-        return ( isResponsive && defaultDeviceIsDefined() && __ODevices.getInstance().getCurrentDevice() != __ODevices.getInstance().getDefaultDevice() && defaultDeviceOverlay && typeof value[__ODevices.getInstance().getCurrentDevice()] == "undefined") ?
-            <div key={getKey() + "defaultDeviceContainer"} className="default-overlay-container">
-                <Button
-                    key={getKey() + "defaultDeviceContainer-button"}
-                    onMouseDown={ () => { setDefaultDeviceOverlay(false) } }
-                    variant="primary"
-                >
-                    <Dashicon icon="edit" /> Override {__ODevices.getInstance().getDefaultDevice()} value
+                    <Dashicon icon="edit" />{text}
                 </Button>
             </div>
         : null;
@@ -249,7 +270,7 @@ export function Control(props) {
                 required_field={required_field}
                 args={args}
                 error={itemsError}
-                onChange={ (newValue) => onChange(newValue) }
+                onChange={ (newValue, directSubmit) => onChange(newValue, directSubmit) }
                 label={getLabel()}
             /> )
         }
@@ -262,7 +283,6 @@ export function Control(props) {
                 id={getKey()}
                 label={getLabel()}
                 value={getValue()}
-                defaultValue={args.default}
                 type={type}
                 args={args}
                 error={error}
@@ -275,6 +295,7 @@ export function Control(props) {
         if( isResponsive && defaultDeviceIsDefined() ) {
 
             const currentDevice = __ODevices.getInstance().getCurrentDevice();
+            const defaultDevice = __ODevices.getInstance().getDefaultDevice();
 
             render = Render.responsiveTabComponent(
                 getKey(),
@@ -287,7 +308,9 @@ export function Control(props) {
                             layout.charAt(0).toUpperCase() +
                             layout.slice(1),
                         className: "tab-" + layout,
-                        active: ( currentDevice == layout ) ? true : false
+                        active: ( currentDevice == layout ) ? true : false,
+                        isDefault: ( defaultDevice == layout ) ? true : false,
+                        isValid: ( typeof value[layout] != "undefined" ) ? true : false
                     };
                 }),
                 render,
@@ -308,7 +331,6 @@ export function Control(props) {
             {render()}
             {renderSavedButton()}
             {renderDefaultValueOverlay()}
-            {renderDefaultDeviceOverlay()}
         </>,
         getContainerClassName()
     ) 

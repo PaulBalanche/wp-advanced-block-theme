@@ -13107,6 +13107,7 @@ class ODevices extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Component
   }
   getButtonGroup() {
     const currentDevice = this.getCurrentDevice();
+    const defaultDevice = this.getDefaultDevice();
     if (typeof this.getMediaQueries()[currentDevice] == 'undefined') {
       return null;
     }
@@ -13116,9 +13117,11 @@ class ODevices extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Component
       key: "devicesButtonGroup",
       className: "devicesButtonGroup"
     }, Object.keys(this.getMediaQueries()).map(layout => {
+      const extraClass = defaultDevice == layout ? 'default' : null;
       return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
         key: "layoutButton_" + layout,
         isPressed: currentDevice == layout,
+        className: extraClass,
         onMouseDown: () => {
           this.setCurrentDevice(layout);
         }
@@ -14673,12 +14676,44 @@ function Control(props) {
   const error = props.error;
   const componentInstance = props.componentInstance;
   const isSortableItem = typeof props.sortableIndex != 'undefined';
-  const directSubmission = ['file', 'video', 'gallery', 'image', 'datetime', 'checkbox', 'boolean', 'switch'].includes(props.type);
+  const directSubmission = !['string', 'number', 'integer', 'text', 'richText', 'wysiwyg'].includes(props.type);
   const [value, setValue] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(props.controllerValue);
   const [updating, setUpdating] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
-  const [editMode, setEditMode] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(props.controllerValue != null || typeof props.args.default == 'undefined' || props.args.default == null || typeof props.args.default.value == 'undefined');
-  const [defaultDeviceOverlay, setDefaultDeviceOverlay] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(true);
+  const [editMode, setEditMode] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
+  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (!!editMode && editMode != _Components_ODevices__WEBPACK_IMPORTED_MODULE_3__["default"].getInstance().getCurrentDevice()) {
+      setEditMode(null);
+    }
+  });
+  function haveToDisplayDefaultValue() {
+    if (!!editMode && editMode == _Components_ODevices__WEBPACK_IMPORTED_MODULE_3__["default"].getInstance().getCurrentDevice()) {
+      return false;
+    }
+    if (isSortableItem || repeatable && getDefaultValue() != null && typeof getDefaultValue() != 'object') {
+      return false;
+    }
+    if (value == null && getDefaultValue() != null) {
+      return true;
+    }
+    if (isResponsive && _Components_ODevices__WEBPACK_IMPORTED_MODULE_3__["default"].getInstance().getCurrentDevice() != _Components_ODevices__WEBPACK_IMPORTED_MODULE_3__["default"].getInstance().getDefaultDevice() && defaultDeviceIsDefined() && typeof value[_Components_ODevices__WEBPACK_IMPORTED_MODULE_3__["default"].getInstance().getCurrentDevice()] == "undefined") {
+      return true;
+    }
+    return false;
+  }
+  function getDefaultValue() {
+    if (isResponsive && _Components_ODevices__WEBPACK_IMPORTED_MODULE_3__["default"].getInstance().getCurrentDevice() != _Components_ODevices__WEBPACK_IMPORTED_MODULE_3__["default"].getInstance().getDefaultDevice() && defaultDeviceIsDefined() && typeof value[_Components_ODevices__WEBPACK_IMPORTED_MODULE_3__["default"].getInstance().getCurrentDevice()] == "undefined") {
+      return value[_Components_ODevices__WEBPACK_IMPORTED_MODULE_3__["default"].getInstance().getDefaultDevice()];
+    }
+    if (typeof args.default != 'undefined' && args.default != null && typeof args.default.value != 'undefined') {
+      return args.default.value;
+    }
+    return null;
+  }
+  function defaultDeviceIsDefined() {
+    return value != null && typeof value == "object" && typeof value[_Components_ODevices__WEBPACK_IMPORTED_MODULE_3__["default"].getInstance().getDefaultDevice()] != "undefined";
+  }
   function onChange(newValue) {
+    let directSubmit = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
     if (isResponsive) {
       newValue = {
         ...value,
@@ -14691,8 +14726,8 @@ function Control(props) {
     if (isSortableItem && typeof props.onChange != 'undefined') {
       props.onChange(newValue, [props.sortableIndex]);
     }
-    if (directSubmission) {
-      directSubmit(newValue);
+    if (directSubmit || directSubmission) {
+      onDirectSubmit(newValue);
     } else {
       setUpdating(true);
     }
@@ -14702,17 +14737,10 @@ function Control(props) {
     setUpdating(false);
     componentInstance.updatePreview();
   }
-  function directSubmit(newValue) {
+  function onDirectSubmit(newValue) {
     _Attributes__WEBPACK_IMPORTED_MODULE_5__.Attributes.updateAttributes(keys, valueProp, newValue, false, componentInstance);
     componentInstance.updatePreview();
   }
-
-  // function onCancel() {
-
-  //     setValue(props.controllerValue);
-  //     setUpdating(false);
-  // }
-
   function getLabel() {
     if (label == null) {
       return null;
@@ -14759,8 +14787,8 @@ function Control(props) {
     return keysFormatted;
   }
   function getValue() {
-    if (!editMode) {
-      return args.default.value;
+    if (haveToDisplayDefaultValue()) {
+      return getDefaultValue();
     }
     if (isResponsive) {
       const currentDevice = _Components_ODevices__WEBPACK_IMPORTED_MODULE_3__["default"].getInstance().getCurrentDevice();
@@ -14777,9 +14805,6 @@ function Control(props) {
     }
     return value;
   }
-  function defaultDeviceIsDefined() {
-    return value != null && typeof value == "object" && typeof value[_Components_ODevices__WEBPACK_IMPORTED_MODULE_3__["default"].getInstance().getDefaultDevice()] != "undefined";
-  }
   function getContainerClassName() {
     const className = [];
     if (error && error != null && typeof error == 'object') {
@@ -14795,7 +14820,7 @@ function Control(props) {
     return className.length > 0 ? className.join(' ') : '';
   }
   function renderSavedButton() {
-    return editMode && updating && !isSortableItem && !directSubmission ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    return !haveToDisplayDefaultValue() && updating && !isSortableItem && !directSubmission ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       key: getKey() + "buttonsChangesContainer",
       className: "buttons-changes-container"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
@@ -14807,32 +14832,20 @@ function Control(props) {
     }), " Apply")) : null;
   }
   function renderDefaultValueOverlay() {
-    return !editMode && !isSortableItem ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    const text = isResponsive && defaultDeviceIsDefined() ? 'Define a specific image for ' + _Components_ODevices__WEBPACK_IMPORTED_MODULE_3__["default"].getInstance().getCurrentDevice() : 'Override default value';
+    const extraClass = isResponsive && defaultDeviceIsDefined() ? 'isResponsive' : null;
+    return haveToDisplayDefaultValue() && !isSortableItem ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       key: getKey() + "defaultOverlayContainer",
-      className: "default-overlay-container"
+      className: "default-overlay-container " + extraClass
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
       key: getKey() + "defaultOverlayContainer-button",
       onMouseDown: () => {
-        setEditMode(true);
+        setEditMode(_Components_ODevices__WEBPACK_IMPORTED_MODULE_3__["default"].getInstance().getCurrentDevice());
       },
       variant: "primary"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
       icon: "edit"
-    }), " Override default value")) : null;
-  }
-  function renderDefaultDeviceOverlay() {
-    return isResponsive && defaultDeviceIsDefined() && _Components_ODevices__WEBPACK_IMPORTED_MODULE_3__["default"].getInstance().getCurrentDevice() != _Components_ODevices__WEBPACK_IMPORTED_MODULE_3__["default"].getInstance().getDefaultDevice() && defaultDeviceOverlay && typeof value[_Components_ODevices__WEBPACK_IMPORTED_MODULE_3__["default"].getInstance().getCurrentDevice()] == "undefined" ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      key: getKey() + "defaultDeviceContainer",
-      className: "default-overlay-container"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
-      key: getKey() + "defaultDeviceContainer-button",
-      onMouseDown: () => {
-        setDefaultDeviceOverlay(false);
-      },
-      variant: "primary"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
-      icon: "edit"
-    }), " Override ", _Components_ODevices__WEBPACK_IMPORTED_MODULE_3__["default"].getInstance().getDefaultDevice(), " value")) : null;
+    }), text)) : null;
   }
   function render() {
     /** Rendering */
@@ -14851,7 +14864,7 @@ function Control(props) {
         required_field: required_field,
         args: args,
         error: itemsError,
-        onChange: newValue => onChange(newValue),
+        onChange: (newValue, directSubmit) => onChange(newValue, directSubmit),
         label: getLabel()
       }));
     } else {
@@ -14862,7 +14875,6 @@ function Control(props) {
         id: getKey(),
         label: getLabel(),
         value: getValue(),
-        defaultValue: args.default,
         type: type,
         args: args,
         error: error,
@@ -14873,12 +14885,15 @@ function Control(props) {
     }
     if (isResponsive && defaultDeviceIsDefined()) {
       const currentDevice = _Components_ODevices__WEBPACK_IMPORTED_MODULE_3__["default"].getInstance().getCurrentDevice();
+      const defaultDevice = _Components_ODevices__WEBPACK_IMPORTED_MODULE_3__["default"].getInstance().getDefaultDevice();
       render = _Render__WEBPACK_IMPORTED_MODULE_4__.Render.responsiveTabComponent(getKey(), Object.keys(_Components_ODevices__WEBPACK_IMPORTED_MODULE_3__["default"].getInstance().getMediaQueries()).map(layout => {
         return {
           name: layout,
           title: layout.charAt(0).toUpperCase() + layout.slice(1),
           className: "tab-" + layout,
-          active: currentDevice == layout ? true : false
+          active: currentDevice == layout ? true : false,
+          isDefault: defaultDevice == layout ? true : false,
+          isValid: typeof value[layout] != "undefined" ? true : false
         };
       }), render, newDevice => {
         componentInstance.setState({
@@ -14889,7 +14904,7 @@ function Control(props) {
     }
     return render;
   }
-  return _Render__WEBPACK_IMPORTED_MODULE_4__.Render.fieldContainer(getKey(), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, render(), renderSavedButton(), renderDefaultValueOverlay(), renderDefaultDeviceOverlay()), getContainerClassName());
+  return _Render__WEBPACK_IMPORTED_MODULE_4__.Render.fieldContainer(getKey(), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, render(), renderSavedButton(), renderDefaultValueOverlay()), getContainerClassName());
 }
 
 /***/ }),
@@ -14910,11 +14925,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _Attributes__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Attributes */ "./src/js/Static/Attributes.js");
-/* harmony import */ var _Control__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Control */ "./src/js/Static/Control.js");
-/* harmony import */ var _Sortable__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Sortable */ "./src/js/Static/Sortable.js");
-/* harmony import */ var _Components_ODevices__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../Components/ODevices */ "./src/js/Components/ODevices.js");
-
-
+/* harmony import */ var _Components_ODevices__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Components/ODevices */ "./src/js/Components/ODevices.js");
 
 
 
@@ -15051,12 +15062,14 @@ class Render {
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "responsive-buttons-container"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.ButtonGroup, null, tabs.map(layout => {
+      const extraClass = layout.isDefault ? 'default' : layout.isValid ? ' valid' : '';
       return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
         key: id + "-responsiveTabPanel-Button-" + layout.name,
+        isPressed: layout.active,
+        className: extraClass,
         onMouseDown: () => {
           onSelect(layout.name);
-        },
-        isPressed: layout.active
+        }
       }, Render.getDeviceLabel(layout.name));
     }))), inner);
   }
@@ -15106,11 +15119,10 @@ __webpack_require__.r(__webpack_exports__);
 function Sortable(props) {
   const [items, setItems] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(Object.keys(props.value));
   function updateValue(newValue) {
-    props.onChange(newValue);
+    let directSubmit = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+    props.onChange(newValue, directSubmit);
   }
   function onChange(newValue, index) {
-    console.log(index);
-    console.log(newValue);
     const newControllerValue = [];
     for (var i in props.value) {
       newControllerValue.push(i == index ? newValue : props.value[i]);
@@ -15139,19 +15151,29 @@ function Sortable(props) {
           newControllerValue.push(props.value[i]);
         }
       }
-      updateValue(newControllerValue);
+      updateValue(newControllerValue, true);
     }
+  }
+  function handleDuplicate(id) {
+    const indexToDuplicate = items.indexOf(id);
+    const indexToInsert = indexToDuplicate + 1;
+    const newItems = Object.assign([], items);
+    newItems.splice(indexToInsert, 0, items.length.toString());
+    setItems(newItems);
+    const newControllerValue = Object.assign([], props.value);
+    newControllerValue.splice(indexToInsert, 0, props.value[indexToDuplicate]);
+    updateValue(newControllerValue, true);
   }
   function handleRemove(id) {
     const indexToRemove = items.indexOf(id);
     setItems(items.filter(item => item !== id));
     const newControllerValue = Object.assign([], props.value);
     newControllerValue.splice(indexToRemove, 1);
-    updateValue(newControllerValue);
+    updateValue(newControllerValue, true);
   }
   function addItem() {
-    setItems(items.concat(items.length));
-    updateValue(props.value.concat(""));
+    setItems(items.concat(items.length.toString()));
+    updateValue(props.value.concat(""), true);
   }
   function renderItems() {
     var renderItems = [];
@@ -15166,6 +15188,7 @@ function Sortable(props) {
         key: props.blockKey + "-" + keyLoop + "-SortableItem",
         id: items[keyLoop],
         blockKey: props.blockKey,
+        onDuplicate: handleDuplicate,
         onRemove: handleRemove,
         type: props.type,
         error: error
@@ -15275,6 +15298,12 @@ function SortableItem(props) {
     isSmall: true,
     icon: "move"
   })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.Button, {
+    className: "duplicate",
+    onMouseDown: () => props.onDuplicate(props.id),
+    variant: "tertiary",
+    isSmall: true,
+    icon: "admin-page"
+  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.Button, {
     className: "remove",
     onMouseDown: () => props.onRemove(props.id),
     variant: "tertiary",
@@ -15845,14 +15874,13 @@ function MediaPreview(_ref) {
   } = _ref;
   const [preview, setPreview] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
   (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    if (typeof value != 'undefined' && value != null && value != '') {
+    if (typeof value == 'number') {
       fetchMedia(value);
     } else {
       setPreview(null);
     }
   }, [value]);
   function fetchMedia(newValue) {
-    console.log('apiFetch' + newValue);
     setPreview(true);
     const queryParams = {
       include: [newValue]
