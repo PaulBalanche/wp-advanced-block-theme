@@ -6,13 +6,13 @@ import {
 } from "@wordpress/block-editor";
 import { compose } from "@wordpress/compose";
 import { withDispatch, withSelect } from "@wordpress/data";
+import { Dashicon } from "@wordpress/components";
+
 import { WpeComponentBase } from "../../Components/WpeComponentBase";
 
 import apiFetch from "@wordpress/api-fetch";
 
 import __OEditorApp from "../../Components/OEditorApp";
-
-import { Errors } from "../../Helpers/Error";
 
 class WpeComponent extends WpeComponentBase {
     _$iframes;
@@ -191,9 +191,13 @@ class WpeComponent extends WpeComponentBase {
                             key={this.props.clientId + "-LiveRenderingMessage"}
                             className="liveRenderingMessage"
                         >
-                            <span className="diagonal1"></span>
-                            <span className="diagonal2"></span>
-                            <span className="inner">Click to edit</span>
+                            <div className="inner">
+                                <h2>{this.title}</h2>
+                                <Dashicon icon="admin-generic" />
+                                <p>
+                                    Not ready yet!<br /><u>Click to edit</u>
+                                </p>
+                            </div>
                         </div>
                     );
                 } else {
@@ -203,9 +207,12 @@ class WpeComponent extends WpeComponentBase {
                             key={this.props.clientId + "-LiveRenderingMessage"}
                             className="liveRenderingMessage"
                         >
-                            <span className="diagonal1"></span>
-                            <span className="diagonal2"></span>
-                            <span className="inner">{error}</span>
+                            <div className="inner">
+                                <Dashicon icon="info" />
+                                <p>
+                                    {error}
+                                </p>
+                            </div>
                         </div>
                     );
                 }

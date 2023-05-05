@@ -22,7 +22,7 @@ import {
 } from '@wordpress/icons';
 
 import { withSelect, withDispatch, dispatch } from '@wordpress/data';
-import { get, map, times } from 'lodash';
+import { get, map } from 'lodash';
 
 import __ODevices from "../../../Components/ODevices";
 

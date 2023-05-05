@@ -128,6 +128,7 @@ export function BaseControl(props) {
                     props={props.args.props}
                     onChange={ (newValue) => onChange(newValue) }
                     componentInstance={props.componentInstance}
+                    error={props.error}
                 />
                 break;
 

@@ -219,14 +219,6 @@ export function Control(props) {
                 >
                     <Dashicon icon="saved" /> Apply
                 </Button>
-                {/* <Button
-                    key={getKey() + "cancelChanges-button"}
-                    onMouseDown={ () => onCancel() }
-                    variant="secondary"
-                    className="is-destructive"
-                >
-                    <Dashicon icon="no" /> Cancel
-                </Button> */}
             </div>
         : null;
     }

@@ -1,0 +1,27 @@
+.o-editor {
+
+    .block-editor-link-control {
+    
+        .block-editor-link-control__field {
+    
+            margin: $o-space-20 0;
+    
+            .components-base-control__field {
+                margin: 0;
+
+                .block-editor-url-input__input {
+                    @include o-field;
+                }
+            }
+        }
+
+        .block-editor-link-control__search-actions {
+            top: 10px;
+            right: 20px;
+        }
+
+        .block-editor-link-control__search-item {
+            box-sizing: border-box;
+        }
+    }
+}

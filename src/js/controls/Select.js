@@ -8,7 +8,7 @@ export function Select({id, label, options, value, onChange}) {
         key={id}
         label={label}
         value={value}
-        options={[{ label: "--", value: "" }].concat(
+        options={[{ label: "--Please choose an option--", value: "" }].concat(
             options.map(function (value) {
                 return { label: value.name, value: value.value };
             })

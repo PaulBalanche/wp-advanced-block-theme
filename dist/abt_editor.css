@@ -194,38 +194,23 @@
 }
 .o-editor .block-editor-block-list__layout > .wp-block .liveRenderingMessage {
   text-align: center;
-  padding: 100px 0;
-  color: white;
+  background: white;
+  color: var(--wp-admin-theme-color);
   position: relative;
-  z-index: 20;
+  border-top: 6px solid var(--wp-admin-theme-color);
 }
 .o-editor .block-editor-block-list__layout > .wp-block .liveRenderingMessage .abtButtonEditZone {
   display: inline-flex;
 }
-.o-editor .block-editor-block-list__layout > .wp-block .liveRenderingMessage .diagonal1,
-.o-editor .block-editor-block-list__layout > .wp-block .liveRenderingMessage .diagonal2 {
-  content: "";
-  position: absolute;
-  top: 5%;
-  left: 5%;
-  width: 90%;
-  height: 90%;
-  background: var(--wp-admin-theme-color);
-  opacity: 0.5;
-}
-.o-editor .block-editor-block-list__layout > .wp-block .liveRenderingMessage .diagonal1 {
-  -webkit-clip-path: polygon(0% 0%, 100% calc(100% - 1px), 100% 100%, 0% calc(0% + 1px));
-          clip-path: polygon(0% 0%, 100% calc(100% - 1px), 100% 100%, 0% calc(0% + 1px));
-}
-.o-editor .block-editor-block-list__layout > .wp-block .liveRenderingMessage .diagonal2 {
-  -webkit-clip-path: polygon(0% calc(100% - 1px), 100% 0%, 100% calc(0% + 1px), 0% 100%);
-          clip-path: polygon(0% calc(100% - 1px), 100% 0%, 100% calc(0% + 1px), 0% 100%);
-}
 .o-editor .block-editor-block-list__layout > .wp-block .liveRenderingMessage .inner {
   position: relative;
-  padding: 60px 160px;
-  background: radial-gradient(circle, var(--abt-background-editor, "white") 60%, rgba(0, 212, 255, 0) 100%);
+  padding: 18px 0 30px 0;
   font-size: 16px;
+}
+.o-editor .block-editor-block-list__layout > .wp-block .liveRenderingMessage .inner .dashicon {
+  font-size: 40px;
+  width: auto;
+  height: auto;
 }
 
 .o-editor .block-editor-block-parent-selector {
@@ -1649,6 +1634,38 @@
   right: 10px;
 }
 
+.o-editor .block-editor-link-control .block-editor-link-control__field {
+  margin: 12px 0;
+}
+.o-editor .block-editor-link-control .block-editor-link-control__field .components-base-control__field {
+  margin: 0;
+}
+.o-editor .block-editor-link-control .block-editor-link-control__field .components-base-control__field .block-editor-url-input__input {
+  border-radius: 10px !important;
+  border: 1px solid #e8e8e8 !important;
+  padding: 18px 24px !important;
+  box-shadow: none !important;
+  outline: none !important;
+  height: auto !important;
+  transition: all 0.1s ease-in-out !important;
+}
+.o-editor .block-editor-link-control .block-editor-link-control__field .components-base-control__field .block-editor-url-input__input:hover {
+  border-color: #d8eef8 !important;
+}
+.o-editor .block-editor-link-control .block-editor-link-control__field .components-base-control__field .block-editor-url-input__input:focus {
+  border-color: #47a8e7 !important;
+}
+.o-editor .block-editor-link-control .block-editor-link-control__field .components-base-control__field .block-editor-url-input__input ~ .components-input-control__backdrop {
+  display: none !important;
+}
+.o-editor .block-editor-link-control .block-editor-link-control__search-actions {
+  top: 10px;
+  right: 20px;
+}
+.o-editor .block-editor-link-control .block-editor-link-control__search-item {
+  box-sizing: border-box;
+}
+
 .o-editor .components-text-control__input {
   border-radius: 10px !important;
   border: 1px solid #e8e8e8 !important;
@@ -2155,22 +2172,21 @@
   background: #866ec1;
 }
 .o-editor .wp-block.block-list-appender {
-  border: 1px dashed var(--wp-admin-theme-color);
+  background: var(--wp-admin-theme-color);
+  border: none;
   width: 90%;
   max-width: 90%;
   position: relative;
-}
-.o-editor .wp-block.block-list-appender:hover {
-  border-style: solid;
+  margin: auto;
+  margin-top: 24px;
 }
 .o-editor .wp-block.block-list-appender .components-button {
   box-shadow: none;
 }
 .o-editor .wp-block.block-list-appender .components-button svg {
   color: white;
-}
-.o-editor .wp-block.block-list-appender .components-button svg * {
-  fill: var(--wp-admin-theme-color);
+  width: 30px;
+  height: 30px;
 }
 
 #editor .interface-interface-skeleton__header .edit-post-header__toolbar {
