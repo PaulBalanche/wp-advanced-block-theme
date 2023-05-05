@@ -1,6 +1,6 @@
-import { Fragment } from "@wordpress/element";
 import { getBlockType } from "@wordpress/blocks";
 import { Button, Dashicon } from "@wordpress/components";
+import { Fragment } from "@wordpress/element";
 
 import __OEditorApp from "./OEditorApp";
 
@@ -29,7 +29,6 @@ export default class OEditorInspector {
     }
 
     render() {
-
         return (
             <BlockList
                 blocksList={this.blocksList}
@@ -50,7 +49,7 @@ const BlockList = (props) => {
                 <div className="separator"></div>
             )}
             {props.blocksList.map((block) => (
-                <Fragment key={"o-inspector-blockContainer-" + block.clientId }>
+                <Fragment key={"o-inspector-blockContainer-" + block.clientId}>
                     <BlockListItem
                         block={block}
                         selectBlock={props.selectBlock}
@@ -69,44 +68,70 @@ const BlockListItem = ({ block, selectBlock }) => {
         anchor.match(/^[a-z0-9]+-[a-z0-9]+-[a-z0-9]+-[a-z0-9]+-[a-z0-9]+$/) ==
             null;
     const domBlock = document.querySelector("#block-" + block.clientId);
-    
+
     const parentDomBlocks = [];
     var closestParent = domBlock;
-    while( true ) {
-        closestParent = closestParent.parentNode;
-        if( closestParent.classList.contains('is-root-container') ) {
-            break;
-        }
-        if( closestParent.classList.contains('block-editor-block-list__block') ) {
-            parentDomBlocks.push(closestParent);
+    if (closestParent != null) {
+        while (true) {
+            closestParent = closestParent.parentNode;
+            if (closestParent.classList.contains("is-root-container")) {
+                break;
+            }
+            if (
+                closestParent.classList.contains(
+                    "block-editor-block-list__block"
+                )
+            ) {
+                parentDomBlocks.push(closestParent);
+            }
         }
     }
 
-    let blockName = ( block.name == "core/block" && typeof block.postName != 'undefined' ) ? block.postName + " (" + getBlockType(block.name).title + ")" : getBlockType(block.name).title;
+    let blockName =
+        block.name == "core/block" && typeof block.postName != "undefined"
+            ? block.postName + " (" + getBlockType(block.name).title + ")"
+            : getBlockType(block.name).title;
 
-    if( typeof globalData.componentInstances == 'object' && typeof globalData.componentInstances[block.clientId] != 'undefined' && typeof globalData.componentInstances[block.clientId].state.error == 'object' && globalData.componentInstances[block.clientId].state.error != null && Object.keys(globalData.componentInstances[block.clientId].state.error).length > 0 ) {
-
+    if (
+        typeof globalData.componentInstances == "object" &&
+        typeof globalData.componentInstances[block.clientId] != "undefined" &&
+        typeof globalData.componentInstances[block.clientId].state.error ==
+            "object" &&
+        globalData.componentInstances[block.clientId].state.error != null &&
+        Object.keys(globalData.componentInstances[block.clientId].state.error)
+            .length > 0
+    ) {
         let errorsBlock = 0;
         let warningsBlock = 0;
-        for( var i in globalData.componentInstances[block.clientId].state.error ) {
-            if( typeof globalData.componentInstances[block.clientId].state.error[i].error != 'undefined' ) {
+        for (var i in globalData.componentInstances[block.clientId].state
+            .error) {
+            if (
+                typeof globalData.componentInstances[block.clientId].state
+                    .error[i].error != "undefined"
+            ) {
                 errorsBlock++;
             }
-            if( typeof globalData.componentInstances[block.clientId].state.error[i].warning != 'undefined' ) {
+            if (
+                typeof globalData.componentInstances[block.clientId].state
+                    .error[i].warning != "undefined"
+            ) {
                 warningsBlock++;
             }
         }
-        if( errorsBlock > 0 ) {
-            blockName = <>
-                {blockName}
-                <span className="error-attributes">{errorsBlock}</span>
-            </>
-        }
-        else if (warningsBlock > 0) {
-            blockName = <>
-                {blockName}
-                <span className="warning-attributes">{warningsBlock}</span>
-            </>
+        if (errorsBlock > 0) {
+            blockName = (
+                <>
+                    {blockName}
+                    <span className="error-attributes">{errorsBlock}</span>
+                </>
+            );
+        } else if (warningsBlock > 0) {
+            blockName = (
+                <>
+                    {blockName}
+                    <span className="warning-attributes">{warningsBlock}</span>
+                </>
+            );
         }
     }
 
@@ -121,14 +146,18 @@ const BlockListItem = ({ block, selectBlock }) => {
                         block: "center",
                     });
                     domBlock?.classList.add("is-pre-selected");
-                    for(var i in parentDomBlocks) {
-                        parentDomBlocks[i].classList.add("has-child-pre-selected");
+                    for (var i in parentDomBlocks) {
+                        parentDomBlocks[i].classList.add(
+                            "has-child-pre-selected"
+                        );
                     }
                 }}
                 onMouseOut={() => {
                     domBlock?.classList.remove("is-pre-selected");
-                    for(var i in parentDomBlocks) {
-                        parentDomBlocks[i].classList.remove("has-child-pre-selected");
+                    for (var i in parentDomBlocks) {
+                        parentDomBlocks[i].classList.remove(
+                            "has-child-pre-selected"
+                        );
                     }
                 }}
                 onMouseDown={() => {
@@ -146,7 +175,7 @@ const BlockListItem = ({ block, selectBlock }) => {
                     isChildren={true}
                 />
             )}
-            { typeof block.children != 'undefined' && (
+            {typeof block.children != "undefined" && (
                 <BlockList
                     blocksList={block.children}
                     selectBlock={selectBlock}

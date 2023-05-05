@@ -11,8 +11,8 @@ import __OEditorWelcome from "./OEditorWelcome";
 
 import globalData from "../global";
 
-import OModal from "./OModal";
 import ODevices from "./ODevices";
+import OModal from "./OModal";
 import OUserPreferences from "./OUserPreferences";
 
 export default class OEditorApp extends Component {
@@ -34,7 +34,7 @@ export default class OEditorApp extends Component {
         this.state = {
             route: null,
             needToBeMounted: true,
-            currentDevice: null
+            currentDevice: null,
         };
 
         // @ts-ignore
@@ -46,23 +46,24 @@ export default class OEditorApp extends Component {
     }
 
     componentDidMount() {
-
         // init shortcuts and mouse events
         this._initShortcuts();
         this._initMouseEvents();
 
-        if( this.props.context.editorMode == 'visual' && this.state.needToBeMounted && this.props.context.blocksList.length > 0 ) {
+        if (
+            this.props.context.editorMode == "visual" &&
+            this.state.needToBeMounted
+            // this.props.context.blocksList.length > 0
+        ) {
             this._mount();
         }
     }
 
     setCurrentDevice(newDevice) {
-
-        this.setState( { currentDevice: newDevice } );
+        this.setState({ currentDevice: newDevice });
     }
 
     _mount() {
-
         // Route the Editor App related to anchor
         this._routing();
 
@@ -80,17 +81,18 @@ export default class OEditorApp extends Component {
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
-
-        if( this.props.context.editorMode == 'visual' ) {
-            
-            if( this.state.needToBeMounted && this.props.context.blocksList.length > 0 ) {
+        if (this.props.context.editorMode == "visual") {
+            if (
+                this.state.needToBeMounted &&
+                this.props.context.blocksList.length > 0
+            ) {
                 this._mount();
             }
 
             for (var i in globalData.componentInstances) {
                 globalData.componentInstances[i].forceUpdate();
             }
-    
+
             // Force first of reusable block selection
             if (this.props.context.selectedBlockClientId != null) {
                 for (var i in this.props.context.blocksList) {
@@ -105,13 +107,13 @@ export default class OEditorApp extends Component {
                         this.props.context.blocksList[i].children.length > 0
                     ) {
                         this.props.context.selectBlock(
-                            this.props.context.blocksList[i].children[0].clientId
+                            this.props.context.blocksList[i].children[0]
+                                .clientId
                         );
                     }
                 }
             }
-        }
-        else if( ! this.state.needToBeMounted ) {
+        } else if (!this.state.needToBeMounted) {
             this._unmount();
         }
     }
@@ -193,7 +195,7 @@ export default class OEditorApp extends Component {
             this._$editAppContainer.classList.add("show");
         }, 1200);
     }
-    
+
     _hideEditorApp() {
         this._$editAppContainer.classList.remove("show");
     }
@@ -327,10 +329,8 @@ export default class OEditorApp extends Component {
     }
 
     render() {
+        if (this.props.context.editorMode != "visual") return null;
 
-        if( this.props.context.editorMode != 'visual' )
-            return null;
-       
         switch (this.state.route) {
             case "settings":
                 var componentToRender = new __OEditorSettings();
