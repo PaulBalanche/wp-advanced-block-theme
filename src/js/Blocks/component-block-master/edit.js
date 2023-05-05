@@ -4,9 +4,9 @@ import {
     useBlockProps,
     useInnerBlocksProps,
 } from "@wordpress/block-editor";
+import { Dashicon } from "@wordpress/components";
 import { compose } from "@wordpress/compose";
 import { withDispatch, withSelect } from "@wordpress/data";
-import { Dashicon } from "@wordpress/components";
 
 import { WpeComponentBase } from "../../Components/WpeComponentBase";
 
@@ -40,7 +40,6 @@ class WpeComponent extends WpeComponentBase {
     }
 
     componentDidMount() {
-
         setTimeout(() => {
             this.apiFetch();
         });
@@ -104,20 +103,19 @@ class WpeComponent extends WpeComponentBase {
             method: "POST",
             data: attributes == null ? this.props.attributes : attributes,
         }).then((res) => {
-            
-            // const error = ( ! res.success ) ? Errors.cleanError(res.data) : null;
-
-            if( res.success ) {
+            if (res.success) {
                 this.setState({
                     previewReady: true,
                     needPreviewUpdate: false,
+                    error: typeof res.data != "undefined" ? res.data : null,
                 });
-            } {
+            }
+            {
                 this.setState({
                     error: res.data,
                     needPreviewUpdate: false,
                 });
-            }  
+            }
 
             __OEditorApp.getInstance().forceUpdate();
         });
@@ -143,8 +141,9 @@ class WpeComponent extends WpeComponentBase {
     }
 
     renderLoaderPreview() {
-
-        const className = ( this.state.iframeLoaded ) ? "loaderLiveRenderingIframe closed" : "loaderLiveRenderingIframe";
+        const className = this.state.iframeLoaded
+            ? "loaderLiveRenderingIframe closed"
+            : "loaderLiveRenderingIframe";
 
         return (
             <div
@@ -183,8 +182,12 @@ class WpeComponent extends WpeComponentBase {
 
             var render = [];
 
-            if (error != null ) {
-                if( typeof error == "object" ) {
+            if (previewReady) {
+                render.push(this.renderEditFormZone());
+                render.push(this.renderLoaderPreview());
+                render.push(this.renderIframePreview());
+            } else if (error != null) {
+                if (typeof error == "object") {
                     render.push(this.renderEditFormZone());
                     render.push(
                         <div
@@ -195,7 +198,9 @@ class WpeComponent extends WpeComponentBase {
                                 <h2>{this.title}</h2>
                                 <Dashicon icon="admin-generic" />
                                 <p>
-                                    Not ready yet!<br /><u>Click to edit</u>
+                                    Not ready yet!
+                                    <br />
+                                    <u>Click to edit</u>
                                 </p>
                             </div>
                         </div>
@@ -209,20 +214,14 @@ class WpeComponent extends WpeComponentBase {
                         >
                             <div className="inner">
                                 <Dashicon icon="info" />
-                                <p>
-                                    {error}
-                                </p>
+                                <p>{error}</p>
                             </div>
                         </div>
                     );
                 }
-            } else if (!previewReady) {
-                render.push(this.renderEditFormZone());
-                render.push(this.renderLoaderPreview());
             } else {
                 render.push(this.renderEditFormZone());
                 render.push(this.renderLoaderPreview());
-                render.push(this.renderIframePreview());
             }
 
             return render;

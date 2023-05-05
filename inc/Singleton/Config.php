@@ -29,7 +29,7 @@ class Config {
         $specData                           = null,
         $addOnsLocation                     = 'add-ons',
         $rest_api_namespace                 = 'abt/v2',
-        $componentBlocksAutoSaveLocation    = ABSPATH . '../../abt-tmp/';
+        $componentBlocksAutoSaveLocation    = ABT_PLUGIN_DIR . '/abt-tmp/';
         
 
 
