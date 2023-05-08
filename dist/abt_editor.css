@@ -2012,8 +2012,8 @@
   flex-direction: column;
   gap: 60px;
   padding: 100px 0;
-  border-left: solid 1px hsla(200deg, 0%, 55%, 0.2);
-  border-right: solid 1px hsla(200deg, 0%, 55%, 0.2);
+  border-left: solid 1px hsla(200, 0%, 55%, 0.2);
+  border-right: solid 1px hsla(200, 0%, 55%, 0.2);
 }
 .o-editor .is-layout-flow .block-editor-block-list__block {
   width: 100%;

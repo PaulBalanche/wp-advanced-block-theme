@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: 		WP advanced block theme
- * Version: 			1.2.7
+ * Version: 			1.2.8
  * Requires at least: 	6.0
  * Requires PHP:      	8.0
  * Author: 				Paul Balanche
@@ -48,7 +48,7 @@ define(
     defined("CONTAINER_CLASS_NAME") ? CONTAINER_CLASS_NAME : "container"
 );
 define("ABT_FRONT_ENV", defined("FRONT_ENV") ? FRONT_ENV : "production");
-define("ABT_PLUGIN_TEXTDOMAIN", "abt-plugin" );
+define("ABT_PLUGIN_TEXTDOMAIN", "abt-plugin");
 
 /**
  * Dependencies
@@ -68,8 +68,8 @@ function _abt_plugin_init()
 
 /**
  *  Loads a plugin’s translated strings.
- * 
-//  */
+ *
+ //  */
 // add_action("init", "_abt_plugin_load_textdomain");
 // function _abt_plugin_load_textdomain() {
 

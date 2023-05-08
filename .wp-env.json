@@ -1,5 +1,5 @@
 {
-    "core": "WordPress/WordPress#master",
+    "core": "WordPress/WordPress#6.1.1",
     "plugins": ["."],
     "mappings": {
         "wp-content/themes": "../development/themes"

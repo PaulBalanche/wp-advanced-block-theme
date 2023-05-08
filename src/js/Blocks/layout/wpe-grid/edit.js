@@ -120,13 +120,17 @@ class WpeGrid extends WpeComponentBase {
          * Define innerBlocks
          */
         if (
-            typeof inner_blocks != "object" ||
-            (typeof inner_blocks == "object" && countColumns == 0)
+            false &&
+            (typeof inner_blocks != "object" ||
+                (typeof inner_blocks == "object" && countColumns == 0))
         ) {
             return (
                 <>
                     <div {...innerBlocksProps}>
                         <__experimentalBlockVariationPicker
+                            key={
+                                "__experimentalBlockVariationPicker_" + clientId
+                            }
                             icon={get(blockType, ["icon", "src"])}
                             label={get(blockType, ["title"])}
                             variations={blockVariations}
