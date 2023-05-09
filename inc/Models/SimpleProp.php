@@ -13,6 +13,7 @@ use Abt\Helpers\Attributes\RecursiveObject;
 use Abt\Helpers\Attributes\Link;
 use Abt\Helpers\Attributes\Date;
 use Abt\Helpers\Attributes\Wysiwyg;
+use Abt\Helpers\Attributes\Select;
 
 class SimpleProp {
     
@@ -114,6 +115,11 @@ class SimpleProp {
             case 'wysiwyg':
             case 'richText':
                 return Wysiwyg::isValid( $this );
+            
+            case 'select':
+            case 'color':
+            case 'spaces':
+                return Select::isValid( $this );
 
             default:
                 return Base::isValid( $this );
@@ -159,6 +165,11 @@ class SimpleProp {
             case 'wysiwyg':
             case 'richText':
                 return Wysiwyg::format( $this );
+
+            case 'select':
+            case 'color':
+            case 'spaces':
+                return Select::format( $this );
 
             default:
                 return Base::format( $this );

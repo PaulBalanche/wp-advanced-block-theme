@@ -288,6 +288,7 @@ class ComponentBlock extends ModelBase {
                         case 'richText':
                         case 'select':
                         case 'color':
+                        case 'spaces':
                         case 'radio':
                         case 'relation':
                         case 'number':
