@@ -36,7 +36,8 @@ class Grid extends ControllerBase
             if ($innerBlock["blockName"] != "custom/wpe-column") {
                 continue;
             }
-            $cellsLayout[] = $innerBlock["attrs"]["layout"] ?? null;
+            $cellsLayout[$innerBlock["attrs"]["id_component"]] =
+                $innerBlock["attrs"]["layout"] ?? null;
         }
 
         // Generate Coffeekraken CSS layout string
