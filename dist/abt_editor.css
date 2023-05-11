@@ -127,6 +127,7 @@
 }
 .o-editor .block-editor-block-list__block[data-type="custom/wpe-column"].is-empty {
   padding-top: 80px !important;
+  border: 1px dashed var(--wp-admin-theme-color);
 }
 .o-editor .block-editor-block-list__block[data-type="custom/wpe-column"] > .block-list-appender {
   width: 100%;
@@ -432,6 +433,14 @@
 .o-editor .block-editor-block-list__block[data-type="custom/wpe-grid"] .o-grid-container > .block-editor-block-list__block[data-type="custom/wpe-column"]:nth-child(2) {
   margin-top: 0;
 }
+.o-editor .block-editor-block-list__block[data-type="custom/wpe-grid"] .o-grid-container.empty {
+  background: white;
+  display: block;
+  padding: 18px 36px;
+}
+.o-editor .block-editor-block-list__block[data-type="custom/wpe-grid"] .o-grid-container.empty h2 {
+  color: var(--wp-admin-theme-color);
+}
 .o-editor .block-editor-block-list__block[data-type="custom/wpe-grid"] .o-grid-add-column {
   display: flex;
   position: relative;
@@ -448,7 +457,7 @@
   border-style: solid;
 }
 .o-editor .block-editor-block-list__block[data-type="custom/wpe-grid"] .o-grid-add-column .dashicon {
-  margin-right: 10px;
+  margin-right: 6px;
 }
 .o-editor .block-editor-block-list__block[data-type="custom/wpe-grid"]:hover .o-grid-add-column {
   visibility: visible;
@@ -457,6 +466,51 @@
   max-width: 75%;
   margin: auto;
   margin-top: 40px;
+}
+.o-editor .basicField .grid-layout .items,
+.o-editor .o-grid-container .grid-layout .items {
+  display: flex;
+  row-gap: 24px;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin-top: 24px;
+}
+.o-editor .basicField .grid-layout .items .item,
+.o-editor .o-grid-container .grid-layout .items .item {
+  width: 30%;
+}
+.o-editor .basicField .grid-layout .items .item svg,
+.o-editor .o-grid-container .grid-layout .items .item svg {
+  fill: var(--border300, rgb(235, 235, 235));
+  transition: all 0.1s ease-in-out;
+  width: 100%;
+  height: auto;
+}
+.o-editor .basicField .grid-layout .items .item svg rect,
+.o-editor .o-grid-container .grid-layout .items .item svg rect {
+  stroke-width: 3px;
+  stroke: rgb(220, 220, 220);
+}
+.o-editor .basicField .grid-layout .items .item:hover, .o-editor .basicField .grid-layout .items .item.active,
+.o-editor .o-grid-container .grid-layout .items .item:hover,
+.o-editor .o-grid-container .grid-layout .items .item.active {
+  cursor: pointer;
+}
+.o-editor .basicField .grid-layout .items .item:hover svg, .o-editor .basicField .grid-layout .items .item.active svg,
+.o-editor .o-grid-container .grid-layout .items .item:hover svg,
+.o-editor .o-grid-container .grid-layout .items .item.active svg {
+  fill: var(--wp-admin-theme-color);
+}
+.o-editor .basicField .grid-layout .initialGridLayout .items,
+.o-editor .o-grid-container .grid-layout .initialGridLayout .items {
+  -moz-column-gap: 24px;
+       column-gap: 24px;
+  margin-top: 0;
+  justify-content: initial;
+}
+.o-editor .basicField .grid-layout .initialGridLayout .items .item,
+.o-editor .o-grid-container .grid-layout .initialGridLayout .items .item {
+  max-width: 250px;
 }
 
 @keyframes o-loading-in {

@@ -2,7 +2,6 @@
  * WordPress dependencies
  */
 import {
-    __experimentalBlockVariationPicker,
     store as blockEditorStore,
     useBlockProps,
     useInnerBlocksProps,
@@ -16,9 +15,13 @@ import { Dashicon, MenuItem } from "@wordpress/components";
 import { plus } from "@wordpress/icons";
 
 import { dispatch, withDispatch, withSelect } from "@wordpress/data";
-import { get, map } from "lodash";
+import { map } from "lodash";
 
 import __ODevices from "../../../Components/ODevices";
+
+import { Render } from "../../../Static/Render";
+
+import { predefinedLayouts } from "./predefinedLayouts";
 
 /**
  * Add some columns in wpe-container based on variation selected
@@ -36,6 +39,13 @@ function createBlocksFromInnerBlocksTemplate(innerBlocksTemplate) {
 class WpeGrid extends WpeComponentBase {
     constructor() {
         super(...arguments);
+    }
+
+    isEditable() {
+        return (
+            typeof this.props.inner_blocks == "object" &&
+            this.props.countColumns > 0
+        );
     }
 
     addColumn() {
@@ -102,17 +112,133 @@ class WpeGrid extends WpeComponentBase {
         );
     }
 
+    renderInspectorControls() {
+        const currentDevice = __ODevices.getInstance().getCurrentDevice();
+        const currentLayout = this.getLayout();
+
+        return Render.fieldContainer(
+            this.props.clientId + "_layout",
+            Render.responsiveTabComponent(
+                this.props.clientId,
+                Object.keys(__ODevices.getInstance().getMediaQueries()).map(
+                    (layout) => {
+                        return {
+                            name: layout,
+                            title:
+                                layout.charAt(0).toUpperCase() +
+                                layout.slice(1),
+                            className: "tab-" + layout,
+                            active: currentDevice == layout ? true : false,
+                        };
+                    }
+                ),
+                <>
+                    <label
+                        className="components-base-control__forced_label"
+                        key={this.props.clientId + "-template-label"}
+                    >
+                        Layout
+                    </label>
+                    <div className="items">
+                        {predefinedLayouts.map((variation, index) => {
+                            if (variation.count == this.props.countColumns) {
+                                return (
+                                    <span
+                                        key={
+                                            this.props.clientId +
+                                            "-gridInitialLayout-" +
+                                            index
+                                        }
+                                        className={
+                                            "item " +
+                                            (currentLayout != null &&
+                                            index == currentLayout
+                                                ? "active"
+                                                : "")
+                                        }
+                                        onMouseDown={() =>
+                                            this.setLayout(index)
+                                        }
+                                    >
+                                        {variation.icon}
+                                    </span>
+                                );
+                            }
+                        })}
+                    </div>
+                </>,
+                (newDevice) => {
+                    __ODevices.getInstance().setCurrentDevice(newDevice);
+                },
+                "grid-layout"
+            )
+        );
+    }
+
+    getLayout() {
+        const currentDevice = __ODevices.getInstance().getCurrentDevice();
+        if (typeof this.props.attributes.layout == "undefined") {
+            return null;
+        }
+        if (typeof this.props.attributes.layout[currentDevice] == "undefined") {
+            return null;
+        }
+
+        return this.props.attributes.layout[currentDevice];
+    }
+
+    setLayout(index) {
+        const currentDevice = __ODevices.getInstance().getCurrentDevice();
+
+        if (typeof this.props.attributes.layout == "undefined") {
+            this.props.attributes.layout = {};
+        }
+        this.props.attributes.layout[currentDevice] = index;
+
+        this.setAttributes({ layout: this.props.attributes.layout });
+
+        for (var i in this.props.inner_blocks) {
+            this.props.inner_blocks[i].attributes.layout[currentDevice] =
+                predefinedLayouts[index].layout[i];
+
+            dispatch("core/block-editor").updateBlockAttributes(
+                this.props.inner_blocks[i].clientId,
+                this.props.inner_blocks[i].attributes.layout[currentDevice]
+            );
+        }
+    }
+
+    setInitialLayout(index) {
+        const mediaQueries = __ODevices.getInstance().getMediaQueries();
+
+        const gridLayoutAttribute = {};
+        for (var i in mediaQueries) {
+            gridLayoutAttribute[i] = index;
+        }
+        this.setAttributes({ layout: gridLayoutAttribute });
+
+        const innerBlocks = [];
+        predefinedLayouts[index].layout.forEach((layout) => {
+            const columnLayoutAttribute = {};
+            for (var i in mediaQueries) {
+                columnLayoutAttribute[i] = layout;
+            }
+            innerBlocks.push({
+                name: "custom/wpe-column",
+                attributes: {
+                    layout: columnLayoutAttribute,
+                },
+            });
+        });
+        this.props.replaceInnerBlocks(
+            this.props.clientId,
+            createBlocksFromInnerBlocksTemplate(innerBlocks),
+            false
+        );
+    }
+
     liveRendering() {
-        var {
-            clientId,
-            inner_blocks,
-            countColumns,
-            blockVariations,
-            blockType,
-            // isSelectedBlock,
-            // isParentOfSelectedBlock,
-            replaceInnerBlocks,
-        } = this.props;
+        var { clientId, inner_blocks, countColumns } = this.props;
 
         const { children, ...innerBlocksProps } = this.props.innerBlocksProps;
         innerBlocksProps.key = "innerBlocksProps_" + clientId;
@@ -120,42 +246,88 @@ class WpeGrid extends WpeComponentBase {
          * Define innerBlocks
          */
         if (
-            false &&
-            (typeof inner_blocks != "object" ||
-                (typeof inner_blocks == "object" && countColumns == 0))
+            typeof inner_blocks != "object" ||
+            (typeof inner_blocks == "object" && countColumns == 0)
         ) {
             return (
-                <>
-                    <div {...innerBlocksProps}>
-                        <__experimentalBlockVariationPicker
-                            key={
-                                "__experimentalBlockVariationPicker_" + clientId
-                            }
-                            icon={get(blockType, ["icon", "src"])}
-                            label={get(blockType, ["title"])}
-                            variations={blockVariations}
-                            onSelect={(nextVariation) => {
-                                if (nextVariation.innerBlocks) {
-                                    replaceInnerBlocks(
-                                        clientId,
-                                        createBlocksFromInnerBlocksTemplate(
-                                            nextVariation.innerBlocks
-                                        ),
-                                        false
+                <div {...innerBlocksProps}>
+                    <div className="o-grid-container empty">
+                        <h2>Grid</h2>
+                        <label
+                            className="components-base-control__forced_label"
+                            key={this.props.clientId + "-template-label"}
+                        >
+                            Choose a layout
+                        </label>
+                        <div className="grid-layout">
+                            {Render.tabPanelComponent(
+                                clientId + "-gridLayout",
+                                [
+                                    {
+                                        name: "cols-2",
+                                        title: "2 columns",
+                                        value: 2,
+                                    },
+                                    {
+                                        name: "cols-3",
+                                        title: "3 columns",
+                                        value: 3,
+                                    },
+                                    {
+                                        name: "cols-4",
+                                        title: "4 columns",
+                                        value: 4,
+                                    },
+                                    {
+                                        name: "cols-5",
+                                        title: "5 columns",
+                                        value: 5,
+                                    },
+                                    {
+                                        name: "cols-6",
+                                        title: "6 columns",
+                                        value: 6,
+                                    },
+                                ],
+                                (tabPanel) => {
+                                    return (
+                                        <div className="items">
+                                            {predefinedLayouts.map(
+                                                (variation, index) => {
+                                                    if (
+                                                        variation.count ==
+                                                        tabPanel.value
+                                                    ) {
+                                                        return (
+                                                            <span
+                                                                key={
+                                                                    clientId +
+                                                                    "-gridInitialLayout-" +
+                                                                    index
+                                                                }
+                                                                className="item"
+                                                                onMouseDown={() =>
+                                                                    this.setInitialLayout(
+                                                                        index
+                                                                    )
+                                                                }
+                                                            >
+                                                                {variation.icon}
+                                                            </span>
+                                                        );
+                                                    }
+                                                }
+                                            )}
+                                        </div>
                                     );
-                                }
-                                if (nextVariation.attributes) {
-                                    dispatch(
-                                        "core/block-editor"
-                                    ).updateBlockAttributes(
-                                        clientId,
-                                        nextVariation.attributes
-                                    );
-                                }
-                            }}
-                        />
+                                },
+                                null,
+                                null,
+                                "initialGridLayout"
+                            )}
+                        </div>
                     </div>
-                </>
+                </div>
             );
         } else {
             return (

@@ -3,9 +3,11 @@
  */
 import { useBlockProps, useInnerBlocksProps } from "@wordpress/block-editor";
 import { registerBlockType } from "@wordpress/blocks";
-// import { Icon, check } from '@wordpress/icons';
+import { Icon } from "@wordpress/icons";
 
 import { Attributes } from "../../../Static/Attributes";
+
+import { predefinedLayouts } from "./predefinedLayouts";
 
 /**
  * Internal dependencies
@@ -21,15 +23,20 @@ variations.forEach(function (elt, index) {
         variations[index].scope = ["block"];
     }
 
-    // if( typeof elt.icon == 'string' ) {
-    //     variations[index].icon = <Icon icon={ gridIcons[elt.icon] } />
-    // }
+    if (typeof elt.icon != "undefined") {
+        variations[index].icon = (
+            <Icon icon={predefinedLayouts[elt.icon].icon} />
+        );
+    }
 });
 
 let attributes = {
     gridLocked: {
         type: "boolean",
         default: false,
+    },
+    layout: {
+        type: "object",
     },
 };
 if (

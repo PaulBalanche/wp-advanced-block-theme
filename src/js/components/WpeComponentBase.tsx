@@ -55,13 +55,19 @@ export class WpeComponentBase extends Component {
 
     propsExists() {
         return (
-            typeof this.props == "object" && typeof this.props.block_spec != 'undefined' && typeof this.props.block_spec == 'object' && typeof this.props.block_spec.props != 'undefined' && typeof this.props.block_spec.props == "object" &&
+            typeof this.props == "object" &&
+            typeof this.props.block_spec != "undefined" &&
+            typeof this.props.block_spec == "object" &&
+            typeof this.props.block_spec.props != "undefined" &&
+            typeof this.props.block_spec.props == "object" &&
             Object.keys(this.props.block_spec.props).length > 0
         );
     }
-    
+
     getCurrentEditedProp() {
-        return ( typeof this.state.currentEditedProp != 'undefined' ) ? this.state.currentEditedProp : null;
+        return typeof this.state.currentEditedProp != "undefined"
+            ? this.state.currentEditedProp
+            : null;
     }
 
     isReusableBlock() {
@@ -74,6 +80,10 @@ export class WpeComponentBase extends Component {
         }
 
         return null;
+    }
+
+    isEditable() {
+        return true;
     }
 
     getReusableBlock() {
@@ -214,7 +224,7 @@ export class WpeComponentBase extends Component {
             );
         }
 
-        if ( this.getReusableBlock() != null ) {
+        if (this.getReusableBlock() != null) {
             menuGroup.push(
                 <MenuGroup
                     key={this.props.clientId + "-toolsDropdownMenu-reusable"}
@@ -224,7 +234,13 @@ export class WpeComponentBase extends Component {
                             this.props.clientId +
                             "-toolsDropdownMenu-reusable-manage-all"
                         }
-                        onClick={() => window.open(js_const.admin_url + 'edit.php?post_type=wp_block', "_blank")}
+                        onClick={() =>
+                            window.open(
+                                js_const.admin_url +
+                                    "edit.php?post_type=wp_block",
+                                "_blank"
+                            )
+                        }
                     >
                         Manage all reusable blocks
                     </MenuItem>
@@ -233,7 +249,15 @@ export class WpeComponentBase extends Component {
                             this.props.clientId +
                             "-toolsDropdownMenu-reusable-convert-to-regular"
                         }
-                        onClick={() => window.open(js_const.admin_url + 'post.php?post=' + this.getReusableBlock() + '&action=edit', "_blank")}
+                        onClick={() =>
+                            window.open(
+                                js_const.admin_url +
+                                    "post.php?post=" +
+                                    this.getReusableBlock() +
+                                    "&action=edit",
+                                "_blank"
+                            )
+                        }
                     >
                         Convert to regular blocks
                     </MenuItem>
@@ -242,7 +266,15 @@ export class WpeComponentBase extends Component {
                             this.props.clientId +
                             "-toolsDropdownMenu-reusable-manage"
                         }
-                        onClick={() => window.open(js_const.admin_url + 'post.php?post=' + this.getReusableBlock() + '&action=edit', "_blank")}
+                        onClick={() =>
+                            window.open(
+                                js_const.admin_url +
+                                    "post.php?post=" +
+                                    this.getReusableBlock() +
+                                    "&action=edit",
+                                "_blank"
+                            )
+                        }
                     >
                         Manage this reusable block
                     </MenuItem>
@@ -342,7 +374,9 @@ export class WpeComponentBase extends Component {
                     valueProp.category != null &&
                     valueProp.category in catReOrder
                         ? valueProp.category
-                        : ["margin", "padding", "gap", "spaces"].includes(keyProp)
+                        : ["margin", "padding", "gap", "spaces"].includes(
+                              keyProp
+                          )
                         ? "spacing"
                         : "default";
                 catReOrder[currentCatToPush].props[keyProp] = valueProp;
@@ -387,13 +421,19 @@ export class WpeComponentBase extends Component {
 
                 let currentAttributeError = false;
 
-                if( typeof this.state.error == 'object' && this.state.error != null && typeof this.state.error[keyProp] == 'object' ) {
+                if (
+                    typeof this.state.error == "object" &&
+                    this.state.error != null &&
+                    typeof this.state.error[keyProp] == "object"
+                ) {
                     currentAttributeError = this.state.error[keyProp];
 
-                    if( typeof this.state.error[keyProp].error != 'undefined' ) {
+                    if (typeof this.state.error[keyProp].error != "undefined") {
                         errorAttributes++;
                     }
-                    if( typeof this.state.error[keyProp].warning != 'undefined' ) {
+                    if (
+                        typeof this.state.error[keyProp].warning != "undefined"
+                    ) {
                         warningAttributes++;
                     }
                 }
@@ -415,23 +455,37 @@ export class WpeComponentBase extends Component {
             }
 
             let titleTab = valCat.name;
-            if( errorAttributes > 0 ) {
-                titleTab = <>{titleTab}<span className="error-attributes">{errorAttributes}</span></>
+            if (errorAttributes > 0) {
+                titleTab = (
+                    <>
+                        {titleTab}
+                        <span className="error-attributes">
+                            {errorAttributes}
+                        </span>
+                    </>
+                );
+            } else if (warningAttributes > 0) {
+                titleTab = (
+                    <>
+                        {titleTab}
+                        <span className="warning-attributes">
+                            {warningAttributes}
+                        </span>
+                    </>
+                );
             }
-            else if( warningAttributes > 0 ) {
-                titleTab = <>{titleTab}<span className="warning-attributes">{warningAttributes}</span></>
-            }
-            
+
             tabPanel.push({
                 name: keyCat,
                 title: titleTab,
-                content: currentEditCat
+                content: currentEditCat,
             });
         }
 
-        const portalContainer = document.querySelector(".o-editor-app.block .o-editor-app_body")
-        if ( ! portalContainer)
-            return null;
+        const portalContainer = document.querySelector(
+            ".o-editor-app.block .o-editor-app_body"
+        );
+        if (!portalContainer) return null;
 
         return createPortal(
             <Placeholder
@@ -480,7 +534,7 @@ export class WpeComponentBase extends Component {
     }
 
     updatePreview() {
-        if( typeof this.state.needPreviewUpdate != "undefined" ) {
+        if (typeof this.state.needPreviewUpdate != "undefined") {
             this.setState({ needPreviewUpdate: true });
         }
     }

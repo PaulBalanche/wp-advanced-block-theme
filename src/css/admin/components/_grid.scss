@@ -1,7 +1,5 @@
 .o-editor {
-
     .block-editor-block-list__block[data-type="custom/wpe-grid"] {
-
         > * > .o-toolbar {
             top: -80px;
         }
@@ -27,6 +25,16 @@
                     margin-top: 0;
                 }
             }
+
+            &.empty {
+                background: white;
+                display: block;
+                padding: $o-space-30 $o-space-60;
+
+                h2 {
+                    color: var(--wp-admin-theme-color);
+                }
+            }
         }
 
         .o-grid-add-column {
@@ -46,7 +54,7 @@
             }
 
             .dashicon {
-                margin-right: 10px;
+                margin-right: $o-space-10;
             }
         }
 
@@ -57,9 +65,58 @@
         }
     }
 
-    .block-editor-block-list__layout.is-root-container > .block-editor-block-variation-picker {
+    .block-editor-block-list__layout.is-root-container
+        > .block-editor-block-variation-picker {
         max-width: $max_width_main_column;
         margin: auto;
         margin-top: $base_padding;
+    }
+
+    .basicField,
+    .o-grid-container {
+        .grid-layout {
+            .items {
+                display: flex;
+                row-gap: $o-space-40;
+                flex-wrap: wrap;
+                justify-content: space-between;
+                margin-top: $o-space-40;
+
+                .item {
+                    width: 30%;
+
+                    svg {
+                        fill: $border300;
+                        transition: $o-transition-fast;
+                        width: 100%;
+                        height: auto;
+
+                        rect {
+                            stroke-width: 3px;
+                            stroke: rgb(220, 220, 220);
+                        }
+                    }
+                    &:hover,
+                    &.active {
+                        cursor: pointer;
+                        svg {
+                            fill: var(--wp-admin-theme-color);
+                        }
+                    }
+                }
+            }
+
+            .initialGridLayout {
+                .items {
+                    column-gap: $o-space-40;
+                    margin-top: 0;
+                    justify-content: initial;
+
+                    .item {
+                        max-width: 250px;
+                    }
+                }
+            }
+        }
     }
 }

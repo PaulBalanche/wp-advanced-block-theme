@@ -343,7 +343,10 @@ export default class OEditorApp extends Component {
                     this.props.context.selectedBlockClientId != undefined &&
                     typeof globalData.componentInstances[
                         this.props.context.selectedBlockClientId
-                    ] != "undefined"
+                    ] != "undefined" &&
+                    globalData.componentInstances[
+                        this.props.context.selectedBlockClientId
+                    ].isEditable()
                         ? new __OEditorBlock(
                               globalData.componentInstances[
                                   this.props.context.selectedBlockClientId
