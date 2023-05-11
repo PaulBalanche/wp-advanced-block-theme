@@ -11627,8 +11627,8 @@ class WpeComponent extends _Components_WpeComponentBase__WEBPACK_IMPORTED_MODULE
         if (typeof error == "object") {
           render.push(this.renderEditFormZone());
           render.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-            key: this.props.clientId + "-LiveRenderingMessage",
-            className: "liveRenderingMessage"
+            key: this.props.clientId + "-placeholder",
+            className: "wpe-block-placeholder"
           }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
             className: "inner"
           }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h2", null, this.title), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Dashicon, {
@@ -11637,8 +11637,8 @@ class WpeComponent extends _Components_WpeComponentBase__WEBPACK_IMPORTED_MODULE
         } else {
           render.push(this.renderEditFormZone());
           render.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-            key: this.props.clientId + "-LiveRenderingMessage",
-            className: "liveRenderingMessage"
+            key: this.props.clientId + "-placeholder",
+            className: "wpe-block-placeholder"
           }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
             className: "inner"
           }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Dashicon, {
@@ -12439,7 +12439,10 @@ class WpeGrid extends _Components_WpeComponentBase__WEBPACK_IMPORTED_MODULE_4__.
      */
     if (typeof inner_blocks != "object" || typeof inner_blocks == "object" && countColumns == 0) {
       return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", innerBlocksProps, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-        className: "o-grid-container empty"
+        key: this.props.clientId + "-placeholder",
+        className: "wpe-block-placeholder"
+      }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+        className: "inner"
       }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h2", null, "Grid"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
         className: "components-base-control__forced_label",
         key: this.props.clientId + "-template-label"
@@ -12477,7 +12480,7 @@ class WpeGrid extends _Components_WpeComponentBase__WEBPACK_IMPORTED_MODULE_4__.
             }, variation.icon);
           }
         }));
-      }, null, null, "initialGridLayout"))));
+      }, null, null, "initialGridLayout")))));
     } else {
       return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", innerBlocksProps, this.renderEditFormZone(), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
         className: "o-grid-container"

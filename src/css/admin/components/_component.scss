@@ -1,7 +1,5 @@
 .o-editor {
-
     .block-editor-block-inspector {
-
         .child-range-control {
             padding-left: 10px;
         }
@@ -23,8 +21,8 @@
     .components-base-control .components-base-control__label,
     .components-base-control .components-input-control__label,
     .components-base-control__forced_label {
-        display: flex  !important;
-        align-items: center  !important;
+        display: flex !important;
+        align-items: center !important;
         text-transform: none !important;
         font-size: 14px !important;
         font-weight: 600 !important;
@@ -41,10 +39,8 @@
     }
 
     .block-editor-block-list__layout {
-
         & > .wp-block {
-
-            &:has( > .loaderLiveRenderingIframe ) {
+            &:has(> .loaderLiveRenderingIframe) {
                 height: 100vh;
             }
 
@@ -67,21 +63,24 @@
             .alert {
                 color: red;
                 border: 2px solid red;
-                padding: 4em  0;
+                padding: 4em 0;
                 text-align: center;
             }
 
-            .liveRenderingMessage {
-                text-align: center;
-                background: white;
-                color: var(--wp-admin-theme-color);
+            .wpe-block-placeholder {
                 position: relative;
-                border-top: 6px solid var(--wp-admin-theme-color);
+                background: white;
+                display: block;
+                padding: $o-space-30 $o-space-60;
+
+                h2 {
+                    color: var(--wp-admin-theme-color);
+                }
 
                 .abtButtonEditZone {
                     display: inline-flex;
                 }
-                .inner{
+                .inner {
                     position: relative;
                     padding: $o-space-30 0 $o-space-50 0;
                     font-size: 16px;

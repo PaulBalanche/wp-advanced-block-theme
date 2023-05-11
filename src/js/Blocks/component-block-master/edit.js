@@ -191,8 +191,8 @@ class WpeComponent extends WpeComponentBase {
                     render.push(this.renderEditFormZone());
                     render.push(
                         <div
-                            key={this.props.clientId + "-LiveRenderingMessage"}
-                            className="liveRenderingMessage"
+                            key={this.props.clientId + "-placeholder"}
+                            className="wpe-block-placeholder"
                         >
                             <div className="inner">
                                 <h2>{this.title}</h2>
@@ -209,8 +209,8 @@ class WpeComponent extends WpeComponentBase {
                     render.push(this.renderEditFormZone());
                     render.push(
                         <div
-                            key={this.props.clientId + "-LiveRenderingMessage"}
-                            className="liveRenderingMessage"
+                            key={this.props.clientId + "-placeholder"}
+                            className="wpe-block-placeholder"
                         >
                             <div className="inner">
                                 <Dashicon icon="info" />

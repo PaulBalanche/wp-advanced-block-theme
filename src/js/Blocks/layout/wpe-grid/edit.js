@@ -251,80 +251,87 @@ class WpeGrid extends WpeComponentBase {
         ) {
             return (
                 <div {...innerBlocksProps}>
-                    <div className="o-grid-container empty">
-                        <h2>Grid</h2>
-                        <label
-                            className="components-base-control__forced_label"
-                            key={this.props.clientId + "-template-label"}
-                        >
-                            Choose a layout
-                        </label>
-                        <div className="grid-layout">
-                            {Render.tabPanelComponent(
-                                clientId + "-gridLayout",
-                                [
-                                    {
-                                        name: "cols-2",
-                                        title: "2 columns",
-                                        value: 2,
-                                    },
-                                    {
-                                        name: "cols-3",
-                                        title: "3 columns",
-                                        value: 3,
-                                    },
-                                    {
-                                        name: "cols-4",
-                                        title: "4 columns",
-                                        value: 4,
-                                    },
-                                    {
-                                        name: "cols-5",
-                                        title: "5 columns",
-                                        value: 5,
-                                    },
-                                    {
-                                        name: "cols-6",
-                                        title: "6 columns",
-                                        value: 6,
-                                    },
-                                ],
-                                (tabPanel) => {
-                                    return (
-                                        <div className="items">
-                                            {predefinedLayouts.map(
-                                                (variation, index) => {
-                                                    if (
-                                                        variation.count ==
-                                                        tabPanel.value
-                                                    ) {
-                                                        return (
-                                                            <span
-                                                                key={
-                                                                    clientId +
-                                                                    "-gridInitialLayout-" +
-                                                                    index
-                                                                }
-                                                                className="item"
-                                                                onMouseDown={() =>
-                                                                    this.setInitialLayout(
+                    <div
+                        key={this.props.clientId + "-placeholder"}
+                        className="wpe-block-placeholder"
+                    >
+                        <div className="inner">
+                            <h2>Grid</h2>
+                            <label
+                                className="components-base-control__forced_label"
+                                key={this.props.clientId + "-template-label"}
+                            >
+                                Choose a layout
+                            </label>
+                            <div className="grid-layout">
+                                {Render.tabPanelComponent(
+                                    clientId + "-gridLayout",
+                                    [
+                                        {
+                                            name: "cols-2",
+                                            title: "2 columns",
+                                            value: 2,
+                                        },
+                                        {
+                                            name: "cols-3",
+                                            title: "3 columns",
+                                            value: 3,
+                                        },
+                                        {
+                                            name: "cols-4",
+                                            title: "4 columns",
+                                            value: 4,
+                                        },
+                                        {
+                                            name: "cols-5",
+                                            title: "5 columns",
+                                            value: 5,
+                                        },
+                                        {
+                                            name: "cols-6",
+                                            title: "6 columns",
+                                            value: 6,
+                                        },
+                                    ],
+                                    (tabPanel) => {
+                                        return (
+                                            <div className="items">
+                                                {predefinedLayouts.map(
+                                                    (variation, index) => {
+                                                        if (
+                                                            variation.count ==
+                                                            tabPanel.value
+                                                        ) {
+                                                            return (
+                                                                <span
+                                                                    key={
+                                                                        clientId +
+                                                                        "-gridInitialLayout-" +
                                                                         index
-                                                                    )
-                                                                }
-                                                            >
-                                                                {variation.icon}
-                                                            </span>
-                                                        );
+                                                                    }
+                                                                    className="item"
+                                                                    onMouseDown={() =>
+                                                                        this.setInitialLayout(
+                                                                            index
+                                                                        )
+                                                                    }
+                                                                >
+                                                                    {
+                                                                        variation.icon
+                                                                    }
+                                                                </span>
+                                                            );
+                                                        }
                                                     }
-                                                }
-                                            )}
-                                        </div>
-                                    );
-                                },
-                                null,
-                                null,
-                                "initialGridLayout"
-                            )}
+                                                )}
+                                            </div>
+                                        );
+                                    },
+                                    null,
+                                    null,
+                                    "initialGridLayout"
+                                )}
+                            </div>
                         </div>
                     </div>
                 </div>

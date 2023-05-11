@@ -193,22 +193,24 @@
   padding: 4em 0;
   text-align: center;
 }
-.o-editor .block-editor-block-list__layout > .wp-block .liveRenderingMessage {
-  text-align: center;
-  background: white;
-  color: var(--wp-admin-theme-color);
+.o-editor .block-editor-block-list__layout > .wp-block .wpe-block-placeholder {
   position: relative;
-  border-top: 6px solid var(--wp-admin-theme-color);
+  background: white;
+  display: block;
+  padding: 18px 36px;
 }
-.o-editor .block-editor-block-list__layout > .wp-block .liveRenderingMessage .abtButtonEditZone {
+.o-editor .block-editor-block-list__layout > .wp-block .wpe-block-placeholder h2 {
+  color: var(--wp-admin-theme-color);
+}
+.o-editor .block-editor-block-list__layout > .wp-block .wpe-block-placeholder .abtButtonEditZone {
   display: inline-flex;
 }
-.o-editor .block-editor-block-list__layout > .wp-block .liveRenderingMessage .inner {
+.o-editor .block-editor-block-list__layout > .wp-block .wpe-block-placeholder .inner {
   position: relative;
   padding: 18px 0 30px 0;
   font-size: 16px;
 }
-.o-editor .block-editor-block-list__layout > .wp-block .liveRenderingMessage .inner .dashicon {
+.o-editor .block-editor-block-list__layout > .wp-block .wpe-block-placeholder .inner .dashicon {
   font-size: 40px;
   width: auto;
   height: auto;
@@ -433,14 +435,6 @@
 .o-editor .block-editor-block-list__block[data-type="custom/wpe-grid"] .o-grid-container > .block-editor-block-list__block[data-type="custom/wpe-column"]:nth-child(2) {
   margin-top: 0;
 }
-.o-editor .block-editor-block-list__block[data-type="custom/wpe-grid"] .o-grid-container.empty {
-  background: white;
-  display: block;
-  padding: 18px 36px;
-}
-.o-editor .block-editor-block-list__block[data-type="custom/wpe-grid"] .o-grid-container.empty h2 {
-  color: var(--wp-admin-theme-color);
-}
 .o-editor .block-editor-block-list__block[data-type="custom/wpe-grid"] .o-grid-add-column {
   display: flex;
   position: relative;
@@ -468,7 +462,7 @@
   margin-top: 40px;
 }
 .o-editor .basicField .grid-layout .items,
-.o-editor .o-grid-container .grid-layout .items {
+.o-editor .wpe-block-placeholder .grid-layout .items {
   display: flex;
   row-gap: 24px;
   flex-wrap: wrap;
@@ -476,40 +470,40 @@
   margin-top: 24px;
 }
 .o-editor .basicField .grid-layout .items .item,
-.o-editor .o-grid-container .grid-layout .items .item {
+.o-editor .wpe-block-placeholder .grid-layout .items .item {
   width: 30%;
 }
 .o-editor .basicField .grid-layout .items .item svg,
-.o-editor .o-grid-container .grid-layout .items .item svg {
+.o-editor .wpe-block-placeholder .grid-layout .items .item svg {
   fill: var(--border300, rgb(235, 235, 235));
   transition: all 0.1s ease-in-out;
   width: 100%;
   height: auto;
 }
 .o-editor .basicField .grid-layout .items .item svg rect,
-.o-editor .o-grid-container .grid-layout .items .item svg rect {
+.o-editor .wpe-block-placeholder .grid-layout .items .item svg rect {
   stroke-width: 3px;
   stroke: rgb(220, 220, 220);
 }
 .o-editor .basicField .grid-layout .items .item:hover, .o-editor .basicField .grid-layout .items .item.active,
-.o-editor .o-grid-container .grid-layout .items .item:hover,
-.o-editor .o-grid-container .grid-layout .items .item.active {
+.o-editor .wpe-block-placeholder .grid-layout .items .item:hover,
+.o-editor .wpe-block-placeholder .grid-layout .items .item.active {
   cursor: pointer;
 }
 .o-editor .basicField .grid-layout .items .item:hover svg, .o-editor .basicField .grid-layout .items .item.active svg,
-.o-editor .o-grid-container .grid-layout .items .item:hover svg,
-.o-editor .o-grid-container .grid-layout .items .item.active svg {
+.o-editor .wpe-block-placeholder .grid-layout .items .item:hover svg,
+.o-editor .wpe-block-placeholder .grid-layout .items .item.active svg {
   fill: var(--wp-admin-theme-color);
 }
 .o-editor .basicField .grid-layout .initialGridLayout .items,
-.o-editor .o-grid-container .grid-layout .initialGridLayout .items {
+.o-editor .wpe-block-placeholder .grid-layout .initialGridLayout .items {
   -moz-column-gap: 24px;
        column-gap: 24px;
   margin-top: 0;
   justify-content: initial;
 }
 .o-editor .basicField .grid-layout .initialGridLayout .items .item,
-.o-editor .o-grid-container .grid-layout .initialGridLayout .items .item {
+.o-editor .wpe-block-placeholder .grid-layout .initialGridLayout .items .item {
   max-width: 250px;
 }
 
@@ -2128,7 +2122,7 @@
 .o-editor .block-editor-block-list__block:not(:hover):not(.is-selected):not([data-type="custom/wpe-grid"].has-child-selected) > .o-toolbar-container, .o-editor .block-editor-block-list__block:has(.block-editor-block-list__block:hover):not([data-type="custom/wpe-grid"]) > .o-toolbar-container {
   display: none !important;
 }
-.o-editor .block-editor-block-list__block:not(:hover):not(.is-selected):has(.liveRenderingMessage) > .o-toolbar-container, .o-editor .block-editor-block-list__block:has(.block-editor-block-list__block:hover):has(.liveRenderingMessage) > .o-toolbar-container {
+.o-editor .block-editor-block-list__block:not(:hover):not(.is-selected):has(.wpe-block-placeholder) > .o-toolbar-container, .o-editor .block-editor-block-list__block:has(.block-editor-block-list__block:hover):has(.wpe-block-placeholder) > .o-toolbar-container {
   display: flex !important;
 }
 .o-editor .is-root-container:has(.block-editor-block-list__block.is-selected) .block-editor-block-list__block:not(.is-selected):not(.has-child-selected):not(.is-selected .block-editor-block-list__block):not(.block-editor-block-list__block .block-editor-block-list__block):not(:hover) {
