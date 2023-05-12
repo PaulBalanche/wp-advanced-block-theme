@@ -1,14 +1,32 @@
 .o-editor {
     .block-editor-block-list__block[data-type="custom/wpe-grid"] {
-        > * > .o-toolbar {
-            top: -80px;
+        > .o-toolbar-container {
+            .o-toolbar {
+                .svg {
+                    width: 80px;
+                    height: 32px;
+                    svg {
+                        fill: rgb(220, 220, 220);
+                        transition: $o-transition-fast;
+                        width: 100%;
+                        height: auto;
+                    }
+                }
+                &::after {
+                    content: none;
+                }
+                &:hover {
+                    svg {
+                        fill: var(--wp-admin-theme-color);
+                    }
+                }
+            }
         }
-
         .o-grid-container {
             display: grid;
-            padding: 4px;
-            column-gap: 4px;
-            row-gap: 4px;
+            padding: $o-space-10;
+            column-gap: $o-space-10;
+            row-gap: $o-space-10;
             grid-auto-columns: 1fr;
             grid-auto-flow: column;
 
@@ -48,9 +66,17 @@
             }
         }
 
-        &:hover {
+        &:hover,
+        &.is-selected {
             .o-grid-add-column {
                 visibility: visible;
+            }
+
+            > .o-grid-container
+                > .block-editor-block-list__block[data-type="custom/wpe-column"]:not(
+                    :hover
+                )::before {
+                opacity: 0.6;
             }
         }
     }

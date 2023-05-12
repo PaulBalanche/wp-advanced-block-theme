@@ -4,16 +4,15 @@
         margin-top: 0 !important;
         margin-bottom: 0 !important;
         box-sizing: border-box;
-        padding-top: 60px !important;
+        padding-top: $o-space-100 !important;
+        padding-bottom: $o-space-20;
 
-        &.is-empty {
-            padding-top: 80px !important;
-            border: 1px dashed $o-accent-color;
+        &:before {
+            border: 1px dashed var(--wp-admin-theme-color);
         }
 
-        & > .block-list-appender {
-            width: 100%;
-            max-width: 100%;
+        &.is-empty {
+            padding-top: $o-space-100 !important;
         }
 
         &:hover {
@@ -28,6 +27,10 @@
 
         &:not([contenteditable])::focus::after {
             border: none;
+        }
+
+        > .o-toolbar-container {
+            display: none !important;
         }
     }
 }

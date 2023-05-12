@@ -592,7 +592,7 @@ export class WpeComponentBase extends Component {
         return null;
     }
 
-    renderEditFormZone(content = null, titleOnly = false) {
+    renderEditFormZone(content = null, titleOnly = true) {
         let editZone = [];
 
         // Title
@@ -602,12 +602,12 @@ export class WpeComponentBase extends Component {
             </div>
         );
 
-        if (false && !titleOnly) {
+        if (!titleOnly) {
             // Separator
             // editZone.push(<div key={ this.props.clientId + "_EditZoneSeparator1" } className="separator"></div>);
 
             // Edit button
-            editZone.push(this.renderButtonEditZone());
+            // editZone.push(this.renderButtonEditZone());
 
             // Additionnal content
             if (content != null) {
@@ -623,7 +623,7 @@ export class WpeComponentBase extends Component {
                 editZone.push(content);
             }
 
-            editZone.push(this.renderTools());
+            // editZone.push(this.renderTools());
         }
 
         return (

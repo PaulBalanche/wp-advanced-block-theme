@@ -10,7 +10,7 @@ import { createBlock } from "@wordpress/blocks";
 import { compose } from "@wordpress/compose";
 import { WpeComponentBase } from "../../../Components/WpeComponentBase";
 
-import { Dashicon, MenuItem } from "@wordpress/components";
+import { MenuItem } from "@wordpress/components";
 
 import { plus } from "@wordpress/icons";
 
@@ -176,10 +176,13 @@ class WpeGrid extends WpeComponentBase {
     }
 
     getLayout() {
-        const currentDevice = __ODevices.getInstance().getCurrentDevice();
         if (typeof this.props.attributes.layout == "undefined") {
             return null;
         }
+        if (typeof __ODevices.getInstance() == "undefined") {
+            return null;
+        }
+        const currentDevice = __ODevices.getInstance().getCurrentDevice();
         if (typeof this.props.attributes.layout[currentDevice] == "undefined") {
             return null;
         }
@@ -235,6 +238,25 @@ class WpeGrid extends WpeComponentBase {
             createBlocksFromInnerBlocksTemplate(innerBlocks),
             false
         );
+    }
+
+    getToolbar() {
+        const tootlBar = [];
+
+        const currentLayout = this.getLayout();
+        if (
+            currentLayout &&
+            typeof predefinedLayouts[currentLayout] == "object" &&
+            typeof predefinedLayouts[currentLayout].icon != "undefined"
+        ) {
+            tootlBar.push(
+                <div class="svg">{predefinedLayouts[currentLayout].icon}</div>
+            );
+        }
+
+        tootlBar.push(<span className="instruction">Edit layout</span>);
+
+        return tootlBar;
     }
 
     liveRendering() {
@@ -339,15 +361,15 @@ class WpeGrid extends WpeComponentBase {
         } else {
             return (
                 <div {...innerBlocksProps}>
-                    {this.renderEditFormZone()}
+                    {this.renderEditFormZone(this.getToolbar(), false)}
                     <div className="o-grid-container">{children}</div>
-                    <div
+                    {/* <div
                         className="o-grid-add-column"
                         onClick={() => this.addColumn()}
                     >
                         <Dashicon icon="plus" />
                         Add column
-                    </div>
+                    </div> */}
                 </div>
             );
         }

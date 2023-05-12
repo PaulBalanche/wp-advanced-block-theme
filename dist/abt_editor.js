@@ -12376,10 +12376,13 @@ class WpeGrid extends _Components_WpeComponentBase__WEBPACK_IMPORTED_MODULE_4__.
     }, "grid-layout"));
   }
   getLayout() {
-    const currentDevice = _Components_ODevices__WEBPACK_IMPORTED_MODULE_8__["default"].getInstance().getCurrentDevice();
     if (typeof this.props.attributes.layout == "undefined") {
       return null;
     }
+    if (typeof _Components_ODevices__WEBPACK_IMPORTED_MODULE_8__["default"].getInstance() == "undefined") {
+      return null;
+    }
+    const currentDevice = _Components_ODevices__WEBPACK_IMPORTED_MODULE_8__["default"].getInstance().getCurrentDevice();
     if (typeof this.props.attributes.layout[currentDevice] == "undefined") {
       return null;
     }
@@ -12422,6 +12425,19 @@ class WpeGrid extends _Components_WpeComponentBase__WEBPACK_IMPORTED_MODULE_4__.
       });
     });
     this.props.replaceInnerBlocks(this.props.clientId, createBlocksFromInnerBlocksTemplate(innerBlocks), false);
+  }
+  getToolbar() {
+    const tootlBar = [];
+    const currentLayout = this.getLayout();
+    if (currentLayout && typeof _predefinedLayouts__WEBPACK_IMPORTED_MODULE_10__.predefinedLayouts[currentLayout] == "object" && typeof _predefinedLayouts__WEBPACK_IMPORTED_MODULE_10__.predefinedLayouts[currentLayout].icon != "undefined") {
+      tootlBar.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+        class: "svg"
+      }, _predefinedLayouts__WEBPACK_IMPORTED_MODULE_10__.predefinedLayouts[currentLayout].icon));
+    }
+    tootlBar.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+      className: "instruction"
+    }, "Edit layout"));
+    return tootlBar;
   }
   liveRendering() {
     var {
@@ -12482,14 +12498,9 @@ class WpeGrid extends _Components_WpeComponentBase__WEBPACK_IMPORTED_MODULE_4__.
         }));
       }, null, null, "initialGridLayout")))));
     } else {
-      return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", innerBlocksProps, this.renderEditFormZone(), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", innerBlocksProps, this.renderEditFormZone(this.getToolbar(), false), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
         className: "o-grid-container"
-      }, children), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-        className: "o-grid-add-column",
-        onClick: () => this.addColumn()
-      }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_5__.Dashicon, {
-        icon: "plus"
-      }), "Add column"));
+      }, children));
     }
   }
 }
@@ -15208,7 +15219,7 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
   }
   renderEditFormZone() {
     let content = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
-    let titleOnly = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+    let titleOnly = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
     let editZone = [];
 
     // Title
@@ -15216,7 +15227,28 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
       key: this.props.clientId + "_EditZoneTitle",
       className: "title"
     }, this.title));
-    if (false) {}
+    if (!titleOnly) {
+      // Separator
+      // editZone.push(<div key={ this.props.clientId + "_EditZoneSeparator1" } className="separator"></div>);
+
+      // Edit button
+      // editZone.push(this.renderButtonEditZone());
+
+      // Additionnal content
+      if (content != null) {
+        // Separator
+        editZone.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+          key: this.props.clientId + "_EditZoneSeparator2",
+          className: "separator"
+        }));
+
+        // Additionnal content
+        editZone.push(content);
+      }
+
+      // editZone.push(this.renderTools());
+    }
+
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       key: this.props.clientId + "-EditZoneButtonGroup",
       className: "o-toolbar-container"
