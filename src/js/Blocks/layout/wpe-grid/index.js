@@ -3,32 +3,13 @@
  */
 import { useBlockProps, useInnerBlocksProps } from "@wordpress/block-editor";
 import { registerBlockType } from "@wordpress/blocks";
-import { Icon } from "@wordpress/icons";
 
 import { Attributes } from "../../../Static/Attributes";
-
-import { predefinedLayouts } from "./predefinedLayouts";
 
 /**
  * Internal dependencies
  */
 import edit from "./edit";
-
-var variations =
-    global_localized.gridConfig && global_localized.gridConfig.variations
-        ? global_localized.gridConfig.variations
-        : gridConfig.variations;
-variations.forEach(function (elt, index) {
-    if (typeof elt.scope != "object") {
-        variations[index].scope = ["block"];
-    }
-
-    if (typeof elt.icon != "undefined") {
-        variations[index].icon = (
-            <Icon icon={predefinedLayouts[elt.icon].icon} />
-        );
-    }
-});
 
 let attributes = {
     gridLocked: {
@@ -85,7 +66,6 @@ registerBlockType("custom/wpe-grid", {
     },
     // parent: [ 'custom/wpe-container' ],
     attributes: attributes,
-    variations,
     edit: edit(blocks_spec["wpe-grid"], theme_spec),
     save: () => {
         const blockProps = useBlockProps.save();

@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: 		WP advanced block theme
- * Version: 			1.3.2
+ * Version: 			1.3.3
  * Requires at least: 	6.0
  * Requires PHP:      	8.0
  * Author: 				Paul Balanche

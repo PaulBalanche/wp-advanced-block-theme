@@ -5199,53 +5199,6 @@ function findFirstFocusableNode(element) {
 
 /***/ }),
 
-/***/ "./node_modules/@wordpress/icons/build-module/icon/index.js":
-/*!******************************************************************!*\
-  !*** ./node_modules/@wordpress/icons/build-module/icon/index.js ***!
-  \******************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
-/**
- * WordPress dependencies
- */
-
-/** @typedef {{icon: JSX.Element, size?: number} & import('@wordpress/primitives').SVGProps} IconProps */
-
-/**
- * Return an SVG icon.
- *
- * @param {IconProps} props icon is the SVG component to render
- *                          size is a number specifiying the icon size in pixels
- *                          Other props will be passed to wrapped SVG component
- *
- * @return {JSX.Element}  Icon component
- */
-
-function Icon(_ref) {
-  let {
-    icon,
-    size = 24,
-    ...props
-  } = _ref;
-  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.cloneElement)(icon, {
-    width: size,
-    height: size,
-    ...props
-  });
-}
-
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Icon);
-//# sourceMappingURL=index.js.map
-
-/***/ }),
-
 /***/ "./node_modules/@wordpress/icons/build-module/library/chevron-down.js":
 /*!****************************************************************************!*\
   !*** ./node_modules/@wordpress/icons/build-module/library/chevron-down.js ***!
@@ -12431,10 +12384,12 @@ class WpeGrid extends _Components_WpeComponentBase__WEBPACK_IMPORTED_MODULE_4__.
     const currentLayout = this.getLayout();
     if (currentLayout && typeof _predefinedLayouts__WEBPACK_IMPORTED_MODULE_10__.predefinedLayouts[currentLayout] == "object" && typeof _predefinedLayouts__WEBPACK_IMPORTED_MODULE_10__.predefinedLayouts[currentLayout].icon != "undefined") {
       tootlBar.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+        key: this.props.clientId + "_toolBarSvg",
         class: "svg"
       }, _predefinedLayouts__WEBPACK_IMPORTED_MODULE_10__.predefinedLayouts[currentLayout].icon));
     }
     tootlBar.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+      key: this.props.clientId + "_toolBarInstruction",
       className: "instruction"
     }, "Edit layout"));
     return tootlBar;
@@ -12499,6 +12454,7 @@ class WpeGrid extends _Components_WpeComponentBase__WEBPACK_IMPORTED_MODULE_4__.
       }, null, null, "initialGridLayout")))));
     } else {
       return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", innerBlocksProps, this.renderEditFormZone(this.getToolbar(), false), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+        key: this.props.clientId + "_gridContainer",
         className: "o-grid-container"
       }, children));
     }
@@ -12566,10 +12522,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/blocks */ "@wordpress/blocks");
 /* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/@wordpress/icons/build-module/icon/index.js");
 /* harmony import */ var _Static_Attributes__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../Static/Attributes */ "./src/js/Static/Attributes.js");
-/* harmony import */ var _predefinedLayouts__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./predefinedLayouts */ "./src/js/Blocks/layout/wpe-grid/predefinedLayouts.js");
-/* harmony import */ var _edit__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./edit */ "./src/js/Blocks/layout/wpe-grid/edit.js");
+/* harmony import */ var _edit__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./edit */ "./src/js/Blocks/layout/wpe-grid/edit.js");
 
 /**
  * WordPress dependencies
@@ -12578,23 +12532,10 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
-
 /**
  * Internal dependencies
  */
 
-var variations = global_localized.gridConfig && global_localized.gridConfig.variations ? global_localized.gridConfig.variations : gridConfig.variations;
-variations.forEach(function (elt, index) {
-  if (typeof elt.scope != "object") {
-    variations[index].scope = ["block"];
-  }
-  if (typeof elt.icon != "undefined") {
-    variations[index].icon = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_icons__WEBPACK_IMPORTED_MODULE_6__["default"], {
-      icon: _predefinedLayouts__WEBPACK_IMPORTED_MODULE_4__.predefinedLayouts[elt.icon].icon
-    });
-  }
-});
 let attributes = {
   gridLocked: {
     type: "boolean",
@@ -12631,8 +12572,7 @@ if (typeof blocks_spec["wpe-grid"] == "object" && typeof blocks_spec["wpe-grid"]
   },
   // parent: [ 'custom/wpe-container' ],
   attributes: attributes,
-  variations,
-  edit: (0,_edit__WEBPACK_IMPORTED_MODULE_5__["default"])(blocks_spec["wpe-grid"], theme_spec),
+  edit: (0,_edit__WEBPACK_IMPORTED_MODULE_4__["default"])(blocks_spec["wpe-grid"], theme_spec),
   save: () => {
     const blockProps = _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.useBlockProps.save();
     const innerBlocksProps = _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.useInnerBlocksProps.save(blockProps);

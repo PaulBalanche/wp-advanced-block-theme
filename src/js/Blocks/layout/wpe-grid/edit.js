@@ -250,11 +250,20 @@ class WpeGrid extends WpeComponentBase {
             typeof predefinedLayouts[currentLayout].icon != "undefined"
         ) {
             tootlBar.push(
-                <div class="svg">{predefinedLayouts[currentLayout].icon}</div>
+                <div key={this.props.clientId + "_toolBarSvg"} class="svg">
+                    {predefinedLayouts[currentLayout].icon}
+                </div>
             );
         }
 
-        tootlBar.push(<span className="instruction">Edit layout</span>);
+        tootlBar.push(
+            <span
+                key={this.props.clientId + "_toolBarInstruction"}
+                className="instruction"
+            >
+                Edit layout
+            </span>
+        );
 
         return tootlBar;
     }
@@ -362,7 +371,12 @@ class WpeGrid extends WpeComponentBase {
             return (
                 <div {...innerBlocksProps}>
                     {this.renderEditFormZone(this.getToolbar(), false)}
-                    <div className="o-grid-container">{children}</div>
+                    <div
+                        key={this.props.clientId + "_gridContainer"}
+                        className="o-grid-container"
+                    >
+                        {children}
+                    </div>
                     {/* <div
                         className="o-grid-add-column"
                         onClick={() => this.addColumn()}
