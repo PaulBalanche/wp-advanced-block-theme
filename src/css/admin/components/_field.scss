@@ -1,12 +1,10 @@
 .o-editor {
-
     .basicField {
         position: relative;
         width: 100%;
 
         &.has-error {
-
-            &::before{
+            &::before {
                 content: "";
                 background: rgb(220 50 50 / 50%);
                 width: $o-space-10;
@@ -16,19 +14,28 @@
                 left: -$o-space-70;
             }
 
-            &:has( > .components-panel ) {
-
+            &:has(> .components-panel) {
                 &::before {
                     content: none;
                 }
                 & > .components-panel {
-                    border-color: rgba(220, 50, 50, 0.5) !important;
+                    border-color: rgb(220, 50, 50) !important;
+
+                    > .components-panel__body > .components-panel__body-title {
+                        background: rgb(220, 50, 50) !important;
+                        .components-button {
+                            color: white;
+                            .components-panel__arrow,
+                            .error {
+                                color: white;
+                            }
+                        }
+                    }
                 }
             }
         }
         &.has-warning {
-
-            &::before{
+            &::before {
                 content: "";
                 background: rgb(255 105 0 / 50%) !important;
                 width: $o-space-10;
@@ -38,8 +45,7 @@
                 left: -$o-space-70;
             }
 
-            &:has( > .components-panel ) {
-
+            &:has(> .components-panel) {
                 &::before {
                     content: none;
                 }
@@ -49,7 +55,8 @@
             }
         }
 
-        .error, .warning {
+        .error,
+        .warning {
             background: none;
             border: none;
             padding: 0;
@@ -83,24 +90,23 @@
             position: relative;
             width: 100%;
             padding-top: $o-space-20;
-        
+
             .responsive-buttons-container {
                 position: absolute;
                 z-index: 1;
                 top: $o-space-10;
                 right: 0;
             }
-        
+
             .tab-panel-wpe-component.videoType {
                 margin-top: $o-space-40;
-        
+
                 .components-tab-panel__tabs {
                     position: relative;
                     z-index: 1;
                     background: $background300;
                 }
             }
-        
         }
 
         .default-overlay-container {
@@ -125,13 +131,12 @@
                 top: 60px;
                 height: calc(100% - 55px);
 
-                .components-button{
+                .components-button {
                     opacity: 1;
                 }
             }
 
             &:hover {
-
                 .components-button {
                     opacity: 1;
                 }
@@ -173,7 +178,6 @@
         width: 100%;
 
         &:has(.basicField.updating) {
-
             .basicField:not(.updating):after {
                 display: block;
             }

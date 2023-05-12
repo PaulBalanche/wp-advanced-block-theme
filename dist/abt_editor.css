@@ -285,7 +285,17 @@
   content: none;
 }
 .o-editor .basicField.has-error:has(> .components-panel) > .components-panel {
-  border-color: rgba(220, 50, 50, 0.5) !important;
+  border-color: rgb(220, 50, 50) !important;
+}
+.o-editor .basicField.has-error:has(> .components-panel) > .components-panel > .components-panel__body > .components-panel__body-title {
+  background: rgb(220, 50, 50) !important;
+}
+.o-editor .basicField.has-error:has(> .components-panel) > .components-panel > .components-panel__body > .components-panel__body-title .components-button {
+  color: white;
+}
+.o-editor .basicField.has-error:has(> .components-panel) > .components-panel > .components-panel__body > .components-panel__body-title .components-button .components-panel__arrow,
+.o-editor .basicField.has-error:has(> .components-panel) > .components-panel > .components-panel__body > .components-panel__body-title .components-button .error {
+  color: white;
 }
 .o-editor .basicField.has-warning::before {
   content: "";
@@ -302,7 +312,8 @@
 .o-editor .basicField.has-warning:has(> .components-panel) > .components-panel {
   border-color: rgba(255, 105, 0, 0.5) !important;
 }
-.o-editor .basicField .error, .o-editor .basicField .warning {
+.o-editor .basicField .error,
+.o-editor .basicField .warning {
   background: none;
   border: none;
   padding: 0;
@@ -313,13 +324,16 @@
   font-weight: 400;
   font-size: 13px;
 }
-.o-editor .basicField .error .dashicon, .o-editor .basicField .warning .dashicon {
+.o-editor .basicField .error .dashicon,
+.o-editor .basicField .warning .dashicon {
   margin-right: 6px;
 }
-.o-editor .basicField .error ul, .o-editor .basicField .warning ul {
+.o-editor .basicField .error ul,
+.o-editor .basicField .warning ul {
   margin: 0;
 }
-.o-editor .basicField .error ul li, .o-editor .basicField .warning ul li {
+.o-editor .basicField .error ul li,
+.o-editor .basicField .warning ul li {
   margin: 0;
 }
 .o-editor .basicField .error {
@@ -414,6 +428,9 @@
   display: none;
 }
 
+.o-editor .block-editor-block-list__block[data-type="custom/wpe-grid"] > .o-toolbar-container .o-toolbar {
+  top: -24px;
+}
 .o-editor .block-editor-block-list__block[data-type="custom/wpe-grid"] > .o-toolbar-container .o-toolbar .svg {
   width: 80px;
   height: 32px;
@@ -2259,6 +2276,19 @@
   color: white;
   width: 30px;
   height: 30px;
+}
+
+#editor .block-editor-block-list__insertion-point-inserter {
+  top: calc(50% - 25px);
+  left: calc(50% - 50px);
+}
+#editor .block-editor-block-list__insertion-point-inserter .block-editor-inserter__toggle.components-button.has-icon {
+  height: 50px;
+  width: 100px;
+}
+#editor .block-editor-block-list__insertion-point-inserter .block-editor-inserter__toggle.components-button.has-icon:hover {
+  background: white;
+  color: var(--wp-admin-theme-color);
 }
 
 #editor .interface-interface-skeleton__header .edit-post-header__toolbar {

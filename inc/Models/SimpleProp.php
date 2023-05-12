@@ -15,19 +15,20 @@ use Abt\Helpers\Attributes\Date;
 use Abt\Helpers\Attributes\Wysiwyg;
 use Abt\Helpers\Attributes\Select;
 
-class SimpleProp {
-    
+class SimpleProp
+{
     private $key,
-            $value,
-            $specs = [],
-            $required = false,
-            $type = null,
-            $default = null,
-            $isValid = false,
-            $errorMessage = null,
-            $subPropsStatus = [];
+        $value,
+        $specs = [],
+        $required = false,
+        $type = null,
+        $default = null,
+        $isValid = false,
+        $errorMessage = null,
+        $subPropsStatus = [];
 
-    function __construct( $key, $value, $specs ) {
+    function __construct($key, $value, $specs)
+    {
         $this->key = $key;
         $this->value = $value;
 
@@ -35,178 +36,186 @@ class SimpleProp {
         $this->isValid = $this->_validate();
     }
 
-    public function getId() {
+    public function getId()
+    {
         return $this->key;
     }
 
-    public function getValue() {
+    public function getValue()
+    {
         return $this->value;
     }
 
-    public function getSpecs() {
+    public function getSpecs()
+    {
         return $this->specs;
     }
 
-    public function _initSpecs( $specs ) {
-
-        $this->specs = ( is_array($specs) ) ? $specs : [];
-        $this->required = ( isset($specs['required']) && $specs['required'] );
-        $this->type = ( isset($specs['type']) ) ? trim( strtolower( $specs['type'] ) ) : null;
-        $this->default = ( isset($specs['default']) ) ? $specs['default'] : null;
+    public function _initSpecs($specs)
+    {
+        $this->specs = is_array($specs) ? $specs : [];
+        $this->required = isset($specs["required"]) && $specs["required"];
+        $this->type = isset($specs["type"])
+            ? trim(strtolower($specs["type"]))
+            : null;
+        $this->default = isset($specs["default"]) ? $specs["default"] : null;
     }
 
-    public function getDefaultValue() {
+    public function getDefaultValue()
+    {
         return $this->default;
     }
 
-    public function isRequired() {
-        return ( $this->required );
+    public function isRequired()
+    {
+        return $this->required;
     }
 
-    public function getType() {
+    public function getType()
+    {
         return $this->type;
     }
 
-    public function isValid() {
-        return ( $this->isValid );
+    public function isValid()
+    {
+        return $this->isValid;
     }
 
-    public function _validate() {
-
-        if( is_null($this->getValue()) ) {
-
-            if( ! is_null($this->getDefaultValue()) ) {
+    public function _validate()
+    {
+        if (is_null($this->getValue())) {
+            if (!is_null($this->getDefaultValue())) {
                 return true;
             }
 
-            return $this->falseWithError( 'Required' );
+            return $this->isRequired()
+                ? $this->falseWithError("Required")
+                : true;
         }
 
-        switch( $this->getType() ) {
-                        
-            case 'boolean':
-            case 'switch':
-                return Boolean::isValid( $this );
+        switch ($this->getType()) {
+            case "boolean":
+            case "switch":
+                return Boolean::isValid($this);
 
-            case 'image':
-                return Image::isValid( $this );
+            case "image":
+                return Image::isValid($this);
 
-            case 'gallery':
-                return Gallery::isValid( $this );
+            case "gallery":
+                return Gallery::isValid($this);
 
-            case 'video':
-                return Video::isValid( $this );
+            case "video":
+                return Video::isValid($this);
 
-            case 'file':
-                return File::isValid( $this );
+            case "file":
+                return File::isValid($this);
 
-            case 'relation':
-                return Relation::isValid( $this );
+            case "relation":
+                return Relation::isValid($this);
 
-            case 'object':
-                return RecursiveObject::isValid( $this );
+            case "object":
+                return RecursiveObject::isValid($this);
 
-            case 'link':
-                return Link::isValid( $this );
+            case "link":
+                return Link::isValid($this);
 
-            case 'date':
-                return Date::isValid( $this );
+            case "date":
+                return Date::isValid($this);
 
-            case 'wysiwyg':
-            case 'richText':
-                return Wysiwyg::isValid( $this );
-            
-            case 'select':
-            case 'color':
-            case 'spaces':
-                return Select::isValid( $this );
+            case "wysiwyg":
+            case "richText":
+                return Wysiwyg::isValid($this);
+
+            case "select":
+            case "color":
+            case "spaces":
+                return Select::isValid($this);
 
             default:
-                return Base::isValid( $this );
+                return Base::isValid($this);
         }
     }
 
-    public function format() {
-
-        if( is_null($this->getValue()) ) {
+    public function format()
+    {
+        if (is_null($this->getValue())) {
             return $this->getDefaultValue();
         }
 
-        switch( $this->getType() ) {
-                        
-            case 'boolean':
-            case 'switch':
-                return Boolean::format( $this );
+        switch ($this->getType()) {
+            case "boolean":
+            case "switch":
+                return Boolean::format($this);
 
-            case 'image':
-                return Image::format( $this );
+            case "image":
+                return Image::format($this);
 
-            case 'gallery':
-                return Gallery::format( $this );
+            case "gallery":
+                return Gallery::format($this);
 
-            case 'video':
-                return Video::format( $this );
+            case "video":
+                return Video::format($this);
 
-            case 'file':
-                return File::format( $this );
+            case "file":
+                return File::format($this);
 
-            case 'relation':
-                return Relation::format( $this );
+            case "relation":
+                return Relation::format($this);
 
-            case 'object':
-                return RecursiveObject::format( $this );
+            case "object":
+                return RecursiveObject::format($this);
 
-            case 'link':
-                return Link::format( $this );
+            case "link":
+                return Link::format($this);
 
-            case 'date':
-                return Date::format( $this );
+            case "date":
+                return Date::format($this);
 
-            case 'wysiwyg':
-            case 'richText':
-                return Wysiwyg::format( $this );
+            case "wysiwyg":
+            case "richText":
+                return Wysiwyg::format($this);
 
-            case 'select':
-            case 'color':
-            case 'spaces':
-                return Select::format( $this );
+            case "select":
+            case "color":
+            case "spaces":
+                return Select::format($this);
 
             default:
-                return Base::format( $this );
+                return Base::format($this);
         }
     }
 
-    public function falseWithError( $error ) {
-
+    public function falseWithError($error)
+    {
         $this->errorMessage = $error;
         return false;
     }
 
-    public function addSubPropStatus( $subPropInstance ) {
-
+    public function addSubPropStatus($subPropInstance)
+    {
         $subPropsStatus = $subPropInstance->getStatus();
-        if( ! is_null($subPropsStatus) ) {
-            $this->subPropsStatus[ $subPropInstance->getId() ] = $subPropsStatus;
+        if (!is_null($subPropsStatus)) {
+            $this->subPropsStatus[$subPropInstance->getId()] = $subPropsStatus;
         }
     }
 
-    public function getStatus( ) {
-        
+    public function getStatus()
+    {
         $status = [];
 
-        if( ! is_null($this->errorMessage) ) {
-            $status[ ( $this->isRequired() ) ? 'error' : 'warning' ] = $this->errorMessage;
+        if (!is_null($this->errorMessage)) {
+            $status[$this->isRequired() ? "error" : "warning"] =
+                $this->errorMessage;
         }
 
-        if( count($this->subPropsStatus) > 0 ) {
-            $status['props'] = $this->subPropsStatus;
-            
-            if( ! isset($status[ ( $this->isRequired() ) ? 'error' : 'warning' ]) ) {
-                $status[ ( $this->isRequired() ) ? 'error' : 'warning' ] = true;
+        if (count($this->subPropsStatus) > 0) {
+            $status["props"] = $this->subPropsStatus;
+
+            if (!isset($status[$this->isRequired() ? "error" : "warning"])) {
+                $status[$this->isRequired() ? "error" : "warning"] = true;
             }
         }
 
-        return ( count($status) > 0 ) ? $status : null;
+        return count($status) > 0 ? $status : null;
     }
-
 }
