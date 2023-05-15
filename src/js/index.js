@@ -1,7 +1,6 @@
-import * as __ReactDom from "react-dom";
-
 import { compose } from "@wordpress/compose";
 import { withDispatch, withSelect } from "@wordpress/data";
+import { createRoot } from "@wordpress/element";
 
 import { store as blockEditorStore } from "@wordpress/block-editor";
 
@@ -30,7 +29,6 @@ class OEditor {
             ".interface-interface-skeleton__content"
         );
         if ($editorContainer) {
-
             $editorContainer.classList?.add?.("o-editor");
 
             // create the container for our app
@@ -38,8 +36,8 @@ class OEditor {
             $editorApp.classList.add("o-editor-container");
             $editorContainer.appendChild($editorApp);
 
-            // render our app
-            __ReactDom.render(<OEditorAppContext />, $editorApp);
+            const root = createRoot($editorApp);
+            root.render(<OEditorAppContext />);
         }
     }
 
@@ -102,15 +100,13 @@ const OEditorAppContext = compose([
         }
         const selectedBlockClientId =
             select("core/block-editor").getSelectedBlockClientId();
-        
-        const editorMode =
-            select("core/edit-post").getEditorMode();
+
+        const editorMode = select("core/edit-post").getEditorMode();
 
         return {
             blocksList,
             selectedBlockClientId,
-            editorMode
-
+            editorMode,
         };
     }),
     withDispatch((dispatch) => {

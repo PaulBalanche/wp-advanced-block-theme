@@ -1,11 +1,4 @@
-/**
- * WordPress dependencies
- */
-import {
-    store as blockEditorStore,
-    useBlockProps,
-    useInnerBlocksProps,
-} from "@wordpress/block-editor";
+import { store as blockEditorStore } from "@wordpress/block-editor";
 import { createBlock } from "@wordpress/blocks";
 import { compose } from "@wordpress/compose";
 import { WpeComponentBase } from "../../../Components/WpeComponentBase";
@@ -390,65 +383,48 @@ class WpeGrid extends WpeComponentBase {
     }
 }
 
-export default (block_spec, theme_spec) =>
-    compose([
-        withSelect((select, props) => {
-            // Detect if inside a reusable block
-            const getBlockParents = select("core/block-editor").getBlockParents(
-                props.clientId
-            );
-
-            const parentsBlock = [];
-            if (getBlockParents.length > 0) {
-                for (var i in getBlockParents) {
-                    parentsBlock.push(
-                        select("core/block-editor").getBlock(getBlockParents[i])
-                    );
-                }
+export const TestEdit = compose([
+    withSelect((select, props) => {
+        const parentsBlock = [];
+        const getBlockParents = select("core/block-editor").getBlockParents(
+            props.clientId
+        );
+        if (getBlockParents.length > 0) {
+            for (var i in getBlockParents) {
+                parentsBlock.push(
+                    select("core/block-editor").getBlock(getBlockParents[i])
+                );
             }
+        }
 
-            return {
-                block_spec,
-                theme_spec,
-                inner_blocks: select("core/block-editor").getBlocks(
-                    props.clientId
-                ),
-                innerBlocksProps: useInnerBlocksProps(
-                    useBlockProps({ className: "" }),
-                    { renderAppender: false }
-                ),
-                countColumns: select("core/block-editor").getBlockCount(
-                    props.clientId
-                ),
-                blockVariations: select("core/blocks").getBlockVariations(
-                    props.name,
-                    "block"
-                ),
-                blockType: select("core/blocks").getBlockType(props.name),
-                // isSelectedBlock: select("core/block-editor").isBlockSelected(
-                //     props.clientId
-                // ),
-                // isParentOfSelectedBlock: select(
-                //     "core/block-editor"
-                // ).hasSelectedInnerBlock(props.clientId, true),
-                parentsBlock,
-            };
-        }),
-        withDispatch((dispatch) => {
-            const {
-                replaceInnerBlocks,
-                removeBlock,
-                duplicateBlocks,
-                moveBlocksUp,
-                moveBlocksDown,
-            } = dispatch(blockEditorStore);
+        return {
+            inner_blocks: select("core/block-editor").getBlocks(props.clientId),
+            countColumns: select("core/block-editor").getBlockCount(
+                props.clientId
+            ),
+            blockVariations: select("core/blocks").getBlockVariations(
+                props.name,
+                "block"
+            ),
+            blockType: select("core/blocks").getBlockType(props.name),
+            parentsBlock,
+        };
+    }),
+    withDispatch((dispatch) => {
+        const {
+            replaceInnerBlocks,
+            removeBlock,
+            duplicateBlocks,
+            moveBlocksUp,
+            moveBlocksDown,
+        } = dispatch(blockEditorStore);
 
-            return {
-                replaceInnerBlocks,
-                removeBlock,
-                duplicateBlocks,
-                moveBlocksUp,
-                moveBlocksDown,
-            };
-        }),
-    ])(WpeGrid);
+        return {
+            replaceInnerBlocks,
+            removeBlock,
+            duplicateBlocks,
+            moveBlocksUp,
+            moveBlocksDown,
+        };
+    }),
+])(WpeGrid);

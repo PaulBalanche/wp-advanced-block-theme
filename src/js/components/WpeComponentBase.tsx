@@ -36,17 +36,22 @@ export class WpeComponentBase extends Component {
             },
         };
 
-        this.title = getBlockType(this.props.name).title;
+        this.title =
+            typeof this.props.name != "undefined"
+                ? getBlockType(this.props.name).title
+                : "Undefined...";
         this.reusableBlock = this.isReusableBlock();
 
         globalData.componentInstances[this.props.clientId] = this;
-        if (typeof this.getAttribute("anchor") == "undefined") {
+        if (this.getAttribute("anchor") != null) {
             this.setAttributes({ anchor: this.props.clientId });
         }
     }
 
     getAttribute(key) {
-        return this.props.attributes[key];
+        return typeof this.props.attributes[key] != "undefined"
+            ? this.props.attributes[key]
+            : null;
     }
 
     setAttributes(attributes) {
@@ -122,6 +127,7 @@ export class WpeComponentBase extends Component {
         const anchor = this.getAttribute("anchor");
         const displayAnchor =
             typeof anchor != "undefined" &&
+            anchor != null &&
             anchor.match(
                 /^[a-z0-9]+-[a-z0-9]+-[a-z0-9]+-[a-z0-9]+-[a-z0-9]+$/
             ) == null;

@@ -6,10 +6,7 @@ import { registerBlockType } from "@wordpress/blocks";
 
 import { Attributes } from "../../../Static/Attributes";
 
-/**
- * Internal dependencies
- */
-import edit from "./edit";
+import { TestEdit } from "./edit";
 
 let attributes = {
     gridLocked: {
@@ -66,7 +63,14 @@ registerBlockType("custom/wpe-grid", {
     },
     // parent: [ 'custom/wpe-container' ],
     attributes: attributes,
-    edit: edit(blocks_spec["wpe-grid"], theme_spec),
+    edit: (props) => {
+        const innerBlocksProps = useInnerBlocksProps(
+            useBlockProps({ className: "" }),
+            { renderAppender: false }
+        );
+
+        return <TestEdit {...props} innerBlocksProps={innerBlocksProps} />;
+    },
     save: () => {
         const blockProps = useBlockProps.save();
         const innerBlocksProps = useInnerBlocksProps.save(blockProps);
