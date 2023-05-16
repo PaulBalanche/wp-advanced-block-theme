@@ -1,9 +1,12 @@
-import { useBlockProps, useInnerBlocksProps } from "@wordpress/block-editor";
+import {
+    InnerBlocks,
+    useBlockProps,
+    useInnerBlocksProps,
+} from "@wordpress/block-editor";
 import { registerBlockType } from "@wordpress/blocks";
 
 import { Attributes } from "../../../Static/Attributes";
-
-import edit from "./edit";
+import { EditMode } from "./edit";
 
 let attributes = {
     id_component: {
@@ -59,7 +62,21 @@ registerBlockType("custom/wpe-column", {
     },
     parent: ["custom/wpe-grid"],
     attributes: attributes,
-    edit: edit(blocks_spec["wpe-column"], theme_spec),
+    edit: (props) => {
+        const innerBlocksProps = useInnerBlocksProps(
+            useBlockProps({ className: "" }),
+            { renderAppender: InnerBlocks.ButtonBlockAppender }
+        );
+
+        return (
+            <EditMode
+                {...props}
+                innerBlocksProps={innerBlocksProps}
+                blocks_spec={blocks_spec["wpe-column"]}
+                theme_spec={theme_spec}
+            />
+        );
+    },
     save: () => {
         const blockProps = useBlockProps.save();
         const innerBlocksProps = useInnerBlocksProps.save(blockProps);

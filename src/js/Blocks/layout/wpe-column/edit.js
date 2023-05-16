@@ -1,12 +1,7 @@
 /**
  * WordPress dependencies
  */
-import {
-    InnerBlocks,
-    store as blockEditorStore,
-    useBlockProps,
-    useInnerBlocksProps,
-} from "@wordpress/block-editor";
+import { store as blockEditorStore } from "@wordpress/block-editor";
 import { compose } from "@wordpress/compose";
 import { WpeComponentBase } from "../../../Components/WpeComponentBase";
 
@@ -228,36 +223,28 @@ class WpeColumn extends WpeComponentBase {
     }
 }
 
-export default (block_spec, theme_spec) =>
-    compose([
-        withSelect((select, props) => {
-            const getBlockParents = select("core/block-editor").getBlockParents(
+export const EditMode = compose([
+    withSelect((select, props) => {
+        const getBlockParents = select("core/block-editor").getBlockParents(
+            props.clientId
+        );
+        const parentBlockId = getBlockParents[getBlockParents.length - 1];
+        const fatherBlocks =
+            select("core/block-editor").getBlockOrder(parentBlockId);
+        const indexOf = fatherBlocks.indexOf(props.clientId);
+
+        return {
+            countColumns: select("core/block-editor").getBlockCount(
                 props.clientId
-            );
-            const parentBlockId = getBlockParents[getBlockParents.length - 1];
-            const fatherBlocks =
-                select("core/block-editor").getBlockOrder(parentBlockId);
-            const indexOf = fatherBlocks.indexOf(props.clientId);
+            ),
+            columnIndex: indexOf,
+        };
+    }),
+    withDispatch((dispatch) => {
+        const { removeBlock } = dispatch(blockEditorStore);
 
-            return {
-                block_spec,
-                theme_spec,
-                innerBlocksProps: useInnerBlocksProps(
-                    useBlockProps({ className: "" }),
-                    { renderAppender: InnerBlocks.ButtonBlockAppender }
-                ),
-                disableButtonGroupMode: true,
-                countColumns: select("core/block-editor").getBlockCount(
-                    props.clientId
-                ),
-                columnIndex: indexOf,
-            };
-        }),
-        withDispatch((dispatch) => {
-            const { removeBlock } = dispatch(blockEditorStore);
-
-            return {
-                removeBlock,
-            };
-        }),
-    ])(WpeColumn);
+        return {
+            removeBlock,
+        };
+    }),
+])(WpeColumn);

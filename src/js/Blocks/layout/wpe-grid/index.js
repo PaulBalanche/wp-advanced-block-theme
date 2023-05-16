@@ -5,8 +5,7 @@ import { useBlockProps, useInnerBlocksProps } from "@wordpress/block-editor";
 import { registerBlockType } from "@wordpress/blocks";
 
 import { Attributes } from "../../../Static/Attributes";
-
-import { TestEdit } from "./edit";
+import { EditMode } from "./edit";
 
 let attributes = {
     gridLocked: {
@@ -69,7 +68,14 @@ registerBlockType("custom/wpe-grid", {
             { renderAppender: false }
         );
 
-        return <TestEdit {...props} innerBlocksProps={innerBlocksProps} />;
+        return (
+            <EditMode
+                {...props}
+                innerBlocksProps={innerBlocksProps}
+                blocks_spec={blocks_spec["wpe-grid"]}
+                theme_spec={theme_spec}
+            />
+        );
     },
     save: () => {
         const blockProps = useBlockProps.save();

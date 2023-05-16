@@ -383,7 +383,7 @@ class WpeGrid extends WpeComponentBase {
     }
 }
 
-export const TestEdit = compose([
+export const EditMode = compose([
     withSelect((select, props) => {
         const parentsBlock = [];
         const getBlockParents = select("core/block-editor").getBlockParents(

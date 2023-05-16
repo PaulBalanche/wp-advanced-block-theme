@@ -1,47 +1,48 @@
 /**
  * WordPress dependencies
  */
-import { WpeComponentBase } from '../../../Components/WpeComponentBase';
-import { compose } from '@wordpress/compose';
 import {
     InnerBlocks,
     useBlockProps,
     useInnerBlocksProps,
-    __experimentalBlockVariationPicker
-} from '@wordpress/block-editor';
+} from "@wordpress/block-editor";
+import { compose } from "@wordpress/compose";
+import { WpeComponentBase } from "../../../Components/WpeComponentBase";
 
-import { withSelect } from '@wordpress/data';
+import { withSelect } from "@wordpress/data";
 
 /**
  * registerBlockType edit function
- * 
+ *
  */
 class WpeSlide extends WpeComponentBase {
- 
     constructor() {
-        super( ...arguments );
+        super(...arguments);
     }
 
     liveRendering() {
-        
         const { children, ...innerBlocksProps } = this.props.innerBlocksProps;
-        innerBlocksProps.key = 'innerBlocksProps_' + this.props.clientId;
+        innerBlocksProps.key = "innerBlocksProps_" + this.props.clientId;
 
-        return <div {...innerBlocksProps}>
-            { this.renderEditFormZone() }
-            { children }
-        </div>
+        return (
+            <div {...innerBlocksProps}>
+                {this.renderEditFormZone()}
+                {children}
+            </div>
+        );
     }
 }
 
-export default ( block_spec, theme_spec ) => compose( [
-    withSelect( () => {
-
-        return {
-            block_spec,
-            theme_spec,
-            innerBlocksProps: useInnerBlocksProps( useBlockProps( { className: '' } ), { renderAppender: InnerBlocks.ButtonBlockAppender } ),
-            disableButtonGroupMode: true
-        };
-    } ),
-] )( WpeSlide );
+export default (block_spec, theme_spec) =>
+    compose([
+        withSelect(() => {
+            return {
+                block_spec,
+                theme_spec,
+                innerBlocksProps: useInnerBlocksProps(
+                    useBlockProps({ className: "" }),
+                    { renderAppender: InnerBlocks.ButtonBlockAppender }
+                ),
+            };
+        }),
+    ])(WpeSlide);
