@@ -2377,4 +2377,12 @@
   color: var(--wp-admin-theme-color);
 }
 
+.block-editor-inserter__preview-container {
+  width: 600px;
+}
+
+.block-editor-inserter__preview-content {
+  min-height: 300px;
+}
+
 /*# sourceMappingURL=abt_editor.css.map*/

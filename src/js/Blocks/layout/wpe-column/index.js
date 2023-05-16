@@ -2,33 +2,33 @@ import {
     InnerBlocks,
     useBlockProps,
     useInnerBlocksProps,
-} from "@wordpress/block-editor";
-import { registerBlockType } from "@wordpress/blocks";
+} from '@wordpress/block-editor';
+import { registerBlockType } from '@wordpress/blocks';
 
-import { Attributes } from "../../../Static/Attributes";
-import { EditMode } from "./edit";
+import { Attributes } from '../../../Static/Attributes';
+import { EditMode } from './edit';
 
 let attributes = {
     id_component: {
-        type: "string",
+        type: 'string',
     },
     layout: {
-        type: "object",
+        type: 'object',
     },
 };
 if (
-    typeof blocks_spec["wpe-column"] == "object" &&
-    typeof blocks_spec["wpe-column"].props == "object"
+    typeof blocks_spec['wpe-column'] == 'object' &&
+    typeof blocks_spec['wpe-column'].props == 'object'
 ) {
     Attributes.initComponentAttributes(
         attributes,
-        blocks_spec["wpe-column"].props
+        blocks_spec['wpe-column'].props,
     );
 }
 
-registerBlockType("custom/wpe-column", {
-    title: "Col",
-    category: "wpe-layout",
+registerBlockType('custom/wpe-column', {
+    title: 'Col',
+    category: 'wpe-layout',
     icon: (
         <svg
             enableBackground="new 0 0 24 24"
@@ -60,19 +60,19 @@ registerBlockType("custom/wpe-column", {
         anchor: true,
         lightBlockWrapper: true,
     },
-    parent: ["custom/wpe-grid"],
+    parent: ['custom/wpe-grid'],
     attributes: attributes,
     edit: (props) => {
         const innerBlocksProps = useInnerBlocksProps(
-            useBlockProps({ className: "" }),
-            { renderAppender: InnerBlocks.ButtonBlockAppender }
+            useBlockProps({ className: '' }),
+            { renderAppender: InnerBlocks.ButtonBlockAppender },
         );
 
         return (
             <EditMode
                 {...props}
                 innerBlocksProps={innerBlocksProps}
-                blocks_spec={blocks_spec["wpe-column"]}
+                blocks_spec={blocks_spec['wpe-column']}
                 theme_spec={theme_spec}
             />
         );

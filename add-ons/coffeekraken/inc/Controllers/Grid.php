@@ -32,8 +32,13 @@ class Grid extends ControllerBase
     {
         // Get all cells grid informations
         $cellsLayout = [];
+
         foreach ($block_instance->parsed_block["innerBlocks"] as $innerBlock) {
             if ($innerBlock["blockName"] != "custom/wpe-column") {
+                continue;
+            }
+
+            if( !isset($innerBlock["attrs"]["id_component"]) ) {
                 continue;
             }
             $cellsLayout[$innerBlock["attrs"]["id_component"]] =

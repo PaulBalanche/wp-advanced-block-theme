@@ -1,34 +1,34 @@
 /**
  * WordPress dependencies
  */
-import { useBlockProps, useInnerBlocksProps } from "@wordpress/block-editor";
-import { registerBlockType } from "@wordpress/blocks";
+import { useBlockProps, useInnerBlocksProps } from '@wordpress/block-editor';
+import { registerBlockType } from '@wordpress/blocks';
 
-import { Attributes } from "../../../Static/Attributes";
-import { EditMode } from "./edit";
+import { Attributes } from '../../../Static/Attributes';
+import { EditMode } from './edit';
 
 let attributes = {
     gridLocked: {
-        type: "boolean",
+        type: 'boolean',
         default: false,
     },
     layout: {
-        type: "object",
+        type: 'object',
     },
 };
 if (
-    typeof blocks_spec["wpe-grid"] == "object" &&
-    typeof blocks_spec["wpe-grid"].props == "object"
+    typeof blocks_spec['wpe-grid'] == 'object' &&
+    typeof blocks_spec['wpe-grid'].props == 'object'
 ) {
     Attributes.initComponentAttributes(
         attributes,
-        blocks_spec["wpe-grid"].props
+        blocks_spec['wpe-grid'].props,
     );
 }
 
-registerBlockType("custom/wpe-grid", {
-    title: "Grid",
-    category: "wpe-layout",
+registerBlockType('custom/wpe-grid', {
+    title: 'Grid',
+    category: 'wpe-layout',
     icon: (
         <svg
             enableBackground="new 0 0 24 24"
@@ -64,15 +64,15 @@ registerBlockType("custom/wpe-grid", {
     attributes: attributes,
     edit: (props) => {
         const innerBlocksProps = useInnerBlocksProps(
-            useBlockProps({ className: "" }),
-            { renderAppender: false }
+            useBlockProps({ className: '' }),
+            { renderAppender: false },
         );
 
         return (
             <EditMode
                 {...props}
                 innerBlocksProps={innerBlocksProps}
-                blocks_spec={blocks_spec["wpe-grid"]}
+                blocks_spec={blocks_spec['wpe-grid']}
                 theme_spec={theme_spec}
             />
         );

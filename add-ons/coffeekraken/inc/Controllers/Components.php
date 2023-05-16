@@ -41,7 +41,10 @@ class Components extends ControllerBase {
         $namespace_settings = [
             'namespaces' => [
                 $namespace => [ rtrim( $path, '/' ) ]
-            ]
+            ],
+            'previewUrl' => function ($args) {
+                return (isset($args->path) && file_exists($args->path) ) ? str_replace( ABSPATH, '/', $args->path, ) : null;
+            }
         ];
 
         return $namespace_settings;

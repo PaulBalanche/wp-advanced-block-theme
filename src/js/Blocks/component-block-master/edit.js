@@ -3,16 +3,16 @@ import {
     store as blockEditorStore,
     useBlockProps,
     useInnerBlocksProps,
-} from "@wordpress/block-editor";
-import { Dashicon } from "@wordpress/components";
-import { compose } from "@wordpress/compose";
-import { withDispatch, withSelect } from "@wordpress/data";
+} from '@wordpress/block-editor';
+import { Dashicon } from '@wordpress/components';
+import { compose } from '@wordpress/compose';
+import { withDispatch, withSelect } from '@wordpress/data';
 
-import { WpeComponentBase } from "../../Components/WpeComponentBase";
+import { WpeComponentBase } from '../../Components/WpeComponentBase';
 
-import apiFetch from "@wordpress/api-fetch";
+import apiFetch from '@wordpress/api-fetch';
 
-import __OEditorApp from "../../Components/OEditorApp";
+import __OEditorApp from '../../Components/OEditorApp';
 
 class WpeComponent extends WpeComponentBase {
     _$iframes;
@@ -21,7 +21,7 @@ class WpeComponent extends WpeComponentBase {
         super(...arguments);
 
         // Because of ID will be not saved to the block’s comment delimiter default attribute, we manually set it.
-        if (typeof this.props.attributes.id_component == "undefined")
+        if (typeof this.props.attributes.id_component == 'undefined')
             this.setAttributes({ id_component: this.props.block_spec.id });
 
         this.description = this.props.block_spec.description;
@@ -29,11 +29,11 @@ class WpeComponent extends WpeComponentBase {
             js_const.rest_api_url +
             js_const.rest_api_namespace +
             js_const.componentblock_attr_autosaves_rest_api_resource_path +
-            "/" +
+            '/' +
             js_const.post_id +
-            "/" +
-            this.props.attributes.id_component +
-            "/" +
+            '/' +
+            this.props.block_spec.id +
+            '/' +
             this.props.clientId;
 
         this.iframeResize = this._iframeResize.bind(this);
@@ -94,20 +94,20 @@ class WpeComponent extends WpeComponentBase {
             path:
                 js_const.rest_api_namespace +
                 js_const.componentblock_attr_autosaves_rest_api_resource_path +
-                "/" +
+                '/' +
                 js_const.post_id +
-                "/" +
+                '/' +
                 this.props.attributes.id_component +
-                "/" +
+                '/' +
                 this.props.clientId,
-            method: "POST",
+            method: 'POST',
             data: attributes == null ? this.props.attributes : attributes,
         }).then((res) => {
             if (res.success) {
                 this.setState({
                     previewReady: true,
                     needPreviewUpdate: false,
-                    error: typeof res.data != "undefined" ? res.data : null,
+                    error: typeof res.data != 'undefined' ? res.data : null,
                 });
             }
             {
@@ -127,14 +127,14 @@ class WpeComponent extends WpeComponentBase {
         });
 
         var iFrame = document.getElementById(
-            this.props.clientId + "-LiveRenderingIframe"
+            this.props.clientId + '-LiveRenderingIframe',
         );
         if (iFrame) {
             const heightIframe =
-                iFrame.contentWindow.document.body.scrollHeight + "px";
+                iFrame.contentWindow.document.body.scrollHeight + 'px';
             iFrame.height = heightIframe;
             iFrame.parentNode.style.height = heightIframe;
-            iFrame.contentWindow.document.body.style.overflowY = "hidden";
+            iFrame.contentWindow.document.body.style.overflowY = 'hidden';
         }
 
         // __OEditorApp.getInstance().refreshScrollrefreshScroll();
@@ -142,12 +142,12 @@ class WpeComponent extends WpeComponentBase {
 
     renderLoaderPreview() {
         const className = this.state.iframeLoaded
-            ? "loaderLiveRenderingIframe closed"
-            : "loaderLiveRenderingIframe";
+            ? 'loaderLiveRenderingIframe closed'
+            : 'loaderLiveRenderingIframe';
 
         return (
             <div
-                key={this.props.clientId + "-loaderLiveRenderingIframe"}
+                key={this.props.clientId + '-loaderLiveRenderingIframe'}
                 className={className}
             >
                 <div className="_inner">
@@ -161,8 +161,8 @@ class WpeComponent extends WpeComponentBase {
         const $iframe = (
             <iframe
                 className="o-preview-iframe"
-                key={this.props.clientId + "-LiveRenderingIframe"}
-                id={this.props.clientId + "-LiveRenderingIframe"}
+                key={this.props.clientId + '-LiveRenderingIframe'}
+                id={this.props.clientId + '-LiveRenderingIframe'}
                 src={this.previewUrl}
                 onLoad={this.iframeResize}
             ></iframe>
@@ -187,11 +187,11 @@ class WpeComponent extends WpeComponentBase {
                 render.push(this.renderLoaderPreview());
                 render.push(this.renderIframePreview());
             } else if (error != null) {
-                if (typeof error == "object") {
+                if (typeof error == 'object') {
                     render.push(this.renderEditFormZone());
                     render.push(
                         <div
-                            key={this.props.clientId + "-placeholder"}
+                            key={this.props.clientId + '-placeholder'}
                             className="wpe-block-placeholder"
                         >
                             <div className="inner">
@@ -203,20 +203,20 @@ class WpeComponent extends WpeComponentBase {
                                     <u>Click to edit</u>
                                 </p>
                             </div>
-                        </div>
+                        </div>,
                     );
                 } else {
                     render.push(this.renderEditFormZone());
                     render.push(
                         <div
-                            key={this.props.clientId + "-placeholder"}
+                            key={this.props.clientId + '-placeholder'}
                             className="wpe-block-placeholder"
                         >
                             <div className="inner">
                                 <Dashicon icon="info" />
                                 <p>{error}</p>
                             </div>
-                        </div>
+                        </div>,
                     );
                 }
             } else {
@@ -232,44 +232,44 @@ class WpeComponent extends WpeComponentBase {
 export default (block_spec, current_user_can_edit_posts, theme_spec) =>
     compose([
         withSelect((select, props) => {
-            const { getEntityRecords } = select("core");
+            const { getEntityRecords } = select('core');
             const { __experimentalGetPreviewDeviceType } =
-                select("core/edit-post");
+                select('core/edit-post');
             let relations = [];
 
-            if (props.name == "custom/wpe-component-" + block_spec.id) {
+            if (props.name == 'custom/wpe-component-' + block_spec.id) {
                 // Loop Props
                 for (const [keyProp, valueProp] of Object.entries(
-                    block_spec.props
+                    block_spec.props,
                 )) {
                     if (
-                        valueProp.type == "relation" &&
-                        typeof valueProp.entity != "undefined" &&
+                        valueProp.type == 'relation' &&
+                        typeof valueProp.entity != 'undefined' &&
                         relations[valueProp.entity] == null
                     ) {
                         relations[valueProp.entity] = getEntityRecords(
-                            "postType",
+                            'postType',
                             valueProp.entity,
                             {
                                 per_page: -1,
-                                status: "publish",
-                            }
+                                status: 'publish',
+                            },
                         );
                     }
                 }
             }
 
             // Detect if inside a reusable block
-            const getBlockParents = select("core/block-editor").getBlockParents(
-                props.clientId
+            const getBlockParents = select('core/block-editor').getBlockParents(
+                props.clientId,
             );
             const parentsBlock = [];
             for (var i in getBlockParents) {
                 parentsBlock.push(
-                    select("core/block-editor").getBlock(getBlockParents[i])
+                    select('core/block-editor').getBlock(getBlockParents[i]),
                 );
             }
-
+            console.log(select('core/block-editor').hasInserterItems());
             return {
                 relations: relations,
                 block_spec,
@@ -278,16 +278,16 @@ export default (block_spec, current_user_can_edit_posts, theme_spec) =>
                 innerBlocksProps:
                     block_spec?.container && block_spec.container
                         ? useInnerBlocksProps(
-                              useBlockProps({ className: "" }),
+                              useBlockProps({ className: '' }),
                               {
                                   renderAppender:
                                       InnerBlocks.ButtonBlockAppender,
-                              }
+                              },
                           )
                         : null,
                 parentsBlock,
-                blockInstance: select("core/block-editor").getBlock(
-                    props.clientId
+                blockInstance: select('core/block-editor').getBlock(
+                    props.clientId,
                 ),
             };
         }),

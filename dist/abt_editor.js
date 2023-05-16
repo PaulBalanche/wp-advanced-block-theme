@@ -11451,11 +11451,11 @@ class WpeComponent extends _Components_WpeComponentBase__WEBPACK_IMPORTED_MODULE
     super(...arguments);
 
     // Because of ID will be not saved to the block’s comment delimiter default attribute, we manually set it.
-    if (typeof this.props.attributes.id_component == "undefined") this.setAttributes({
+    if (typeof this.props.attributes.id_component == 'undefined') this.setAttributes({
       id_component: this.props.block_spec.id
     });
     this.description = this.props.block_spec.description;
-    this.previewUrl = js_const.rest_api_url + js_const.rest_api_namespace + js_const.componentblock_attr_autosaves_rest_api_resource_path + "/" + js_const.post_id + "/" + this.props.attributes.id_component + "/" + this.props.clientId;
+    this.previewUrl = js_const.rest_api_url + js_const.rest_api_namespace + js_const.componentblock_attr_autosaves_rest_api_resource_path + '/' + js_const.post_id + '/' + this.props.block_spec.id + '/' + this.props.clientId;
     this.iframeResize = this._iframeResize.bind(this);
   }
   componentDidMount() {
@@ -11507,15 +11507,15 @@ class WpeComponent extends _Components_WpeComponentBase__WEBPACK_IMPORTED_MODULE
       error: null
     });
     _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_6___default()({
-      path: js_const.rest_api_namespace + js_const.componentblock_attr_autosaves_rest_api_resource_path + "/" + js_const.post_id + "/" + this.props.attributes.id_component + "/" + this.props.clientId,
-      method: "POST",
+      path: js_const.rest_api_namespace + js_const.componentblock_attr_autosaves_rest_api_resource_path + '/' + js_const.post_id + '/' + this.props.attributes.id_component + '/' + this.props.clientId,
+      method: 'POST',
       data: attributes == null ? this.props.attributes : attributes
     }).then(res => {
       if (res.success) {
         this.setState({
           previewReady: true,
           needPreviewUpdate: false,
-          error: typeof res.data != "undefined" ? res.data : null
+          error: typeof res.data != 'undefined' ? res.data : null
         });
       }
       {
@@ -11531,21 +11531,21 @@ class WpeComponent extends _Components_WpeComponentBase__WEBPACK_IMPORTED_MODULE
     this.setState({
       iframeLoaded: true
     });
-    var iFrame = document.getElementById(this.props.clientId + "-LiveRenderingIframe");
+    var iFrame = document.getElementById(this.props.clientId + '-LiveRenderingIframe');
     if (iFrame) {
-      const heightIframe = iFrame.contentWindow.document.body.scrollHeight + "px";
+      const heightIframe = iFrame.contentWindow.document.body.scrollHeight + 'px';
       iFrame.height = heightIframe;
       iFrame.parentNode.style.height = heightIframe;
-      iFrame.contentWindow.document.body.style.overflowY = "hidden";
+      iFrame.contentWindow.document.body.style.overflowY = 'hidden';
     }
 
     // __OEditorApp.getInstance().refreshScrollrefreshScroll();
   }
 
   renderLoaderPreview() {
-    const className = this.state.iframeLoaded ? "loaderLiveRenderingIframe closed" : "loaderLiveRenderingIframe";
+    const className = this.state.iframeLoaded ? 'loaderLiveRenderingIframe closed' : 'loaderLiveRenderingIframe';
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      key: this.props.clientId + "-loaderLiveRenderingIframe",
+      key: this.props.clientId + '-loaderLiveRenderingIframe',
       className: className
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "_inner"
@@ -11556,8 +11556,8 @@ class WpeComponent extends _Components_WpeComponentBase__WEBPACK_IMPORTED_MODULE
   renderIframePreview() {
     const $iframe = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("iframe", {
       className: "o-preview-iframe",
-      key: this.props.clientId + "-LiveRenderingIframe",
-      id: this.props.clientId + "-LiveRenderingIframe",
+      key: this.props.clientId + '-LiveRenderingIframe',
+      id: this.props.clientId + '-LiveRenderingIframe',
       src: this.previewUrl,
       onLoad: this.iframeResize
     });
@@ -11577,10 +11577,10 @@ class WpeComponent extends _Components_WpeComponentBase__WEBPACK_IMPORTED_MODULE
         render.push(this.renderLoaderPreview());
         render.push(this.renderIframePreview());
       } else if (error != null) {
-        if (typeof error == "object") {
+        if (typeof error == 'object') {
           render.push(this.renderEditFormZone());
           render.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-            key: this.props.clientId + "-placeholder",
+            key: this.props.clientId + '-placeholder',
             className: "wpe-block-placeholder"
           }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
             className: "inner"
@@ -11590,7 +11590,7 @@ class WpeComponent extends _Components_WpeComponentBase__WEBPACK_IMPORTED_MODULE
         } else {
           render.push(this.renderEditFormZone());
           render.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-            key: this.props.clientId + "-placeholder",
+            key: this.props.clientId + '-placeholder',
             className: "wpe-block-placeholder"
           }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
             className: "inner"
@@ -11609,41 +11609,42 @@ class WpeComponent extends _Components_WpeComponentBase__WEBPACK_IMPORTED_MODULE
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((block_spec, current_user_can_edit_posts, theme_spec) => (0,_wordpress_compose__WEBPACK_IMPORTED_MODULE_3__.compose)([(0,_wordpress_data__WEBPACK_IMPORTED_MODULE_4__.withSelect)((select, props) => {
   const {
     getEntityRecords
-  } = select("core");
+  } = select('core');
   const {
     __experimentalGetPreviewDeviceType
-  } = select("core/edit-post");
+  } = select('core/edit-post');
   let relations = [];
-  if (props.name == "custom/wpe-component-" + block_spec.id) {
+  if (props.name == 'custom/wpe-component-' + block_spec.id) {
     // Loop Props
     for (const [keyProp, valueProp] of Object.entries(block_spec.props)) {
-      if (valueProp.type == "relation" && typeof valueProp.entity != "undefined" && relations[valueProp.entity] == null) {
-        relations[valueProp.entity] = getEntityRecords("postType", valueProp.entity, {
+      if (valueProp.type == 'relation' && typeof valueProp.entity != 'undefined' && relations[valueProp.entity] == null) {
+        relations[valueProp.entity] = getEntityRecords('postType', valueProp.entity, {
           per_page: -1,
-          status: "publish"
+          status: 'publish'
         });
       }
     }
   }
 
   // Detect if inside a reusable block
-  const getBlockParents = select("core/block-editor").getBlockParents(props.clientId);
+  const getBlockParents = select('core/block-editor').getBlockParents(props.clientId);
   const parentsBlock = [];
   for (var i in getBlockParents) {
-    parentsBlock.push(select("core/block-editor").getBlock(getBlockParents[i]));
+    parentsBlock.push(select('core/block-editor').getBlock(getBlockParents[i]));
   }
+  console.log(select('core/block-editor').hasInserterItems());
   return {
     relations: relations,
     block_spec,
     current_user_can_edit_posts: current_user_can_edit_posts,
     theme_spec,
     innerBlocksProps: block_spec?.container && block_spec.container ? (0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.useInnerBlocksProps)((0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.useBlockProps)({
-      className: ""
+      className: ''
     }), {
       renderAppender: _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.InnerBlocks.ButtonBlockAppender
     }) : null,
     parentsBlock,
-    blockInstance: select("core/block-editor").getBlock(props.clientId)
+    blockInstance: select('core/block-editor').getBlock(props.clientId)
   };
 }), (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_4__.withDispatch)(dispatch => {
   const {
@@ -11700,11 +11701,11 @@ var current_user_can_edit_posts = global_localized.current_user_can_edit_posts;
 Object.values(global_localized.components).forEach(element => {
   var initAttributes = {
     id_component: {
-      type: "string"
+      type: 'string'
     }
   };
   _Static_Attributes__WEBPACK_IMPORTED_MODULE_4__.Attributes.initComponentAttributes(initAttributes, element.props);
-  (0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__.registerBlockType)("custom/wpe-component-" + element.id, {
+  (0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__.registerBlockType)('custom/wpe-component-' + element.id, {
     title: element.name,
     category: element.category.slug,
     supports: {
@@ -11713,6 +11714,13 @@ Object.values(global_localized.components).forEach(element => {
     parent: element.parent,
     attributes: initAttributes,
     description: element.description,
+    example: {
+      attributes: {
+        title: 'https://example.com/image.jpg',
+        intro: 'William Shakespeare',
+        text: 'blaasda sda da das sdd'
+      }
+    },
     edit: (0,_edit__WEBPACK_IMPORTED_MODULE_3__["default"])(element, current_user_can_edit_posts, theme_spec),
     save: () => {
       return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.useBlockProps.save(), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.InnerBlocks.Content, null));
@@ -11903,18 +11911,18 @@ __webpack_require__.r(__webpack_exports__);
 
 let attributes = {
   id_component: {
-    type: "string"
+    type: 'string'
   },
   layout: {
-    type: "object"
+    type: 'object'
   }
 };
-if (typeof blocks_spec["wpe-column"] == "object" && typeof blocks_spec["wpe-column"].props == "object") {
-  _Static_Attributes__WEBPACK_IMPORTED_MODULE_4__.Attributes.initComponentAttributes(attributes, blocks_spec["wpe-column"].props);
+if (typeof blocks_spec['wpe-column'] == 'object' && typeof blocks_spec['wpe-column'].props == 'object') {
+  _Static_Attributes__WEBPACK_IMPORTED_MODULE_4__.Attributes.initComponentAttributes(attributes, blocks_spec['wpe-column'].props);
 }
-(0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_3__.registerBlockType)("custom/wpe-column", {
-  title: "Col",
-  category: "wpe-layout",
+(0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_3__.registerBlockType)('custom/wpe-column', {
+  title: 'Col',
+  category: 'wpe-layout',
   icon: (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("svg", {
     enableBackground: "new 0 0 24 24",
     height: "24px",
@@ -11934,17 +11942,17 @@ if (typeof blocks_spec["wpe-column"] == "object" && typeof blocks_spec["wpe-colu
     anchor: true,
     lightBlockWrapper: true
   },
-  parent: ["custom/wpe-grid"],
+  parent: ['custom/wpe-grid'],
   attributes: attributes,
   edit: props => {
     const innerBlocksProps = (0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.useInnerBlocksProps)((0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.useBlockProps)({
-      className: ""
+      className: ''
     }), {
       renderAppender: _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.InnerBlocks.ButtonBlockAppender
     });
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)(_edit__WEBPACK_IMPORTED_MODULE_5__.EditMode, (0,_babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_0__["default"])({}, props, {
       innerBlocksProps: innerBlocksProps,
-      blocks_spec: blocks_spec["wpe-column"],
+      blocks_spec: blocks_spec['wpe-column'],
       theme_spec: theme_spec
     }));
   },
@@ -12387,7 +12395,7 @@ class WpeGrid extends _Components_WpeComponentBase__WEBPACK_IMPORTED_MODULE_4__.
     if (currentLayout && typeof _predefinedLayouts__WEBPACK_IMPORTED_MODULE_10__.predefinedLayouts[currentLayout] == "object" && typeof _predefinedLayouts__WEBPACK_IMPORTED_MODULE_10__.predefinedLayouts[currentLayout].icon != "undefined") {
       tootlBar.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
         key: this.props.clientId + "_toolBarSvg",
-        class: "svg"
+        className: "svg"
       }, _predefinedLayouts__WEBPACK_IMPORTED_MODULE_10__.predefinedLayouts[currentLayout].icon));
     }
     tootlBar.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
@@ -12524,19 +12532,19 @@ __webpack_require__.r(__webpack_exports__);
 
 let attributes = {
   gridLocked: {
-    type: "boolean",
+    type: 'boolean',
     default: false
   },
   layout: {
-    type: "object"
+    type: 'object'
   }
 };
-if (typeof blocks_spec["wpe-grid"] == "object" && typeof blocks_spec["wpe-grid"].props == "object") {
-  _Static_Attributes__WEBPACK_IMPORTED_MODULE_4__.Attributes.initComponentAttributes(attributes, blocks_spec["wpe-grid"].props);
+if (typeof blocks_spec['wpe-grid'] == 'object' && typeof blocks_spec['wpe-grid'].props == 'object') {
+  _Static_Attributes__WEBPACK_IMPORTED_MODULE_4__.Attributes.initComponentAttributes(attributes, blocks_spec['wpe-grid'].props);
 }
-(0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_3__.registerBlockType)("custom/wpe-grid", {
-  title: "Grid",
-  category: "wpe-layout",
+(0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_3__.registerBlockType)('custom/wpe-grid', {
+  title: 'Grid',
+  category: 'wpe-layout',
   icon: (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("svg", {
     enableBackground: "new 0 0 24 24",
     height: "24px",
@@ -12560,13 +12568,13 @@ if (typeof blocks_spec["wpe-grid"] == "object" && typeof blocks_spec["wpe-grid"]
   attributes: attributes,
   edit: props => {
     const innerBlocksProps = (0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.useInnerBlocksProps)((0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.useBlockProps)({
-      className: ""
+      className: ''
     }), {
       renderAppender: false
     });
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)(_edit__WEBPACK_IMPORTED_MODULE_5__.EditMode, (0,_babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_0__["default"])({}, props, {
       innerBlocksProps: innerBlocksProps,
-      blocks_spec: blocks_spec["wpe-grid"],
+      blocks_spec: blocks_spec['wpe-grid'],
       theme_spec: theme_spec
     }));
   },

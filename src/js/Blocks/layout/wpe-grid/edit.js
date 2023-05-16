@@ -243,7 +243,7 @@ class WpeGrid extends WpeComponentBase {
             typeof predefinedLayouts[currentLayout].icon != "undefined"
         ) {
             tootlBar.push(
-                <div key={this.props.clientId + "_toolBarSvg"} class="svg">
+                <div key={this.props.clientId + "_toolBarSvg"} className="svg">
                     {predefinedLayouts[currentLayout].icon}
                 </div>
             );

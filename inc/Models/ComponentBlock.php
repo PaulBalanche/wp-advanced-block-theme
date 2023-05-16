@@ -257,6 +257,7 @@ class ComponentBlock extends ModelBase
                 "props_categories" =>
                     $component_frontspec["props_categories"] ?? null,
                 "path" => $component_frontspec["path"] ?? null,
+                "preview" => $component_frontspec["preview"] ?? null,
                 "parent" => $component_frontspec["parent"] ?? $default_parent,
             ],
             $this

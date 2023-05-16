@@ -12,7 +12,7 @@
     ],
     "require": {
         "php": ">=7.4",
-        "coffeekraken/coffeekraken": "dev-develop"
+        "coffeekraken/coffeekraken": "dev-feature/refactoring"
     },
     "autoload": {
         "psr-4": {

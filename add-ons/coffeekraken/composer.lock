@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6f4da1373c16669b3002f50bf5c5fd16",
+    "content-hash": "36627cd0a42dcf3df32c391a08a5b696",
     "packages": [
         {
             "name": "coffeekraken/coffeekraken",
-            "version": "dev-develop",
+            "version": "dev-feature/refactoring",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Coffeekraken/coffeekraken.git",
-                "reference": "01f9fa0c26d082b4edb01a0bfa76001e63a59d62"
+                "reference": "011d2df4d028d35b104a6676e8313d9c6755722a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Coffeekraken/coffeekraken/zipball/01f9fa0c26d082b4edb01a0bfa76001e63a59d62",
-                "reference": "01f9fa0c26d082b4edb01a0bfa76001e63a59d62",
+                "url": "https://api.github.com/repos/Coffeekraken/coffeekraken/zipball/011d2df4d028d35b104a6676e8313d9c6755722a",
+                "reference": "011d2df4d028d35b104a6676e8313d9c6755722a",
                 "shasum": ""
             },
             "require": {
@@ -38,9 +38,9 @@
             "homepage": "https://coffeekraken.io",
             "support": {
                 "issues": "https://github.com/Coffeekraken/coffeekraken/issues",
-                "source": "https://github.com/Coffeekraken/coffeekraken/tree/develop"
+                "source": "https://github.com/Coffeekraken/coffeekraken/tree/feature/refactoring"
             },
-            "time": "2023-05-09T13:15:57+00:00"
+            "time": "2023-05-16T08:23:55+00:00"
         },
         {
             "name": "eftec/bladeone",

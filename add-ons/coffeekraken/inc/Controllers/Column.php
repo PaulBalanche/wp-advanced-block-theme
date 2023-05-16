@@ -30,7 +30,9 @@ class Column extends ControllerBase
 
     public function handle_column($attributes)
     {
-        $attributes["areaId"] = $attributes["id_component"];
+        if( isset($attributes["id_component"]) ) {
+            $attributes["areaId"] = $attributes["id_component"];
+        }
 
         // Return
         return $attributes;
