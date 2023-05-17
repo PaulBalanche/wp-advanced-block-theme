@@ -646,12 +646,13 @@
   right: 40px;
   top: 91px;
   width: 320px;
-  height: calc(100vh - 61px - 60px);
   background: white;
   border-radius: 10px;
   z-index: 99999;
   box-sizing: border-box;
-  transition: all 0.2s ease-out;
+  transition-property: transform, width, height;
+  transition-duration: 0.2s;
+  transition-timing-function: ease-out;
   display: flex;
   flex-direction: column;
   box-shadow: 0px 0.8px 2.2px rgba(0, 0, 0, 0.022), 0px 2px 5.3px rgba(0, 0, 0, 0.032), 0px 3.8px 10px rgba(0, 0, 0, 0.04), 0px 6.7px 17.9px rgba(0, 0, 0, 0.048), 0px 12.5px 33.4px rgba(0, 0, 0, 0.058), 0px 30px 80px rgba(0, 0, 0, 0.08);
@@ -707,6 +708,7 @@
   border-top-right-radius: 10px;
   display: flex;
   align-items: center;
+  cursor: move;
 }
 .o-editor-app_header .breadcrumb {
   display: flex;
@@ -759,7 +761,7 @@
   flex-direction: column;
   gap: 30px;
   flex-grow: 1;
-  padding: 24px 42px;
+  padding: 24px 42px 42px 42px;
   overflow: auto;
   background: #fcfcfc;
 }
@@ -810,7 +812,7 @@
   color: rgb(255, 255, 255);
 }
 .o-editor-app.inspector li > ul, .o-editor-app.help li > ul, .o-editor-app.settings li > ul {
-  padding: 0 0 0 18px;
+  padding: 0 0 0 30px;
 }
 .o-editor-app.inspector ul, .o-editor-app.help ul, .o-editor-app.settings ul {
   margin: 0;
@@ -827,6 +829,22 @@
   margin: 0;
   overflow: hidden;
 }
+.o-editor-app.inspector .inspectorBlockListButtonGroup, .o-editor-app.help .inspectorBlockListButtonGroup, .o-editor-app.settings .inspectorBlockListButtonGroup {
+  display: flex;
+  align-items: center;
+}
+.o-editor-app.inspector .inspectorBlockListButtonGroup .dashicon, .o-editor-app.help .inspectorBlockListButtonGroup .dashicon, .o-editor-app.settings .inspectorBlockListButtonGroup .dashicon {
+  font-size: 1em;
+  height: auto;
+  width: auto;
+  margin-right: 6px;
+}
+.o-editor-app.inspector .inspectorBlockListButtonGroup:hover .dashicon,
+.o-editor-app.inspector .inspectorBlockListButtonGroup:hover .is-tertiary, .o-editor-app.help .inspectorBlockListButtonGroup:hover .dashicon,
+.o-editor-app.help .inspectorBlockListButtonGroup:hover .is-tertiary, .o-editor-app.settings .inspectorBlockListButtonGroup:hover .dashicon,
+.o-editor-app.settings .inspectorBlockListButtonGroup:hover .is-tertiary {
+  color: var(--wp-admin-theme-color);
+}
 .o-editor-app.inspector .is-tertiary, .o-editor-app.help .is-tertiary, .o-editor-app.settings .is-tertiary {
   position: relative;
   display: flex;
@@ -837,18 +855,7 @@
   padding: 12px 0;
   font-weight: 500;
   font-size: 1.1em;
-}
-.o-editor-app.inspector .is-tertiary.animate, .o-editor-app.help .is-tertiary.animate, .o-editor-app.settings .is-tertiary.animate {
-  transform: translate(-20px, 0);
-  transition: all 0.1s ease-in-out;
-}
-.o-editor-app.inspector .is-tertiary.animate:hover, .o-editor-app.help .is-tertiary.animate:hover, .o-editor-app.settings .is-tertiary.animate:hover {
-  transform: translate(0, 0);
-}
-.o-editor-app.inspector .is-tertiary .dashicon, .o-editor-app.help .is-tertiary .dashicon, .o-editor-app.settings .is-tertiary .dashicon {
-  font-size: 1em;
-  height: auto;
-  width: auto;
+  color: #1e1e1e;
 }
 .o-editor-app.inspector .is-tertiary .anchor, .o-editor-app.help .is-tertiary .anchor, .o-editor-app.settings .is-tertiary .anchor {
   color: rgba(30, 30, 30, 0.5);
@@ -856,10 +863,13 @@
   font-size: 0.8em;
   margin-left: 6px;
 }
-.o-editor-app.inspector .is-tertiary .error-attributes, .o-editor-app.inspector .is-tertiary .warning-attributes, .o-editor-app.help .is-tertiary .error-attributes, .o-editor-app.help .is-tertiary .warning-attributes, .o-editor-app.settings .is-tertiary .error-attributes, .o-editor-app.settings .is-tertiary .warning-attributes {
+.o-editor-app.inspector .is-tertiary .error-attributes,
+.o-editor-app.inspector .is-tertiary .warning-attributes, .o-editor-app.help .is-tertiary .error-attributes,
+.o-editor-app.help .is-tertiary .warning-attributes, .o-editor-app.settings .is-tertiary .error-attributes,
+.o-editor-app.settings .is-tertiary .warning-attributes {
   position: relative;
   top: -6px;
-  margin-left: 4px;
+  margin-left: 6px;
   color: white;
   border-radius: 50%;
   width: 16px;

@@ -1,19 +1,19 @@
-import React from "react";
+import React from 'react';
 
-import { Component } from "@wordpress/element";
+import { Component } from '@wordpress/element';
 
-import { Button, Dashicon } from "@wordpress/components";
+import { Button, Dashicon } from '@wordpress/components';
 
-import __OEditorBlock from "./OEditorBlock";
-import __OEditorInspector from "./OEditorInspector";
-import __OEditorSettings from "./OEditorSettings";
-import __OEditorWelcome from "./OEditorWelcome";
+import __OEditorBlock from './OEditorBlock';
+import __OEditorInspector from './OEditorInspector';
+import __OEditorSettings from './OEditorSettings';
+import __OEditorWelcome from './OEditorWelcome';
 
-import globalData from "../global";
+import globalData from '../global';
 
-import ODevices from "./ODevices";
-import OModal from "./OModal";
-import OUserPreferences from "./OUserPreferences";
+import ODevices from './ODevices';
+import OModal from './OModal';
+import OUserPreferences from './OUserPreferences';
 
 export default class OEditorApp extends Component {
     static _instance;
@@ -22,7 +22,7 @@ export default class OEditorApp extends Component {
     }
 
     static exists() {
-        return typeof this._instance != "undefined";
+        return typeof this._instance != 'undefined';
     }
 
     _$editApp;
@@ -35,14 +35,15 @@ export default class OEditorApp extends Component {
             route: null,
             needToBeMounted: true,
             currentDevice: null,
+            moves: null,
         };
 
         // @ts-ignore
         this.constructor._instance = this;
 
         // get the actual edit app dom node
-        this._$editApp = document.querySelector(".o-editor");
-        this._$editAppContainer = document.querySelector(".o-editor-container");
+        this._$editApp = document.querySelector('.o-editor');
+        this._$editAppContainer = document.querySelector('.o-editor-container');
     }
 
     componentDidMount() {
@@ -51,7 +52,7 @@ export default class OEditorApp extends Component {
         this._initMouseEvents();
 
         if (
-            this.props.context.editorMode == "visual" &&
+            this.props.context.editorMode == 'visual' &&
             this.state.needToBeMounted
             // this.props.context.blocksList.length > 0
         ) {
@@ -81,7 +82,7 @@ export default class OEditorApp extends Component {
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
-        if (this.props.context.editorMode == "visual") {
+        if (this.props.context.editorMode == 'visual') {
             if (
                 this.state.needToBeMounted &&
                 this.props.context.blocksList.length > 0
@@ -100,15 +101,15 @@ export default class OEditorApp extends Component {
                         this.props.context.blocksList[i].clientId ==
                             this.props.context.selectedBlockClientId &&
                         typeof this.props.context.blocksList[i].isReusable !=
-                            "undefined" &&
+                            'undefined' &&
                         this.props.context.blocksList[i].isReusable &&
                         typeof this.props.context.blocksList[i].children !=
-                            "undefined" &&
+                            'undefined' &&
                         this.props.context.blocksList[i].children.length > 0
                     ) {
                         this.props.context.selectBlock(
                             this.props.context.blocksList[i].children[0]
-                                .clientId
+                                .clientId,
                         );
                     }
                 }
@@ -151,14 +152,14 @@ export default class OEditorApp extends Component {
         // });
 
         // liten for maintaining the "§" key to hide and show the editor
-        document.addEventListener("keydown", (e) => {
-            if (e.key === "§") {
+        document.addEventListener('keydown', (e) => {
+            if (e.key === '§') {
                 e.preventDefault();
                 this.hide();
             }
         });
-        document.addEventListener("keyup", (e) => {
-            if (e.key === "§") {
+        document.addEventListener('keyup', (e) => {
+            if (e.key === '§') {
                 e.preventDefault();
                 this.show();
             }
@@ -166,45 +167,45 @@ export default class OEditorApp extends Component {
     }
 
     _showEditorLoadingZone() {
-        const $loadingZone = document.querySelector(".o-editor-loading-zone");
+        const $loadingZone = document.querySelector('.o-editor-loading-zone');
         if (!$loadingZone) {
             return;
         }
-        $loadingZone.classList.remove("hide");
-        $loadingZone.classList.remove("close");
-        $loadingZone.classList.remove("removed");
+        $loadingZone.classList.remove('hide');
+        $loadingZone.classList.remove('close');
+        $loadingZone.classList.remove('removed');
     }
 
     _hideEditorLoadingZone() {
-        const $loadingZone = document.querySelector(".o-editor-loading-zone");
+        const $loadingZone = document.querySelector('.o-editor-loading-zone');
         if (!$loadingZone) {
             return;
         }
-        $loadingZone.classList.add("hide");
+        $loadingZone.classList.add('hide');
         setTimeout(() => {
-            $loadingZone.classList.add("close");
+            $loadingZone.classList.add('close');
             setTimeout(() => {
                 // $loadingZone.remove();
-                $loadingZone.classList.add("removed");
+                $loadingZone.classList.add('removed');
             }, 500);
         }, 1000);
     }
 
     _showEditorApp() {
         setTimeout(() => {
-            this._$editAppContainer.classList.add("show");
+            this._$editAppContainer.classList.add('show');
         }, 1200);
     }
 
     _hideEditorApp() {
-        this._$editAppContainer.classList.remove("show");
+        this._$editAppContainer.classList.remove('show');
     }
 
     _routing() {
-        if (document.location.hash === "#settings") {
-            this.setState({ route: "settings" });
-        } else if (document.location.hash === "#help") {
-            this.setState({ route: "help" });
+        if (document.location.hash === '#settings') {
+            this.setState({ route: 'settings' });
+        } else if (document.location.hash === '#help') {
+            this.setState({ route: 'help' });
         } else {
             const anchorDetection =
                 document.location.hash?.match(/^#([a-zA-Z0-9-]+)/);
@@ -217,7 +218,7 @@ export default class OEditorApp extends Component {
                         clientIdRequested
                     ) {
                         this.forceSelectComponent(
-                            globalData.componentInstances[i]
+                            globalData.componentInstances[i],
                         );
                         break;
                     }
@@ -255,7 +256,7 @@ export default class OEditorApp extends Component {
 
     forceSelectComponent(component: any): void {
         // If clientId given, get the block instance related
-        if (typeof component == "string") {
+        if (typeof component == 'string') {
             for (var i in globalData.componentInstances) {
                 if (
                     globalData.componentInstances[i].props.clientId == component
@@ -266,7 +267,7 @@ export default class OEditorApp extends Component {
             }
         }
 
-        if (typeof component == "string") {
+        if (typeof component == 'string') {
             return;
         }
 
@@ -277,11 +278,11 @@ export default class OEditorApp extends Component {
         if (this.props.context.selectedBlockClientId != undefined) {
             document
                 .querySelector(
-                    "#block-" + this.props.context.selectedBlockClientId
+                    '#block-' + this.props.context.selectedBlockClientId,
                 )
                 ?.scrollIntoView({
-                    behavior: "smooth",
-                    block: "center",
+                    behavior: 'smooth',
+                    block: 'center',
                 });
         }
     }
@@ -291,7 +292,7 @@ export default class OEditorApp extends Component {
             this.props.context.resetSelection(
                 this.props.context.selectedBlockClientId,
                 this.props.context.selectedBlockClientId,
-                -1
+                -1,
             );
         }
     }
@@ -302,11 +303,11 @@ export default class OEditorApp extends Component {
     // }
 
     show() {
-        this._$editApp.classList.remove("hide", "is-updating");
+        this._$editApp.classList.remove('hide', 'is-updating');
     }
 
     hide() {
-        this._$editApp.classList.add("hide");
+        this._$editApp.classList.add('hide');
     }
 
     renderBreadcrumb() {
@@ -314,10 +315,10 @@ export default class OEditorApp extends Component {
             (this.props.context.selectedBlockClientId != undefined &&
                 typeof globalData.componentInstances[
                     this.props.context.selectedBlockClientId
-                ] != "undefined") ? (
+                ] != 'undefined') ? (
             <div className="breadcrumb">
                 <Button
-                    key={"breadcrumb-home"}
+                    key={'breadcrumb-home'}
                     variant="link"
                     onMouseDown={() => this.goInspector()}
                 >
@@ -329,13 +330,13 @@ export default class OEditorApp extends Component {
     }
 
     render() {
-        if (this.props.context.editorMode != "visual") return null;
+        if (this.props.context.editorMode != 'visual') return null;
 
         switch (this.state.route) {
-            case "settings":
+            case 'settings':
                 var componentToRender = new __OEditorSettings();
                 break;
-            case "help":
+            case 'help':
                 var componentToRender = new __OEditorWelcome();
                 break;
             default:
@@ -343,18 +344,18 @@ export default class OEditorApp extends Component {
                     this.props.context.selectedBlockClientId != undefined &&
                     typeof globalData.componentInstances[
                         this.props.context.selectedBlockClientId
-                    ] != "undefined" &&
+                    ] != 'undefined' &&
                     globalData.componentInstances[
                         this.props.context.selectedBlockClientId
                     ].isEditable()
                         ? new __OEditorBlock(
                               globalData.componentInstances[
                                   this.props.context.selectedBlockClientId
-                              ]
+                              ],
                           )
                         : new __OEditorInspector(
                               this.props.context.blocksList,
-                              this.props.context.selectBlock
+                              this.props.context.selectBlock,
                           );
         }
 
@@ -366,7 +367,46 @@ export default class OEditorApp extends Component {
                     className={`o-editor-app ${componentToRender?.getExtraClassName?.()}`}
                 >
                     {componentToRender?.renderTitle && (
-                        <div className="o-editor-app_header">
+                        <div
+                            className="o-editor-app_header"
+                            onMouseDown={(e) => {
+                                this.setState({
+                                    moves: {
+                                        top: document.querySelector(
+                                            '.o-editor-app',
+                                        ).offsetTop,
+                                        left: document.querySelector(
+                                            '.o-editor-app',
+                                        ).offsetLeft,
+                                        mouseTop: e.clientY,
+                                        mouseLeft: e.clientX,
+                                    },
+                                });
+                            }}
+                            onMouseUp={() => {
+                                this.setState({ moves: null });
+                            }}
+                            onMouseLeave={() => {
+                                this.setState({ moves: null });
+                            }}
+                            onMouseMove={(e) => {
+                                if (this.state.moves != null) {
+                                    const newTop =
+                                        this.state.moves.top +
+                                        (e.clientY - this.state.moves.mouseTop);
+                                    const newLeft =
+                                        this.state.moves.left +
+                                        (e.clientX -
+                                            this.state.moves.mouseLeft);
+                                    document.querySelector(
+                                        '.o-editor-app',
+                                    ).style.top = newTop + 'px';
+                                    document.querySelector(
+                                        '.o-editor-app',
+                                    ).style.left = newLeft + 'px';
+                                }
+                            }}
+                        >
                             <div className="title">
                                 {this.renderBreadcrumb()}
                                 {componentToRender.renderTitle()}

@@ -18,7 +18,7 @@ Object.values(global_localized.components).forEach((element) => {
         },
     };
     Attributes.initComponentAttributes(initAttributes, element.props);
-    console.log(element);
+
     registerBlockType('custom/wpe-component-' + element.id, {
         title: element.name,
         category: element.category.slug,

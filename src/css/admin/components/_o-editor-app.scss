@@ -3,12 +3,14 @@
     right: calc($o-space-50 + 10px);
     top: calc(61px + $o-space-50);
     width: 320px;
-    height: calc(100vh - 61px - 2 * $o-space-50);
+    // height: calc(100vh - 61px - 2 * $o-space-50);
     background: white;
     border-radius: $o-border-radius;
     z-index: 99999;
     box-sizing: border-box;
-    transition: all 0.2s ease-out;
+    transition-property: transform, width, height;
+    transition-duration: 0.2s;
+    transition-timing-function: ease-out;
     display: flex;
     flex-direction: column;
     box-shadow: $o-depth-100;
@@ -75,6 +77,7 @@
         border-top-right-radius: $o-border-radius;
         display: flex;
         align-items: center;
+        cursor: move;
 
         .breadcrumb {
             display: flex;
@@ -139,7 +142,7 @@
         flex-direction: column;
         gap: $o-space-50;
         flex-grow: 1;
-        padding: $o-space-40 $o-space-70;
+        padding: $o-space-40 $o-space-70 $o-space-70 $o-space-70;
         overflow: auto;
         background: $o-background-color;
 
@@ -204,7 +207,7 @@
     &.help,
     &.settings {
         li > ul {
-            padding: 0 0 0 $o-space-30;
+            padding: 0 0 0 $o-space-50;
         }
 
         ul {
@@ -226,6 +229,25 @@
             overflow: hidden;
         }
 
+        .inspectorBlockListButtonGroup {
+            display: flex;
+            align-items: center;
+
+            .dashicon {
+                font-size: 1em;
+                height: auto;
+                width: auto;
+                margin-right: $o-space-10;
+            }
+
+            &:hover {
+                .dashicon,
+                .is-tertiary {
+                    color: $o-accent-color;
+                }
+            }
+        }
+
         .is-tertiary {
             position: relative;
             display: flex;
@@ -236,20 +258,7 @@
             padding: $o-space-20 0;
             font-weight: 500;
             font-size: 1.1em;
-
-            &.animate {
-                transform: translate(-20px, 0);
-                transition: $o-transition-fast;
-
-                &:hover {
-                    transform: translate(0, 0);
-                }
-            }
-            .dashicon {
-                font-size: 1em;
-                height: auto;
-                width: auto;
-            }
+            color: #1e1e1e;
 
             .anchor {
                 color: rgb(30 30 30 / 50%);
@@ -258,10 +267,11 @@
                 margin-left: $o-space-10;
             }
 
-            .error-attributes, .warning-attributes {
+            .error-attributes,
+            .warning-attributes {
                 position: relative;
-                top: -6px;
-                margin-left: 4px;
+                top: -$o-space-10;
+                margin-left: $o-space-10;
                 color: white;
                 border-radius: 50%;
                 width: 16px;
