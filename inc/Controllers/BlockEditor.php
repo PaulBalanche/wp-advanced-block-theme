@@ -88,7 +88,7 @@ class BlockEditor extends ControllerBase
             "rest_api_namespace" => $this->get_config()->get(
                 "rest_api_namespace"
             ),
-            "componentblock_attr_autosaves_rest_api_resource_path" => ComponentBlocksService::get_attributes_autosaves_rest_api_resource_path(),
+            "componentblock_attr_autosaves_rest_api_resource_path" => ComponentBlocksService::get_attributes_autosaves_rest_api_resource_path()
         ]);
 
         wp_enqueue_script($handle);

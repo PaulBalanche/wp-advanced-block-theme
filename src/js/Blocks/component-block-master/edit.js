@@ -37,12 +37,18 @@ class WpeComponent extends WpeComponentBase {
             this.props.clientId;
 
         this.iframeResize = this._iframeResize.bind(this);
+
+        this.editorPreviewImage = this?.props?.attributes?.editorPreviewImage
+            ? this.props.attributes.editorPreviewImage
+            : false;
     }
 
     componentDidMount() {
-        setTimeout(() => {
-            this.apiFetch();
-        });
+        if (!this.editorPreviewImage) {
+            setTimeout(() => {
+                this.apiFetch();
+            });
+        }
 
         // load iframes one after the other
         // it seems that it's a bad idea cause it's slower...
@@ -74,10 +80,12 @@ class WpeComponent extends WpeComponentBase {
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        this._iframeResize.bind(this);
+        if (!this.editorPreviewImage) {
+            this._iframeResize.bind(this);
 
-        if (!this.state.needPreviewUpdate && nextState.needPreviewUpdate) {
-            this.apiFetch(nextProps.attributes);
+            if (!this.state.needPreviewUpdate && nextState.needPreviewUpdate) {
+                this.apiFetch(nextProps.attributes);
+            }
         }
 
         return true;
@@ -182,46 +190,55 @@ class WpeComponent extends WpeComponentBase {
 
             var render = [];
 
-            if (previewReady) {
-                render.push(this.renderEditFormZone());
-                render.push(this.renderLoaderPreview());
-                render.push(this.renderIframePreview());
-            } else if (error != null) {
-                if (typeof error == 'object') {
+            if (this.editorPreviewImage) {
+                render.push(
+                    <img
+                        src={this.editorPreviewImage}
+                        className="editorPreviewImage"
+                    />,
+                );
+            } else {
+                if (previewReady) {
                     render.push(this.renderEditFormZone());
-                    render.push(
-                        <div
-                            key={this.props.clientId + '-placeholder'}
-                            className="wpe-block-placeholder"
-                        >
-                            <div className="inner">
-                                <h2>{this.title}</h2>
-                                <Dashicon icon="admin-generic" />
-                                <p>
-                                    Not ready yet!
-                                    <br />
-                                    <u>Click to edit</u>
-                                </p>
-                            </div>
-                        </div>,
-                    );
+                    render.push(this.renderLoaderPreview());
+                    render.push(this.renderIframePreview());
+                } else if (error != null) {
+                    if (typeof error == 'object') {
+                        render.push(this.renderEditFormZone());
+                        render.push(
+                            <div
+                                key={this.props.clientId + '-placeholder'}
+                                className="wpe-block-placeholder"
+                            >
+                                <div className="inner">
+                                    <h2>{this.title}</h2>
+                                    <Dashicon icon="admin-generic" />
+                                    <p>
+                                        Not ready yet!
+                                        <br />
+                                        <u>Click to edit</u>
+                                    </p>
+                                </div>
+                            </div>,
+                        );
+                    } else {
+                        render.push(this.renderEditFormZone());
+                        render.push(
+                            <div
+                                key={this.props.clientId + '-placeholder'}
+                                className="wpe-block-placeholder"
+                            >
+                                <div className="inner">
+                                    <Dashicon icon="info" />
+                                    <p>{error}</p>
+                                </div>
+                            </div>,
+                        );
+                    }
                 } else {
                     render.push(this.renderEditFormZone());
-                    render.push(
-                        <div
-                            key={this.props.clientId + '-placeholder'}
-                            className="wpe-block-placeholder"
-                        >
-                            <div className="inner">
-                                <Dashicon icon="info" />
-                                <p>{error}</p>
-                            </div>
-                        </div>,
-                    );
+                    render.push(this.renderLoaderPreview());
                 }
-            } else {
-                render.push(this.renderEditFormZone());
-                render.push(this.renderLoaderPreview());
             }
 
             return render;
@@ -269,7 +286,7 @@ export default (block_spec, current_user_can_edit_posts, theme_spec) =>
                     select('core/block-editor').getBlock(getBlockParents[i]),
                 );
             }
-            console.log(select('core/block-editor').hasInserterItems());
+
             return {
                 relations: relations,
                 block_spec,

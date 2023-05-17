@@ -1,5 +1,3 @@
-import __ODevices from "../Components/ODevices";
-import { Render } from "./Render";
 import { Control } from './Control';
 
 export class Attributes {
@@ -12,14 +10,14 @@ export class Attributes {
         currentValueProp,
         currentValueRepeatableField,
         isNumber = false,
-        componentInstance
+        componentInstance,
     ) {
         Attributes.updateAttributes(
             arrayKey,
             currentValueProp,
-            currentValueRepeatableField.concat(""),
+            currentValueRepeatableField.concat(''),
             isNumber,
-            componentInstance
+            componentInstance,
         );
     }
 
@@ -29,14 +27,14 @@ export class Attributes {
             currentValueProp,
             false,
             false,
-            componentInstance
+            componentInstance,
         );
     }
 
     static fileSizeFormat(filesizeInBytes) {
         if (filesizeInBytes > 1000000)
-            return Math.round(filesizeInBytes / 10000) / 100 + " Mo";
-        else return Math.round(filesizeInBytes / 1000) + " Ko";
+            return Math.round(filesizeInBytes / 10000) / 100 + ' Mo';
+        else return Math.round(filesizeInBytes / 1000) + ' Ko';
     }
 
     static updateAttributes(
@@ -44,14 +42,13 @@ export class Attributes {
         currentValue,
         newValue,
         isNumber = false,
-        componentInstance
+        componentInstance,
     ) {
-
         const newValueToUpdate = Attributes.recursiveUpdateObjectFromObject(
             arrayKey,
             currentValue,
             newValue,
-            isNumber
+            isNumber,
         );
         componentInstance.setAttributes({
             [arrayKey[0]]: newValueToUpdate[arrayKey[0]],
@@ -62,20 +59,20 @@ export class Attributes {
         arrayKey,
         fromObject,
         newValue,
-        isNumber = false
+        isNumber = false,
     ) {
         const currentArrayKey = Object.assign([], arrayKey);
         const firstElement = currentArrayKey.shift();
 
         if (
-            typeof fromObject != "object" ||
+            typeof fromObject != 'object' ||
             (Array.isArray(fromObject) && isNaN(firstElement)) ||
-            (!Array.isArray(fromObject) && typeof firstElement == "number")
+            (!Array.isArray(fromObject) && typeof firstElement == 'number')
         )
             fromObject = isNaN(firstElement) ? {} : [];
 
         let objectReturned = Array.isArray(fromObject) ? [] : {};
-        
+
         for (const [key, val] of Object.entries(fromObject)) {
             if (key == firstElement) {
                 if (currentArrayKey.length > 0)
@@ -84,37 +81,37 @@ export class Attributes {
                             currentArrayKey,
                             val,
                             newValue,
-                            isNumber
+                            isNumber,
                         );
                 // else if (!!newValue)
                 else
                     objectReturned[key] = Attributes.returnStringOrNumber(
                         newValue,
-                        isNumber
+                        isNumber,
                     );
             } else objectReturned[key] = val;
         }
 
-        if (typeof objectReturned[firstElement] == "undefined") {
+        if (typeof objectReturned[firstElement] == 'undefined') {
             if (currentArrayKey.length > 0)
                 objectReturned[firstElement] =
                     Attributes.recursiveUpdateObjectFromObject(
                         currentArrayKey,
                         undefined,
                         newValue,
-                        isNumber
+                        isNumber,
                     );
             else if (!!newValue)
                 objectReturned[firstElement] = Attributes.returnStringOrNumber(
                     newValue,
-                    isNumber
+                    isNumber,
                 );
         }
 
         // Re-index in case of element suppression
         if (currentArrayKey.length == 0 && !newValue) {
             for (let index = 0; index < objectReturned.length; index++) {
-                if (typeof objectReturned[index] == "undefined")
+                if (typeof objectReturned[index] == 'undefined')
                     objectReturned.splice(index, 1);
             }
         }
@@ -125,190 +122,196 @@ export class Attributes {
     static renderProp(prop, keys, valueProp, componentInstance, error = false) {
         const type = prop.type.toLowerCase();
         const blockKey =
-            componentInstance.props.clientId + "-" + keys.join("-");
+            componentInstance.props.clientId + '-' + keys.join('-');
         const repeatable =
-            typeof prop.repeatable != "undefined" && !!prop.repeatable
+            typeof prop.repeatable != 'undefined' && !!prop.repeatable
                 ? true
                 : false;
         const label =
-            typeof prop.label != "undefined"
+            typeof prop.label != 'undefined'
                 ? prop.label
-                : typeof prop.title != "undefined"
+                : typeof prop.title != 'undefined'
                 ? prop.title
                 : keys.slice(-1);
         const required_field =
-            typeof prop.required != "undefined" && prop.required ? true : false;
+            typeof prop.required != 'undefined' && prop.required ? true : false;
 
         let currentValueAttribute = valueProp;
         keys.forEach((element) => {
             currentValueAttribute =
                 currentValueAttribute != null &&
-                typeof currentValueAttribute == "object" &&
+                typeof currentValueAttribute == 'object' &&
                 currentValueAttribute.hasOwnProperty(element) &&
-                typeof currentValueAttribute[element] != "undefined"
+                typeof currentValueAttribute[element] != 'undefined'
                     ? currentValueAttribute[element]
                     : null;
         });
 
         var args = {
-            default:
-                typeof prop.default != "undefined"
-                    ? prop.default
-                    : null
+            default: typeof prop.default != 'undefined' ? prop.default : null,
         };
         switch (type) {
-            case "string":
+            case 'string':
                 args.isNumber = false;
                 break;
-            case "number":
+            case 'number':
                 args.isNumber = false;
                 break;
-            case "integer":
+            case 'integer':
                 args.isNumber = true;
                 break;
-            case "boolean":
-            case "switch":
-                args.help = typeof prop.help != "undefined"
-                    ? prop.help
-                    : null;
+            case 'boolean':
+            case 'switch':
+                args.help = typeof prop.help != 'undefined' ? prop.help : null;
                 break;
-            case "select":
-            case "color":
-            case "spaces":
-                args.options = typeof prop.options != "undefined"
-                    ? prop.options
-                    : null;
+            case 'select':
+            case 'color':
+            case 'spaces':
+                args.options =
+                    typeof prop.options != 'undefined' ? prop.options : null;
                 break;
-            case "radio":
-            case "checkbox":
-                args.options = typeof prop.options != "undefined"
-                    ? prop.options
-                    : null;
+            case 'radio':
+            case 'checkbox':
+                args.options =
+                    typeof prop.options != 'undefined' ? prop.options : null;
                 break;
-            case "relation":
-                args.entity = typeof prop.entity != "undefined"
-                    ? prop.entity
-                    : null;
+            case 'relation':
+                args.entity =
+                    typeof prop.entity != 'undefined' ? prop.entity : null;
                 break;
-            case "image":
-                args.type = typeof prop.type != "undefined"
-                    ? prop.type
-                    : null;
-                args.args = prop.image && typeof prop.image == "object"
-                    ? prop.image
-                    : {};
+            case 'image':
+                args.type = typeof prop.type != 'undefined' ? prop.type : null;
+                args.args =
+                    prop.image && typeof prop.image == 'object'
+                        ? prop.image
+                        : {};
                 prop.responsive = true;
                 break;
-            case "video":
-                args.type = typeof prop.type != "undefined"
-                    ? prop.type
-                    : null;
-                args.args = prop.video && typeof prop.video == "object"
-                    ? prop.video
-                    : {};
+            case 'video':
+                args.type = typeof prop.type != 'undefined' ? prop.type : null;
+                args.args =
+                    prop.video && typeof prop.video == 'object'
+                        ? prop.video
+                        : {};
                 prop.responsive = true;
                 break;
-            case "file":
-            case "gallery":
-                args.type = typeof prop.type != "undefined"
-                    ? prop.type
-                    : null;
+            case 'file':
+            case 'gallery':
+                args.type = typeof prop.type != 'undefined' ? prop.type : null;
                 prop.responsive = true;
                 break;
-            case "object":
-                if (typeof prop.props != "object") {
+            case 'object':
+                if (typeof prop.props != 'object') {
                     return;
                 }
                 args.props = prop.props;
                 break;
-            case "date":
-            case "datetime":
-                if( typeof prop.format != "undefined" && prop.format == 'YYYY-MM-DD' ) {
-                    args.type = "date";
-                }
-                else if( typeof prop.format != "undefined" && prop.format == 'HH:mm' ) {
-                    args.type = "time";
-                }
-                else {
-                    args.type = "datetime";
+            case 'date':
+            case 'datetime':
+                if (
+                    typeof prop.format != 'undefined' &&
+                    prop.format == 'YYYY-MM-DD'
+                ) {
+                    args.type = 'date';
+                } else if (
+                    typeof prop.format != 'undefined' &&
+                    prop.format == 'HH:mm'
+                ) {
+                    args.type = 'time';
+                } else {
+                    args.type = 'datetime';
                 }
                 break;
         }
 
-        return <Control
-            key={blockKey + "-Control"}
-            keys={keys}
-            blockKey={blockKey}
-            label={label}
-            type={type}
-            valueProp={valueProp}
-            controllerValue={currentValueAttribute}
-            required_field={required_field}
-            repeatable={repeatable}
-            isResponsive={ ( typeof prop.responsive != "undefined" && !!prop.responsive ) ? true : false }
-            args={args}
-            error={error}
-            componentInstance={componentInstance}
-        />
+        return (
+            <Control
+                key={blockKey + '-Control'}
+                keys={keys}
+                blockKey={blockKey}
+                label={label}
+                type={type}
+                valueProp={valueProp}
+                controllerValue={currentValueAttribute}
+                required_field={required_field}
+                repeatable={repeatable}
+                isResponsive={
+                    typeof prop.responsive != 'undefined' && !!prop.responsive
+                        ? true
+                        : false
+                }
+                args={args}
+                error={error}
+                componentInstance={componentInstance}
+            />
+        );
     }
 
     static initComponentAttributes(attributes, props) {
         for (const [key, value] of Object.entries(props)) {
-            if (typeof value != "object" || value == null) continue;
+            if (typeof value != 'object' || value == null) continue;
 
             let currentType =
-                typeof value.repeatable != "undefined" && value.repeatable && ! ['image', 'video', 'file', 'image'].includes(value.type.toLowerCase())
-                    ? "array"
+                typeof value.repeatable != 'undefined' &&
+                value.repeatable &&
+                !['image', 'video', 'file', 'image'].includes(
+                    value.type.toLowerCase(),
+                )
+                    ? 'array'
                     : value.type.toLowerCase();
             currentType =
-                typeof value.responsive != "undefined" && value.responsive
-                    ? "object"
+                typeof value.responsive != 'undefined' && value.responsive
+                    ? 'object'
                     : currentType;
 
             switch (currentType) {
-                case "string":
-                case "text":
-                case "richText":
-                case "select":
-                case "spaces":
-                case "color":
-                case "radio":
-                case "relation":
-                case "date":
-                case "datetime":
-                case "number":
-                case "integer":
+                case 'string':
+                case 'text':
+                case 'richText':
+                case 'select':
+                case 'spaces':
+                case 'color':
+                case 'radio':
+                case 'relation':
+                case 'date':
+                case 'datetime':
+                case 'number':
+                case 'integer':
                     attributes[key] = {
-                        type: "string",
-                    };
-                    break; 
-
-                case "object":
-                case "link":
-                case "image":
-                case "video":
-                case "file":
-                case "gallery":
-                case "wysiwyg":
-                    attributes[key] = {
-                        type: "object",
+                        type: 'string',
                     };
                     break;
 
-                case "array":
-                case "checkbox":                    
+                case 'object':
+                case 'link':
+                case 'image':
+                case 'video':
+                case 'file':
+                case 'gallery':
+                case 'wysiwyg':
                     attributes[key] = {
-                        type: "array",
+                        type: 'object',
                     };
                     break;
 
-                case "boolean":
-                case "switch":
+                case 'array':
+                case 'checkbox':
                     attributes[key] = {
-                        type: "boolean",
+                        type: 'array',
+                    };
+                    break;
+
+                case 'boolean':
+                case 'switch':
+                    attributes[key] = {
+                        type: 'boolean',
                     };
                     break;
             }
         }
+
+        attributes.editorPreviewImage = {
+            type: 'boolean',
+        };
     }
 }

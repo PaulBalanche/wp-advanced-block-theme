@@ -18,7 +18,7 @@ Object.values(global_localized.components).forEach((element) => {
         },
     };
     Attributes.initComponentAttributes(initAttributes, element.props);
-
+    console.log(element);
     registerBlockType('custom/wpe-component-' + element.id, {
         title: element.name,
         category: element.category.slug,
@@ -28,13 +28,14 @@ Object.values(global_localized.components).forEach((element) => {
         parent: element.parent,
         attributes: initAttributes,
         description: element.description,
-        example: {
-            attributes: {
-                title: 'https://example.com/image.jpg',
-                intro: 'William Shakespeare',
-                text: 'blaasda sda da das sdd',
-            },
-        },
+        example:
+            typeof element.preview == 'string'
+                ? {
+                      attributes: {
+                          editorPreviewImage: element.preview,
+                      },
+                  }
+                : null,
         edit: edit(element, current_user_can_edit_posts, theme_spec),
         save: () => {
             return (

@@ -2291,6 +2291,14 @@
   color: var(--wp-admin-theme-color);
 }
 
+.block-editor-inserter__preview-container {
+  width: 500px;
+}
+
+.editorPreviewImage {
+  width: 100%;
+}
+
 #editor .interface-interface-skeleton__header .edit-post-header__toolbar {
   align-items: center;
 }
@@ -2375,14 +2383,6 @@
 .o-editor .responsive-buttons-container .components-button-group .components-button.valid:after {
   content: "\f15e";
   color: var(--wp-admin-theme-color);
-}
-
-.block-editor-inserter__preview-container {
-  width: 600px;
-}
-
-.block-editor-inserter__preview-content {
-  min-height: 300px;
 }
 
 /*# sourceMappingURL=abt_editor.css.map*/

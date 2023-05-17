@@ -11457,11 +11457,14 @@ class WpeComponent extends _Components_WpeComponentBase__WEBPACK_IMPORTED_MODULE
     this.description = this.props.block_spec.description;
     this.previewUrl = js_const.rest_api_url + js_const.rest_api_namespace + js_const.componentblock_attr_autosaves_rest_api_resource_path + '/' + js_const.post_id + '/' + this.props.block_spec.id + '/' + this.props.clientId;
     this.iframeResize = this._iframeResize.bind(this);
+    this.editorPreviewImage = this?.props?.attributes?.editorPreviewImage ? this.props.attributes.editorPreviewImage : false;
   }
   componentDidMount() {
-    setTimeout(() => {
-      this.apiFetch();
-    });
+    if (!this.editorPreviewImage) {
+      setTimeout(() => {
+        this.apiFetch();
+      });
+    }
 
     // load iframes one after the other
     // it seems that it's a bad idea cause it's slower...
@@ -11493,9 +11496,11 @@ class WpeComponent extends _Components_WpeComponentBase__WEBPACK_IMPORTED_MODULE
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    this._iframeResize.bind(this);
-    if (!this.state.needPreviewUpdate && nextState.needPreviewUpdate) {
-      this.apiFetch(nextProps.attributes);
+    if (!this.editorPreviewImage) {
+      this._iframeResize.bind(this);
+      if (!this.state.needPreviewUpdate && nextState.needPreviewUpdate) {
+        this.apiFetch(nextProps.attributes);
+      }
     }
     return true;
   }
@@ -11572,35 +11577,42 @@ class WpeComponent extends _Components_WpeComponentBase__WEBPACK_IMPORTED_MODULE
         previewReady
       } = this.state;
       var render = [];
-      if (previewReady) {
-        render.push(this.renderEditFormZone());
-        render.push(this.renderLoaderPreview());
-        render.push(this.renderIframePreview());
-      } else if (error != null) {
-        if (typeof error == 'object') {
+      if (this.editorPreviewImage) {
+        render.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
+          src: this.editorPreviewImage,
+          className: "editorPreviewImage"
+        }));
+      } else {
+        if (previewReady) {
           render.push(this.renderEditFormZone());
-          render.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-            key: this.props.clientId + '-placeholder',
-            className: "wpe-block-placeholder"
-          }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-            className: "inner"
-          }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h2", null, this.title), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Dashicon, {
-            icon: "admin-generic"
-          }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "Not ready yet!", (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("u", null, "Click to edit")))));
+          render.push(this.renderLoaderPreview());
+          render.push(this.renderIframePreview());
+        } else if (error != null) {
+          if (typeof error == 'object') {
+            render.push(this.renderEditFormZone());
+            render.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+              key: this.props.clientId + '-placeholder',
+              className: "wpe-block-placeholder"
+            }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+              className: "inner"
+            }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h2", null, this.title), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Dashicon, {
+              icon: "admin-generic"
+            }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "Not ready yet!", (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("u", null, "Click to edit")))));
+          } else {
+            render.push(this.renderEditFormZone());
+            render.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+              key: this.props.clientId + '-placeholder',
+              className: "wpe-block-placeholder"
+            }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+              className: "inner"
+            }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Dashicon, {
+              icon: "info"
+            }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, error))));
+          }
         } else {
           render.push(this.renderEditFormZone());
-          render.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-            key: this.props.clientId + '-placeholder',
-            className: "wpe-block-placeholder"
-          }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-            className: "inner"
-          }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Dashicon, {
-            icon: "info"
-          }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, error))));
+          render.push(this.renderLoaderPreview());
         }
-      } else {
-        render.push(this.renderEditFormZone());
-        render.push(this.renderLoaderPreview());
       }
       return render;
     }
@@ -11632,7 +11644,6 @@ class WpeComponent extends _Components_WpeComponentBase__WEBPACK_IMPORTED_MODULE
   for (var i in getBlockParents) {
     parentsBlock.push(select('core/block-editor').getBlock(getBlockParents[i]));
   }
-  console.log(select('core/block-editor').hasInserterItems());
   return {
     relations: relations,
     block_spec,
@@ -11705,6 +11716,7 @@ Object.values(global_localized.components).forEach(element => {
     }
   };
   _Static_Attributes__WEBPACK_IMPORTED_MODULE_4__.Attributes.initComponentAttributes(initAttributes, element.props);
+  console.log(element);
   (0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__.registerBlockType)('custom/wpe-component-' + element.id, {
     title: element.name,
     category: element.category.slug,
@@ -11714,13 +11726,11 @@ Object.values(global_localized.components).forEach(element => {
     parent: element.parent,
     attributes: initAttributes,
     description: element.description,
-    example: {
+    example: typeof element.preview == 'string' ? {
       attributes: {
-        title: 'https://example.com/image.jpg',
-        intro: 'William Shakespeare',
-        text: 'blaasda sda da das sdd'
+        editorPreviewImage: element.preview
       }
-    },
+    } : null,
     edit: (0,_edit__WEBPACK_IMPORTED_MODULE_3__["default"])(element, current_user_can_edit_posts, theme_spec),
     save: () => {
       return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.useBlockProps.save(), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.InnerBlocks.Content, null));
@@ -15273,11 +15283,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _Components_ODevices__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Components/ODevices */ "./src/js/Components/ODevices.js");
-/* harmony import */ var _Render__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Render */ "./src/js/Static/Render.js");
-/* harmony import */ var _Control__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Control */ "./src/js/Static/Control.js");
-
-
+/* harmony import */ var _Control__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Control */ "./src/js/Static/Control.js");
 
 
 class Attributes {
@@ -15288,13 +15294,13 @@ class Attributes {
   static addEltToRepeatable(arrayKey, currentValueProp, currentValueRepeatableField) {
     let isNumber = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
     let componentInstance = arguments.length > 4 ? arguments[4] : undefined;
-    Attributes.updateAttributes(arrayKey, currentValueProp, currentValueRepeatableField.concat(""), isNumber, componentInstance);
+    Attributes.updateAttributes(arrayKey, currentValueProp, currentValueRepeatableField.concat(''), isNumber, componentInstance);
   }
   static removeEltRepeatable(arrayKey, currentValueProp, componentInstance) {
     Attributes.updateAttributes(arrayKey, currentValueProp, false, false, componentInstance);
   }
   static fileSizeFormat(filesizeInBytes) {
-    if (filesizeInBytes > 1000000) return Math.round(filesizeInBytes / 10000) / 100 + " Mo";else return Math.round(filesizeInBytes / 1000) + " Ko";
+    if (filesizeInBytes > 1000000) return Math.round(filesizeInBytes / 10000) / 100 + ' Mo';else return Math.round(filesizeInBytes / 1000) + ' Ko';
   }
   static updateAttributes(arrayKey, currentValue, newValue) {
     let isNumber = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
@@ -15308,7 +15314,7 @@ class Attributes {
     let isNumber = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
     const currentArrayKey = Object.assign([], arrayKey);
     const firstElement = currentArrayKey.shift();
-    if (typeof fromObject != "object" || Array.isArray(fromObject) && isNaN(firstElement) || !Array.isArray(fromObject) && typeof firstElement == "number") fromObject = isNaN(firstElement) ? {} : [];
+    if (typeof fromObject != 'object' || Array.isArray(fromObject) && isNaN(firstElement) || !Array.isArray(fromObject) && typeof firstElement == 'number') fromObject = isNaN(firstElement) ? {} : [];
     let objectReturned = Array.isArray(fromObject) ? [] : {};
     for (const [key, val] of Object.entries(fromObject)) {
       if (key == firstElement) {
@@ -15317,14 +15323,14 @@ class Attributes {
         else objectReturned[key] = Attributes.returnStringOrNumber(newValue, isNumber);
       } else objectReturned[key] = val;
     }
-    if (typeof objectReturned[firstElement] == "undefined") {
+    if (typeof objectReturned[firstElement] == 'undefined') {
       if (currentArrayKey.length > 0) objectReturned[firstElement] = Attributes.recursiveUpdateObjectFromObject(currentArrayKey, undefined, newValue, isNumber);else if (!!newValue) objectReturned[firstElement] = Attributes.returnStringOrNumber(newValue, isNumber);
     }
 
     // Re-index in case of element suppression
     if (currentArrayKey.length == 0 && !newValue) {
       for (let index = 0; index < objectReturned.length; index++) {
-        if (typeof objectReturned[index] == "undefined") objectReturned.splice(index, 1);
+        if (typeof objectReturned[index] == 'undefined') objectReturned.splice(index, 1);
       }
     }
     return objectReturned;
@@ -15332,77 +15338,77 @@ class Attributes {
   static renderProp(prop, keys, valueProp, componentInstance) {
     let error = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : false;
     const type = prop.type.toLowerCase();
-    const blockKey = componentInstance.props.clientId + "-" + keys.join("-");
-    const repeatable = typeof prop.repeatable != "undefined" && !!prop.repeatable ? true : false;
-    const label = typeof prop.label != "undefined" ? prop.label : typeof prop.title != "undefined" ? prop.title : keys.slice(-1);
-    const required_field = typeof prop.required != "undefined" && prop.required ? true : false;
+    const blockKey = componentInstance.props.clientId + '-' + keys.join('-');
+    const repeatable = typeof prop.repeatable != 'undefined' && !!prop.repeatable ? true : false;
+    const label = typeof prop.label != 'undefined' ? prop.label : typeof prop.title != 'undefined' ? prop.title : keys.slice(-1);
+    const required_field = typeof prop.required != 'undefined' && prop.required ? true : false;
     let currentValueAttribute = valueProp;
     keys.forEach(element => {
-      currentValueAttribute = currentValueAttribute != null && typeof currentValueAttribute == "object" && currentValueAttribute.hasOwnProperty(element) && typeof currentValueAttribute[element] != "undefined" ? currentValueAttribute[element] : null;
+      currentValueAttribute = currentValueAttribute != null && typeof currentValueAttribute == 'object' && currentValueAttribute.hasOwnProperty(element) && typeof currentValueAttribute[element] != 'undefined' ? currentValueAttribute[element] : null;
     });
     var args = {
-      default: typeof prop.default != "undefined" ? prop.default : null
+      default: typeof prop.default != 'undefined' ? prop.default : null
     };
     switch (type) {
-      case "string":
+      case 'string':
         args.isNumber = false;
         break;
-      case "number":
+      case 'number':
         args.isNumber = false;
         break;
-      case "integer":
+      case 'integer':
         args.isNumber = true;
         break;
-      case "boolean":
-      case "switch":
-        args.help = typeof prop.help != "undefined" ? prop.help : null;
+      case 'boolean':
+      case 'switch':
+        args.help = typeof prop.help != 'undefined' ? prop.help : null;
         break;
-      case "select":
-      case "color":
-      case "spaces":
-        args.options = typeof prop.options != "undefined" ? prop.options : null;
+      case 'select':
+      case 'color':
+      case 'spaces':
+        args.options = typeof prop.options != 'undefined' ? prop.options : null;
         break;
-      case "radio":
-      case "checkbox":
-        args.options = typeof prop.options != "undefined" ? prop.options : null;
+      case 'radio':
+      case 'checkbox':
+        args.options = typeof prop.options != 'undefined' ? prop.options : null;
         break;
-      case "relation":
-        args.entity = typeof prop.entity != "undefined" ? prop.entity : null;
+      case 'relation':
+        args.entity = typeof prop.entity != 'undefined' ? prop.entity : null;
         break;
-      case "image":
-        args.type = typeof prop.type != "undefined" ? prop.type : null;
-        args.args = prop.image && typeof prop.image == "object" ? prop.image : {};
+      case 'image':
+        args.type = typeof prop.type != 'undefined' ? prop.type : null;
+        args.args = prop.image && typeof prop.image == 'object' ? prop.image : {};
         prop.responsive = true;
         break;
-      case "video":
-        args.type = typeof prop.type != "undefined" ? prop.type : null;
-        args.args = prop.video && typeof prop.video == "object" ? prop.video : {};
+      case 'video':
+        args.type = typeof prop.type != 'undefined' ? prop.type : null;
+        args.args = prop.video && typeof prop.video == 'object' ? prop.video : {};
         prop.responsive = true;
         break;
-      case "file":
-      case "gallery":
-        args.type = typeof prop.type != "undefined" ? prop.type : null;
+      case 'file':
+      case 'gallery':
+        args.type = typeof prop.type != 'undefined' ? prop.type : null;
         prop.responsive = true;
         break;
-      case "object":
-        if (typeof prop.props != "object") {
+      case 'object':
+        if (typeof prop.props != 'object') {
           return;
         }
         args.props = prop.props;
         break;
-      case "date":
-      case "datetime":
-        if (typeof prop.format != "undefined" && prop.format == 'YYYY-MM-DD') {
-          args.type = "date";
-        } else if (typeof prop.format != "undefined" && prop.format == 'HH:mm') {
-          args.type = "time";
+      case 'date':
+      case 'datetime':
+        if (typeof prop.format != 'undefined' && prop.format == 'YYYY-MM-DD') {
+          args.type = 'date';
+        } else if (typeof prop.format != 'undefined' && prop.format == 'HH:mm') {
+          args.type = 'time';
         } else {
-          args.type = "datetime";
+          args.type = 'datetime';
         }
         break;
     }
-    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Control__WEBPACK_IMPORTED_MODULE_3__.Control, {
-      key: blockKey + "-Control",
+    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Control__WEBPACK_IMPORTED_MODULE_1__.Control, {
+      key: blockKey + '-Control',
       keys: keys,
       blockKey: blockKey,
       label: label,
@@ -15411,7 +15417,7 @@ class Attributes {
       controllerValue: currentValueAttribute,
       required_field: required_field,
       repeatable: repeatable,
-      isResponsive: typeof prop.responsive != "undefined" && !!prop.responsive ? true : false,
+      isResponsive: typeof prop.responsive != 'undefined' && !!prop.responsive ? true : false,
       args: args,
       error: error,
       componentInstance: componentInstance
@@ -15419,51 +15425,54 @@ class Attributes {
   }
   static initComponentAttributes(attributes, props) {
     for (const [key, value] of Object.entries(props)) {
-      if (typeof value != "object" || value == null) continue;
-      let currentType = typeof value.repeatable != "undefined" && value.repeatable && !['image', 'video', 'file', 'image'].includes(value.type.toLowerCase()) ? "array" : value.type.toLowerCase();
-      currentType = typeof value.responsive != "undefined" && value.responsive ? "object" : currentType;
+      if (typeof value != 'object' || value == null) continue;
+      let currentType = typeof value.repeatable != 'undefined' && value.repeatable && !['image', 'video', 'file', 'image'].includes(value.type.toLowerCase()) ? 'array' : value.type.toLowerCase();
+      currentType = typeof value.responsive != 'undefined' && value.responsive ? 'object' : currentType;
       switch (currentType) {
-        case "string":
-        case "text":
-        case "richText":
-        case "select":
-        case "spaces":
-        case "color":
-        case "radio":
-        case "relation":
-        case "date":
-        case "datetime":
-        case "number":
-        case "integer":
+        case 'string':
+        case 'text':
+        case 'richText':
+        case 'select':
+        case 'spaces':
+        case 'color':
+        case 'radio':
+        case 'relation':
+        case 'date':
+        case 'datetime':
+        case 'number':
+        case 'integer':
           attributes[key] = {
-            type: "string"
+            type: 'string'
           };
           break;
-        case "object":
-        case "link":
-        case "image":
-        case "video":
-        case "file":
-        case "gallery":
-        case "wysiwyg":
+        case 'object':
+        case 'link':
+        case 'image':
+        case 'video':
+        case 'file':
+        case 'gallery':
+        case 'wysiwyg':
           attributes[key] = {
-            type: "object"
+            type: 'object'
           };
           break;
-        case "array":
-        case "checkbox":
+        case 'array':
+        case 'checkbox':
           attributes[key] = {
-            type: "array"
+            type: 'array'
           };
           break;
-        case "boolean":
-        case "switch":
+        case 'boolean':
+        case 'switch':
           attributes[key] = {
-            type: "boolean"
+            type: 'boolean'
           };
           break;
       }
     }
+    attributes.editorPreviewImage = {
+      type: 'boolean'
+    };
   }
 }
 
