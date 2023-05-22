@@ -1,6 +1,4 @@
-import React from 'react';
-
-import { Component } from '@wordpress/element';
+import { Component, useEffect, useState } from '@wordpress/element';
 
 import { Button, Dashicon } from '@wordpress/components';
 
@@ -35,7 +33,6 @@ export default class OEditorApp extends Component {
             route: null,
             needToBeMounted: true,
             currentDevice: null,
-            moves: null,
         };
 
         // @ts-ignore
@@ -367,46 +364,7 @@ export default class OEditorApp extends Component {
                     className={`o-editor-app ${componentToRender?.getExtraClassName?.()}`}
                 >
                     {componentToRender?.renderTitle && (
-                        <div
-                            className="o-editor-app_header"
-                            onMouseDown={(e) => {
-                                this.setState({
-                                    moves: {
-                                        top: document.querySelector(
-                                            '.o-editor-app',
-                                        ).offsetTop,
-                                        left: document.querySelector(
-                                            '.o-editor-app',
-                                        ).offsetLeft,
-                                        mouseTop: e.clientY,
-                                        mouseLeft: e.clientX,
-                                    },
-                                });
-                            }}
-                            onMouseUp={() => {
-                                this.setState({ moves: null });
-                            }}
-                            onMouseLeave={() => {
-                                this.setState({ moves: null });
-                            }}
-                            onMouseMove={(e) => {
-                                if (this.state.moves != null) {
-                                    const newTop =
-                                        this.state.moves.top +
-                                        (e.clientY - this.state.moves.mouseTop);
-                                    const newLeft =
-                                        this.state.moves.left +
-                                        (e.clientX -
-                                            this.state.moves.mouseLeft);
-                                    document.querySelector(
-                                        '.o-editor-app',
-                                    ).style.top = newTop + 'px';
-                                    document.querySelector(
-                                        '.o-editor-app',
-                                    ).style.left = newLeft + 'px';
-                                }
-                            }}
-                        >
+                        <EditorAppHeader>
                             <div className="title">
                                 {this.renderBreadcrumb()}
                                 {componentToRender.renderTitle()}
@@ -416,7 +374,7 @@ export default class OEditorApp extends Component {
                                     {componentToRender.renderTools()}
                                 </div>
                             )}
-                        </div>
+                        </EditorAppHeader>
                     )}
                     <div className="o-editor-app_body">
                         {componentToRender?.render?.()}
@@ -432,4 +390,97 @@ export default class OEditorApp extends Component {
             </>
         );
     }
+}
+
+function EditorAppHeader(props) {
+    const [moving, setMoving] = useState(false);
+    const [oEditorTop, setOEditorTop] = useState(null);
+    const [oEditorRight, setOEditorRight] = useState(null);
+    const [mouseTop, setMouseTop] = useState(null);
+    const [mouseLeft, setMouseLeft] = useState(null);
+
+    const oEditorApp = document.querySelector('.o-editor-app');
+    const skeletonHeader = document.querySelector(
+        '#editor .interface-interface-skeleton__header',
+    );
+
+    useEffect(() => {
+        if (!moving && oEditorApp) {
+            window.setTimeout(() => {
+                improveOEditorTop();
+                improveOEditorRight();
+            });
+        }
+    });
+
+    function updatePosition(e) {
+        improveOEditorTop(oEditorTop + (e.clientY - mouseTop));
+        improveOEditorRight(oEditorRight - (e.clientX - mouseLeft));
+    }
+
+    function improveOEditorTop(top = null) {
+        if (top == null) {
+            top = oEditorApp.offsetTop;
+        }
+        if (top < skeletonHeader.offsetHeight) {
+            top = skeletonHeader.offsetHeight;
+        }
+        if (top + oEditorApp.offsetHeight > window.innerHeight) {
+            top = window.innerHeight - oEditorApp.offsetHeight;
+        }
+
+        oEditorApp.style.top = top + 'px';
+    }
+
+    function improveOEditorRight(right = null) {
+        if (right == null) {
+            right =
+                window.innerWidth -
+                (oEditorApp.offsetLeft + oEditorApp.offsetWidth);
+        }
+        if (right < 0) {
+            right = 0;
+        }
+        if (right + oEditorApp.offsetWidth > window.innerWidth) {
+            right = window.innerWidth - oEditorApp.offsetWidth;
+        }
+
+        oEditorApp.style.right = right + 'px';
+    }
+
+    return (
+        <div
+            className="o-editor-app_header"
+            onMouseDown={(e) => {
+                if (
+                    e.target !=
+                    document.querySelector(
+                        '.o-editor-app_header .breadcrumb .is-link',
+                    )
+                ) {
+                    setOEditorTop(oEditorApp.offsetTop);
+                    setOEditorRight(
+                        window.innerWidth -
+                            (oEditorApp.offsetLeft + oEditorApp.offsetWidth),
+                    );
+                    setMouseTop(e.clientY);
+                    setMouseLeft(e.clientX);
+                    setMoving(true);
+                }
+            }}
+            onMouseUp={() => {
+                setMoving(false);
+            }}
+            onMouseLeave={() => {
+                setMoving(false);
+            }}
+            onMouseMove={(e) => {
+                if (moving) {
+                    updatePosition(e);
+                }
+            }}
+        >
+            {props.children}
+        </div>
+    );
 }

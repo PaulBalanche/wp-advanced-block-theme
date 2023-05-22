@@ -10,6 +10,7 @@ class Twig extends ControllerBase {
         parent::__construct();
 
         $_ENV['S_FRONTSPEC_PATH'] = get_stylesheet_directory() . '/' . $this->get_config()->get_front_end_file_path( $this->get_config()->get('frontspecJsonFileName') );
+        $_ENV['S_FRONTEND_DIR'] = get_stylesheet_directory() . '/' . rtrim($this->get_config()->get_front_end_file_path(''), '/');
 
         $this->add_filters();
     }

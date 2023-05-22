@@ -1,7 +1,7 @@
-import { defaultAnimateLayoutChanges, useSortable } from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
+import { defaultAnimateLayoutChanges, useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 
-import { Button } from "@wordpress/components";
+import { Button } from '@wordpress/components';
 
 const animateLayoutChanges = (args) =>
     defaultAnimateLayoutChanges({ ...args, wasDragging: true });
@@ -24,15 +24,24 @@ export function SortableItem(props) {
         transform: CSS.Translate.toString(transform),
     };
 
-    const errorClassName = ( props.error && typeof props.error == 'object' && typeof props.error.error != 'undefined' ) ? 'has-error' : ( ( props.error && typeof props.error == 'object' && typeof props.error.warning != 'undefined' ) ? 'has-warning' : '' );
+    const errorClassName =
+        props.error &&
+        typeof props.error == 'object' &&
+        typeof props.error.error != 'undefined'
+            ? 'has-error'
+            : props.error &&
+              typeof props.error == 'object' &&
+              typeof props.error.warning != 'undefined'
+            ? 'has-warning'
+            : '';
 
     return (
         <li
-            key={props.id + "-SortableItemContainer"}
+            key={props.id + '-SortableItemContainer'}
             ref={setNodeRef}
             style={style}
             {...attributes}
-            className={"repeatableItem " + props.type + " " + errorClassName}
+            className={'repeatableItem ' + props.type + ' ' + errorClassName}
         >
             <div className="sortableItemInner">{props.children}</div>
             <Button

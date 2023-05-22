@@ -650,7 +650,7 @@
   border-radius: 10px;
   z-index: 99999;
   box-sizing: border-box;
-  transition-property: transform, width, height;
+  transition-property: transform;
   transition-duration: 0.2s;
   transition-timing-function: ease-out;
   display: flex;

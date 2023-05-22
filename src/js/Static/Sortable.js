@@ -1,37 +1,34 @@
-import { useState, useEffect, Fragment } from "@wordpress/element";
-import { Button, Dashicon } from "@wordpress/components";
+import { Button, Dashicon } from '@wordpress/components';
+import { Fragment, useState } from '@wordpress/element';
 
-import { closestCenter, DndContext, MeasuringStrategy } from "@dnd-kit/core";
+import { closestCenter, DndContext, MeasuringStrategy } from '@dnd-kit/core';
 import {
     arrayMove,
     SortableContext,
     verticalListSortingStrategy,
-} from "@dnd-kit/sortable";
+} from '@dnd-kit/sortable';
 
-import { SortableItem } from "./SortableItem";
+import { SortableItem } from './SortableItem';
 
-import { Control } from "./Control";
-import { Render } from "./Render";
+import { Control } from './Control';
+import { Render } from './Render';
 
 export function Sortable(props) {
-
-    const [items, setItems] = useState( Object.keys(props.value) );
+    const [items, setItems] = useState(Object.keys(props.value));
 
     function updateValue(newValue, directSubmit = false) {
         props.onChange(newValue, directSubmit);
     }
 
     function onChange(newValue, index) {
-
         const newControllerValue = [];
-        for( var i in props.value ) {
-            newControllerValue.push( ( i == index ) ? newValue : props.value[i] );
+        for (var i in props.value) {
+            newControllerValue.push(i == index ? newValue : props.value[i]);
         }
         updateValue(newControllerValue);
     }
 
     function handleDragEnd(event) {
-
         const { active, over } = event;
         if (active.id !== over.id) {
             const oldIndex = items.indexOf(active.id);
@@ -65,21 +62,18 @@ export function Sortable(props) {
     }
 
     function handleDuplicate(id) {
-        
         const indexToDuplicate = items.indexOf(id);
         const indexToInsert = indexToDuplicate + 1;
-        const newItems = Object.assign(
-            [],
-            items
-        );
+        const newItems = Object.assign([], items);
         newItems.splice(indexToInsert, 0, items.length.toString());
-        setItems( newItems );
+        setItems(newItems);
 
-        const newControllerValue = Object.assign(
-            [],
-            props.value
+        const newControllerValue = Object.assign([], props.value);
+        newControllerValue.splice(
+            indexToInsert,
+            0,
+            props.value[indexToDuplicate],
         );
-        newControllerValue.splice(indexToInsert, 0, props.value[indexToDuplicate]);
 
         updateValue(newControllerValue, true);
     }
@@ -88,32 +82,34 @@ export function Sortable(props) {
         const indexToRemove = items.indexOf(id);
         setItems(items.filter((item) => item !== id));
 
-        const newControllerValue = Object.assign(
-            [],
-            props.value
-        );
+        const newControllerValue = Object.assign([], props.value);
         newControllerValue.splice(indexToRemove, 1);
 
         updateValue(newControllerValue, true);
     }
 
     function addItem() {
-        setItems( items.concat(items.length.toString()) );
-        updateValue( props.value.concat(""), true );
+        setItems(items.concat(items.length.toString()));
+        updateValue(props.value.concat(''), true);
     }
 
     function renderItems() {
         var renderItems = [];
         for (var keyLoop in items) {
-
-            const error = ( props.error && typeof props.error == 'object' && props.error != null && typeof props.error[keyLoop] != 'undefined' ) ? props.error[keyLoop] : false;
+            const error =
+                props.error &&
+                typeof props.error == 'object' &&
+                props.error != null &&
+                typeof props.error[keyLoop] != 'undefined'
+                    ? props.error[keyLoop]
+                    : false;
 
             let labelRepeatableItem =
-                props.type == "object"
+                props.type == 'object'
                     ? Render.repeatableObjectLabelFormatting(
-                          props.blockKey + "-" + keyLoop,
+                          props.blockKey + '-' + keyLoop,
                           props.value,
-                          keyLoop
+                          keyLoop,
                       )
                     : null;
 
@@ -122,7 +118,7 @@ export function Sortable(props) {
 
             renderItems.push(
                 <SortableItem
-                    key={props.blockKey + "-" + keyLoop + "-SortableItem"}
+                    key={props.blockKey + '-' + keyLoop + '-SortableItem'}
                     id={items[keyLoop]}
                     blockKey={props.blockKey}
                     onDuplicate={handleDuplicate}
@@ -133,7 +129,7 @@ export function Sortable(props) {
                     <Control
                         type={props.type}
                         componentInstance={props.componentInstance}
-                        blockKey={props.blockKey + "-" + keyLoop}
+                        blockKey={props.blockKey + '-' + keyLoop}
                         label={labelRepeatableItem}
                         keys={props.keys.concat(keyLoop)}
                         valueProp={props.valueProp}
@@ -141,39 +137,46 @@ export function Sortable(props) {
                         required_field={false}
                         args={props.args}
                         error={null}
-                        onChange={ (newValue, index) => onChange(newValue, index) }
+                        onChange={(newValue, index) =>
+                            onChange(newValue, index)
+                        }
                         sortableIndex={keyLoop}
                     />
-                </SortableItem>
+                </SortableItem>,
             );
         }
         return renderItems;
     }
 
-    return <Fragment key={props.id + "-fragment"}>
-        <label className="components-base-control__forced_label" key={props.id + "-label"}>{props.label}</label>
-        <DndContext
-            collisionDetection={closestCenter}
-            onDragEnd={handleDragEnd}
-            measuring={{
-                droppable: { strategy: MeasuringStrategy.Always },
-            }}
-        >
-            <SortableContext
-                items={items}
-                strategy={verticalListSortingStrategy}
+    return (
+        <Fragment key={props.id + '-fragment'}>
+            <label
+                className="components-base-control__forced_label"
+                key={props.id + '-label'}
             >
-                <ul className="repeatableContainer">
-                    {renderItems()}
-                </ul>
-            </SortableContext>
-            <Button
-                className="repeatableAddElt"
-                onMouseDown={addItem}
-                variant="secondary"
+                {props.label}
+            </label>
+            <DndContext
+                collisionDetection={closestCenter}
+                onDragEnd={handleDragEnd}
+                measuring={{
+                    droppable: { strategy: MeasuringStrategy.Always },
+                }}
             >
-                <Dashicon icon="insert" /> Add
-            </Button>
-        </DndContext>
-    </Fragment>
+                <SortableContext
+                    items={items}
+                    strategy={verticalListSortingStrategy}
+                >
+                    <ul className="repeatableContainer">{renderItems()}</ul>
+                </SortableContext>
+                <Button
+                    className="repeatableAddElt"
+                    onMouseDown={addItem}
+                    variant="secondary"
+                >
+                    <Dashicon icon="insert" /> Add
+                </Button>
+            </DndContext>
+        </Fragment>
+    );
 }
