@@ -8,6 +8,8 @@ class Wysiwyg extends Base {
     
     public static function format( &$propInstance ) {
                     
-        return DraftJsToHtml::rawToHtml( $propInstance->getValue() );
+        return [
+            'value' => DraftJsToHtml::rawToHtml( $propInstance->getValue() )
+        ];
     }
 }

@@ -1,22 +1,24 @@
-import { Component, Fragment } from "@wordpress/element";
+import { Component, Fragment } from '@wordpress/element';
 
 import {
     CompositeDecorator,
-    convertFromRaw,
-    convertToRaw,
+    ContentState,
     DefaultDraftBlockRenderMap,
     Editor,
     EditorState,
-    getDefaultKeyBinding,
     Modifier,
     RichUtils,
     SelectionState,
-} from "draft-js";
+    convertFromHTML,
+    convertFromRaw,
+    convertToRaw,
+    getDefaultKeyBinding,
+} from 'draft-js';
 
-import { Map } from "Immutable";
+import { Map } from 'Immutable';
 
-import { DropDown } from "./DropDown";
-import { LinkControl } from "./LinkControl";
+import { DropDown } from './DropDown';
+import { LinkControl } from './LinkControl';
 
 export class DraftEditor extends Component {
     constructor(props) {
@@ -25,27 +27,46 @@ export class DraftEditor extends Component {
         this.rawDraftContentState = props?.initialContent
             ? props.initialContent
             : null;
-        this.state = {
-            editorState:
-                this.rawDraftContentState != null
-                    ? EditorState.createWithContent(
-                          convertFromRaw(this.rawDraftContentState),
-                          new CompositeDecorator([
-                              {
-                                  strategy: this.findLinkEntities,
-                                  component: this.Link,
-                              },
-                          ])
-                      )
-                    : EditorState.createEmpty(
+
+        if (this.rawDraftContentState != null) {
+            if (typeof this.rawDraftContentState == 'string') {
+                const blocksFromHTML = convertFromHTML(
+                    this.rawDraftContentState,
+                );
+                const state = ContentState.createFromBlockArray(
+                    blocksFromHTML.contentBlocks,
+                    blocksFromHTML.entityMap,
+                );
+
+                this.state = {
+                    editorState: EditorState.createWithContent(state),
+                };
+            } else {
+                this.state = {
+                    editorState: EditorState.createWithContent(
+                        convertFromRaw(this.rawDraftContentState),
                         new CompositeDecorator([
                             {
                                 strategy: this.findLinkEntities,
                                 component: this.Link,
                             },
-                        ])
-                    )
-        };
+                        ]),
+                    ),
+                };
+            }
+        } else {
+            this.state = {
+                editorState: EditorState.createEmpty(
+                    new CompositeDecorator([
+                        {
+                            strategy: this.findLinkEntities,
+                            component: this.Link,
+                        },
+                    ]),
+                ),
+            };
+        }
+
         this.onChange = (editorState) => this.handleChange(editorState);
         this.toggleBlockType = this._toggleBlockType.bind(this);
         this.toggleInlineStyle = this._toggleInlineStyle.bind(this);
@@ -70,8 +91,8 @@ export class DraftEditor extends Component {
     };
 
     _confirmLink(value) {
-        if (value && typeof value == "object") {
-            if (value.url != "") {
+        if (value && typeof value == 'object') {
+            if (value.url != '') {
                 const { editorState } = this.state;
 
                 const selection = editorState.getSelection();
@@ -80,12 +101,12 @@ export class DraftEditor extends Component {
                 const contentState = editorState.getCurrentContent();
                 const blockWithLink = contentState.getBlockForKey(anchorKey);
                 const linkKey = blockWithLink.getEntityAt(
-                    selection.getStartOffset()
+                    selection.getStartOffset(),
                 );
 
                 const contentStateWithEntity = linkKey
                     ? contentState.replaceEntityData(linkKey, value)
-                    : contentState.createEntity("LINK", "MUTABLE", value);
+                    : contentState.createEntity('LINK', 'MUTABLE', value);
 
                 const entityKey =
                     contentStateWithEntity.getLastCreatedEntityKey();
@@ -94,7 +115,7 @@ export class DraftEditor extends Component {
                 });
 
                 this.onChange(
-                    RichUtils.toggleLink(newEditorState, selection, entityKey)
+                    RichUtils.toggleLink(newEditorState, selection, entityKey),
                 );
             } else {
                 this._removeLink();
@@ -129,10 +150,10 @@ export class DraftEditor extends Component {
                 contentState = Modifier.applyEntity(
                     contentState,
                     entitySelection,
-                    null
+                    null,
                 );
                 return;
-            }
+            },
         );
 
         const newEditorState = EditorState.set(editorState, {
@@ -147,7 +168,7 @@ export class DraftEditor extends Component {
             const entityKey = character.getEntity();
             return (
                 entityKey !== null &&
-                contentState.getEntity(entityKey).getType() === "LINK"
+                contentState.getEntity(entityKey).getType() === 'LINK'
             );
         }, callback);
     }
@@ -161,7 +182,7 @@ export class DraftEditor extends Component {
             }
 
             let style = [];
-            if (val?.editor && typeof val.editor == "object") {
+            if (val?.editor && typeof val.editor == 'object') {
                 for (const [keyCss, valCss] of Object.entries(val.editor)) {
                     style[keyCss] = valCss;
                 }
@@ -169,20 +190,20 @@ export class DraftEditor extends Component {
 
             if (val.isDefault) {
                 this.blockRenderMap.unstyled = {
-                    element: "div",
+                    element: 'div',
                     wrapper: (
                         <WrapperBlockRendering
-                            id={this.props.id + "-WrapperBlockRendering-" + key}
+                            id={this.props.id + '-WrapperBlockRendering-' + key}
                             key={
-                                this.props.id + "-WrapperBlockRendering-" + key
+                                this.props.id + '-WrapperBlockRendering-' + key
                             }
                             style={style}
                         />
                     ),
                 };
             } else {
-                let groupToAdd = val.group == "null" ? "default" : val.group;
-                if (typeof this.blockTypes[groupToAdd] != "object") {
+                let groupToAdd = val.group == 'null' ? 'default' : val.group;
+                if (typeof this.blockTypes[groupToAdd] != 'object') {
                     this.blockTypes[groupToAdd] = [];
                 }
 
@@ -194,9 +215,9 @@ export class DraftEditor extends Component {
                 this.blockRenderMap[key] = {
                     wrapper: (
                         <WrapperBlockRendering
-                            id={this.props.id + "-WrapperBlockRendering-" + key}
+                            id={this.props.id + '-WrapperBlockRendering-' + key}
                             key={
-                                this.props.id + "-WrapperBlockRendering-" + key
+                                this.props.id + '-WrapperBlockRendering-' + key
                             }
                             style={style}
                         />
@@ -207,7 +228,7 @@ export class DraftEditor extends Component {
 
         this.blockRenderMap = Map(this.blockRenderMap);
         this.blockRenderMap = DefaultDraftBlockRenderMap.merge(
-            this.blockRenderMap
+            this.blockRenderMap,
         );
     }
 
@@ -221,16 +242,16 @@ export class DraftEditor extends Component {
             }
 
             let inlineCss = [];
-            if (val?.editor && typeof val.editor == "object") {
+            if (val?.editor && typeof val.editor == 'object') {
                 for (const [keyCss, valCss] of Object.entries(val.editor)) {
                     inlineCss[keyCss] = valCss;
                 }
                 this.styleMap[key] = inlineCss;
             }
 
-            if (val.type != "color") {
-                let groupToAdd = val.group == "null" ? "default" : val.group;
-                if (typeof this.inlineStyles[groupToAdd] != "object") {
+            if (val.type != 'color') {
+                let groupToAdd = val.group == 'null' ? 'default' : val.group;
+                if (typeof this.inlineStyles[groupToAdd] != 'object') {
                     this.inlineStyles[groupToAdd] = [];
                 }
 
@@ -251,7 +272,7 @@ export class DraftEditor extends Component {
 
     handleSoftNewLine(e) {
         return e.keyCode === 13 && e.shiftKey
-            ? "soft-new-line"
+            ? 'soft-new-line'
             : getDefaultKeyBinding(e);
     }
 
@@ -266,13 +287,13 @@ export class DraftEditor extends Component {
 
     _toggleBlockType(blockType) {
         this.onChange(
-            RichUtils.toggleBlockType(this.state.editorState, blockType)
+            RichUtils.toggleBlockType(this.state.editorState, blockType),
         );
     }
 
     _toggleInlineStyle(inlineStyle) {
         this.onChange(
-            RichUtils.toggleInlineStyle(this.state.editorState, inlineStyle)
+            RichUtils.toggleInlineStyle(this.state.editorState, inlineStyle),
         );
     }
 
@@ -281,33 +302,33 @@ export class DraftEditor extends Component {
         const currentInlineStyle = curentEditorState.getCurrentInlineStyle();
 
         for (const [key, val] of Object.entries(this.props.typo)) {
-            if (val.isBlock || val.type != "color" || key == inlineStyle) {
+            if (val.isBlock || val.type != 'color' || key == inlineStyle) {
                 continue;
             }
 
             if (currentInlineStyle.has(key)) {
                 curentEditorState = RichUtils.toggleInlineStyle(
                     curentEditorState,
-                    key
+                    key,
                 );
             }
         }
 
         const newEditorState = RichUtils.toggleInlineStyle(
             curentEditorState,
-            inlineStyle
+            inlineStyle,
         );
 
         this.onChange(newEditorState);
     }
 
     handleKeyCommand(command, editorState) {
-        if (command === "soft-new-line") {
+        if (command === 'soft-new-line') {
             this.handleChange(RichUtils.insertSoftNewline(editorState));
-            return "handled";
+            return 'handled';
         }
 
-        return "not-handled";
+        return 'not-handled';
     }
 
     render() {
@@ -318,7 +339,7 @@ export class DraftEditor extends Component {
                 .getBlockForKey(selection.getStartKey())
                 .getType();
 
-            let currentBlockStyle = "Default";
+            let currentBlockStyle = 'Default';
             let dropDownItems = [];
             for (const [key, val] of Object.entries(this.blockTypes)) {
                 let children = [];
@@ -343,8 +364,8 @@ export class DraftEditor extends Component {
 
             return (
                 <DropDown
-                    key={this.props.id + "-DropDown-BlockStyle"}
-                    id={this.props.id + "-DropDown-BlockStyle"}
+                    key={this.props.id + '-DropDown-BlockStyle'}
+                    id={this.props.id + '-DropDown-BlockStyle'}
                     label="Block style"
                     headerTitle={currentBlockStyle}
                     items={dropDownItems}
@@ -360,19 +381,19 @@ export class DraftEditor extends Component {
             for (const [key, val] of Object.entries(this.inlineStyles)) {
                 groupControls.push(
                     <div
-                        key={this.props.id + "-inlineStylesContainer"}
+                        key={this.props.id + '-inlineStylesContainer'}
                         className="border-style"
                     >
                         {val.map((type) => (
                             <StyleButton
                                 key={
                                     this.props.id +
-                                    "-StyleButton-inlineStyles-" +
+                                    '-StyleButton-inlineStyles-' +
                                     type.style
                                 }
                                 id={
                                     this.props.id +
-                                    "-StyleButton-inlineStyles-" +
+                                    '-StyleButton-inlineStyles-' +
                                     type.style
                                 }
                                 active={currentStyle.has(type.style)}
@@ -382,7 +403,7 @@ export class DraftEditor extends Component {
                                 buttonStyle={type.buttonStyle}
                             />
                         ))}
-                    </div>
+                    </div>,
                 );
             }
 
@@ -392,7 +413,7 @@ export class DraftEditor extends Component {
         const ColorStyleControls = (props) => {
             const currentStyle = props.editorState.getCurrentInlineStyle();
 
-            let currentColor = "Choose color...";
+            let currentColor = 'Choose color...';
             let dropDownItems = [];
             this.colorOptions.forEach(function (type) {
                 currentColor = currentStyle.has(type.style)
@@ -407,8 +428,8 @@ export class DraftEditor extends Component {
 
             return (
                 <DropDown
-                    key={this.props.id + "-DropDown-Color"}
-                    id={this.props.id + "-DropDown-Color"}
+                    key={this.props.id + '-DropDown-Color'}
+                    id={this.props.id + '-DropDown-Color'}
                     label="Color"
                     headerTitle={currentColor}
                     items={dropDownItems}
@@ -418,7 +439,7 @@ export class DraftEditor extends Component {
         };
 
         return (
-            <Fragment key={this.props.id + "-draftEditor"}>
+            <Fragment key={this.props.id + '-draftEditor'}>
                 <div className="DraftEditor-Container">
                     <div
                         key="DraftEditor-controls-row-line1"
@@ -444,7 +465,7 @@ export class DraftEditor extends Component {
                         </div>
                     </div>
                     <div
-                        key={"DraftEditor-controls-row-line2"}
+                        key={'DraftEditor-controls-row-line2'}
                         className="DraftEditor-controls-row"
                     >
                         <div className="DraftEditor-controls-row-inner">
@@ -480,9 +501,9 @@ class StyleButton extends Component {
     }
 
     render() {
-        let className = "DraftEditor-styleButton";
+        let className = 'DraftEditor-styleButton';
         if (this.props.active) {
-            className += " DraftEditor-activeButton";
+            className += ' DraftEditor-activeButton';
         }
 
         return (

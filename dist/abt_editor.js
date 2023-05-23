@@ -17312,15 +17312,29 @@ class DraftEditor extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Compon
   constructor(props) {
     super(props);
     this.rawDraftContentState = props?.initialContent ? props.initialContent : null;
-    this.state = {
-      editorState: this.rawDraftContentState != null ? draft_js__WEBPACK_IMPORTED_MODULE_1__.EditorState.createWithContent((0,draft_js__WEBPACK_IMPORTED_MODULE_1__.convertFromRaw)(this.rawDraftContentState), new draft_js__WEBPACK_IMPORTED_MODULE_1__.CompositeDecorator([{
-        strategy: this.findLinkEntities,
-        component: this.Link
-      }])) : draft_js__WEBPACK_IMPORTED_MODULE_1__.EditorState.createEmpty(new draft_js__WEBPACK_IMPORTED_MODULE_1__.CompositeDecorator([{
-        strategy: this.findLinkEntities,
-        component: this.Link
-      }]))
-    };
+    if (this.rawDraftContentState != null) {
+      if (typeof this.rawDraftContentState == 'string') {
+        const blocksFromHTML = (0,draft_js__WEBPACK_IMPORTED_MODULE_1__.convertFromHTML)(this.rawDraftContentState);
+        const state = draft_js__WEBPACK_IMPORTED_MODULE_1__.ContentState.createFromBlockArray(blocksFromHTML.contentBlocks, blocksFromHTML.entityMap);
+        this.state = {
+          editorState: draft_js__WEBPACK_IMPORTED_MODULE_1__.EditorState.createWithContent(state)
+        };
+      } else {
+        this.state = {
+          editorState: draft_js__WEBPACK_IMPORTED_MODULE_1__.EditorState.createWithContent((0,draft_js__WEBPACK_IMPORTED_MODULE_1__.convertFromRaw)(this.rawDraftContentState), new draft_js__WEBPACK_IMPORTED_MODULE_1__.CompositeDecorator([{
+            strategy: this.findLinkEntities,
+            component: this.Link
+          }]))
+        };
+      }
+    } else {
+      this.state = {
+        editorState: draft_js__WEBPACK_IMPORTED_MODULE_1__.EditorState.createEmpty(new draft_js__WEBPACK_IMPORTED_MODULE_1__.CompositeDecorator([{
+          strategy: this.findLinkEntities,
+          component: this.Link
+        }]))
+      };
+    }
     this.onChange = editorState => this.handleChange(editorState);
     this.toggleBlockType = this._toggleBlockType.bind(this);
     this.toggleInlineStyle = this._toggleInlineStyle.bind(this);
@@ -17341,8 +17355,8 @@ class DraftEditor extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Compon
     }, props.children);
   };
   _confirmLink(value) {
-    if (value && typeof value == "object") {
-      if (value.url != "") {
+    if (value && typeof value == 'object') {
+      if (value.url != '') {
         const {
           editorState
         } = this.state;
@@ -17351,7 +17365,7 @@ class DraftEditor extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Compon
         const contentState = editorState.getCurrentContent();
         const blockWithLink = contentState.getBlockForKey(anchorKey);
         const linkKey = blockWithLink.getEntityAt(selection.getStartOffset());
-        const contentStateWithEntity = linkKey ? contentState.replaceEntityData(linkKey, value) : contentState.createEntity("LINK", "MUTABLE", value);
+        const contentStateWithEntity = linkKey ? contentState.replaceEntityData(linkKey, value) : contentState.createEntity('LINK', 'MUTABLE', value);
         const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
         const newEditorState = draft_js__WEBPACK_IMPORTED_MODULE_1__.EditorState.set(editorState, {
           currentContent: contentStateWithEntity
@@ -17393,7 +17407,7 @@ class DraftEditor extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Compon
   findLinkEntities(contentBlock, callback, contentState) {
     contentBlock.findEntityRanges(character => {
       const entityKey = character.getEntity();
-      return entityKey !== null && contentState.getEntity(entityKey).getType() === "LINK";
+      return entityKey !== null && contentState.getEntity(entityKey).getType() === 'LINK';
     }, callback);
   }
   defineBlocks() {
@@ -17404,23 +17418,23 @@ class DraftEditor extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Compon
         continue;
       }
       let style = [];
-      if (val?.editor && typeof val.editor == "object") {
+      if (val?.editor && typeof val.editor == 'object') {
         for (const [keyCss, valCss] of Object.entries(val.editor)) {
           style[keyCss] = valCss;
         }
       }
       if (val.isDefault) {
         this.blockRenderMap.unstyled = {
-          element: "div",
+          element: 'div',
           wrapper: (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(WrapperBlockRendering, {
-            id: this.props.id + "-WrapperBlockRendering-" + key,
-            key: this.props.id + "-WrapperBlockRendering-" + key,
+            id: this.props.id + '-WrapperBlockRendering-' + key,
+            key: this.props.id + '-WrapperBlockRendering-' + key,
             style: style
           })
         };
       } else {
-        let groupToAdd = val.group == "null" ? "default" : val.group;
-        if (typeof this.blockTypes[groupToAdd] != "object") {
+        let groupToAdd = val.group == 'null' ? 'default' : val.group;
+        if (typeof this.blockTypes[groupToAdd] != 'object') {
           this.blockTypes[groupToAdd] = [];
         }
         this.blockTypes[groupToAdd].push({
@@ -17429,8 +17443,8 @@ class DraftEditor extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Compon
         });
         this.blockRenderMap[key] = {
           wrapper: (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(WrapperBlockRendering, {
-            id: this.props.id + "-WrapperBlockRendering-" + key,
-            key: this.props.id + "-WrapperBlockRendering-" + key,
+            id: this.props.id + '-WrapperBlockRendering-' + key,
+            key: this.props.id + '-WrapperBlockRendering-' + key,
             style: style
           })
         };
@@ -17448,15 +17462,15 @@ class DraftEditor extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Compon
         continue;
       }
       let inlineCss = [];
-      if (val?.editor && typeof val.editor == "object") {
+      if (val?.editor && typeof val.editor == 'object') {
         for (const [keyCss, valCss] of Object.entries(val.editor)) {
           inlineCss[keyCss] = valCss;
         }
         this.styleMap[key] = inlineCss;
       }
-      if (val.type != "color") {
-        let groupToAdd = val.group == "null" ? "default" : val.group;
-        if (typeof this.inlineStyles[groupToAdd] != "object") {
+      if (val.type != 'color') {
+        let groupToAdd = val.group == 'null' ? 'default' : val.group;
+        if (typeof this.inlineStyles[groupToAdd] != 'object') {
           this.inlineStyles[groupToAdd] = [];
         }
         this.inlineStyles[groupToAdd].push({
@@ -17474,7 +17488,7 @@ class DraftEditor extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Compon
     }
   }
   handleSoftNewLine(e) {
-    return e.keyCode === 13 && e.shiftKey ? "soft-new-line" : (0,draft_js__WEBPACK_IMPORTED_MODULE_1__.getDefaultKeyBinding)(e);
+    return e.keyCode === 13 && e.shiftKey ? 'soft-new-line' : (0,draft_js__WEBPACK_IMPORTED_MODULE_1__.getDefaultKeyBinding)(e);
   }
   handleChange(editorState) {
     this.setState({
@@ -17494,7 +17508,7 @@ class DraftEditor extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Compon
     let curentEditorState = this.state.editorState;
     const currentInlineStyle = curentEditorState.getCurrentInlineStyle();
     for (const [key, val] of Object.entries(this.props.typo)) {
-      if (val.isBlock || val.type != "color" || key == inlineStyle) {
+      if (val.isBlock || val.type != 'color' || key == inlineStyle) {
         continue;
       }
       if (currentInlineStyle.has(key)) {
@@ -17505,17 +17519,17 @@ class DraftEditor extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Compon
     this.onChange(newEditorState);
   }
   handleKeyCommand(command, editorState) {
-    if (command === "soft-new-line") {
+    if (command === 'soft-new-line') {
       this.handleChange(draft_js__WEBPACK_IMPORTED_MODULE_1__.RichUtils.insertSoftNewline(editorState));
-      return "handled";
+      return 'handled';
     }
-    return "not-handled";
+    return 'not-handled';
   }
   render() {
     const BlockStyleControls = props => {
       const selection = props.editorState.getSelection();
       const blockType = props.editorState.getCurrentContent().getBlockForKey(selection.getStartKey()).getType();
-      let currentBlockStyle = "Default";
+      let currentBlockStyle = 'Default';
       let dropDownItems = [];
       for (const [key, val] of Object.entries(this.blockTypes)) {
         let children = [];
@@ -17534,8 +17548,8 @@ class DraftEditor extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Compon
         });
       }
       return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_DropDown__WEBPACK_IMPORTED_MODULE_2__.DropDown, {
-        key: this.props.id + "-DropDown-BlockStyle",
-        id: this.props.id + "-DropDown-BlockStyle",
+        key: this.props.id + '-DropDown-BlockStyle',
+        id: this.props.id + '-DropDown-BlockStyle',
         label: "Block style",
         headerTitle: currentBlockStyle,
         items: dropDownItems,
@@ -17547,11 +17561,11 @@ class DraftEditor extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Compon
       let groupControls = [];
       for (const [key, val] of Object.entries(this.inlineStyles)) {
         groupControls.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-          key: this.props.id + "-inlineStylesContainer",
+          key: this.props.id + '-inlineStylesContainer',
           className: "border-style"
         }, val.map(type => (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(StyleButton, {
-          key: this.props.id + "-StyleButton-inlineStyles-" + type.style,
-          id: this.props.id + "-StyleButton-inlineStyles-" + type.style,
+          key: this.props.id + '-StyleButton-inlineStyles-' + type.style,
+          id: this.props.id + '-StyleButton-inlineStyles-' + type.style,
           active: currentStyle.has(type.style),
           label: type.label,
           onToggle: props.onToggle,
@@ -17563,7 +17577,7 @@ class DraftEditor extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Compon
     };
     const ColorStyleControls = props => {
       const currentStyle = props.editorState.getCurrentInlineStyle();
-      let currentColor = "Choose color...";
+      let currentColor = 'Choose color...';
       let dropDownItems = [];
       this.colorOptions.forEach(function (type) {
         currentColor = currentStyle.has(type.style) ? type.label : currentColor;
@@ -17574,8 +17588,8 @@ class DraftEditor extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Compon
         });
       });
       return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_DropDown__WEBPACK_IMPORTED_MODULE_2__.DropDown, {
-        key: this.props.id + "-DropDown-Color",
-        id: this.props.id + "-DropDown-Color",
+        key: this.props.id + '-DropDown-Color',
+        id: this.props.id + '-DropDown-Color',
         label: "Color",
         headerTitle: currentColor,
         items: dropDownItems,
@@ -17583,7 +17597,7 @@ class DraftEditor extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Compon
       });
     };
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
-      key: this.props.id + "-draftEditor"
+      key: this.props.id + '-draftEditor'
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "DraftEditor-Container"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -17606,7 +17620,7 @@ class DraftEditor extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Compon
       onSubmit: this.confirmLink,
       onRemove: this.removeLink
     })))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      key: "DraftEditor-controls-row-line2",
+      key: 'DraftEditor-controls-row-line2',
       className: "DraftEditor-controls-row"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "DraftEditor-controls-row-inner"
@@ -17633,9 +17647,9 @@ class StyleButton extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Compon
     };
   }
   render() {
-    let className = "DraftEditor-styleButton";
+    let className = 'DraftEditor-styleButton';
     if (this.props.active) {
-      className += " DraftEditor-activeButton";
+      className += ' DraftEditor-activeButton';
     }
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
       key: this.props.id,
