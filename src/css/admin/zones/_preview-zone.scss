@@ -11,7 +11,7 @@
 
 .o-editor {
     .editor-styles-wrapper.block-editor-writing-flow {
-        background: var(--abt-background-editor, "white");
+        background: var(--abt-background-editor, 'white');
     }
 
     .is-layout-flow {
@@ -35,8 +35,8 @@
         height: 100%;
         top: 0;
         left: 0;
-        background: var(--abt-background-editor, "white") center no-repeat
-            url("../../img/svg-loaders/oval.svg");
+        background: var(--abt-background-editor, 'white') center no-repeat
+            url('../../img/svg-loaders/oval.svg');
         opacity: 0.75;
     }
 
@@ -70,7 +70,7 @@
         }
 
         &:before {
-            content: "";
+            content: '';
             display: block;
             position: absolute;
             top: 0;
@@ -94,18 +94,20 @@
 
         // toolbar
         &:not(:hover):not(.is-selected):not(
-                [data-type="custom/wpe-grid"].has-child-selected
+                [data-type='custom/wpe-grid'].has-child-selected
             )
             > .o-toolbar-container,
         &:has(.block-editor-block-list__block:hover):not(
-                [data-type="custom/wpe-grid"]
+                [data-type='custom/wpe-grid']
             )
             > .o-toolbar-container {
             display: none !important;
         }
         &:not(:hover):not(.is-selected):has(.wpe-block-placeholder)
             > .o-toolbar-container,
-        &:has(.block-editor-block-list__block:hover):has(.wpe-block-placeholder)
+        &:has(.block-editor-block-list__block:hover):has(
+                .wpe-block-placeholder
+            ):not([data-type='custom/wpe-slide'])
             > .o-toolbar-container {
             display: flex !important;
         }
@@ -142,6 +144,19 @@
                 :hover
             ) {
             opacity: 0.5;
+        }
+    }
+
+    .edit-post-visual-editor__content-area:has(
+            .block-editor-block-list__block.is-dragging
+        ) {
+        .block-editor-block-list__block {
+            opacity: 1 !important;
+
+            &:before {
+                opacity: 1;
+                border: 1px dashed var(--wp-admin-theme-color);
+            }
         }
     }
 
@@ -184,7 +199,7 @@
             transition: $o-transition-default;
 
             &:after {
-                content: " ";
+                content: ' ';
                 position: absolute;
                 border-style: solid;
                 border-color: white transparent transparent transparent;

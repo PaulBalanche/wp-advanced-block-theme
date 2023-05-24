@@ -1,10 +1,10 @@
-import { Component } from "@wordpress/element";
+import { Component } from '@wordpress/element';
 
-import { Button, Dashicon } from "@wordpress/components";
+import { Button, Dashicon } from '@wordpress/components';
 
-import __OUserPreferences from "./OUserPreferences";
+import __OUserPreferences from './OUserPreferences';
 
-import { WpeModal } from "./Modal";
+import { WpeModal } from './Modal';
 
 export default class OModal extends Component {
     static _instance;
@@ -58,12 +58,12 @@ export default class OModal extends Component {
     }
 
     alertUpdateAttributes() {
-        return this.displayModal("alertUpdateAttributes") ? (
+        return this.displayModal('alertUpdateAttributes') ? (
             <WpeModal
                 key="OModal-alertUpdateAttributes"
                 id="alertUpdateAttributesMessageWpeModal"
                 title="Updating preview..."
-                onClose={() => this.hideModal("alertUpdateAttributes")}
+                onClose={() => this.hideModal('alertUpdateAttributes')}
                 hasFooter={false}
                 type="info"
             >
@@ -75,10 +75,10 @@ export default class OModal extends Component {
                 <div className="bouttonGroup">
                     <div className="row">
                         <Button
-                            key={"alertUpdateAttributesMessageButton"}
+                            key={'alertUpdateAttributesMessageButton'}
                             variant="primary"
                             onMouseDown={() =>
-                                this.hideModal("alertUpdateAttributes")
+                                this.hideModal('alertUpdateAttributes')
                             }
                         >
                             <Dashicon icon="yes" />
@@ -98,28 +98,28 @@ export default class OModal extends Component {
     }
 
     alertReusableBlock() {
-        return this.displayModal("alertReusableBlock") ? (
+        return this.displayModal('alertReusableBlock') ? (
             <WpeModal
                 key="OModal-alertReusableBlock"
                 id="alertReusableBlockMessageWpeModal"
                 title="Reusable block"
-                onClose={() => this.hideModal("alertReusableBlock")}
+                onClose={() => this.hideModal('alertReusableBlock')}
                 hasFooter={false}
                 type="warning"
             >
                 <p>
                     This block is part of a <b>reusable block</b> composition.
                     <br />
-                    Updating this block will{" "}
+                    Updating this block will{' '}
                     <b>apply the changes everywhere it is used.</b>
                 </p>
                 <div className="bouttonGroup">
                     <div className="row">
                         <Button
-                            key={"alertReusableBlockMessageButton"}
+                            key={'alertReusableBlockMessageButton'}
                             variant="primary"
                             onMouseDown={() =>
-                                this.hideModal("alertReusableBlock")
+                                this.hideModal('alertReusableBlock')
                             }
                         >
                             <Dashicon icon="yes" />

@@ -1,5 +1,5 @@
 .o-editor {
-    .block-editor-block-list__block[data-type="custom/wpe-column"] {
+    .block-editor-block-list__block[data-type='custom/wpe-column'] {
         width: 100%;
         margin-top: 0 !important;
         margin-bottom: 0 !important;
@@ -16,11 +16,11 @@
         }
 
         &:hover {
-            & > .block-list-appender {
+            & > .o-column-container > .block-list-appender {
                 visibility: visible;
             }
 
-            & > .block-editor-block-list__block {
+            & > .o-column-container > .block-editor-block-list__block {
                 z-index: 20;
             }
         }
@@ -29,8 +29,14 @@
             border: none;
         }
 
-        > .o-toolbar-container {
+        & > .o-toolbar-container {
             display: none !important;
+        }
+
+        .o-column-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
         }
     }
 }

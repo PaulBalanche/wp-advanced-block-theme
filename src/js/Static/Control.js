@@ -1,14 +1,13 @@
-import { Button, Dashicon } from "@wordpress/components";
-import { useState, useEffect } from "@wordpress/element";
+import { Button, Dashicon } from '@wordpress/components';
+import { useEffect, useState } from '@wordpress/element';
 
-import { Sortable } from "./Sortable";
-import __ODevices from "../Components/ODevices";
+import __ODevices from '../Components/ODevices';
+import { BaseControl } from '../controls/BaseControl';
+import { Attributes } from './Attributes';
 import { Render } from './Render';
-import { Attributes } from "./Attributes";
-import { BaseControl } from "../controls/BaseControl";
+import { Sortable } from './Sortable';
 
 export function Control(props) {
-
     const id = props.keys.join('-');
     const key = props.blockKey;
     const label = props.label;
@@ -21,35 +20,58 @@ export function Control(props) {
     const args = props.args;
     const error = props.error;
     const componentInstance = props.componentInstance;
-    const isSortableItem = ( typeof props.sortableIndex != 'undefined' );
-    const directSubmission = ( ! [ 'string', 'number', 'integer', 'text', 'richText', 'wysiwyg' ].includes(props.type) );
+    const isSortableItem = typeof props.sortableIndex != 'undefined';
+    const directSubmission = ![
+        'string',
+        'number',
+        'integer',
+        'text',
+        'richText',
+        'wysiwyg',
+    ].includes(props.type);
 
-    const [value, setValue] = useState( props.controllerValue );
-    const [updating, setUpdating] = useState( false );
-    const [editMode, setEditMode] = useState( null );
+    const [value, setValue] = useState(props.controllerValue);
+    const [updating, setUpdating] = useState(false);
+    const [editMode, setEditMode] = useState(null);
 
     useEffect(() => {
-
-        if( !! editMode && editMode != __ODevices.getInstance().getCurrentDevice() ) {
-            setEditMode( null );
+        if (
+            !!editMode &&
+            editMode != __ODevices.getInstance().getCurrentDevice()
+        ) {
+            setEditMode(null);
         }
     });
 
     function haveToDisplayDefaultValue() {
-
-        if( !! editMode && editMode == __ODevices.getInstance().getCurrentDevice() ) {
+        if (
+            !!editMode &&
+            editMode == __ODevices.getInstance().getCurrentDevice()
+        ) {
             return false;
         }
 
-        if( isSortableItem || ( repeatable && getDefaultValue() != null && typeof getDefaultValue() != 'object' ) ) {
+        if (
+            isSortableItem ||
+            (repeatable &&
+                getDefaultValue() != null &&
+                typeof getDefaultValue() != 'object')
+        ) {
             return false;
         }
 
-        if( value == null && getDefaultValue() != null ) {
+        if (value == null && getDefaultValue() != null) {
             return true;
         }
 
-        if( isResponsive && __ODevices.getInstance().getCurrentDevice() != __ODevices.getInstance().getDefaultDevice() && defaultDeviceIsDefined() && typeof value[__ODevices.getInstance().getCurrentDevice()] == "undefined" ) {
+        if (
+            isResponsive &&
+            __ODevices.getInstance().getCurrentDevice() !=
+                __ODevices.getInstance().getDefaultDevice() &&
+            defaultDeviceIsDefined() &&
+            typeof value[__ODevices.getInstance().getCurrentDevice()] ==
+                'undefined'
+        ) {
             return true;
         }
 
@@ -57,12 +79,22 @@ export function Control(props) {
     }
 
     function getDefaultValue() {
-
-        if( isResponsive && __ODevices.getInstance().getCurrentDevice() != __ODevices.getInstance().getDefaultDevice() && defaultDeviceIsDefined() && typeof value[__ODevices.getInstance().getCurrentDevice()] == "undefined" ) {
-            return value[ __ODevices.getInstance().getDefaultDevice() ];
+        if (
+            isResponsive &&
+            __ODevices.getInstance().getCurrentDevice() !=
+                __ODevices.getInstance().getDefaultDevice() &&
+            defaultDeviceIsDefined() &&
+            typeof value[__ODevices.getInstance().getCurrentDevice()] ==
+                'undefined'
+        ) {
+            return value[__ODevices.getInstance().getDefaultDevice()];
         }
 
-        if( typeof args.default != 'undefined' && args.default != null && typeof args.default.value != 'undefined' ) {
+        if (
+            typeof args.default != 'undefined' &&
+            args.default != null &&
+            typeof args.default.value != 'undefined'
+        ) {
             return args.default.value;
         }
 
@@ -70,37 +102,41 @@ export function Control(props) {
     }
 
     function defaultDeviceIsDefined() {
-
-        return ( value != null && typeof value == "object" && typeof value[ __ODevices.getInstance().getDefaultDevice() ] != "undefined" );
+        return (
+            value != null &&
+            typeof value == 'object' &&
+            typeof value[__ODevices.getInstance().getDefaultDevice()] !=
+                'undefined'
+        );
     }
 
     function onChange(newValue, directSubmit = false) {
-
-        if( isResponsive ) {
-            newValue = { ...value, ...{ [ __ODevices.getInstance().getCurrentDevice() ]: newValue} };
+        if (isResponsive) {
+            newValue = {
+                ...value,
+                ...{ [__ODevices.getInstance().getCurrentDevice()]: newValue },
+            };
         }
         setValue(newValue);
-    
-        if( isSortableItem && typeof props.onChange != 'undefined' ) {
-            props.onChange( newValue, [props.sortableIndex] );
+
+        if (isSortableItem && typeof props.onChange != 'undefined') {
+            props.onChange(newValue, [props.sortableIndex]);
         }
 
-        if( directSubmit || directSubmission ) {
+        if (directSubmit || directSubmission) {
             onDirectSubmit(newValue);
-        }
-        else {
+        } else {
             setUpdating(true);
         }
     }
-    
-    function onSubmit() {
 
+    function onSubmit() {
         Attributes.updateAttributes(
             keys,
             valueProp,
             value,
             false,
-            componentInstance
+            componentInstance,
         );
         setUpdating(false);
         componentInstance.updatePreview();
@@ -112,50 +148,70 @@ export function Control(props) {
             valueProp,
             newValue,
             false,
-            componentInstance
+            componentInstance,
         );
         componentInstance.updatePreview();
     }
 
     function getLabel() {
-
-        if( label == null ) {
+        if (label == null) {
             return null;
         }
 
-        let labelFormatted = [ label ];
+        let labelFormatted = [label];
 
-        if( required_field && label != null ) {
-            labelFormatted.push(<span key={getKey() + '-label-required'} className="o-required">*</span>)
+        if (required_field && label != null) {
+            labelFormatted.push(
+                <span key={getKey() + '-label-required'} className="o-required">
+                    *
+                </span>,
+            );
         }
 
-        if( error && typeof error == 'object' && typeof error.error == 'string' ) {
-            labelFormatted.push(<div key={getKey() + '-label-error'} className="error"> <Dashicon icon="info" /> {error.error} </div>)
+        if (
+            error &&
+            typeof error == 'object' &&
+            typeof error.error == 'string'
+        ) {
+            labelFormatted.push(
+                <div key={getKey() + '-label-error'} className="error">
+                    {' '}
+                    <Dashicon icon="info" /> {error.error}{' '}
+                </div>,
+            );
         }
 
-        if( error && typeof error == 'object' && typeof error.warning == 'string' ) {
-            labelFormatted.push(<div key={getKey() + '-label-warging'} className="warning"><Dashicon icon="info" />{error.warning}</div>)
+        if (
+            error &&
+            typeof error == 'object' &&
+            typeof error.warning == 'string'
+        ) {
+            labelFormatted.push(
+                <div key={getKey() + '-label-warging'} className="warning">
+                    <Dashicon icon="info" />
+                    {error.warning}
+                </div>,
+            );
         }
 
         return labelFormatted;
     }
 
     function getKey() {
-        let keyFormatted = Object.assign( [], key );
+        let keyFormatted = Object.assign([], key);
 
-        if( isResponsive ) {
+        if (isResponsive) {
             const currentDevice = __ODevices.getInstance().getCurrentDevice();
-            keyFormatted = keyFormatted + "-" + currentDevice;
+            keyFormatted = keyFormatted + '-' + currentDevice;
         }
 
         return keyFormatted;
     }
 
-    function getKeys( ) {
+    function getKeys() {
+        let keysFormatted = Object.assign([], keys);
 
-        let keysFormatted = Object.assign( [], keys );
-
-        if( isResponsive ) {
+        if (isResponsive) {
             const currentDevice = __ODevices.getInstance().getCurrentDevice();
             keysFormatted.push(currentDevice);
         }
@@ -164,156 +220,186 @@ export function Control(props) {
     }
 
     function getValue() {
-
-        if( haveToDisplayDefaultValue() ) {
+        if (haveToDisplayDefaultValue()) {
             return getDefaultValue();
         }
-    
-        if( isResponsive ) {
 
+        if (isResponsive) {
             const currentDevice = __ODevices.getInstance().getCurrentDevice();
-            if( value != null && typeof value == "object" && typeof value[currentDevice] != "undefined" ) {
+            if (
+                value != null &&
+                typeof value == 'object' &&
+                typeof value[currentDevice] != 'undefined'
+            ) {
                 return value[currentDevice];
-            }
-            else {
-                return "";
+            } else {
+                return '';
             }
         }
 
-        if( repeatable ) {
-            if ( value == null || typeof value != "object" || value.length == 0 ) {
-                return [""];
+        if (repeatable) {
+            if (
+                value == null ||
+                typeof value != 'object' ||
+                value.length == 0
+            ) {
+                return [''];
             }
         }
-        
+
         return value;
     }
 
     function getContainerClassName() {
-
         const className = [];
-        if( error && error != null && typeof error == 'object' ) {
-            if( typeof error.error != 'undefined' ) {
-                className.push('has-error')
-            }
-            else if( typeof error.warning != 'undefined' ) {
-                className.push('has-warning')
+        if (error && error != null && typeof error == 'object') {
+            if (typeof error.error != 'undefined') {
+                className.push('has-error');
+            } else if (typeof error.warning != 'undefined') {
+                className.push('has-warning');
             }
         }
 
-        if( updating && ! isSortableItem && ! directSubmission ) {
+        if (updating && !isSortableItem && !directSubmission) {
             className.push('updating');
         }
 
-        return ( className.length > 0 ) ? className.join(' ') : '';
+        return className.length > 0 ? className.join(' ') : '';
     }
 
     function renderSavedButton() {
-
-        return ( ! haveToDisplayDefaultValue() && updating && ! isSortableItem && ! directSubmission ) ?
-            <div key={getKey() + "buttonsChangesContainer"} className="buttons-changes-container">
+        return !haveToDisplayDefaultValue() &&
+            updating &&
+            !isSortableItem &&
+            !directSubmission ? (
+            <div
+                key={getKey() + 'buttonsChangesContainer'}
+                className="buttons-changes-container"
+            >
                 <Button
-                    key={getKey() + "submitChanges-button"}
-                    onMouseDown={ () => onSubmit() }
+                    key={getKey() + 'submitChanges-button'}
+                    onMouseDown={() => onSubmit()}
                     variant="primary"
                 >
                     <Dashicon icon="saved" /> Apply
                 </Button>
             </div>
-        : null;
+        ) : null;
     }
-    
+
     function renderDefaultValueOverlay() {
+        const text =
+            isResponsive && defaultDeviceIsDefined()
+                ? 'Define a specific image for ' +
+                  __ODevices.getInstance().getCurrentDevice()
+                : 'Override default value';
+        const extraClass =
+            isResponsive && defaultDeviceIsDefined() ? 'isResponsive' : null;
 
-        const text = ( isResponsive && defaultDeviceIsDefined() ) ? 'Define a specific image for ' + __ODevices.getInstance().getCurrentDevice() : 'Override default value';
-        const extraClass = ( isResponsive && defaultDeviceIsDefined() ) ? 'isResponsive' : null;
-
-        return ( haveToDisplayDefaultValue() && ! isSortableItem ) ?
-            <div key={getKey() + "defaultOverlayContainer"} className={"default-overlay-container " + extraClass}>
+        return haveToDisplayDefaultValue() && !isSortableItem ? (
+            <div
+                key={getKey() + 'defaultOverlayContainer'}
+                className={'default-overlay-container ' + extraClass}
+            >
                 <Button
-                    key={getKey() + "defaultOverlayContainer-button"}
-                    onMouseDown={ () => { setEditMode( __ODevices.getInstance().getCurrentDevice() ) } }
+                    key={getKey() + 'defaultOverlayContainer-button'}
+                    onMouseDown={() => {
+                        setEditMode(
+                            __ODevices.getInstance().getCurrentDevice(),
+                        );
+                    }}
                     variant="primary"
                 >
-                    <Dashicon icon="edit" />{text}
+                    <Dashicon icon="edit" />
+                    {text}
                 </Button>
             </div>
-        : null;
+        ) : null;
     }
 
     function render() {
-
         /** Rendering */
         let render = [];
 
-        if( repeatable ) {
+        if (repeatable) {
+            const itemsError =
+                error &&
+                typeof error == 'object' &&
+                typeof error.props == 'object' &&
+                Object.keys(error.props).length > 0
+                    ? error.props
+                    : null;
 
-            const itemsError = ( error && typeof error == 'object' && typeof error.props == 'object' && Object.keys(error.props).length > 0 ) ? error.props : null;
-
-            render.push( <Sortable
-                key={getKey() + "-Sortable"}
-                id={getKey() + "-Sortable"}
-                type={type}
-                componentInstance={componentInstance}
-                blockKey={getKey()}
-                keys={getKeys()}
-                valueProp={valueProp}
-                value={getValue()}
-                required_field={required_field}
-                args={args}
-                error={itemsError}
-                onChange={ (newValue, directSubmit) => onChange(newValue, directSubmit) }
-                label={getLabel()}
-            /> )
+            render.push(
+                <Sortable
+                    key={getKey() + '-Sortable'}
+                    id={getKey() + '-Sortable'}
+                    type={type}
+                    componentInstance={componentInstance}
+                    blockKey={getKey()}
+                    keys={getKeys()}
+                    valueProp={valueProp}
+                    value={getValue()}
+                    required_field={required_field}
+                    args={args}
+                    error={itemsError}
+                    onChange={(newValue, directSubmit) =>
+                        onChange(newValue, directSubmit)
+                    }
+                    label={getLabel()}
+                />,
+            );
+        } else {
+            render.push(
+                <BaseControl
+                    key={getKey()}
+                    keys={getKeys()}
+                    valueProp={valueProp}
+                    id={getKey()}
+                    label={getLabel()}
+                    value={getValue()}
+                    type={type}
+                    args={args}
+                    error={error}
+                    onChange={(newValue) => onChange(newValue)}
+                    onSubmit={() => onSubmit()}
+                    componentInstance={componentInstance}
+                />,
+            );
         }
-        else {
-            
-            render.push( <BaseControl
-                key={getKey()}
-                keys={getKeys()}
-                valueProp={valueProp}
-                id={getKey()}
-                label={getLabel()}
-                value={getValue()}
-                type={type}
-                args={args}
-                error={error}
-                onChange={ (newValue) => onChange(newValue) }
-                onSubmit={ () => onSubmit() }
-                componentInstance={componentInstance}
-            /> )
-        }
 
-        if( isResponsive && defaultDeviceIsDefined() ) {
-
+        if (isResponsive && defaultDeviceIsDefined()) {
             const currentDevice = __ODevices.getInstance().getCurrentDevice();
             const defaultDevice = __ODevices.getInstance().getDefaultDevice();
 
             render = Render.responsiveTabComponent(
                 getKey(),
-                Object.keys(
-                    __ODevices.getInstance().getMediaQueries()
-                ).map((layout) => {
-                    return {
-                        name: layout,
-                        title:
-                            layout.charAt(0).toUpperCase() +
-                            layout.slice(1),
-                        className: "tab-" + layout,
-                        active: ( currentDevice == layout ) ? true : false,
-                        isDefault: ( defaultDevice == layout ) ? true : false,
-                        isValid: ( typeof value[layout] != "undefined" ) ? true : false
-                    };
-                }),
+                Object.keys(__ODevices.getInstance().getMediaQueries()).map(
+                    (layout) => {
+                        return {
+                            name: layout,
+                            title:
+                                layout.charAt(0).toUpperCase() +
+                                layout.slice(1),
+                            className: 'tab-' + layout,
+                            active: currentDevice == layout ? true : false,
+                            isDefault: defaultDevice == layout ? true : false,
+                            isValid:
+                                typeof value[layout] != 'undefined'
+                                    ? true
+                                    : false,
+                        };
+                    },
+                ),
                 render,
-                ( newDevice ) => {
-                    componentInstance.setState( { currentEditedProp: id });
+                (newDevice) => {
+                    componentInstance.setState({ currentEditedProp: id });
                     __ODevices.getInstance().setCurrentDevice(newDevice);
                 },
-                type
+                type,
             );
         }
-        
+
         return render;
     }
 
@@ -324,6 +410,6 @@ export function Control(props) {
             {renderSavedButton()}
             {renderDefaultValueOverlay()}
         </>,
-        getContainerClassName()
-    ) 
+        getContainerClassName(),
+    );
 }

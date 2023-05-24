@@ -1,15 +1,14 @@
 import {
-    ButtonGroup,
     Button,
+    ButtonGroup,
     Dashicon,
     Panel,
     PanelBody,
     PanelRow,
     TabPanel,
-} from "@wordpress/components";
+} from '@wordpress/components';
 
-import { Attributes } from "./Attributes";
-import __ODevices from "../Components/ODevices";
+import { Attributes } from './Attributes';
 
 export class Render {
     static tabPanelComponent(
@@ -18,12 +17,12 @@ export class Render {
         inner,
         initialTabName = null,
         onSelect = null,
-        extraClass = ""
+        extraClass = '',
     ) {
         return (
             <TabPanel
-                key={id + "-tabPanel"}
-                className={"tab-panel-wpe-component " + extraClass}
+                key={id + '-tabPanel'}
+                className={'tab-panel-wpe-component ' + extraClass}
                 activeClass="active-tab"
                 initialTabName={initialTabName}
                 tabs={tabs}
@@ -39,13 +38,13 @@ export class Render {
         label,
         inner,
         initialOpen = false,
-        extraClass = ""
+        extraClass = '',
     ) {
         var className = [];
-        if (extraClass != "") className.push(extraClass);
+        if (extraClass != '') className.push(extraClass);
 
         return (
-            <Panel key={id + "-panel"} className={className.join(" ")}>
+            <Panel key={id + '-panel'} className={className.join(' ')}>
                 {this.panelBodyComponent(id, label, inner, initialOpen)}
             </Panel>
         );
@@ -54,7 +53,7 @@ export class Render {
     static panelBodyComponent(id, label, inner, initialOpen = false) {
         return (
             <PanelBody
-                key={id + "-PanelBody"}
+                key={id + '-PanelBody'}
                 title={label}
                 initialOpen={label != null ? initialOpen : true}
             >
@@ -63,22 +62,22 @@ export class Render {
         );
     }
 
-    static fieldContainer(id, inner, extraClass = "") {
+    static fieldContainer(id, inner, extraClass = '') {
         const className =
-            "basicField" + (extraClass != "" ? " " + extraClass : "");
+            'basicField' + (extraClass != '' ? ' ' + extraClass : '');
         return (
-            <div key={id + "-basicContainer"} className={className}>
+            <div key={id + '-basicContainer'} className={className}>
                 {inner}
             </div>
         );
     }
 
-    static label(id, inner, extraClass = "") {
+    static label(id, inner, extraClass = '') {
         const className =
-            "components-base-control__label" +
-            (extraClass != "" ? " " + extraClass : "");
+            'components-base-control__label' +
+            (extraClass != '' ? ' ' + extraClass : '');
         return (
-            <div key={id + "-label"} className={className}>
+            <div key={id + '-label'} className={className}>
                 {inner}
             </div>
         );
@@ -89,11 +88,11 @@ export class Render {
         keys,
         valueProp,
         controllerValue,
-        componentInstance
+        componentInstance,
     ) {
         return (
             <Button
-                key={id + "-repeatableAddElt"}
+                key={id + '-repeatableAddElt'}
                 className="repeatableAddElt"
                 onMouseDown={() => {
                     Attributes.addEltToRepeatable(
@@ -101,7 +100,7 @@ export class Render {
                         valueProp,
                         controllerValue,
                         false,
-                        componentInstance
+                        componentInstance,
                     );
                 }}
                 variant="secondary"
@@ -114,13 +113,13 @@ export class Render {
     static buttonRemoveRepeatableElt(id, keys, valueProp, componentInstance) {
         return (
             <Button
-                key={id + "-repeatableRemoveElt"}
+                key={id + '-repeatableRemoveElt'}
                 className="repeatableRemoveElt"
                 onMouseDown={() => {
                     Attributes.removeEltRepeatable(
                         keys,
                         valueProp,
-                        componentInstance
+                        componentInstance,
                     );
                 }}
                 variant="secondary"
@@ -133,51 +132,42 @@ export class Render {
 
     static repeatableObjectLabelFormatting(blockKey, valueProp, keyLoop) {
         var labelKey = Attributes.returnStringOrNumber(keyLoop, true) + 1;
-        labelKey = labelKey < 10 ? "0" + labelKey : labelKey;
-        labelKey = "#" + labelKey;
+        labelKey = labelKey < 10 ? '0' + labelKey : labelKey;
+        labelKey = '#' + labelKey;
 
         var itemsProp = null;
 
         var valueProp = valueProp[keyLoop];
         if (
             valueProp != null &&
-            typeof valueProp == "object" &&
+            typeof valueProp == 'object' &&
             Object.keys(valueProp).length > 0
         ) {
             itemsProp = [];
 
-            if (typeof valueProp.title != "undefined") {
+            if (typeof valueProp.title != 'undefined') {
                 itemsProp.push(
-                    <li key={blockKey + "-repeatableObjectLabel-key"}>
+                    <li key={blockKey + '-repeatableObjectLabel-key'}>
                         <span className="value">{valueProp.title}</span>
-                    </li>
+                    </li>,
                 );
-            } else if (typeof valueProp.name != "undefined") {
+            } else if (typeof valueProp.name != 'undefined') {
                 itemsProp.push(
-                    <li key={blockKey + "-repeatableObjectLabel-key"}>
+                    <li key={blockKey + '-repeatableObjectLabel-key'}>
                         <span className="value">{valueProp.name}</span>
-                    </li>
+                    </li>,
                 );
-            } else if (typeof valueProp.id != "undefined") {
+            } else if (typeof valueProp.id != 'undefined') {
                 itemsProp.push(
-                    <li key={blockKey + "-repeatableObjectLabel-key"}>
+                    <li key={blockKey + '-repeatableObjectLabel-key'}>
                         <span className="value">{valueProp.id}</span>
-                    </li>
+                    </li>,
                 );
-            } else {
-                for (var i in valueProp) {
-                    itemsProp.push(
-                        <li key={blockKey + "-repeatableObjectLabel-key-" + i}>
-                            <span className="key">{i + ": "}</span>
-                            <span className="value">{valueProp[i]} </span>
-                        </li>
-                    );
-                }
             }
 
             itemsProp = (
                 <ul
-                    key={blockKey + "-repeatableObjectLabel-ul"}
+                    key={blockKey + '-repeatableObjectLabel-ul'}
                     className="props"
                 >
                     {itemsProp}
@@ -187,11 +177,11 @@ export class Render {
 
         return (
             <div
-                key={blockKey + "-repeatableObjectLabel"}
+                key={blockKey + '-repeatableObjectLabel'}
                 className="repeatableObjectLabel"
             >
                 <div
-                    key={blockKey + "-repeatableObjectLabel-id"}
+                    key={blockKey + '-repeatableObjectLabel-id'}
                     className="id"
                 >
                     {labelKey}
@@ -201,33 +191,38 @@ export class Render {
         );
     }
 
-    static responsiveTabComponent(
-        id,
-        tabs,
-        inner,
-        onSelect = null,
-        type
-    ) {
+    static responsiveTabComponent(id, tabs, inner, onSelect = null, type) {
         return (
             <div
-                key={id + "-responsiveTabPanel"}
-                className={"responsive-tab-panel-wpe-component " + type}
+                key={id + '-responsiveTabPanel'}
+                className={'responsive-tab-panel-wpe-component ' + type}
             >
                 <div className="responsive-buttons-container">
                     <ButtonGroup>
-                        { tabs.map((layout) => {
+                        {tabs.map((layout) => {
+                            const extraClass = layout.isDefault
+                                ? 'default'
+                                : layout.isValid
+                                ? ' valid'
+                                : '';
 
-                            const extraClass = ( layout.isDefault ) ? 'default' : ( ( layout.isValid ) ? ' valid' : '' );
-
-                            return <Button
-                                key={id + "-responsiveTabPanel-Button-" + layout.name}
-                                isPressed={(layout.active)}
-                                className={extraClass}
-                                onMouseDown={() => {
-                                    onSelect(layout.name)
-                                }}
-                            >{Render.getDeviceLabel(layout.name)}</Button>
-                        }) }
+                            return (
+                                <Button
+                                    key={
+                                        id +
+                                        '-responsiveTabPanel-Button-' +
+                                        layout.name
+                                    }
+                                    isPressed={layout.active}
+                                    className={extraClass}
+                                    onMouseDown={() => {
+                                        onSelect(layout.name);
+                                    }}
+                                >
+                                    {Render.getDeviceLabel(layout.name)}
+                                </Button>
+                            );
+                        })}
                     </ButtonGroup>
                 </div>
                 {inner}
@@ -235,15 +230,18 @@ export class Render {
         );
     }
 
-    static getDeviceLabel( device ) {
-
+    static getDeviceLabel(device) {
         const icons = {
             mobile: 'smartphone',
             tablet: 'tablet',
             desktop: 'laptop',
-            wide: 'desktop'
+            wide: 'desktop',
         };
-        
-        return ( typeof icons[device] != 'undefined' ) ? <Dashicon icon={icons[device]} /> : device.charAt(0).toUpperCase() + device.slice(1);
+
+        return typeof icons[device] != 'undefined' ? (
+            <Dashicon icon={icons[device]} />
+        ) : (
+            device.charAt(0).toUpperCase() + device.slice(1)
+        );
     }
 }

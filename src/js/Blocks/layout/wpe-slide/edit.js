@@ -1,48 +1,31 @@
 /**
  * WordPress dependencies
  */
-import {
-    InnerBlocks,
-    useBlockProps,
-    useInnerBlocksProps,
-} from "@wordpress/block-editor";
-import { compose } from "@wordpress/compose";
-import { WpeComponentBase } from "../../../Components/WpeComponentBase";
-
-import { withSelect } from "@wordpress/data";
+import { WpeComponentBase } from '../../../Components/WpeComponentBase';
 
 /**
  * registerBlockType edit function
  *
  */
-class WpeSlide extends WpeComponentBase {
+export class WpeSlide extends WpeComponentBase {
     constructor() {
         super(...arguments);
     }
 
     liveRendering() {
         const { children, ...innerBlocksProps } = this.props.innerBlocksProps;
-        innerBlocksProps.key = "innerBlocksProps_" + this.props.clientId;
+        innerBlocksProps.key = 'innerBlocksProps_' + this.props.clientId;
 
         return (
             <div {...innerBlocksProps}>
                 {this.renderEditFormZone()}
-                {children}
+                <div
+                    key={this.props.clientId + '_slideContainer'}
+                    className="o-slide-container"
+                >
+                    {children}
+                </div>
             </div>
         );
     }
 }
-
-export default (block_spec, theme_spec) =>
-    compose([
-        withSelect(() => {
-            return {
-                block_spec,
-                theme_spec,
-                innerBlocksProps: useInnerBlocksProps(
-                    useBlockProps({ className: "" }),
-                    { renderAppender: InnerBlocks.ButtonBlockAppender }
-                ),
-            };
-        }),
-    ])(WpeSlide);

@@ -1,20 +1,20 @@
-import { store as blockEditorStore } from "@wordpress/block-editor";
-import { createBlock } from "@wordpress/blocks";
-import { compose } from "@wordpress/compose";
-import { WpeComponentBase } from "../../../Components/WpeComponentBase";
+import { store as blockEditorStore } from '@wordpress/block-editor';
+import { createBlock } from '@wordpress/blocks';
+import { compose } from '@wordpress/compose';
+import { WpeComponentBase } from '../../../Components/WpeComponentBase';
 
-import { MenuItem } from "@wordpress/components";
+import { MenuItem } from '@wordpress/components';
 
-import { plus } from "@wordpress/icons";
+import { plus } from '@wordpress/icons';
 
-import { dispatch, withDispatch, withSelect } from "@wordpress/data";
-import { map } from "lodash";
+import { dispatch, withDispatch, withSelect } from '@wordpress/data';
+import { map } from 'lodash';
 
-import __ODevices from "../../../Components/ODevices";
+import __ODevices from '../../../Components/ODevices';
 
-import { Render } from "../../../Static/Render";
+import { Render } from '../../../Static/Render';
 
-import { predefinedLayouts } from "./predefinedLayouts";
+import { predefinedLayouts } from './predefinedLayouts';
 
 /**
  * Add some columns in wpe-container based on variation selected
@@ -22,7 +22,7 @@ import { predefinedLayouts } from "./predefinedLayouts";
  */
 function createBlocksFromInnerBlocksTemplate(innerBlocksTemplate) {
     return map(innerBlocksTemplate, ({ name, attributes }) =>
-        createBlock(name, attributes)
+        createBlock(name, attributes),
     );
 }
 
@@ -36,7 +36,7 @@ class WpeGrid extends WpeComponentBase {
 
     isEditable() {
         return (
-            typeof this.props.inner_blocks == "object" &&
+            typeof this.props.inner_blocks == 'object' &&
             this.props.countColumns > 0
         );
     }
@@ -73,12 +73,12 @@ class WpeGrid extends WpeComponentBase {
                         }
                     }
                 });
-            }
+            },
         );
 
         let inner_blocks_new = [
             ...this.props.inner_blocks,
-            createBlock("custom/wpe-column", {
+            createBlock('custom/wpe-column', {
                 layout: initLayout,
             }),
         ];
@@ -86,7 +86,7 @@ class WpeGrid extends WpeComponentBase {
         this.props.replaceInnerBlocks(
             this.props.clientId,
             inner_blocks_new,
-            false
+            false,
         );
     }
 
@@ -95,7 +95,7 @@ class WpeGrid extends WpeComponentBase {
             <MenuItem
                 key={
                     this.props.clientId +
-                    "-toolsDropdownMenu-SpecificTools-addColumn"
+                    '-toolsDropdownMenu-SpecificTools-addColumn'
                 }
                 icon={plus}
                 onClick={() => this.addColumn()}
@@ -107,10 +107,11 @@ class WpeGrid extends WpeComponentBase {
 
     renderInspectorControls() {
         const currentDevice = __ODevices.getInstance().getCurrentDevice();
+        const defaultDevice = __ODevices.getInstance().getDefaultDevice();
         const currentLayout = this.getLayout();
 
         return Render.fieldContainer(
-            this.props.clientId + "_layout",
+            this.props.clientId + '_layout',
             Render.responsiveTabComponent(
                 this.props.clientId,
                 Object.keys(__ODevices.getInstance().getMediaQueries()).map(
@@ -120,15 +121,16 @@ class WpeGrid extends WpeComponentBase {
                             title:
                                 layout.charAt(0).toUpperCase() +
                                 layout.slice(1),
-                            className: "tab-" + layout,
+                            className: 'tab-' + layout,
                             active: currentDevice == layout ? true : false,
+                            isDefault: defaultDevice == layout ? true : false,
                         };
-                    }
+                    },
                 ),
                 <>
                     <label
                         className="components-base-control__forced_label"
-                        key={this.props.clientId + "-template-label"}
+                        key={this.props.clientId + '-template-label'}
                     >
                         Layout
                     </label>
@@ -139,15 +141,15 @@ class WpeGrid extends WpeComponentBase {
                                     <span
                                         key={
                                             this.props.clientId +
-                                            "-gridInitialLayout-" +
+                                            '-gridInitialLayout-' +
                                             index
                                         }
                                         className={
-                                            "item " +
+                                            'item ' +
                                             (currentLayout != null &&
                                             index == currentLayout
-                                                ? "active"
-                                                : "")
+                                                ? 'active'
+                                                : '')
                                         }
                                         onMouseDown={() =>
                                             this.setLayout(index)
@@ -163,20 +165,20 @@ class WpeGrid extends WpeComponentBase {
                 (newDevice) => {
                     __ODevices.getInstance().setCurrentDevice(newDevice);
                 },
-                "grid-layout"
-            )
+                'grid-layout',
+            ),
         );
     }
 
     getLayout() {
-        if (typeof this.props.attributes.layout == "undefined") {
+        if (typeof this.props.attributes.layout == 'undefined') {
             return null;
         }
-        if (typeof __ODevices.getInstance() == "undefined") {
+        if (typeof __ODevices.getInstance() == 'undefined') {
             return null;
         }
         const currentDevice = __ODevices.getInstance().getCurrentDevice();
-        if (typeof this.props.attributes.layout[currentDevice] == "undefined") {
+        if (typeof this.props.attributes.layout[currentDevice] == 'undefined') {
             return null;
         }
 
@@ -186,7 +188,7 @@ class WpeGrid extends WpeComponentBase {
     setLayout(index) {
         const currentDevice = __ODevices.getInstance().getCurrentDevice();
 
-        if (typeof this.props.attributes.layout == "undefined") {
+        if (typeof this.props.attributes.layout == 'undefined') {
             this.props.attributes.layout = {};
         }
         this.props.attributes.layout[currentDevice] = index;
@@ -197,9 +199,9 @@ class WpeGrid extends WpeComponentBase {
             this.props.inner_blocks[i].attributes.layout[currentDevice] =
                 predefinedLayouts[index].layout[i];
 
-            dispatch("core/block-editor").updateBlockAttributes(
+            dispatch('core/block-editor').updateBlockAttributes(
                 this.props.inner_blocks[i].clientId,
-                this.props.inner_blocks[i].attributes.layout[currentDevice]
+                this.props.inner_blocks[i].attributes.layout[currentDevice],
             );
         }
     }
@@ -220,7 +222,7 @@ class WpeGrid extends WpeComponentBase {
                 columnLayoutAttribute[i] = layout;
             }
             innerBlocks.push({
-                name: "custom/wpe-column",
+                name: 'custom/wpe-column',
                 attributes: {
                     layout: columnLayoutAttribute,
                 },
@@ -229,7 +231,7 @@ class WpeGrid extends WpeComponentBase {
         this.props.replaceInnerBlocks(
             this.props.clientId,
             createBlocksFromInnerBlocksTemplate(innerBlocks),
-            false
+            false,
         );
     }
 
@@ -239,23 +241,23 @@ class WpeGrid extends WpeComponentBase {
         const currentLayout = this.getLayout();
         if (
             currentLayout &&
-            typeof predefinedLayouts[currentLayout] == "object" &&
-            typeof predefinedLayouts[currentLayout].icon != "undefined"
+            typeof predefinedLayouts[currentLayout] == 'object' &&
+            typeof predefinedLayouts[currentLayout].icon != 'undefined'
         ) {
             tootlBar.push(
-                <div key={this.props.clientId + "_toolBarSvg"} className="svg">
+                <div key={this.props.clientId + '_toolBarSvg'} className="svg">
                     {predefinedLayouts[currentLayout].icon}
-                </div>
+                </div>,
             );
         }
 
         tootlBar.push(
             <span
-                key={this.props.clientId + "_toolBarInstruction"}
+                key={this.props.clientId + '_toolBarInstruction'}
                 className="instruction"
             >
                 Edit layout
-            </span>
+            </span>,
         );
 
         return tootlBar;
@@ -265,55 +267,55 @@ class WpeGrid extends WpeComponentBase {
         var { clientId, inner_blocks, countColumns } = this.props;
 
         const { children, ...innerBlocksProps } = this.props.innerBlocksProps;
-        innerBlocksProps.key = "innerBlocksProps_" + clientId;
+        innerBlocksProps.key = 'innerBlocksProps_' + clientId;
         /**
          * Define innerBlocks
          */
         if (
-            typeof inner_blocks != "object" ||
-            (typeof inner_blocks == "object" && countColumns == 0)
+            typeof inner_blocks != 'object' ||
+            (typeof inner_blocks == 'object' && countColumns == 0)
         ) {
             return (
                 <div {...innerBlocksProps}>
                     <div
-                        key={this.props.clientId + "-placeholder"}
+                        key={this.props.clientId + '-placeholder'}
                         className="wpe-block-placeholder"
                     >
                         <div className="inner">
                             <h2>Grid</h2>
                             <label
                                 className="components-base-control__forced_label"
-                                key={this.props.clientId + "-template-label"}
+                                key={this.props.clientId + '-template-label'}
                             >
                                 Choose a layout
                             </label>
                             <div className="grid-layout">
                                 {Render.tabPanelComponent(
-                                    clientId + "-gridLayout",
+                                    clientId + '-gridLayout',
                                     [
                                         {
-                                            name: "cols-2",
-                                            title: "2 columns",
+                                            name: 'cols-2',
+                                            title: '2 columns',
                                             value: 2,
                                         },
                                         {
-                                            name: "cols-3",
-                                            title: "3 columns",
+                                            name: 'cols-3',
+                                            title: '3 columns',
                                             value: 3,
                                         },
                                         {
-                                            name: "cols-4",
-                                            title: "4 columns",
+                                            name: 'cols-4',
+                                            title: '4 columns',
                                             value: 4,
                                         },
                                         {
-                                            name: "cols-5",
-                                            title: "5 columns",
+                                            name: 'cols-5',
+                                            title: '5 columns',
                                             value: 5,
                                         },
                                         {
-                                            name: "cols-6",
-                                            title: "6 columns",
+                                            name: 'cols-6',
+                                            title: '6 columns',
                                             value: 6,
                                         },
                                     ],
@@ -330,13 +332,13 @@ class WpeGrid extends WpeComponentBase {
                                                                 <span
                                                                     key={
                                                                         clientId +
-                                                                        "-gridInitialLayout-" +
+                                                                        '-gridInitialLayout-' +
                                                                         index
                                                                     }
                                                                     className="item"
                                                                     onMouseDown={() =>
                                                                         this.setInitialLayout(
-                                                                            index
+                                                                            index,
                                                                         )
                                                                     }
                                                                 >
@@ -346,14 +348,14 @@ class WpeGrid extends WpeComponentBase {
                                                                 </span>
                                                             );
                                                         }
-                                                    }
+                                                    },
                                                 )}
                                             </div>
                                         );
                                     },
                                     null,
                                     null,
-                                    "initialGridLayout"
+                                    'initialGridLayout',
                                 )}
                             </div>
                         </div>
@@ -365,7 +367,7 @@ class WpeGrid extends WpeComponentBase {
                 <div {...innerBlocksProps}>
                     {this.renderEditFormZone(this.getToolbar(), false)}
                     <div
-                        key={this.props.clientId + "_gridContainer"}
+                        key={this.props.clientId + '_gridContainer'}
                         className="o-grid-container"
                     >
                         {children}
@@ -386,27 +388,27 @@ class WpeGrid extends WpeComponentBase {
 export const EditMode = compose([
     withSelect((select, props) => {
         const parentsBlock = [];
-        const getBlockParents = select("core/block-editor").getBlockParents(
-            props.clientId
+        const getBlockParents = select('core/block-editor').getBlockParents(
+            props.clientId,
         );
         if (getBlockParents.length > 0) {
             for (var i in getBlockParents) {
                 parentsBlock.push(
-                    select("core/block-editor").getBlock(getBlockParents[i])
+                    select('core/block-editor').getBlock(getBlockParents[i]),
                 );
             }
         }
 
         return {
-            inner_blocks: select("core/block-editor").getBlocks(props.clientId),
-            countColumns: select("core/block-editor").getBlockCount(
-                props.clientId
+            inner_blocks: select('core/block-editor').getBlocks(props.clientId),
+            countColumns: select('core/block-editor').getBlockCount(
+                props.clientId,
             ),
-            blockVariations: select("core/blocks").getBlockVariations(
+            blockVariations: select('core/blocks').getBlockVariations(
                 props.name,
-                "block"
+                'block',
             ),
-            blockType: select("core/blocks").getBlockType(props.name),
+            blockType: select('core/blocks').getBlockType(props.name),
             parentsBlock,
         };
     }),

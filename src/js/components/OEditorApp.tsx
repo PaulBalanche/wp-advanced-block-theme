@@ -384,12 +384,154 @@ export default class OEditorApp extends Component {
                             {componentToRender?.renderFooter?.()}
                         </div>
                     )}
+                    <Resizer />
                 </section>
                 <OUserPreferences />
                 <OModal />
             </>
         );
     }
+}
+
+function Resizer() {
+    const [resizing, setResizing] = useState(false);
+    const [oEditorTop, setOEditorTop] = useState(null);
+    const [oEditorRight, setOEditorRight] = useState(null);
+    const [oEditorWidth, setOEditorWidth] = useState(null);
+    const [oEditorHeight, setOEditorHeight] = useState(null);
+    const [mouseTop, setMouseTop] = useState(null);
+    const [mouseLeft, setMouseLeft] = useState(null);
+
+    const oEditorApp = document.querySelector('.o-editor-app');
+
+    function mouseDown(e) {
+        setOEditorTop(oEditorApp.offsetTop);
+        setOEditorRight(
+            window.innerWidth -
+                (oEditorApp.offsetLeft + oEditorApp.offsetWidth),
+        );
+        setOEditorWidth(oEditorApp.offsetWidth);
+        setOEditorHeight(oEditorApp.offsetHeight);
+        setMouseTop(e.clientY);
+        setMouseLeft(e.clientX);
+        setResizing(true);
+    }
+
+    function resize(e, top, left) {
+        if (resizing) {
+            let newWidth = oEditorWidth;
+            let newHeight = oEditorHeight;
+
+            const diffX = e.clientX - mouseLeft;
+            const diffY = e.clientY - mouseTop;
+
+            if (left) {
+                newWidth -= diffX;
+            } else {
+                newWidth += diffX;
+                oEditorApp.style.right = oEditorRight - diffX + 'px';
+            }
+
+            if (top) {
+                newHeight -= diffY;
+                oEditorApp.style.top = oEditorTop + diffY + 'px';
+            } else {
+                newHeight += diffY;
+            }
+
+            oEditorApp.style.width = newWidth + 'px';
+            oEditorApp.style.height = newHeight + 'px';
+        }
+    }
+
+    return (
+        <>
+            <div
+                className="resizer top-left"
+                onMouseUp={() => {
+                    setResizing(false);
+                }}
+                onMouseLeave={() => {
+                    setResizing(false);
+                }}
+                onMouseMove={(e) => {
+                    resize(e, true, true);
+                }}
+            >
+                <span
+                    onMouseDown={(e) => {
+                        mouseDown(e);
+                    }}
+                >
+                    <Dashicon icon="arrow-left-alt2" />
+                    <Dashicon icon="arrow-left-alt2" />
+                </span>
+            </div>
+            <div
+                className="resizer top-right"
+                onMouseUp={() => {
+                    setResizing(false);
+                }}
+                onMouseLeave={() => {
+                    setResizing(false);
+                }}
+                onMouseMove={(e) => {
+                    resize(e, true, false);
+                }}
+            >
+                <span
+                    onMouseDown={(e) => {
+                        mouseDown(e);
+                    }}
+                >
+                    <Dashicon icon="arrow-left-alt2" />
+                    <Dashicon icon="arrow-left-alt2" />
+                </span>
+            </div>
+            <div
+                className="resizer bottom-left"
+                onMouseUp={() => {
+                    setResizing(false);
+                }}
+                onMouseLeave={() => {
+                    setResizing(false);
+                }}
+                onMouseMove={(e) => {
+                    resize(e, false, true);
+                }}
+            >
+                <span
+                    onMouseDown={(e) => {
+                        mouseDown(e);
+                    }}
+                >
+                    <Dashicon icon="arrow-left-alt2" />
+                    <Dashicon icon="arrow-left-alt2" />
+                </span>
+            </div>
+            <div
+                className="resizer bottom-right"
+                onMouseUp={() => {
+                    setResizing(false);
+                }}
+                onMouseLeave={() => {
+                    setResizing(false);
+                }}
+                onMouseMove={(e) => {
+                    resize(e, false, false);
+                }}
+            >
+                <span
+                    onMouseDown={(e) => {
+                        mouseDown(e);
+                    }}
+                >
+                    <Dashicon icon="arrow-left-alt2" />
+                    <Dashicon icon="arrow-left-alt2" />
+                </span>
+            </div>
+        </>
+    );
 }
 
 function EditorAppHeader(props) {

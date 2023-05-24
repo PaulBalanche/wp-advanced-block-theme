@@ -64,8 +64,11 @@ export class Attributes {
         const currentArrayKey = Object.assign([], arrayKey);
         const firstElement = currentArrayKey.shift();
 
+        console.log(fromObject);
+        console.log(typeof fromObject);
         if (
             typeof fromObject != 'object' ||
+            fromObject == null ||
             (Array.isArray(fromObject) && isNaN(firstElement)) ||
             (!Array.isArray(fromObject) && typeof firstElement == 'number')
         )
