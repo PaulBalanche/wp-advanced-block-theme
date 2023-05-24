@@ -922,53 +922,66 @@
   background: #866ec1;
 }
 .o-editor-app:hover .resizer > span {
-  opacity: 0.1;
+  visibility: visible;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out 0.4s, transform 0.3s ease-in-out;
+}
+.o-editor-app:hover .resizer.top-left > span {
+  transform: rotate(45deg) translateX(0);
+}
+.o-editor-app:hover .resizer.top-right > span {
+  transform: rotate(135deg) translateX(0);
+}
+.o-editor-app:hover .resizer.bottom-left > span {
+  transform: rotate(-45deg) translateX(0);
+}
+.o-editor-app:hover .resizer.bottom-right > span {
+  transform: rotate(-135deg) translateX(0);
 }
 .o-editor-app .resizer {
   position: absolute;
-  width: 60px;
-  height: 60px;
+  width: 80px;
+  height: 80px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 .o-editor-app .resizer.top-left {
-  top: -40px;
-  left: -40px;
+  top: -50px;
+  left: -50px;
 }
 .o-editor-app .resizer.top-left > span {
-  transform: rotate(45deg);
+  transform: rotate(45deg) translateX(40px);
 }
 .o-editor-app .resizer.top-right {
-  top: -40px;
-  right: -40px;
+  top: -50px;
+  right: -50px;
 }
 .o-editor-app .resizer.top-right > span {
-  transform: rotate(135deg);
+  transform: rotate(135deg) translateX(40px);
 }
 .o-editor-app .resizer.bottom-left {
-  bottom: -40px;
-  left: -40px;
+  bottom: -50px;
+  left: -50px;
 }
 .o-editor-app .resizer.bottom-left > span {
-  transform: rotate(-45deg);
+  transform: rotate(-45deg) translateX(40px);
 }
 .o-editor-app .resizer.bottom-right {
-  bottom: -40px;
-  right: -40px;
+  bottom: -50px;
+  right: -50px;
 }
 .o-editor-app .resizer.bottom-right > span {
-  transform: rotate(-135deg);
+  transform: rotate(-135deg) translateX(40px);
 }
 .o-editor-app .resizer > span {
   display: flex;
+  visibility: hidden;
   align-items: center;
   cursor: pointer;
-  opacity: 0;
-  transition: all 0.1s ease-in-out;
 }
 .o-editor-app .resizer:hover > span {
-  opacity: 1;
+  opacity: 1 !important;
 }
 .o-editor-app .resizer .dashicon {
   color: white;

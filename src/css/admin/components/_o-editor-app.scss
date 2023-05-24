@@ -346,58 +346,74 @@
     }
 
     &:hover {
-        .resizer > span {
-            opacity: 0.1;
+        .resizer {
+            & > span {
+                visibility: visible;
+                opacity: 0;
+                transition: opacity 0.3s ease-in-out 0.4s,
+                    transform 0.3s ease-in-out;
+            }
+            &.top-left > span {
+                transform: rotate(45deg) translateX(0);
+            }
+            &.top-right > span {
+                transform: rotate(135deg) translateX(0);
+            }
+            &.bottom-left > span {
+                transform: rotate(-45deg) translateX(0);
+            }
+            &.bottom-right > span {
+                transform: rotate(-135deg) translateX(0);
+            }
         }
     }
 
     .resizer {
         position: absolute;
-        width: 60px;
-        height: 60px;
+        width: 80px;
+        height: 80px;
         display: flex;
         align-items: center;
         justify-content: center;
 
         &.top-left {
-            top: -40px;
-            left: -40px;
+            top: -50px;
+            left: -50px;
             & > span {
-                transform: rotate(45deg);
+                transform: rotate(45deg) translateX(40px);
             }
         }
         &.top-right {
-            top: -40px;
-            right: -40px;
+            top: -50px;
+            right: -50px;
             & > span {
-                transform: rotate(135deg);
+                transform: rotate(135deg) translateX(40px);
             }
         }
         &.bottom-left {
-            bottom: -40px;
-            left: -40px;
+            bottom: -50px;
+            left: -50px;
             & > span {
-                transform: rotate(-45deg);
+                transform: rotate(-45deg) translateX(40px);
             }
         }
         &.bottom-right {
-            bottom: -40px;
-            right: -40px;
+            bottom: -50px;
+            right: -50px;
             & > span {
-                transform: rotate(-135deg);
+                transform: rotate(-135deg) translateX(40px);
             }
         }
 
         & > span {
             display: flex;
+            visibility: hidden;
             align-items: center;
             cursor: pointer;
-            opacity: 0;
-            transition: $o-transition-fast;
         }
         &:hover {
             & > span {
-                opacity: 1;
+                opacity: 1 !important;
             }
         }
         .dashicon {
