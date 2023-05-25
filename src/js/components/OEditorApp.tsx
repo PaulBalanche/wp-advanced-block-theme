@@ -401,6 +401,9 @@ function EditorAppHeader(props) {
     const [mouseTop, setMouseTop] = useState(null);
     const [mouseLeft, setMouseLeft] = useState(null);
 
+    const editPostVisualEditor = document.querySelector(
+        '.o-editor .edit-post-visual-editor',
+    );
     const oEditorApp = document.querySelector('.o-editor-app');
     const skeletonHeader = document.querySelector(
         '#editor .interface-interface-skeleton__header',
@@ -487,12 +490,26 @@ function EditorAppHeader(props) {
     }
 
     function resizeX(e, left) {
-        const diffX = e.clientX - mouseLeft;
+        let diffX = e.clientX - mouseLeft;
         let newWidth = oEditorWidth;
 
         if (left) {
             newWidth -= diffX;
+
+            if (oEditorRight + newWidth >= window.innerWidth - marge) {
+                newWidth = window.innerWidth - marge - oEditorRight;
+            }
         } else {
+            if (
+                oEditorRight - diffX <=
+                window.innerWidth - editPostVisualEditor.offsetWidth + marge
+            ) {
+                diffX =
+                    oEditorRight -
+                    window.innerWidth +
+                    editPostVisualEditor.offsetWidth -
+                    marge;
+            }
             newWidth += diffX;
             oEditorApp.style.right = oEditorRight - diffX + 'px';
         }
@@ -512,18 +529,11 @@ function EditorAppHeader(props) {
             oEditorApp.style.top = oEditorTop + diffY + 'px';
             newHeight -= diffY;
         } else {
-            if (
-                oEditorTop + diffY + oEditorApp.offsetHeight >=
-                window.innerHeight - marge
-            ) {
-                diffY =
-                    window.innerHeight -
-                    oEditorApp.offsetHeight -
-                    marge -
-                    oEditorTop;
-            }
-
             newHeight += diffY;
+
+            if (oEditorTop + newHeight >= window.innerHeight - marge) {
+                newHeight = window.innerHeight - marge - oEditorTop;
+            }
         }
 
         oEditorApp.style.height = newHeight + 'px';
@@ -556,8 +566,12 @@ function EditorAppHeader(props) {
                 window.innerWidth -
                 (oEditorApp.offsetLeft + oEditorApp.offsetWidth);
         }
-        if (right <= marge) {
-            right = marge;
+        if (
+            right <=
+            window.innerWidth - editPostVisualEditor.offsetWidth + marge
+        ) {
+            right =
+                window.innerWidth - editPostVisualEditor.offsetWidth + marge;
         }
         if (right + oEditorApp.offsetWidth >= window.innerWidth - marge) {
             right = window.innerWidth - marge - oEditorApp.offsetWidth;

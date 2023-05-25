@@ -641,8 +641,8 @@
 
 .o-editor-app {
   position: fixed;
-  right: 40px;
-  top: 91px;
+  top: 0;
+  right: 0;
   width: 320px;
   min-width: 250px;
   min-height: 250px;

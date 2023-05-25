@@ -14302,6 +14302,7 @@ function EditorAppHeader(props) {
   const [oEditorHeight, setOEditorHeight] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
   const [mouseTop, setMouseTop] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
   const [mouseLeft, setMouseLeft] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
+  const editPostVisualEditor = document.querySelector('.o-editor .edit-post-visual-editor');
   const oEditorApp = document.querySelector('.o-editor-app');
   const skeletonHeader = document.querySelector('#editor .interface-interface-skeleton__header');
   (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
@@ -14375,11 +14376,17 @@ function EditorAppHeader(props) {
     resizeY(e, top);
   }
   function resizeX(e, left) {
-    const diffX = e.clientX - mouseLeft;
+    let diffX = e.clientX - mouseLeft;
     let newWidth = oEditorWidth;
     if (left) {
       newWidth -= diffX;
+      if (oEditorRight + newWidth >= window.innerWidth - marge) {
+        newWidth = window.innerWidth - marge - oEditorRight;
+      }
     } else {
+      if (oEditorRight - diffX <= window.innerWidth - editPostVisualEditor.offsetWidth + marge) {
+        diffX = oEditorRight - window.innerWidth + editPostVisualEditor.offsetWidth - marge;
+      }
       newWidth += diffX;
       oEditorApp.style.right = oEditorRight - diffX + 'px';
     }
@@ -14395,10 +14402,10 @@ function EditorAppHeader(props) {
       oEditorApp.style.top = oEditorTop + diffY + 'px';
       newHeight -= diffY;
     } else {
-      if (oEditorTop + diffY + oEditorApp.offsetHeight >= window.innerHeight - marge) {
-        diffY = window.innerHeight - oEditorApp.offsetHeight - marge - oEditorTop;
-      }
       newHeight += diffY;
+      if (oEditorTop + newHeight >= window.innerHeight - marge) {
+        newHeight = window.innerHeight - marge - oEditorTop;
+      }
     }
     oEditorApp.style.height = newHeight + 'px';
   }
@@ -14423,8 +14430,8 @@ function EditorAppHeader(props) {
     if (right == null) {
       right = window.innerWidth - (oEditorApp.offsetLeft + oEditorApp.offsetWidth);
     }
-    if (right <= marge) {
-      right = marge;
+    if (right <= window.innerWidth - editPostVisualEditor.offsetWidth + marge) {
+      right = window.innerWidth - editPostVisualEditor.offsetWidth + marge;
     }
     if (right + oEditorApp.offsetWidth >= window.innerWidth - marge) {
       right = window.innerWidth - marge - oEditorApp.offsetWidth;
@@ -42184,13 +42191,14 @@ class OEditor {
     this._initTheme();
 
     // add the scoping class "o-editor"
-    const $editorContainer = document.querySelector(".interface-interface-skeleton__content");
+    const $editorContainer = document.querySelector('.interface-interface-skeleton__content');
     if ($editorContainer) {
-      $editorContainer.classList?.add?.("o-editor");
+      $editorContainer.classList?.add?.('o-editor');
+      $editorContainer.classList?.add?.('init');
 
       // create the container for our app
-      const $editorApp = document.createElement("div");
-      $editorApp.classList.add("o-editor-container");
+      const $editorApp = document.createElement('div');
+      $editorApp.classList.add('o-editor-container');
       $editorContainer.appendChild($editorApp);
       const root = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createRoot)($editorApp);
       root.render((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(OEditorAppContext, null));
@@ -42201,8 +42209,8 @@ class OEditor {
    * Move some elements of the wordpress UI
    */
   _moveWpUiElements() {
-    let postTitle = document.querySelector(".edit-post-visual-editor__post-title-wrapper");
-    let headerToolbar = document.querySelector(".edit-post-header__toolbar > .edit-post-header-toolbar");
+    let postTitle = document.querySelector('.edit-post-visual-editor__post-title-wrapper');
+    let headerToolbar = document.querySelector('.edit-post-header__toolbar > .edit-post-header-toolbar');
     headerToolbar?.after?.(postTitle);
   }
 
@@ -42211,7 +42219,7 @@ class OEditor {
    */
   _initTheme() {
     if (theme_spec?.metas?.backgroundColor) {
-      document.documentElement.style.setProperty("--abt-background-editor", theme_spec.metas.backgroundColor);
+      document.documentElement.style.setProperty('--abt-background-editor', theme_spec.metas.backgroundColor);
     }
   }
 }
@@ -42221,22 +42229,22 @@ function OEditorAppDisplay(props) {
   });
 }
 const OEditorAppContext = (0,_wordpress_compose__WEBPACK_IMPORTED_MODULE_1__.compose)([(0,_wordpress_data__WEBPACK_IMPORTED_MODULE_2__.withSelect)(select => {
-  const blocksList = select("core/block-editor").getBlocks();
+  const blocksList = select('core/block-editor').getBlocks();
   for (var i in blocksList) {
-    if (blocksList[i].name == "core/block" && typeof blocksList[i].attributes.ref != "undefined" && blocksList[i].innerBlocks == 0) {
-      let wpReusableBlock = select("core").getEntityRecord("postType", "wp_block", blocksList[i].attributes.ref);
-      if (typeof wpReusableBlock != "undefined") {
+    if (blocksList[i].name == 'core/block' && typeof blocksList[i].attributes.ref != 'undefined' && blocksList[i].innerBlocks == 0) {
+      let wpReusableBlock = select('core').getEntityRecord('postType', 'wp_block', blocksList[i].attributes.ref);
+      if (typeof wpReusableBlock != 'undefined') {
         blocksList[i].postName = wpReusableBlock.title.raw;
       }
-      let childrenBlocksList = select("core/block-editor").getBlocks(blocksList[i].clientId);
+      let childrenBlocksList = select('core/block-editor').getBlocks(blocksList[i].clientId);
       if (childrenBlocksList.length > 0) {
         blocksList[i].isReusable = true;
         blocksList[i].children = childrenBlocksList;
       }
     }
   }
-  const selectedBlockClientId = select("core/block-editor").getSelectedBlockClientId();
-  const editorMode = select("core/edit-post").getEditorMode();
+  const selectedBlockClientId = select('core/block-editor').getSelectedBlockClientId();
+  const editorMode = select('core/edit-post').getEditorMode();
   return {
     blocksList,
     selectedBlockClientId,
@@ -42252,7 +42260,7 @@ const OEditorAppContext = (0,_wordpress_compose__WEBPACK_IMPORTED_MODULE_1__.com
     resetSelection
   };
 })])(OEditorAppDisplay);
-window.addEventListener("load", function () {
+window.addEventListener('load', function () {
   setTimeout(() => {
     new OEditor();
   });
