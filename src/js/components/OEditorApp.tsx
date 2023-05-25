@@ -394,7 +394,6 @@ export default class OEditorApp extends Component {
 }
 
 function Resizer() {
-    const [resizing, setResizing] = useState(false);
     const [oEditorTop, setOEditorTop] = useState(null);
     const [oEditorRight, setOEditorRight] = useState(null);
     const [oEditorWidth, setOEditorWidth] = useState(null);
@@ -404,7 +403,45 @@ function Resizer() {
 
     const oEditorApp = document.querySelector('.o-editor-app');
 
-    function mouseDown(e) {
+    if (oEditorApp) {
+        document.addEventListener('mouseup', () => {
+            oEditorApp.classList.remove('resizing');
+            oEditorApp.removeAttribute('marker');
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (oEditorApp.classList.contains('resizing')) {
+                switch (oEditorApp.getAttribute('marker')) {
+                    case 'tl':
+                        resize(e, true, true);
+                        break;
+                    case 't':
+                        resizeY(e, true);
+                        break;
+                    case 'tr':
+                        resize(e, true, false);
+                        break;
+                    case 'r':
+                        resizeX(e, false);
+                        break;
+                    case 'br':
+                        resize(e, false, false);
+                        break;
+                    case 'b':
+                        resizeY(e, false);
+                        break;
+                    case 'bl':
+                        resize(e, false, true);
+                        break;
+                    case 'l':
+                        resizeX(e, true);
+                        break;
+                }
+            }
+        });
+    }
+
+    function mouseDown(e, marker) {
         setOEditorTop(oEditorApp.offsetTop);
         setOEditorRight(
             window.innerWidth -
@@ -414,121 +451,109 @@ function Resizer() {
         setOEditorHeight(oEditorApp.offsetHeight);
         setMouseTop(e.clientY);
         setMouseLeft(e.clientX);
-        setResizing(true);
+
+        oEditorApp.classList.add('resizing');
+        oEditorApp.setAttribute('marker', marker);
     }
 
     function resize(e, top, left) {
-        if (resizing) {
-            let newWidth = oEditorWidth;
-            let newHeight = oEditorHeight;
+        resizeX(e, left);
+        resizeY(e, top);
+    }
 
-            const diffX = e.clientX - mouseLeft;
-            const diffY = e.clientY - mouseTop;
+    function resizeX(e, left) {
+        const diffX = e.clientX - mouseLeft;
+        let newWidth = oEditorWidth;
 
-            if (left) {
-                newWidth -= diffX;
-            } else {
-                newWidth += diffX;
-                oEditorApp.style.right = oEditorRight - diffX + 'px';
-            }
-
-            if (top) {
-                newHeight -= diffY;
-                oEditorApp.style.top = oEditorTop + diffY + 'px';
-            } else {
-                newHeight += diffY;
-            }
-
-            oEditorApp.style.width = newWidth + 'px';
-            oEditorApp.style.height = newHeight + 'px';
+        if (left) {
+            newWidth -= diffX;
+        } else {
+            newWidth += diffX;
+            oEditorApp.style.right = oEditorRight - diffX + 'px';
         }
+
+        oEditorApp.style.width = newWidth + 'px';
+    }
+
+    function resizeY(e, top) {
+        const diffY = e.clientY - mouseTop;
+        let newHeight = oEditorHeight;
+
+        if (top) {
+            newHeight -= diffY;
+            oEditorApp.style.top = oEditorTop + diffY + 'px';
+        } else {
+            newHeight += diffY;
+        }
+
+        oEditorApp.style.height = newHeight + 'px';
     }
 
     return (
         <>
             <div
                 className="resizer top-left"
-                onMouseUp={() => {
-                    setResizing(false);
-                }}
-                onMouseLeave={() => {
-                    setResizing(false);
-                }}
-                onMouseMove={(e) => {
-                    resize(e, true, true);
+                onMouseDown={(e) => {
+                    mouseDown(e, 'tl');
                 }}
             >
-                <span
-                    onMouseDown={(e) => {
-                        mouseDown(e);
-                    }}
-                >
-                    <Dashicon icon="arrow-left-alt2" />
-                    <Dashicon icon="arrow-left-alt2" />
-                </span>
+                <Dashicon icon="arrow-left-alt2" />
+            </div>
+            <div
+                className="resizer top"
+                onMouseDown={(e) => {
+                    mouseDown(e, 't');
+                }}
+            >
+                <Dashicon icon="minus" />
             </div>
             <div
                 className="resizer top-right"
-                onMouseUp={() => {
-                    setResizing(false);
-                }}
-                onMouseLeave={() => {
-                    setResizing(false);
-                }}
-                onMouseMove={(e) => {
-                    resize(e, true, false);
+                onMouseDown={(e) => {
+                    mouseDown(e, 'tr');
                 }}
             >
-                <span
-                    onMouseDown={(e) => {
-                        mouseDown(e);
-                    }}
-                >
-                    <Dashicon icon="arrow-left-alt2" />
-                    <Dashicon icon="arrow-left-alt2" />
-                </span>
+                <Dashicon icon="arrow-left-alt2" />
             </div>
             <div
-                className="resizer bottom-left"
-                onMouseUp={() => {
-                    setResizing(false);
-                }}
-                onMouseLeave={() => {
-                    setResizing(false);
-                }}
-                onMouseMove={(e) => {
-                    resize(e, false, true);
+                className="resizer right"
+                onMouseDown={(e) => {
+                    mouseDown(e, 'r');
                 }}
             >
-                <span
-                    onMouseDown={(e) => {
-                        mouseDown(e);
-                    }}
-                >
-                    <Dashicon icon="arrow-left-alt2" />
-                    <Dashicon icon="arrow-left-alt2" />
-                </span>
+                <Dashicon icon="minus" />
             </div>
             <div
                 className="resizer bottom-right"
-                onMouseUp={() => {
-                    setResizing(false);
-                }}
-                onMouseLeave={() => {
-                    setResizing(false);
-                }}
-                onMouseMove={(e) => {
-                    resize(e, false, false);
+                onMouseDown={(e) => {
+                    mouseDown(e, 'br');
                 }}
             >
-                <span
-                    onMouseDown={(e) => {
-                        mouseDown(e);
-                    }}
-                >
-                    <Dashicon icon="arrow-left-alt2" />
-                    <Dashicon icon="arrow-left-alt2" />
-                </span>
+                <Dashicon icon="arrow-left-alt2" />
+            </div>
+            <div
+                className="resizer bottom"
+                onMouseDown={(e) => {
+                    mouseDown(e, 'b');
+                }}
+            >
+                <Dashicon icon="minus" />
+            </div>
+            <div
+                className="resizer bottom-left"
+                onMouseDown={(e) => {
+                    mouseDown(e, 'bl');
+                }}
+            >
+                <Dashicon icon="arrow-left-alt2" />
+            </div>
+            <div
+                className="resizer left"
+                onMouseDown={(e) => {
+                    mouseDown(e, 'l');
+                }}
+            >
+                <Dashicon icon="minus" />
             </div>
         </>
     );
@@ -547,13 +572,25 @@ function EditorAppHeader(props) {
     );
 
     useEffect(() => {
-        if (!moving && oEditorApp) {
+        if (oEditorApp && !oEditorApp.classList.contains('moving')) {
             window.setTimeout(() => {
                 improveOEditorTop();
                 improveOEditorRight();
             });
         }
     });
+
+    if (oEditorApp) {
+        document.addEventListener('mouseup', () => {
+            oEditorApp.classList.remove('moving');
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (oEditorApp.classList.contains('moving')) {
+                updatePosition(e);
+            }
+        });
+    }
 
     function updatePosition(e) {
         improveOEditorTop(oEditorTop + (e.clientY - mouseTop));
@@ -607,18 +644,7 @@ function EditorAppHeader(props) {
                     );
                     setMouseTop(e.clientY);
                     setMouseLeft(e.clientX);
-                    setMoving(true);
-                }
-            }}
-            onMouseUp={() => {
-                setMoving(false);
-            }}
-            onMouseLeave={() => {
-                setMoving(false);
-            }}
-            onMouseMove={(e) => {
-                if (moving) {
-                    updatePosition(e);
+                    oEditorApp.classList.add('moving');
                 }
             }}
         >

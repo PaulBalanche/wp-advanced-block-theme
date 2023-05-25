@@ -644,6 +644,8 @@
   right: 40px;
   top: 91px;
   width: 320px;
+  min-width: 250px;
+  min-height: 250px;
   background: white;
   border-radius: 10px;
   z-index: 99999;
@@ -662,6 +664,8 @@
 .o-editor-app.block {
   width: 800px;
   height: calc(100vh - 61px - 60px);
+  min-width: 600px;
+  min-height: 600px;
 }
 .o-editor-app.settings {
   width: 480px;
@@ -921,79 +925,90 @@
 .is-reusable-block .o-editor-app_footer .components-button.is-primary:hover {
   background: #866ec1;
 }
-.o-editor-app:hover .resizer > span {
-  visibility: visible;
-  opacity: 0;
-  transition: opacity 0.3s ease-in-out 0.4s, transform 0.3s ease-in-out;
-}
-.o-editor-app:hover .resizer.top-left > span {
-  transform: rotate(45deg) translateX(0);
-}
-.o-editor-app:hover .resizer.top-right > span {
-  transform: rotate(135deg) translateX(0);
-}
-.o-editor-app:hover .resizer.bottom-left > span {
-  transform: rotate(-45deg) translateX(0);
-}
-.o-editor-app:hover .resizer.bottom-right > span {
-  transform: rotate(-135deg) translateX(0);
-}
 .o-editor-app .resizer {
   position: absolute;
-  width: 80px;
-  height: 80px;
+  width: 40px;
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
+  opacity: 0;
+  transition: all 0.3s ease-in-out;
 }
 .o-editor-app .resizer.top-left {
-  top: -50px;
-  left: -50px;
+  top: -35px;
+  left: -35px;
+  cursor: nw-resize;
 }
-.o-editor-app .resizer.top-left > span {
-  transform: rotate(45deg) translateX(40px);
+.o-editor-app .resizer.top-left .dashicon {
+  transform: rotate(45deg) translateX(0);
+}
+.o-editor-app .resizer.top {
+  top: -35px;
+  left: 5px;
+  right: 5px;
+  width: auto;
+  cursor: n-resize;
 }
 .o-editor-app .resizer.top-right {
-  top: -50px;
-  right: -50px;
+  top: -35px;
+  right: -35px;
+  cursor: ne-resize;
 }
-.o-editor-app .resizer.top-right > span {
-  transform: rotate(135deg) translateX(40px);
+.o-editor-app .resizer.top-right .dashicon {
+  transform: rotate(135deg) translateX(0);
 }
-.o-editor-app .resizer.bottom-left {
-  bottom: -50px;
-  left: -50px;
+.o-editor-app .resizer.right {
+  top: 5px;
+  bottom: 5px;
+  right: -35px;
+  height: auto;
+  cursor: e-resize;
 }
-.o-editor-app .resizer.bottom-left > span {
-  transform: rotate(-45deg) translateX(40px);
+.o-editor-app .resizer.right .dashicon {
+  transform: rotate(90deg) translateX(0);
 }
 .o-editor-app .resizer.bottom-right {
-  bottom: -50px;
-  right: -50px;
+  bottom: -35px;
+  right: -35px;
+  cursor: se-resize;
 }
-.o-editor-app .resizer.bottom-right > span {
-  transform: rotate(-135deg) translateX(40px);
+.o-editor-app .resizer.bottom-right .dashicon {
+  transform: rotate(-135deg) translateX(0);
 }
-.o-editor-app .resizer > span {
-  display: flex;
-  visibility: hidden;
-  align-items: center;
-  cursor: pointer;
+.o-editor-app .resizer.bottom {
+  bottom: -35px;
+  left: 5px;
+  right: 5px;
+  width: auto;
+  cursor: s-resize;
 }
-.o-editor-app .resizer:hover > span {
-  opacity: 1 !important;
+.o-editor-app .resizer.bottom-left {
+  bottom: -35px;
+  left: -35px;
+  cursor: sw-resize;
+}
+.o-editor-app .resizer.bottom-left .dashicon {
+  transform: rotate(-45deg) translateX(0);
+}
+.o-editor-app .resizer.left {
+  top: 5px;
+  bottom: 5px;
+  left: -35px;
+  height: auto;
+  cursor: w-resize;
+}
+.o-editor-app .resizer.left .dashicon {
+  transform: rotate(90deg) translateX(0);
+}
+.o-editor-app .resizer:hover {
+  opacity: 1;
 }
 .o-editor-app .resizer .dashicon {
-  color: white;
+  color: var(--wp-admin-theme-color);
   height: auto;
   width: auto;
-}
-.o-editor-app .resizer .dashicon:first-child {
-  margin-right: -12px;
   font-size: 20px;
-}
-.o-editor-app .resizer .dashicon:last-child {
-  font-size: 18px;
 }
 
 @keyframes o-loader {
