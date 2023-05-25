@@ -384,7 +384,6 @@ export default class OEditorApp extends Component {
                             {componentToRender?.renderFooter?.()}
                         </div>
                     )}
-                    <Resizer />
                 </section>
                 <OUserPreferences />
                 <OModal />
@@ -393,7 +392,8 @@ export default class OEditorApp extends Component {
     }
 }
 
-function Resizer() {
+function EditorAppHeader(props) {
+    const marge = 6;
     const [oEditorTop, setOEditorTop] = useState(null);
     const [oEditorRight, setOEditorRight] = useState(null);
     const [oEditorWidth, setOEditorWidth] = useState(null);
@@ -402,14 +402,34 @@ function Resizer() {
     const [mouseLeft, setMouseLeft] = useState(null);
 
     const oEditorApp = document.querySelector('.o-editor-app');
+    const skeletonHeader = document.querySelector(
+        '#editor .interface-interface-skeleton__header',
+    );
+
+    useEffect(() => {
+        if (oEditorApp && !oEditorApp.classList.contains('moving')) {
+            window.setTimeout(() => {
+                improveOEditorPositionY();
+                improveOEditorPositionX();
+            });
+        }
+    });
 
     if (oEditorApp) {
         document.addEventListener('mouseup', () => {
-            oEditorApp.classList.remove('resizing');
-            oEditorApp.removeAttribute('marker');
+            if (oEditorApp.classList.contains('moving')) {
+                oEditorApp.classList.remove('moving');
+            }
+            if (oEditorApp.classList.contains('resizing')) {
+                oEditorApp.classList.remove('resizing');
+                oEditorApp.removeAttribute('marker');
+            }
         });
 
         document.addEventListener('mousemove', (e) => {
+            if (oEditorApp.classList.contains('moving')) {
+                updatePosition(e);
+            }
             if (oEditorApp.classList.contains('resizing')) {
                 switch (oEditorApp.getAttribute('marker')) {
                     case 'tl':
@@ -438,6 +458,11 @@ function Resizer() {
                         break;
                 }
             }
+        });
+
+        window.addEventListener('resize', () => {
+            improveOEditorPositionY();
+            improveOEditorPositionX();
         });
     }
 
@@ -476,17 +501,69 @@ function Resizer() {
     }
 
     function resizeY(e, top) {
-        const diffY = e.clientY - mouseTop;
+        let diffY = e.clientY - mouseTop;
         let newHeight = oEditorHeight;
 
         if (top) {
-            newHeight -= diffY;
+            if (oEditorTop + diffY <= skeletonHeader.offsetHeight + marge) {
+                diffY = skeletonHeader.offsetHeight + marge - oEditorTop;
+            }
+
             oEditorApp.style.top = oEditorTop + diffY + 'px';
+            newHeight -= diffY;
         } else {
+            if (
+                oEditorTop + diffY + oEditorApp.offsetHeight >=
+                window.innerHeight - marge
+            ) {
+                diffY =
+                    window.innerHeight -
+                    oEditorApp.offsetHeight -
+                    marge -
+                    oEditorTop;
+            }
+
             newHeight += diffY;
         }
 
         oEditorApp.style.height = newHeight + 'px';
+    }
+
+    function updatePosition(e) {
+        improveOEditorPositionY(oEditorTop + (e.clientY - mouseTop));
+        improveOEditorPositionX(oEditorRight - (e.clientX - mouseLeft));
+    }
+
+    function improveOEditorPositionY(top = null) {
+        if (top == null) {
+            top = oEditorApp.offsetTop;
+        }
+        if (top <= skeletonHeader.offsetHeight + marge) {
+            top = skeletonHeader.offsetHeight + marge;
+        } else if (
+            top + oEditorApp.offsetHeight >=
+            window.innerHeight - marge
+        ) {
+            top = window.innerHeight - marge - oEditorApp.offsetHeight;
+        }
+
+        oEditorApp.style.top = top + 'px';
+    }
+
+    function improveOEditorPositionX(right = null) {
+        if (right == null) {
+            right =
+                window.innerWidth -
+                (oEditorApp.offsetLeft + oEditorApp.offsetWidth);
+        }
+        if (right <= marge) {
+            right = marge;
+        }
+        if (right + oEditorApp.offsetWidth >= window.innerWidth - marge) {
+            right = window.innerWidth - marge - oEditorApp.offsetWidth;
+        }
+
+        oEditorApp.style.right = right + 'px';
     }
 
     return (
@@ -505,7 +582,7 @@ function Resizer() {
                     mouseDown(e, 't');
                 }}
             >
-                <Dashicon icon="minus" />
+                <span className="fakeDashicon"></span>
             </div>
             <div
                 className="resizer top-right"
@@ -521,7 +598,7 @@ function Resizer() {
                     mouseDown(e, 'r');
                 }}
             >
-                <Dashicon icon="minus" />
+                <span className="fakeDashicon"></span>
             </div>
             <div
                 className="resizer bottom-right"
@@ -537,7 +614,7 @@ function Resizer() {
                     mouseDown(e, 'b');
                 }}
             >
-                <Dashicon icon="minus" />
+                <span className="fakeDashicon"></span>
             </div>
             <div
                 className="resizer bottom-left"
@@ -553,102 +630,31 @@ function Resizer() {
                     mouseDown(e, 'l');
                 }}
             >
-                <Dashicon icon="minus" />
+                <span className="fakeDashicon"></span>
+            </div>
+            <div
+                className="o-editor-app_header"
+                onMouseDown={(e) => {
+                    if (
+                        e.target !=
+                        document.querySelector(
+                            '.o-editor-app_header .breadcrumb .is-link',
+                        )
+                    ) {
+                        setOEditorTop(oEditorApp.offsetTop);
+                        setOEditorRight(
+                            window.innerWidth -
+                                (oEditorApp.offsetLeft +
+                                    oEditorApp.offsetWidth),
+                        );
+                        setMouseTop(e.clientY);
+                        setMouseLeft(e.clientX);
+                        oEditorApp.classList.add('moving');
+                    }
+                }}
+            >
+                {props.children}
             </div>
         </>
-    );
-}
-
-function EditorAppHeader(props) {
-    const [moving, setMoving] = useState(false);
-    const [oEditorTop, setOEditorTop] = useState(null);
-    const [oEditorRight, setOEditorRight] = useState(null);
-    const [mouseTop, setMouseTop] = useState(null);
-    const [mouseLeft, setMouseLeft] = useState(null);
-
-    const oEditorApp = document.querySelector('.o-editor-app');
-    const skeletonHeader = document.querySelector(
-        '#editor .interface-interface-skeleton__header',
-    );
-
-    useEffect(() => {
-        if (oEditorApp && !oEditorApp.classList.contains('moving')) {
-            window.setTimeout(() => {
-                improveOEditorTop();
-                improveOEditorRight();
-            });
-        }
-    });
-
-    if (oEditorApp) {
-        document.addEventListener('mouseup', () => {
-            oEditorApp.classList.remove('moving');
-        });
-
-        document.addEventListener('mousemove', (e) => {
-            if (oEditorApp.classList.contains('moving')) {
-                updatePosition(e);
-            }
-        });
-    }
-
-    function updatePosition(e) {
-        improveOEditorTop(oEditorTop + (e.clientY - mouseTop));
-        improveOEditorRight(oEditorRight - (e.clientX - mouseLeft));
-    }
-
-    function improveOEditorTop(top = null) {
-        if (top == null) {
-            top = oEditorApp.offsetTop;
-        }
-        if (top < skeletonHeader.offsetHeight) {
-            top = skeletonHeader.offsetHeight;
-        }
-        if (top + oEditorApp.offsetHeight > window.innerHeight) {
-            top = window.innerHeight - oEditorApp.offsetHeight;
-        }
-
-        oEditorApp.style.top = top + 'px';
-    }
-
-    function improveOEditorRight(right = null) {
-        if (right == null) {
-            right =
-                window.innerWidth -
-                (oEditorApp.offsetLeft + oEditorApp.offsetWidth);
-        }
-        if (right < 0) {
-            right = 0;
-        }
-        if (right + oEditorApp.offsetWidth > window.innerWidth) {
-            right = window.innerWidth - oEditorApp.offsetWidth;
-        }
-
-        oEditorApp.style.right = right + 'px';
-    }
-
-    return (
-        <div
-            className="o-editor-app_header"
-            onMouseDown={(e) => {
-                if (
-                    e.target !=
-                    document.querySelector(
-                        '.o-editor-app_header .breadcrumb .is-link',
-                    )
-                ) {
-                    setOEditorTop(oEditorApp.offsetTop);
-                    setOEditorRight(
-                        window.innerWidth -
-                            (oEditorApp.offsetLeft + oEditorApp.offsetWidth),
-                    );
-                    setMouseTop(e.clientY);
-                    setMouseLeft(e.clientX);
-                    oEditorApp.classList.add('moving');
-                }
-            }}
-        >
-            {props.children}
-        </div>
     );
 }

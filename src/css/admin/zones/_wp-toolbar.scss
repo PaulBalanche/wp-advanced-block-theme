@@ -1,15 +1,13 @@
 #devicesButtonGroupContainer {
     position: fixed;
-    top: 70px;
-    left: 50%;
-    transform: translateX(-50%);
+    bottom: $o-space-40;
+    left: $o-space-40;
     z-index: 9999;
     background: $background300;
     border-radius: $o-border-radius-small;
     padding: $o-space-10;
 
     .devicesButtonGroup {
-
         .components-button {
             position: relative;
             border-radius: 0;
@@ -27,14 +25,14 @@
                 background: none;
                 color: var(--wp-admin-theme-color);
 
-                &.default:after { 
-                    content: "\f155";
+                &.default:after {
+                    content: '\f155';
                 }
             }
 
             &.default {
                 &:after {
-                    content: "\f154";
+                    content: '\f154';
                 }
             }
         }
@@ -42,9 +40,7 @@
 }
 
 .o-editor {
-
     .responsive-buttons-container {
-
         .components-button-group {
             background: $background300;
             border-radius: $o-border-radius-small;
@@ -69,21 +65,21 @@
                     background: none;
                     color: var(--wp-admin-theme-color);
 
-                    &.default:after { 
-                        content: "\f155";
+                    &.default:after {
+                        content: '\f155';
                     }
                 }
 
                 &.default {
                     &:after {
-                        content: "\f154";
+                        content: '\f154';
                         color: var(--wp-admin-theme-color);
                     }
                 }
 
                 &.valid {
                     &:after {
-                        content: "\f15e";
+                        content: '\f15e';
                         color: var(--wp-admin-theme-color);
                     }
                 }

@@ -351,8 +351,8 @@
 
     .resizer {
         position: absolute;
-        width: 40px;
-        height: 40px;
+        width: 30px;
+        height: 30px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -360,23 +360,28 @@
         transition: $o-transition-default;
 
         &.top-left {
-            top: -35px;
-            left: -35px;
+            top: -25px;
+            left: -25px;
             cursor: nw-resize;
             .dashicon {
                 transform: rotate(45deg) translateX(0);
             }
         }
         &.top {
-            top: -35px;
+            top: -25px;
             left: 5px;
             right: 5px;
             width: auto;
             cursor: n-resize;
+            .fakeDashicon {
+                top: -2px;
+                width: 60%;
+                height: 3px;
+            }
         }
         &.top-right {
-            top: -35px;
-            right: -35px;
+            top: -25px;
+            right: -25px;
             cursor: ne-resize;
             .dashicon {
                 transform: rotate(135deg) translateX(0);
@@ -385,31 +390,38 @@
         &.right {
             top: 5px;
             bottom: 5px;
-            right: -35px;
+            right: -25px;
             height: auto;
             cursor: e-resize;
-            .dashicon {
-                transform: rotate(90deg) translateX(0);
+            .fakeDashicon {
+                left: 2px;
+                height: 60%;
+                width: 3px;
             }
         }
         &.bottom-right {
-            bottom: -35px;
-            right: -35px;
+            bottom: -25px;
+            right: -25px;
             cursor: se-resize;
             .dashicon {
                 transform: rotate(-135deg) translateX(0);
             }
         }
         &.bottom {
-            bottom: -35px;
+            bottom: -25px;
             left: 5px;
             right: 5px;
             width: auto;
             cursor: s-resize;
+            .fakeDashicon {
+                top: 2px;
+                width: 60%;
+                height: 3px;
+            }
         }
         &.bottom-left {
-            bottom: -35px;
-            left: -35px;
+            bottom: -25px;
+            left: -25px;
             cursor: sw-resize;
             .dashicon {
                 transform: rotate(-45deg) translateX(0);
@@ -418,21 +430,49 @@
         &.left {
             top: 5px;
             bottom: 5px;
-            left: -35px;
+            left: -25px;
             height: auto;
             cursor: w-resize;
-            .dashicon {
-                transform: rotate(90deg) translateX(0);
+            .fakeDashicon {
+                left: -2px;
+                height: 60%;
+                width: 3px;
             }
         }
         &:hover {
             opacity: 1;
+            animation-name: twinkle;
+            animation-duration: 0.6s;
+            animation-iteration-count: infinite;
+            animation-delay: 0.3s;
+            animation-timing-function: ease-in-out;
         }
         .dashicon {
             color: $o-accent-color;
             height: auto;
             width: auto;
-            font-size: 20px;
+            font-size: 26px;
         }
+        .fakeDashicon {
+            position: relative;
+            background-color: $o-accent-color;
+        }
+    }
+}
+
+.o-editor:has(.o-editor-app.resizing) .block-editor-block-list__block,
+.o-editor:has(.o-editor-app.moving) .block-editor-block-list__block {
+    opacity: 0.1;
+}
+
+@keyframes twinkle {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.6;
+    }
+    100% {
+        opacity: 1;
     }
 }
