@@ -1,4 +1,4 @@
-import { getBlockType } from '@wordpress/blocks';
+import { createBlock, getBlockType } from '@wordpress/blocks';
 import { Button, ButtonGroup, Dashicon } from '@wordpress/components';
 import { Fragment, useState } from '@wordpress/element';
 
@@ -6,10 +6,16 @@ import __OEditorApp from './OEditorApp';
 
 import globalData from '../global';
 
+import { Render } from '../Static/Render';
+
+import { WpeModal } from '../Components/Modal';
+
 export default class OEditorInspector {
-    constructor(blocksList, selectBlock) {
+    constructor(blocksList, selectBlock, inserterItems, insertBlock) {
         this.blocksList = blocksList;
         this.selectBlock = selectBlock;
+        this.inserterItems = inserterItems;
+        this.insertBlock = insertBlock;
     }
 
     renderTitle() {
@@ -30,10 +36,16 @@ export default class OEditorInspector {
 
     render() {
         return (
-            <BlockList
-                blocksList={this.blocksList}
-                selectBlock={this.selectBlock}
-            />
+            <>
+                <BlockList
+                    blocksList={this.blocksList}
+                    selectBlock={this.selectBlock}
+                />
+                <InserterBlocks
+                    blocks={this.inserterItems}
+                    insertBlockFunction={this.insertBlock}
+                />
+            </>
         );
     }
 
@@ -207,5 +219,102 @@ const BlockListItem = ({ block, selectBlock }) => {
                 />
             )}
         </li>
+    );
+};
+
+const InserterBlocks = ({ blocks, insertBlockFunction }) => {
+    const [isOpen, setIsOpen] = useState(false);
+    console.log(blocks);
+    let blockCaregories = [];
+    blocks.forEach((block) => {
+        if (!blockCaregories.includes(block.category)) {
+            blockCaregories.push(block.category);
+        }
+    });
+    blockCaregories = blockCaregories.map((category) => {
+        return {
+            name: category,
+            title:
+                category == 'wpe-layout'
+                    ? 'Layout'
+                    : category.charAt(0).toUpperCase() + category.slice(1),
+        };
+    });
+
+    return (
+        <>
+            <Button
+                key={'o-editor-inspector-button-insertNewBlock'}
+                variant="primary"
+                onMouseDown={() => {
+                    setIsOpen(true);
+                }}
+            >
+                Add block
+            </Button>
+            {isOpen && (
+                <WpeModal
+                    key={'o-editor-inspector-modal-insertNewBlock'}
+                    id={'o-editor-inspector-modal-insertNewBlock'}
+                    title="Add block"
+                    onClose={() => {
+                        setIsOpen(false);
+                    }}
+                    icon="admin-links"
+                >
+                    {Render.tabPanelComponent(
+                        'o-editor-inspector-tab-insertNewBlock',
+                        blockCaregories,
+                        (tabPanel) => {
+                            return (
+                                <div className="items">
+                                    {blocks.map((block, index) => {
+                                        if (block.category == tabPanel.name) {
+                                            return (
+                                                <div
+                                                    key={
+                                                        'o-editor-inspector-modal-block-' +
+                                                        index
+                                                    }
+                                                    className="item"
+                                                    onMouseDown={() => {
+                                                        insertBlockFunction(
+                                                            createBlock(
+                                                                block.name,
+                                                            ),
+                                                        );
+                                                    }}
+                                                >
+                                                    <div className="previewContainer">
+                                                        {block?.example
+                                                            ?.attributes
+                                                            ?.editorPreviewImage && (
+                                                            <img
+                                                                src={
+                                                                    block
+                                                                        .example
+                                                                        .attributes
+                                                                        .editorPreviewImage
+                                                                }
+                                                            />
+                                                        )}
+                                                    </div>
+                                                    <div className="blockTitle">
+                                                        {block.title}
+                                                    </div>
+                                                </div>
+                                            );
+                                        }
+                                    })}
+                                </div>
+                            );
+                        },
+                        null,
+                        null,
+                        'panelInspectorInsertNewBlock',
+                    )}
+                </WpeModal>
+            )}
+        </>
     );
 };

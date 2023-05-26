@@ -104,18 +104,23 @@ const OEditorAppContext = compose([
 
         const editorMode = select('core/edit-post').getEditorMode();
 
+        const inserterItems = select('core/block-editor').getInserterItems();
+
         return {
             blocksList,
             selectedBlockClientId,
             editorMode,
+            inserterItems,
         };
     }),
     withDispatch((dispatch) => {
-        const { selectBlock, resetSelection } = dispatch(blockEditorStore);
+        const { selectBlock, resetSelection, insertBlock } =
+            dispatch(blockEditorStore);
 
         return {
             selectBlock,
             resetSelection,
+            insertBlock,
         };
     }),
 ])(OEditorAppDisplay);
