@@ -1,9 +1,9 @@
-import React from "react";
+import React from 'react';
 
-import { Button, Dashicon } from "@wordpress/components";
+import { Button, Dashicon } from '@wordpress/components';
 
-import __OEditorApp from "./OEditorApp";
-import __OUserPreferences from "./OUserPreferences";
+import __OEditorApp from './OEditorApp';
+import __OUserPreferences from './OUserPreferences';
 
 export default class OEditorSettings {
     constructor() {}
@@ -17,7 +17,7 @@ export default class OEditorSettings {
             <>
                 <div className="o-flex-grow"></div>
                 <Button
-                    key={"buttonCloseEditZone"}
+                    key={'buttonCloseEditZone'}
                     className="abtButtonCloseEditZone"
                     variant="secondary"
                     onMouseDown={() => __OEditorApp.getInstance().clean()}
@@ -34,24 +34,17 @@ export default class OEditorSettings {
             <ul>
                 <li>
                     <__OUserPreferences
-                        preference="alertUpdateAttributes"
-                        context="toggle"
-                        label="Display alert while update block preview ?"
-                    ></__OUserPreferences>
-                </li>
-                <li className="separator"></li>
-                <li>
-                    <__OUserPreferences
                         preference="alertReusableBlock"
                         context="toggle"
                         label="Display alert while edit reusable block ?"
                     ></__OUserPreferences>
                 </li>
+                {/* <li className="separator"></li> */}
             </ul>
         );
     }
 
     getExtraClassName() {
-        return "settings";
+        return 'settings';
     }
 }

@@ -1,4 +1,4 @@
-import { Component, createPortal } from "@wordpress/element";
+import { Component, createPortal } from '@wordpress/element';
 
 import {
     Button,
@@ -7,24 +7,24 @@ import {
     MenuGroup,
     MenuItem,
     Placeholder,
-} from "@wordpress/components";
+} from '@wordpress/components';
 
-import { chevronDown, chevronUp, cog, pages, trash } from "@wordpress/icons";
+import { chevronDown, chevronUp, cog, pages, trash } from '@wordpress/icons';
 
-import { Attributes } from "../Static/Attributes";
-import { Render } from "../Static/Render";
+import { Attributes } from '../Static/Attributes';
+import { Render } from '../Static/Render';
 
-import { getBlockType } from "@wordpress/blocks";
+import { getBlockType } from '@wordpress/blocks';
 
-import { isReusableBlock } from "@wordpress/blocks";
+import { isReusableBlock } from '@wordpress/blocks';
 
-import { WpeModal } from "./Modal";
+import { WpeModal } from './Modal';
 
-import __OEditorApp from "./OEditorApp";
-import __OModal from "./OModal";
-import __OUserPreferences from "./OUserPreferences";
+import __OEditorApp from './OEditorApp';
+import __OModal from './OModal';
+import __OUserPreferences from './OUserPreferences';
 
-import globalData from "../global";
+import globalData from '../global';
 
 export class WpeComponentBase extends Component {
     constructor() {
@@ -37,19 +37,19 @@ export class WpeComponentBase extends Component {
         };
 
         this.title =
-            typeof this.props.name != "undefined"
+            typeof this.props.name != 'undefined'
                 ? getBlockType(this.props.name).title
-                : "Undefined...";
+                : 'Undefined...';
         this.reusableBlock = this.isReusableBlock();
 
         globalData.componentInstances[this.props.clientId] = this;
-        if (this.getAttribute("anchor") != null) {
+        if (this.getAttribute('anchor') != null) {
             this.setAttributes({ anchor: this.props.clientId });
         }
     }
 
     getAttribute(key) {
-        return typeof this.props.attributes[key] != "undefined"
+        return typeof this.props.attributes[key] != 'undefined'
             ? this.props.attributes[key]
             : null;
     }
@@ -60,23 +60,23 @@ export class WpeComponentBase extends Component {
 
     propsExists() {
         return (
-            typeof this.props == "object" &&
-            typeof this.props.block_spec != "undefined" &&
-            typeof this.props.block_spec == "object" &&
-            typeof this.props.block_spec.props != "undefined" &&
-            typeof this.props.block_spec.props == "object" &&
+            typeof this.props == 'object' &&
+            typeof this.props.block_spec != 'undefined' &&
+            typeof this.props.block_spec == 'object' &&
+            typeof this.props.block_spec.props != 'undefined' &&
+            typeof this.props.block_spec.props == 'object' &&
             Object.keys(this.props.block_spec.props).length > 0
         );
     }
 
     getCurrentEditedProp() {
-        return typeof this.state.currentEditedProp != "undefined"
+        return typeof this.state.currentEditedProp != 'undefined'
             ? this.state.currentEditedProp
             : null;
     }
 
     isReusableBlock() {
-        if (typeof this.props.parentsBlock == "object") {
+        if (typeof this.props.parentsBlock == 'object') {
             for (var i in this.props.parentsBlock) {
                 if (isReusableBlock(this.props.parentsBlock[i])) {
                     return this.props.parentsBlock[i].attributes.ref;
@@ -98,20 +98,20 @@ export class WpeComponentBase extends Component {
     descriptionMessage() {
         const messages = [];
 
-        if (typeof this.description != "undefined") {
+        if (typeof this.description != 'undefined') {
             messages.push(
                 <div
-                    key={this.props.clientId + "-descriptionMessage-info"}
+                    key={this.props.clientId + '-descriptionMessage-info'}
                     className="row"
                 >
                     {this.description}
-                </div>
+                </div>,
             );
         }
 
         return messages.length > 0 ? (
             <div
-                key={this.props.clientId + "-descriptionMessage"}
+                key={this.props.clientId + '-descriptionMessage'}
                 className="description"
             >
                 {messages}
@@ -124,18 +124,18 @@ export class WpeComponentBase extends Component {
     }
 
     renderTitle() {
-        const anchor = this.getAttribute("anchor");
+        const anchor = this.getAttribute('anchor');
         const displayAnchor =
-            typeof anchor != "undefined" &&
+            typeof anchor != 'undefined' &&
             anchor != null &&
             anchor.match(
-                /^[a-z0-9]+-[a-z0-9]+-[a-z0-9]+-[a-z0-9]+-[a-z0-9]+$/
+                /^[a-z0-9]+-[a-z0-9]+-[a-z0-9]+-[a-z0-9]+-[a-z0-9]+$/,
             ) == null;
 
         return (
             <>
                 <h2>
-                    {this.props.title ?? this.title ?? "Editor"}
+                    {this.props.title ?? this.title ?? 'Editor'}
                     {displayAnchor && (
                         <span className="subtitle">#{anchor}</span>
                     )}
@@ -148,36 +148,36 @@ export class WpeComponentBase extends Component {
         const menuGroup = [];
 
         if (
-            typeof this.props.moveBlocksUp != "undefined" ||
-            typeof this.props.moveBlocksDown != "undefined"
+            typeof this.props.moveBlocksUp != 'undefined' ||
+            typeof this.props.moveBlocksDown != 'undefined'
         ) {
             const groupMoveBlock = [];
 
             if (
-                typeof this.props.moveBlocksUp != "undefined" &&
+                typeof this.props.moveBlocksUp != 'undefined' &&
                 this.getReusableBlock() == null
             ) {
                 groupMoveBlock.push(
                     <MenuItem
-                        key={this.props.clientId + "-toolsDropdownMenu-move-up"}
+                        key={this.props.clientId + '-toolsDropdownMenu-move-up'}
                         icon={chevronUp}
                         onClick={() =>
                             this.props.moveBlocksUp([this.props.clientId])
                         }
                     >
                         Move up
-                    </MenuItem>
+                    </MenuItem>,
                 );
             }
 
             if (
-                typeof this.props.moveBlocksDown != "undefined" &&
+                typeof this.props.moveBlocksDown != 'undefined' &&
                 this.getReusableBlock() == null
             ) {
                 groupMoveBlock.push(
                     <MenuItem
                         key={
-                            this.props.clientId + "-toolsDropdownMenu-move-down"
+                            this.props.clientId + '-toolsDropdownMenu-move-down'
                         }
                         icon={chevronDown}
                         onClick={() =>
@@ -185,20 +185,20 @@ export class WpeComponentBase extends Component {
                         }
                     >
                         Move down
-                    </MenuItem>
+                    </MenuItem>,
                 );
             }
 
             menuGroup.push(
                 <MenuGroup
-                    key={this.props.clientId + "-toolsDropdownMenu-move"}
+                    key={this.props.clientId + '-toolsDropdownMenu-move'}
                 >
                     {groupMoveBlock}
-                </MenuGroup>
+                </MenuGroup>,
             );
         }
 
-        if (typeof this.props.duplicateBlocks != "undefined") {
+        if (typeof this.props.duplicateBlocks != 'undefined') {
             const groupSpecificTools = [];
 
             groupSpecificTools.push(this.renderSpecificTools());
@@ -207,7 +207,7 @@ export class WpeComponentBase extends Component {
                 <MenuItem
                     key={
                         this.props.clientId +
-                        "-toolsDropdownMenu-SpecificTools-duplicate"
+                        '-toolsDropdownMenu-SpecificTools-duplicate'
                     }
                     icon={pages}
                     onClick={() => {
@@ -216,35 +216,35 @@ export class WpeComponentBase extends Component {
                     }}
                 >
                     Duplicate
-                </MenuItem>
+                </MenuItem>,
             );
 
             menuGroup.push(
                 <MenuGroup
                     key={
-                        this.props.clientId + "-toolsDropdownMenu-SpecificTools"
+                        this.props.clientId + '-toolsDropdownMenu-SpecificTools'
                     }
                 >
                     {groupSpecificTools}
-                </MenuGroup>
+                </MenuGroup>,
             );
         }
 
         if (this.getReusableBlock() != null) {
             menuGroup.push(
                 <MenuGroup
-                    key={this.props.clientId + "-toolsDropdownMenu-reusable"}
+                    key={this.props.clientId + '-toolsDropdownMenu-reusable'}
                 >
                     <MenuItem
                         key={
                             this.props.clientId +
-                            "-toolsDropdownMenu-reusable-manage-all"
+                            '-toolsDropdownMenu-reusable-manage-all'
                         }
                         onClick={() =>
                             window.open(
                                 js_const.admin_url +
-                                    "edit.php?post_type=wp_block",
-                                "_blank"
+                                    'edit.php?post_type=wp_block',
+                                '_blank',
                             )
                         }
                     >
@@ -253,15 +253,15 @@ export class WpeComponentBase extends Component {
                     <MenuItem
                         key={
                             this.props.clientId +
-                            "-toolsDropdownMenu-reusable-convert-to-regular"
+                            '-toolsDropdownMenu-reusable-convert-to-regular'
                         }
                         onClick={() =>
                             window.open(
                                 js_const.admin_url +
-                                    "post.php?post=" +
+                                    'post.php?post=' +
                                     this.getReusableBlock() +
-                                    "&action=edit",
-                                "_blank"
+                                    '&action=edit',
+                                '_blank',
                             )
                         }
                     >
@@ -270,46 +270,46 @@ export class WpeComponentBase extends Component {
                     <MenuItem
                         key={
                             this.props.clientId +
-                            "-toolsDropdownMenu-reusable-manage"
+                            '-toolsDropdownMenu-reusable-manage'
                         }
                         onClick={() =>
                             window.open(
                                 js_const.admin_url +
-                                    "post.php?post=" +
+                                    'post.php?post=' +
                                     this.getReusableBlock() +
-                                    "&action=edit",
-                                "_blank"
+                                    '&action=edit',
+                                '_blank',
                             )
                         }
                     >
                         Manage this reusable block
                     </MenuItem>
-                </MenuGroup>
+                </MenuGroup>,
             );
         }
 
-        if (typeof this.props.removeBlock != "undefined") {
+        if (typeof this.props.removeBlock != 'undefined') {
             menuGroup.push(
                 <MenuGroup
-                    key={this.props.clientId + "-toolsDropdownMenu-remove"}
+                    key={this.props.clientId + '-toolsDropdownMenu-remove'}
                 >
                     <MenuItem
                         key={
                             this.props.clientId +
-                            "-toolsDropdownMenu-remove-trash"
+                            '-toolsDropdownMenu-remove-trash'
                         }
                         icon={trash}
-                        onClick={() => this.showModal("removeSubmitted")}
+                        onClick={() => this.showModal('removeSubmitted')}
                     >
                         Remove {this.title}
                     </MenuItem>
-                </MenuGroup>
+                </MenuGroup>,
             );
         }
 
         return menuGroup.length > 0 ? (
             <DropdownMenu
-                key={this.props.clientId + "-toolsDropdownMenu"}
+                key={this.props.clientId + '-toolsDropdownMenu'}
                 icon={cog}
                 label="Advanced"
             >
@@ -331,7 +331,7 @@ export class WpeComponentBase extends Component {
      * Get the internal component id
      */
     getId(): string {
-        return this.getAttribute("anchor");
+        return this.getAttribute('anchor');
     }
 
     renderPropsEdition() {
@@ -343,24 +343,24 @@ export class WpeComponentBase extends Component {
         }
 
         const catReOrder = {
-            default: { name: "Attributes", props: {} },
+            default: { name: 'Attributes', props: {} },
             block_settings: {
-                name: "Settings",
+                name: 'Settings',
                 props: {
-                    anchor: { type: "string", label: "Anchor" },
+                    anchor: { type: 'string', label: 'Anchor' },
                 },
             },
-            spacing: { name: "Spacing", props: {} },
+            spacing: { name: 'Spacing', props: {} },
         };
 
         if (this.propsExists()) {
             // 1. Loop Props Categories
             if (
-                typeof this.props.block_spec.props_categories != "undefined" &&
+                typeof this.props.block_spec.props_categories != 'undefined' &&
                 this.props.block_spec.props_categories != null
             ) {
                 for (const [keyCatProps, valueCatProps] of Object.entries(
-                    this.props.block_spec.props_categories
+                    this.props.block_spec.props_categories,
                 )) {
                     catReOrder[valueCatProps.id] = {
                         name: valueCatProps.name,
@@ -371,20 +371,20 @@ export class WpeComponentBase extends Component {
 
             // 2. Loop Props
             for (const [keyProp, valueProp] of Object.entries(
-                this.props.block_spec.props
+                this.props.block_spec.props,
             )) {
-                if (typeof valueProp != "object" || valueProp == null) continue;
+                if (typeof valueProp != 'object' || valueProp == null) continue;
 
                 const currentCatToPush =
-                    typeof valueProp.category != "undefined" &&
+                    typeof valueProp.category != 'undefined' &&
                     valueProp.category != null &&
                     valueProp.category in catReOrder
                         ? valueProp.category
-                        : ["margin", "padding", "gap", "spaces"].includes(
-                              keyProp
+                        : ['margin', 'padding', 'gap', 'spaces'].includes(
+                              keyProp,
                           )
-                        ? "spacing"
-                        : "default";
+                        ? 'spacing'
+                        : 'default';
                 catReOrder[currentCatToPush].props[keyProp] = valueProp;
             }
         }
@@ -406,12 +406,12 @@ export class WpeComponentBase extends Component {
             let warningAttributes = 0;
 
             forEachCatProps: for (const [keyProp, prop] of Object.entries(
-                valCat.props
+                valCat.props,
             )) {
                 // Conditional treatment
-                if (typeof prop.conditional == "object") {
+                if (typeof prop.conditional == 'object') {
                     for (const [index, conditionalField] of Object.entries(
-                        prop.conditional
+                        prop.conditional,
                     )) {
                         let conditionalFieldKey =
                             Object.keys(conditionalField)[0];
@@ -428,17 +428,17 @@ export class WpeComponentBase extends Component {
                 let currentAttributeError = false;
 
                 if (
-                    typeof this.state.error == "object" &&
+                    typeof this.state.error == 'object' &&
                     this.state.error != null &&
-                    typeof this.state.error[keyProp] == "object"
+                    typeof this.state.error[keyProp] == 'object'
                 ) {
                     currentAttributeError = this.state.error[keyProp];
 
-                    if (typeof this.state.error[keyProp].error != "undefined") {
+                    if (typeof this.state.error[keyProp].error != 'undefined') {
                         errorAttributes++;
                     }
                     if (
-                        typeof this.state.error[keyProp].warning != "undefined"
+                        typeof this.state.error[keyProp].warning != 'undefined'
                     ) {
                         warningAttributes++;
                     }
@@ -451,12 +451,12 @@ export class WpeComponentBase extends Component {
                         [keyProp],
                         { [keyProp]: valueProp },
                         this,
-                        currentAttributeError
-                    )
+                        currentAttributeError,
+                    ),
                 );
             }
 
-            if (keyCat == "block_settings") {
+            if (keyCat == 'block_settings') {
                 currentEditCat.push(this.renderInspectorControls());
             }
 
@@ -489,13 +489,13 @@ export class WpeComponentBase extends Component {
         }
 
         const portalContainer = document.querySelector(
-            ".o-editor-app.block .o-editor-app_body"
+            '.o-editor-app.block .o-editor-app_body',
         );
         if (!portalContainer) return null;
 
         return createPortal(
             <Placeholder
-                key={this.props.clientId + "-ConfigurationPlaceholder"}
+                key={this.props.clientId + '-ConfigurationPlaceholder'}
                 isColumnLayout={true}
                 className="wpe-component_edit_placeholder"
             >
@@ -504,10 +504,10 @@ export class WpeComponentBase extends Component {
                     tabPanel,
                     function (tabPanel) {
                         return tabPanel.content;
-                    }
+                    },
                 )}
             </Placeholder>,
-            portalContainer
+            portalContainer,
         );
     }
 
@@ -540,7 +540,7 @@ export class WpeComponentBase extends Component {
     }
 
     updatePreview() {
-        if (typeof this.state.needPreviewUpdate != "undefined") {
+        if (typeof this.state.needPreviewUpdate != 'undefined') {
             this.setState({ needPreviewUpdate: true });
         }
     }
@@ -548,25 +548,9 @@ export class WpeComponentBase extends Component {
     renderFooter() {
         return (
             <>
-                {/* {typeof this.state.needPreviewUpdate != "undefined" && (
+                {typeof this.previewUrl != 'undefined' && (
                     <Button
-                        key={this.props.clientId + "-buttonUpdatePreview"}
-                        className="abtButtonUpdatePreview"
-                        variant="primary"
-                        onMouseDown={() => {
-                            this.setState({ needPreviewUpdate: true });
-                            __OModal
-                                .getInstance()
-                                .showModal("alertUpdateAttributes", true);
-                        }}
-                    >
-                        <Dashicon icon="update" />
-                        Update preview
-                    </Button>
-                )} */}
-                {typeof this.previewUrl != "undefined" && (
-                    <Button
-                        key={this.props.clientId + "-buttonPreviewUrl"}
+                        key={this.props.clientId + '-buttonPreviewUrl'}
                         className="abtButtonPreviewUrl"
                         variant="primary"
                         href={this.previewUrl}
@@ -578,7 +562,7 @@ export class WpeComponentBase extends Component {
                 )}
                 <div className="o-flex-grow"></div>
                 <Button
-                    key={this.props.clientId + "-buttonCloseEditZone"}
+                    key={this.props.clientId + '-buttonCloseEditZone'}
                     className="abtButtonCloseEditZone"
                     variant="secondary"
                     onMouseDown={() => __OEditorApp.getInstance().clean()}
@@ -603,9 +587,9 @@ export class WpeComponentBase extends Component {
 
         // Title
         editZone.push(
-            <div key={this.props.clientId + "_EditZoneTitle"} className="title">
+            <div key={this.props.clientId + '_EditZoneTitle'} className="title">
                 {this.title}
-            </div>
+            </div>,
         );
 
         if (!titleOnly) {
@@ -620,9 +604,9 @@ export class WpeComponentBase extends Component {
                 // Separator
                 editZone.push(
                     <div
-                        key={this.props.clientId + "_EditZoneSeparator2"}
+                        key={this.props.clientId + '_EditZoneSeparator2'}
                         className="separator"
-                    ></div>
+                    ></div>,
                 );
 
                 // Additionnal content
@@ -634,7 +618,7 @@ export class WpeComponentBase extends Component {
 
         return (
             <div
-                key={this.props.clientId + "-EditZoneButtonGroup"}
+                key={this.props.clientId + '-EditZoneButtonGroup'}
                 className="o-toolbar-container"
                 // onDoubleClick={(e) => {
                 //     __OEditorApp.getInstance().open( this );
@@ -651,7 +635,7 @@ export class WpeComponentBase extends Component {
     renderButtonEditZone() {
         return (
             <Button
-                key={this.props.clientId + "-EditZoneButtonEdition"}
+                key={this.props.clientId + '-EditZoneButtonEdition'}
                 className="abtButtonEditZone"
                 variant="primary"
                 onMouseDown={() => {
@@ -659,7 +643,7 @@ export class WpeComponentBase extends Component {
                     if (this.getReusableBlock() != null) {
                         __OModal
                             .getInstance()
-                            .showModal("alertReusableBlock", true);
+                            .showModal('alertReusableBlock', true);
                     }
                 }}
             >
@@ -669,14 +653,13 @@ export class WpeComponentBase extends Component {
     }
 
     renderRemoveModal() {
-        return this.displayModal("removeSubmitted") &&
-            typeof this.props.removeBlock != "undefined" ? (
+        return this.displayModal('removeSubmitted') &&
+            typeof this.props.removeBlock != 'undefined' ? (
             <WpeModal
-                key={this.props.clientId + "-removeBlockWpeModal"}
-                id={this.props.clientId + "-removeBlockWpeModal"}
+                key={this.props.clientId + '-removeBlockWpeModal'}
+                id={this.props.clientId + '-removeBlockWpeModal'}
                 title={'Confirm "' + this.title + '" suppression'}
-                onClose={() => this.hideModal("removeSubmitted")}
-                hasFooter={false}
+                onClose={() => this.hideModal('removeSubmitted')}
                 type="warning"
             >
                 <p>Are you sure you want to remove this block ?</p>
@@ -685,7 +668,7 @@ export class WpeComponentBase extends Component {
                         <Button
                             variant="primary"
                             onMouseDown={() => {
-                                this.hideModal("removeSubmitted");
+                                this.hideModal('removeSubmitted');
                                 __OEditorApp.getInstance().hide();
                                 this.props.removeBlock(this.props.clientId);
                             }}
@@ -698,7 +681,7 @@ export class WpeComponentBase extends Component {
                         <Button
                             variant="link"
                             onMouseDown={() =>
-                                this.hideModal("removeSubmitted")
+                                this.hideModal('removeSubmitted')
                             }
                         >
                             Cancel

@@ -61,6 +61,14 @@ registerBlockType('custom/wpe-grid', {
         lightBlockWrapper: true,
     },
     // parent: [ 'custom/wpe-container' ],
+    example:
+        typeof blocks_spec['wpe-grid'].preview == 'string'
+            ? {
+                  attributes: {
+                      editorPreviewImage: blocks_spec['wpe-grid'].preview,
+                  },
+              }
+            : null,
     attributes: attributes,
     edit: (props) => {
         const innerBlocksProps = useInnerBlocksProps(

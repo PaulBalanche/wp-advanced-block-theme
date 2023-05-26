@@ -3,6 +3,18 @@
     max-width: 95%;
 }
 
+.inspectorButtonInsertNewBlock {
+    display: flex;
+    justify-content: center;
+    font-weight: 500;
+
+    .dashhicon {
+        font-size: 17px;
+        height: auto;
+        width: auto;
+    }
+}
+
 .panelInspectorInsertNewBlock {
     .components-tab-panel__tabs {
         background: #d8eef8;
@@ -51,6 +63,11 @@
                     .blockTitle {
                         color: var(--wp-admin-theme-color);
                     }
+                    .previewContainer {
+                        img {
+                            transform: scale(1.05);
+                        }
+                    }
                 }
 
                 .previewContainer {
@@ -61,11 +78,13 @@
                     align-items: center;
                     justify-content: center;
                     background: $background300;
+                    overflow: hidden;
 
                     img {
                         object-fit: contain;
                         width: 100%;
                         height: 100%;
+                        transition: $o-transition-default;
                     }
                 }
 

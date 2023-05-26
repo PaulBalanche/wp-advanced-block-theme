@@ -35,12 +35,20 @@ export default class OEditorInspector {
     }
 
     render() {
-        return (
-            <>
+        const inner =
+            this.blocksList &&
+            typeof this.blocksList == 'object' &&
+            this.blocksList.length > 0 ? (
                 <BlockList
                     blocksList={this.blocksList}
                     selectBlock={this.selectBlock}
                 />
+            ) : (
+                <p>Empty page...</p>
+            );
+        return (
+            <>
+                {inner}
                 <InserterBlocks
                     blocks={this.inserterItems}
                     insertBlockFunction={this.insertBlock}
@@ -245,11 +253,13 @@ const InserterBlocks = ({ blocks, insertBlockFunction }) => {
         <>
             <Button
                 key={'o-editor-inspector-button-insertNewBlock'}
+                className="inspectorButtonInsertNewBlock"
                 variant="primary"
-                onMouseDown={() => {
+                onClick={() => {
                     setIsOpen(true);
                 }}
             >
+                <Dashicon icon="plus" />
                 Add block
             </Button>
             {isOpen && (
@@ -260,7 +270,6 @@ const InserterBlocks = ({ blocks, insertBlockFunction }) => {
                     onClose={() => {
                         setIsOpen(false);
                     }}
-                    icon="admin-links"
                 >
                     {Render.tabPanelComponent(
                         'o-editor-inspector-tab-insertNewBlock',
@@ -283,6 +292,7 @@ const InserterBlocks = ({ blocks, insertBlockFunction }) => {
                                                                 block.name,
                                                             ),
                                                         );
+                                                        setIsOpen(false);
                                                     }}
                                                 >
                                                     <div className="previewContainer">

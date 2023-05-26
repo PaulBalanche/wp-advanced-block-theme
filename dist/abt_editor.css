@@ -545,6 +545,17 @@
   max-width: 95%;
 }
 
+.inspectorButtonInsertNewBlock {
+  display: flex;
+  justify-content: center;
+  font-weight: 500;
+}
+.inspectorButtonInsertNewBlock .dashhicon {
+  font-size: 17px;
+  height: auto;
+  width: auto;
+}
+
 .panelInspectorInsertNewBlock .components-tab-panel__tabs {
   background: #d8eef8;
   padding: 0 24px;
@@ -588,6 +599,9 @@
 .panelInspectorInsertNewBlock .components-tab-panel__tab-content .items .item:hover .blockTitle {
   color: var(--wp-admin-theme-color);
 }
+.panelInspectorInsertNewBlock .components-tab-panel__tab-content .items .item:hover .previewContainer img {
+  transform: scale(1.05);
+}
 .panelInspectorInsertNewBlock .components-tab-panel__tab-content .items .item .previewContainer {
   position: relative;
   width: 100%;
@@ -596,12 +610,14 @@
   align-items: center;
   justify-content: center;
   background: var(--background300, rgb(245, 245, 245));
+  overflow: hidden;
 }
 .panelInspectorInsertNewBlock .components-tab-panel__tab-content .items .item .previewContainer img {
   -o-object-fit: contain;
      object-fit: contain;
   width: 100%;
   height: 100%;
+  transition: all 0.3s ease-in-out;
 }
 .panelInspectorInsertNewBlock .components-tab-panel__tab-content .items .item .blockTitle {
   text-align: center;
@@ -832,7 +848,7 @@
   flex-direction: column;
   gap: 30px;
   flex-grow: 1;
-  padding: 24px 42px 42px 42px;
+  padding: 24px 42px;
   overflow: auto;
   background: #fcfcfc;
   border-bottom-left-radius: 10px;
@@ -1707,55 +1723,34 @@
   padding: 0;
 }
 .wpe-modal .components-modal__content .components-modal__header {
-  padding: 0 50px;
+  padding: 0 42px;
   border-bottom: 1px solid var(--border300, rgb(235, 235, 235));
 }
 .wpe-modal .components-modal__content .components-modal__body {
-  padding: 50px;
+  padding: 30px 42px 42px 42px;
 }
-.wpe-modal .components-modal__content .components-modal__body .title {
-  display: flex;
-  align-items: center;
-  margin: 0 0 50px 0;
-  border-bottom: 1px solid var(--border300, rgb(235, 235, 235));
-  padding: 0 0 30px 0;
-}
-.wpe-modal .components-modal__content .components-modal__body .title .dashicon {
-  font-size: 2.5em;
-  width: auto;
-  height: auto;
-  margin-right: 20px;
-  color: #b4b4b4;
-}
-.wpe-modal .components-modal__content .components-modal__body .title h1 {
-  font-size: 1.7em;
-  font-weight: 500;
-  color: #1d2327;
-  margin: 0;
-  padding: 0;
-}
-.wpe-modal .components-modal__content .components-modal__body .inner p {
+.wpe-modal .components-modal__content .components-modal__body p {
   font-size: 1.1em;
   margin: 0;
   line-height: 1.6em;
 }
-.wpe-modal .components-modal__content .components-modal__body .inner p.center {
+.wpe-modal .components-modal__content .components-modal__body p.center {
   text-align: center;
 }
-.wpe-modal .components-modal__content .components-modal__body .inner .bouttonGroup {
+.wpe-modal .components-modal__content .components-modal__body .bouttonGroup {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
   margin-top: 40px;
 }
-.wpe-modal .components-modal__content .components-modal__body .inner .bouttonGroup .row {
+.wpe-modal .components-modal__content .components-modal__body .bouttonGroup .row {
   margin-top: 10px;
   width: 100%;
 }
-.wpe-modal .components-modal__content .components-modal__body .inner .bouttonGroup .row:first-child {
+.wpe-modal .components-modal__content .components-modal__body .bouttonGroup .row:first-child {
   margin-top: 0;
 }
-.wpe-modal .components-modal__content .components-modal__body .inner .bouttonGroup button {
+.wpe-modal .components-modal__content .components-modal__body .bouttonGroup button {
   padding: 22px 28px;
   font-size: 1.1em;
 }

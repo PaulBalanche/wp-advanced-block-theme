@@ -1,13 +1,13 @@
-import { Component } from "@wordpress/element";
+import { Component } from '@wordpress/element';
 
 import {
     Button,
     Dashicon,
-    ToggleControl,
     __experimentalInputControl as InputControl,
-} from "@wordpress/components";
+    ToggleControl,
+} from '@wordpress/components';
 
-import { WpeModal } from "../../Components/Modal";
+import { WpeModal } from '../../Components/Modal';
 
 export class LinkControl extends Component {
     constructor() {
@@ -23,7 +23,6 @@ export class LinkControl extends Component {
     }
 
     componentDidUpdate() {
-        
         const selectionState = this.props.editorState.getSelection();
         const anchorKey = selectionState.getAnchorKey();
         const contentState = this.props.editorState.getCurrentContent();
@@ -55,11 +54,11 @@ export class LinkControl extends Component {
 
         this.setState({
             isOpen: true,
-            url: linkData && linkData.url ? linkData.url : "",
+            url: linkData && linkData.url ? linkData.url : '',
             openInNewTab: linkData && linkData.openInNewTab ? true : false,
         });
 
-        if (!this.editionMode && selectedText == "") {
+        if (!this.editionMode && selectedText == '') {
             this.isValid = false;
             return;
         }
@@ -68,12 +67,12 @@ export class LinkControl extends Component {
 
     open = () => {
         this.initValue();
-    }
+    };
 
     _close() {
         this.setState({
             isOpen: false,
-            url: "",
+            url: '',
             openInNewTab: false,
         });
     }
@@ -147,20 +146,23 @@ export class LinkControl extends Component {
     }
 
     render() {
-        const title = this.editionMode ? "Edit link" : "Add link";
+        const title = this.editionMode ? 'Edit link' : 'Add link';
 
         return (
             <>
-                <Button variant="tertiary" className={ ( this.editionMode ) ? "is-active" : "" } onClick={this.open}>
+                <Button
+                    variant="tertiary"
+                    className={this.editionMode ? 'is-active' : ''}
+                    onClick={this.open}
+                >
                     <Dashicon icon="admin-links" />
                 </Button>
                 {this.isValid && this.state.isOpen && (
                     <WpeModal
-                        key={this.props.clientId + "-linkWpeModal"}
-                        id={this.props.clientId + "-linkWpeModal"}
+                        key={this.props.clientId + '-linkWpeModal'}
+                        id={this.props.clientId + '-linkWpeModal'}
                         title={title}
                         onClose={this.close}
-                        icon="admin-links"
                     >
                         {this.getContent()}
                         <div className="bouttonGroup">{this.getFooter()}</div>

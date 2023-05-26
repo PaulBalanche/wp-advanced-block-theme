@@ -1,6 +1,6 @@
-import { Component } from "@wordpress/element";
+import { Component } from '@wordpress/element';
 
-import { CheckboxControl, ToggleControl } from "@wordpress/components";
+import { CheckboxControl, ToggleControl } from '@wordpress/components';
 
 export default class OUserPreferences extends Component {
     static _instance;
@@ -12,7 +12,6 @@ export default class OUserPreferences extends Component {
         super(props);
 
         this.state = {
-            alertUpdateAttributes: true,
             alertReusableBlock: true,
         };
 
@@ -26,13 +25,13 @@ export default class OUserPreferences extends Component {
 
     _initUserPreference() {
         const storage = localStorage.getItem(
-            "ABT_PREFERENCES_USER_" + js_const.user_id
+            'ABT_PREFERENCES_USER_' + js_const.user_id,
         );
         if (storage) {
             let jsonStorage = JSON.parse(storage);
-            if (typeof jsonStorage == "object") {
+            if (typeof jsonStorage == 'object') {
                 for (var i in this.state) {
-                    if (typeof jsonStorage[i] != "undefined") {
+                    if (typeof jsonStorage[i] != 'undefined') {
                         this.setState({ [i]: jsonStorage[i] });
                     }
                 }
@@ -41,7 +40,7 @@ export default class OUserPreferences extends Component {
     }
 
     getUserPreferences(preference) {
-        return typeof this.state[preference] != "undefined"
+        return typeof this.state[preference] != 'undefined'
             ? this.state[preference]
             : null;
     }
@@ -53,8 +52,8 @@ export default class OUserPreferences extends Component {
         currentState[preference] = newValue;
 
         localStorage.setItem(
-            "ABT_PREFERENCES_USER_" + js_const.user_id,
-            JSON.stringify(currentState)
+            'ABT_PREFERENCES_USER_' + js_const.user_id,
+            JSON.stringify(currentState),
         );
     }
 
@@ -62,35 +61,35 @@ export default class OUserPreferences extends Component {
         const render = [];
 
         if (
-            typeof this.props.preference != "undefined" &&
-            typeof this.props.context != "undefined"
+            typeof this.props.preference != 'undefined' &&
+            typeof this.props.context != 'undefined'
         ) {
             switch (this.props.context) {
-                case "toggle":
+                case 'toggle':
                     render.push(
                         <ToggleControl
                             label={
-                                typeof this.props.label != "undefined"
+                                typeof this.props.label != 'undefined'
                                     ? this.props.label
                                     : this.props.preference
                             }
                             checked={this.getUserPreferences(
-                                this.props.preference
+                                this.props.preference,
                             )}
                             onChange={() =>
                                 this.updateUserPreferences(
-                                    this.props.preference
+                                    this.props.preference,
                                 )
                             }
-                        />
+                        />,
                     );
                     break;
 
-                case "checkbox":
+                case 'checkbox':
                     render.push(
                         <CheckboxControl
                             label={
-                                typeof this.props.label != "undefined"
+                                typeof this.props.label != 'undefined'
                                     ? this.props.label
                                     : this.props.preference
                             }
@@ -99,10 +98,10 @@ export default class OUserPreferences extends Component {
                             }
                             onChange={() =>
                                 this.updateUserPreferences(
-                                    this.props.preference
+                                    this.props.preference,
                                 )
                             }
-                        />
+                        />,
                     );
                     break;
             }

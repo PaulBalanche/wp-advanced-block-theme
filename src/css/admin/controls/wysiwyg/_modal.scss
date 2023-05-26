@@ -13,67 +13,41 @@
         padding: 0;
 
         .components-modal__header {
-            padding: 0 50px;
+            padding: 0 $o-space-70;
             border-bottom: 1px solid $border300;
         }
 
         .components-modal__body {
-            padding: 50px;
+            padding: $o-space-50 $o-space-70 $o-space-70 $o-space-70;
 
-            .title {
-                display: flex;
-                align-items: center;
-                margin: 0 0 50px 0;
-                border-bottom: 1px solid $border300;
-                padding: 0 0 30px 0;
+            p {
+                font-size: 1.1em;
+                margin: 0;
+                line-height: 1.6em;
 
-                .dashicon {
-                    font-size: 2.5em;
-                    width: auto;
-                    height: auto;
-                    margin-right: 20px;
-                    color: #b4b4b4;
-                }
-
-                h1 {
-                    font-size: 1.7em;
-                    font-weight: 500;
-                    color: #1d2327;
-                    margin: 0;
-                    padding: 0;
+                &.center {
+                    text-align: center;
                 }
             }
 
-            .inner {
-                p {
-                    font-size: 1.1em;
-                    margin: 0;
-                    line-height: 1.6em;
+            .bouttonGroup {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-between;
+                margin-top: 40px;
 
-                    &.center {
-                        text-align: center;
+                .row {
+                    margin-top: 10px;
+                    width: 100%;
+
+                    &:first-child {
+                        margin-top: 0;
                     }
                 }
 
-                .bouttonGroup {
-                    display: flex;
-                    flex-wrap: wrap;
-                    justify-content: space-between;
-                    margin-top: 40px;
-
-                    .row {
-                        margin-top: 10px;
-                        width: 100%;
-
-                        &:first-child {
-                            margin-top: 0;
-                        }
-                    }
-
-                    button {
-                        padding: 22px 28px;
-                        font-size: 1.1em;
-                    }
+                button {
+                    padding: 22px 28px;
+                    font-size: 1.1em;
                 }
             }
 

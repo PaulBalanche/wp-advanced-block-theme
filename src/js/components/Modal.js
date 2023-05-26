@@ -1,66 +1,40 @@
-import { Button, Dashicon, Modal } from "@wordpress/components";
-import { Component } from "@wordpress/element";
+import { Modal } from '@wordpress/components';
+import { useState } from '@wordpress/element';
 
-export class WpeModal extends Component {
-    constructor() {
-        super(...arguments);
+export const WpeModal = (props) => {
+    const [isOpen, setOpen] = useState(true);
+    const openModal = () => setOpen(true);
+    const closeModal = () => {
+        setOpen(false);
+        props.onClose();
+    };
 
-        this.state = {
-            showModal: true,
-        };
+    const classNameModal = ['wpe-modal'];
 
-        this.handleCloseModal = this.handleCloseModal.bind(this);
+    if (typeof props.type != 'undefined') {
+        classNameModal.push('modal-' + props.type + ' center');
     }
 
-    handleCloseModal() {
-        this.setState({ showModal: false });
-        this.props.onClose();
-    }
+    const hasCustomHeader =
+        typeof props.hasCustomHeader == 'undefined' || props.hasCustomHeader;
+    const hasFooter = typeof props.hasFooter == 'undefined' || props.hasFooter;
 
-    render() {
-        const classNameModal = ["wpe-modal"];
-
-        if (typeof this.props.type != "undefined") {
-            classNameModal.push("modal-" + this.props.type + " center");
-        }
-
-        const hasFooter =
-            typeof this.props.hasFooter == "undefined" || this.props.hasFooter;
-
-        return (
-            this.state.showModal && (
+    return (
+        <>
+            {isOpen && (
                 <Modal
-                    key={this.props.id + "-modal"}
-                    title={this.props.title}
-                    onRequestClose={null}
-                    isDismissible={false}
-                    className={classNameModal.join(" ")}
-                    __experimentalHideHeader={true}
+                    key={props.id + '-modal'}
+                    title={props.title}
+                    onRequestClose={closeModal}
+                    className={classNameModal.join(' ')}
                     shouldCloseOnEsc={true}
                     shouldCloseOnClickOutside={true}
                 >
                     <div className="components-modal__body">
-                        <div className="title">
-                            {typeof this.props.icon != "undefined" && (
-                                <Dashicon icon={this.props.icon} />
-                            )}
-                            <h1>{this.props.title}</h1>
-                        </div>
-                        <div className="inner">{this.props.children}</div>
+                        {props.children}
                     </div>
-                    {hasFooter && (
-                        <div className="components-modal__footer">
-                            <Button
-                                className="alignRight"
-                                variant="link"
-                                onMouseDown={this.handleCloseModal}
-                            >
-                                Close
-                            </Button>
-                        </div>
-                    )}
                 </Modal>
-            )
-        );
-    }
-}
+            )}
+        </>
+    );
+};

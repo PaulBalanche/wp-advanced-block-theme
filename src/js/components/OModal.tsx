@@ -16,7 +16,6 @@ export default class OModal extends Component {
         super(props);
 
         this.state = {
-            alertUpdateAttributes: null,
             alertReusableBlock: null,
         };
 
@@ -27,7 +26,6 @@ export default class OModal extends Component {
     render() {
         const render = [];
 
-        render.push(this.alertUpdateAttributes());
         render.push(this.alertReusableBlock());
 
         return render;
@@ -57,46 +55,6 @@ export default class OModal extends Component {
         this.setState({ [modal]: false });
     }
 
-    alertUpdateAttributes() {
-        return this.displayModal('alertUpdateAttributes') ? (
-            <WpeModal
-                key="OModal-alertUpdateAttributes"
-                id="alertUpdateAttributesMessageWpeModal"
-                title="Updating preview..."
-                onClose={() => this.hideModal('alertUpdateAttributes')}
-                hasFooter={false}
-                type="info"
-            >
-                <p>
-                    This preview update does not save the post.
-                    <br />
-                    <b>Don't forget to save your changes!</b>
-                </p>
-                <div className="bouttonGroup">
-                    <div className="row">
-                        <Button
-                            key={'alertUpdateAttributesMessageButton'}
-                            variant="primary"
-                            onMouseDown={() =>
-                                this.hideModal('alertUpdateAttributes')
-                            }
-                        >
-                            <Dashicon icon="yes" />
-                            All right!
-                        </Button>
-                    </div>
-                    <div className="row">
-                        <__OUserPreferences
-                            preference="alertUpdateAttributes"
-                            context="checkbox"
-                            label="Do not show this message again"
-                        ></__OUserPreferences>
-                    </div>
-                </div>
-            </WpeModal>
-        ) : null;
-    }
-
     alertReusableBlock() {
         return this.displayModal('alertReusableBlock') ? (
             <WpeModal
@@ -104,7 +62,6 @@ export default class OModal extends Component {
                 id="alertReusableBlockMessageWpeModal"
                 title="Reusable block"
                 onClose={() => this.hideModal('alertReusableBlock')}
-                hasFooter={false}
                 type="warning"
             >
                 <p>
