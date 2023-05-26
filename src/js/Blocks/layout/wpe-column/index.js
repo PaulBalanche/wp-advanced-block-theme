@@ -1,12 +1,10 @@
-import {
-    InnerBlocks,
-    useBlockProps,
-    useInnerBlocksProps,
-} from '@wordpress/block-editor';
+import { useBlockProps, useInnerBlocksProps } from '@wordpress/block-editor';
 import { registerBlockType } from '@wordpress/blocks';
 
 import { Attributes } from '../../../Static/Attributes';
 import { EditMode } from './edit';
+
+import { OBlocksAppender } from '../../../components/OBlocksAppender';
 
 let attributes = {
     id_component: {
@@ -63,9 +61,18 @@ registerBlockType('custom/wpe-column', {
     parent: ['custom/wpe-grid'],
     attributes: attributes,
     edit: (props) => {
+        const MyAmazingAppender = (
+            <OBlocksAppender
+                blocks={null}
+                blockCategories={null}
+                insertBlockFunction={null}
+            />
+        );
         const innerBlocksProps = useInnerBlocksProps(
             useBlockProps({ className: '' }),
-            { renderAppender: InnerBlocks.ButtonBlockAppender },
+            {
+                renderAppender: OBlocksAppender,
+            },
         );
 
         return (

@@ -15,10 +15,6 @@ export const WpeModal = (props) => {
         classNameModal.push('modal-' + props.type + ' center');
     }
 
-    const hasCustomHeader =
-        typeof props.hasCustomHeader == 'undefined' || props.hasCustomHeader;
-    const hasFooter = typeof props.hasFooter == 'undefined' || props.hasFooter;
-
     return (
         <>
             {isOpen && (

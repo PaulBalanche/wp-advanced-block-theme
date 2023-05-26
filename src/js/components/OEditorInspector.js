@@ -1,4 +1,4 @@
-import { createBlock, getBlockType } from '@wordpress/blocks';
+import { getBlockType } from '@wordpress/blocks';
 import { Button, ButtonGroup, Dashicon } from '@wordpress/components';
 import { Fragment, useState } from '@wordpress/element';
 
@@ -6,9 +6,7 @@ import __OEditorApp from './OEditorApp';
 
 import globalData from '../global';
 
-import { Render } from '../Static/Render';
-
-import { WpeModal } from '../Components/Modal';
+import { OBlocksAppender } from './OBlocksAppender';
 
 export default class OEditorInspector {
     constructor(blocksList, selectBlock, inserterItems, insertBlock) {
@@ -232,14 +230,14 @@ const BlockListItem = ({ block, selectBlock }) => {
 
 const InserterBlocks = ({ blocks, insertBlockFunction }) => {
     const [isOpen, setIsOpen] = useState(false);
-    console.log(blocks);
-    let blockCaregories = [];
+
+    let blockCategories = [];
     blocks.forEach((block) => {
-        if (!blockCaregories.includes(block.category)) {
-            blockCaregories.push(block.category);
+        if (!blockCategories.includes(block.category)) {
+            blockCategories.push(block.category);
         }
     });
-    blockCaregories = blockCaregories.map((category) => {
+    blockCategories = blockCategories.map((category) => {
         return {
             name: category,
             title:
@@ -263,67 +261,14 @@ const InserterBlocks = ({ blocks, insertBlockFunction }) => {
                 Add block
             </Button>
             {isOpen && (
-                <WpeModal
-                    key={'o-editor-inspector-modal-insertNewBlock'}
-                    id={'o-editor-inspector-modal-insertNewBlock'}
-                    title="Add block"
+                <OBlocksAppender
+                    blocks={blocks}
+                    blockCategories={blockCategories}
+                    insertBlockFunction={insertBlockFunction}
                     onClose={() => {
                         setIsOpen(false);
                     }}
-                >
-                    {Render.tabPanelComponent(
-                        'o-editor-inspector-tab-insertNewBlock',
-                        blockCaregories,
-                        (tabPanel) => {
-                            return (
-                                <div className="items">
-                                    {blocks.map((block, index) => {
-                                        if (block.category == tabPanel.name) {
-                                            return (
-                                                <div
-                                                    key={
-                                                        'o-editor-inspector-modal-block-' +
-                                                        index
-                                                    }
-                                                    className="item"
-                                                    onMouseDown={() => {
-                                                        insertBlockFunction(
-                                                            createBlock(
-                                                                block.name,
-                                                            ),
-                                                        );
-                                                        setIsOpen(false);
-                                                    }}
-                                                >
-                                                    <div className="previewContainer">
-                                                        {block?.example
-                                                            ?.attributes
-                                                            ?.editorPreviewImage && (
-                                                            <img
-                                                                src={
-                                                                    block
-                                                                        .example
-                                                                        .attributes
-                                                                        .editorPreviewImage
-                                                                }
-                                                            />
-                                                        )}
-                                                    </div>
-                                                    <div className="blockTitle">
-                                                        {block.title}
-                                                    </div>
-                                                </div>
-                                            );
-                                        }
-                                    })}
-                                </div>
-                            );
-                        },
-                        null,
-                        null,
-                        'panelInspectorInsertNewBlock',
-                    )}
-                </WpeModal>
+                />
             )}
         </>
     );
