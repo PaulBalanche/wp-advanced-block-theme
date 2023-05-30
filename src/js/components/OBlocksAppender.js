@@ -1,6 +1,7 @@
 import { createBlock } from '@wordpress/blocks';
 import { Render } from '../Static/Render';
-import { WpeModal } from './Modal';
+
+import { WpeModal } from './WpeModal';
 
 export const OBlocksAppender = ({
     blocks,

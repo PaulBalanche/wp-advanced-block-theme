@@ -18,7 +18,7 @@ import { getBlockType } from '@wordpress/blocks';
 
 import { isReusableBlock } from '@wordpress/blocks';
 
-import { WpeModal } from './Modal';
+import { WpeModal } from './WpeModal';
 
 import __OEditorApp from './OEditorApp';
 import __OModal from './OModal';

@@ -9,6 +9,8 @@ import { Attributes } from '../../../Static/Attributes';
 
 import { WpeSlide } from './edit';
 
+import { OButtonBlockAppender } from '../../../Components/OButtonBlockAppender';
+
 let attributes = {};
 if (
     typeof blocks_spec['wpe-slide'] == 'object' &&
@@ -58,7 +60,7 @@ registerBlockType('custom/wpe-slide', {
     edit: (props) => {
         const innerBlocksProps = useInnerBlocksProps(
             useBlockProps({ className: '' }),
-            { renderAppender: InnerBlocks.ButtonBlockAppender },
+            { renderAppender: OButtonBlockAppender },
         );
 
         return (

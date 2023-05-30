@@ -6,14 +6,12 @@ import __OEditorApp from './OEditorApp';
 
 import globalData from '../global';
 
-import { OBlocksAppender } from './OBlocksAppender';
+import { OButtonBlockAppender } from './OButtonBlockAppender';
 
 export default class OEditorInspector {
-    constructor(blocksList, selectBlock, inserterItems, insertBlock) {
+    constructor(blocksList, selectBlock) {
         this.blocksList = blocksList;
         this.selectBlock = selectBlock;
-        this.inserterItems = inserterItems;
-        this.insertBlock = insertBlock;
     }
 
     renderTitle() {
@@ -47,10 +45,7 @@ export default class OEditorInspector {
         return (
             <>
                 {inner}
-                <InserterBlocks
-                    blocks={this.inserterItems}
-                    insertBlockFunction={this.insertBlock}
-                />
+                <OButtonBlockAppender />
             </>
         );
     }
@@ -225,51 +220,5 @@ const BlockListItem = ({ block, selectBlock }) => {
                 />
             )}
         </li>
-    );
-};
-
-const InserterBlocks = ({ blocks, insertBlockFunction }) => {
-    const [isOpen, setIsOpen] = useState(false);
-
-    let blockCategories = [];
-    blocks.forEach((block) => {
-        if (!blockCategories.includes(block.category)) {
-            blockCategories.push(block.category);
-        }
-    });
-    blockCategories = blockCategories.map((category) => {
-        return {
-            name: category,
-            title:
-                category == 'wpe-layout'
-                    ? 'Layout'
-                    : category.charAt(0).toUpperCase() + category.slice(1),
-        };
-    });
-
-    return (
-        <>
-            <Button
-                key={'o-editor-inspector-button-insertNewBlock'}
-                className="inspectorButtonInsertNewBlock"
-                variant="primary"
-                onClick={() => {
-                    setIsOpen(true);
-                }}
-            >
-                <Dashicon icon="plus" />
-                Add block
-            </Button>
-            {isOpen && (
-                <OBlocksAppender
-                    blocks={blocks}
-                    blockCategories={blockCategories}
-                    insertBlockFunction={insertBlockFunction}
-                    onClose={() => {
-                        setIsOpen(false);
-                    }}
-                />
-            )}
-        </>
     );
 };

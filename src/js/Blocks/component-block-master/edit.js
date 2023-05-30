@@ -1,5 +1,4 @@
 import {
-    InnerBlocks,
     store as blockEditorStore,
     useBlockProps,
     useInnerBlocksProps,
@@ -13,6 +12,8 @@ import { WpeComponentBase } from '../../Components/WpeComponentBase';
 import apiFetch from '@wordpress/api-fetch';
 
 import __OEditorApp from '../../Components/OEditorApp';
+
+import { OButtonBlockAppender } from '../../Components/OButtonBlockAppender';
 
 class WpeComponent extends WpeComponentBase {
     _$iframes;
@@ -297,8 +298,7 @@ export default (block_spec, current_user_can_edit_posts, theme_spec) =>
                         ? useInnerBlocksProps(
                               useBlockProps({ className: '' }),
                               {
-                                  renderAppender:
-                                      InnerBlocks.ButtonBlockAppender,
+                                  renderAppender: OButtonBlockAppender,
                               },
                           )
                         : null,

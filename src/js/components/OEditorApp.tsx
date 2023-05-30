@@ -353,8 +353,6 @@ export default class OEditorApp extends Component {
                         : new __OEditorInspector(
                               this.props.context.blocksList,
                               this.props.context.selectBlock,
-                              this.props.context.inserterItems,
-                              this.props.context.insertBlock,
                           );
         }
 

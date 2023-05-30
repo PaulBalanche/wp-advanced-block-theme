@@ -7,7 +7,7 @@ import {
     ToggleControl,
 } from '@wordpress/components';
 
-import { WpeModal } from '../../Components/Modal';
+import { WpeModal } from '../../Components/WpeModal';
 
 export class LinkControl extends Component {
     constructor() {
