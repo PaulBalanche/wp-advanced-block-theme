@@ -34,13 +34,13 @@
             display: flex;
             flex-wrap: wrap;
             row-gap: $o-space-100;
-            column-gap: 6%;
+            column-gap: 4%;
             margin-top: $o-space-50;
 
             .item {
                 position: relative;
                 display: block;
-                width: 20%;
+                width: 22%;
                 cursor: pointer;
                 background: rgb(250, 250, 250);
 
