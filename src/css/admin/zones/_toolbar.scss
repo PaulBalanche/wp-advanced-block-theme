@@ -1,29 +1,29 @@
 #editor {
-
     .interface-interface-skeleton__header {
-
         .edit-post-header__toolbar {
-            
             align-items: center;
 
             .edit-post-header-toolbar {
                 flex-grow: initial;
+
+                .components-button:not(.editor-history__undo):not(
+                        .editor-history__redo
+                    ) {
+                    display: none;
+                }
             }
 
             .edit-post-visual-editor__post-title-wrapper {
-
                 margin: 0;
-                margin-left: 5rem;
                 flex: auto;
-        
+
                 h1 {
-        
                     margin: 0;
                     border: 1px solid $background300;
                     line-height: initial;
                     padding: $o-space-10 $o-space-20;
                 }
             }
-        } 
+        }
     }
 }

@@ -3,10 +3,17 @@
     max-width: 95%;
 }
 
+.block-editor-block-list__block.wp-block .block-list-appender {
+    position: relative;
+}
+
 .inspectorButtonInsertNewBlock {
     display: flex;
     justify-content: center;
     font-weight: 500;
+    width: 100%;
+    max-width: 300px;
+    margin: auto;
 
     .dashhicon {
         font-size: 17px;

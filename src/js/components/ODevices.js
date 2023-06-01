@@ -1,11 +1,9 @@
-import { Component, createPortal } from "@wordpress/element";
-import { Button, ButtonGroup, Dashicon } from "@wordpress/components";
+import { Button, ButtonGroup } from '@wordpress/components';
+import { Component, createPortal } from '@wordpress/element';
 
-import __OUserPreferences from "./OUserPreferences";
+import __OEditorApp from './OEditorApp';
 
-import __OEditorApp from "./OEditorApp";
-
-import { Render } from "../Static/Render";
+import { Render } from '../Static/Render';
 
 export default class ODevices extends Component {
     static _instance;
@@ -17,7 +15,7 @@ export default class ODevices extends Component {
         super(props);
 
         this.state = {
-            currentDevice: null
+            currentDevice: null,
         };
 
         // @ts-ignore
@@ -28,10 +26,9 @@ export default class ODevices extends Component {
     }
 
     componentDidMount() {
-
         if (
             theme_spec?.media?.queries &&
-            typeof theme_spec.media.queries == "object"
+            typeof theme_spec.media.queries == 'object'
         ) {
             this.mediaQueries = this.sortMediaQueries(theme_spec.media.queries);
 
@@ -39,7 +36,7 @@ export default class ODevices extends Component {
                 this.getCurrentDevice() == null ||
                 (theme_spec?.media?.defaultMedia &&
                     typeof this.mediaQueries[theme_spec.media.defaultMedia] !=
-                        "undefined")
+                        'undefined')
             ) {
                 this.defaultMediaQuery = theme_spec.media.defaultMedia;
                 this.setCurrentDevice(theme_spec.media.defaultMedia);
@@ -76,26 +73,25 @@ export default class ODevices extends Component {
     }
 
     setCurrentDevice(newDevice) {
+        this.setState({ currentDevice: newDevice });
 
-        this.setState( { currentDevice: newDevice } );
-
-        var editor_area = document.querySelector("#editor");
+        var editor_area = document.querySelector('#editor');
         var layout_flow_area = document.querySelector(
-            ".is-root-container.is-layout-flow"
+            '.is-root-container.is-layout-flow',
         );
         if (editor_area && layout_flow_area) {
-            layout_flow_area.style.margin = "auto";
+            layout_flow_area.style.margin = 'auto';
 
-            if (typeof this.getMediaQueries()[newDevice] != "undefined") {
+            if (typeof this.getMediaQueries()[newDevice] != 'undefined') {
                 if (
-                    this.getMediaQueries()[newDevice]["maxWidth"] != null &&
-                    this.getMediaQueries()[newDevice]["maxWidth"] <=
+                    this.getMediaQueries()[newDevice]['maxWidth'] != null &&
+                    this.getMediaQueries()[newDevice]['maxWidth'] <=
                         editor_area.offsetWidth
                 ) {
                     layout_flow_area.style.width =
-                        this.getMediaQueries()[newDevice]["maxWidth"] + "px";
+                        this.getMediaQueries()[newDevice]['maxWidth'] + 'px';
                 } else {
-                    layout_flow_area.style.removeProperty("width");
+                    layout_flow_area.style.removeProperty('width');
                 }
             }
         }
@@ -108,11 +104,10 @@ export default class ODevices extends Component {
     }
 
     getButtonGroup() {
-
         const currentDevice = this.getCurrentDevice();
         const defaultDevice = this.getDefaultDevice();
 
-        if( typeof this.getMediaQueries()[currentDevice] == 'undefined' ) {
+        if (typeof this.getMediaQueries()[currentDevice] == 'undefined') {
             return null;
         }
 
@@ -123,10 +118,11 @@ export default class ODevices extends Component {
                     className="devicesButtonGroup"
                 >
                     {Object.keys(this.getMediaQueries()).map((layout) => {
-                        const extraClass = ( defaultDevice == layout ) ? 'default' : null;
+                        const extraClass =
+                            defaultDevice == layout ? 'default' : null;
                         return (
                             <Button
-                                key={"layoutButton_" + layout}
+                                key={'layoutButton_' + layout}
                                 isPressed={currentDevice == layout}
                                 className={extraClass}
                                 onMouseDown={() => {
@@ -137,6 +133,14 @@ export default class ODevices extends Component {
                             </Button>
                         );
                     })}
+                    <Button
+                        key={'layoutButton_open'}
+                        href={js_const.post_url}
+                        className="is-secondary"
+                        target="_blank"
+                    >
+                        View page
+                    </Button>
                 </ButtonGroup>
             </div>
         );
@@ -146,7 +150,7 @@ export default class ODevices extends Component {
         // return null;
         return createPortal(
             this.getButtonGroup(),
-            document.querySelector(".o-editor")
+            document.querySelector('.o-editor'),
         );
     }
 }

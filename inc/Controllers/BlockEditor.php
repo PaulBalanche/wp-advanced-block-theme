@@ -83,6 +83,7 @@ class BlockEditor extends ControllerBase
         wp_localize_script($handle, "js_const", [
             "admin_url" => admin_url(),
             "post_id" => get_the_ID(),
+            "post_url" => get_the_permalink(),
             "user_id" => get_current_user_id(),
             "rest_api_url" => rest_url(),
             "rest_api_namespace" => $this->get_config()->get(

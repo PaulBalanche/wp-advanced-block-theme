@@ -12,13 +12,14 @@
 .o-editor {
     .editor-styles-wrapper.block-editor-writing-flow {
         background: var(--abt-background-editor, 'white');
+        padding: 0;
     }
 
     .is-layout-flow {
-        display: flex;
-        flex-direction: column;
-        gap: 180px;
-        padding: 100px 0;
+        // display: flex;
+        // flex-direction: column;
+        // gap: 180px;
+        padding: $o-space-40 0;
         border-left: solid 1px hsla(200, 0%, 55%, 0.2);
         border-right: solid 1px hsla(200, 0%, 55%, 0.2);
 
@@ -273,44 +274,50 @@
     /**
     * Appender
     */
-    .wp-block.block-list-appender {
-        background: var(--wp-admin-theme-color);
-        border: none;
-        width: 90%;
-        max-width: 90%;
-        position: relative;
-        margin: auto;
-        margin-top: $o-space-40;
-
-        .components-button {
-            box-shadow: none;
-
-            svg {
-                color: white;
-                width: 30px;
-                height: 30px;
-
-                // * {
-                //     fill: $o-accent-color;
-                // }
-            }
-        }
+    .is-root-container > .wp-block.block-list-appender {
+        display: none;
     }
+    // .wp-block.block-list-appender {
+    //     background: var(--wp-admin-theme-color);
+    //     border: none;
+    //     width: 90%;
+    //     max-width: 90%;
+    //     position: relative;
+    //     margin: auto;
+    //     margin-top: $o-space-40;
+
+    //     .components-button {
+    //         box-shadow: none;
+
+    //         svg {
+    //             color: white;
+    //             width: 30px;
+    //             height: 30px;
+
+    //             // * {
+    //             //     fill: $o-accent-color;
+    //             // }
+    //         }
+    //     }
+    // }
 }
 
 #editor {
-    .block-editor-block-list__insertion-point-inserter {
-        top: calc(50% - 25px);
-        left: calc(50% - 50px);
-
-        .block-editor-inserter__toggle.components-button.has-icon {
-            height: 50px;
-            width: 100px;
-
-            &:hover {
-                background: white;
-                color: var(--wp-admin-theme-color);
-            }
-        }
+    .block-editor-block-popover__inbetween {
+        display: none;
     }
+    // .block-editor-block-list__insertion-point-inserter {
+    //     top: calc(50% - 25px);
+    //     left: calc(50% - 50px);
+
+    //     .block-editor-inserter__toggle.components-button.has-icon {
+    //         height: 50px;
+    //         width: 100px;
+
+    //         &:hover {
+    //             background: white;
+    //             color: var(--wp-admin-theme-color);
+    //         }
+    //     }
+    // }
 }

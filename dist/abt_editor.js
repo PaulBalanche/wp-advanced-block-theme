@@ -13964,10 +13964,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _OUserPreferences__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./OUserPreferences */ "./src/js/Components/OUserPreferences.tsx");
-/* harmony import */ var _OEditorApp__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./OEditorApp */ "./src/js/Components/OEditorApp.tsx");
-/* harmony import */ var _Static_Render__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../Static/Render */ "./src/js/Static/Render.js");
-
+/* harmony import */ var _OEditorApp__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./OEditorApp */ "./src/js/Components/OEditorApp.tsx");
+/* harmony import */ var _Static_Render__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Static/Render */ "./src/js/Static/Render.js");
 
 
 
@@ -13990,9 +13988,9 @@ class ODevices extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Component
     this.defaultMediaQuery = null;
   }
   componentDidMount() {
-    if (theme_spec?.media?.queries && typeof theme_spec.media.queries == "object") {
+    if (theme_spec?.media?.queries && typeof theme_spec.media.queries == 'object') {
       this.mediaQueries = this.sortMediaQueries(theme_spec.media.queries);
-      if (this.getCurrentDevice() == null || theme_spec?.media?.defaultMedia && typeof this.mediaQueries[theme_spec.media.defaultMedia] != "undefined") {
+      if (this.getCurrentDevice() == null || theme_spec?.media?.defaultMedia && typeof this.mediaQueries[theme_spec.media.defaultMedia] != 'undefined') {
         this.defaultMediaQuery = theme_spec.media.defaultMedia;
         this.setCurrentDevice(theme_spec.media.defaultMedia);
       }
@@ -14024,19 +14022,19 @@ class ODevices extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Component
     this.setState({
       currentDevice: newDevice
     });
-    var editor_area = document.querySelector("#editor");
-    var layout_flow_area = document.querySelector(".is-root-container.is-layout-flow");
+    var editor_area = document.querySelector('#editor');
+    var layout_flow_area = document.querySelector('.is-root-container.is-layout-flow');
     if (editor_area && layout_flow_area) {
-      layout_flow_area.style.margin = "auto";
-      if (typeof this.getMediaQueries()[newDevice] != "undefined") {
-        if (this.getMediaQueries()[newDevice]["maxWidth"] != null && this.getMediaQueries()[newDevice]["maxWidth"] <= editor_area.offsetWidth) {
-          layout_flow_area.style.width = this.getMediaQueries()[newDevice]["maxWidth"] + "px";
+      layout_flow_area.style.margin = 'auto';
+      if (typeof this.getMediaQueries()[newDevice] != 'undefined') {
+        if (this.getMediaQueries()[newDevice]['maxWidth'] != null && this.getMediaQueries()[newDevice]['maxWidth'] <= editor_area.offsetWidth) {
+          layout_flow_area.style.width = this.getMediaQueries()[newDevice]['maxWidth'] + 'px';
         } else {
-          layout_flow_area.style.removeProperty("width");
+          layout_flow_area.style.removeProperty('width');
         }
       }
     }
-    _OEditorApp__WEBPACK_IMPORTED_MODULE_3__["default"].getInstance().setCurrentDevice(newDevice);
+    _OEditorApp__WEBPACK_IMPORTED_MODULE_2__["default"].getInstance().setCurrentDevice(newDevice);
   }
   getMediaQueries() {
     return this.mediaQueries;
@@ -14055,18 +14053,23 @@ class ODevices extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Component
     }, Object.keys(this.getMediaQueries()).map(layout => {
       const extraClass = defaultDevice == layout ? 'default' : null;
       return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
-        key: "layoutButton_" + layout,
+        key: 'layoutButton_' + layout,
         isPressed: currentDevice == layout,
         className: extraClass,
         onMouseDown: () => {
           this.setCurrentDevice(layout);
         }
-      }, _Static_Render__WEBPACK_IMPORTED_MODULE_4__.Render.getDeviceLabel(layout));
-    })));
+      }, _Static_Render__WEBPACK_IMPORTED_MODULE_3__.Render.getDeviceLabel(layout));
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
+      key: 'layoutButton_open',
+      href: js_const.post_url,
+      className: "is-secondary",
+      target: "_blank"
+    }, "View page")));
   }
   render() {
     // return null;
-    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createPortal)(this.getButtonGroup(), document.querySelector(".o-editor"));
+    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createPortal)(this.getButtonGroup(), document.querySelector('.o-editor'));
   }
 }
 

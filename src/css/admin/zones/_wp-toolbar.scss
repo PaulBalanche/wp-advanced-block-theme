@@ -8,6 +8,8 @@
     padding: $o-space-10;
 
     .devicesButtonGroup {
+        display: flex;
+
         .components-button {
             position: relative;
             border-radius: 0;
@@ -33,6 +35,13 @@
             &.default {
                 &:after {
                     content: '\f154';
+                }
+            }
+            &.is-secondary {
+                border-left: 1px solid $o-main-color-border;
+                transition: $o-transition-fast;
+                &:hover {
+                    color: var(--wp-admin-theme-color);
                 }
             }
         }
