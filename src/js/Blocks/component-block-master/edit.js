@@ -286,19 +286,13 @@ export default (block_spec, current_user_can_edit_posts, theme_spec) =>
                 duplicateBlocks,
                 moveBlocksUp,
                 moveBlocksDown,
+                __experimentalConvertBlocksToReusable,
             } = dispatch(blockEditorStore);
-
-            // dispatch( preferencesStore ).setDefaults(
-            //     'abt/wpe-component',
-            //     {
-            //         myBooleanFeature: true
-            //     }
-            // );
 
             return {
                 removeBlock,
                 duplicateBlocks,
-                // __experimentalConvertBlocksToReusable
+                __experimentalConvertBlocksToReusable,
                 moveBlocksUp,
                 moveBlocksDown,
             };

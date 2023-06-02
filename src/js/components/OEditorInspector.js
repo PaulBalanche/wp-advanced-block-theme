@@ -81,6 +81,7 @@ const BlockList = (props) => {
 
 const BlockListItem = ({ block, selectBlock }) => {
     const [isOpen, setIsOpen] = useState(false);
+    const [isHover, setIsHover] = useState(false);
 
     const anchor = block.attributes?.anchor;
     const displayAnchor =
@@ -88,6 +89,12 @@ const BlockListItem = ({ block, selectBlock }) => {
         anchor.match(/^[a-z0-9]+-[a-z0-9]+-[a-z0-9]+-[a-z0-9]+-[a-z0-9]+$/) ==
             null;
     const domBlock = document.querySelector('#block-' + block.clientId);
+    domBlock.addEventListener('mouseover', () => {
+        setIsHover(true);
+    });
+    domBlock.addEventListener('mouseleave', () => {
+        setIsHover(false);
+    });
 
     const parentDomBlocks = [];
     var closestParent = domBlock;
@@ -158,6 +165,7 @@ const BlockListItem = ({ block, selectBlock }) => {
     return (
         <li
             key={'o-inspector-block-' + block.clientId}
+            className={isHover ? 'is-hover' : ''}
             onMouseOver={() => {
                 setIsOpen(true);
             }}

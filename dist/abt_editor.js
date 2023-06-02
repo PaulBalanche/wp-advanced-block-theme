@@ -11635,20 +11635,13 @@ class WpeComponent extends _Components_WpeComponentBase__WEBPACK_IMPORTED_MODULE
     removeBlock,
     duplicateBlocks,
     moveBlocksUp,
-    moveBlocksDown
+    moveBlocksDown,
+    __experimentalConvertBlocksToReusable
   } = dispatch(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.store);
-
-  // dispatch( preferencesStore ).setDefaults(
-  //     'abt/wpe-component',
-  //     {
-  //         myBooleanFeature: true
-  //     }
-  // );
-
   return {
     removeBlock,
     duplicateBlocks,
-    // __experimentalConvertBlocksToReusable
+    __experimentalConvertBlocksToReusable,
     moveBlocksUp,
     moveBlocksDown
   };
@@ -14691,9 +14684,16 @@ const BlockListItem = _ref => {
     selectBlock
   } = _ref;
   const [isOpen, setIsOpen] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
+  const [isHover, setIsHover] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   const anchor = block.attributes?.anchor;
   const displayAnchor = typeof anchor != 'undefined' && anchor.match(/^[a-z0-9]+-[a-z0-9]+-[a-z0-9]+-[a-z0-9]+-[a-z0-9]+$/) == null;
   const domBlock = document.querySelector('#block-' + block.clientId);
+  domBlock.addEventListener('mouseover', () => {
+    setIsHover(true);
+  });
+  domBlock.addEventListener('mouseleave', () => {
+    setIsHover(false);
+  });
   const parentDomBlocks = [];
   var closestParent = domBlock;
   if (closestParent != null) {
@@ -14731,6 +14731,7 @@ const BlockListItem = _ref => {
   }
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", {
     key: 'o-inspector-block-' + block.clientId,
+    className: isHover ? 'is-hover' : '',
     onMouseOver: () => {
       setIsOpen(true);
     },
@@ -15231,6 +15232,28 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
         key: this.props.clientId + '-toolsDropdownMenu-reusable-manage',
         onClick: () => window.open(js_const.admin_url + 'post.php?post=' + this.getReusableBlock() + '&action=edit', '_blank')
       }, "Manage this reusable block")));
+    } else if (typeof this.props.__experimentalConvertBlocksToReusable != 'undefined') {
+      // menuGroup.push(
+      //     <MenuGroup
+      //         key={this.props.clientId + '-toolsDropdownMenu-reusable'}
+      //     >
+      //         <MenuItem
+      //             key={
+      //                 this.props.clientId +
+      //                 '-toolsDropdownMenu-convertToReusable'
+      //             }
+      //             icon={trash}
+      //             onClick={() => {
+      //                 this.props.__experimentalConvertBlocksToReusable(
+      //                     this.props.clientId,
+      //                     'test',
+      //                 );
+      //             }}
+      //         >
+      //             Create Reusable block
+      //         </MenuItem>
+      //     </MenuGroup>,
+      // );
     }
     if (typeof this.props.removeBlock != 'undefined') {
       menuGroup.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.MenuGroup, {

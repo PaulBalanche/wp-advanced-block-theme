@@ -45,6 +45,7 @@
         margin: 0 !important;
         user-select: none;
         opacity: 1;
+        z-index: auto !important;
         transition: $o-transition-fast;
 
         /* wordpress outline */
@@ -185,7 +186,8 @@
         cursor: pointer;
 
         .o-toolbar {
-            display: flex;
+            // display: flex;
+            display: none;
             align-items: center;
             gap: $o-space-30;
             padding: $o-space-20;
