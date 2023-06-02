@@ -320,7 +320,7 @@ export default class OEditorApp extends Component {
                     onMouseDown={() => this.goInspector()}
                 >
                     <Dashicon icon="arrow-left-alt2" />
-                    Back
+                    Inspector
                 </Button>
             </div>
         ) : null;

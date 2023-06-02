@@ -147,6 +147,14 @@ export class WpeComponentBase extends Component {
     renderTools() {
         const menuGroup = [];
 
+        const rootClientId =
+            this.props.parentsBlock != null &&
+            typeof this.props.parentsBlock == 'object' &&
+            this.props.parentsBlock.length > 0
+                ? this.props.parentsBlock[this.props.parentsBlock.length - 1]
+                      .clientId
+                : undefined;
+
         if (
             typeof this.props.moveBlocksUp != 'undefined' ||
             typeof this.props.moveBlocksDown != 'undefined'
@@ -162,7 +170,10 @@ export class WpeComponentBase extends Component {
                         key={this.props.clientId + '-toolsDropdownMenu-move-up'}
                         icon={chevronUp}
                         onClick={() =>
-                            this.props.moveBlocksUp([this.props.clientId])
+                            this.props.moveBlocksUp(
+                                [this.props.clientId],
+                                rootClientId,
+                            )
                         }
                     >
                         Move up
@@ -181,7 +192,10 @@ export class WpeComponentBase extends Component {
                         }
                         icon={chevronDown}
                         onClick={() =>
-                            this.props.moveBlocksDown([this.props.clientId])
+                            this.props.moveBlocksDown(
+                                [this.props.clientId],
+                                rootClientId,
+                            )
                         }
                     >
                         Move down

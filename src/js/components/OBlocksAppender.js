@@ -4,6 +4,7 @@ import { Render } from '../Static/Render';
 import { WpeModal } from './WpeModal';
 
 export const OBlocksAppender = ({
+    rootClientId,
     blocks,
     blockCategories,
     insertBlockFunction,
@@ -36,6 +37,9 @@ export const OBlocksAppender = ({
                                             onMouseDown={() => {
                                                 insertBlockFunction(
                                                     createBlock(block.name),
+                                                    undefined,
+                                                    rootClientId,
+                                                    false,
                                                 );
                                                 onClose();
                                             }}

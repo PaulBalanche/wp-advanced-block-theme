@@ -63,7 +63,9 @@ registerBlockType('custom/wpe-column', {
         const innerBlocksProps = useInnerBlocksProps(
             useBlockProps({ className: '' }),
             {
-                renderAppender: OButtonBlockAppender,
+                renderAppender: () => (
+                    <OButtonBlockAppender rootClientId={props.clientId} />
+                ),
             },
         );
 

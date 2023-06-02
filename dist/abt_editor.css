@@ -426,9 +426,6 @@
   display: none;
 }
 
-.o-editor .block-editor-block-list__block[data-type="custom/wpe-grid"] > .o-toolbar-container .o-toolbar {
-  top: -24px;
-}
 .o-editor .block-editor-block-list__block[data-type="custom/wpe-grid"] > .o-toolbar-container .o-toolbar .svg {
   width: 80px;
   height: 32px;
@@ -461,9 +458,6 @@
 .o-editor .block-editor-block-list__block[data-type="custom/wpe-grid"] .o-grid-container > .block-editor-block-list__block[data-type="custom/wpe-column"] .block-editor-block-list__block {
   width: 100% !important;
   max-width: 100% !important;
-}
-.o-editor .block-editor-block-list__block[data-type="custom/wpe-grid"] .o-grid-container > .block-editor-block-list__block[data-type="custom/wpe-column"]:nth-child(2) {
-  margin-top: 0;
 }
 .o-editor .block-editor-block-list__block[data-type="custom/wpe-grid"] .o-grid-add-column {
   display: flex;
@@ -2349,9 +2343,6 @@
 }
 .o-editor .block-editor-block-list__block:not(:hover):not(.is-selected):not([data-type="custom/wpe-grid"].has-child-selected) > .o-toolbar-container, .o-editor .block-editor-block-list__block:has(.block-editor-block-list__block:hover):not([data-type="custom/wpe-grid"]) > .o-toolbar-container {
   display: none !important;
-}
-.o-editor .block-editor-block-list__block:not(:hover):not(.is-selected):has(.wpe-block-placeholder) > .o-toolbar-container, .o-editor .block-editor-block-list__block:has(.block-editor-block-list__block:hover):has(.wpe-block-placeholder):not([data-type="custom/wpe-slide"]) > .o-toolbar-container {
-  display: flex !important;
 }
 .o-editor .is-root-container:has(.block-editor-block-list__block.is-selected) .block-editor-block-list__block:not(.is-selected):not(.has-child-selected):not(.is-selected .block-editor-block-list__block):not(.block-editor-block-list__block .block-editor-block-list__block):not(:hover) {
   opacity: 0.1;

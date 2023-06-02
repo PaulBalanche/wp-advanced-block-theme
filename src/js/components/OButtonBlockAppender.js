@@ -10,6 +10,7 @@ import { store as blockEditorStore } from '@wordpress/block-editor';
 export const ButtonBlockAppender = ({
     inserterItems = null,
     insertBlock = null,
+    rootClientId,
 }) => {
     const [isOpen, setIsOpen] = useState(false);
 
@@ -37,6 +38,7 @@ export const ButtonBlockAppender = ({
                 variant="primary"
                 onClick={() => {
                     setIsOpen(true);
+                    console.log();
                 }}
             >
                 <Dashicon icon="plus" />
@@ -44,6 +46,7 @@ export const ButtonBlockAppender = ({
             </Button>
             {isOpen && (
                 <OBlocksAppender
+                    rootClientId={rootClientId}
                     blocks={inserterItems}
                     blockCategories={blockCategories}
                     insertBlockFunction={insertBlock}
@@ -57,11 +60,18 @@ export const ButtonBlockAppender = ({
 };
 
 export const OButtonBlockAppender = compose([
-    withSelect((select) => {
-        const inserterItems = select('core/block-editor').getInserterItems();
+    withSelect((select, props) => {
+        const clientId =
+            typeof props.rootClientId != 'undefined'
+                ? props.rootClientId
+                : undefined;
+
+        const inserterItems =
+            select('core/block-editor').getInserterItems(clientId);
 
         return {
             inserterItems,
+            rootClientId: clientId,
         };
     }),
     withDispatch((dispatch) => {

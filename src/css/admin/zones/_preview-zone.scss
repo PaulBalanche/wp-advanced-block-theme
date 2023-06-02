@@ -104,14 +104,14 @@
             > .o-toolbar-container {
             display: none !important;
         }
-        &:not(:hover):not(.is-selected):has(.wpe-block-placeholder)
-            > .o-toolbar-container,
-        &:has(.block-editor-block-list__block:hover):has(
-                .wpe-block-placeholder
-            ):not([data-type='custom/wpe-slide'])
-            > .o-toolbar-container {
-            display: flex !important;
-        }
+        // &:not(:hover):not(.is-selected):has(.wpe-block-placeholder)
+        //     > .o-toolbar-container,
+        // &:has(.block-editor-block-list__block:hover):has(
+        //         .wpe-block-placeholder
+        //     ):not([data-type='custom/wpe-slide'])
+        //     > .o-toolbar-container {
+        //     display: flex !important;
+        // }
     }
 
     .is-root-container:has(.block-editor-block-list__block.is-selected) {

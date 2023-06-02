@@ -11467,36 +11467,7 @@ class WpeComponent extends _Components_WpeComponentBase__WEBPACK_IMPORTED_MODULE
         this.apiFetch();
       });
     }
-
-    // load iframes one after the other
-    // it seems that it's a bad idea cause it's slower...
-    // (async () => {
-    //     if (!this._$iframes) {
-    //         this._$iframes = Array.from(
-    //             document.querySelectorAll(".o-preview-iframe") ?? []
-    //         );
-    //         for (let [idx, $iframe] of this._$iframes.entries()) {
-    //             await new Promise((resolve) => {
-    //                 $iframe.addEventListener("load", () => {
-    //                     resolve();
-    //                 });
-    //                 $iframe.setAttribute(
-    //                     "src",
-    //                     $iframe.getAttribute("data-src")
-    //                 );
-    //             });
-    //         }
-    //     }
-    // })();
-
-    // for (let [idx, $frame] of this._$iframes.entries()) {
-    //     console.log($iframe.key);
-    //     if ($frame.id === $iframe.key) {
-    //         console.log(idx, $frame, $iframe);
-    //     }
-    // }
   }
-
   shouldComponentUpdate(nextProps, nextState) {
     if (!this.editorPreviewImage) {
       this._iframeResize.bind(this);
@@ -11540,7 +11511,7 @@ class WpeComponent extends _Components_WpeComponentBase__WEBPACK_IMPORTED_MODULE
     });
     var iFrame = document.getElementById(this.props.clientId + '-LiveRenderingIframe');
     if (iFrame) {
-      const heightIframe = iFrame.contentWindow.document.body.scrollHeight + 'px';
+      const heightIframe = iFrame.contentWindow.document.body.offsetHeight + 'px';
       iFrame.height = heightIframe;
       iFrame.parentNode.style.height = heightIframe;
       iFrame.contentWindow.document.body.style.overflowY = 'hidden';
@@ -11966,7 +11937,9 @@ if (typeof blocks_spec['wpe-column'] == 'object' && typeof blocks_spec['wpe-colu
     const innerBlocksProps = (0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.useInnerBlocksProps)((0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.useBlockProps)({
       className: ''
     }), {
-      renderAppender: _Components_OButtonBlockAppender__WEBPACK_IMPORTED_MODULE_4__.OButtonBlockAppender
+      renderAppender: () => (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)(_Components_OButtonBlockAppender__WEBPACK_IMPORTED_MODULE_4__.OButtonBlockAppender, {
+        rootClientId: props.clientId
+      })
     });
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)(_edit__WEBPACK_IMPORTED_MODULE_6__.EditMode, (0,_babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_0__["default"])({}, props, {
       innerBlocksProps: innerBlocksProps,
@@ -13829,6 +13802,7 @@ __webpack_require__.r(__webpack_exports__);
 
 const OBlocksAppender = _ref => {
   let {
+    rootClientId,
     blocks,
     blockCategories,
     insertBlockFunction,
@@ -13850,7 +13824,7 @@ const OBlocksAppender = _ref => {
           key: 'o-editor-inspector-modal-block-' + index,
           className: "item",
           onMouseDown: () => {
-            insertBlockFunction((0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__.createBlock)(block.name));
+            insertBlockFunction((0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__.createBlock)(block.name), undefined, rootClientId, false);
             onClose();
           }
         }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -13900,7 +13874,8 @@ __webpack_require__.r(__webpack_exports__);
 const ButtonBlockAppender = _ref => {
   let {
     inserterItems = null,
-    insertBlock = null
+    insertBlock = null,
+    rootClientId
   } = _ref;
   const [isOpen, setIsOpen] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   let blockCategories = [];
@@ -13921,10 +13896,12 @@ const ButtonBlockAppender = _ref => {
     variant: "primary",
     onClick: () => {
       setIsOpen(true);
+      console.log();
     }
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
     icon: "plus"
   }), "Add block"), isOpen && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_OBlocksAppender__WEBPACK_IMPORTED_MODULE_3__.OBlocksAppender, {
+    rootClientId: rootClientId,
     blocks: inserterItems,
     blockCategories: blockCategories,
     insertBlockFunction: insertBlock,
@@ -13933,10 +13910,12 @@ const ButtonBlockAppender = _ref => {
     }
   }));
 };
-const OButtonBlockAppender = (0,_wordpress_compose__WEBPACK_IMPORTED_MODULE_2__.compose)([(0,_wordpress_data__WEBPACK_IMPORTED_MODULE_4__.withSelect)(select => {
-  const inserterItems = select('core/block-editor').getInserterItems();
+const OButtonBlockAppender = (0,_wordpress_compose__WEBPACK_IMPORTED_MODULE_2__.compose)([(0,_wordpress_data__WEBPACK_IMPORTED_MODULE_4__.withSelect)((select, props) => {
+  const clientId = typeof props.rootClientId != 'undefined' ? props.rootClientId : undefined;
+  const inserterItems = select('core/block-editor').getInserterItems(clientId);
   return {
-    inserterItems
+    inserterItems,
+    rootClientId: clientId
   };
 }), (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_4__.withDispatch)(dispatch => {
   const {
@@ -14355,7 +14334,7 @@ class OEditorApp extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Compone
       onMouseDown: () => this.goInspector()
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
       icon: "arrow-left-alt2"
-    }), "Back")) : null;
+    }), "Inspector")) : null;
   }
   render() {
     if (this.props.context.editorMode != 'visual') return null;
@@ -15203,20 +15182,21 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
   }
   renderTools() {
     const menuGroup = [];
+    const rootClientId = this.props.parentsBlock != null && typeof this.props.parentsBlock == 'object' && this.props.parentsBlock.length > 0 ? this.props.parentsBlock[this.props.parentsBlock.length - 1].clientId : undefined;
     if (typeof this.props.moveBlocksUp != 'undefined' || typeof this.props.moveBlocksDown != 'undefined') {
       const groupMoveBlock = [];
       if (typeof this.props.moveBlocksUp != 'undefined' && this.getReusableBlock() == null) {
         groupMoveBlock.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.MenuItem, {
           key: this.props.clientId + '-toolsDropdownMenu-move-up',
           icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_10__["default"],
-          onClick: () => this.props.moveBlocksUp([this.props.clientId])
+          onClick: () => this.props.moveBlocksUp([this.props.clientId], rootClientId)
         }, "Move up"));
       }
       if (typeof this.props.moveBlocksDown != 'undefined' && this.getReusableBlock() == null) {
         groupMoveBlock.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.MenuItem, {
           key: this.props.clientId + '-toolsDropdownMenu-move-down',
           icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_11__["default"],
-          onClick: () => this.props.moveBlocksDown([this.props.clientId])
+          onClick: () => this.props.moveBlocksDown([this.props.clientId], rootClientId)
         }, "Move down"));
       }
       menuGroup.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.MenuGroup, {

@@ -50,34 +50,6 @@ class WpeComponent extends WpeComponentBase {
                 this.apiFetch();
             });
         }
-
-        // load iframes one after the other
-        // it seems that it's a bad idea cause it's slower...
-        // (async () => {
-        //     if (!this._$iframes) {
-        //         this._$iframes = Array.from(
-        //             document.querySelectorAll(".o-preview-iframe") ?? []
-        //         );
-        //         for (let [idx, $iframe] of this._$iframes.entries()) {
-        //             await new Promise((resolve) => {
-        //                 $iframe.addEventListener("load", () => {
-        //                     resolve();
-        //                 });
-        //                 $iframe.setAttribute(
-        //                     "src",
-        //                     $iframe.getAttribute("data-src")
-        //                 );
-        //             });
-        //         }
-        //     }
-        // })();
-
-        // for (let [idx, $frame] of this._$iframes.entries()) {
-        //     console.log($iframe.key);
-        //     if ($frame.id === $iframe.key) {
-        //         console.log(idx, $frame, $iframe);
-        //     }
-        // }
     }
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -140,7 +112,7 @@ class WpeComponent extends WpeComponentBase {
         );
         if (iFrame) {
             const heightIframe =
-                iFrame.contentWindow.document.body.scrollHeight + 'px';
+                iFrame.contentWindow.document.body.offsetHeight + 'px';
             iFrame.height = heightIframe;
             iFrame.parentNode.style.height = heightIframe;
             iFrame.contentWindow.document.body.style.overflowY = 'hidden';
