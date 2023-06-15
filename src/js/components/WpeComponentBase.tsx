@@ -300,31 +300,6 @@ export class WpeComponentBase extends Component {
                     </MenuItem>
                 </MenuGroup>,
             );
-        } else if (
-            typeof this.props.__experimentalConvertBlocksToReusable !=
-            'undefined'
-        ) {
-            // menuGroup.push(
-            //     <MenuGroup
-            //         key={this.props.clientId + '-toolsDropdownMenu-reusable'}
-            //     >
-            //         <MenuItem
-            //             key={
-            //                 this.props.clientId +
-            //                 '-toolsDropdownMenu-convertToReusable'
-            //             }
-            //             icon={trash}
-            //             onClick={() => {
-            //                 this.props.__experimentalConvertBlocksToReusable(
-            //                     this.props.clientId,
-            //                     'test',
-            //                 );
-            //             }}
-            //         >
-            //             Create Reusable block
-            //         </MenuItem>
-            //     </MenuGroup>,
-            // );
         }
 
         if (typeof this.props.removeBlock != 'undefined') {

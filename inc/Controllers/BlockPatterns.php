@@ -58,19 +58,21 @@ class BlockPatterns extends ControllerBase {
 
         if( class_exists( '\WP_Block_Patterns_Registry' ) && file_exists( get_stylesheet_directory() . self::$themePatternsPath ) ) {
 
-            $patterns_dir = scandir( get_stylesheet_directory() . self::$themePatternsPath );
-            foreach( $patterns_dir as $pattern ) {
+            $patterns = glob( get_stylesheet_directory() . self::$themePatternsPath . '/*.json' );
+            if( $patterns && is_array($patterns) && count($patterns) > 0 ) {
+                foreach( $patterns as $pattern ) {
+                        
+                    // Get info file
+                    $file_pathinfo = pathinfo( $pattern );
+                    if( $file_pathinfo['extension'] == 'json'  && ! \WP_Block_Patterns_Registry::get_instance()->is_registered( $file_pathinfo['filename'] ) ) {
 
-                if( is_dir( get_stylesheet_directory() . self::$themePatternsPath . '/' . $pattern ) || $pattern == '..' || $pattern == '.' )
-                    continue;
-                    
-                // Get info file
-                $file_pathinfo = pathinfo( get_stylesheet_directory() . self::$themePatternsPath . '/' . $pattern );
-                if( $file_pathinfo['extension'] == 'json'  && ! \WP_Block_Patterns_Registry::get_instance()->is_registered( $file_pathinfo['filename'] ) ) {
+                        $pattern_data = json_decode( file_get_contents( $pattern ), true );
+                        $contentFileName = get_stylesheet_directory() . self::$themePatternsPath . '/' . $file_pathinfo['filename'] . '.html';
+                        if( is_array($pattern_data) && isset($pattern_data['title']) && file_exists($contentFileName) ) {
 
-                    $pattern_data = json_decode( file_get_contents( get_stylesheet_directory() . self::$themePatternsPath . '/' . $pattern ), true );
-                    if( is_array($pattern_data) && isset($pattern_data['title'], $pattern_data['content']) ) {
-                        register_block_pattern( get_stylesheet() . '/' . $file_pathinfo['filename'], $pattern_data );
+                            $pattern_data['content'] = file_get_contents($contentFileName);
+                            register_block_pattern( get_stylesheet() . '/' . $file_pathinfo['filename'], $pattern_data );
+                        }
                     }
                 }
             }

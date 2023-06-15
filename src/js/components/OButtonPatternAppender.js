@@ -1,34 +1,14 @@
 import { Button, Dashicon } from '@wordpress/components';
 import { compose } from '@wordpress/compose';
 import { useState } from '@wordpress/element';
-import { OBlocksAppender } from './OBlocksAppender';
+import { OPatternsAppender } from './OPatternsAppender';
 
 import { withDispatch, withSelect } from '@wordpress/data';
 
 import { store as blockEditorStore } from '@wordpress/block-editor';
 
-const ButtonBlockAppender = ({
-    inserterItems = null,
-    insertBlock = null,
-    rootClientId,
-}) => {
+const ButtonPatternAppender = ({ rootClientId, insertBlocks }) => {
     const [isOpen, setIsOpen] = useState(false);
-
-    let blockCategories = [];
-    inserterItems.forEach((block) => {
-        if (!blockCategories.includes(block.category)) {
-            blockCategories.push(block.category);
-        }
-    });
-    blockCategories = blockCategories.map((category) => {
-        return {
-            name: category,
-            title:
-                category == 'wpe-layout'
-                    ? 'Layout'
-                    : category.charAt(0).toUpperCase() + category.slice(1),
-        };
-    });
 
     return (
         <>
@@ -41,14 +21,12 @@ const ButtonBlockAppender = ({
                 }}
             >
                 <Dashicon icon="plus" />
-                Add block
+                Add pattern
             </Button>
             {isOpen && (
-                <OBlocksAppender
+                <OPatternsAppender
                     rootClientId={rootClientId}
-                    blocks={inserterItems}
-                    blockCategories={blockCategories}
-                    insertBlockFunction={insertBlock}
+                    insertBlocksFunction={insertBlocks}
                     onClose={() => {
                         setIsOpen(false);
                     }}
@@ -58,26 +36,22 @@ const ButtonBlockAppender = ({
     );
 };
 
-export const OButtonBlockAppender = compose([
+export const OButtonPatternAppender = compose([
     withSelect((select, props) => {
         const clientId =
             typeof props.rootClientId != 'undefined'
                 ? props.rootClientId
                 : undefined;
 
-        const inserterItems =
-            select('core/block-editor').getInserterItems(clientId);
-
         return {
-            inserterItems,
             rootClientId: clientId,
         };
     }),
     withDispatch((dispatch) => {
-        const { insertBlock } = dispatch(blockEditorStore);
+        const { insertBlocks } = dispatch(blockEditorStore);
 
         return {
-            insertBlock,
+            insertBlocks,
         };
     }),
-])(ButtonBlockAppender);
+])(ButtonPatternAppender);

@@ -7,6 +7,7 @@ import __OEditorApp from './OEditorApp';
 import globalData from '../global';
 
 import { OButtonBlockAppender } from './OButtonBlockAppender';
+import { OButtonPatternAppender } from './OButtonPatternAppender';
 
 export default class OEditorInspector {
     constructor(blocksList, selectBlock) {
@@ -46,6 +47,7 @@ export default class OEditorInspector {
             <>
                 {inner}
                 <OButtonBlockAppender />
+                <OButtonPatternAppender />
             </>
         );
     }

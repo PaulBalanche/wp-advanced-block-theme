@@ -2490,9 +2490,6 @@
 #editor .interface-interface-skeleton__header .edit-post-header__toolbar .edit-post-header-toolbar {
   flex-grow: initial;
 }
-#editor .interface-interface-skeleton__header .edit-post-header__toolbar .edit-post-header-toolbar .components-button:not(.editor-history__undo):not(.editor-history__redo) {
-  display: none;
-}
 #editor .interface-interface-skeleton__header .edit-post-header__toolbar .edit-post-visual-editor__post-title-wrapper {
   margin: 0;
   flex: auto;

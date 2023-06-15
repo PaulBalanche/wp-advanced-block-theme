@@ -6,11 +6,11 @@
             .edit-post-header-toolbar {
                 flex-grow: initial;
 
-                .components-button:not(.editor-history__undo):not(
-                        .editor-history__redo
-                    ) {
-                    display: none;
-                }
+                // .components-button:not(.editor-history__undo):not(
+                //         .editor-history__redo
+                //     ) {
+                //     // display: none;
+                // }
             }
 
             .edit-post-visual-editor__post-title-wrapper {
