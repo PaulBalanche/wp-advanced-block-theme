@@ -1,1 +1,1 @@
-<div class="row grid">{!! $content !!}</div>
+<div class="row grid" style="display: grid;">{!! $html !!}</div>

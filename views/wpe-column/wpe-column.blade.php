@@ -1,1 +1,1 @@
-<div class="{{ $className }}">{!! $content !!}</div>
+<div class="{{ $className }}">{!! $html !!}</div>

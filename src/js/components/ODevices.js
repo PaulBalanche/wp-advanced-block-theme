@@ -41,6 +41,15 @@ export default class ODevices extends Component {
                 this.defaultMediaQuery = theme_spec.media.defaultMedia;
                 this.setCurrentDevice(theme_spec.media.defaultMedia);
             }
+        } else {
+            this.mediaQueries = {
+                desktop: {
+                    minWidth: null,
+                    maxWidth: null,
+                },
+            };
+            this.defaultMediaQuery = 'desktop';
+            this.setCurrentDevice('desktop');
         }
     }
 

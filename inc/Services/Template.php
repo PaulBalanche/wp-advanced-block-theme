@@ -34,7 +34,7 @@ class Template extends ServiceBase {
                 break;
         }
 
-        if( file_exists($new_template) ) {
+        if( isset($new_template) && file_exists($new_template) ) {
             $template = $new_template;
         }
 

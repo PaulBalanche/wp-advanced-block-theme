@@ -1,1 +1,12 @@
-<div class="{{ className }}">{{ content }}</div>
+{% if layout and layout is iterable and layout.desktop and layout.desktop is iterable %}
+    {% set grisCss = [] %}
+    {% set grisCss = grisCss|merge(["grid-column-start: " ~ layout.desktop.columnStart]) %}
+    {% set grisCss = grisCss|merge(["grid-column-end: " ~ ( layout.desktop.columnStart + layout.desktop.width ) ]) %}
+    {% set grisCss = grisCss|merge(["grid-row-start: " ~ layout.desktop.rowStart]) %}
+    {% set grisCss = grisCss|merge(["grid-row-end: " ~ ( layout.desktop.rowStart + layout.desktop.height ) ]) %}
+    {% set grisCss = grisCss|join('; ') %}
+{% else %}
+    {% set grisCss = '' %}
+{% endif %}
+
+<div class="{{ className }}" style="{{ grisCss }}">{{ html }}</div>
