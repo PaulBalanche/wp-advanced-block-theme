@@ -12548,7 +12548,7 @@ if (blocks_spec['wpe-grid'] != null && typeof blocks_spec['wpe-grid'] == 'object
     lightBlockWrapper: true
   },
   // parent: [ 'custom/wpe-container' ],
-  example: typeof blocks_spec['wpe-grid'].preview == 'string' ? {
+  example: blocks_spec['wpe-grid'] != null && typeof blocks_spec['wpe-grid'] == 'object' && typeof blocks_spec['wpe-grid'].preview == 'string' ? {
     attributes: {
       editorPreviewImage: blocks_spec['wpe-grid'].preview
     }

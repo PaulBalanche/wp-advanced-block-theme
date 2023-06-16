@@ -12,7 +12,8 @@
 .o-editor {
     .editor-styles-wrapper.block-editor-writing-flow {
         background: var(--abt-background-editor, 'white');
-        padding: 0;
+        padding-top: 4rem;
+        padding-bottom: 4rem;
     }
 
     .is-layout-flow {

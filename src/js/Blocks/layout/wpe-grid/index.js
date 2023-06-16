@@ -63,6 +63,8 @@ registerBlockType('custom/wpe-grid', {
     },
     // parent: [ 'custom/wpe-container' ],
     example:
+        blocks_spec['wpe-grid'] != null &&
+        typeof blocks_spec['wpe-grid'] == 'object' &&
         typeof blocks_spec['wpe-grid'].preview == 'string'
             ? {
                   attributes: {

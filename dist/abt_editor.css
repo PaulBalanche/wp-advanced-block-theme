@@ -2294,7 +2294,8 @@
 }
 .o-editor .editor-styles-wrapper.block-editor-writing-flow {
   background: var(--abt-background-editor, "white");
-  padding: 0;
+  padding-top: 4rem;
+  padding-bottom: 4rem;
 }
 .o-editor .is-layout-flow {
   padding: 24px 0;
@@ -2495,7 +2496,7 @@
   flex: auto;
 }
 #editor .interface-interface-skeleton__header .edit-post-header__toolbar .edit-post-visual-editor__post-title-wrapper h1 {
-  margin: 0;
+  margin: 0 24px;
   border: 1px solid var(--background300, rgb(245, 245, 245));
   line-height: initial;
   padding: 6px 12px;
