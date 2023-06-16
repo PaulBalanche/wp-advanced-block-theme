@@ -2120,12 +2120,24 @@
   padding: 0 !important;
 }
 
+#editor {
+  background: var(--abt-background-editor, "white");
+}
 #editor.resizable .is-mode-visual .interface-interface-skeleton__body {
   width: 100%;
   transition: width 0.4s;
 }
 #editor.resizable .is-mode-visual .interface-interface-skeleton__body:has(#o-edit-zone .edit-zone__inner) {
   width: calc(100% - 700px);
+}
+#editor .interface-interface-skeleton__header {
+  opacity: 0.15;
+  transition: all 0.3s ease-in-out;
+  transition-delay: 0.3s;
+}
+#editor .interface-interface-skeleton__header:hover {
+  opacity: 1;
+  transition-delay: 0s;
 }
 #editor .interface-interface-skeleton__body .edit-post-visual-editor__post-title-wrapper {
   display: none;
@@ -2497,12 +2509,15 @@
 #editor .interface-interface-skeleton__header .edit-post-header__toolbar .edit-post-header-toolbar {
   flex-grow: initial;
 }
+#editor .interface-interface-skeleton__header .edit-post-header__toolbar .edit-post-header-toolbar .components-button:not(.editor-history__undo):not(.editor-history__redo) {
+  display: none;
+}
 #editor .interface-interface-skeleton__header .edit-post-header__toolbar .edit-post-visual-editor__post-title-wrapper {
   margin: 0;
   flex: auto;
 }
 #editor .interface-interface-skeleton__header .edit-post-header__toolbar .edit-post-visual-editor__post-title-wrapper h1 {
-  margin: 0 24px;
+  margin: 0 18px;
   border: 1px solid var(--background300, rgb(245, 245, 245));
   line-height: initial;
   padding: 6px 12px;
@@ -2510,8 +2525,8 @@
 
 #devicesButtonGroupContainer {
   position: fixed;
-  bottom: 24px;
-  left: 24px;
+  bottom: 6px;
+  left: 6px;
   z-index: 9999;
   background: var(--background300, rgb(245, 245, 245));
   border-radius: 4px;

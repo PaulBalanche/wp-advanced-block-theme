@@ -1,9 +1,9 @@
 #editor {
+    background: var(--abt-background-editor, 'white');
+
     &.resizable {
         .is-mode-visual {
-
             .interface-interface-skeleton__body {
-
                 width: 100%;
                 transition: width 0.4s;
 
@@ -14,8 +14,18 @@
         }
     }
 
+    .interface-interface-skeleton__header {
+        opacity: 0.15;
+        transition: $o-transition-default;
+        transition-delay: 0.3s;
+
+        &:hover {
+            opacity: 1;
+            transition-delay: 0s;
+        }
+    }
+
     .interface-interface-skeleton__body {
-        
         .edit-post-visual-editor__post-title-wrapper {
             display: none;
         }
