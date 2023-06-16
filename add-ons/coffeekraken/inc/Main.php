@@ -8,6 +8,7 @@ use Abt\Coffeekraken\Controllers\Grid as GridController;
 use Abt\Coffeekraken\Controllers\Column as ColumnController;
 use Abt\Coffeekraken\Controllers\Scripts as ScriptsController;
 use Abt\Coffeekraken\Controllers\Spacing as SpacingController;
+use Abt\Coffeekraken\Controllers\DraftJs as DraftJsController;
 
 class Main
 {
@@ -21,6 +22,7 @@ class Main
         new ComponentsController();
         new ScriptsController();
         new SpacingController();
+        new DraftJsController();
     }
 
     /**
