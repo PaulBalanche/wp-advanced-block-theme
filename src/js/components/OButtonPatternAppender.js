@@ -1,4 +1,4 @@
-import { Button, Dashicon } from '@wordpress/components';
+import { Button } from '@wordpress/components';
 import { compose } from '@wordpress/compose';
 import { useState } from '@wordpress/element';
 import { OPatternsAppender } from './OPatternsAppender';
@@ -13,14 +13,13 @@ const ButtonPatternAppender = ({ rootClientId, insertBlocks }) => {
     return (
         <>
             <Button
-                key={'o-editor-inspector-button-insertNewBlock'}
-                className="inspectorButtonInsertNewBlock"
+                key={'o-editor-inspector-button-insertNewPattern'}
                 variant="primary"
                 onClick={() => {
                     setIsOpen(true);
                 }}
             >
-                <Dashicon icon="plus" />
+                {/* <Dashicon icon="plus" /> */}
                 Add pattern
             </Button>
             {isOpen && (

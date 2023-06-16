@@ -1,4 +1,4 @@
-import { Button, Dashicon } from '@wordpress/components';
+import { Button } from '@wordpress/components';
 import { compose } from '@wordpress/compose';
 import { useState } from '@wordpress/element';
 import { OBlocksAppender } from './OBlocksAppender';
@@ -34,13 +34,12 @@ const ButtonBlockAppender = ({
         <>
             <Button
                 key={'o-editor-inspector-button-insertNewBlock'}
-                className="inspectorButtonInsertNewBlock"
                 variant="primary"
                 onClick={() => {
                     setIsOpen(true);
                 }}
             >
-                <Dashicon icon="plus" />
+                {/* <Dashicon icon="plus" /> */}
                 Add block
             </Button>
             {isOpen && (

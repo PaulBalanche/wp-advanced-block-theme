@@ -543,15 +543,20 @@
   position: relative;
 }
 
-.inspectorButtonInsertNewBlock {
-  display: flex;
-  justify-content: center;
-  font-weight: 500;
-  width: 100%;
-  max-width: 300px;
-  margin: auto;
+.inspectorButtonInsertNew {
+  border-radius: 4px;
+  overflow: hidden;
 }
-.inspectorButtonInsertNewBlock .dashhicon {
+.inspectorButtonInsertNew .components-button {
+  font-weight: 500;
+  width: 50%;
+  justify-content: center;
+  border-left: 1px solid rgba(255, 255, 255, 0.5);
+}
+.inspectorButtonInsertNew .components-button:first-child {
+  border-left: none;
+}
+.inspectorButtonInsertNew .dashhicon {
   font-size: 17px;
   height: auto;
   width: auto;
@@ -846,6 +851,7 @@
 }
 .o-editor-app_body {
   display: flex;
+  justify-content: space-between;
   flex-direction: column;
   gap: 30px;
   flex-grow: 1;
@@ -1747,7 +1753,7 @@
   border-bottom: 1px solid var(--border300, rgb(235, 235, 235));
 }
 .wpe-modal .components-modal__content .components-modal__body {
-  padding: 30px 42px 42px 42px;
+  padding: 30px 42px 60px 42px;
 }
 .wpe-modal .components-modal__content .components-modal__body p {
   font-size: 1.1em;

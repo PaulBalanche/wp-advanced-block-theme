@@ -13908,14 +13908,11 @@ const ButtonBlockAppender = _ref => {
   });
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
     key: 'o-editor-inspector-button-insertNewBlock',
-    className: "inspectorButtonInsertNewBlock",
     variant: "primary",
     onClick: () => {
       setIsOpen(true);
     }
-  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
-    icon: "plus"
-  }), "Add block"), isOpen && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_OBlocksAppender__WEBPACK_IMPORTED_MODULE_3__.OBlocksAppender, {
+  }, "Add block"), isOpen && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_OBlocksAppender__WEBPACK_IMPORTED_MODULE_3__.OBlocksAppender, {
     rootClientId: rootClientId,
     blocks: inserterItems,
     blockCategories: blockCategories,
@@ -13979,15 +13976,12 @@ const ButtonPatternAppender = _ref => {
   } = _ref;
   const [isOpen, setIsOpen] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
-    key: 'o-editor-inspector-button-insertNewBlock',
-    className: "inspectorButtonInsertNewBlock",
+    key: 'o-editor-inspector-button-insertNewPattern',
     variant: "primary",
     onClick: () => {
       setIsOpen(true);
     }
-  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
-    icon: "plus"
-  }), "Add pattern"), isOpen && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_OPatternsAppender__WEBPACK_IMPORTED_MODULE_3__.OPatternsAppender, {
+  }, "Add pattern"), isOpen && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_OPatternsAppender__WEBPACK_IMPORTED_MODULE_3__.OPatternsAppender, {
     rootClientId: rootClientId,
     insertBlocksFunction: insertBlocks,
     onClose: () => {
@@ -14752,7 +14746,9 @@ class OEditorInspector {
       blocksList: this.blocksList,
       selectBlock: this.selectBlock
     }) : (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "Empty page...");
-    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, inner, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_OButtonBlockAppender__WEBPACK_IMPORTED_MODULE_5__.OButtonBlockAppender, null), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_OButtonPatternAppender__WEBPACK_IMPORTED_MODULE_6__.OButtonPatternAppender, null));
+    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, inner, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.ButtonGroup, {
+      className: "inspectorButtonInsertNew"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_OButtonBlockAppender__WEBPACK_IMPORTED_MODULE_5__.OButtonBlockAppender, null), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_OButtonPatternAppender__WEBPACK_IMPORTED_MODULE_6__.OButtonPatternAppender, null)));
   }
   getExtraClassName() {
     return 'inspector';

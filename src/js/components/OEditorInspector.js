@@ -46,8 +46,10 @@ export default class OEditorInspector {
         return (
             <>
                 {inner}
-                <OButtonBlockAppender />
-                <OButtonPatternAppender />
+                <ButtonGroup className="inspectorButtonInsertNew">
+                    <OButtonBlockAppender />
+                    <OButtonPatternAppender />
+                </ButtonGroup>
             </>
         );
     }

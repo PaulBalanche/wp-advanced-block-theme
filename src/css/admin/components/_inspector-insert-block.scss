@@ -7,13 +7,20 @@
     position: relative;
 }
 
-.inspectorButtonInsertNewBlock {
-    display: flex;
-    justify-content: center;
-    font-weight: 500;
-    width: 100%;
-    max-width: 300px;
-    margin: auto;
+.inspectorButtonInsertNew {
+    border-radius: $o-border-radius-small;
+    overflow: hidden;
+
+    .components-button {
+        font-weight: 500;
+        width: 50%;
+        justify-content: center;
+        border-left: 1px solid rgb(255 255 255 / 50%);
+
+        &:first-child {
+            border-left: none;
+        }
+    }
 
     .dashhicon {
         font-size: 17px;

@@ -143,6 +143,7 @@
 
     &_body {
         display: flex;
+        justify-content: space-between;
         flex-direction: column;
         gap: $o-space-50;
         flex-grow: 1;
