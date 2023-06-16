@@ -14,6 +14,7 @@ import edit from './edit';
 
 let attributes = {};
 if (
+    blocks_spec['wpe-container'] != null &&
     typeof blocks_spec['wpe-container'] == 'object' &&
     typeof blocks_spec['wpe-container'].props == 'object'
 ) {

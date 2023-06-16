@@ -9,6 +9,7 @@ import { EditMode } from './edit';
 
 let attributes = {};
 if (
+    blocks_spec['wpe-slider'] != null &&
     typeof blocks_spec['wpe-slider'] == 'object' &&
     typeof blocks_spec['wpe-slider'].props == 'object'
 ) {

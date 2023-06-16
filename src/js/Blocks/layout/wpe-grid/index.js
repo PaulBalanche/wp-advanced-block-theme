@@ -17,6 +17,7 @@ let attributes = {
     },
 };
 if (
+    blocks_spec['wpe-grid'] != null &&
     typeof blocks_spec['wpe-grid'] == 'object' &&
     typeof blocks_spec['wpe-grid'].props == 'object'
 ) {

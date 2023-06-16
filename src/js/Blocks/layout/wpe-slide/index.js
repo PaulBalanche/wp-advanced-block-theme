@@ -13,6 +13,7 @@ import { OButtonBlockAppender } from '../../../Components/OButtonBlockAppender';
 
 let attributes = {};
 if (
+    blocks_spec['wpe-slide'] != null &&
     typeof blocks_spec['wpe-slide'] == 'object' &&
     typeof blocks_spec['wpe-slide'].props == 'object'
 ) {

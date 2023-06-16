@@ -11897,7 +11897,7 @@ let attributes = {
     type: 'object'
   }
 };
-if (typeof blocks_spec['wpe-column'] == 'object' && typeof blocks_spec['wpe-column'].props == 'object') {
+if (blocks_spec['wpe-column'] != null && typeof blocks_spec['wpe-column'] == 'object' && typeof blocks_spec['wpe-column'].props == 'object') {
   _Static_Attributes__WEBPACK_IMPORTED_MODULE_5__.Attributes.initComponentAttributes(attributes, blocks_spec['wpe-column'].props);
 }
 (0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_3__.registerBlockType)('custom/wpe-column', {
@@ -12063,7 +12063,7 @@ __webpack_require__.r(__webpack_exports__);
  */
 
 let attributes = {};
-if (typeof blocks_spec['wpe-container'] == 'object' && typeof blocks_spec['wpe-container'].props == 'object') {
+if (blocks_spec['wpe-container'] != null && typeof blocks_spec['wpe-container'] == 'object' && typeof blocks_spec['wpe-container'].props == 'object') {
   _Static_Attributes__WEBPACK_IMPORTED_MODULE_4__.Attributes.initComponentAttributes(attributes, blocks_spec['wpe-container'].props);
 }
 (0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_2__.registerBlockType)('custom/wpe-container', {
@@ -12187,7 +12187,7 @@ const addAttributesCoreGallerywithInspectorControls = createHigherOrderComponent
     }
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(BlockEdit, props);
   };
-}, "withInspectorControl");
+}, 'withInspectorControl');
 addFilter('editor.BlockEdit', 'core/gallery', addAttributesCoreGallerywithInspectorControls);
 
 /***/ }),
@@ -12522,7 +12522,7 @@ let attributes = {
     type: 'object'
   }
 };
-if (typeof blocks_spec['wpe-grid'] == 'object' && typeof blocks_spec['wpe-grid'].props == 'object') {
+if (blocks_spec['wpe-grid'] != null && typeof blocks_spec['wpe-grid'] == 'object' && typeof blocks_spec['wpe-grid'].props == 'object') {
   _Static_Attributes__WEBPACK_IMPORTED_MODULE_4__.Attributes.initComponentAttributes(attributes, blocks_spec['wpe-grid'].props);
 }
 (0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_3__.registerBlockType)('custom/wpe-grid', {
@@ -13529,7 +13529,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 let attributes = {};
-if (typeof blocks_spec['wpe-slide'] == 'object' && typeof blocks_spec['wpe-slide'].props == 'object') {
+if (blocks_spec['wpe-slide'] != null && typeof blocks_spec['wpe-slide'] == 'object' && typeof blocks_spec['wpe-slide'].props == 'object') {
   _Static_Attributes__WEBPACK_IMPORTED_MODULE_4__.Attributes.initComponentAttributes(attributes, blocks_spec['wpe-slide'].props);
 }
 (0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_3__.registerBlockType)('custom/wpe-slide', {
@@ -13721,7 +13721,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 let attributes = {};
-if (typeof blocks_spec['wpe-slider'] == 'object' && typeof blocks_spec['wpe-slider'].props == 'object') {
+if (blocks_spec['wpe-slider'] != null && typeof blocks_spec['wpe-slider'] == 'object' && typeof blocks_spec['wpe-slider'].props == 'object') {
   _Static_Attributes__WEBPACK_IMPORTED_MODULE_4__.Attributes.initComponentAttributes(attributes, blocks_spec['wpe-slider'].props);
 }
 (0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_3__.registerBlockType)('custom/wpe-slider', {

@@ -13,7 +13,9 @@ let attributes = {
         type: 'object',
     },
 };
+
 if (
+    blocks_spec['wpe-column'] != null &&
     typeof blocks_spec['wpe-column'] == 'object' &&
     typeof blocks_spec['wpe-column'].props == 'object'
 ) {
