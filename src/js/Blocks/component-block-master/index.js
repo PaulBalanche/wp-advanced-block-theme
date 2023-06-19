@@ -9,9 +9,9 @@ import edit from './edit';
 
 import { Attributes } from '../../Static/Attributes';
 
-var current_user_can_edit_posts = global_localized.current_user_can_edit_posts;
+var current_user_can_edit_posts = GLOBAL_LOCALIZED.current_user_can_edit_posts;
 
-Object.values(global_localized.components).forEach((element) => {
+Object.values(GLOBAL_LOCALIZED.components).forEach((element) => {
     var initAttributes = {
         id_component: {
             type: 'string',
@@ -36,7 +36,11 @@ Object.values(global_localized.components).forEach((element) => {
                       },
                   }
                 : null,
-        edit: edit(element, current_user_can_edit_posts, theme_spec),
+        edit: edit(
+            element,
+            current_user_can_edit_posts,
+            GLOBAL_LOCALIZED.theme_spec,
+        ),
         save: () => {
             return (
                 <div {...useBlockProps.save()}>

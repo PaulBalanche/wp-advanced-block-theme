@@ -25,7 +25,7 @@ export default class OUserPreferences extends Component {
 
     _initUserPreference() {
         const storage = localStorage.getItem(
-            'ABT_PREFERENCES_USER_' + js_const.user_id,
+            'ABT_PREFERENCES_USER_' + GLOBAL_LOCALIZED.user_id,
         );
         if (storage) {
             let jsonStorage = JSON.parse(storage);
@@ -52,7 +52,7 @@ export default class OUserPreferences extends Component {
         currentState[preference] = newValue;
 
         localStorage.setItem(
-            'ABT_PREFERENCES_USER_' + js_const.user_id,
+            'ABT_PREFERENCES_USER_' + GLOBAL_LOCALIZED.user_id,
             JSON.stringify(currentState),
         );
     }

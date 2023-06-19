@@ -27,11 +27,11 @@ class WpeComponent extends WpeComponentBase {
 
         this.description = this.props.block_spec.description;
         this.previewUrl =
-            js_const.rest_api_url +
-            js_const.rest_api_namespace +
-            js_const.componentblock_attr_autosaves_rest_api_resource_path +
+            GLOBAL_LOCALIZED.rest_api_url +
+            GLOBAL_LOCALIZED.rest_api_namespace +
+            GLOBAL_LOCALIZED.componentblock_attr_autosaves_rest_api_resource_path +
             '/' +
-            js_const.post_id +
+            GLOBAL_LOCALIZED.post_id +
             '/' +
             this.props.block_spec.id +
             '/' +
@@ -73,10 +73,10 @@ class WpeComponent extends WpeComponentBase {
 
         apiFetch({
             path:
-                js_const.rest_api_namespace +
-                js_const.componentblock_attr_autosaves_rest_api_resource_path +
+                GLOBAL_LOCALIZED.rest_api_namespace +
+                GLOBAL_LOCALIZED.componentblock_attr_autosaves_rest_api_resource_path +
                 '/' +
-                js_const.post_id +
+                GLOBAL_LOCALIZED.post_id +
                 '/' +
                 this.props.attributes.id_component +
                 '/' +
@@ -270,7 +270,11 @@ export default (block_spec, current_user_can_edit_posts, theme_spec) =>
                         ? useInnerBlocksProps(
                               useBlockProps({ className: '' }),
                               {
-                                  renderAppender: OButtonBlockAppender,
+                                  renderAppender: () => (
+                                      <OButtonBlockAppender
+                                          rootClientId={props.clientId}
+                                      />
+                                  ),
                               },
                           )
                         : null,

@@ -1,8 +1,8 @@
-import { Component } from "@wordpress/element";
+import { Component } from '@wordpress/element';
 
-import { Attributes } from "../../Static/Attributes";
-import { Render } from "../../Static/Render";
-import { DraftEditor } from "./DraftEditor";
+import { Attributes } from '../../Static/Attributes';
+import { Render } from '../../Static/Render';
+import { DraftEditor } from './DraftEditor';
 
 class WysiwygControl extends Component {
     constructor(props) {
@@ -17,7 +17,7 @@ class WysiwygControl extends Component {
             this.props.valueProp,
             newContent,
             false,
-            this.props.componentInstance
+            this.props.componentInstance,
         );
     }
 
@@ -27,36 +27,36 @@ class WysiwygControl extends Component {
         if (
             this.props?.componentInstance?.props?.theme_spec?.typo &&
             typeof this.props.componentInstance.props.theme_spec.typo ==
-                "object"
+                'object'
         ) {
             for (const [key, val] of Object.entries(
-                this.props.componentInstance.props.theme_spec.typo
+                this.props.componentInstance.props.theme_spec.typo,
             )) {
-                if (key == "a") {
+                if (key == 'a') {
                     continue;
                 }
 
                 let isBlock = false;
 
                 let editorCss = null;
-                if (val?.style && typeof val.style == "object") {
+                if (val?.style && typeof val.style == 'object') {
                     editorCss = {};
                     for (const [keyCss, valCss] of Object.entries(val.style)) {
-                        if (keyCss != "display") {
+                        if (keyCss != 'display') {
                             editorCss[keyCss] = valCss;
-                        } else if (valCss == "block") {
+                        } else if (valCss == 'block') {
                             isBlock = true;
                         }
                     }
                 }
 
-                if (val?.editorStyle && typeof val.editorStyle == "object") {
+                if (val?.editorStyle && typeof val.editorStyle == 'object') {
                     for (const [keyCss, valCss] of Object.entries(
-                        val.editorStyle
+                        val.editorStyle,
                     )) {
-                        if (keyCss != "display") {
+                        if (keyCss != 'display') {
                             editorCss[keyCss] = valCss;
-                        } else if (valCss == "block") {
+                        } else if (valCss == 'block') {
                             isBlock = true;
                         }
                     }
@@ -80,7 +80,7 @@ class WysiwygControl extends Component {
         let tools = {
             a: {
                 style: {
-                    textDecoration: "underline",
+                    textDecoration: 'underline',
                 },
             },
         };
@@ -88,20 +88,20 @@ class WysiwygControl extends Component {
         if (
             this.props?.componentInstance?.props?.theme_spec?.typo &&
             typeof this.props.componentInstance.props.theme_spec.typo ==
-                "object"
+                'object'
         ) {
             for (const [key, val] of Object.entries(
-                this.props.componentInstance.props.theme_spec.typo
+                this.props.componentInstance.props.theme_spec.typo,
             )) {
                 let editorCss = null;
 
-                if (key == "a") {
-                    if (val?.style && typeof val.style == "object") {
+                if (key == 'a') {
+                    if (val?.style && typeof val.style == 'object') {
                         editorCss = {};
                         for (const [keyCss, valCss] of Object.entries(
-                            val.style
+                            val.style,
                         )) {
-                            if (keyCss != "display") {
+                            if (keyCss != 'display') {
                                 editorCss[keyCss] = valCss;
                             }
                         }
@@ -109,12 +109,12 @@ class WysiwygControl extends Component {
 
                     if (
                         val?.editorStyle &&
-                        typeof val.editorStyle == "object"
+                        typeof val.editorStyle == 'object'
                     ) {
                         for (const [keyCss, valCss] of Object.entries(
-                            val.editorStyle
+                            val.editorStyle,
                         )) {
-                            if (keyCss != "display") {
+                            if (keyCss != 'display') {
                                 editorCss[keyCss] = valCss;
                             }
                         }
@@ -137,7 +137,7 @@ class WysiwygControl extends Component {
             keys,
             valueProp,
             objectValue,
-            repeatable = false
+            repeatable = false,
         } = this.props;
 
         if (repeatable) {
@@ -148,7 +148,7 @@ class WysiwygControl extends Component {
                         Attributes.removeEltRepeatable(
                             keys,
                             valueProp,
-                            this.props.componentInstance
+                            this.props.componentInstance,
                         );
                     })}
                 </>
@@ -157,15 +157,15 @@ class WysiwygControl extends Component {
 
         return (
             <div
-                key={id + "-WysiwygComponentsBaseControl"}
+                key={id + '-WysiwygComponentsBaseControl'}
                 className="components-base-control"
             >
                 <div
-                    key={id + "-WysiwygComponentsBaseControlField"}
+                    key={id + '-WysiwygComponentsBaseControlField'}
                     className="components-base-control__field"
                 >
                     <div
-                        key={id + "-WysiwygContainer"}
+                        key={id + '-WysiwygContainer'}
                         className="wysiwyg-container"
                     >
                         {Render.label(id, label)}
@@ -175,7 +175,9 @@ class WysiwygControl extends Component {
                             onChange={this.onChange}
                             typo={this.getTypo()}
                             tools={this.getTools()}
-                            onBlur={() => this.props.componentInstance.updatePreview() }
+                            onBlur={() =>
+                                this.props.componentInstance.updatePreview()
+                            }
                         />
                     </div>
                 </div>

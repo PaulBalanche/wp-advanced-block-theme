@@ -26,9 +26,9 @@ addFilter('blocks.registerBlockType', 'core/gallery', addAttributesCoreGallery);
 
 var galleryTypeOptions = [{ label: 'Default', value: 'default' }];
 
-if (global_localized.galleryType && global_localized.galleryType != 'undefined')
+if (GLOBAL_LOCALIZED.galleryType && GLOBAL_LOCALIZED.galleryType != 'undefined')
     galleryTypeOptions = galleryTypeOptions.concat(
-        global_localized.galleryType,
+        GLOBAL_LOCALIZED.galleryType,
     );
 
 const addAttributesCoreGallerywithInspectorControls =

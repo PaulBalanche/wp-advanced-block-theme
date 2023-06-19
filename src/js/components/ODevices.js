@@ -27,19 +27,25 @@ export default class ODevices extends Component {
 
     componentDidMount() {
         if (
-            theme_spec?.media?.queries &&
-            typeof theme_spec.media.queries == 'object'
+            GLOBAL_LOCALIZED.theme_spec?.media?.queries &&
+            typeof GLOBAL_LOCALIZED.theme_spec.media.queries == 'object'
         ) {
-            this.mediaQueries = this.sortMediaQueries(theme_spec.media.queries);
+            this.mediaQueries = this.sortMediaQueries(
+                GLOBAL_LOCALIZED.theme_spec.media.queries,
+            );
 
             if (
                 this.getCurrentDevice() == null ||
-                (theme_spec?.media?.defaultMedia &&
-                    typeof this.mediaQueries[theme_spec.media.defaultMedia] !=
-                        'undefined')
+                (GLOBAL_LOCALIZED.theme_spec?.media?.defaultMedia &&
+                    typeof this.mediaQueries[
+                        GLOBAL_LOCALIZED.theme_spec.media.defaultMedia
+                    ] != 'undefined')
             ) {
-                this.defaultMediaQuery = theme_spec.media.defaultMedia;
-                this.setCurrentDevice(theme_spec.media.defaultMedia);
+                this.defaultMediaQuery =
+                    GLOBAL_LOCALIZED.theme_spec.media.defaultMedia;
+                this.setCurrentDevice(
+                    GLOBAL_LOCALIZED.theme_spec.media.defaultMedia,
+                );
             }
         } else {
             this.mediaQueries = {
@@ -85,9 +91,7 @@ export default class ODevices extends Component {
         this.setState({ currentDevice: newDevice });
 
         var editor_area = document.querySelector('#editor');
-        var layout_flow_area = document.querySelector(
-            '.is-root-container.is-layout-flow',
-        );
+        var layout_flow_area = document.querySelector('.is-root-container');
         if (editor_area && layout_flow_area) {
             layout_flow_area.style.margin = 'auto';
 
@@ -144,7 +148,7 @@ export default class ODevices extends Component {
                     })}
                     <Button
                         key={'layoutButton_open'}
-                        href={js_const.post_url}
+                        href={GLOBAL_LOCALIZED.post_url}
                         className="is-secondary"
                         target="_blank"
                     >

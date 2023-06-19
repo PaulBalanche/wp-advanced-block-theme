@@ -54,7 +54,13 @@ export default (containerConfig, block_spec, theme_spec) =>
                 theme_spec,
                 innerBlocksProps: useInnerBlocksProps(
                     useBlockProps({ className: '' }),
-                    { renderAppender: OButtonBlockAppender },
+                    {
+                        renderAppender: () => (
+                            <OButtonBlockAppender
+                                rootClientId={props.clientId}
+                            />
+                        ),
+                    },
                 ),
                 isSelectedBlock: select('core/block-editor').isBlockSelected(
                     props.clientId,

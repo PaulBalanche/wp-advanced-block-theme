@@ -14,13 +14,13 @@ import edit from './edit';
 
 let attributes = {};
 if (
-    blocks_spec['wpe-container'] != null &&
-    typeof blocks_spec['wpe-container'] == 'object' &&
-    typeof blocks_spec['wpe-container'].props == 'object'
+    GLOBAL_LOCALIZED.blocks_spec['wpe-container'] != null &&
+    typeof GLOBAL_LOCALIZED.blocks_spec['wpe-container'] == 'object' &&
+    typeof GLOBAL_LOCALIZED.blocks_spec['wpe-container'].props == 'object'
 ) {
     Attributes.initComponentAttributes(
         attributes,
-        blocks_spec['wpe-container'].props,
+        GLOBAL_LOCALIZED.blocks_spec['wpe-container'].props,
     );
 }
 
@@ -60,9 +60,9 @@ registerBlockType('custom/wpe-container', {
     },
     attributes: attributes,
     edit: edit(
-        global_localized.container,
-        blocks_spec['wpe-container'],
-        theme_spec,
+        GLOBAL_LOCALIZED.container,
+        GLOBAL_LOCALIZED.blocks_spec['wpe-container'],
+        GLOBAL_LOCALIZED.theme_spec,
     ),
     save: () => {
         const blockProps = useBlockProps.save();
@@ -93,7 +93,7 @@ function updateSettingsParent(settings, name) {
     });
 }
 
-if (global_localized?.container?.is_main) {
+if (GLOBAL_LOCALIZED?.container?.is_main) {
     addFilter(
         'blocks.registerBlockType',
         'abt/updateSettingsParent',

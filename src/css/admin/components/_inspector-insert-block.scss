@@ -8,8 +8,12 @@
 }
 
 .inspectorButtonInsertNew {
-    border-radius: $o-border-radius-small;
-    overflow: hidden;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    max-width: 400px;
+    margin: auto;
+    margin-bottom: 0;
 
     .components-button {
         font-weight: 500;
@@ -19,6 +23,12 @@
 
         &:first-child {
             border-left: none;
+            border-top-left-radius: $o-border-radius-small;
+            border-bottom-left-radius: $o-border-radius-small;
+        }
+        &:last-child {
+            border-top-right-radius: $o-border-radius-small;
+            border-bottom-right-radius: $o-border-radius-small;
         }
     }
 

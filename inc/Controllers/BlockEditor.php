@@ -49,48 +49,34 @@ class BlockEditor extends ControllerBase
             $asset_file["version"]
         );
 
-        // Localize script
-        $data_localized = [
-            "current_user_can_edit_posts" => current_user_can("edit_posts")
-                ? "1"
-                : "0",
-            "components" => ComponentBlocksService::get_all_blocks_spec(),
-            "container" => $this->get_config()->get_spec("container"),
-            "galleryType" => $this->get_config()->get_spec("galleryType"),
-            "gridConfig" => $this->get_config()->get_spec("gridConfig"),
-        ];
-        wp_localize_script($handle, "global_localized", $data_localized);
         wp_localize_script(
             $handle,
-            "theme_spec",
-            apply_filters(
-                "Abt\localize_editor_script",
-                $this->get_config()->get_spec(),
-                $this->get_config()->get("componentBlockPrefixName"),
-                "theme_spec"
-            )
+            "GLOBAL_LOCALIZED", [
+                "admin_url" => admin_url(),
+                "post_id" => get_the_ID(),
+                "post_url" => get_the_permalink(),
+                "user_id" => get_current_user_id(),
+                "rest_api_url" => rest_url(),
+                "rest_api_namespace" => $this->get_config()->get("rest_api_namespace"),
+                "componentblock_attr_autosaves_rest_api_resource_path" => ComponentBlocksService::get_attributes_autosaves_rest_api_resource_path(),
+                "current_user_can_edit_posts" => current_user_can("edit_posts") ? "1" : "0",
+                "components" => ComponentBlocksService::get_all_blocks_spec(),
+                "container" => $this->get_config()->get_spec("container"),
+                "galleryType" => $this->get_config()->get_spec("galleryType"),
+                "theme_spec" => apply_filters(
+                    "Abt\localize_editor_script",
+                    $this->get_config()->get_spec(),
+                    $this->get_config()->get("componentBlockPrefixName"),
+                    "theme_spec"
+                ),
+                "blocks_spec" => apply_filters(
+                    "Abt\localize_editor_script",
+                    apply_filters('Abt\editor_script_localize_blocks_spec', []),
+                    $this->get_config()->get("componentBlockPrefixName"),
+                    "block_spec"
+                )
+            ]
         );
-        wp_localize_script(
-            $handle,
-            "blocks_spec",
-            apply_filters(
-                "Abt\localize_editor_script",
-                apply_filters('Abt\editor_script_localize_blocks_spec', []),
-                $this->get_config()->get("componentBlockPrefixName"),
-                "block_spec"
-            )
-        );
-        wp_localize_script($handle, "js_const", [
-            "admin_url" => admin_url(),
-            "post_id" => get_the_ID(),
-            "post_url" => get_the_permalink(),
-            "user_id" => get_current_user_id(),
-            "rest_api_url" => rest_url(),
-            "rest_api_namespace" => $this->get_config()->get(
-                "rest_api_namespace"
-            ),
-            "componentblock_attr_autosaves_rest_api_resource_path" => ComponentBlocksService::get_attributes_autosaves_rest_api_resource_path()
-        ]);
 
         wp_enqueue_script($handle);
     }

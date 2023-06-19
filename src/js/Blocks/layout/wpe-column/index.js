@@ -2,8 +2,11 @@ import { useBlockProps, useInnerBlocksProps } from '@wordpress/block-editor';
 import { registerBlockType } from '@wordpress/blocks';
 
 import { OButtonBlockAppender } from '../../../Components/OButtonBlockAppender';
+import { OButtonPatternAppender } from '../../../Components/OButtonPatternAppender';
 import { Attributes } from '../../../Static/Attributes';
 import { EditMode } from './edit';
+
+import { ButtonGroup } from '@wordpress/components';
 
 let attributes = {
     id_component: {
@@ -15,13 +18,13 @@ let attributes = {
 };
 
 if (
-    blocks_spec['wpe-column'] != null &&
-    typeof blocks_spec['wpe-column'] == 'object' &&
-    typeof blocks_spec['wpe-column'].props == 'object'
+    GLOBAL_LOCALIZED.blocks_spec['wpe-column'] != null &&
+    typeof GLOBAL_LOCALIZED.blocks_spec['wpe-column'] == 'object' &&
+    typeof GLOBAL_LOCALIZED.blocks_spec['wpe-column'].props == 'object'
 ) {
     Attributes.initComponentAttributes(
         attributes,
-        blocks_spec['wpe-column'].props,
+        GLOBAL_LOCALIZED.blocks_spec['wpe-column'].props,
     );
 }
 
@@ -66,7 +69,10 @@ registerBlockType('custom/wpe-column', {
             useBlockProps({ className: '' }),
             {
                 renderAppender: () => (
-                    <OButtonBlockAppender rootClientId={props.clientId} />
+                    <ButtonGroup className="inspectorButtonInsertNew">
+                        <OButtonBlockAppender rootClientId={props.clientId} />
+                        <OButtonPatternAppender rootClientId={props.clientId} />
+                    </ButtonGroup>
                 ),
             },
         );
@@ -75,8 +81,8 @@ registerBlockType('custom/wpe-column', {
             <EditMode
                 {...props}
                 innerBlocksProps={innerBlocksProps}
-                blocks_spec={blocks_spec['wpe-column']}
-                theme_spec={theme_spec}
+                blocks_spec={GLOBAL_LOCALIZED.blocks_spec['wpe-column']}
+                theme_spec={GLOBAL_LOCALIZED.theme_spec}
             />
         );
     },

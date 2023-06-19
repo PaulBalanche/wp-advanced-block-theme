@@ -17,13 +17,13 @@ let attributes = {
     },
 };
 if (
-    blocks_spec['wpe-grid'] != null &&
-    typeof blocks_spec['wpe-grid'] == 'object' &&
-    typeof blocks_spec['wpe-grid'].props == 'object'
+    GLOBAL_LOCALIZED.blocks_spec['wpe-grid'] != null &&
+    typeof GLOBAL_LOCALIZED.blocks_spec['wpe-grid'] == 'object' &&
+    typeof GLOBAL_LOCALIZED.blocks_spec['wpe-grid'].props == 'object'
 ) {
     Attributes.initComponentAttributes(
         attributes,
-        blocks_spec['wpe-grid'].props,
+        GLOBAL_LOCALIZED.blocks_spec['wpe-grid'].props,
     );
 }
 
@@ -63,12 +63,13 @@ registerBlockType('custom/wpe-grid', {
     },
     // parent: [ 'custom/wpe-container' ],
     example:
-        blocks_spec['wpe-grid'] != null &&
-        typeof blocks_spec['wpe-grid'] == 'object' &&
-        typeof blocks_spec['wpe-grid'].preview == 'string'
+        GLOBAL_LOCALIZED.blocks_spec['wpe-grid'] != null &&
+        typeof GLOBAL_LOCALIZED.blocks_spec['wpe-grid'] == 'object' &&
+        typeof GLOBAL_LOCALIZED.blocks_spec['wpe-grid'].preview == 'string'
             ? {
                   attributes: {
-                      editorPreviewImage: blocks_spec['wpe-grid'].preview,
+                      editorPreviewImage:
+                          GLOBAL_LOCALIZED.blocks_spec['wpe-grid'].preview,
                   },
               }
             : null,
@@ -83,8 +84,8 @@ registerBlockType('custom/wpe-grid', {
             <EditMode
                 {...props}
                 innerBlocksProps={innerBlocksProps}
-                blocks_spec={blocks_spec['wpe-grid']}
-                theme_spec={theme_spec}
+                blocks_spec={GLOBAL_LOCALIZED.blocks_spec['wpe-grid']}
+                theme_spec={GLOBAL_LOCALIZED.theme_spec}
             />
         );
     },

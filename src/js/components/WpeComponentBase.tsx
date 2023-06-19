@@ -256,7 +256,7 @@ export class WpeComponentBase extends Component {
                         }
                         onClick={() =>
                             window.open(
-                                js_const.admin_url +
+                                GLOBAL_LOCALIZED.admin_url +
                                     'edit.php?post_type=wp_block',
                                 '_blank',
                             )
@@ -271,7 +271,7 @@ export class WpeComponentBase extends Component {
                         }
                         onClick={() =>
                             window.open(
-                                js_const.admin_url +
+                                GLOBAL_LOCALIZED.admin_url +
                                     'post.php?post=' +
                                     this.getReusableBlock() +
                                     '&action=edit',
@@ -288,7 +288,7 @@ export class WpeComponentBase extends Component {
                         }
                         onClick={() =>
                             window.open(
-                                js_const.admin_url +
+                                GLOBAL_LOCALIZED.admin_url +
                                     'post.php?post=' +
                                     this.getReusableBlock() +
                                     '&action=edit',

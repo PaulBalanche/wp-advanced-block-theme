@@ -9,13 +9,13 @@ import { EditMode } from './edit';
 
 let attributes = {};
 if (
-    blocks_spec['wpe-slider'] != null &&
-    typeof blocks_spec['wpe-slider'] == 'object' &&
-    typeof blocks_spec['wpe-slider'].props == 'object'
+    GLOBAL_LOCALIZED.blocks_spec['wpe-slider'] != null &&
+    typeof GLOBAL_LOCALIZED.blocks_spec['wpe-slider'] == 'object' &&
+    typeof GLOBAL_LOCALIZED.blocks_spec['wpe-slider'].props == 'object'
 ) {
     Attributes.initComponentAttributes(
         attributes,
-        blocks_spec['wpe-slider'].props,
+        GLOBAL_LOCALIZED.blocks_spec['wpe-slider'].props,
     );
 }
 
@@ -65,8 +65,8 @@ registerBlockType('custom/wpe-slider', {
             <EditMode
                 {...props}
                 innerBlocksProps={innerBlocksProps}
-                blocks_spec={blocks_spec['wpe-slider']}
-                theme_spec={theme_spec}
+                blocks_spec={GLOBAL_LOCALIZED.blocks_spec['wpe-slider']}
+                theme_spec={GLOBAL_LOCALIZED.theme_spec}
             />
         );
     },

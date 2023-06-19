@@ -13,13 +13,13 @@ import { OButtonBlockAppender } from '../../../Components/OButtonBlockAppender';
 
 let attributes = {};
 if (
-    blocks_spec['wpe-slide'] != null &&
-    typeof blocks_spec['wpe-slide'] == 'object' &&
-    typeof blocks_spec['wpe-slide'].props == 'object'
+    GLOBAL_LOCALIZED.blocks_spec['wpe-slide'] != null &&
+    typeof GLOBAL_LOCALIZED.blocks_spec['wpe-slide'] == 'object' &&
+    typeof GLOBAL_LOCALIZED.blocks_spec['wpe-slide'].props == 'object'
 ) {
     Attributes.initComponentAttributes(
         attributes,
-        blocks_spec['wpe-slide'].props,
+        GLOBAL_LOCALIZED.blocks_spec['wpe-slide'].props,
     );
 }
 
@@ -61,14 +61,18 @@ registerBlockType('custom/wpe-slide', {
     edit: (props) => {
         const innerBlocksProps = useInnerBlocksProps(
             useBlockProps({ className: '' }),
-            { renderAppender: OButtonBlockAppender },
+            {
+                renderAppender: () => (
+                    <OButtonBlockAppender rootClientId={props.clientId} />
+                ),
+            },
         );
 
         return (
             <WpeSlide
                 {...props}
                 innerBlocksProps={innerBlocksProps}
-                blocks_spec={blocks_spec['wpe-slide']}
+                blocks_spec={GLOBAL_LOCALIZED.blocks_spec['wpe-slide']}
                 theme_spec={theme_spec}
             />
         );
