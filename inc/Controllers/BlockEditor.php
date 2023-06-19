@@ -49,6 +49,8 @@ class BlockEditor extends ControllerBase
             $asset_file["version"]
         );
 
+        $editorConfig = $this->get_config()->get_spec('editor');
+
         wp_localize_script(
             $handle,
             "GLOBAL_LOCALIZED", [
@@ -74,7 +76,11 @@ class BlockEditor extends ControllerBase
                     apply_filters('Abt\editor_script_localize_blocks_spec', []),
                     $this->get_config()->get("componentBlockPrefixName"),
                     "block_spec"
-                )
+                ),
+                "editor" => [
+                    "style" => ( $editorConfig && is_array($editorConfig) && isset($editorConfig["style"]) && $editorConfig["style"] == "dark" ) ? "dark" : "light",
+                    "backgroundColor" => ( $editorConfig && is_array($editorConfig) && isset($editorConfig["backgroundColor"]) ) ? $editorConfig["backgroundColor"] : false,
+                ]
             ]
         );
 

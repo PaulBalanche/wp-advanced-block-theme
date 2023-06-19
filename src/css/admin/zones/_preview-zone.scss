@@ -17,16 +17,11 @@
     }
 
     .is-root-container {
-        // display: flex;
-        // flex-direction: column;
-        // gap: 180px;
-        padding: $o-space-40 0;
-        border-left: solid 1px hsla(200, 0%, 55%, 0.2);
-        border-right: solid 1px hsla(200, 0%, 55%, 0.2);
+        padding: $o-space-40 0 !important;
 
         .block-editor-block-list__block {
             width: 100%;
-            max-width: 100%;
+            max-width: 100% !important;
         }
     }
 

@@ -59,10 +59,13 @@ class OEditor {
      * Just add the theme background color from the frontspec if needed
      */
     _initTheme() {
-        if (GLOBAL_LOCALIZED.theme_spec?.metas?.backgroundColor) {
+        if (
+            GLOBAL_LOCALIZED?.editor?.backgroundColor &&
+            GLOBAL_LOCALIZED.editor.backgroundColor != null
+        ) {
             document.documentElement.style.setProperty(
                 '--abt-background-editor',
-                GLOBAL_LOCALIZED.theme_spec.metas.backgroundColor,
+                GLOBAL_LOCALIZED.editor.backgroundColor,
             );
         }
     }

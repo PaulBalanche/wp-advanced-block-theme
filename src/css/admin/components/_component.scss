@@ -94,3 +94,9 @@
         }
     }
 }
+
+.o-editor.dark {
+    .o-editor {
+        border: 1px solid var(--wp-admin-theme-color);
+    }
+}

@@ -41,6 +41,10 @@ export default class OEditorApp extends Component {
         // get the actual edit app dom node
         this._$editApp = document.querySelector('.o-editor');
         this._$editAppContainer = document.querySelector('.o-editor-container');
+
+        if (GLOBAL_LOCALIZED?.editor?.style) {
+            this._$editApp.classList.add(GLOBAL_LOCALIZED.editor.style);
+        }
     }
 
     componentDidMount() {

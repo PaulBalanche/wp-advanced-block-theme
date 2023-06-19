@@ -14210,6 +14210,9 @@ class OEditorApp extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Compone
     // get the actual edit app dom node
     this._$editApp = document.querySelector('.o-editor');
     this._$editAppContainer = document.querySelector('.o-editor-container');
+    if (GLOBAL_LOCALIZED?.editor?.style) {
+      this._$editApp.classList.add(GLOBAL_LOCALIZED.editor.style);
+    }
   }
   componentDidMount() {
     // init shortcuts and mouse events
@@ -42546,8 +42549,8 @@ class OEditor {
    * Just add the theme background color from the frontspec if needed
    */
   _initTheme() {
-    if (GLOBAL_LOCALIZED.theme_spec?.metas?.backgroundColor) {
-      document.documentElement.style.setProperty('--abt-background-editor', GLOBAL_LOCALIZED.theme_spec.metas.backgroundColor);
+    if (GLOBAL_LOCALIZED?.editor?.backgroundColor && GLOBAL_LOCALIZED.editor.backgroundColor != null) {
+      document.documentElement.style.setProperty('--abt-background-editor', GLOBAL_LOCALIZED.editor.backgroundColor);
     }
   }
 }
