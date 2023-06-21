@@ -213,8 +213,10 @@
     &.inspector,
     &.help,
     &.settings {
-        li > ul {
+        li > .ul-slidedown {
             padding: 0 0 0 $o-space-50;
+            transition-duration: 0.3s;
+            transition-timing-function: ease-in-out;
         }
 
         ul {
@@ -487,9 +489,9 @@
     }
 }
 
-.o-editor:has(.o-editor-app.resizing) .block-editor-block-list__block,
-.o-editor:has(.o-editor-app.moving) .block-editor-block-list__block {
-    opacity: 0.1;
+.edit-post-visual-editor {
+    filter: none;
+    transition: $o-transition-fast;
 }
 
 @keyframes twinkle {

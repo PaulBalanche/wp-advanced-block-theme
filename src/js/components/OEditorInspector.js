@@ -9,6 +9,9 @@ import globalData from '../global';
 import { OButtonBlockAppender } from './OButtonBlockAppender';
 import { OButtonPatternAppender } from './OButtonPatternAppender';
 
+import { SlideDown } from 'react-slidedown';
+import '../../../node_modules/react-slidedown/lib/slidedown.css';
+
 export default class OEditorInspector {
     constructor(blocksList, selectBlock) {
         this.blocksList = blocksList;
@@ -60,32 +63,36 @@ export default class OEditorInspector {
 }
 
 const BlockList = (props) => {
-    return (
-        <>
-            {((props.isChildren && props.isOpen) || !props.isChildren) && (
-                <ul>
-                    {typeof props.isChildren != 'undefined' &&
-                        props.isChildren && <div className="separator"></div>}
-                    {props.blocksList.map((block) => (
-                        <Fragment
-                            key={'o-inspector-blockContainer-' + block.clientId}
-                        >
-                            <BlockListItem
-                                block={block}
-                                selectBlock={props.selectBlock}
-                            />
-                            <li className="separator"></li>
-                        </Fragment>
-                    ))}
-                </ul>
+    const children = (
+        <ul>
+            {typeof props.isChildren != 'undefined' && props.isChildren && (
+                <div className="separator"></div>
             )}
-        </>
+            {props.blocksList.map((block) => (
+                <Fragment key={'o-inspector-blockContainer-' + block.clientId}>
+                    <BlockListItem
+                        block={block}
+                        selectBlock={props.selectBlock}
+                    />
+                    <li className="separator"></li>
+                </Fragment>
+            ))}
+        </ul>
+    );
+
+    return typeof props.isChildren != 'undefined' && props.isChildren ? (
+        <SlideDown className={'ul-slidedown'}>
+            {props.isOpen ? children : null}
+        </SlideDown>
+    ) : (
+        children
     );
 };
 
 const BlockListItem = ({ block, selectBlock }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [isHover, setIsHover] = useState(false);
+    const [timeoutId, setTimeoutId] = useState(null);
 
     const anchor = block.attributes?.anchor;
     const displayAnchor =
@@ -188,18 +195,23 @@ const BlockListItem = ({ block, selectBlock }) => {
                 <Button
                     variant="tertiary"
                     onMouseOver={() => {
-                        domBlock?.scrollIntoView({
-                            behavior: 'smooth',
-                            block: 'center',
-                        });
-                        domBlock?.classList.add('is-pre-selected');
-                        for (var i in parentDomBlocks) {
-                            parentDomBlocks[i].classList.add(
-                                'has-child-pre-selected',
-                            );
-                        }
+                        setTimeoutId(
+                            window.setTimeout(() => {
+                                domBlock?.scrollIntoView({
+                                    behavior: 'smooth',
+                                    block: 'center',
+                                });
+                                domBlock?.classList.add('is-pre-selected');
+                                for (var i in parentDomBlocks) {
+                                    parentDomBlocks[i].classList.add(
+                                        'has-child-pre-selected',
+                                    );
+                                }
+                            }, 400),
+                        );
                     }}
                     onMouseOut={() => {
+                        clearTimeout(timeoutId);
                         domBlock?.classList.remove('is-pre-selected');
                         for (var i in parentDomBlocks) {
                             parentDomBlocks[i].classList.remove(

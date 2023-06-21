@@ -47,7 +47,7 @@ const BlocksAppender = ({
                                                     ),
                                                     undefined,
                                                     rootClientId,
-                                                    false,
+                                                    true,
                                                 );
                                                 onClose();
                                                 createSuccessNotice(

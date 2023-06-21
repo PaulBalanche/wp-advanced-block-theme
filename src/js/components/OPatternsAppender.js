@@ -85,7 +85,7 @@ const PatternsAppender = ({
                                                     parse(pattern.content),
                                                     undefined,
                                                     rootClientId,
-                                                    false,
+                                                    true,
                                                 );
                                                 onClose();
                                                 createSuccessNotice(

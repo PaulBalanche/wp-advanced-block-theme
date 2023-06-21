@@ -1,6 +1,6 @@
 {
     "name": "wp-advanced-block-theme",
-    "version": "1.4.92",
+    "version": "1.4.93",
     "description": "",
     "main": "wp-advanced-block-theme",
     "scripts": {
@@ -34,6 +34,7 @@
         "@wordpress/preferences": "^3.10.0",
         "@wordpress/reusable-blocks": "^4.10.0",
         "dompurify": "^2.4.5",
-        "react-router-dom": "^6.11.1"
+        "react-router-dom": "^6.11.1",
+        "react-slidedown": "^2.4.7"
     }
 }
