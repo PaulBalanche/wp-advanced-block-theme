@@ -6,6 +6,8 @@ use Abt\Services\CoreBlocks as CoreBlocksService;
 
 class CoreBlocks extends ControllerBase {
 
+    private $coreBlocksService;
+
     public function __construct() {
         parent::__construct();
         
