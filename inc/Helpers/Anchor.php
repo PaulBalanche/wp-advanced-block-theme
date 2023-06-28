@@ -11,6 +11,9 @@ class Anchor
     public static function get($className, &$content)
     {
         $anchor = null;
+        if( $content == null ) {
+            $content = '';
+        }
 
         if (
             preg_match(

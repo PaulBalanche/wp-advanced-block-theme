@@ -1,5 +1,6 @@
 {
     "core": "WordPress/WordPress#master",
+    "phpVersion": "8.2",
     "plugins": ["."],
     "mappings": {
         "wp-content/themes": "../development/themes"
