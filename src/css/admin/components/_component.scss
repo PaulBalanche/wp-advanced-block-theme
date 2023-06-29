@@ -88,13 +88,28 @@
                     h2 {
                         font-weight: 500;
                         font-size: 2em;
-                        margin-top: 0;
+                        margin: 0 0 $o-space-10 0;
                     }
 
                     .dashicon {
                         font-size: 40px;
                         width: auto;
                         height: auto;
+                    }
+
+                    .error-attributes {
+                        position: relative;
+                        top: -$o-space-30;
+                        margin-left: $o-space-10;
+                        color: white;
+                        border-radius: 50%;
+                        width: 23px;
+                        height: 23px;
+                        display: inline-flex;
+                        align-items: center;
+                        justify-content: center;
+                        font-size: 11px;
+                        background: $o-accent-red-color;
                     }
                 }
 

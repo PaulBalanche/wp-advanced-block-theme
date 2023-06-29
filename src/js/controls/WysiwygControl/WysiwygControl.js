@@ -23,14 +23,14 @@ class WysiwygControl extends Component {
 
     getTypo() {
         let typo = {};
-
+        console.log(this.props.componentInstance.props.theme_spec.editor.typo);
         if (
-            this.props?.componentInstance?.props?.theme_spec?.typo &&
-            typeof this.props.componentInstance.props.theme_spec.typo ==
+            this.props?.componentInstance?.props?.theme_spec?.editor?.typo &&
+            typeof this.props.componentInstance.props.theme_spec.editor.typo ==
                 'object'
         ) {
             for (const [key, val] of Object.entries(
-                this.props.componentInstance.props.theme_spec.typo,
+                this.props.componentInstance.props.theme_spec.editor.typo,
             )) {
                 if (key == 'a') {
                     continue;
@@ -86,12 +86,12 @@ class WysiwygControl extends Component {
         };
 
         if (
-            this.props?.componentInstance?.props?.theme_spec?.typo &&
-            typeof this.props.componentInstance.props.theme_spec.typo ==
+            this.props?.componentInstance?.props?.theme_spec?.editor?.typo &&
+            typeof this.props.componentInstance.props.theme_spec.editor.typo ==
                 'object'
         ) {
             for (const [key, val] of Object.entries(
-                this.props.componentInstance.props.theme_spec.typo,
+                this.props.componentInstance.props.theme_spec.editor.typo,
             )) {
                 let editorCss = null;
 

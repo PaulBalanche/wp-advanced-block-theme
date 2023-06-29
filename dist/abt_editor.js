@@ -11562,13 +11562,16 @@ class WpeComponent extends _Components_WpeComponentBase__WEBPACK_IMPORTED_MODULE
           render.push(this.renderIframePreview());
         } else if (error != null) {
           if (typeof error == 'object') {
+            let countError = Object.keys(error).length;
             render.push(this.renderEditFormZone());
             render.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
               key: this.props.clientId + '-placeholder',
               className: "wpe-block-placeholder center"
             }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
               className: "inner"
-            }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h2", null, this.title), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("strong", null, "Missing fields."), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), "This block is not yet visible in front part."))));
+            }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h2", null, this.title, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+              className: "error-attributes"
+            }, countError)), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "Fix error", countError > 1 && 's', " to make this block visible."))));
           } else {
             render.push(this.renderEditFormZone());
             render.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -18434,8 +18437,9 @@ class WysiwygControl extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Com
   }
   getTypo() {
     let typo = {};
-    if (this.props?.componentInstance?.props?.theme_spec?.typo && typeof this.props.componentInstance.props.theme_spec.typo == 'object') {
-      for (const [key, val] of Object.entries(this.props.componentInstance.props.theme_spec.typo)) {
+    console.log(this.props.componentInstance.props.theme_spec.editor.typo);
+    if (this.props?.componentInstance?.props?.theme_spec?.editor?.typo && typeof this.props.componentInstance.props.theme_spec.editor.typo == 'object') {
+      for (const [key, val] of Object.entries(this.props.componentInstance.props.theme_spec.editor.typo)) {
         if (key == 'a') {
           continue;
         }
@@ -18480,8 +18484,8 @@ class WysiwygControl extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Com
         }
       }
     };
-    if (this.props?.componentInstance?.props?.theme_spec?.typo && typeof this.props.componentInstance.props.theme_spec.typo == 'object') {
-      for (const [key, val] of Object.entries(this.props.componentInstance.props.theme_spec.typo)) {
+    if (this.props?.componentInstance?.props?.theme_spec?.editor?.typo && typeof this.props.componentInstance.props.theme_spec.editor.typo == 'object') {
+      for (const [key, val] of Object.entries(this.props.componentInstance.props.theme_spec.editor.typo)) {
         let editorCss = null;
         if (key == 'a') {
           if (val?.style && typeof val.style == 'object') {

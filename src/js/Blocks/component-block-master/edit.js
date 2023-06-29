@@ -160,7 +160,6 @@ class WpeComponent extends WpeComponentBase {
             return <div {...this.props.innerBlocksProps} />;
         } else {
             const { error, previewReady } = this.state;
-
             var render = [];
 
             if (this.editorPreviewImage) {
@@ -177,6 +176,7 @@ class WpeComponent extends WpeComponentBase {
                     render.push(this.renderIframePreview());
                 } else if (error != null) {
                     if (typeof error == 'object') {
+                        let countError = Object.keys(error).length;
                         render.push(this.renderEditFormZone());
                         render.push(
                             <div
@@ -184,12 +184,15 @@ class WpeComponent extends WpeComponentBase {
                                 className="wpe-block-placeholder center"
                             >
                                 <div className="inner">
-                                    <h2>{this.title}</h2>
+                                    <h2>
+                                        {this.title}
+                                        <span className="error-attributes">
+                                            {countError}
+                                        </span>
+                                    </h2>
                                     <p>
-                                        <strong>Missing fields.</strong>
-                                        <br />
-                                        This block is not yet visible in front
-                                        part.
+                                        Fix error{countError > 1 && 's'} to make
+                                        this block visible.
                                     </p>
                                 </div>
                             </div>,
