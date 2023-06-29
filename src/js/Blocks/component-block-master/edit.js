@@ -181,15 +181,15 @@ class WpeComponent extends WpeComponentBase {
                         render.push(
                             <div
                                 key={this.props.clientId + '-placeholder'}
-                                className="wpe-block-placeholder"
+                                className="wpe-block-placeholder center"
                             >
                                 <div className="inner">
                                     <h2>{this.title}</h2>
-                                    <Dashicon icon="admin-generic" />
                                     <p>
-                                        Not ready yet!
+                                        <strong>Missing fields.</strong>
                                         <br />
-                                        <u>Click to edit</u>
+                                        This block is not yet visible in front
+                                        part.
                                     </p>
                                 </div>
                             </div>,
@@ -199,7 +199,7 @@ class WpeComponent extends WpeComponentBase {
                         render.push(
                             <div
                                 key={this.props.clientId + '-placeholder'}
-                                className="wpe-block-placeholder"
+                                className="wpe-block-placeholder center"
                             >
                                 <div className="inner">
                                     <Dashicon icon="info" />

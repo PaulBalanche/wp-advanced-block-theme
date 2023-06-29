@@ -11565,17 +11565,15 @@ class WpeComponent extends _Components_WpeComponentBase__WEBPACK_IMPORTED_MODULE
             render.push(this.renderEditFormZone());
             render.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
               key: this.props.clientId + '-placeholder',
-              className: "wpe-block-placeholder"
+              className: "wpe-block-placeholder center"
             }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
               className: "inner"
-            }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h2", null, this.title), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Dashicon, {
-              icon: "admin-generic"
-            }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "Not ready yet!", (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("u", null, "Click to edit")))));
+            }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h2", null, this.title), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("strong", null, "Missing fields."), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), "This block is not yet visible in front part."))));
           } else {
             render.push(this.renderEditFormZone());
             render.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
               key: this.props.clientId + '-placeholder',
-              className: "wpe-block-placeholder"
+              className: "wpe-block-placeholder center"
             }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
               className: "inner"
             }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Dashicon, {

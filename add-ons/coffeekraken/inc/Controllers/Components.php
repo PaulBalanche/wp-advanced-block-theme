@@ -43,7 +43,7 @@ class Components extends ControllerBase {
                 $namespace => [ rtrim( $path, '/' ) ]
             ],
             'previewUrl' => function ($args) {
-                return (isset($args->path) && file_exists($args->path) ) ? str_replace( WP_CONTENT_DIR, str_replace(WP_SITEURL, '', WP_CONTENT_URL), $args->path, ) : null;
+                return (isset($args->path) && file_exists($args->path) ) ? str_replace( WP_HOME, '', str_replace( WP_CONTENT_DIR, WP_CONTENT_URL, $args->path)) : null;
             }
         ];
 
