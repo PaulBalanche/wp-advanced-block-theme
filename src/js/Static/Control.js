@@ -198,7 +198,7 @@ export function Control(props) {
     }
 
     function getKey() {
-        let keyFormatted = Object.assign([], key);
+        let keyFormatted = key;
 
         if (isResponsive) {
             const currentDevice = __ODevices.getInstance().getCurrentDevice();
@@ -338,6 +338,7 @@ export function Control(props) {
                     componentInstance={componentInstance}
                     blockKey={getKey()}
                     keys={getKeys()}
+                    controllerValue={props.controllerValue}
                     valueProp={valueProp}
                     value={getValue()}
                     required_field={required_field}

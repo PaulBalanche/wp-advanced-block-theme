@@ -90,7 +90,14 @@ export function Sortable(props) {
 
     function addItem() {
         setItems(items.concat(items.length.toString()));
-        updateValue(props.value.concat(''), true);
+
+        let newValue =
+            props.type == 'object' ? props.controllerValue : props.value;
+        if (newValue == null || typeof props.controllerValue != 'object') {
+            newValue = [];
+        }
+
+        updateValue(newValue.concat(''), true);
     }
 
     function renderItems() {

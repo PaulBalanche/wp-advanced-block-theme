@@ -16171,7 +16171,7 @@ function Control(props) {
     return labelFormatted;
   }
   function getKey() {
-    let keyFormatted = Object.assign([], key);
+    let keyFormatted = key;
     if (isResponsive) {
       const currentDevice = _Components_ODevices__WEBPACK_IMPORTED_MODULE_2__["default"].getInstance().getCurrentDevice();
       keyFormatted = keyFormatted + '-' + currentDevice;
@@ -16259,6 +16259,7 @@ function Control(props) {
         componentInstance: componentInstance,
         blockKey: getKey(),
         keys: getKeys(),
+        controllerValue: props.controllerValue,
         valueProp: valueProp,
         value: getValue(),
         required_field: required_field,
@@ -16561,7 +16562,11 @@ function Sortable(props) {
   }
   function addItem() {
     setItems(items.concat(items.length.toString()));
-    updateValue(props.value.concat(''), true);
+    let newValue = props.type == 'object' ? props.controllerValue : props.value;
+    if (newValue == null || typeof props.controllerValue != 'object') {
+      newValue = [];
+    }
+    updateValue(newValue.concat(''), true);
   }
   function renderItems() {
     var renderItems = [];
