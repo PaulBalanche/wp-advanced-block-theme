@@ -35,18 +35,31 @@ class Scripts extends ServiceBase {
 
         $assets = apply_filters( 'Abt\get_assets_spec', $this->get_config()->get_spec('assets') );
         if( ! is_null($assets) && is_array($assets) ) {
-            
-            // CSS
-            if( isset($assets['css']) && is_array($assets['css']) ) {
-                foreach( $assets['css'] as $key => $css ) {
-                    $this->enqueue( $key, $css, false, false );
-                }
-            }
 
-            // JS
-            if( isset($assets['js']) && is_array($assets['js']) ) {
-                foreach( $assets['js'] as $key => $js ) {
-                    $this->enqueue( $key, $js, true, false );
+            foreach( $assets as $key_asset => $asset ) {
+                
+                if( isset($asset['src']) ) {
+                    
+                    $pathinfo = pathinfo($asset['src']);
+                    $asset['src'] = $this->get_config()->get_front_end_file_path( trim($asset['src'], '/') );
+
+                    switch( $pathinfo['extension'] ) {
+                        case 'js':
+                        case 'ts':
+                            if( ! isset($new_assets['js']) || ! is_array($new_assets['js']) ) {
+                                $new_assets['js'] = [];
+                            }
+                            $this->enqueue( $key_asset, $asset, true, false );
+                            break;
+                        
+                        case 'css':
+
+                            if( ! isset($new_assets['css']) || ! is_array($new_assets['css']) ) {
+                                $new_assets['css'] = [];
+                            }
+                            $this->enqueue( $key_asset, $asset, false, false );
+                            break;
+                    }
                 }
             }
         }
@@ -62,18 +75,31 @@ class Scripts extends ServiceBase {
 
         $assets = apply_filters( 'Abt\get_assets_spec', $this->get_config()->get_spec('assets') );
         if( ! is_null($assets) && is_array($assets) ) {
-            
-            // CSS
-            if( isset($assets['css']) && is_array($assets['css']) ) {
-                foreach( $assets['css'] as $key => $css ) {
-                    $this->enqueue( $key, $css, false, true );
-                }
-            }
 
-            // JS
-            if( isset($assets['js']) && is_array($assets['js']) ) {
-                foreach( $assets['js'] as $key => $js ) {
-                    $this->enqueue( $key, $js, true, true );
+            foreach( $assets as $key_asset => $asset ) {
+                
+                if( isset($asset['src']) ) {
+                    
+                    $pathinfo = pathinfo($asset['src']);
+                    $asset['src'] = $this->get_config()->get_front_end_file_path( trim($asset['src'], '/') );
+
+                    switch( $pathinfo['extension'] ) {
+                        case 'js':
+                        case 'ts':
+                            if( ! isset($new_assets['js']) || ! is_array($new_assets['js']) ) {
+                                $new_assets['js'] = [];
+                            }
+                            $this->enqueue( $key_asset, $asset, true, true );
+                            break;
+                        
+                        case 'css':
+
+                            if( ! isset($new_assets['css']) || ! is_array($new_assets['css']) ) {
+                                $new_assets['css'] = [];
+                            }
+                            $this->enqueue( $key_asset, $asset, false, true );
+                            break;
+                    }
                 }
             }
         }

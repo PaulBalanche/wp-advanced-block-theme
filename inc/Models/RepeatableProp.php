@@ -37,7 +37,7 @@ class RepeatableProp extends SimpleProp {
 
         if( $countValidItems < $this->getRequiredValidItems() ) {
 
-            return $this->falseWithError( sprintf( _n( 'Required minimun %s item', 'Required minimun %s items', $this->getRequiredValidItems(), ABT_PLUGIN_TEXTDOMAIN ), number_format_i18n( $this->getRequiredValidItems() ) ) );
+            return $this->falseWithError( sprintf( _n( 'Required minimun %s item', 'Required minimun %s items', $this->getRequiredValidItems(), 'wp-abt' ), number_format_i18n( $this->getRequiredValidItems() ) ) );
         }
         
         return true;

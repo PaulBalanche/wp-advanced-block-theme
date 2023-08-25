@@ -11,7 +11,6 @@ class Config {
         $viewspecJsonFilename               = 'viewspec.json',
         $overrideSpecJsonFilename           = 'override.json',
         $blockMetadataJsonFilename          = 'block.json',
-        $allowedBlockTypesJsonFileName      = 'allowed_block_types.json',
         $frontendRelativePath               = ABT_FRONTEND_RELATIVE_PATH,
         $templateViewsLocation              = ABT_TEMPLATE_VIEWS_LOCATION,
         $templateComponentsSubLocation      = ABT_TEMPLATE_COMPONENTS_SUB_LOCATION,
@@ -29,8 +28,8 @@ class Config {
         $specData                           = null,
         $addOnsLocation                     = 'add-ons',
         $rest_api_namespace                 = 'abt/v2',
-        $componentBlocksAutoSaveLocation    = ABT_PLUGIN_DIR . '/abt-tmp/';
-        
+        $componentBlocksAutoSaveLocation    = ABT_PLUGIN_DIR . 'abt-tmp/',
+        $templateIncludeWpHeaderFooter      = ABT_INCLUDE_WP_HEADER;
 
 
     /**
@@ -44,6 +43,98 @@ class Config {
             self::$_instance = new Config();
         }
         return self::$_instance;
+    }
+
+	/**
+	 * Config page display callback.
+	 */
+	public function bo_config_page_callback() {
+
+        return '<h2>Front-end part</h2>
+            <table class="form-table" role="presentation">
+                <tbody>
+                    <tr>
+                        <th scope="row"><label for="blogname">frontendRelativePath</label></th>
+                        <td>
+                            <input type="text" class="regular-text" disabled="disabled" value="' . $this->get('frontendRelativePath') . '" />
+                            <span>' . $this->display_config_exists( $this->get('frontendRelativePath') ) . '</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><label for="blogname">frontspecJsonFileName</label></th>
+                        <td>
+                            <input type="text" class="regular-text" disabled="disabled" value="' . $this->get('frontspecJsonFileName') . '" />
+                            <span>' . $this->display_config_exists( $this->get('frontendRelativePath') . '/' . $this->get('frontspecJsonFileName') ) . '</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><label for="blogname">templateViewsLocation</label></th>
+                        <td>
+                            <input type="text" class="regular-text" disabled="disabled" value="' . $this->get('templateViewsLocation') . '" />
+                            <span>' . $this->display_config_exists( $this->get('frontendRelativePath') . '/' . $this->get('templateViewsLocation') ) . '</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><label for="blogname">templateComponentsSubLocation</label></th>
+                        <td>
+                            <input type="text" class="regular-text" disabled="disabled" value="' . $this->get('templateComponentsSubLocation') . '" />
+                            <span>' . $this->display_config_exists( $this->get('frontendRelativePath') . '/' . $this->get('templateViewsLocation') . '/' . $this->get('templateComponentsSubLocation') ) . '</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><label for="blogname">templateIncludeWpHeaderFooter</label></th>
+                        <td><input type="text" class="regular-text" disabled="disabled" value="' . $this->get('templateIncludeWpHeaderFooter') . '" /></td>
+                    </tr>
+                </tbody>
+            </table>
+            <h2>back-end part</h2>
+            <table class="form-table" role="presentation">
+                    <tr>
+                        <th scope="row"><label for="blogname">' . __( 'Active theme', 'wp-abt' ) . '</label></th>
+                        <td><input type="text" class="regular-text" disabled="disabled" value="' . get_stylesheet_directory() . '" /></td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><label for="blogname">themespecJsonFileName</label></th>
+                        <td>
+                            <input type="text" class="regular-text" disabled="disabled" value="' . $this->get('themespecJsonFileName') . '" />
+                            <span>' . $this->display_config_exists( $this->get('themespecJsonFileName') ) . '</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><label for="blogname">componentBlocksLocation</label></th>
+                        <td>
+                            <input type="text" class="regular-text" disabled="disabled" value="' . $this->get('componentBlocksLocation') . '" />
+                            <span>' . $this->display_config_exists( $this->get('componentBlocksLocation') ) . '</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><label for="blogname">blockMetadataJsonFilename</label></th>
+                        <td><input type="text" class="regular-text" disabled="disabled" value="' . $this->get('blockMetadataJsonFilename') . '" /></td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><label for="blogname">viewspecJsonFilename</label></th>
+                        <td><input type="text" class="regular-text" disabled="disabled" value="' . $this->get('viewspecJsonFilename') . '" /></td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><label for="blogname">overrideSpecJsonFilename</label></th>
+                        <td><input type="text" class="regular-text" disabled="disabled" value="' . $this->get('overrideSpecJsonFilename') . '" /></td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><label for="blogname">componentBlocksAutoSaveLocation</label></th>
+                        <td><input type="text" class="regular-text" disabled="disabled" value="' . $this->get('componentBlocksAutoSaveLocation') . '" /></td>
+                    </tr>
+                </tbody>
+            </table>';
+	}
+
+
+    public function display_config_exists( $path ) {
+        
+        if( file_exists( get_stylesheet_directory() . '/' . $path) ) {
+            return '<span class="dashicons dashicons-yes" style="color:#46B450"></span>';
+        }
+        
+        return '<span class="dashicons dashicons-no-alt" style="color:#DC3232"></span>';
     }
 
 

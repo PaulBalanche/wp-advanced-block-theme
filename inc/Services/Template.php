@@ -7,13 +7,21 @@ class Template extends ServiceBase {
     function __construct() {
         parent::__construct();
 
+        $this->add_actions();
         $this->add_filters();
     }
     
     /**
-     * Add Wordpress filters
+     * Add Wordpress actions & filters
      * 
      */
+    public function add_actions() {
+
+        if( $this->get_config()->get('templateIncludeWpHeaderFooter') ) {
+            add_action( 'Abt\layout_header', 'get_header' );
+            add_action( 'Abt\layout_footer', 'get_footer' );
+        }
+    }
     public function add_filters() {
 
         add_filter( 'template_include', [ $this, 'template_include' ] );

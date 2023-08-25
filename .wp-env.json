@@ -1,8 +1,9 @@
 {
-    "core": "WordPress/WordPress#master",
+    "core": null,
     "phpVersion": "8.2",
     "plugins": ["."],
     "mappings": {
-        "wp-content/themes": "../development/themes"
+        "wp-content/themes": "../development/themes",
+        "wp-content/plugins": "../development/plugins"
     }
 }

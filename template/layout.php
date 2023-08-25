@@ -1,5 +1,4 @@
 <?php
-
 $content = '';
 
 if ( have_posts() ) :
@@ -10,4 +9,6 @@ if ( have_posts() ) :
     endwhile;
 endif;
 
+do_action('Abt\layout_header');
 Abt\Main::getInstance()->get_theme_controller()->render( __FILE__, $content );
+do_action('Abt\layout_footer');
