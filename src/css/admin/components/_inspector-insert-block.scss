@@ -17,12 +17,10 @@
 
     .components-button {
         font-weight: 500;
-        width: 50%;
+        padding: $o-space-10 $o-space-40;
         justify-content: center;
-        border-left: 1px solid rgb(255 255 255 / 50%);
 
         &:first-child {
-            border-left: none;
             border-top-left-radius: $o-border-radius-small;
             border-bottom-left-radius: $o-border-radius-small;
         }

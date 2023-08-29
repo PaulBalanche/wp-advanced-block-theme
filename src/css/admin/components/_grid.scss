@@ -61,20 +61,6 @@
                 margin-right: $o-space-10;
             }
         }
-
-        &:hover,
-        &.is-selected {
-            .o-grid-add-column {
-                visibility: visible;
-            }
-
-            > .o-grid-container
-                > .block-editor-block-list__block[data-type='custom/wpe-column']:not(
-                    :hover
-                )::before {
-                opacity: 0.6;
-            }
-        }
     }
 
     .block-editor-block-list__layout.is-root-container

@@ -305,7 +305,7 @@
                 opacity: 0.1;
             }
             li.is-hover {
-                &:before {
+                &::before {
                     content: '\f139';
                     font-family: dashicons;
                     position: absolute;

@@ -1,14 +1,9 @@
 /**
  * WordPress dependencies
  */
-import {
-    store as blockEditorStore,
-    useBlockProps,
-    useInnerBlocksProps,
-} from '@wordpress/block-editor';
+import { store as blockEditorStore } from '@wordpress/block-editor';
 import { compose } from '@wordpress/compose';
 import { withDispatch, withSelect } from '@wordpress/data';
-import { OButtonBlockAppender } from '../../../Components/OButtonBlockAppender';
 import { WpeComponentBase } from '../../../Components/WpeComponentBase';
 
 /**
@@ -31,52 +26,35 @@ class WpeContainer extends WpeComponentBase {
     }
 }
 
-export default (containerConfig, block_spec, theme_spec) =>
-    compose([
-        withSelect((select, props) => {
-            const { __experimentalGetPreviewDeviceType } =
-                select('core/edit-post');
-
-            // Detect if inside a reusable block
-            const getBlockParents = select('core/block-editor').getBlockParents(
-                props.clientId,
+export const EditMode = compose([
+    withSelect((select, props) => {
+        // Detect if inside a reusable block
+        const getBlockParents = select('core/block-editor').getBlockParents(
+            props.clientId,
+        );
+        const parentsBlock = [];
+        for (var i in getBlockParents) {
+            parentsBlock.push(
+                select('core/block-editor').getBlock(getBlockParents[i]),
             );
-            const parentsBlock = [];
-            for (var i in getBlockParents) {
-                parentsBlock.push(
-                    select('core/block-editor').getBlock(getBlockParents[i]),
-                );
-            }
+        }
 
-            return {
-                containerConfig: containerConfig,
-                block_spec,
-                theme_spec,
-                innerBlocksProps: useInnerBlocksProps(
-                    useBlockProps({ className: '' }),
-                    {
-                        renderAppender: () => (
-                            <OButtonBlockAppender
-                                rootClientId={props.clientId}
-                            />
-                        ),
-                    },
-                ),
-                isSelectedBlock: select('core/block-editor').isBlockSelected(
-                    props.clientId,
-                ),
-                isParentOfSelectedBlock: select(
-                    'core/block-editor',
-                ).hasSelectedInnerBlock(props.clientId, true),
-                parentsBlock,
-            };
-        }),
-        withDispatch((dispatch) => {
-            const { removeBlock, duplicateBlocks } = dispatch(blockEditorStore);
+        return {
+            isSelectedBlock: select('core/block-editor').isBlockSelected(
+                props.clientId,
+            ),
+            isParentOfSelectedBlock: select(
+                'core/block-editor',
+            ).hasSelectedInnerBlock(props.clientId, true),
+            parentsBlock,
+        };
+    }),
+    withDispatch((dispatch) => {
+        const { removeBlock, duplicateBlocks } = dispatch(blockEditorStore);
 
-            return {
-                removeBlock,
-                duplicateBlocks,
-            };
-        }),
-    ])(WpeContainer);
+        return {
+            removeBlock,
+            duplicateBlocks,
+        };
+    }),
+])(WpeContainer);

@@ -7,10 +7,6 @@
         padding-top: $o-space-100 !important;
         padding-bottom: $o-space-20;
 
-        &:before {
-            border: 1px dashed var(--wp-admin-theme-color);
-        }
-
         &.is-empty {
             padding-top: $o-space-100 !important;
         }

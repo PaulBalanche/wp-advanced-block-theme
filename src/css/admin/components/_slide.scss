@@ -6,16 +6,8 @@
         z-index: 32;
         padding: $o-space-30;
 
-        &::before {
-            border: 1px dashed var(--wp-admin-theme-color);
-        }
-
         &:not([contenteditable])::focus::after {
             border: none;
-        }
-
-        & > .o-toolbar-container {
-            display: none !important;
         }
 
         &:hover > .o-slide-container > .block-list-appender {

@@ -7,10 +7,6 @@
             max-width: none;
             margin-left: 0;
             margin-right: 0;
-
-            &::before {
-                border-right-width: 1px;
-            }
         }
     }
 
@@ -111,12 +107,6 @@
 
         .wp-block {
             max-width: 100%;
-        }
-
-        &.has-child-selected {
-            &::before {
-                visibility: visible;
-            }
         }
 
         &:hover > .block-list-appender {

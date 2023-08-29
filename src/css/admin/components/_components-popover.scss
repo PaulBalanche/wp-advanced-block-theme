@@ -6,14 +6,8 @@
     }
 
     .components-popover {
-        // .block-editor-block-contextual-toolbar {
-        //     transform: translateY(50%);
-        //     margin: 0 !important;
-        // }
-
         .block-editor-block-contextual-toolbar {
             border-radius: $o-border-radius-small;
-            border: none;
 
             * {
                 color: $o-text-color;
@@ -27,6 +21,14 @@
 
         .components-popover__content {
             border-radius: $o-border-radius-small;
+        }
+    }
+
+    &.dark {
+        .components-popover {
+            .block-editor-block-contextual-toolbar {
+                border: none;
+            }
         }
     }
 }

@@ -4,7 +4,7 @@ import {
     useInnerBlocksProps,
 } from '@wordpress/block-editor';
 import { registerBlockType } from '@wordpress/blocks';
-
+import { ButtonGroup } from '@wordpress/components';
 import { Attributes } from '../../../Static/Attributes';
 
 import { WpeSlide } from './edit';
@@ -63,7 +63,9 @@ registerBlockType('custom/wpe-slide', {
             useBlockProps({ className: '' }),
             {
                 renderAppender: () => (
-                    <OButtonBlockAppender rootClientId={props.clientId} />
+                    <ButtonGroup className="inspectorButtonInsertNew">
+                        <OButtonBlockAppender rootClientId={props.clientId} />
+                    </ButtonGroup>
                 ),
             },
         );
@@ -73,7 +75,7 @@ registerBlockType('custom/wpe-slide', {
                 {...props}
                 innerBlocksProps={innerBlocksProps}
                 blocks_spec={GLOBAL_LOCALIZED.blocks_spec['wpe-slide']}
-                theme_spec={theme_spec}
+                theme_spec={GLOBAL_LOCALIZED.theme_spec}
             />
         );
     },

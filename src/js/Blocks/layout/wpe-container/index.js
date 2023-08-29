@@ -3,14 +3,12 @@
  */
 import { useBlockProps, useInnerBlocksProps } from '@wordpress/block-editor';
 import { registerBlockType } from '@wordpress/blocks';
+import { ButtonGroup } from '@wordpress/components';
 import { addFilter } from '@wordpress/hooks';
+import { OButtonBlockAppender } from '../../../Components/OButtonBlockAppender';
 
 import { Attributes } from '../../../Static/Attributes';
-
-/**
- * Internal dependencies
- */
-import edit from './edit';
+import { EditMode } from './edit';
 
 let attributes = {};
 if (
@@ -59,11 +57,27 @@ registerBlockType('custom/wpe-container', {
         anchor: true,
     },
     attributes: attributes,
-    edit: edit(
-        GLOBAL_LOCALIZED.container,
-        GLOBAL_LOCALIZED.blocks_spec['wpe-container'],
-        GLOBAL_LOCALIZED.theme_spec,
-    ),
+    edit: (props) => {
+        const innerBlocksProps = useInnerBlocksProps(
+            useBlockProps({ className: '' }),
+            {
+                renderAppender: () => (
+                    <ButtonGroup className="inspectorButtonInsertNew">
+                        <OButtonBlockAppender rootClientId={props.clientId} />
+                    </ButtonGroup>
+                ),
+            },
+        );
+
+        return (
+            <EditMode
+                {...props}
+                innerBlocksProps={innerBlocksProps}
+                blocks_spec={GLOBAL_LOCALIZED.blocks_spec['wpe-container']}
+                theme_spec={GLOBAL_LOCALIZED.theme_spec}
+            />
+        );
+    },
     save: () => {
         const blockProps = useBlockProps.save();
         const innerBlocksProps = useInnerBlocksProps.save(blockProps);
