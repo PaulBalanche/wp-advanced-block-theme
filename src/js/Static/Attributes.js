@@ -151,6 +151,11 @@ export class Attributes {
             default: typeof prop.default != 'undefined' ? prop.default : null,
         };
         switch (type) {
+            case 'text':
+            case 'richText':
+            case 'wysiwyg':
+            case 'link':
+                break;
             case 'string':
                 args.isNumber = false;
                 break;
@@ -222,6 +227,9 @@ export class Attributes {
                     args.type = 'datetime';
                 }
                 break;
+
+            default:
+                return;
         }
 
         return (

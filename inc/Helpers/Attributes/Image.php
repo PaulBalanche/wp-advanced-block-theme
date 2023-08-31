@@ -71,7 +71,9 @@ class Image extends Base {
                 }
             }
 
-            return $imageObject->getAttributes();
+            if( $imageObject->isValid() ) {
+                return $imageObject->getAttributes();
+            }
         }
 
         return null;

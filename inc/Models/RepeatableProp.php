@@ -18,7 +18,7 @@ class RepeatableProp extends SimpleProp {
 
         if( is_null($this->getValue()) || empty($this->getValue()) || ! is_array($this->getValue()) || count($this->getValue()) == 0 ) {
 
-            if( ! is_null($this->getDefaultValue()) ) {
+            if( ! $this->isRequired() || ! is_null($this->getDefaultValue()) ) {
                 return true;
             }
 

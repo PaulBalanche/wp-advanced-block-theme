@@ -5,5 +5,8 @@
     "mappings": {
         "wp-content/themes": "../development/themes",
         "wp-content/plugins": "../development/plugins"
+    },
+    "config": {
+        "INCLUDE_WP_HEADER": false
     }
 }

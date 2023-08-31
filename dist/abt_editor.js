@@ -14854,12 +14854,17 @@ const BlockListItem = _ref => {
       blockName = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, blockName, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
         className: "error-attributes"
       }, errorsBlock));
-    } else if (warningsBlock > 0) {
-      blockName = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, blockName, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-        className: "warning-attributes"
-      }, warningsBlock));
     }
+    // else if (warningsBlock > 0) {
+    //     blockName = (
+    //         <>
+    //             {blockName}
+    //             <span className="warning-attributes">{warningsBlock}</span>
+    //         </>
+    //     );
+    // }
   }
+
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", {
     key: 'o-inspector-block-' + block.clientId,
     className: isHover ? 'is-hover' : '',
@@ -15530,9 +15535,10 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
     if (!_OEditorApp__WEBPACK_IMPORTED_MODULE_6__["default"].exists() || !_OEditorApp__WEBPACK_IMPORTED_MODULE_6__["default"].getInstance().isBlockEdited(this.props.clientId)) {
       return null;
     }
-    const catReOrder = {
+    var catReOrder = {};
+    const defaultCat = {
       default: {
-        name: 'Attributes',
+        name: 'General',
         props: {}
       },
       block_settings: {
@@ -15540,17 +15546,21 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
         props: {
           anchor: {
             type: 'string',
-            label: 'Anchor'
+            label: 'ID (anchor)'
           }
         }
-      },
-      spacing: {
-        name: 'Spacing',
-        props: {}
       }
     };
     if (this.propsExists()) {
       // 1. Loop Props Categories
+      if (typeof GLOBAL_LOCALIZED.props_categories != 'undefined' && GLOBAL_LOCALIZED.props_categories != null) {
+        for (const [keyCatProps, valueCatProps] of Object.entries(GLOBAL_LOCALIZED.props_categories)) {
+          catReOrder[keyCatProps] = {
+            name: valueCatProps.title,
+            props: {}
+          };
+        }
+      }
       if (typeof this.props.block_spec.props_categories != 'undefined' && this.props.block_spec.props_categories != null) {
         for (const [keyCatProps, valueCatProps] of Object.entries(this.props.block_spec.props_categories)) {
           catReOrder[valueCatProps.id] = {
@@ -15559,6 +15569,10 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
           };
         }
       }
+      catReOrder = {
+        ...catReOrder,
+        ...defaultCat
+      };
 
       // 2. Loop Props
       for (const [keyProp, valueProp] of Object.entries(this.props.block_spec.props)) {
@@ -15614,11 +15628,18 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
         titleTab = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, titleTab, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
           className: "error-attributes"
         }, errorAttributes));
-      } else if (warningAttributes > 0) {
-        titleTab = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, titleTab, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-          className: "warning-attributes"
-        }, warningAttributes));
       }
+      // else if (warningAttributes > 0) {
+      //     titleTab = (
+      //         <>
+      //             {titleTab}
+      //             <span className="warning-attributes">
+      //                 {warningAttributes}
+      //             </span>
+      //         </>
+      //     );
+      // }
+
       tabPanel.push({
         name: keyCat,
         title: titleTab,
@@ -15913,6 +15934,11 @@ class Attributes {
       default: typeof prop.default != 'undefined' ? prop.default : null
     };
     switch (type) {
+      case 'text':
+      case 'richText':
+      case 'wysiwyg':
+      case 'link':
+        break;
       case 'string':
         args.isNumber = false;
         break;
@@ -15969,6 +15995,8 @@ class Attributes {
           args.type = 'datetime';
         }
         break;
+      default:
+        return;
     }
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Control__WEBPACK_IMPORTED_MODULE_1__.Control, {
       key: blockKey + '-Control',

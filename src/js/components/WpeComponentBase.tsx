@@ -356,19 +356,32 @@ export class WpeComponentBase extends Component {
             return null;
         }
 
-        const catReOrder = {
-            default: { name: 'Attributes', props: {} },
+        var catReOrder = {};
+        const defaultCat = {
+            default: { name: 'General', props: {} },
             block_settings: {
                 name: 'Settings',
                 props: {
-                    anchor: { type: 'string', label: 'Anchor' },
+                    anchor: { type: 'string', label: 'ID (anchor)' },
                 },
             },
-            spacing: { name: 'Spacing', props: {} },
         };
 
         if (this.propsExists()) {
             // 1. Loop Props Categories
+            if (
+                typeof GLOBAL_LOCALIZED.props_categories != 'undefined' &&
+                GLOBAL_LOCALIZED.props_categories != null
+            ) {
+                for (const [keyCatProps, valueCatProps] of Object.entries(
+                    GLOBAL_LOCALIZED.props_categories,
+                )) {
+                    catReOrder[keyCatProps] = {
+                        name: valueCatProps.title,
+                        props: {},
+                    };
+                }
+            }
             if (
                 typeof this.props.block_spec.props_categories != 'undefined' &&
                 this.props.block_spec.props_categories != null
@@ -382,6 +395,11 @@ export class WpeComponentBase extends Component {
                     };
                 }
             }
+
+            catReOrder = {
+                ...catReOrder,
+                ...defaultCat,
+            };
 
             // 2. Loop Props
             for (const [keyProp, valueProp] of Object.entries(
@@ -484,16 +502,17 @@ export class WpeComponentBase extends Component {
                         </span>
                     </>
                 );
-            } else if (warningAttributes > 0) {
-                titleTab = (
-                    <>
-                        {titleTab}
-                        <span className="warning-attributes">
-                            {warningAttributes}
-                        </span>
-                    </>
-                );
             }
+            // else if (warningAttributes > 0) {
+            //     titleTab = (
+            //         <>
+            //             {titleTab}
+            //             <span className="warning-attributes">
+            //                 {warningAttributes}
+            //             </span>
+            //         </>
+            //     );
+            // }
 
             tabPanel.push({
                 name: keyCat,

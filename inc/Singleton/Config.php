@@ -6,8 +6,7 @@ class Config {
     
     private static $_instance;
 
-    private $frontspecJsonFileName          = ABT_FRONTSPEC_JSON_FILENAME,
-        $themespecJsonFileName              = 'theme_spec.json',
+    private $themespecJsonFileName          = 'theme_spec.json',
         $viewspecJsonFilename               = 'viewspec.json',
         $overrideSpecJsonFilename           = 'override.json',
         $blockMetadataJsonFilename          = 'block.json',
@@ -58,13 +57,6 @@ class Config {
                         <td>
                             <input type="text" class="regular-text" disabled="disabled" value="' . $this->get('frontendRelativePath') . '" />
                             <span>' . $this->display_config_exists( $this->get('frontendRelativePath') ) . '</span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th scope="row"><label for="blogname">frontspecJsonFileName</label></th>
-                        <td>
-                            <input type="text" class="regular-text" disabled="disabled" value="' . $this->get('frontspecJsonFileName') . '" />
-                            <span>' . $this->display_config_exists( $this->get('frontendRelativePath') . '/' . $this->get('frontspecJsonFileName') ) . '</span>
                         </td>
                     </tr>
                     <tr>
@@ -158,12 +150,10 @@ class Config {
 
         // If specData propertie is still emtpy, load spec files
         if( is_null( $this->specData ) ) {
-
-            $front_spec = $this->spec_file_get_contents( $this->get_front_end_file_path($this->get('frontspecJsonFileName')) );
-            $theme_spec = $this->spec_file_get_contents( $this->get('themespecJsonFileName') );
-
-            $this->specData = array_replace_recursive( $front_spec, $theme_spec);
+            $this->specData = $this->spec_file_get_contents( $this->get('themespecJsonFileName') );
         }
+
+        $this->specData = apply_filters('Abt\get_spec', $this->specData );
 
         if ( $data ) {
 

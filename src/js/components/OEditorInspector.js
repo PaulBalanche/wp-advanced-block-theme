@@ -163,14 +163,15 @@ const BlockListItem = ({ block, selectBlock }) => {
                     <span className="error-attributes">{errorsBlock}</span>
                 </>
             );
-        } else if (warningsBlock > 0) {
-            blockName = (
-                <>
-                    {blockName}
-                    <span className="warning-attributes">{warningsBlock}</span>
-                </>
-            );
         }
+        // else if (warningsBlock > 0) {
+        //     blockName = (
+        //         <>
+        //             {blockName}
+        //             <span className="warning-attributes">{warningsBlock}</span>
+        //         </>
+        //     );
+        // }
     }
 
     return (

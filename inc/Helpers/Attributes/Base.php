@@ -15,8 +15,6 @@ class Base {
 
     public static function format( &$propInstance ) {
         
-        return [
-            'value' => $propInstance->getValue()
-        ];
+        return $propInstance->getValue();
     }
 }

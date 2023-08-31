@@ -31,12 +31,6 @@ define(
         : "front-end"
 );
 define(
-    "ABT_FRONTSPEC_JSON_FILENAME",
-    defined("THEME_FRONTSPEC_JSON_FILENAME")
-        ? THEME_FRONTSPEC_JSON_FILENAME
-        : "frontspec.json"
-);
-define(
     "ABT_TEMPLATE_VIEWS_LOCATION",
     defined("THEME_VIEW_ROOT_LOCATION")
         ? THEME_VIEW_ROOT_LOCATION

@@ -83,7 +83,7 @@ class SimpleProp
 
     public function _validate()
     {
-        if (is_null($this->getValue())) {
+        if (is_null($this->getValue()) || empty( $this->getValue() ) ) {
             if (!is_null($this->getDefaultValue())) {
                 return true;
             }

@@ -6,6 +6,8 @@ use Abt\Controllers\ControllerBase;
 
 class Components extends ControllerBase {
 
+    private $frontspecJsonFileName = 'frontspec.json';
+
     public function __construct() {
         parent::__construct();
 
@@ -20,7 +22,7 @@ class Components extends ControllerBase {
 
         add_filter( 'Abt\get_components', [ $this, 'get_components' ], 10, 1 );
         add_filter( 'Abt\pre_get_component_viewspec', [ $this, 'pre_get_component_viewspec' ], 10, 2 );
-        add_filter( 'Abt\get_component_viewspec', [ $this, 'get_component_viewspec' ], 10, 2 );   
+        add_filter( 'Abt\get_component_viewspec', [ $this, 'get_component_viewspec' ], 10, 2 );
     }
 
 
@@ -98,7 +100,7 @@ class Components extends ControllerBase {
             if( str_replace( get_stylesheet_directory() . '/' . $this->get_config()->get_front_end_file_path( $this->get_config()->get('templateViewsLocation') ) , '', $block['dir'] ) == $component ) {
 
                 $namespace_settings = $this->get_components_namespace_settings( str_replace('/', '.', $component ), $this->get_config()->get('templateViewsLocation') );
-                $component_viewspec = json_decode(json_encode( \Sugar\specs\readSpec( str_replace('/', '.', $component ), $namespace_settings ) ), true);
+                $component_viewspec = json_decode(json_encode( \SViews\specs\readViewsSpec( str_replace('/', '.', $component ), $namespace_settings ) ), true);
                 break;
             }
         }

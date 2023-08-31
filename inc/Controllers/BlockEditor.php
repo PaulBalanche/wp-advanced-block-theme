@@ -80,7 +80,8 @@ class BlockEditor extends ControllerBase
                 "editor" => [
                     "style" => ( $editorConfig && is_array($editorConfig) && isset($editorConfig["style"]) && $editorConfig["style"] == "dark" ) ? "dark" : "light",
                     "backgroundColor" => ( $editorConfig && is_array($editorConfig) && isset($editorConfig["backgroundColor"]) ) ? $editorConfig["backgroundColor"] : false,
-                ]
+                ],
+                "props_categories" => $this->get_props_categories()
             ]
         );
 
@@ -122,5 +123,15 @@ class BlockEditor extends ControllerBase
                 </div>';
             }
         }
+    }
+
+
+    public function get_props_categories() {
+
+        $props_categories = $this->get_config()->get_spec('props_categories');
+        if( is_null($props_categories) ) {
+            $props_categories = [];
+        }
+        return apply_filters('Abt\get_props_categories', $props_categories);
     }
 }
