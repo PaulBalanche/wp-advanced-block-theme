@@ -5,7 +5,7 @@
 
         &.has-error {
             &::before {
-                content: "";
+                content: '';
                 background: rgb(220 50 50 / 50%);
                 width: $o-space-10;
                 height: 100%;
@@ -36,7 +36,7 @@
         }
         &.has-warning {
             &::before {
-                content: "";
+                content: '';
                 background: rgb(255 105 0 / 50%) !important;
                 width: $o-space-10;
                 height: 100%;
@@ -133,6 +133,10 @@
 
                 .components-button {
                     opacity: 1;
+
+                    .dashicons {
+                        margin-right: $o-space-20;
+                    }
                 }
             }
 
@@ -145,7 +149,7 @@
 
         &:after {
             background: rgba(252, 252, 252, 0.9);
-            content: "";
+            content: '';
             position: absolute;
             top: 0;
             left: 0;

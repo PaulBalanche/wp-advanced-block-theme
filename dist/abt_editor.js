@@ -16267,7 +16267,7 @@ function Control(props) {
     }), " Apply")) : null;
   }
   function renderDefaultValueOverlay() {
-    const text = isResponsive && defaultDeviceIsDefined() ? 'Define a specific image for ' + _Components_ODevices__WEBPACK_IMPORTED_MODULE_2__["default"].getInstance().getCurrentDevice() : 'Override default value';
+    const text = isResponsive && defaultDeviceIsDefined() ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, 'Define ', (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("b", null, getLabel()), ' for ', _Components_ODevices__WEBPACK_IMPORTED_MODULE_2__["default"].getInstance().getCurrentDevice()) : 'Override default value';
     const extraClass = isResponsive && defaultDeviceIsDefined() ? 'isResponsive' : null;
     return haveToDisplayDefaultValue() && !isSortableItem ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       key: getKey() + 'defaultOverlayContainer',

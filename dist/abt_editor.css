@@ -420,6 +420,9 @@
 .o-editor .basicField .default-overlay-container.isResponsive .components-button {
   opacity: 1;
 }
+.o-editor .basicField .default-overlay-container.isResponsive .components-button .dashicons {
+  margin-right: 12px;
+}
 .o-editor .basicField .default-overlay-container:hover .components-button {
   opacity: 1;
 }
@@ -2345,11 +2348,11 @@
 }
 .o-editor .editor-styles-wrapper.block-editor-writing-flow {
   background: var(--abt-background-editor, "white");
-  padding-top: 4rem;
+  padding-top: 0;
   padding-bottom: 4rem;
 }
 .o-editor .is-root-container {
-  padding: 24px 0 !important;
+  padding: 0 !important;
 }
 .o-editor .is-root-container .block-editor-block-list__block {
   width: 100%;
@@ -2366,7 +2369,7 @@
   opacity: 0.75;
 }
 .o-editor .block-editor-block-list__block {
-  margin: 6px 0 !important;
+  margin: 0 !important;
   -webkit-user-select: none;
      -moz-user-select: none;
           user-select: none;
@@ -2539,6 +2542,9 @@
   border: 1px solid var(--background300, rgb(245, 245, 245));
   line-height: initial;
   padding: 6px 12px;
+}
+#editor .interface-interface-skeleton__header .edit-post-header__settings .components-dropdown.components-dropdown-menu.block-editor-post-preview__dropdown:first-child {
+  display: none;
 }
 
 #devicesButtonGroupContainer {

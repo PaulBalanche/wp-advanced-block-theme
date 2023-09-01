@@ -289,10 +289,16 @@ export function Control(props) {
 
     function renderDefaultValueOverlay() {
         const text =
-            isResponsive && defaultDeviceIsDefined()
-                ? 'Define a specific image for ' +
-                  __ODevices.getInstance().getCurrentDevice()
-                : 'Override default value';
+            isResponsive && defaultDeviceIsDefined() ? (
+                <>
+                    {'Define '}
+                    <b>{getLabel()}</b>
+                    {' for '}
+                    {__ODevices.getInstance().getCurrentDevice()}
+                </>
+            ) : (
+                'Override default value'
+            );
         const extraClass =
             isResponsive && defaultDeviceIsDefined() ? 'isResponsive' : null;
 
