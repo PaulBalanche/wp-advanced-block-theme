@@ -345,7 +345,6 @@ class ComponentBlock extends ModelBase
                         case "richText":
                         case "select":
                         case "color":
-                        case "spaces":
                         case "radio":
                         case "relation":
                         case "number":
@@ -360,6 +359,7 @@ class ComponentBlock extends ModelBase
                         case "image":
                         case "video":
                         case "file":
+                        case "spaces":
                             $currentType = "object";
                             break;
 
@@ -458,9 +458,10 @@ class ComponentBlock extends ModelBase
                     $this->get_config()->get("componentBlockPrefixName"),
                 $content
             );
-            // echo '<pre>';print_r($render_attributes);
+
             // Validate and format props
             if ($this->validateProps($render_attributes)) {
+                // echo '<pre>';print_r($render_attributes);
                 // Start rendering
                 if (
                     apply_filters(

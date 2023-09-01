@@ -14,6 +14,8 @@ use Abt\Helpers\Attributes\Link;
 use Abt\Helpers\Attributes\Date;
 use Abt\Helpers\Attributes\Wysiwyg;
 use Abt\Helpers\Attributes\Select;
+use Abt\Helpers\Attributes\Text;
+use Abt\Helpers\Attributes\Spaces;
 
 class SimpleProp
 {
@@ -128,8 +130,10 @@ class SimpleProp
 
             case "select":
             case "color":
-            case "spaces":
                 return Select::isValid($this);
+
+            case "spaces":
+                return Spaces::isValid($this);
 
             default:
                 return Base::isValid($this);
@@ -138,7 +142,7 @@ class SimpleProp
 
     public function format()
     {
-        if (is_null($this->getValue())) {
+        if( is_null($this->getValue()) || empty( $this->getValue() ) ) {
             return $this->getDefaultValue();
         }
 
@@ -171,14 +175,19 @@ class SimpleProp
             case "date":
                 return Date::format($this);
 
+            case "text":
+                return Text::format($this);
+
             case "wysiwyg":
             case "richText":
                 return Wysiwyg::format($this);
 
             case "select":
             case "color":
-            case "spaces":
                 return Select::format($this);
+            
+            case "spaces":
+                return Spaces::format($this);
 
             default:
                 return Base::format($this);

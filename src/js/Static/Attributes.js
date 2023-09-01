@@ -155,6 +155,7 @@ export class Attributes {
             case 'richText':
             case 'wysiwyg':
             case 'link':
+            case 'spaces':
                 break;
             case 'string':
                 args.isNumber = false;
@@ -171,7 +172,6 @@ export class Attributes {
                 break;
             case 'select':
             case 'color':
-            case 'spaces':
                 args.options =
                     typeof prop.options != 'undefined' ? prop.options : null;
                 break;
@@ -277,7 +277,6 @@ export class Attributes {
                 case 'text':
                 case 'richText':
                 case 'select':
-                case 'spaces':
                 case 'color':
                 case 'radio':
                 case 'relation':
@@ -297,6 +296,7 @@ export class Attributes {
                 case 'file':
                 case 'gallery':
                 case 'wysiwyg':
+                case 'spaces':
                     attributes[key] = {
                         type: 'object',
                     };

@@ -1041,6 +1041,9 @@
 .o-editor-app.inspector ul:has(li.is-hover) li.is-hover .dashicon {
   color: var(--wp-admin-theme-color);
 }
+.o-editor-app.inspector .components-button:hover {
+  background: initial;
+}
 .o-editor-app.help .is-tertiary {
   font-weight: initial;
   font-size: 1em;
@@ -2398,7 +2401,7 @@
   pointer-events: none !important;
   transition: all 0.1s ease-in-out;
   z-index: 10;
-  border: 2px dotted var(--wp-admin-theme-color);
+  outline: 3px solid var(--wp-admin-theme-color);
 }
 .o-editor .block-editor-block-list__block:hover::before, .o-editor .block-editor-block-list__block.is-selected::before {
   opacity: 1;

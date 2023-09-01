@@ -7,9 +7,7 @@ class Select extends Base {
     public static function format( &$propInstance ) {
 
         return [
-            'value' => [
-                [ 'value' => $propInstance->getValue() ]
-            ]
+            'value' => $propInstance->getValue()
         ];
     }
 
