@@ -90,15 +90,19 @@ export function Control(props) {
             return value[__ODevices.getInstance().getDefaultDevice()];
         }
 
-        if (
-            typeof args.default != 'undefined' &&
-            args.default != null &&
-            typeof args.default.value != 'undefined'
-        ) {
+        if (default_value_is_defined()) {
             return args.default.value;
         }
 
         return null;
+    }
+
+    function default_value_is_defined() {
+        return (
+            typeof args.default != 'undefined' &&
+            args.default != null &&
+            typeof args.default.value != 'undefined'
+        );
     }
 
     function defaultDeviceIsDefined() {
@@ -191,6 +195,22 @@ export function Control(props) {
                     <Dashicon icon="info" />
                     {error.warning}
                 </div>,
+            );
+        }
+
+        if (default_value_is_defined() && value != null) {
+            labelFormatted.push(
+                <Button
+                    key={getKey() + 'defaultOverlayContainer-button'}
+                    onMouseDown={() => {
+                        onChange(undefined, true);
+                        setEditMode(null);
+                    }}
+                    className="resetDefault"
+                    variant="link"
+                >
+                    Reset
+                </Button>,
             );
         }
 

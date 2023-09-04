@@ -2,7 +2,6 @@ import { __experimentalBoxControl as BoxControl } from '@wordpress/components';
 import { Render } from '../Static/Render';
 
 export function Spaces({ id, label, value, onChange }) {
-    console.log(value);
     const paddingValue =
         typeof value == 'object' && typeof value.padding == 'object'
             ? {
@@ -62,7 +61,7 @@ export function Spaces({ id, label, value, onChange }) {
         label,
         <>
             {Render.fieldContainer(
-                id + '_spaces',
+                id + '_spaces_padding',
                 <div
                     key={id + '-SpacesPaddingComponentsBaseControl'}
                     className="components-base-control"
@@ -93,7 +92,7 @@ export function Spaces({ id, label, value, onChange }) {
                 </div>,
             )}
             {Render.fieldContainer(
-                id + '_spaces',
+                id + '_spaces_margin',
                 <div
                     key={id + '-SpacesMarginComponentsBaseControl'}
                     className="components-base-control"
