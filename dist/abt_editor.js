@@ -16209,7 +16209,6 @@ function Control(props) {
         icon: "info"
       }), error.warning));
     }
-    labelFormatted.push(renderSavedButton());
     if (value != null && type != 'object') {
       labelFormatted.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
         key: getKey() + 'defaultOverlayContainer-button',
@@ -16276,13 +16275,16 @@ function Control(props) {
     return className.length > 0 ? className.join(' ') : '';
   }
   function renderSavedButton() {
-    return !haveToDisplayDefaultValue() && updating && !isSortableItem && !directSubmission ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
+    return !haveToDisplayDefaultValue() && updating && !isSortableItem && !directSubmission ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      key: getKey() + 'buttonsChangesContainer',
+      className: "buttons-changes-container"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
       key: getKey() + 'submitChanges-button',
       onMouseDown: () => onSubmit(),
-      variant: "link"
+      variant: "primary"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
       icon: "saved"
-    }), " Apply") : null;
+    }), " Apply")) : null;
   }
   function renderDefaultValueOverlay() {
     const text = isResponsive && defaultDeviceIsDefined() ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, 'Define ', (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("b", null, getLabel()), ' for ', _Components_ODevices__WEBPACK_IMPORTED_MODULE_2__["default"].getInstance().getCurrentDevice()) : 'Override default value';
@@ -16359,7 +16361,7 @@ function Control(props) {
     }
     return render;
   }
-  return _Render__WEBPACK_IMPORTED_MODULE_5__.Render.fieldContainer(getKey(), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, render(), renderDefaultValueOverlay()), getContainerClassName());
+  return _Render__WEBPACK_IMPORTED_MODULE_5__.Render.fieldContainer(getKey(), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, render(), renderSavedButton(), renderDefaultValueOverlay()), getContainerClassName());
 }
 
 /***/ }),
@@ -17811,116 +17813,6 @@ function Spaces(_ref) {
       onChange(newSpaces);
     }
   })))))), true, '', description);
-  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(PropsObject, {
-    key: id,
-    id: id,
-    label: label,
-    keys: props.keys,
-    valueProp: value,
-    props: {
-      margin: {
-        type: 'select',
-        title: 'Margin',
-        options: [{
-          id: '---',
-          name: '---',
-          value: null
-        }, {
-          id: '10',
-          name: '10',
-          value: '10'
-        }, {
-          id: '20',
-          name: '20',
-          value: '20'
-        }, {
-          id: '30',
-          name: '30',
-          value: '30'
-        }, {
-          id: '40',
-          name: '40',
-          value: '40'
-        }, {
-          id: '50',
-          name: '50',
-          value: '50'
-        }, {
-          id: '60',
-          name: '60',
-          value: '60'
-        }, {
-          id: '70',
-          name: '70',
-          value: '70'
-        }, {
-          id: '80',
-          name: '80',
-          value: '80'
-        }, {
-          id: '90',
-          name: '90',
-          value: '90'
-        }, {
-          id: '100',
-          name: '100',
-          value: '100'
-        }]
-      },
-      padding: {
-        type: 'select',
-        title: 'Padding',
-        options: [{
-          id: '---',
-          name: '---',
-          value: null
-        }, {
-          id: '10',
-          name: '10',
-          value: '10'
-        }, {
-          id: '20',
-          name: '20',
-          value: '20'
-        }, {
-          id: '30',
-          name: '30',
-          value: '30'
-        }, {
-          id: '40',
-          name: '40',
-          value: '40'
-        }, {
-          id: '50',
-          name: '50',
-          value: '50'
-        }, {
-          id: '60',
-          name: '60',
-          value: '60'
-        }, {
-          id: '70',
-          name: '70',
-          value: '70'
-        }, {
-          id: '80',
-          name: '80',
-          value: '80'
-        }, {
-          id: '90',
-          name: '90',
-          value: '90'
-        }, {
-          id: '100',
-          name: '100',
-          value: '100'
-        }]
-      }
-    },
-    onChange: newValue => onChange(newValue),
-    componentInstance: props.componentInstance,
-    error: props.error
-  });
 }
 
 /***/ }),

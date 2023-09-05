@@ -192,17 +192,15 @@
   border-bottom: none !important;
   height: auto !important;
 }
-.o-editor .components-base-control .components-base-control__label .inner .components-button,
-.o-editor .components-base-control .components-input-control__label .inner .components-button,
-.o-editor .components-base-control__forced_label .inner .components-button {
-  text-decoration: none;
+.o-editor .components-base-control .components-base-control__label .inner .resetDefault,
+.o-editor .components-base-control .components-input-control__label .inner .resetDefault,
+.o-editor .components-base-control__forced_label .inner .resetDefault {
   margin-left: auto;
-  margin-bottom: 0;
-  margin-right: 0;
+  text-decoration: none;
 }
-.o-editor .components-base-control .components-base-control__label .inner .components-button .dashicon,
-.o-editor .components-base-control .components-input-control__label .inner .components-button .dashicon,
-.o-editor .components-base-control__forced_label .inner .components-button .dashicon {
+.o-editor .components-base-control .components-base-control__label .inner .resetDefault .dashicon,
+.o-editor .components-base-control .components-input-control__label .inner .resetDefault .dashicon,
+.o-editor .components-base-control__forced_label .inner .resetDefault .dashicon {
   margin-right: 2px;
 }
 .o-editor .components-base-control .components-base-control__label .components-input-control__description,
@@ -456,7 +454,8 @@
 .o-editor .basicField .default-overlay-container:hover .components-button {
   opacity: 1;
 }
-.o-editor .basicField:after {
+.o-editor .basicField::after,
+.o-editor .basicField .components-base-control__label::after {
   background: rgba(252, 252, 252, 0.9);
   content: "";
   position: absolute;
@@ -467,16 +466,39 @@
   display: none;
   z-index: 1;
 }
+.o-editor .basicField .buttons-changes-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  position: absolute;
+  width: 100%;
+  z-index: 2;
+  left: 0;
+  top: calc(100% + 10px);
+  border-radius: 4px;
+}
+.o-editor .basicField .buttons-changes-container .components-button {
+  margin: 0;
+}
 .o-editor .tab-panel-wpe-component {
   width: 100%;
 }
-.o-editor .tab-panel-wpe-component:has(.basicField.updating) .basicField:not(.updating):after {
+.o-editor .tab-panel-wpe-component:has(.basicField.updating) .components-base-control__label {
+  filter: blur(5px);
+}
+.o-editor .tab-panel-wpe-component:has(.basicField.updating) .components-base-control__label::after {
   display: block;
 }
-.o-editor .tab-panel-wpe-component:has(.basicField.updating) .basicField.updating .basicField:not(.updating):after {
+.o-editor .tab-panel-wpe-component:has(.basicField.updating) .basicField:not(.updating) {
+  filter: blur(5px);
+}
+.o-editor .tab-panel-wpe-component:has(.basicField.updating) .basicField:not(.updating)::after {
+  display: block;
+}
+.o-editor .tab-panel-wpe-component:has(.basicField.updating) .basicField.updating .basicField:not(.updating) .components-base-control__label::after, .o-editor .tab-panel-wpe-component:has(.basicField.updating) .basicField.updating .basicField:not(.updating)::after {
   display: none;
 }
-.o-editor .tab-panel-wpe-component:has(.basicField.updating) .basicField:has(.basicField.updating)::after {
+.o-editor .tab-panel-wpe-component:has(.basicField.updating) .basicField:has(.basicField.updating) .components-base-control__label::after, .o-editor .tab-panel-wpe-component:has(.basicField.updating) .basicField:has(.basicField.updating)::after {
   display: none;
 }
 

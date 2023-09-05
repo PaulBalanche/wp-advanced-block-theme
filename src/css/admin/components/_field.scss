@@ -147,7 +147,8 @@
             }
         }
 
-        &:after {
+        &::after,
+        .components-base-control__label::after {
             background: rgba(252, 252, 252, 0.9);
             content: '';
             position: absolute;
@@ -158,20 +159,51 @@
             display: none;
             z-index: 1;
         }
+
+        .buttons-changes-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-evenly;
+            position: absolute;
+            width: 100%;
+            z-index: 2;
+            left: 0;
+            top: calc(100% + 10px);
+            border-radius: $o-border-radius-small;
+
+            .components-button {
+                margin: 0;
+            }
+        }
     }
 
     .tab-panel-wpe-component {
         width: 100%;
 
         &:has(.basicField.updating) {
-            .basicField:not(.updating):after {
-                display: block;
+            .components-base-control__label {
+                filter: blur(5px);
+                &::after {
+                    display: block;
+                }
             }
-            .basicField.updating .basicField:not(.updating):after {
-                display: none;
+            .basicField:not(.updating) {
+                filter: blur(5px);
+                &::after {
+                    display: block;
+                }
             }
-            .basicField:has(.basicField.updating)::after {
-                display: none;
+            .basicField.updating .basicField:not(.updating) {
+                .components-base-control__label::after,
+                &::after {
+                    display: none;
+                }
+            }
+            .basicField:has(.basicField.updating) {
+                .components-base-control__label::after,
+                &::after {
+                    display: none;
+                }
             }
         }
     }

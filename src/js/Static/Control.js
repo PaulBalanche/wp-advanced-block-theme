@@ -200,8 +200,6 @@ export function Control(props) {
             );
         }
 
-        labelFormatted.push(renderSavedButton());
-
         if (value != null && type != 'object') {
             labelFormatted.push(
                 <Button
@@ -308,13 +306,18 @@ export function Control(props) {
             updating &&
             !isSortableItem &&
             !directSubmission ? (
-            <Button
-                key={getKey() + 'submitChanges-button'}
-                onMouseDown={() => onSubmit()}
-                variant="link"
+            <div
+                key={getKey() + 'buttonsChangesContainer'}
+                className="buttons-changes-container"
             >
-                <Dashicon icon="saved" /> Apply
-            </Button>
+                <Button
+                    key={getKey() + 'submitChanges-button'}
+                    onMouseDown={() => onSubmit()}
+                    variant="primary"
+                >
+                    <Dashicon icon="saved" /> Apply
+                </Button>
+            </div>
         ) : null;
     }
 
@@ -446,6 +449,7 @@ export function Control(props) {
         getKey(),
         <>
             {render()}
+            {renderSavedButton()}
             {renderDefaultValueOverlay()}
         </>,
         getContainerClassName(),
