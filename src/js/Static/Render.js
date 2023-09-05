@@ -39,25 +39,45 @@ export class Render {
         inner,
         initialOpen = false,
         extraClass = '',
+        description = null,
     ) {
         var className = [];
         if (extraClass != '') className.push(extraClass);
 
         return (
             <Panel key={id + '-panel'} className={className.join(' ')}>
-                {this.panelBodyComponent(id, label, inner, initialOpen)}
+                {this.panelBodyComponent(
+                    id,
+                    label,
+                    inner,
+                    initialOpen,
+                    description,
+                )}
             </Panel>
         );
     }
 
-    static panelBodyComponent(id, label, inner, initialOpen = false) {
+    static panelBodyComponent(
+        id,
+        label,
+        inner,
+        initialOpen = false,
+        description = null,
+    ) {
         return (
             <PanelBody
                 key={id + '-PanelBody'}
                 title={label}
                 initialOpen={label != null ? initialOpen : true}
             >
-                <PanelRow>{inner}</PanelRow>
+                <PanelRow>
+                    {description != null && (
+                        <div className="components-panel__row__description">
+                            {description}
+                        </div>
+                    )}
+                    {inner}
+                </PanelRow>
             </PanelBody>
         );
     }
@@ -80,6 +100,24 @@ export class Render {
             <div key={id + '-label'} className={className}>
                 {inner}
             </div>
+        );
+    }
+
+    static innerLabel(id, inner, description = null) {
+        return (
+            <>
+                <div key={id + '-innerLabel'} className="inner">
+                    {inner}
+                </div>
+                {description != null && (
+                    <p
+                        key={id + '-innerLabelDescription'}
+                        className="components-input-control__description"
+                    >
+                        {description}
+                    </p>
+                )}
+            </>
         );
     }
 

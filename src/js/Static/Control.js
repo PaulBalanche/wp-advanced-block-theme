@@ -11,6 +11,8 @@ export function Control(props) {
     const id = props.keys.join('-');
     const key = props.blockKey;
     const label = props.label;
+    const description =
+        typeof props.description != 'undefined' ? props.description : null;
     const type = props.type;
     const keys = props.keys;
     const valueProp = props.valueProp;
@@ -198,7 +200,9 @@ export function Control(props) {
             );
         }
 
-        if (default_value_is_defined() && value != null) {
+        labelFormatted.push(renderSavedButton());
+
+        if (value != null && type != 'object') {
             labelFormatted.push(
                 <Button
                     key={getKey() + 'defaultOverlayContainer-button'}
@@ -209,10 +213,22 @@ export function Control(props) {
                     className="resetDefault"
                     variant="link"
                 >
+                    <Dashicon icon="editor-removeformatting" />
                     Reset
                 </Button>,
             );
         }
+
+        labelFormatted = Render.innerLabel(
+            getKey(),
+            labelFormatted,
+            typeof props.description != 'undefined' &&
+                props.description != null &&
+                props.description != '' &&
+                !['object', 'spaces'].includes(type)
+                ? props.description
+                : null,
+        );
 
         return labelFormatted;
     }
@@ -292,18 +308,13 @@ export function Control(props) {
             updating &&
             !isSortableItem &&
             !directSubmission ? (
-            <div
-                key={getKey() + 'buttonsChangesContainer'}
-                className="buttons-changes-container"
+            <Button
+                key={getKey() + 'submitChanges-button'}
+                onMouseDown={() => onSubmit()}
+                variant="link"
             >
-                <Button
-                    key={getKey() + 'submitChanges-button'}
-                    onMouseDown={() => onSubmit()}
-                    variant="primary"
-                >
-                    <Dashicon icon="saved" /> Apply
-                </Button>
-            </div>
+                <Dashicon icon="saved" /> Apply
+            </Button>
         ) : null;
     }
 
@@ -384,6 +395,7 @@ export function Control(props) {
                     valueProp={valueProp}
                     id={getKey()}
                     label={getLabel()}
+                    description={description}
                     value={getValue()}
                     type={type}
                     args={args}
@@ -434,7 +446,6 @@ export function Control(props) {
         getKey(),
         <>
             {render()}
-            {renderSavedButton()}
             {renderDefaultValueOverlay()}
         </>,
         getContainerClassName(),

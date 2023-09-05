@@ -17,7 +17,6 @@ export function Color({ id, label, value, onChange }) {
                     label={label}
                     onChange={(newValue) => onChange(newValue)}
                     enableAlpha
-                    defaultValue="#000"
                     copyFormat="hex"
                 />
             </div>

@@ -1,71 +1,73 @@
-import { TextControl } from "@wordpress/components";
+import { TextControl } from '@wordpress/components';
 
-import { __experimentalLinkControl as LinkControl } from "@wordpress/block-editor";
-import { Render } from "../Static/Render";
+import { __experimentalLinkControl as LinkControl } from '@wordpress/block-editor';
+import { Render } from '../Static/Render';
 
-export function Link({id, label, value, onChange}) {
-
+export function Link({ id, label, description, value, onChange }) {
     return Render.panelComponent(
         id,
         label,
         Render.fieldContainer(
-            id + "_link",
+            id + '_link',
             <div
-                key={id + "-LinkControlComponentsBaseControl"}
+                key={id + '-LinkControlComponentsBaseControl'}
                 className="components-base-control"
             >
                 <div
-                    key={id + "-LinkControlComponentsBaseControlField"}
+                    key={id + '-LinkControlComponentsBaseControlField'}
                     className="components-base-control__field"
                 >
                     <div
-                        key={id + "-LinkControlContainer"}
+                        key={id + '-LinkControlContainer'}
                         className="link-control-container"
                     >
                         <TextControl
-                            key={id + "-text"}
-                            label={"Text"}
-                            type={"text"}
-                            value={ ( value?.text ) ? value.text : '' }
-                            onChange={ (newValue) => {
+                            key={id + '-text'}
+                            label={'Text'}
+                            type={'text'}
+                            value={value?.text ? value.text : ''}
+                            onChange={(newValue) => {
                                 newValue = {
-                                    text: newValue
+                                    text: newValue,
                                 };
-                                if( value?.url ) {
+                                if (value?.url) {
                                     newValue.url = value.url;
                                 }
-                                if( value?.opensInNewTab ) {
-                                    newValue.opensInNewTab = value.opensInNewTab;
+                                if (value?.opensInNewTab) {
+                                    newValue.opensInNewTab =
+                                        value.opensInNewTab;
                                 }
                                 onChange(newValue);
                             }}
                         />
                         <LinkControl
-                            key={id + "-LinkControl"}
+                            key={id + '-LinkControl'}
                             className="wp-block-navigation-link__inline-link-input"
-                            value={ ( value != null && typeof value == 'object' ) ? value : {} }
+                            value={
+                                value != null && typeof value == 'object'
+                                    ? value
+                                    : {}
+                            }
                             settings={[
                                 {
-                                    id: "url",
-                                    title: "URL ...",
+                                    id: 'url',
+                                    title: 'URL ...',
                                 },
                                 {
-                                    id: "opensInNewTab",
-                                    title: "Open in new tab",
+                                    id: 'opensInNewTab',
+                                    title: 'Open in new tab',
                                 },
                             ]}
                             onChange={({
                                 url: newURL,
                                 opensInNewTab: newOpensInNewTab,
                             }) => {
-    
-                                if( typeof newURL == "string" ) {
-    
+                                if (typeof newURL == 'string') {
                                     const newValue = {
                                         url: newURL,
-                                        opensInNewTab: newOpensInNewTab
+                                        opensInNewTab: newOpensInNewTab,
                                     };
-                                    if( value?.text ) {
+                                    if (value?.text) {
                                         newValue.text = value.text;
                                     }
                                     onChange(newValue);
@@ -74,8 +76,10 @@ export function Link({id, label, value, onChange}) {
                         />
                     </div>
                 </div>
-            </div>
+            </div>,
         ),
-        false
-    )
+        false,
+        '',
+        description,
+    );
 }

@@ -57,6 +57,11 @@ export function BaseControl(props) {
                         key={props.id}
                         id={props.id}
                         label={props.label}
+                        description={
+                            typeof props.description != 'undefined'
+                                ? props.description
+                                : null
+                        }
                         value={props.value != null ? props.value : ''}
                         onChange={(newValue) => onChange(newValue)}
                     />
@@ -158,6 +163,11 @@ export function BaseControl(props) {
                         key={props.id}
                         id={props.id}
                         label={props.label}
+                        description={
+                            typeof props.description != 'undefined'
+                                ? props.description
+                                : null
+                        }
                         value={props.value != null ? props.value : undefined}
                         onChange={(newValue) => onChange(newValue)}
                     />
@@ -170,6 +180,11 @@ export function BaseControl(props) {
                         key={props.id}
                         id={props.id}
                         label={props.label}
+                        description={
+                            typeof props.description != 'undefined'
+                                ? props.description
+                                : null
+                        }
                         keys={props.keys}
                         valueProp={props.valueProp}
                         props={props.args.props}
@@ -213,6 +228,11 @@ export function BaseControl(props) {
                         key={props.id}
                         id={props.id}
                         label={props.label}
+                        description={
+                            typeof props.description != 'undefined'
+                                ? props.description
+                                : null
+                        }
                         value={props.value}
                         onChange={(newValue) => onChange(newValue)}
                     />

@@ -4,6 +4,7 @@ import { Render } from '../Static/Render';
 export function PropsObject({
     id,
     label,
+    description,
     props,
     keys,
     valueProp,
@@ -36,5 +37,12 @@ export function PropsObject({
 
     if (label == null) return fieldsetObject;
 
-    return Render.panelComponent(id, label, fieldsetObject, false);
+    return Render.panelComponent(
+        id,
+        label,
+        fieldsetObject,
+        false,
+        '',
+        description,
+    );
 }

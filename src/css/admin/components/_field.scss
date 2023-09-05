@@ -158,24 +158,6 @@
             display: none;
             z-index: 1;
         }
-
-        .buttons-changes-container {
-            display: flex;
-            align-items: center;
-            justify-content: space-evenly;
-            position: absolute;
-            width: 100%;
-            z-index: 2;
-            left: 0;
-            top: calc(100% + 10px);
-            background: $background300;
-            padding: $o-space-50 0;
-            border-radius: $o-border-radius-small;
-
-            .components-button {
-                margin: 0;
-            }
-        }
     }
 
     .tab-panel-wpe-component {

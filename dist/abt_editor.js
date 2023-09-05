@@ -15925,6 +15925,7 @@ class Attributes {
     const blockKey = componentInstance.props.clientId + '-' + keys.join('-');
     const repeatable = typeof prop.repeatable != 'undefined' && !!prop.repeatable ? true : false;
     const label = typeof prop.label != 'undefined' ? prop.label : typeof prop.title != 'undefined' ? prop.title : keys.slice(-1);
+    const description = typeof prop.description != 'undefined' ? prop.description : null;
     const required_field = typeof prop.required != 'undefined' && prop.required ? true : false;
     let currentValueAttribute = valueProp;
     keys.forEach(element => {
@@ -16003,6 +16004,7 @@ class Attributes {
       keys: keys,
       blockKey: blockKey,
       label: label,
+      description: description,
       type: type,
       valueProp: valueProp,
       controllerValue: currentValueAttribute,
@@ -16101,6 +16103,7 @@ function Control(props) {
   const id = props.keys.join('-');
   const key = props.blockKey;
   const label = props.label;
+  const description = typeof props.description != 'undefined' ? props.description : null;
   const type = props.type;
   const keys = props.keys;
   const valueProp = props.valueProp;
@@ -16206,7 +16209,8 @@ function Control(props) {
         icon: "info"
       }), error.warning));
     }
-    if (default_value_is_defined() && value != null) {
+    labelFormatted.push(renderSavedButton());
+    if (value != null && type != 'object') {
       labelFormatted.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
         key: getKey() + 'defaultOverlayContainer-button',
         onMouseDown: () => {
@@ -16215,8 +16219,11 @@ function Control(props) {
         },
         className: "resetDefault",
         variant: "link"
-      }, "Reset"));
+      }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
+        icon: "editor-removeformatting"
+      }), "Reset"));
     }
+    labelFormatted = _Render__WEBPACK_IMPORTED_MODULE_5__.Render.innerLabel(getKey(), labelFormatted, typeof props.description != 'undefined' && props.description != null && props.description != '' && !['object', 'spaces'].includes(type) ? props.description : null);
     return labelFormatted;
   }
   function getKey() {
@@ -16269,16 +16276,13 @@ function Control(props) {
     return className.length > 0 ? className.join(' ') : '';
   }
   function renderSavedButton() {
-    return !haveToDisplayDefaultValue() && updating && !isSortableItem && !directSubmission ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      key: getKey() + 'buttonsChangesContainer',
-      className: "buttons-changes-container"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
+    return !haveToDisplayDefaultValue() && updating && !isSortableItem && !directSubmission ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
       key: getKey() + 'submitChanges-button',
       onMouseDown: () => onSubmit(),
-      variant: "primary"
+      variant: "link"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
       icon: "saved"
-    }), " Apply")) : null;
+    }), " Apply") : null;
   }
   function renderDefaultValueOverlay() {
     const text = isResponsive && defaultDeviceIsDefined() ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, 'Define ', (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("b", null, getLabel()), ' for ', _Components_ODevices__WEBPACK_IMPORTED_MODULE_2__["default"].getInstance().getCurrentDevice()) : 'Override default value';
@@ -16324,6 +16328,7 @@ function Control(props) {
         valueProp: valueProp,
         id: getKey(),
         label: getLabel(),
+        description: description,
         value: getValue(),
         type: type,
         args: args,
@@ -16354,7 +16359,7 @@ function Control(props) {
     }
     return render;
   }
-  return _Render__WEBPACK_IMPORTED_MODULE_5__.Render.fieldContainer(getKey(), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, render(), renderSavedButton(), renderDefaultValueOverlay()), getContainerClassName());
+  return _Render__WEBPACK_IMPORTED_MODULE_5__.Render.fieldContainer(getKey(), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, render(), renderDefaultValueOverlay()), getContainerClassName());
 }
 
 /***/ }),
@@ -16395,20 +16400,24 @@ class Render {
   static panelComponent(id, label, inner) {
     let initialOpen = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
     let extraClass = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : '';
+    let description = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : null;
     var className = [];
     if (extraClass != '') className.push(extraClass);
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Panel, {
       key: id + '-panel',
       className: className.join(' ')
-    }, this.panelBodyComponent(id, label, inner, initialOpen));
+    }, this.panelBodyComponent(id, label, inner, initialOpen, description));
   }
   static panelBodyComponent(id, label, inner) {
     let initialOpen = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
+    let description = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : null;
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.PanelBody, {
       key: id + '-PanelBody',
       title: label,
       initialOpen: label != null ? initialOpen : true
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.PanelRow, null, inner));
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.PanelRow, null, description != null && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "components-panel__row__description"
+    }, description), inner));
   }
   static fieldContainer(id, inner) {
     let extraClass = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '';
@@ -16425,6 +16434,16 @@ class Render {
       key: id + '-label',
       className: className
     }, inner);
+  }
+  static innerLabel(id, inner) {
+    let description = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      key: id + '-innerLabel',
+      className: "inner"
+    }, inner), description != null && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
+      key: id + '-innerLabelDescription',
+      className: "components-input-control__description"
+    }, description));
   }
   static buttonAddRepeatableElt(id, keys, valueProp, controllerValue, componentInstance) {
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
@@ -16835,6 +16854,7 @@ function BaseControl(props) {
           key: props.id,
           id: props.id,
           label: props.label,
+          description: typeof props.description != 'undefined' ? props.description : null,
           value: props.value != null ? props.value : '',
           onChange: newValue => onChange(newValue)
         });
@@ -16912,6 +16932,7 @@ function BaseControl(props) {
           key: props.id,
           id: props.id,
           label: props.label,
+          description: typeof props.description != 'undefined' ? props.description : null,
           value: props.value != null ? props.value : undefined,
           onChange: newValue => onChange(newValue)
         });
@@ -16921,6 +16942,7 @@ function BaseControl(props) {
           key: props.id,
           id: props.id,
           label: props.label,
+          description: typeof props.description != 'undefined' ? props.description : null,
           keys: props.keys,
           valueProp: props.valueProp,
           props: props.args.props,
@@ -16955,6 +16977,7 @@ function BaseControl(props) {
           key: props.id,
           id: props.id,
           label: props.label,
+          description: typeof props.description != 'undefined' ? props.description : null,
           value: props.value,
           onChange: newValue => onChange(newValue)
         });
@@ -17101,7 +17124,6 @@ function Color(_ref) {
     label: label,
     onChange: newValue => onChange(newValue),
     enableAlpha: true,
-    defaultValue: "#000",
     copyFormat: "hex"
   })));
 }
@@ -17231,22 +17253,23 @@ function Link(_ref) {
   let {
     id,
     label,
+    description,
     value,
     onChange
   } = _ref;
-  return _Static_Render__WEBPACK_IMPORTED_MODULE_3__.Render.panelComponent(id, label, _Static_Render__WEBPACK_IMPORTED_MODULE_3__.Render.fieldContainer(id + "_link", (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    key: id + "-LinkControlComponentsBaseControl",
+  return _Static_Render__WEBPACK_IMPORTED_MODULE_3__.Render.panelComponent(id, label, _Static_Render__WEBPACK_IMPORTED_MODULE_3__.Render.fieldContainer(id + '_link', (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    key: id + '-LinkControlComponentsBaseControl',
     className: "components-base-control"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    key: id + "-LinkControlComponentsBaseControlField",
+    key: id + '-LinkControlComponentsBaseControlField',
     className: "components-base-control__field"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    key: id + "-LinkControlContainer",
+    key: id + '-LinkControlContainer',
     className: "link-control-container"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.TextControl, {
-    key: id + "-text",
-    label: "Text",
-    type: "text",
+    key: id + '-text',
+    label: 'Text',
+    type: 'text',
     value: value?.text ? value.text : '',
     onChange: newValue => {
       newValue = {
@@ -17261,22 +17284,22 @@ function Link(_ref) {
       onChange(newValue);
     }
   }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.__experimentalLinkControl, {
-    key: id + "-LinkControl",
+    key: id + '-LinkControl',
     className: "wp-block-navigation-link__inline-link-input",
     value: value != null && typeof value == 'object' ? value : {},
     settings: [{
-      id: "url",
-      title: "URL ..."
+      id: 'url',
+      title: 'URL ...'
     }, {
-      id: "opensInNewTab",
-      title: "Open in new tab"
+      id: 'opensInNewTab',
+      title: 'Open in new tab'
     }],
     onChange: _ref2 => {
       let {
         url: newURL,
         opensInNewTab: newOpensInNewTab
       } = _ref2;
-      if (typeof newURL == "string") {
+      if (typeof newURL == 'string') {
         const newValue = {
           url: newURL,
           opensInNewTab: newOpensInNewTab
@@ -17287,7 +17310,7 @@ function Link(_ref) {
         onChange(newValue);
       }
     }
-  }))))), false);
+  }))))), false, '', description);
 }
 
 /***/ }),
@@ -17524,6 +17547,7 @@ function PropsObject(_ref) {
   let {
     id,
     label,
+    description,
     props,
     keys,
     valueProp,
@@ -17538,7 +17562,7 @@ function PropsObject(_ref) {
     fieldsetObject.push(_Static_Attributes__WEBPACK_IMPORTED_MODULE_0__.Attributes.renderProp(valueSubProp, keys.concat(keySubProp), valueProp, componentInstance, subPropError));
   }
   if (label == null) return fieldsetObject;
-  return _Static_Render__WEBPACK_IMPORTED_MODULE_1__.Render.panelComponent(id, label, fieldsetObject, false);
+  return _Static_Render__WEBPACK_IMPORTED_MODULE_1__.Render.panelComponent(id, label, fieldsetObject, false, '', description);
 }
 
 /***/ }),
@@ -17718,6 +17742,7 @@ function Spaces(_ref) {
   let {
     id,
     label,
+    description,
     value,
     onChange
   } = _ref;
@@ -17755,7 +17780,7 @@ function Spaces(_ref) {
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.__experimentalBoxControl, {
     key: id + '-padding',
     id: id + '-padding',
-    label: "Padding",
+    label: _Static_Render__WEBPACK_IMPORTED_MODULE_2__.Render.innerLabel(id, 'Padding'),
     values: paddingValue,
     onChange: newValue => {
       let newSpaces = {
@@ -17776,7 +17801,7 @@ function Spaces(_ref) {
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.__experimentalBoxControl, {
     key: id + '-margin',
     id: id + '-margin',
-    label: "Margin",
+    label: _Static_Render__WEBPACK_IMPORTED_MODULE_2__.Render.innerLabel(id, 'Margin'),
     values: marginValue,
     onChange: newValue => {
       let newSpaces = {
@@ -17785,7 +17810,7 @@ function Spaces(_ref) {
       };
       onChange(newSpaces);
     }
-  })))))), true);
+  })))))), true, '', description);
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(PropsObject, {
     key: id,
     id: id,
@@ -18035,6 +18060,7 @@ function Video(_ref) {
   let {
     id,
     label,
+    description,
     value,
     onChange
   } = _ref;
@@ -18042,8 +18068,8 @@ function Video(_ref) {
 
   // File
   typeVideoPanel.push({
-    name: "file",
-    title: "File",
+    name: 'file',
+    title: 'File',
     content: (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_File__WEBPACK_IMPORTED_MODULE_4__.File, {
       key: id,
       id: id,
@@ -18063,13 +18089,13 @@ function Video(_ref) {
 
   // Embed
   typeVideoPanel.push({
-    name: "embed",
-    title: "Embed",
-    content: _Static_Render__WEBPACK_IMPORTED_MODULE_3__.Render.fieldContainer(id + "_embed", (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.TextControl, {
-      key: id + "-embedLink",
-      label: "Embed link",
-      type: "text",
-      value: value?.embed ? value.embed : "",
+    name: 'embed',
+    title: 'Embed',
+    content: _Static_Render__WEBPACK_IMPORTED_MODULE_3__.Render.fieldContainer(id + '_embed', (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.TextControl, {
+      key: id + '-embedLink',
+      label: 'Embed link',
+      type: 'text',
+      value: value?.embed ? value.embed : '',
       onChange: newValue => {
         newValue = {
           embed: newValue
@@ -18082,12 +18108,12 @@ function Video(_ref) {
     }))
   });
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_2__.Fragment, {
-    key: id + "-fragment"
+    key: id + '-fragment'
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    key: id + "-instructions"
-  }, "Upload a media file or pick one from your media library."), _Static_Render__WEBPACK_IMPORTED_MODULE_3__.Render.tabPanelComponent(id + "-videoType", typeVideoPanel, function (typeVideoPanel) {
+    key: id + '-instructions'
+  }, "Upload a media file or pick one from your media library."), _Static_Render__WEBPACK_IMPORTED_MODULE_3__.Render.tabPanelComponent(id + '-videoType', typeVideoPanel, function (typeVideoPanel) {
     return typeVideoPanel.content;
-  }, null, null, "videoType"));
+  }, null, null, 'videoType', description));
 }
 
 /***/ }),

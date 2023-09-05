@@ -125,6 +125,10 @@
   margin-bottom: 160px;
 }
 
+.o-editor .components-color-picker .components-h-stack {
+  display: none;
+}
+
 .o-editor .block-editor-block-list__block[data-type="custom/wpe-column"] {
   width: 100%;
   margin-top: 0 !important;
@@ -167,26 +171,47 @@
 .o-editor .components-base-control .components-base-control__label,
 .o-editor .components-base-control .components-input-control__label,
 .o-editor .components-base-control__forced_label {
-  display: flex !important;
-  align-items: center !important;
+  width: 100%;
   text-transform: none !important;
-  font-size: 14px !important;
-  font-weight: 600 !important;
   line-height: 1 !important;
   max-width: 100% !important;
   overflow: hidden !important;
   text-overflow: ellipsis !important;
   white-space: nowrap !important;
+}
+.o-editor .components-base-control .components-base-control__label .inner,
+.o-editor .components-base-control .components-input-control__label .inner,
+.o-editor .components-base-control__forced_label .inner {
+  display: flex !important;
+  align-items: center !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
   border-left: 3px solid #d8eef8 !important;
   padding: 10px 10px 10px 10px !important;
   margin-bottom: 10px !important;
   border-bottom: none !important;
   height: auto !important;
 }
-.o-editor .components-base-control .components-base-control__label .resetDefault,
-.o-editor .components-base-control .components-input-control__label .resetDefault,
-.o-editor .components-base-control__forced_label .resetDefault {
+.o-editor .components-base-control .components-base-control__label .inner .components-button,
+.o-editor .components-base-control .components-input-control__label .inner .components-button,
+.o-editor .components-base-control__forced_label .inner .components-button {
+  text-decoration: none;
   margin-left: auto;
+  margin-bottom: 0;
+  margin-right: 0;
+}
+.o-editor .components-base-control .components-base-control__label .inner .components-button .dashicon,
+.o-editor .components-base-control .components-input-control__label .inner .components-button .dashicon,
+.o-editor .components-base-control__forced_label .inner .components-button .dashicon {
+  margin-right: 2px;
+}
+.o-editor .components-base-control .components-base-control__label .components-input-control__description,
+.o-editor .components-base-control .components-input-control__label .components-input-control__description,
+.o-editor .components-base-control__forced_label .components-input-control__description {
+  padding-left: 13px;
+  margin-top: 0;
+  color: rgb(100, 100, 100);
+  font-weight: 400;
 }
 .o-editor .block-editor-block-list__layout > .wp-block:has(> .loaderLiveRenderingIframe) {
   height: 100vh;
@@ -441,22 +466,6 @@
   height: 100%;
   display: none;
   z-index: 1;
-}
-.o-editor .basicField .buttons-changes-container {
-  display: flex;
-  align-items: center;
-  justify-content: space-evenly;
-  position: absolute;
-  width: 100%;
-  z-index: 2;
-  left: 0;
-  top: calc(100% + 10px);
-  background: var(--background300, rgb(245, 245, 245));
-  padding: 30px 0;
-  border-radius: 4px;
-}
-.o-editor .basicField .buttons-changes-container .components-button {
-  margin: 0;
 }
 .o-editor .tab-panel-wpe-component {
   width: 100%;
@@ -1315,6 +1324,11 @@
   padding-top: 18px;
   flex-direction: column;
   gap: 30px;
+}
+.o-editor .components-panel > .components-panel__body > .components-panel__row .components-panel__row__description {
+  padding-left: 30px;
+  color: rgb(100, 100, 100);
+  width: 100%;
 }
 .o-editor .components-panel:hover, .o-editor .components-panel:focus, .o-editor .components-panel:focus-within, .o-editor .components-panel:has(> .is-opened.components-panel__body) {
   border-color: #d8eef8;

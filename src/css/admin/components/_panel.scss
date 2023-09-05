@@ -1,5 +1,4 @@
 .o-editor {
-
     .components-panel {
         position: relative;
         border: 1px solid $o-main-color-border;
@@ -37,13 +36,18 @@
             padding-top: $o-space-30;
             flex-direction: column;
             gap: $o-space-50;
+
+            .components-panel__row__description {
+                padding-left: 30px;
+                color: rgb(100, 100, 100);
+                width: 100%;
+            }
         }
 
         &:hover,
         &:focus,
         &:focus-within,
-        &:has( > .is-opened.components-panel__body ) {
-
+        &:has(> .is-opened.components-panel__body) {
             // border-color: transparent !important;
             border-color: $o-accent-color-border;
 
@@ -54,7 +58,6 @@
             > .components-panel__body > .components-panel__body-title {
                 background: $o-accent-color-border !important;
             }
-
         }
-    } 
+    }
 }

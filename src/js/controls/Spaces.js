@@ -1,7 +1,7 @@
 import { __experimentalBoxControl as BoxControl } from '@wordpress/components';
 import { Render } from '../Static/Render';
 
-export function Spaces({ id, label, value, onChange }) {
+export function Spaces({ id, label, description, value, onChange }) {
     const paddingValue =
         typeof value == 'object' && typeof value.padding == 'object'
             ? {
@@ -77,7 +77,7 @@ export function Spaces({ id, label, value, onChange }) {
                             <BoxControl
                                 key={id + '-padding'}
                                 id={id + '-padding'}
-                                label="Padding"
+                                label={Render.innerLabel(id, 'Padding')}
                                 values={paddingValue}
                                 onChange={(newValue) => {
                                     let newSpaces = {
@@ -108,7 +108,7 @@ export function Spaces({ id, label, value, onChange }) {
                             <BoxControl
                                 key={id + '-margin'}
                                 id={id + '-margin'}
-                                label="Margin"
+                                label={Render.innerLabel(id, 'Margin')}
                                 values={marginValue}
                                 onChange={(newValue) => {
                                     let newSpaces = {
@@ -124,6 +124,8 @@ export function Spaces({ id, label, value, onChange }) {
             )}
         </>,
         true,
+        '',
+        description,
     );
 
     return (

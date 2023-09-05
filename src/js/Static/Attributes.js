@@ -133,6 +133,8 @@ export class Attributes {
                 : typeof prop.title != 'undefined'
                 ? prop.title
                 : keys.slice(-1);
+        const description =
+            typeof prop.description != 'undefined' ? prop.description : null;
         const required_field =
             typeof prop.required != 'undefined' && prop.required ? true : false;
 
@@ -238,6 +240,7 @@ export class Attributes {
                 keys={keys}
                 blockKey={blockKey}
                 label={label}
+                description={description}
                 type={type}
                 valueProp={valueProp}
                 controllerValue={currentValueAttribute}
