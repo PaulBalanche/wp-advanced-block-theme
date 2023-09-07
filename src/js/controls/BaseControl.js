@@ -253,6 +253,7 @@ export function BaseControl(props) {
                 break;
 
             case 'relation':
+            case 'form':
                 return (
                     <Relation
                         key={props.id}

@@ -200,7 +200,7 @@ export function Control(props) {
             );
         }
 
-        if (value != null && type != 'object') {
+        if (value != null && !['object', 'spaces'].includes(type)) {
             labelFormatted.push(
                 <Button
                     key={getKey() + 'defaultOverlayContainer-button'}

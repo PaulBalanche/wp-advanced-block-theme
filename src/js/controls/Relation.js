@@ -1,25 +1,35 @@
-import { SelectControl } from "@wordpress/components";
+import { SelectControl } from '@wordpress/components';
 
-export function Relation({id, label, entity, relations, value, onChange}) {
-
+export function Relation({ id, label, entity, relations, value, onChange }) {
+    console.log(entity);
+    console.log(relations);
     if (
-        typeof entity == "undefined" ||
-        typeof relations == "undefined" ||
+        typeof entity == 'undefined' ||
+        typeof relations == 'undefined' ||
         relations == null ||
         Object.keys(relations).length == 0
     ) {
         return null;
     }
 
-
-    return <SelectControl
-        key={id}
-        label={label}
-        value={value}
-        help={"Choose an item inside " + entity + " post type"}
-        options={relations.map(function (value) {
-            return { label: value.title.raw, value: value.id };
-        })}
-        onChange={(newValue) => onChange(newValue)}
-    />
+    return (
+        <SelectControl
+            key={id}
+            label={label}
+            value={value}
+            options={[
+                { label: '--Please choose a ' + entity + ' --', value: '' },
+            ].concat(
+                relations.map(function (value) {
+                    return { label: value.title.raw, value: value.id };
+                }),
+            )}
+            onChange={(newValue) => {
+                if (newValue == '') {
+                    newValue = undefined;
+                }
+                onChange(newValue);
+            }}
+        />
+    );
 }

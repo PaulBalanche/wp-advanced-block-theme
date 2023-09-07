@@ -16,6 +16,7 @@ use Abt\Helpers\Attributes\Wysiwyg;
 use Abt\Helpers\Attributes\Select;
 use Abt\Helpers\Attributes\Text;
 use Abt\Helpers\Attributes\Spaces;
+use Abt\Helpers\Attributes\Form;
 
 class SimpleProp
 {
@@ -114,6 +115,9 @@ class SimpleProp
 
             case "relation":
                 return Relation::isValid($this);
+            
+            case "form":
+                return Form::isValid($this);
 
             case "object":
                 return RecursiveObject::isValid($this);
@@ -165,6 +169,9 @@ class SimpleProp
 
             case "relation":
                 return Relation::format($this);
+
+            case "form":
+                return Form::format($this);
 
             case "object":
                 return RecursiveObject::format($this);

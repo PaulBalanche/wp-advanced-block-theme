@@ -11603,7 +11603,7 @@ class WpeComponent extends _Components_WpeComponentBase__WEBPACK_IMPORTED_MODULE
   if (props.name == 'custom/wpe-component-' + block_spec.id) {
     // Loop Props
     for (const [keyProp, valueProp] of Object.entries(block_spec.props)) {
-      if (valueProp.type == 'relation' && typeof valueProp.entity != 'undefined' && relations[valueProp.entity] == null) {
+      if ((valueProp.type == 'relation' || valueProp.type == 'form') && typeof valueProp.entity != 'undefined' && relations[valueProp.entity] == null) {
         relations[valueProp.entity] = getEntityRecords('postType', valueProp.entity, {
           per_page: -1,
           status: 'publish'
@@ -15963,6 +15963,7 @@ class Attributes {
         args.options = typeof prop.options != 'undefined' ? prop.options : null;
         break;
       case 'relation':
+      case 'form':
         args.entity = typeof prop.entity != 'undefined' ? prop.entity : null;
         break;
       case 'image':
@@ -16033,6 +16034,7 @@ class Attributes {
         case 'datetime':
         case 'number':
         case 'integer':
+        case 'form':
           attributes[key] = {
             type: 'string'
           };
@@ -16209,7 +16211,7 @@ function Control(props) {
         icon: "info"
       }), error.warning));
     }
-    if (value != null && type != 'object') {
+    if (value != null && !['object', 'spaces'].includes(type)) {
       labelFormatted.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
         key: getKey() + 'defaultOverlayContainer-button',
         onMouseDown: () => {
@@ -16995,6 +16997,7 @@ function BaseControl(props) {
         });
         break;
       case 'relation':
+      case 'form':
         return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Relation__WEBPACK_IMPORTED_MODULE_8__.Relation, {
           key: props.id,
           id: props.id,
@@ -17646,21 +17649,30 @@ function Relation(_ref) {
     value,
     onChange
   } = _ref;
-  if (typeof entity == "undefined" || typeof relations == "undefined" || relations == null || Object.keys(relations).length == 0) {
+  console.log(entity);
+  console.log(relations);
+  if (typeof entity == 'undefined' || typeof relations == 'undefined' || relations == null || Object.keys(relations).length == 0) {
     return null;
   }
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.SelectControl, {
     key: id,
     label: label,
     value: value,
-    help: "Choose an item inside " + entity + " post type",
-    options: relations.map(function (value) {
+    options: [{
+      label: '--Please choose a ' + entity + ' --',
+      value: ''
+    }].concat(relations.map(function (value) {
       return {
         label: value.title.raw,
         value: value.id
       };
-    }),
-    onChange: newValue => onChange(newValue)
+    })),
+    onChange: newValue => {
+      if (newValue == '') {
+        newValue = undefined;
+      }
+      onChange(newValue);
+    }
   });
 }
 

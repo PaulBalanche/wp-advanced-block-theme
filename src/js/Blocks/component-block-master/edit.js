@@ -236,7 +236,8 @@ export default (block_spec, current_user_can_edit_posts, theme_spec) =>
                     block_spec.props,
                 )) {
                     if (
-                        valueProp.type == 'relation' &&
+                        (valueProp.type == 'relation' ||
+                            valueProp.type == 'form') &&
                         typeof valueProp.entity != 'undefined' &&
                         relations[valueProp.entity] == null
                     ) {

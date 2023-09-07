@@ -416,6 +416,13 @@
   top: 6px;
   right: 0;
 }
+.o-editor .basicField .responsive-tab-panel-wpe-component:has(> .components-panel) > .responsive-buttons-container {
+  top: 21px;
+  right: 54px;
+}
+.o-editor .basicField .responsive-tab-panel-wpe-component:has(> .components-panel) > .responsive-buttons-container .components-button-group {
+  border: none;
+}
 .o-editor .basicField .responsive-tab-panel-wpe-component .tab-panel-wpe-component.videoType {
   margin-top: 24px;
 }
@@ -491,6 +498,9 @@
 }
 .o-editor .tab-panel-wpe-component:has(.basicField.updating) .basicField:not(.updating) {
   filter: blur(5px);
+}
+.o-editor .tab-panel-wpe-component:has(.basicField.updating) .basicField:not(.updating):has(.basicField.updating) {
+  filter: none;
 }
 .o-editor .tab-panel-wpe-component:has(.basicField.updating) .basicField:not(.updating)::after {
   display: block;
@@ -1079,9 +1089,6 @@
 .o-editor-app.inspector ul:has(li.is-hover) li.is-hover .components-button,
 .o-editor-app.inspector ul:has(li.is-hover) li.is-hover .dashicon {
   color: var(--wp-admin-theme-color);
-}
-.o-editor-app.inspector .components-button:hover {
-  background: initial;
 }
 .o-editor-app.help .is-tertiary {
   font-weight: initial;

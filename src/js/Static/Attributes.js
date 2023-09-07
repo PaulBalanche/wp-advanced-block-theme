@@ -183,6 +183,7 @@ export class Attributes {
                     typeof prop.options != 'undefined' ? prop.options : null;
                 break;
             case 'relation':
+            case 'form':
                 args.entity =
                     typeof prop.entity != 'undefined' ? prop.entity : null;
                 break;
@@ -287,6 +288,7 @@ export class Attributes {
                 case 'datetime':
                 case 'number':
                 case 'integer':
+                case 'form':
                     attributes[key] = {
                         type: 'string',
                     };
