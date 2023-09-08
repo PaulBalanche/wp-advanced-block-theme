@@ -56,6 +56,7 @@ class BlockEditor extends ControllerBase
             "GLOBAL_LOCALIZED", [
                 "admin_url" => admin_url(),
                 "post_id" => get_the_ID(),
+                "post_type" => get_post_type( get_the_ID() ),
                 "post_url" => get_the_permalink(),
                 "user_id" => get_current_user_id(),
                 "rest_api_url" => rest_url(),

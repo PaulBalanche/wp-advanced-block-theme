@@ -359,10 +359,10 @@ export default class OEditorApp extends Component {
                               this.props.context.selectBlock,
                           );
         }
-
         return (
             <>
-                <ODevices />
+                {(GLOBAL_LOCALIZED.post_type == 'page' ||
+                    GLOBAL_LOCALIZED.post_type == 'post') && <ODevices />}
                 <section
                     key="o-editor-app"
                     className={`o-editor-app ${componentToRender?.getExtraClassName?.()}`}

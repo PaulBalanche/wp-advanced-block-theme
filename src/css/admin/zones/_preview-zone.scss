@@ -9,20 +9,29 @@
     }
 }
 
+body.post-type-page,
+body.post-type-post {
+    .o-editor {
+        .is-root-container {
+            padding: 0 !important;
+
+            .block-editor-block-list__block {
+                width: 100%;
+                max-width: 100% !important;
+            }
+        }
+
+        .block-editor-block-list__block {
+            margin: 0 !important;
+        }
+    }
+}
+
 .o-editor {
     .editor-styles-wrapper.block-editor-writing-flow {
         background: var(--abt-background-editor, 'white');
         padding-top: 0;
         padding-bottom: 4rem;
-    }
-
-    .is-root-container {
-        padding: 0 !important;
-
-        .block-editor-block-list__block {
-            width: 100%;
-            max-width: 100% !important;
-        }
     }
 
     .o-preview-zone_loader {
@@ -38,7 +47,6 @@
     }
 
     .block-editor-block-list__block {
-        margin: 0 !important;
         user-select: none;
         opacity: 1;
         z-index: auto !important;
