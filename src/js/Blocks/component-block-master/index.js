@@ -1,13 +1,16 @@
 import { registerBlockType } from '@wordpress/blocks';
 
-import { InnerBlocks, useBlockProps } from '@wordpress/block-editor';
+import {
+    InnerBlocks,
+    useBlockProps,
+    useInnerBlocksProps,
+} from '@wordpress/block-editor';
 
-/**
- * Internal dependencies
- */
-import edit from './edit';
+import { ButtonGroup } from '@wordpress/components';
+import { OButtonBlockAppender } from '../../Components/OButtonBlockAppender';
 
 import { Attributes } from '../../Static/Attributes';
+import { EditMode } from './edit';
 
 var current_user_can_edit_posts = GLOBAL_LOCALIZED.current_user_can_edit_posts;
 
@@ -36,11 +39,30 @@ Object.values(GLOBAL_LOCALIZED.components).forEach((element) => {
                       },
                   }
                 : null,
-        edit: edit(
-            element,
-            current_user_can_edit_posts,
-            GLOBAL_LOCALIZED.theme_spec,
-        ),
+        edit: (props) => {
+            const innerBlocksProps =
+                element?.container && element.container
+                    ? useInnerBlocksProps(useBlockProps({ className: '' }), {
+                          renderAppender: () => (
+                              <ButtonGroup className="inspectorButtonInsertNew">
+                                  <OButtonBlockAppender
+                                      rootClientId={props.clientId}
+                                  />
+                              </ButtonGroup>
+                          ),
+                      })
+                    : null;
+
+            return (
+                <EditMode
+                    {...props}
+                    innerBlocksProps={innerBlocksProps}
+                    block_spec={element}
+                    current_user_can_edit_posts={current_user_can_edit_posts}
+                    theme_spec={GLOBAL_LOCALIZED.theme_spec}
+                />
+            );
+        },
         save: () => {
             return (
                 <div {...useBlockProps.save()}>

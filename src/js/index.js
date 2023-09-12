@@ -29,6 +29,8 @@ class OEditor {
             '.interface-interface-skeleton__content',
         );
         if ($editorContainer) {
+            document.querySelector('body').classList?.add?.('o-editor-enabled');
+
             $editorContainer.classList?.add?.('o-editor');
             $editorContainer.classList?.add?.('init');
 
@@ -130,6 +132,25 @@ const OEditorAppContext = compose([
 
 window.addEventListener('load', function () {
     setTimeout(() => {
-        new OEditor();
+        if (document.querySelector('body.post-type-page')) {
+            new OEditor();
+        } else {
+            _hideEditorLoadingZone();
+        }
     });
 });
+
+function _hideEditorLoadingZone() {
+    const $loadingZone = document.querySelector('.o-editor-loading-zone');
+    if (!$loadingZone) {
+        return;
+    }
+    $loadingZone.classList.add('hide');
+    setTimeout(() => {
+        $loadingZone.classList.add('close');
+        setTimeout(() => {
+            // $loadingZone.remove();
+            $loadingZone.classList.add('removed');
+        }, 500);
+    }, 1000);
+}

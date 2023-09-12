@@ -100,12 +100,14 @@ const BlockListItem = ({ block, selectBlock }) => {
         anchor.match(/^[a-z0-9]+-[a-z0-9]+-[a-z0-9]+-[a-z0-9]+-[a-z0-9]+$/) ==
             null;
     const domBlock = document.querySelector('#block-' + block.clientId);
-    domBlock.addEventListener('mouseover', () => {
-        setIsHover(true);
-    });
-    domBlock.addEventListener('mouseleave', () => {
-        setIsHover(false);
-    });
+    if (domBlock) {
+        domBlock.addEventListener('mouseover', () => {
+            setIsHover(true);
+        });
+        domBlock.addEventListener('mouseleave', () => {
+            setIsHover(false);
+        });
+    }
 
     const parentDomBlocks = [];
     var closestParent = domBlock;

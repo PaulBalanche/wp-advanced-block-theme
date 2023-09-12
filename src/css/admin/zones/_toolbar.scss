@@ -1,34 +1,36 @@
-#editor {
-    .interface-interface-skeleton__header {
-        .edit-post-header__toolbar {
-            align-items: center;
+body.o-editor-enabled {
+    #editor {
+        .interface-interface-skeleton__header {
+            .edit-post-header__toolbar {
+                align-items: center;
 
-            .edit-post-header-toolbar {
-                flex-grow: initial;
+                .edit-post-header-toolbar {
+                    flex-grow: initial;
 
-                .components-button:not(.editor-history__undo):not(
-                        .editor-history__redo
-                    ) {
+                    .components-button:not(.editor-history__undo):not(
+                            .editor-history__redo
+                        ) {
+                        display: none;
+                    }
+                }
+
+                .edit-post-visual-editor__post-title-wrapper {
+                    margin: 0;
+                    flex: auto;
+
+                    h1 {
+                        margin: 0 $o-space-30;
+                        border: 1px solid $background300;
+                        line-height: initial;
+                        padding: $o-space-10 $o-space-20;
+                    }
+                }
+            }
+
+            .edit-post-header__settings {
+                .components-dropdown.components-dropdown-menu.block-editor-post-preview__dropdown:first-child {
                     display: none;
                 }
-            }
-
-            .edit-post-visual-editor__post-title-wrapper {
-                margin: 0;
-                flex: auto;
-
-                h1 {
-                    margin: 0 $o-space-30;
-                    border: 1px solid $background300;
-                    line-height: initial;
-                    padding: $o-space-10 $o-space-20;
-                }
-            }
-        }
-
-        .edit-post-header__settings {
-            .components-dropdown.components-dropdown-menu.block-editor-post-preview__dropdown:first-child {
-                display: none;
             }
         }
     }

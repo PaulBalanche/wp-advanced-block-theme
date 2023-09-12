@@ -36,7 +36,7 @@ class Blocks extends FiltersBase {
             // Add core/block for reusable-blocks support
             $allowed_block_types = array_merge( $allowed_block_types_theme, [ 'core/block' ] );
 
-            $allowed_block_types = apply_filters( 'Abt\allowed_block_types_all', $allowed_block_types );
+            $allowed_block_types = apply_filters( 'Abt\allowed_block_types_all', $allowed_block_types, $post );
         }
 
         return $allowed_block_types;

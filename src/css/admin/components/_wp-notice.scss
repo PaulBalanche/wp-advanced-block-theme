@@ -1,17 +1,18 @@
-.components-notice-list {
-    position: fixed;
-    right: auto;
-    z-index: 100;
-    top: calc($o-space-50 + 60px);
-    left: $o-space-50;
+body.o-editor-enabled {
+    .components-notice-list {
+        position: fixed;
+        right: auto;
+        z-index: 100;
+        top: calc($o-space-50 + 60px);
+        left: $o-space-50;
 
-    &.components-editor-notices__dismissible {
-        display: none;
+        &.components-editor-notices__dismissible {
+            display: none;
+        }
+
+        .components-notice {
+            border-radius: $o-border-radius;
+            margin-block-end: $o-space-30;
+        }
     }
-
-    .components-notice {
-        border-radius: $o-border-radius;
-        margin-block-end: $o-space-30;
-    }
-
 }

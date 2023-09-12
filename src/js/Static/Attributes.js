@@ -158,6 +158,7 @@ export class Attributes {
             case 'wysiwyg':
             case 'link':
             case 'spaces':
+            case 'node':
                 break;
             case 'string':
                 args.isNumber = false;

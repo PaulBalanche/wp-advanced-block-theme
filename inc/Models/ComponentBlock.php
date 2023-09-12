@@ -460,8 +460,7 @@ class ComponentBlock extends ModelBase
             );
 
             // Validate and format props
-            if ($this->validateProps($render_attributes)) {
-                // echo '<pre>';print_r($render_attributes);
+            if ($this->validateProps($render_attributes, $content)) {
                 // Start rendering
                 if (
                     apply_filters(
@@ -493,6 +492,7 @@ class ComponentBlock extends ModelBase
 
     public function validateProps(
         &$render_attributes,
+        $content = '',
         $stopError = true,
         $format = true
     ) {
@@ -509,7 +509,8 @@ class ComponentBlock extends ModelBase
                     isset($render_attributes[$key_prop])
                         ? $render_attributes[$key_prop]
                         : null,
-                    $prop
+                    $prop,
+                    $content
                 );
                 $this->addPropStatus($propInstance);
 
@@ -538,7 +539,7 @@ class ComponentBlock extends ModelBase
      * Save liverendering attributes into JSON file
      *
      */
-    public function attributes_autosaves_post($attributes, $post_id, $client_id)
+    public function attributes_autosaves_post( $attributes, $post_id, $client_id, $content = '' )
     {
         if (
             !file_exists(

@@ -178,8 +178,9 @@ class ComponentBlocks extends ServiceBase {
         $component_id = $request['component_id'];
 
         $componentBlockInstance = Main::getInstance()->get_component_block_instance( $component_id );
-        $attributes = $componentBlockInstance->attributes_autosaves_get($post_id, $client_id);
-        $componentBlockInstance->set_attributes($attributes);
+        $json_params = $componentBlockInstance->attributes_autosaves_get($post_id, $client_id);
+        $componentBlockInstance->set_attributes( ( isset($json_params['attributes']) ) ? $json_params['attributes'] : [] );
+        $componentBlockInstance->set_content( ( isset($json_params['content']) ) ? apply_filters('the_content', $json_params['content']) : '' );
 
         header( 'Content-Type: ' . get_option( 'html_type' ) . '; charset=' . get_option( 'blog_charset' ) );
         Main::getInstance()->get_theme_controller()->render_content_only( 'nude', $componentBlockInstance->render() );
@@ -205,17 +206,18 @@ class ComponentBlocks extends ServiceBase {
         $post_id = $request['post_id'];
         $client_id = $request['client_id'];
 
-        $attributes = $request->get_json_params();
-        if( ! $attributes || ! is_array($attributes) ) {
+        $json_params = $request->get_json_params();
+        if( ! $json_params || ! is_array($json_params) || ! isset($json_params['attributes'])  ) {
             wp_send_json_error( 'Attributes missing' );
         }
+        $attributes = $json_params['attributes'];
 
         $componentBlockInstance = Main::getInstance()->get_component_block_instance( $request['component_id'] );
         $block_spec = $componentBlockInstance->get_block_spec();
         if( is_array($block_spec) ) {
 
-            $componentBlockInstance->attributes_autosaves_post( $attributes, $post_id, $client_id );
-            $componentBlockInstance->validateProps($attributes, false, false);
+            $componentBlockInstance->attributes_autosaves_post( $json_params, $post_id, $client_id );
+            $componentBlockInstance->validateProps($attributes, ( isset($json_params['content']) ) ? $json_params['content'] : '', false, false);
             if( $componentBlockInstance->arePropsValid() ) {
                 wp_send_json_success();
             }

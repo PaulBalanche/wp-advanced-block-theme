@@ -14,9 +14,7 @@ import { chevronDown, chevronUp, cog, pages, trash } from '@wordpress/icons';
 import { Attributes } from '../Static/Attributes';
 import { Render } from '../Static/Render';
 
-import { getBlockType } from '@wordpress/blocks';
-
-import { isReusableBlock } from '@wordpress/blocks';
+import { getBlockType, isReusableBlock } from '@wordpress/blocks';
 
 import { WpeModal } from './WpeModal';
 

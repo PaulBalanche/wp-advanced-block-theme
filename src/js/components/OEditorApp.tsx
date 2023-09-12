@@ -361,8 +361,7 @@ export default class OEditorApp extends Component {
         }
         return (
             <>
-                {(GLOBAL_LOCALIZED.post_type == 'page' ||
-                    GLOBAL_LOCALIZED.post_type == 'post') && <ODevices />}
+                <ODevices />
                 <section
                     key="o-editor-app"
                     className={`o-editor-app ${componentToRender?.getExtraClassName?.()}`}

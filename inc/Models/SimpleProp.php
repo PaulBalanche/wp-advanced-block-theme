@@ -30,10 +30,10 @@ class SimpleProp
         $errorMessage = null,
         $subPropsStatus = [];
 
-    function __construct($key, $value, $specs)
+    function __construct( $key, $value, $specs, $content = '' )
     {
         $this->key = $key;
-        $this->value = $value;
+        $this->value = ( isset($specs["type"]) && trim(strtolower($specs["type"])) == 'node' ) ? $content : $value;
 
         $this->_initSpecs($specs);
         $this->isValid = $this->_validate();

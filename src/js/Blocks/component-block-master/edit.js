@@ -1,8 +1,5 @@
-import {
-    store as blockEditorStore,
-    useBlockProps,
-    useInnerBlocksProps,
-} from '@wordpress/block-editor';
+import { store as blockEditorStore } from '@wordpress/block-editor';
+import { getBlockContent } from '@wordpress/blocks';
 import { Dashicon } from '@wordpress/components';
 import { compose } from '@wordpress/compose';
 import { withDispatch, withSelect } from '@wordpress/data';
@@ -12,8 +9,6 @@ import { WpeComponentBase } from '../../Components/WpeComponentBase';
 import apiFetch from '@wordpress/api-fetch';
 
 import __OEditorApp from '../../Components/OEditorApp';
-
-import { OButtonBlockAppender } from '../../Components/OButtonBlockAppender';
 
 class WpeComponent extends WpeComponentBase {
     _$iframes;
@@ -82,7 +77,11 @@ class WpeComponent extends WpeComponentBase {
                 '/' +
                 this.props.clientId,
             method: 'POST',
-            data: attributes == null ? this.props.attributes : attributes,
+            data: {
+                attributes:
+                    attributes == null ? this.props.attributes : attributes,
+                content: getBlockContent(this.props.blockInstance),
+            },
         }).then((res) => {
             if (res.success) {
                 this.setState({
@@ -154,6 +153,7 @@ class WpeComponent extends WpeComponentBase {
 
     liveRendering() {
         if (
+            false &&
             this?.props?.block_spec?.container &&
             this.props.block_spec.container
         ) {
@@ -222,85 +222,60 @@ class WpeComponent extends WpeComponentBase {
     }
 }
 
-export default (block_spec, current_user_can_edit_posts, theme_spec) =>
-    compose([
-        withSelect((select, props) => {
-            const { getEntityRecords } = select('core');
-            const { __experimentalGetPreviewDeviceType } =
-                select('core/edit-post');
-            let relations = [];
+export const EditMode = compose([
+    withSelect((select, props) => {
+        const { getEntityRecords } = select('core');
+        const { __experimentalGetPreviewDeviceType } = select('core/edit-post');
+        let relations = [];
 
-            if (props.name == 'custom/wpe-component-' + block_spec.id) {
-                // Loop Props
-                for (const [keyProp, valueProp] of Object.entries(
-                    block_spec.props,
-                )) {
-                    if (
-                        (valueProp.type == 'relation' ||
-                            valueProp.type == 'form') &&
-                        typeof valueProp.entity != 'undefined' &&
-                        relations[valueProp.entity] == null
-                    ) {
-                        relations[valueProp.entity] = getEntityRecords(
-                            'postType',
-                            valueProp.entity,
-                            {
-                                per_page: -1,
-                                status: 'publish',
-                            },
-                        );
-                    }
+        if (props.name == 'custom/wpe-component-' + props.block_spec.id) {
+            // Loop Props
+            for (const [keyProp, valueProp] of Object.entries(
+                props.block_spec.props,
+            )) {
+                if (
+                    (valueProp.type == 'relation' ||
+                        valueProp.type == 'form') &&
+                    typeof valueProp.entity != 'undefined' &&
+                    relations[valueProp.entity] == null
+                ) {
+                    relations[valueProp.entity] = getEntityRecords(
+                        'postType',
+                        valueProp.entity,
+                        {
+                            per_page: -1,
+                            status: 'publish',
+                        },
+                    );
                 }
             }
+        }
 
-            // Detect if inside a reusable block
-            const getBlockParents = select('core/block-editor').getBlockParents(
-                props.clientId,
+        // Detect if inside a reusable block
+        const getBlockParents = select('core/block-editor').getBlockParents(
+            props.clientId,
+        );
+        const parentsBlock = [];
+        for (var i in getBlockParents) {
+            parentsBlock.push(
+                select('core/block-editor').getBlock(getBlockParents[i]),
             );
-            const parentsBlock = [];
-            for (var i in getBlockParents) {
-                parentsBlock.push(
-                    select('core/block-editor').getBlock(getBlockParents[i]),
-                );
-            }
+        }
+        return {
+            relations: relations,
+            parentsBlock,
+            blockInstance: select('core/block-editor').getBlock(props.clientId),
+        };
+    }),
+    withDispatch((dispatch) => {
+        const { removeBlock, duplicateBlocks, moveBlocksUp, moveBlocksDown } =
+            dispatch(blockEditorStore);
 
-            return {
-                relations: relations,
-                block_spec,
-                current_user_can_edit_posts: current_user_can_edit_posts,
-                theme_spec,
-                innerBlocksProps:
-                    block_spec?.container && block_spec.container
-                        ? useInnerBlocksProps(
-                              useBlockProps({ className: '' }),
-                              {
-                                  renderAppender: () => (
-                                      <OButtonBlockAppender
-                                          rootClientId={props.clientId}
-                                      />
-                                  ),
-                              },
-                          )
-                        : null,
-                parentsBlock,
-                blockInstance: select('core/block-editor').getBlock(
-                    props.clientId,
-                ),
-            };
-        }),
-        withDispatch((dispatch) => {
-            const {
-                removeBlock,
-                duplicateBlocks,
-                moveBlocksUp,
-                moveBlocksDown,
-            } = dispatch(blockEditorStore);
-
-            return {
-                removeBlock,
-                duplicateBlocks,
-                moveBlocksUp,
-                moveBlocksDown,
-            };
-        }),
-    ])(WpeComponent);
+        return {
+            removeBlock,
+            duplicateBlocks,
+            moveBlocksUp,
+            moveBlocksDown,
+        };
+    }),
+])(WpeComponent);

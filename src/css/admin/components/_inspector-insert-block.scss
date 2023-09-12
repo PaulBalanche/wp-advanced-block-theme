@@ -1,120 +1,122 @@
-.wpe-modal:has(.panelInspectorInsertNewBlock) {
-    width: 1400px;
-    max-width: 95%;
-}
+body.o-editor-enabled {
+    .wpe-modal:has(.panelInspectorInsertNewBlock) {
+        width: 1400px;
+        max-width: 95%;
+    }
 
-.block-editor-block-list__block.wp-block .block-list-appender {
-    position: relative;
-}
+    .block-editor-block-list__block.wp-block .block-list-appender {
+        position: relative;
+    }
 
-.inspectorButtonInsertNew {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    max-width: 400px;
-    margin: auto;
-    margin-bottom: 0;
-
-    .components-button {
-        font-weight: 500;
-        padding: $o-space-10 $o-space-40;
+    .inspectorButtonInsertNew {
+        width: 100%;
+        display: flex;
         justify-content: center;
+        max-width: 400px;
+        margin: auto;
+        margin-bottom: 0;
 
-        &:first-child {
-            border-top-left-radius: $o-border-radius-small;
-            border-bottom-left-radius: $o-border-radius-small;
-        }
-        &:last-child {
-            border-top-right-radius: $o-border-radius-small;
-            border-bottom-right-radius: $o-border-radius-small;
-        }
-    }
+        .components-button {
+            font-weight: 500;
+            padding: $o-space-10 $o-space-40;
+            justify-content: center;
 
-    .dashhicon {
-        font-size: 17px;
-        height: auto;
-        width: auto;
-    }
-}
-
-.panelInspectorInsertNewBlock {
-    .components-tab-panel__tabs {
-        background: #d8eef8;
-        padding: 0 $o-space-40;
-
-        button {
-            border-bottom: 2px solid #d8eef8;
-
-            &.active-tab {
-                border-color: var(--wp-admin-theme-color);
+            &:first-child {
+                border-top-left-radius: $o-border-radius-small;
+                border-bottom-left-radius: $o-border-radius-small;
+            }
+            &:last-child {
+                border-top-right-radius: $o-border-radius-small;
+                border-bottom-right-radius: $o-border-radius-small;
             }
         }
+
+        .dashhicon {
+            font-size: 17px;
+            height: auto;
+            width: auto;
+        }
     }
 
-    .components-tab-panel__tab-content {
-        .items {
-            display: flex;
-            flex-wrap: wrap;
-            row-gap: $o-space-100;
-            column-gap: 4%;
-            margin-top: $o-space-50;
+    .panelInspectorInsertNewBlock {
+        .components-tab-panel__tabs {
+            background: #d8eef8;
+            padding: 0 $o-space-40;
 
-            .item {
-                position: relative;
-                display: block;
-                width: 22%;
-                cursor: pointer;
-                background: rgb(250, 250, 250);
+            button {
+                border-bottom: 2px solid #d8eef8;
 
-                &::before {
-                    content: '';
+                &.active-tab {
+                    border-color: var(--wp-admin-theme-color);
+                }
+            }
+        }
+
+        .components-tab-panel__tab-content {
+            .items {
+                display: flex;
+                flex-wrap: wrap;
+                row-gap: $o-space-100;
+                column-gap: 4%;
+                margin-top: $o-space-50;
+
+                .item {
+                    position: relative;
                     display: block;
-                    position: absolute;
-                    top: -1px;
-                    left: -1px;
-                    width: calc(100% + 2px);
-                    height: calc(100% + 2px);
-                    opacity: 0;
-                    transition: $o-transition-default;
-                    border: 1px dashed var(--wp-admin-theme-color);
-                }
-                &:hover::before {
-                    opacity: 1;
-                }
-                &:hover {
-                    .blockTitle {
-                        color: var(--wp-admin-theme-color);
+                    width: 22%;
+                    cursor: pointer;
+                    background: rgb(250, 250, 250);
+
+                    &::before {
+                        content: '';
+                        display: block;
+                        position: absolute;
+                        top: -1px;
+                        left: -1px;
+                        width: calc(100% + 2px);
+                        height: calc(100% + 2px);
+                        opacity: 0;
+                        transition: $o-transition-default;
+                        border: 1px dashed var(--wp-admin-theme-color);
                     }
-                    .previewContainer {
-                        img {
-                            transform: scale(1.05);
+                    &:hover::before {
+                        opacity: 1;
+                    }
+                    &:hover {
+                        .blockTitle {
+                            color: var(--wp-admin-theme-color);
+                        }
+                        .previewContainer {
+                            img {
+                                transform: scale(1.05);
+                            }
                         }
                     }
-                }
 
-                .previewContainer {
-                    position: relative;
-                    width: 100%;
-                    aspect-ratio: 16/9;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    background: $background300;
-                    overflow: hidden;
-
-                    img {
-                        object-fit: contain;
+                    .previewContainer {
+                        position: relative;
                         width: 100%;
-                        height: 100%;
+                        aspect-ratio: 16/9;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        background: $background300;
+                        overflow: hidden;
+
+                        img {
+                            object-fit: contain;
+                            width: 100%;
+                            height: 100%;
+                            transition: $o-transition-default;
+                        }
+                    }
+
+                    .blockTitle {
+                        text-align: center;
+                        font-weight: 500;
+                        padding: 12px 0;
                         transition: $o-transition-default;
                     }
-                }
-
-                .blockTitle {
-                    text-align: center;
-                    font-weight: 500;
-                    padding: 12px 0;
-                    transition: $o-transition-default;
                 }
             }
         }

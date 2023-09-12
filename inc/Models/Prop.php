@@ -7,17 +7,17 @@ class Prop {
     private $type,
             $propInstance;
 
-    function __construct( $key, $value, $specs ) {
+    function __construct( $key, $value, $specs, $content = '' ) {
 
         $this->type = ( isset($specs['repeatable']) && $specs['repeatable'] ) ? 'repeatable' : 'simple';
         switch( $this->getType() ) {
 
             case 'simple':
-                $this->propInstance = new SimpleProp( $key, $value, $specs );
+                $this->propInstance = new SimpleProp( $key, $value, $specs, $content );
                 break;
             
             case 'repeatable':
-                $this->propInstance = new RepeatableProp( $key, $value, $specs );
+                $this->propInstance = new RepeatableProp( $key, $value, $specs, $content );
                 break;
         }
     }

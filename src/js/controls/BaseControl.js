@@ -1,5 +1,6 @@
 import { Fragment } from '@wordpress/element';
 
+import { OButtonBlockAppender } from '../Components/OButtonBlockAppender';
 import { Checkbox } from './Checkbox';
 import { Color } from './Color';
 import { DateTime } from './DateTime';
@@ -267,6 +268,14 @@ export function BaseControl(props) {
                         }
                         value={props.value != null ? props.value : undefined}
                         onChange={(newValue) => onChange(newValue)}
+                    />
+                );
+                break;
+
+            case 'node':
+                return (
+                    <OButtonBlockAppender
+                        rootClientId={props.componentInstance.props.clientId}
                     />
                 );
                 break;

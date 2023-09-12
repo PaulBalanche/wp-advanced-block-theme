@@ -1,40 +1,43 @@
-#editor {
-    background: var(--abt-background-editor, 'white');
+body.o-editor-enabled {
+    #editor {
+        background: var(--abt-background-editor, 'white');
 
-    &.resizable {
-        .is-mode-visual {
-            .interface-interface-skeleton__body {
-                width: 100%;
-                transition: width 0.4s;
+        &.resizable {
+            .is-mode-visual {
+                .interface-interface-skeleton__body {
+                    width: 100%;
+                    transition: width 0.4s;
 
-                &:has(#o-edit-zone .edit-zone__inner) {
-                    width: calc(100% - 700px);
+                    &:has(#o-edit-zone .edit-zone__inner) {
+                        width: calc(100% - 700px);
+                    }
                 }
             }
         }
-    }
 
-    .interface-interface-skeleton__header {
-        opacity: 0.15;
-        filter: none;
-        transition: opacity 0.3s ease-in-out 0.3s, filter 0.1s ease-in-out 0s;
+        .interface-interface-skeleton__header {
+            opacity: 0.15;
+            filter: none;
+            transition: opacity 0.3s ease-in-out 0.3s,
+                filter 0.1s ease-in-out 0s;
 
-        &:hover {
-            opacity: 1;
-            transition-delay: 0s;
+            &:hover {
+                opacity: 1;
+                transition-delay: 0s;
+            }
         }
-    }
 
-    .o-editor:has(.o-editor-app.resizing) > .edit-post-visual-editor,
-    .o-editor:has(.o-editor-app.moving) > .edit-post-visual-editor,
-    &:has(.o-editor-app.resizing) .interface-interface-skeleton__header,
-    &:has(.o-editor-app.moving) .interface-interface-skeleton__header {
-        filter: blur(5px);
-    }
+        .o-editor:has(.o-editor-app.resizing) > .edit-post-visual-editor,
+        .o-editor:has(.o-editor-app.moving) > .edit-post-visual-editor,
+        &:has(.o-editor-app.resizing) .interface-interface-skeleton__header,
+        &:has(.o-editor-app.moving) .interface-interface-skeleton__header {
+            filter: blur(5px);
+        }
 
-    .interface-interface-skeleton__body {
-        .edit-post-visual-editor__post-title-wrapper {
-            display: none;
+        .interface-interface-skeleton__body {
+            .edit-post-visual-editor__post-title-wrapper {
+                display: none;
+            }
         }
     }
 }

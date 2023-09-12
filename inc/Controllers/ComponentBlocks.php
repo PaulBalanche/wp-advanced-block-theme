@@ -44,7 +44,7 @@ class ComponentBlocks extends ControllerBase {
         add_filter( 'block_categories_all', [ $this->componentBlocksService, 'filter_block_categories' ], 10, 2 );
 
         // Allow all custom/wpe-component registered
-        add_filter( 'Abt\allowed_block_types_all', [ $this->componentBlocksService, 'allowed_block_types_all' ] );
+        add_filter( 'Abt\allowed_block_types_all', [ $this->componentBlocksService, 'allowed_block_types_all' ], 10, 1 );
     }
 
 
