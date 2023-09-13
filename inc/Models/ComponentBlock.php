@@ -461,6 +461,7 @@ class ComponentBlock extends ModelBase
 
             // Validate and format props
             if ($this->validateProps($render_attributes, $content)) {
+
                 // Start rendering
                 if (
                     apply_filters(
@@ -471,11 +472,12 @@ class ComponentBlock extends ModelBase
                 ) {
                     return apply_filters(
                         'Abt\render_component_block_' . $this->get_ID(),
-                        RenderService::render(
+                        $this->nodeWrapper(RenderService::render(
                             $block_spec["path"],
                             $render_attributes
-                        )
+                        ), $render_attributes)
                     );
+
                 } elseif (
                     isset($render_attributes["admin_error_message"]) &&
                     Request::is_admin_editor_request()
@@ -600,5 +602,14 @@ class ComponentBlock extends ModelBase
         }
 
         return json_decode(file_get_contents($json_filename), true);
+    }
+
+    public function nodeWrapper( $render, $attributes) {
+
+        if( isset($attributes['_node']) ) {
+            return '<!-- _node {"id":"' . $attributes['_node'] . '"} -->' . $render . '<!-- /_node -->';
+        }
+
+        return $render;
     }
 }

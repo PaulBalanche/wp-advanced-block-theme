@@ -17,6 +17,7 @@ use Abt\Helpers\Attributes\Select;
 use Abt\Helpers\Attributes\Text;
 use Abt\Helpers\Attributes\Spaces;
 use Abt\Helpers\Attributes\Form;
+use Abt\Helpers\Attributes\Node;
 
 class SimpleProp
 {
@@ -195,6 +196,9 @@ class SimpleProp
             
             case "spaces":
                 return Spaces::format($this);
+            
+            case "node":
+                return Node::format($this);
 
             default:
                 return Base::format($this);

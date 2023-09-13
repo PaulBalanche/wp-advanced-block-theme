@@ -11,6 +11,7 @@ const ButtonBlockAppender = ({
     inserterItems = null,
     insertBlock = null,
     rootClientId,
+    extraAttributes = {},
 }) => {
     const [isOpen, setIsOpen] = useState(false);
 
@@ -51,6 +52,7 @@ const ButtonBlockAppender = ({
                     onClose={() => {
                         setIsOpen(false);
                     }}
+                    extraAttributes={extraAttributes}
                 />
             )}
         </>

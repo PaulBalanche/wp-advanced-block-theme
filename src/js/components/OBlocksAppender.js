@@ -14,6 +14,7 @@ const BlocksAppender = ({
     insertBlockFunction,
     onClose,
     createSuccessNotice,
+    extraAttributes = {},
 }) => {
     return (
         <WpeModal
@@ -41,10 +42,10 @@ const BlocksAppender = ({
                                             className="item"
                                             onMouseDown={() => {
                                                 insertBlockFunction(
-                                                    createBlock(
-                                                        block.name,
-                                                        block.initialAttributes,
-                                                    ),
+                                                    createBlock(block.name, {
+                                                        ...block.initialAttributes,
+                                                        ...extraAttributes,
+                                                    }),
                                                     undefined,
                                                     rootClientId,
                                                     true,

@@ -19,6 +19,9 @@ Object.values(GLOBAL_LOCALIZED.components).forEach((element) => {
         id_component: {
             type: 'string',
         },
+        _node: {
+            type: 'string',
+        },
     };
     Attributes.initComponentAttributes(initAttributes, element.props);
 
@@ -42,15 +45,18 @@ Object.values(GLOBAL_LOCALIZED.components).forEach((element) => {
         edit: (props) => {
             const innerBlocksProps =
                 element?.container && element.container
-                    ? useInnerBlocksProps(useBlockProps({ className: '' }), {
-                          renderAppender: () => (
-                              <ButtonGroup className="inspectorButtonInsertNew">
-                                  <OButtonBlockAppender
-                                      rootClientId={props.clientId}
-                                  />
-                              </ButtonGroup>
-                          ),
-                      })
+                    ? useInnerBlocksProps(
+                          useBlockProps({ className: 'hide' }),
+                          {
+                              renderAppender: () => (
+                                  <ButtonGroup className="inspectorButtonInsertNew">
+                                      <OButtonBlockAppender
+                                          rootClientId={props.clientId}
+                                      />
+                                  </ButtonGroup>
+                              ),
+                          },
+                      )
                     : null;
 
             return (

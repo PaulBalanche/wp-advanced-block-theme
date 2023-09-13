@@ -2425,6 +2425,9 @@ body.o-editor-enabled #editor .interface-interface-skeleton__body .edit-post-vis
   /* wordpress outline */
   /* handle grids */
 }
+.o-editor .block-editor-block-list__block.hide {
+  display: none;
+}
 .o-editor .block-editor-block-list__block::after {
   display: none !important;
 }

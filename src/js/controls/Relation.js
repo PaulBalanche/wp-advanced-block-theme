@@ -1,8 +1,6 @@
 import { SelectControl } from '@wordpress/components';
 
 export function Relation({ id, label, entity, relations, value, onChange }) {
-    console.log(entity);
-    console.log(relations);
     if (
         typeof entity == 'undefined' ||
         typeof relations == 'undefined' ||

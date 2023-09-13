@@ -174,6 +174,18 @@ class WpeComponent extends WpeComponentBase {
                     render.push(this.renderEditFormZone());
                     render.push(this.renderLoaderPreview());
                     render.push(this.renderIframePreview());
+
+                    if (
+                        this?.props?.block_spec?.container &&
+                        this.props.block_spec.container
+                    ) {
+                        render.push(
+                            <div
+                                key={this.props.clientId + '-innerBlocksProps'}
+                                {...this.props.innerBlocksProps}
+                            />,
+                        );
+                    }
                 } else if (error != null) {
                     if (typeof error == 'object') {
                         let countError = Object.keys(error).length;
@@ -261,17 +273,25 @@ export const EditMode = compose([
                 select('core/block-editor').getBlock(getBlockParents[i]),
             );
         }
+
         return {
             relations: relations,
             parentsBlock,
             blockInstance: select('core/block-editor').getBlock(props.clientId),
+            blocksList: select('core/block-editor').getBlocks(props.clientId),
         };
     }),
     withDispatch((dispatch) => {
-        const { removeBlock, duplicateBlocks, moveBlocksUp, moveBlocksDown } =
-            dispatch(blockEditorStore);
+        const {
+            selectBlock,
+            removeBlock,
+            duplicateBlocks,
+            moveBlocksUp,
+            moveBlocksDown,
+        } = dispatch(blockEditorStore);
 
         return {
+            selectBlock,
             removeBlock,
             duplicateBlocks,
             moveBlocksUp,

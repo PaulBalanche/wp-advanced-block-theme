@@ -47,6 +47,10 @@
         z-index: auto !important;
         transition: $o-transition-fast;
 
+        &.hide {
+            display: none;
+        }
+
         /* wordpress outline */
         &::after {
             display: none !important;

@@ -1,11 +1,11 @@
 import { Fragment } from '@wordpress/element';
 
-import { OButtonBlockAppender } from '../Components/OButtonBlockAppender';
 import { Checkbox } from './Checkbox';
 import { Color } from './Color';
 import { DateTime } from './DateTime';
 import { File } from './File';
 import { Link } from './Link';
+import { Node } from './Node';
 import { PropsObject } from './PropsObject';
 import { Radio } from './Radio';
 import { Relation } from './Relation';
@@ -274,8 +274,12 @@ export function BaseControl(props) {
 
             case 'node':
                 return (
-                    <OButtonBlockAppender
-                        rootClientId={props.componentInstance.props.clientId}
+                    <Node
+                        key={props.id}
+                        id={props.id}
+                        label={props.label}
+                        keys={props.keys}
+                        componentInstance={props.componentInstance}
                     />
                 );
                 break;
