@@ -68,15 +68,20 @@ const BlockList = (props) => {
             {typeof props.isChildren != 'undefined' && props.isChildren && (
                 <div className="separator"></div>
             )}
-            {props.blocksList.map((block) => (
-                <Fragment key={'o-inspector-blockContainer-' + block.clientId}>
-                    <BlockListItem
-                        block={block}
-                        selectBlock={props.selectBlock}
-                    />
-                    <li className="separator"></li>
-                </Fragment>
-            ))}
+            {props.blocksList.map(
+                (block) =>
+                    typeof block.attributes._node == 'undefined' && (
+                        <Fragment
+                            key={'o-inspector-blockContainer-' + block.clientId}
+                        >
+                            <BlockListItem
+                                block={block}
+                                selectBlock={props.selectBlock}
+                            />
+                            <li className="separator"></li>
+                        </Fragment>
+                    ),
+            )}
         </ul>
     );
 

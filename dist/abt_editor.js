@@ -14826,7 +14826,7 @@ class OEditorInspector {
 const BlockList = props => {
   const children = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", null, typeof props.isChildren != 'undefined' && props.isChildren && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "separator"
-  }), props.blocksList.map(block => (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
+  }), props.blocksList.map(block => typeof block.attributes._node == 'undefined' && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
     key: 'o-inspector-blockContainer-' + block.clientId
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(BlockListItem, {
     block: block,
