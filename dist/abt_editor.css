@@ -880,39 +880,77 @@ body.o-editor-enabled .panelInspectorInsertNewBlock .components-tab-panel__tab-c
   height: 100%;
 }
 .o-editor-app_header {
-  padding: 24px 36px 24px 42px;
+  position: relative;
+  padding: 0;
   background: var(--wp-admin-theme-color);
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
-  display: flex;
   align-items: center;
   cursor: move;
 }
-.o-editor-app_header .breadcrumb {
-  display: flex;
+.o-editor-app_header .o-editor-app_header-inner .path-element:first-child {
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  box-shadow: none;
+}
+.o-editor-app_header .o-editor-app_header-inner .path-element:last-child {
+  color: white;
+  padding-top: 24px;
+  padding-bottom: 24px;
+}
+.o-editor-app_header .o-editor-app_header-inner .path-element:last-child .dashicon {
+  font-size: 18px;
+}
+.o-editor-app_header .o-editor-app_header-inner.child-2 .path-element:first-child {
+  background: #006090;
+  padding-left: 18px;
+}
+.o-editor-app_header .o-editor-app_header-inner.child-2 .path-element:last-child {
+  padding-left: 36px;
+}
+.o-editor-app_header .o-editor-app_header-inner.child-3 .path-element:first-child {
+  background: #004364;
+  padding-left: 18px;
+}
+.o-editor-app_header .o-editor-app_header-inner.child-3 .path-element:nth-child(2) {
+  background: #006090;
+  padding-left: 36px;
+}
+.o-editor-app_header .o-editor-app_header-inner.child-3 .path-element:last-child {
+  padding-left: 48px;
+}
+.o-editor-app_header .o-editor-app_header-inner .path-element {
+  display: block;
+  width: 100%;
+  height: auto;
+  text-align: left;
+  box-shadow: 0 -10px 10px 0px rgba(0, 0, 0, 0.1);
+  padding: 12px 36px;
+  box-sizing: border-box;
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 500;
+  display: inline-flex;
   align-items: center;
-  margin-bottom: 6px;
 }
-.o-editor-app_header .breadcrumb .is-link {
-  color: rgba(255, 255, 255, 0.5);
-  text-decoration: none;
-  padding: 0;
-  font-size: 12px;
-}
-.o-editor-app_header .breadcrumb .is-link:hover {
+.o-editor-app_header .o-editor-app_header-inner .path-element:hover {
   color: white;
 }
-.o-editor-app_header .breadcrumb .dashicon {
-  font-size: 1em;
+.o-editor-app_header .o-editor-app_header-inner .path-element .dashicon {
+  font-size: 14px;
   height: auto;
   width: auto;
   transition-duration: 0.05s;
   transition-timing-function: ease-in-out;
+  margin-right: 6px;
+}
+.o-editor-app_header .breadcrumb {
+  display: flex;
+  align-items: center;
 }
 .o-editor-app_header h2 {
   color: rgb(255, 255, 255);
   margin: 0;
-  font-size: 26px;
+  font-size: 24px;
 }
 .o-editor-app_header h2 .subtitle {
   padding-left: 12px;
@@ -920,7 +958,9 @@ body.o-editor-enabled .panelInspectorInsertNewBlock .components-tab-panel__tab-c
   font-size: 12px;
 }
 .o-editor-app_header .tools {
-  margin-left: auto;
+  position: absolute;
+  right: 18px;
+  bottom: 18px;
 }
 .o-editor-app_header .tools .dashicon {
   margin: 0 !important;

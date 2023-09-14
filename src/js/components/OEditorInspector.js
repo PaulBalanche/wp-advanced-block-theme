@@ -19,10 +19,17 @@ export default class OEditorInspector {
     }
 
     renderTitle() {
-        return <h2>Inspector</h2>;
+        return (
+            <div className={'o-editor-app_header-inner child-1'}>
+                <div className="path-element">
+                    <h2>All blocks</h2>
+                </div>
+            </div>
+        );
     }
 
     renderTools() {
+        return null;
         return (
             <Button
                 key={'o-editor-zone-button-help'}

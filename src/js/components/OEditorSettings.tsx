@@ -9,7 +9,13 @@ export default class OEditorSettings {
     constructor() {}
 
     renderTitle() {
-        return <h2>User preferences</h2>;
+        return (
+            <div className={'o-editor-app_header-inner child-1'}>
+                <div className="path-element">
+                    <h2>User preferences</h2>
+                </div>
+            </div>
+        );
     }
 
     renderFooter() {

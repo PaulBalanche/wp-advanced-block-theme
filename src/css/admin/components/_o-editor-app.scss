@@ -75,43 +75,89 @@
     }
 
     &_header {
-        padding: $o-space-40 $o-space-60 $o-space-40 $o-space-70;
+        // padding: $o-space-40 $o-space-60 $o-space-40 $o-space-70;
+        position: relative;
+        padding: 0;
         background: $o-accent-color;
         border-top-left-radius: $o-border-radius;
         border-top-right-radius: $o-border-radius;
-        display: flex;
         align-items: center;
         cursor: move;
 
-        .breadcrumb {
-            display: flex;
-            align-items: center;
-            margin-bottom: $o-space-10;
+        .o-editor-app_header-inner {
+            .path-element:first-child {
+                border-top-left-radius: $o-border-radius;
+                border-top-right-radius: $o-border-radius;
+                box-shadow: none;
+            }
+            .path-element:last-child {
+                color: white;
+                padding-top: $o-space-40;
+                padding-bottom: $o-space-40;
+                .dashicon {
+                    font-size: 18px;
+                }
+            }
 
-            .is-link {
-                color: rgb(255 255 255 / 50%);
-                text-decoration: none;
-                padding: 0;
-                font-size: 12px;
+            &.child-2 {
+                .path-element:first-child {
+                    background: #006090;
+                    padding-left: $o-space-30;
+                }
+                .path-element:last-child {
+                    padding-left: $o-space-60;
+                }
+            }
+            &.child-3 {
+                .path-element:first-child {
+                    background: #004364;
+                    padding-left: $o-space-30;
+                }
+                .path-element:nth-child(2) {
+                    background: #006090;
+                    padding-left: $o-space-60;
+                }
+                .path-element:last-child {
+                    padding-left: $o-space-80;
+                }
+            }
+            .path-element {
+                display: block;
+                width: 100%;
+                height: auto;
+                text-align: left;
+                box-shadow: 0 -10px 10px 0px rgb(0 0 0 / 10%);
+                padding: $o-space-20 $o-space-60;
+                box-sizing: border-box;
+                color: rgb(255 255 255 / 80%);
+                font-weight: 500;
+                display: inline-flex;
+                align-items: center;
 
                 &:hover {
                     color: white;
                 }
-            }
 
-            .dashicon {
-                font-size: 1em;
-                height: auto;
-                width: auto;
-                transition-duration: 0.05s;
-                transition-timing-function: ease-in-out;
+                .dashicon {
+                    font-size: 14px;
+                    height: auto;
+                    width: auto;
+                    transition-duration: 0.05s;
+                    transition-timing-function: ease-in-out;
+                    margin-right: $o-space-10;
+                }
             }
+        }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
         }
 
         h2 {
             color: $o-foreground-color;
             margin: 0;
-            font-size: 26px;
+            font-size: $o-space-40;
 
             .subtitle {
                 padding-left: $o-space-20;
@@ -121,7 +167,9 @@
         }
 
         .tools {
-            margin-left: auto;
+            position: absolute;
+            right: $o-space-30;
+            bottom: $o-space-30;
 
             .dashicon {
                 margin: 0 !important;

@@ -130,15 +130,44 @@ export class WpeComponentBase extends Component {
                 /^[a-z0-9]+-[a-z0-9]+-[a-z0-9]+-[a-z0-9]+-[a-z0-9]+$/,
             ) == null;
 
+        let countChild = 2;
+        const path = [];
+        if (
+            this.props.parentsBlock != null &&
+            typeof this.props.parentsBlock == 'object' &&
+            this.props.parentsBlock.length > 0
+        ) {
+            this.props.parentsBlock.forEach((element) => {
+                path.push(
+                    <Button
+                        key={'path-button-' + element.clientId}
+                        className="path-element"
+                        onMouseDown={() =>
+                            this.props.selectBlock(element.clientId)
+                        }
+                    >
+                        <Dashicon icon="ellipsis" />
+                        {getBlockType(element.name).title}
+                    </Button>,
+                );
+                countChild++;
+            });
+        }
+
         return (
-            <>
-                <h2>
-                    {this.props.title ?? this.title ?? 'Editor'}
-                    {displayAnchor && (
-                        <span className="subtitle">#{anchor}</span>
-                    )}
-                </h2>
-            </>
+            <div className={'o-editor-app_header-inner child-' + countChild}>
+                {__OEditorApp.getInstance().renderBreadcrumb()}
+                {path}
+                <div className="path-element">
+                    <h2>
+                        <Dashicon icon="arrow-right-alt2" />
+                        {this.props.title ?? this.title ?? 'Editor'}
+                        {displayAnchor && (
+                            <span className="subtitle">#{anchor}</span>
+                        )}
+                    </h2>
+                </div>
+            </div>
         );
     }
 
