@@ -10,11 +10,9 @@ export default class OEditorSettings {
 
     renderTitle() {
         return (
-            <div className={'o-editor-app_header-inner child-1'}>
-                <div className="path-element">
-                    <h2>User preferences</h2>
-                </div>
-            </div>
+            <li className="breadcrumb-current">
+                <h2>User preferences</h2>
+            </li>
         );
     }
 

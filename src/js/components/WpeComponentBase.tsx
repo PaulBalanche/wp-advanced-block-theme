@@ -139,35 +139,34 @@ export class WpeComponentBase extends Component {
         ) {
             this.props.parentsBlock.forEach((element) => {
                 path.push(
-                    <Button
-                        key={'path-button-' + element.clientId}
-                        className="path-element"
-                        onMouseDown={() =>
-                            this.props.selectBlock(element.clientId)
-                        }
-                    >
-                        <Dashicon icon="ellipsis" />
-                        {getBlockType(element.name).title}
-                    </Button>,
+                    <li className="breadcrumb-parent-block">
+                        <Button
+                            key={'path-button-' + element.clientId}
+                            className="path-element"
+                            onMouseDown={() =>
+                                this.props.selectBlock(element.clientId)
+                            }
+                        >
+                            {getBlockType(element.name).title}
+                        </Button>
+                    </li>,
                 );
                 countChild++;
             });
         }
 
         return (
-            <div className={'o-editor-app_header-inner child-' + countChild}>
-                {__OEditorApp.getInstance().renderBreadcrumb()}
+            <>
                 {path}
-                <div className="path-element">
+                <li className="breadcrumb-current">
                     <h2>
-                        <Dashicon icon="arrow-right-alt2" />
                         {this.props.title ?? this.title ?? 'Editor'}
                         {displayAnchor && (
                             <span className="subtitle">#{anchor}</span>
                         )}
                     </h2>
-                </div>
-            </div>
+                </li>
+            </>
         );
     }
 
@@ -349,15 +348,17 @@ export class WpeComponentBase extends Component {
         }
 
         return menuGroup.length > 0 ? (
-            <DropdownMenu
-                key={this.props.clientId + '-toolsDropdownMenu'}
-                icon={cog}
-                label="Advanced"
-            >
-                {() => {
-                    return menuGroup;
-                }}
-            </DropdownMenu>
+            <li className="breadcrumb-tools">
+                <DropdownMenu
+                    key={this.props.clientId + '-toolsDropdownMenu'}
+                    icon={cog}
+                    label="Advanced"
+                >
+                    {() => {
+                        return menuGroup;
+                    }}
+                </DropdownMenu>
+            </li>
         ) : null;
     }
 

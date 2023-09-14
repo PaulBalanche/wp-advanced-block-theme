@@ -14474,13 +14474,15 @@ class OEditorApp extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Compone
     this._$editApp.classList.add('hide');
   }
   renderBreadcrumb() {
-    return this.state.route != null || this.props.context.selectedBlockClientId != undefined && typeof _global__WEBPACK_IMPORTED_MODULE_6__["default"].componentInstances[this.props.context.selectedBlockClientId] != 'undefined' ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
+    return this.state.route != null || this.props.context.selectedBlockClientId != undefined && typeof _global__WEBPACK_IMPORTED_MODULE_6__["default"].componentInstances[this.props.context.selectedBlockClientId] != 'undefined' ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", {
+      className: "breadcrumb-home"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
       key: 'breadcrumb-home',
       className: "breadcrumb path-element",
       onMouseDown: () => this.goInspector()
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
       icon: "screenoptions"
-    }), " All blocks") : null;
+    }), " All blocks")) : null;
   }
   render() {
     if (this.props.context.editorMode != 'visual') return null;
@@ -14497,9 +14499,7 @@ class OEditorApp extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Compone
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ODevices__WEBPACK_IMPORTED_MODULE_7__["default"], null), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("section", {
       key: "o-editor-app",
       className: `o-editor-app ${componentToRender?.getExtraClassName?.()}`
-    }, componentToRender?.renderTitle && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(EditorAppHeader, null, componentToRender.renderTitle(), componentToRender?.renderTools && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "tools"
-    }, componentToRender.renderTools())), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    }, componentToRender?.renderTitle && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(EditorAppHeader, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("nav", null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("ol", null, this.renderBreadcrumb(), componentToRender.renderTitle(), componentToRender?.renderTools && componentToRender.renderTools()))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "o-editor-app_body"
     }, componentToRender?.render?.()), componentToRender?.renderFooter && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "o-editor-app_footer"
@@ -14801,21 +14801,23 @@ class OEditorInspector {
     this.selectBlock = selectBlock;
   }
   renderTitle() {
-    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: 'o-editor-app_header-inner child-1'
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "path-element"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h2", null, "All blocks")));
+    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", {
+      className: "breadcrumb-current"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h2", null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Dashicon, {
+      icon: "screenoptions"
+    }), " All blocks"));
   }
   renderTools() {
     return null;
-    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Button, {
+    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", {
+      className: "breadcrumb-tools"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Button, {
       key: 'o-editor-zone-button-help',
       variant: "primary",
       onMouseDown: () => _OEditorApp__WEBPACK_IMPORTED_MODULE_3__["default"].getInstance().routeTo('help')
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Dashicon, {
       icon: "editor-help"
-    }));
+    })));
   }
   render() {
     const inner = this.blocksList && typeof this.blocksList == 'object' && this.blocksList.length > 0 ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(BlockList, {
@@ -14831,19 +14833,24 @@ class OEditorInspector {
   }
 }
 const BlockList = props => {
-  const children = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", null, typeof props.isChildren != 'undefined' && props.isChildren && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "separator"
-  }), props.blocksList.map(block => typeof block.attributes._node == 'undefined' && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
-    key: 'o-inspector-blockContainer-' + block.clientId
-  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(BlockListItem, {
-    block: block,
-    selectBlock: props.selectBlock
-  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", {
-    className: "separator"
-  }))));
-  return typeof props.isChildren != 'undefined' && props.isChildren ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_slidedown__WEBPACK_IMPORTED_MODULE_7__.SlideDown, {
+  const children = [];
+  props.blocksList.forEach(block => {
+    if (typeof block.attributes._node == 'undefined') {
+      children.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
+        key: 'o-inspector-blockContainer-' + block.clientId
+      }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(BlockListItem, {
+        block: block,
+        selectBlock: props.selectBlock
+      }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", {
+        className: "separator"
+      })));
+    }
+  });
+  return children.length > 0 ? typeof props.isChildren != 'undefined' && props.isChildren ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_slidedown__WEBPACK_IMPORTED_MODULE_7__.SlideDown, {
     className: 'ul-slidedown'
-  }, props.isOpen ? children : null) : children;
+  }, props.isOpen ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "separator"
+  }), children) : null) : (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", null, children) : null;
 };
 const BlockListItem = _ref => {
   let {
@@ -14987,11 +14994,9 @@ __webpack_require__.r(__webpack_exports__);
 class OEditorSettings {
   constructor() {}
   renderTitle() {
-    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: 'o-editor-app_header-inner child-1'
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "path-element"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h2", null, "User preferences")));
+    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", {
+      className: "breadcrumb-current"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h2", null, "User preferences"));
   }
   renderFooter() {
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -15044,11 +15049,9 @@ __webpack_require__.r(__webpack_exports__);
 class OEditorWelcome {
   constructor() {}
   renderTitle() {
-    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: 'o-editor-app_header-inner child-1'
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "path-element"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h2", null, "Help")));
+    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", {
+      className: "breadcrumb-current"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h2", null, "Help"));
   }
   render() {
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Button, {
@@ -15494,23 +15497,19 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
     const path = [];
     if (this.props.parentsBlock != null && typeof this.props.parentsBlock == 'object' && this.props.parentsBlock.length > 0) {
       this.props.parentsBlock.forEach(element => {
-        path.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
+        path.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", {
+          className: "breadcrumb-parent-block"
+        }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
           key: 'path-button-' + element.clientId,
           className: "path-element",
           onMouseDown: () => this.props.selectBlock(element.clientId)
-        }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
-          icon: "ellipsis"
-        }), (0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_4__.getBlockType)(element.name).title));
+        }, (0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_4__.getBlockType)(element.name).title)));
         countChild++;
       });
     }
-    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: 'o-editor-app_header-inner child-' + countChild
-    }, _OEditorApp__WEBPACK_IMPORTED_MODULE_6__["default"].getInstance().renderBreadcrumb(), path, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "path-element"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h2", null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
-      icon: "arrow-right-alt2"
-    }), (_ref = (_this$props$title = this.props.title) !== null && _this$props$title !== void 0 ? _this$props$title : this.title) !== null && _ref !== void 0 ? _ref : 'Editor', displayAnchor && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, path, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", {
+      className: "breadcrumb-current"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h2", null, (_ref = (_this$props$title = this.props.title) !== null && _this$props$title !== void 0 ? _this$props$title : this.title) !== null && _ref !== void 0 ? _ref : 'Editor', displayAnchor && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
       className: "subtitle"
     }, "#", anchor))));
   }
@@ -15575,13 +15574,15 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
         onClick: () => this.showModal('removeSubmitted')
       }, "Remove ", this.title)));
     }
-    return menuGroup.length > 0 ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.DropdownMenu, {
+    return menuGroup.length > 0 ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", {
+      className: "breadcrumb-tools"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.DropdownMenu, {
       key: this.props.clientId + '-toolsDropdownMenu',
       icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_14__["default"],
       label: "Advanced"
     }, () => {
       return menuGroup;
-    }) : null;
+    })) : null;
   }
 
   /**

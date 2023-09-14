@@ -68,13 +68,13 @@
         box-shadow: none;
     }
 
-    &_inner {
+    .o-editor-app_inner {
         display: flex;
         flex-direction: column;
         height: 100%;
     }
 
-    &_header {
+    .o-editor-app_header {
         // padding: $o-space-40 $o-space-60 $o-space-40 $o-space-70;
         position: relative;
         padding: 0;
@@ -84,112 +84,84 @@
         align-items: center;
         cursor: move;
 
-        .o-editor-app_header-inner {
-            .path-element:first-child {
-                border-top-left-radius: $o-border-radius;
-                border-top-right-radius: $o-border-radius;
-                box-shadow: none;
-            }
-            .path-element:last-child {
-                color: white;
-                padding-top: $o-space-40;
-                padding-bottom: $o-space-40;
-                .dashicon {
-                    font-size: 18px;
-                }
-            }
+        nav {
+            ol {
+                margin: 0;
+                list-style: none;
+                display: flex;
 
-            &.child-2 {
-                .path-element:first-child {
-                    background: #006090;
-                    padding-left: $o-space-30;
-                }
-                .path-element:last-child {
-                    padding-left: $o-space-60;
-                }
-            }
-            &.child-3 {
-                .path-element:first-child {
-                    background: #004364;
-                    padding-left: $o-space-30;
-                }
-                .path-element:nth-child(2) {
-                    background: #006090;
-                    padding-left: $o-space-60;
-                }
-                .path-element:last-child {
-                    padding-left: $o-space-80;
-                }
-            }
-            .path-element {
-                display: block;
-                width: 100%;
-                height: auto;
-                text-align: left;
-                box-shadow: 0 -10px 10px 0px rgb(0 0 0 / 10%);
-                padding: $o-space-20 $o-space-60;
-                box-sizing: border-box;
-                color: rgb(255 255 255 / 80%);
-                font-weight: 500;
-                display: inline-flex;
-                align-items: center;
+                li {
+                    margin: 0;
+                    padding: 0;
+                    display: flex;
+                    align-items: center;
 
-                &:hover {
-                    color: white;
-                }
+                    .dashicon {
+                        margin-right: $o-space-10;
+                    }
+                    & > .components-button {
+                        color: rgb(255 255 255 / 80%);
+                        padding: 0 $o-space-30;
+                        transition: color 0.1s ease-in;
 
-                .dashicon {
-                    font-size: 14px;
-                    height: auto;
-                    width: auto;
-                    transition-duration: 0.05s;
-                    transition-timing-function: ease-in-out;
-                    margin-right: $o-space-10;
-                }
-            }
-        }
+                        &:hover {
+                            color: $o-foreground-color;
+                        }
+                    }
+                    h2 {
+                        color: $o-foreground-color;
+                        margin: 0;
+                        padding: $o-space-30 $o-space-40 16px $o-space-40;
+                        font-size: 1.3em;
+                        line-height: 1.3em;
 
-        .breadcrumb {
-            display: flex;
-            align-items: center;
-        }
+                        .subtitle {
+                            padding-left: $o-space-20;
+                            color: rgb(255 255 255 / 50%);
+                            font-size: 12px;
+                        }
+                    }
 
-        h2 {
-            color: $o-foreground-color;
-            margin: 0;
-            font-size: $o-space-40;
+                    &.breadcrumb {
+                        &-home {
+                            border-top-left-radius: $o-border-radius;
+                            background: rgb(0 0 0 / 10%);
+                            border-right: 1px solid rgb(255 255 255 / 10%);
+                        }
+                        &-parent-block {
+                            background: rgb(0 0 0 / 5%);
+                            border-right: 1px solid rgb(255 255 255 / 10%);
+                        }
+                        &-current {
+                        }
 
-            .subtitle {
-                padding-left: $o-space-20;
-                color: rgb(255 255 255 / 50%);
-                font-size: 12px;
-            }
-        }
+                        &-tools {
+                            margin-left: auto;
+                            padding: 0 $o-space-20;
 
-        .tools {
-            position: absolute;
-            right: $o-space-30;
-            bottom: $o-space-30;
+                            .dashicon {
+                                margin: 0 !important;
+                            }
 
-            .dashicon {
-                margin: 0 !important;
-            }
+                            .components-dropdown-menu__toggle {
+                                color: $o-foreground-color;
 
-            .components-dropdown-menu__toggle {
-                color: $o-foreground-color;
+                                &:focus {
+                                    box-shadow: none;
+                                }
 
-                &:focus {
-                    box-shadow: none;
-                }
-
-                &:hover {
-                    color: $o-foreground-color;
+                                &:hover {
+                                    color: $o-foreground-color;
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
     }
 
-    &_body {
+    .o-editor-app_body {
         display: flex;
         justify-content: space-between;
         flex-direction: column;
@@ -230,7 +202,7 @@
         }
     }
 
-    &_footer {
+    .o-editor-app_footer {
         display: flex;
         padding: $o-padding;
         background: $o-background-color;

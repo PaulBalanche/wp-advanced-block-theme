@@ -20,24 +20,28 @@ export default class OEditorInspector {
 
     renderTitle() {
         return (
-            <div className={'o-editor-app_header-inner child-1'}>
-                <div className="path-element">
-                    <h2>All blocks</h2>
-                </div>
-            </div>
+            <li className="breadcrumb-current">
+                <h2>
+                    <Dashicon icon="screenoptions" /> All blocks
+                </h2>
+            </li>
         );
     }
 
     renderTools() {
         return null;
         return (
-            <Button
-                key={'o-editor-zone-button-help'}
-                variant="primary"
-                onMouseDown={() => __OEditorApp.getInstance().routeTo('help')}
-            >
-                <Dashicon icon="editor-help" />
-            </Button>
+            <li className="breadcrumb-tools">
+                <Button
+                    key={'o-editor-zone-button-help'}
+                    variant="primary"
+                    onMouseDown={() =>
+                        __OEditorApp.getInstance().routeTo('help')
+                    }
+                >
+                    <Dashicon icon="editor-help" />
+                </Button>
+            </li>
         );
     }
 
@@ -70,35 +74,35 @@ export default class OEditorInspector {
 }
 
 const BlockList = (props) => {
-    const children = (
-        <ul>
-            {typeof props.isChildren != 'undefined' && props.isChildren && (
-                <div className="separator"></div>
-            )}
-            {props.blocksList.map(
-                (block) =>
-                    typeof block.attributes._node == 'undefined' && (
-                        <Fragment
-                            key={'o-inspector-blockContainer-' + block.clientId}
-                        >
-                            <BlockListItem
-                                block={block}
-                                selectBlock={props.selectBlock}
-                            />
-                            <li className="separator"></li>
-                        </Fragment>
-                    ),
-            )}
-        </ul>
-    );
+    const children = [];
+    props.blocksList.forEach((block) => {
+        if (typeof block.attributes._node == 'undefined') {
+            children.push(
+                <Fragment key={'o-inspector-blockContainer-' + block.clientId}>
+                    <BlockListItem
+                        block={block}
+                        selectBlock={props.selectBlock}
+                    />
+                    <li className="separator"></li>
+                </Fragment>,
+            );
+        }
+    });
 
-    return typeof props.isChildren != 'undefined' && props.isChildren ? (
-        <SlideDown className={'ul-slidedown'}>
-            {props.isOpen ? children : null}
-        </SlideDown>
-    ) : (
-        children
-    );
+    return children.length > 0 ? (
+        typeof props.isChildren != 'undefined' && props.isChildren ? (
+            <SlideDown className={'ul-slidedown'}>
+                {props.isOpen ? (
+                    <ul>
+                        <div className="separator"></div>
+                        {children}
+                    </ul>
+                ) : null}
+            </SlideDown>
+        ) : (
+            <ul>{children}</ul>
+        )
+    ) : null;
 };
 
 const BlockListItem = ({ block, selectBlock }) => {

@@ -317,13 +317,15 @@ export default class OEditorApp extends Component {
                 typeof globalData.componentInstances[
                     this.props.context.selectedBlockClientId
                 ] != 'undefined') ? (
-            <Button
-                key={'breadcrumb-home'}
-                className="breadcrumb path-element"
-                onMouseDown={() => this.goInspector()}
-            >
-                <Dashicon icon="screenoptions" /> All blocks
-            </Button>
+            <li className="breadcrumb-home">
+                <Button
+                    key={'breadcrumb-home'}
+                    className="breadcrumb path-element"
+                    onMouseDown={() => this.goInspector()}
+                >
+                    <Dashicon icon="screenoptions" /> All blocks
+                </Button>
+            </li>
         ) : null;
     }
 
@@ -365,12 +367,14 @@ export default class OEditorApp extends Component {
                 >
                     {componentToRender?.renderTitle && (
                         <EditorAppHeader>
-                            {componentToRender.renderTitle()}
-                            {componentToRender?.renderTools && (
-                                <div className="tools">
-                                    {componentToRender.renderTools()}
-                                </div>
-                            )}
+                            <nav>
+                                <ol>
+                                    {this.renderBreadcrumb()}
+                                    {componentToRender.renderTitle()}
+                                    {componentToRender?.renderTools &&
+                                        componentToRender.renderTools()}
+                                </ol>
+                            </nav>
                         </EditorAppHeader>
                     )}
                     <div className="o-editor-app_body">
