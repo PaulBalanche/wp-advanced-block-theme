@@ -1,12 +1,11 @@
-import { Button, Dashicon } from '@wordpress/components';
-import { Fragment, useState } from '@wordpress/element';
-
-import { closestCenter, DndContext, MeasuringStrategy } from '@dnd-kit/core';
+import { DndContext, MeasuringStrategy, closestCenter } from '@dnd-kit/core';
 import {
-    arrayMove,
     SortableContext,
+    arrayMove,
     verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
+import { Button, Dashicon } from '@wordpress/components';
+import { Fragment, useState } from '@wordpress/element';
 
 import { SortableItem } from './SortableItem';
 
@@ -139,10 +138,16 @@ export function Sortable(props) {
                         blockKey={props.blockKey + '-' + keyLoop}
                         label={labelRepeatableItem}
                         keys={props.keys.concat(keyLoop)}
-                        valueProp={props.valueProp}
+                        valueProp={
+                            typeof props.valueProp != 'undefined'
+                                ? props.valueProp
+                                : null
+                        }
                         controllerValue={props.value[keyLoop]}
                         required_field={false}
-                        args={props.args}
+                        args={
+                            typeof props.args != 'undefined' ? props.args : null
+                        }
                         error={null}
                         onChange={(newValue, index) =>
                             onChange(newValue, index)
@@ -176,13 +181,16 @@ export function Sortable(props) {
                 >
                     <ul className="repeatableContainer">{renderItems()}</ul>
                 </SortableContext>
-                <Button
-                    className="repeatableAddElt"
-                    onMouseDown={addItem}
-                    variant="secondary"
-                >
-                    <Dashicon icon="insert" /> Add
-                </Button>
+                {typeof props.buttonAdd != 'undefined' && props.buttonAdd}
+                {typeof props.buttonAdd == 'undefined' && (
+                    <Button
+                        className="repeatableAddElt"
+                        onMouseDown={addItem}
+                        variant="secondary"
+                    >
+                        <Dashicon icon="insert" /> Add
+                    </Button>
+                )}
             </DndContext>
         </Fragment>
     );

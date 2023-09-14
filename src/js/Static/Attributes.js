@@ -159,6 +159,7 @@ export class Attributes {
             case 'link':
             case 'spaces':
             case 'node':
+            case 'nodes':
                 break;
             case 'string':
                 args.isNumber = false;

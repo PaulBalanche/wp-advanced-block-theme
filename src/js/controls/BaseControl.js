@@ -6,6 +6,7 @@ import { DateTime } from './DateTime';
 import { File } from './File';
 import { Link } from './Link';
 import { Node } from './Node';
+import { NodeList } from './NodeList';
 import { PropsObject } from './PropsObject';
 import { Radio } from './Radio';
 import { Relation } from './Relation';
@@ -275,6 +276,19 @@ export function BaseControl(props) {
             case 'node':
                 return (
                     <Node
+                        key={props.id}
+                        id={props.id}
+                        label={props.label}
+                        keys={props.keys}
+                        value={props.value}
+                        componentInstance={props.componentInstance}
+                    />
+                );
+                break;
+
+            case 'nodes':
+                return (
+                    <NodeList
                         key={props.id}
                         id={props.id}
                         label={props.label}

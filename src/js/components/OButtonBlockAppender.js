@@ -1,4 +1,4 @@
-import { Button } from '@wordpress/components';
+import { Button, Dashicon } from '@wordpress/components';
 import { compose } from '@wordpress/compose';
 import { useState } from '@wordpress/element';
 import { OBlocksAppender } from './OBlocksAppender';
@@ -12,6 +12,9 @@ const ButtonBlockAppender = ({
     insertBlock = null,
     rootClientId,
     extraAttributes = {},
+    buttonExtraClass = null,
+    buttonDashicon = null,
+    buttonVariant = 'primary',
 }) => {
     const [isOpen, setIsOpen] = useState(false);
 
@@ -35,12 +38,13 @@ const ButtonBlockAppender = ({
         <>
             <Button
                 key={'o-editor-inspector-button-insertNewBlock'}
-                variant="primary"
+                variant={buttonVariant}
                 onClick={() => {
                     setIsOpen(true);
                 }}
+                className={buttonExtraClass}
             >
-                {/* <Dashicon icon="plus" /> */}
+                {buttonDashicon && <Dashicon icon={buttonDashicon} />}
                 Add block
             </Button>
             {isOpen && (

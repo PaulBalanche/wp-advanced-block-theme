@@ -52,21 +52,25 @@ export function SortableItem(props) {
                 isSmall
                 icon="move"
             />
-            <Button
-                className="duplicate"
-                onMouseDown={() => props.onDuplicate(props.id)}
-                variant="tertiary"
-                isSmall
-                icon="admin-page"
-            />
-            <Button
-                className="remove"
-                onMouseDown={() => props.onRemove(props.id)}
-                variant="tertiary"
-                isDestructive
-                isSmall
-                icon="trash"
-            />
+            {typeof props.onDuplicate != 'undefined' && (
+                <Button
+                    className="duplicate"
+                    onMouseDown={() => props.onDuplicate(props.id)}
+                    variant="tertiary"
+                    isSmall
+                    icon="admin-page"
+                />
+            )}
+            {typeof props.onRemove != 'undefined' && (
+                <Button
+                    className="remove"
+                    onMouseDown={() => props.onRemove(props.id)}
+                    variant="tertiary"
+                    isDestructive
+                    isSmall
+                    icon="trash"
+                />
+            )}
         </li>
     );
 }
