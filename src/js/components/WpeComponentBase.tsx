@@ -147,6 +147,7 @@ export class WpeComponentBase extends Component {
                                 this.props.selectBlock(element.clientId)
                             }
                         >
+                            <Dashicon icon="arrow-right-alt2" />
                             {getBlockType(element.name).title}
                         </Button>
                     </li>,

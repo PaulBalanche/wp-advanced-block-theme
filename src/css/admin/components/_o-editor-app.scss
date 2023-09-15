@@ -97,7 +97,10 @@
                     align-items: center;
 
                     .dashicon {
-                        margin-right: $o-space-10;
+                        margin-right: 4px;
+                        font-size: 1.1em;
+                        height: auto;
+                        transition: color 0.1s ease-in;
                     }
                     & > .components-button {
                         color: rgb(255 255 255 / 80%);
@@ -111,9 +114,14 @@
                     h2 {
                         color: $o-foreground-color;
                         margin: 0;
-                        padding: $o-space-30 $o-space-40 16px $o-space-40;
+                        padding: 20px $o-space-40 $o-space-30 $o-space-40;
                         font-size: 1.3em;
-                        line-height: 1.3em;
+                        line-height: 1.4em;
+
+                        .dashicon {
+                            margin-right: $o-space-10;
+                            font-size: 1.2em;
+                        }
 
                         .subtitle {
                             padding-left: $o-space-20;
@@ -226,127 +234,6 @@
 
             &:hover {
                 color: $o-foreground-color;
-            }
-        }
-    }
-
-    &.inspector,
-    &.help,
-    &.settings {
-        li > .ul-slidedown {
-            padding: 0 0 0 $o-space-50;
-            transition-duration: 0.3s;
-            transition-timing-function: ease-in-out;
-        }
-
-        ul {
-            margin: 0;
-
-            .separator {
-                height: 1px;
-                border-bottom: 1px solid $border300;
-
-                &:last-child {
-                    display: none;
-                }
-            }
-        }
-
-        li {
-            padding: 0;
-            margin: 0;
-            position: relative;
-        }
-
-        .inspectorBlockListButtonGroup {
-            display: flex;
-            align-items: center;
-
-            .dashicon {
-                font-size: 1em;
-                height: auto;
-                width: auto;
-                margin-right: $o-space-10;
-            }
-
-            &:hover {
-                .dashicon,
-                .is-tertiary {
-                    color: $o-accent-color;
-                }
-            }
-        }
-
-        .is-tertiary {
-            position: relative;
-            display: flex;
-            align-items: center;
-            width: 100%;
-            height: auto;
-            text-align: left;
-            padding: $o-space-20 0;
-            font-weight: 500;
-            font-size: 1.1em;
-            color: #1e1e1e;
-
-            .anchor {
-                color: rgb(30 30 30 / 50%);
-                font-weight: 400;
-                font-size: 0.8em;
-                margin-left: $o-space-10;
-            }
-
-            .error-attributes,
-            .warning-attributes {
-                position: relative;
-                top: -$o-space-10;
-                margin-left: $o-space-10;
-                color: white;
-                border-radius: 50%;
-                width: 16px;
-                height: 16px;
-                display: inline-flex;
-                align-items: center;
-                justify-content: center;
-                font-size: 9px;
-            }
-            .error-attributes {
-                background: $o-accent-red-color;
-            }
-            .warning-attributes {
-                background: var(--wp--preset--color--luminous-vivid-orange);
-            }
-        }
-    }
-
-    &.inspector {
-        ul:has(li.is-hover) {
-            li:not(.is-hover) {
-                opacity: 0.1;
-            }
-            li.is-hover {
-                &::before {
-                    content: '\f139';
-                    font-family: dashicons;
-                    position: absolute;
-                    top: 0;
-                    left: -28px;
-                    bottom: 0;
-                    display: flex;
-                    align-items: center;
-                    font-size: 20px;
-                    color: $o-accent-color;
-                }
-                .components-button,
-                .dashicon {
-                    color: $o-accent-color;
-                }
-            }
-        }
-
-        .components-button {
-            &:hover {
-                // background: initial;
             }
         }
     }

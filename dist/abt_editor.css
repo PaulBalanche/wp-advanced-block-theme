@@ -306,6 +306,121 @@
   border: none;
 }
 
+ul.block-list {
+  margin: 0;
+}
+ul.block-list li {
+  padding: 0;
+  margin: 0;
+  position: relative;
+}
+ul.block-list li.separator {
+  height: 1px;
+  border-bottom: 1px solid var(--border300, rgb(235, 235, 235));
+}
+ul.block-list li.separator:last-child {
+  display: none;
+}
+ul.block-list li > .ul-slidedown {
+  padding: 0 0 0 30px;
+  transition-duration: 0.3s;
+  transition-timing-function: ease-in-out;
+}
+ul.block-list li .inspectorBlockListButtonGroup {
+  display: flex;
+  align-items: center;
+}
+ul.block-list li .inspectorBlockListButtonGroup .dashicon {
+  font-size: 1em;
+  height: auto;
+  width: auto;
+  margin-right: 6px;
+}
+ul.block-list li .inspectorBlockListButtonGroup:hover .dashicon,
+ul.block-list li .inspectorBlockListButtonGroup:hover .is-tertiary {
+  color: var(--wp-admin-theme-color);
+}
+ul.block-list li .inspectorBlockListButtonGroup .is-tertiary {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: auto;
+  text-align: left;
+  padding: 12px 0;
+  font-weight: 500;
+  font-size: 1.1em;
+  color: #1e1e1e;
+}
+ul.block-list li .inspectorBlockListButtonGroup .is-tertiary .anchor {
+  color: rgba(30, 30, 30, 0.5);
+  font-weight: 400;
+  font-size: 0.8em;
+  margin-left: 6px;
+}
+ul.block-list li .inspectorBlockListButtonGroup .is-tertiary .error-attributes,
+ul.block-list li .inspectorBlockListButtonGroup .is-tertiary .warning-attributes {
+  position: relative;
+  top: -6px;
+  margin-left: 6px;
+  color: white;
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+}
+ul.block-list li .inspectorBlockListButtonGroup .is-tertiary .error-attributes {
+  background: #dc3232;
+}
+ul.block-list li .inspectorBlockListButtonGroup .is-tertiary .warning-attributes {
+  background: var(--wp--preset--color--luminous-vivid-orange);
+}
+ul.block-list li .inspectorBlockListButtonGroup .is-tertiary:hover {
+  background: none;
+}
+ul.block-list:has(li.is-hover) li:not(.is-hover) {
+  opacity: 0.1;
+}
+ul.block-list:has(li.is-hover) li.is-hover::before {
+  content: "\f139";
+  font-family: dashicons;
+  position: absolute;
+  top: 0;
+  left: -28px;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  font-size: 20px;
+  color: var(--wp-admin-theme-color);
+}
+ul.block-list:has(li.is-hover) li.is-hover .components-button,
+ul.block-list:has(li.is-hover) li.is-hover .dashicon {
+  color: var(--wp-admin-theme-color);
+}
+
+.nodeListComponentsContainer {
+  background: white;
+  border-radius: 10px !important;
+  border: 1px solid #e8e8e8 !important;
+  padding: 18px 24px !important;
+  box-shadow: none !important;
+  outline: none !important;
+  height: auto !important;
+  transition: all 0.1s ease-in-out !important;
+}
+.nodeListComponentsContainer:hover {
+  border-color: #d8eef8 !important;
+}
+.nodeListComponentsContainer:focus {
+  border-color: #47a8e7 !important;
+}
+.nodeListComponentsContainer ~ .components-input-control__backdrop {
+  display: none !important;
+}
+
 .o-editor .components-datetime, .o-editor .components-datetime__date, .o-editor .components-datetime__time {
   border-radius: 10px;
   border: 1px solid #e8e8e8;
@@ -900,7 +1015,10 @@ body.o-editor-enabled .panelInspectorInsertNewBlock .components-tab-panel__tab-c
   align-items: center;
 }
 .o-editor-app .o-editor-app_header nav ol li .dashicon {
-  margin-right: 6px;
+  margin-right: 4px;
+  font-size: 1.1em;
+  height: auto;
+  transition: color 0.1s ease-in;
 }
 .o-editor-app .o-editor-app_header nav ol li > .components-button {
   color: rgba(255, 255, 255, 0.8);
@@ -913,9 +1031,13 @@ body.o-editor-enabled .panelInspectorInsertNewBlock .components-tab-panel__tab-c
 .o-editor-app .o-editor-app_header nav ol li h2 {
   color: rgb(255, 255, 255);
   margin: 0;
-  padding: 18px 24px 16px 24px;
+  padding: 20px 24px 18px 24px;
   font-size: 1.3em;
-  line-height: 1.3em;
+  line-height: 1.4em;
+}
+.o-editor-app .o-editor-app_header nav ol li h2 .dashicon {
+  margin-right: 6px;
+  font-size: 1.2em;
 }
 .o-editor-app .o-editor-app_header nav ol li h2 .subtitle {
   padding-left: 12px;
@@ -1004,101 +1126,6 @@ body.o-editor-enabled .panelInspectorInsertNewBlock .components-tab-panel__tab-c
 }
 .o-editor-app.is-reusable .components-dropdown-menu__toggle:hover {
   color: rgb(255, 255, 255);
-}
-.o-editor-app.inspector li > .ul-slidedown, .o-editor-app.help li > .ul-slidedown, .o-editor-app.settings li > .ul-slidedown {
-  padding: 0 0 0 30px;
-  transition-duration: 0.3s;
-  transition-timing-function: ease-in-out;
-}
-.o-editor-app.inspector ul, .o-editor-app.help ul, .o-editor-app.settings ul {
-  margin: 0;
-}
-.o-editor-app.inspector ul .separator, .o-editor-app.help ul .separator, .o-editor-app.settings ul .separator {
-  height: 1px;
-  border-bottom: 1px solid var(--border300, rgb(235, 235, 235));
-}
-.o-editor-app.inspector ul .separator:last-child, .o-editor-app.help ul .separator:last-child, .o-editor-app.settings ul .separator:last-child {
-  display: none;
-}
-.o-editor-app.inspector li, .o-editor-app.help li, .o-editor-app.settings li {
-  padding: 0;
-  margin: 0;
-  position: relative;
-}
-.o-editor-app.inspector .inspectorBlockListButtonGroup, .o-editor-app.help .inspectorBlockListButtonGroup, .o-editor-app.settings .inspectorBlockListButtonGroup {
-  display: flex;
-  align-items: center;
-}
-.o-editor-app.inspector .inspectorBlockListButtonGroup .dashicon, .o-editor-app.help .inspectorBlockListButtonGroup .dashicon, .o-editor-app.settings .inspectorBlockListButtonGroup .dashicon {
-  font-size: 1em;
-  height: auto;
-  width: auto;
-  margin-right: 6px;
-}
-.o-editor-app.inspector .inspectorBlockListButtonGroup:hover .dashicon,
-.o-editor-app.inspector .inspectorBlockListButtonGroup:hover .is-tertiary, .o-editor-app.help .inspectorBlockListButtonGroup:hover .dashicon,
-.o-editor-app.help .inspectorBlockListButtonGroup:hover .is-tertiary, .o-editor-app.settings .inspectorBlockListButtonGroup:hover .dashicon,
-.o-editor-app.settings .inspectorBlockListButtonGroup:hover .is-tertiary {
-  color: var(--wp-admin-theme-color);
-}
-.o-editor-app.inspector .is-tertiary, .o-editor-app.help .is-tertiary, .o-editor-app.settings .is-tertiary {
-  position: relative;
-  display: flex;
-  align-items: center;
-  width: 100%;
-  height: auto;
-  text-align: left;
-  padding: 12px 0;
-  font-weight: 500;
-  font-size: 1.1em;
-  color: #1e1e1e;
-}
-.o-editor-app.inspector .is-tertiary .anchor, .o-editor-app.help .is-tertiary .anchor, .o-editor-app.settings .is-tertiary .anchor {
-  color: rgba(30, 30, 30, 0.5);
-  font-weight: 400;
-  font-size: 0.8em;
-  margin-left: 6px;
-}
-.o-editor-app.inspector .is-tertiary .error-attributes,
-.o-editor-app.inspector .is-tertiary .warning-attributes, .o-editor-app.help .is-tertiary .error-attributes,
-.o-editor-app.help .is-tertiary .warning-attributes, .o-editor-app.settings .is-tertiary .error-attributes,
-.o-editor-app.settings .is-tertiary .warning-attributes {
-  position: relative;
-  top: -6px;
-  margin-left: 6px;
-  color: white;
-  border-radius: 50%;
-  width: 16px;
-  height: 16px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 9px;
-}
-.o-editor-app.inspector .is-tertiary .error-attributes, .o-editor-app.help .is-tertiary .error-attributes, .o-editor-app.settings .is-tertiary .error-attributes {
-  background: #dc3232;
-}
-.o-editor-app.inspector .is-tertiary .warning-attributes, .o-editor-app.help .is-tertiary .warning-attributes, .o-editor-app.settings .is-tertiary .warning-attributes {
-  background: var(--wp--preset--color--luminous-vivid-orange);
-}
-.o-editor-app.inspector ul:has(li.is-hover) li:not(.is-hover) {
-  opacity: 0.1;
-}
-.o-editor-app.inspector ul:has(li.is-hover) li.is-hover::before {
-  content: "\f139";
-  font-family: dashicons;
-  position: absolute;
-  top: 0;
-  left: -28px;
-  bottom: 0;
-  display: flex;
-  align-items: center;
-  font-size: 20px;
-  color: var(--wp-admin-theme-color);
-}
-.o-editor-app.inspector ul:has(li.is-hover) li.is-hover .components-button,
-.o-editor-app.inspector ul:has(li.is-hover) li.is-hover .dashicon {
-  color: var(--wp-admin-theme-color);
 }
 .o-editor-app.help .is-tertiary {
   font-weight: initial;
