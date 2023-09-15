@@ -9,15 +9,19 @@ class Prop {
 
     function __construct( $key, $value, $specs, $content = '' ) {
 
-        $this->type = ( isset($specs['repeatable']) && $specs['repeatable'] ) ? 'repeatable' : 'simple';
+        $this->type = ( isset($specs['type']) && trim(strtolower($specs['type'])) == 'node' ) ? 'node' : ( (isset($specs['repeatable']) && $specs['repeatable'] ) ? 'repeatable' : 'simple' );
         switch( $this->getType() ) {
 
             case 'simple':
-                $this->propInstance = new SimpleProp( $key, $value, $specs, $content );
+                $this->propInstance = new SimpleProp( $key, $value, $specs );
                 break;
             
             case 'repeatable':
-                $this->propInstance = new RepeatableProp( $key, $value, $specs, $content );
+                $this->propInstance = new RepeatableProp( $key, $value, $specs );
+                break;
+            
+            case 'node':
+                $this->propInstance = new NodeList( $key, $content, $specs );
                 break;
         }
     }

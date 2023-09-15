@@ -6,8 +6,8 @@ class RepeatableProp extends SimpleProp {
 
     private $requiredValidItems = 1;
 
-    function __construct( $key, $value, $specs, $content = '' ) {
-        parent::__construct( $key, $value, $specs, $content );
+    function __construct( $key, $value, $specs ) {
+        parent::__construct( $key, $value, $specs );
     }
 
     public function getRequiredValidItems() {

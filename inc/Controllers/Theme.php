@@ -37,7 +37,7 @@ class Theme extends ControllerBase {
             $view,
             apply_filters( 'Abt\render_template_context', [
                 'body' => $content,
-                'menus' => $menus,
+                'menu' => $menus,
                 'frontspec' => $this->get_config()->get_spec()
             ] )
         );

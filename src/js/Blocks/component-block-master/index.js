@@ -44,9 +44,15 @@ Object.values(GLOBAL_LOCALIZED.components).forEach((element) => {
                 : null,
         edit: (props) => {
             const innerBlocksProps =
-                element?.container && element.container
+                typeof element.inner_blocks != 'undefined' &&
+                element.inner_blocks !== false
                     ? useInnerBlocksProps(
-                          useBlockProps({ className: 'hide' }),
+                          useBlockProps({
+                              className:
+                                  element.inner_blocks == null
+                                      ? 'hidden'
+                                      : true,
+                          }),
                           {
                               renderAppender: () => (
                                   <ButtonGroup className="inspectorButtonInsertNew">

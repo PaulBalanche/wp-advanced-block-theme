@@ -127,6 +127,12 @@ class FrontEnd extends ServiceBase {
                 $component_props[$key_props]['label'] = ( isset($component_props[$key_props]['label']) ) ? $component_props[$key_props]['label'] : ucfirst($key_props);
                 $component_props[$key_props]['category'] = ( isset($component_props[$key_props]['category']) ) ? strtolower($component_props[$key_props]['category']) : '';
                 
+                // Form type
+                if( isset($component_props[$key_props]['section']) && $component_props[$key_props]['section'] == 'form' ) {
+                    $component_props[$key_props]['type'] = 'form';
+                    $component_props[$key_props]['entity'] = 'wpe_contact_form';
+                }
+
                 // If type is object with sub-props, call this recursive method
                 if( ( in_array( strtolower($component_props[$key_props]['type']), [ 'object', 'component' ] ) || strtolower($component_props[$key_props]['type']) == 'object[]' || strtolower($component_props[$key_props]['type']) == 'object{}' ) && isset($component_props[$key_props]['props']) && is_array($component_props[$key_props]['props']) )
                     $component_props[$key_props]['props'] = $this->get_component_props($component_props[$key_props]['props'], false);

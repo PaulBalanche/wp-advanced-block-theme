@@ -30,6 +30,7 @@ export function Control(props) {
         'text',
         'richText',
         'wysiwyg',
+        'color',
     ].includes(props.type);
 
     const [value, setValue] = useState(props.controllerValue);
@@ -60,6 +61,10 @@ export function Control(props) {
                 typeof getDefaultValue() != 'object')
         ) {
             return false;
+        }
+
+        if (props.type == 'color' && value == null) {
+            return true;
         }
 
         if (value == null && getDefaultValue() != null) {
@@ -200,7 +205,10 @@ export function Control(props) {
             );
         }
 
-        if (value != null && !['object', 'spaces'].includes(type)) {
+        if (
+            value != null &&
+            !['object', 'spaces', 'link', 'image'].includes(type)
+        ) {
             labelFormatted.push(
                 <Button
                     key={getKey() + 'defaultOverlayContainer-button'}
@@ -223,7 +231,7 @@ export function Control(props) {
             typeof props.description != 'undefined' &&
                 props.description != null &&
                 props.description != '' &&
-                !['object', 'spaces'].includes(type)
+                !['object', 'spaces', 'link'].includes(type)
                 ? props.description
                 : null,
         );
@@ -323,16 +331,11 @@ export function Control(props) {
 
     function renderDefaultValueOverlay() {
         const text =
-            isResponsive && defaultDeviceIsDefined() ? (
-                <>
-                    {'Define '}
-                    <b>{getLabel()}</b>
-                    {' for '}
-                    {__ODevices.getInstance().getCurrentDevice()}
-                </>
-            ) : (
-                'Override default value'
-            );
+            isResponsive && defaultDeviceIsDefined()
+                ? `Define ${label} for ${__ODevices
+                      .getInstance()
+                      .getCurrentDevice()}`
+                : 'Override default value';
         const extraClass =
             isResponsive && defaultDeviceIsDefined() ? 'isResponsive' : null;
 
@@ -361,7 +364,7 @@ export function Control(props) {
         /** Rendering */
         let render = [];
 
-        if (repeatable) {
+        if (repeatable && type != 'node') {
             const itemsError =
                 error &&
                 typeof error == 'object' &&

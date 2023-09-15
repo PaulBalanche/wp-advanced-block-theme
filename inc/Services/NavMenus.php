@@ -78,10 +78,13 @@ class NavMenus extends ServiceBase {
 				foreach( $menu_items as $item ) {
 
                     $item_data = [
-                        'title' => $item->title,
-                        'label' => $item->title,
-                        'url' => $item->url,
-                        'href' => $item->url,
+                        'link' => [
+                            'text' => $item->title,
+                            'title' => $item->title,
+                            'label' => $item->title,
+                            'url' => $item->url,
+                            'href' => $item->url,
+                        ]
                     ];
 
                     if( $item->menu_item_parent > 0 ) {

@@ -153,9 +153,8 @@ class WpeComponent extends WpeComponentBase {
 
     liveRendering() {
         if (
-            false &&
-            this?.props?.block_spec?.container &&
-            this.props.block_spec.container
+            typeof this.props.block_spec.inner_blocks != 'undefined' &&
+            this.props.block_spec.inner_blocks
         ) {
             return <div {...this.props.innerBlocksProps} />;
         } else {
@@ -176,8 +175,9 @@ class WpeComponent extends WpeComponentBase {
                     render.push(this.renderIframePreview());
 
                     if (
-                        this?.props?.block_spec?.container &&
-                        this.props.block_spec.container
+                        typeof this.props.block_spec.inner_blocks !=
+                            'undefined' &&
+                        this.props.block_spec.inner_blocks !== false
                     ) {
                         render.push(
                             <div

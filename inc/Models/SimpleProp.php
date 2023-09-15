@@ -31,10 +31,10 @@ class SimpleProp
         $errorMessage = null,
         $subPropsStatus = [];
 
-    function __construct( $key, $value, $specs, $content = '' )
+    function __construct( $key, $value, $specs )
     {
         $this->key = $key;
-        $this->value = ( isset($specs["type"]) && trim(strtolower($specs["type"])) == 'nodes' ) ? $content : $value;
+        $this->value = $value;
 
         $this->_initSpecs($specs);
         $this->isValid = $this->_validate();
@@ -197,7 +197,7 @@ class SimpleProp
             case "spaces":
                 return Spaces::format($this);
             
-            case "nodes":
+            case "node":
                 return Node::format($this);
 
             default:

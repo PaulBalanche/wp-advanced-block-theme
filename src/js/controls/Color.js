@@ -13,11 +13,10 @@ export function Color({ id, label, value, onChange }) {
             >
                 {Render.label(id, label)}
                 <ColorPicker
-                    color={value}
+                    color={value != '' ? value : null}
                     label={label}
                     onChange={(newValue) => onChange(newValue)}
                     enableAlpha
-                    copyFormat="hex"
                 />
             </div>
         </div>

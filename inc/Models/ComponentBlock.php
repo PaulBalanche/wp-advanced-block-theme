@@ -228,6 +228,17 @@ class ComponentBlock extends ModelBase
                 ? ["custom/wpe-container", "custom/wpe-column"]
                 : null;
 
+        // Inner Blocks
+        $inner_blocks = false;
+        if( isset($component_frontspec["props"]) && is_array($component_frontspec["props"]) ) {
+            foreach( $component_frontspec["props"] as $prop ) {
+                if( isset($prop['type'])&& $prop['type'] == 'node' ) {
+                    $inner_blocks = null;
+                    break;
+                }
+            }
+        }
+
         $this->blockSpec = apply_filters(
             "Abt\generate_component_block_spec",
             [
@@ -253,6 +264,7 @@ class ComponentBlock extends ModelBase
                                 "componentBlockDefaultCategory"
                             ),
                         ],
+                "inner_blocks" => $inner_blocks,
                 "props" => $component_frontspec["props"] ?? [],
                 "props_categories" =>
                     $component_frontspec["props_categories"] ?? null,
@@ -321,6 +333,9 @@ class ComponentBlock extends ModelBase
                 "id_component" => [
                     "type" => "string",
                 ],
+                "_node" => [
+                    "type" => "string",
+                ],
                 "anchor" => [
                     "type" => "string",
                 ],
@@ -347,6 +362,7 @@ class ComponentBlock extends ModelBase
                         case "color":
                         case "radio":
                         case "relation":
+                        case "form":
                         case "number":
                         case "integer":
                         case "date":
@@ -360,6 +376,7 @@ class ComponentBlock extends ModelBase
                         case "video":
                         case "file":
                         case "spaces":
+                        case "node":
                             $currentType = "object";
                             break;
 
