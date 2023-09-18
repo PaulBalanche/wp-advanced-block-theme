@@ -240,7 +240,7 @@ export function BaseControl(props) {
                                 <PropsObject
                                     key={props.id + '-extraProps'}
                                     id={props.id + '-extraProps'}
-                                    label={'Extra'}
+                                    label={null}
                                     description={null}
                                     keys={props.keys}
                                     valueProp={props.valueProp}

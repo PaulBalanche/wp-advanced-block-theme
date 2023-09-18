@@ -21,4 +21,14 @@
             box-sizing: border-box;
         }
     }
+
+    .wpe-link-control {
+        .is-secondary {
+            border: 1px solid
+                var(
+                    --wp-components-color-accent,
+                    var(--wp-admin-theme-color, #3858e9)
+                );
+        }
+    }
 }

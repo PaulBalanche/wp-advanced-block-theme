@@ -17094,7 +17094,7 @@ function BaseControl(props) {
           props: typeof props.args.props != 'undefined' ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_PropsObject__WEBPACK_IMPORTED_MODULE_7__.PropsObject, {
             key: props.id + '-extraProps',
             id: props.id + '-extraProps',
-            label: 'Extra',
+            label: null,
             description: null,
             keys: props.keys,
             valueProp: props.valueProp,
@@ -17475,7 +17475,10 @@ function WpeLinkControl(_ref2) {
         }
       },
       onRemove: () => updateValue(null)
-    }), extraContent);
+    }));
+  }
+  function getExtra() {
+    return extraContent;
   }
   function getFooter() {
     return linkValue != null && typeof linkValue == 'object' ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.Button, {
@@ -17495,19 +17498,31 @@ function WpeLinkControl(_ref2) {
       icon: "saved"
     }), "Close"));
   }
-  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.Button, {
-    variant: "primary",
-    className: linkValue != null && typeof linkValue == 'object' ? 'is-active' : '',
+  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.ButtonGroup, {
+    key: id + '-LinkControl-ButtonGroup',
+    className: "wpe-link-control"
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.Button, {
+    variant: linkValue != null && typeof linkValue == 'object' ? 'primary' : 'secondary',
     onClick: () => setIsOpen(true)
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.Dashicon, {
     icon: "admin-links"
-  }), ' ', linkValue != null && typeof linkValue == 'object' ? 'Edit link' : 'Add link'), isOpen && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Components_WpeModal__WEBPACK_IMPORTED_MODULE_5__.WpeModal, {
+  }), ' ', linkValue != null && typeof linkValue == 'object' ? `Edit${linkValue?.text ? ' "' + linkValue.text + '" ' : ' '}link` : 'Add link')), isOpen && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Components_WpeModal__WEBPACK_IMPORTED_MODULE_5__.WpeModal, {
     key: id + '-linkWpeModal',
     id: id + '-linkWpeModal',
     title: linkValue != null && typeof linkValue == 'object' ? 'Edit link' : 'Add link',
     onClose: close,
     type: "wpe-link-control"
-  }, getContent()));
+  }, _Static_Render__WEBPACK_IMPORTED_MODULE_2__.Render.tabPanelComponent(id + '-LinkControl-TabPanel', [{
+    name: 'link',
+    title: 'Link',
+    value: 'link'
+  }, {
+    name: 'extra',
+    title: 'Extra',
+    value: 'extra'
+  }], tabPanel => {
+    return tabPanel.value == 'link' ? getContent() : getExtra();
+  }, null, null, 'wpe-link-control-tabpanel')));
 }
 
 /***/ }),

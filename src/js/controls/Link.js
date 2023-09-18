@@ -3,7 +3,7 @@ import { useState } from '@wordpress/element';
 import { Render } from '../Static/Render';
 import { Text } from './Text';
 
-import { Button, Dashicon } from '@wordpress/components';
+import { Button, ButtonGroup, Dashicon } from '@wordpress/components';
 
 import { WpeModal } from '../Components/WpeModal';
 
@@ -126,9 +126,12 @@ function WpeLinkControl({ id, label, value, onChange, extraContent }) {
                     }}
                     onRemove={() => updateValue(null)}
                 />
-                {extraContent}
             </>
         );
+    }
+
+    function getExtra() {
+        return extraContent;
     }
 
     function getFooter() {
@@ -155,20 +158,28 @@ function WpeLinkControl({ id, label, value, onChange, extraContent }) {
 
     return (
         <>
-            <Button
-                variant="primary"
-                className={
-                    linkValue != null && typeof linkValue == 'object'
-                        ? 'is-active'
-                        : ''
-                }
-                onClick={() => setIsOpen(true)}
+            <ButtonGroup
+                key={id + '-LinkControl-ButtonGroup'}
+                className="wpe-link-control"
             >
-                <Dashicon icon="admin-links" />{' '}
-                {linkValue != null && typeof linkValue == 'object'
-                    ? 'Edit link'
-                    : 'Add link'}
-            </Button>
+                <Button
+                    variant={
+                        linkValue != null && typeof linkValue == 'object'
+                            ? 'primary'
+                            : 'secondary'
+                    }
+                    onClick={() => setIsOpen(true)}
+                >
+                    <Dashicon icon="admin-links" />{' '}
+                    {linkValue != null && typeof linkValue == 'object'
+                        ? `Edit${
+                              linkValue?.text
+                                  ? ' "' + linkValue.text + '" '
+                                  : ' '
+                          }link`
+                        : 'Add link'}
+                </Button>
+            </ButtonGroup>
             {isOpen && (
                 <WpeModal
                     key={id + '-linkWpeModal'}
@@ -181,7 +192,29 @@ function WpeLinkControl({ id, label, value, onChange, extraContent }) {
                     onClose={close}
                     type="wpe-link-control"
                 >
-                    {getContent()}
+                    {Render.tabPanelComponent(
+                        id + '-LinkControl-TabPanel',
+                        [
+                            {
+                                name: 'link',
+                                title: 'Link',
+                                value: 'link',
+                            },
+                            {
+                                name: 'extra',
+                                title: 'Extra',
+                                value: 'extra',
+                            },
+                        ],
+                        (tabPanel) => {
+                            return tabPanel.value == 'link'
+                                ? getContent()
+                                : getExtra();
+                        },
+                        null,
+                        null,
+                        'wpe-link-control-tabpanel',
+                    )}
                     {/* <div className="bouttonGroup">{getFooter()}</div> */}
                 </WpeModal>
             )}

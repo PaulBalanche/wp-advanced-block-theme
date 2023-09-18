@@ -2085,6 +2085,9 @@ body.o-editor-enabled .components-notice-list .components-notice {
 .o-editor .block-editor-link-control .block-editor-link-control__search-item {
   box-sizing: border-box;
 }
+.o-editor .wpe-link-control .is-secondary {
+  border: 1px solid var(--wp-components-color-accent, var(--wp-admin-theme-color, #3858e9));
+}
 
 .o-editor .components-text-control__input {
   border-radius: 10px !important;
