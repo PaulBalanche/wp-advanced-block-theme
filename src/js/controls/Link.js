@@ -1,136 +1,153 @@
-// import { __experimentalLinkControl as LinkControl } from '@wordpress/block-editor';
+import { __experimentalLinkControl as LinkControl } from '@wordpress/block-editor';
 import { useState } from '@wordpress/element';
 import { Render } from '../Static/Render';
+import { Text } from './Text';
 
-import {
-    Button,
-    Dashicon,
-    __experimentalInputControl as InputControl,
-    TextControl,
-    ToggleControl,
-} from '@wordpress/components';
+import { Button, Dashicon } from '@wordpress/components';
 
 import { WpeModal } from '../Components/WpeModal';
 
-export function Link({ id, label, description, value, onChange }) {
+export function Link({ id, label, description, value, props, onChange }) {
     return (
-        <LinkControl
-            label={label}
-            value={value}
-            onSubmit={(newValue) => console.log(newValue)}
-            onRemove={() => console.log('remove')}
-        />
-    );
-    return Render.panelComponent(
-        id,
-        label,
-        Render.fieldContainer(
-            id + '_link',
+        <div
+            key={id + '-WpeLinkControlComponentsBaseControl'}
+            className="components-base-control"
+        >
             <div
-                key={id + '-LinkControlComponentsBaseControl'}
-                className="components-base-control"
+                key={id + '-WpeLinkControlComponentsBaseControlField'}
+                className="components-base-control__field"
             >
-                <div
-                    key={id + '-LinkControlComponentsBaseControlField'}
-                    className="components-base-control__field"
-                >
-                    <div
-                        key={id + '-LinkControlContainer'}
-                        className="link-control-container"
-                    >
-                        <TextControl
-                            key={id + '-text'}
-                            label={'Text'}
-                            type={'text'}
-                            value={value?.text ? value.text : ''}
-                            onChange={(newValue) => {
-                                newValue = {
-                                    text: newValue,
-                                };
-                                if (value?.url) {
-                                    newValue.url = value.url;
-                                }
-                                if (value?.opensInNewTab) {
-                                    newValue.opensInNewTab =
-                                        value.opensInNewTab;
-                                }
-                                onChange(newValue);
-                            }}
-                        />
-                        <LinkControl
-                            key={id + '-LinkControl'}
-                            className="wp-block-navigation-link__inline-link-input"
-                            value={
-                                value != null && typeof value == 'object'
-                                    ? value
-                                    : {}
-                            }
-                            settings={[
-                                {
-                                    id: 'url',
-                                    title: 'URL ...',
-                                },
-                                {
-                                    id: 'opensInNewTab',
-                                    title: 'Open in new tab',
-                                },
-                            ]}
-                            onChange={({
-                                url: newURL,
-                                opensInNewTab: newOpensInNewTab,
-                            }) => {
-                                if (typeof newURL == 'string') {
-                                    const newValue = {
-                                        url: newURL,
-                                        opensInNewTab: newOpensInNewTab,
-                                    };
-                                    if (value?.text) {
-                                        newValue.text = value.text;
-                                    }
-                                    onChange(newValue);
-                                }
-                            }}
-                        />
-                    </div>
-                </div>
-            </div>,
-        ),
-        false,
-        '',
-        description,
+                {Render.label(id, label, description)}
+                <WpeLinkControl
+                    key={id + '-WpeLinkControlComponents'}
+                    id={id + '-WpeLinkControlComponents'}
+                    label={label}
+                    value={value}
+                    onChange={onChange}
+                    extraContent={props}
+                />
+            </div>
+        </div>
     );
 }
 
-function LinkControl({ id, label, value }) {
+function WpeLinkControl({ id, label, value, onChange, extraContent }) {
     const [isOpen, setIsOpen] = useState(false);
-    const [isEditionMode, setIsEditionMode] = useState(false);
-    const [url, setUrl] = useState('http://google.fr');
+    const [linkValue, setLinkValue] = useState(
+        value != null &&
+            typeof value == 'object' &&
+            typeof value.link == 'object'
+            ? value.link
+            : null,
+    );
+    const close = _close.bind();
 
-    const close = _close.bind(this);
+    function updateValue(newValue) {
+        setLinkValue(newValue);
+        onChange(
+            {
+                ...value,
+                ...{
+                    link: newValue != null ? newValue : undefined,
+                },
+            },
+            true,
+        );
+    }
 
     function _close() {
         setIsOpen(false);
     }
+    // const removeLink = _removeLink.bind();
+    // function _removeLink() {
+    //     setLinkValue(null);
+    //     onChange(undefined, true);
+    //     setIsOpen(false);
+    // }
 
-    const title = isEditionMode ? 'Edit link' : 'Add link';
+    function getContent() {
+        return (
+            <>
+                <Text
+                    key={id + '-LinkControl-text'}
+                    id={id + '-LinkControl-text'}
+                    label={Render.innerLabel(id + '-LinkControl-text', 'Title')}
+                    type="text"
+                    value={
+                        linkValue != null &&
+                        typeof linkValue == 'object' &&
+                        linkValue?.text
+                            ? linkValue.text
+                            : ''
+                    }
+                    onChange={(newtext) =>
+                        updateValue(
+                            linkValue != null && typeof linkValue == 'object'
+                                ? {
+                                      ...linkValue,
+                                      ...{
+                                          text: newtext,
+                                      },
+                                  }
+                                : {
+                                      text: newtext,
+                                  },
+                        )
+                    }
+                />
+                <LinkControl
+                    key={id + '-LinkControl'}
+                    className="wp-block-navigation-link__inline-link-input"
+                    value={
+                        linkValue != null && typeof linkValue == 'object'
+                            ? linkValue
+                            : {}
+                    }
+                    onChange={(nextValue) => {
+                        if (typeof nextValue.url == 'string') {
+                            updateValue(
+                                linkValue != null &&
+                                    typeof linkValue == 'object'
+                                    ? {
+                                          ...linkValue,
+                                          ...{
+                                              url: nextValue.url,
+                                              opensInNewTab:
+                                                  nextValue.opensInNewTab,
+                                          },
+                                      }
+                                    : {
+                                          url: nextValue.url,
+                                          opensInNewTab:
+                                              nextValue.opensInNewTab,
+                                      },
+                            );
+                        }
+                    }}
+                    onRemove={() => updateValue(null)}
+                />
+                {extraContent}
+            </>
+        );
+    }
 
     function getFooter() {
-        return isEditionMode ? (
+        return linkValue != null && typeof linkValue == 'object' ? (
             <>
-                <Button variant="primary" onMouseDown={this.confirmLink}>
+                <Button variant="primary" onMouseDown={close}>
                     <Dashicon icon="saved" />
                     Save
                 </Button>
-                <Button variant="tertiary" onMouseDown={this.removeLink}>
+                <Button variant="tertiary" onMouseDown={removeLink}>
                     <Dashicon icon="trash" />
                     Remove
                 </Button>
             </>
         ) : (
             <>
-                <Button variant="primary" onMouseDown={this.confirmLink}>
+                <Button variant="primary" onMouseDown={close}>
                     <Dashicon icon="saved" />
-                    Save
+                    Close
                 </Button>
             </>
         );
@@ -139,32 +156,33 @@ function LinkControl({ id, label, value }) {
     return (
         <>
             <Button
-                variant="tertiary"
-                className={isEditionMode ? 'is-active' : ''}
+                variant="primary"
+                className={
+                    linkValue != null && typeof linkValue == 'object'
+                        ? 'is-active'
+                        : ''
+                }
                 onClick={() => setIsOpen(true)}
             >
-                <Dashicon icon="admin-links" /> {label}
+                <Dashicon icon="admin-links" />{' '}
+                {linkValue != null && typeof linkValue == 'object'
+                    ? 'Edit link'
+                    : 'Add link'}
             </Button>
             {isOpen && (
                 <WpeModal
                     key={id + '-linkWpeModal'}
                     id={id + '-linkWpeModal'}
-                    title={title}
+                    title={
+                        linkValue != null && typeof linkValue == 'object'
+                            ? 'Edit link'
+                            : 'Add link'
+                    }
                     onClose={close}
+                    type="wpe-link-control"
                 >
-                    <>
-                        <InputControl
-                            label="Url"
-                            value={url}
-                            onChange={(newUrl) => setUrl(newUrl)}
-                        />
-                        <ToggleControl
-                            label="Open in new tab"
-                            checked={false}
-                            onChange={() => console.log('toogle')}
-                        />
-                    </>
-                    <div className="bouttonGroup">{this.getFooter()}</div>
+                    {getContent()}
+                    {/* <div className="bouttonGroup">{getFooter()}</div> */}
                 </WpeModal>
             )}
         </>

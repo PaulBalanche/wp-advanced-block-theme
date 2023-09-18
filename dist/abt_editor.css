@@ -1949,17 +1949,20 @@ body.o-editor-enabled .components-notice-list .components-notice {
 .wpe-modal.modal-warning .is-primary:hover {
   background-color: #ffa900;
 }
-.wpe-modal.center {
+.wpe-modal.modal-error, .wpe-modal.modal-warning {
   text-align: center;
 }
-.wpe-modal.center .components-modal__body .title {
+.wpe-modal.modal-error .components-modal__body .title, .wpe-modal.modal-warning .components-modal__body .title {
   justify-content: center;
 }
-.wpe-modal.center .components-modal__body .bouttonGroup {
+.wpe-modal.modal-error .components-modal__body .bouttonGroup, .wpe-modal.modal-warning .components-modal__body .bouttonGroup {
   justify-content: center;
 }
-.wpe-modal.center .components-modal__body .bouttonGroup button {
+.wpe-modal.modal-error .components-modal__body .bouttonGroup button, .wpe-modal.modal-warning .components-modal__body .bouttonGroup button {
   margin: 0 10px;
+}
+.wpe-modal.modal-wpe-link-control {
+  width: 840px;
 }
 
 .o-editor .block-editor-media-placeholder {

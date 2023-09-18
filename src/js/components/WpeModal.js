@@ -9,10 +9,10 @@ export const WpeModal = (props) => {
         props.onClose();
     };
 
-    const classNameModal = ['wpe-modal'];
+    const classNameModal = ['wpe-modal', 'o-editor'];
 
     if (typeof props.type != 'undefined') {
-        classNameModal.push('modal-' + props.type + ' center');
+        classNameModal.push('modal-' + props.type);
     }
 
     return (

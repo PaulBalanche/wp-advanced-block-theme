@@ -121,7 +121,8 @@
         }
     }
 
-    &.center {
+    &.modal-error,
+    &.modal-warning {
         text-align: center;
 
         .components-modal__body {
@@ -137,5 +138,9 @@
                 }
             }
         }
+    }
+
+    &.modal-wpe-link-control {
+        width: 840px;
     }
 }

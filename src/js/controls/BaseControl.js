@@ -235,6 +235,22 @@ export function BaseControl(props) {
                                 : null
                         }
                         value={props.value}
+                        props={
+                            typeof props.args.props != 'undefined' ? (
+                                <PropsObject
+                                    key={props.id + '-extraProps'}
+                                    id={props.id + '-extraProps'}
+                                    label={'Extra'}
+                                    description={null}
+                                    keys={props.keys}
+                                    valueProp={props.valueProp}
+                                    props={props.args.props}
+                                    onChange={(newValue) => onChange(newValue)}
+                                    componentInstance={props.componentInstance}
+                                    error={props.error}
+                                />
+                            ) : null
+                        }
                         onChange={(newValue) => onChange(newValue)}
                     />
                 );

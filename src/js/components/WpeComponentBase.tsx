@@ -137,9 +137,12 @@ export class WpeComponentBase extends Component {
             typeof this.props.parentsBlock == 'object' &&
             this.props.parentsBlock.length > 0
         ) {
-            this.props.parentsBlock.forEach((element) => {
+            this.props.parentsBlock.forEach((element, index) => {
                 path.push(
-                    <li className="breadcrumb-parent-block">
+                    <li
+                        key={'breadcrumb-parent-block-' + index}
+                        className="breadcrumb-parent-block"
+                    >
                         <Button
                             key={'path-button-' + element.clientId}
                             className="path-element"

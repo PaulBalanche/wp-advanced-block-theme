@@ -231,7 +231,7 @@ export function Control(props) {
             typeof props.description != 'undefined' &&
                 props.description != null &&
                 props.description != '' &&
-                !['object', 'spaces', 'link'].includes(type)
+                !['object', 'spaces'].includes(type)
                 ? props.description
                 : null,
         );

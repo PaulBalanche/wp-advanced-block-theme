@@ -156,7 +156,6 @@ export class Attributes {
             case 'text':
             case 'richText':
             case 'wysiwyg':
-            case 'link':
             case 'spaces':
             case 'node':
                 break;
@@ -214,6 +213,11 @@ export class Attributes {
                     return;
                 }
                 args.props = prop.props;
+                break;
+            case 'link':
+                if (typeof prop.props == 'object') {
+                    args.props = prop.props;
+                }
                 break;
             case 'date':
             case 'datetime':
