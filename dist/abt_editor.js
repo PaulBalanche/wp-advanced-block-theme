@@ -13849,7 +13849,7 @@ __webpack_require__.r(__webpack_exports__);
 const BlockList = props => {
   const children = [];
   props.blocksList.forEach(block => {
-    if (true) {
+    if (typeof block.attributes._node == 'undefined' || typeof props.isChildren == 'undefined') {
       children.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
         key: 'o-inspector-blockContainer-' + block.clientId
       }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(BlockListItem, {
@@ -13929,6 +13929,15 @@ const BlockListItem = _ref => {
     // }
   }
 
+  let displayInnerBlocks = false;
+  if (block.innerBlocks.length > 0) {
+    block.innerBlocks.forEach(block => {
+      if (typeof block.attributes._node == 'undefined') {
+        displayInnerBlocks = true;
+        return;
+      }
+    });
+  }
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", {
     key: 'o-inspector-block-' + block.clientId,
     className: isHover ? 'is-hover' : '',
@@ -13940,7 +13949,7 @@ const BlockListItem = _ref => {
     }
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.ButtonGroup, {
     className: "inspectorBlockListButtonGroup"
-  }, (block.innerBlocks.length > 0 || typeof block.children != 'undefined') && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, isOpen && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Dashicon, {
+  }, (block.innerBlocks.length > 0 && displayInnerBlocks || typeof block.children != 'undefined') && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, isOpen && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Dashicon, {
     icon: "arrow-down-alt2"
   }), !isOpen && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Dashicon, {
     icon: "arrow-right-alt2"
@@ -17758,8 +17767,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Components_BlockList__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Components/BlockList */ "./src/js/Components/BlockList.js");
 /* harmony import */ var _Components_OButtonBlockAppender__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Components/OButtonBlockAppender */ "./src/js/Components/OButtonBlockAppender.js");
 /* harmony import */ var _Static_Render__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../Static/Render */ "./src/js/Static/Render.js");
-/* harmony import */ var _Static_Sortable__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../Static/Sortable */ "./src/js/Static/Sortable.js");
-
 
 
 
@@ -17792,19 +17799,6 @@ function NodeList(_ref) {
     },
     buttonDashicon: "insert"
   })))));
-  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Static_Sortable__WEBPACK_IMPORTED_MODULE_5__.Sortable, {
-    key: id + '-Sortable',
-    id: id + '-Sortable',
-    type: 'node',
-    componentInstance: componentInstance,
-    blockKey: id,
-    keys: keys,
-    value: componentInstance.props.blocksList,
-    error: null,
-    onChange: (newValue, directSubmit) => console.log(newValue),
-    label: label,
-    buttonAdd: buttonAdd
-  });
 }
 
 /***/ }),

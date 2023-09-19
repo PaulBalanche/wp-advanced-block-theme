@@ -2,7 +2,6 @@ import { ButtonGroup } from '@wordpress/components';
 import { BlockList } from '../Components/BlockList';
 import { OButtonBlockAppender } from '../Components/OButtonBlockAppender';
 import { Render } from '../Static/Render';
-import { Sortable } from '../Static/Sortable';
 
 export function NodeList({ id, label, keys, componentInstance }) {
     return (
@@ -32,21 +31,5 @@ export function NodeList({ id, label, keys, componentInstance }) {
                 </div>
             </div>
         </div>
-    );
-
-    return (
-        <Sortable
-            key={id + '-Sortable'}
-            id={id + '-Sortable'}
-            type={'node'}
-            componentInstance={componentInstance}
-            blockKey={id}
-            keys={keys}
-            value={componentInstance.props.blocksList}
-            error={null}
-            onChange={(newValue, directSubmit) => console.log(newValue)}
-            label={label}
-            buttonAdd={buttonAdd}
-        />
     );
 }

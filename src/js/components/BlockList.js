@@ -8,7 +8,10 @@ import globalData from '../global';
 export const BlockList = (props) => {
     const children = [];
     props.blocksList.forEach((block) => {
-        if (true || typeof block.attributes._node == 'undefined') {
+        if (
+            typeof block.attributes._node == 'undefined' ||
+            typeof props.isChildren == 'undefined'
+        ) {
             children.push(
                 <Fragment key={'o-inspector-blockContainer-' + block.clientId}>
                     <BlockListItem
@@ -124,6 +127,16 @@ const BlockListItem = ({ block, selectBlock }) => {
         // }
     }
 
+    let displayInnerBlocks = false;
+    if (block.innerBlocks.length > 0) {
+        block.innerBlocks.forEach((block) => {
+            if (typeof block.attributes._node == 'undefined') {
+                displayInnerBlocks = true;
+                return;
+            }
+        });
+    }
+
     return (
         <li
             key={'o-inspector-block-' + block.clientId}
@@ -136,7 +149,7 @@ const BlockListItem = ({ block, selectBlock }) => {
             }}
         >
             <ButtonGroup className="inspectorBlockListButtonGroup">
-                {(block.innerBlocks.length > 0 ||
+                {((block.innerBlocks.length > 0 && displayInnerBlocks) ||
                     typeof block.children != 'undefined') && (
                     <>
                         {isOpen && <Dashicon icon="arrow-down-alt2" />}
