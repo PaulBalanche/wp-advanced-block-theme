@@ -703,6 +703,7 @@ export class WpeComponentBase extends Component {
                             behavior: 'smooth',
                             block: 'center',
                         });
+                        __OEditorApp.getInstance().open();
                     }}
                 >
                     <h2>{this.title}</h2>

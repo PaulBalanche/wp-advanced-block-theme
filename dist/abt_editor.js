@@ -14422,7 +14422,8 @@ class OEditorApp extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Compone
     this.state = {
       route: null,
       needToBeMounted: true,
-      currentDevice: null
+      currentDevice: null,
+      isOpen: false
     };
 
     // @ts-ignore
@@ -14638,12 +14639,16 @@ class OEditorApp extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Compone
       this.props.context.resetSelection(this.props.context.selectedBlockClientId, this.props.context.selectedBlockClientId, -1);
     }
   }
-
-  // close() {
-  //     this.hide();
-  //     this.clean();
-  // }
-
+  open() {
+    this.setState({
+      isOpen: true
+    });
+  }
+  close() {
+    this.setState({
+      isOpen: false
+    });
+  }
   show() {
     this._$editApp.classList.remove('hide', 'is-updating');
   }
@@ -14676,7 +14681,9 @@ class OEditorApp extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Compone
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ODevices__WEBPACK_IMPORTED_MODULE_7__["default"], null), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("section", {
       key: "o-editor-app",
       className: `o-editor-app ${componentToRender?.getExtraClassName?.()}`
-    }, componentToRender?.renderTitle && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(EditorAppHeader, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("nav", null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("ol", null, this.renderBreadcrumb(), componentToRender.renderTitle(), componentToRender?.renderTools && componentToRender.renderTools()))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    }, componentToRender?.renderTitle && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(EditorAppHeader, {
+      isOpen: this.state.isOpen
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("nav", null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("ol", null, this.renderBreadcrumb(), componentToRender.renderTitle(), componentToRender?.renderTools && componentToRender.renderTools()))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "o-editor-app_body"
     }, componentToRender?.render?.()), componentToRender?.renderFooter && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "o-editor-app_footer"
@@ -14691,7 +14698,6 @@ function EditorAppHeader(props) {
   const [oEditorHeight, setOEditorHeight] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
   const [mouseTop, setMouseTop] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
   const [mouseLeft, setMouseLeft] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
-  const [hovered, setHovered] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   const editPostVisualEditor = document.querySelector('.o-editor .edit-post-visual-editor');
   const oEditorApp = document.querySelector('.o-editor-app');
   const skeletonHeader = document.querySelector('#editor .interface-interface-skeleton__header');
@@ -14751,10 +14757,11 @@ function EditorAppHeader(props) {
       improveOEditorPositionX();
     });
     oEditorApp.addEventListener('mouseenter', e => {
-      setHovered(true);
+      OEditorApp.getInstance().open();
+      console.log('enter');
     });
     oEditorApp.addEventListener('mouseleave', e => {
-      setHovered(false);
+      OEditorApp.getInstance().close();
     });
   }
   function mouseDown(e, marker) {
@@ -14815,7 +14822,9 @@ function EditorAppHeader(props) {
       top = oEditorApp.offsetTop;
     }
     if (top <= skeletonHeader.offsetHeight + marge) {
-      top = skeletonHeader.offsetHeight + marge;
+      // top = skeletonHeader.offsetHeight + marge;
+
+      top = (window.innerHeight - skeletonHeader.offsetHeight) / 2 - oEditorApp.offsetHeight / 2 + skeletonHeader.offsetHeight;
     } else if (top + oEditorApp.offsetHeight >= window.innerHeight - marge) {
       top = window.innerHeight - marge - oEditorApp.offsetHeight;
     }
@@ -14823,21 +14832,28 @@ function EditorAppHeader(props) {
   }
   function improveOEditorPositionX() {
     let right = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
-    if (right == null) {
-      right = window.innerWidth - (oEditorApp.offsetLeft + oEditorApp.offsetWidth);
-    }
-    if (right <= window.innerWidth - editPostVisualEditor.offsetWidth + marge) {
-      right = window.innerWidth - editPostVisualEditor.offsetWidth + marge;
-    }
-    if (right + oEditorApp.offsetWidth >= window.innerWidth - marge) {
-      right = window.innerWidth - marge - oEditorApp.offsetWidth;
-    }
-    if (!hovered) {
-      right = 50 - oEditorApp.offsetWidth;
+    if (!props.isOpen) {
+      right = -oEditorApp.offsetWidth;
+    } else {
+      if (right == null) {
+        right = window.innerWidth - (oEditorApp.offsetLeft + oEditorApp.offsetWidth);
+      }
+      if (right <= window.innerWidth - editPostVisualEditor.offsetWidth + marge) {
+        right = window.innerWidth - editPostVisualEditor.offsetWidth + marge;
+      }
+      if (right + oEditorApp.offsetWidth >= window.innerWidth - marge) {
+        right = window.innerWidth - marge - oEditorApp.offsetWidth;
+      }
     }
     oEditorApp.style.right = right + 'px';
   }
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: `open-marker${props.isOpen ? ' hidden' : ''}`
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
+    variant: "primary"
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
+    icon: "arrow-left"
+  }))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "resizer top-left",
     onMouseDown: e => {
       mouseDown(e, 'tl');
@@ -15881,6 +15897,7 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
           behavior: 'smooth',
           block: 'center'
         });
+        _OEditorApp__WEBPACK_IMPORTED_MODULE_6__["default"].getInstance().open();
       }
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h2", null, this.title), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
       variant: "primary"

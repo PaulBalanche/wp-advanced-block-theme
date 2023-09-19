@@ -33,6 +33,7 @@ export default class OEditorApp extends Component {
             route: null,
             needToBeMounted: true,
             currentDevice: null,
+            isOpen: false,
         };
 
         // @ts-ignore
@@ -298,10 +299,13 @@ export default class OEditorApp extends Component {
         }
     }
 
-    // close() {
-    //     this.hide();
-    //     this.clean();
-    // }
+    open() {
+        this.setState({ isOpen: true });
+    }
+
+    close() {
+        this.setState({ isOpen: false });
+    }
 
     show() {
         this._$editApp.classList.remove('hide', 'is-updating');
@@ -366,7 +370,7 @@ export default class OEditorApp extends Component {
                     className={`o-editor-app ${componentToRender?.getExtraClassName?.()}`}
                 >
                     {componentToRender?.renderTitle && (
-                        <EditorAppHeader>
+                        <EditorAppHeader isOpen={this.state.isOpen}>
                             <nav>
                                 <ol>
                                     {this.renderBreadcrumb()}
@@ -401,7 +405,6 @@ function EditorAppHeader(props) {
     const [oEditorHeight, setOEditorHeight] = useState(null);
     const [mouseTop, setMouseTop] = useState(null);
     const [mouseLeft, setMouseLeft] = useState(null);
-    const [hovered, setHovered] = useState(false);
 
     const editPostVisualEditor = document.querySelector(
         '.o-editor .edit-post-visual-editor',
@@ -471,10 +474,11 @@ function EditorAppHeader(props) {
         });
 
         oEditorApp.addEventListener('mouseenter', (e) => {
-            setHovered(true);
+            OEditorApp.getInstance().open();
+            console.log('enter');
         });
         oEditorApp.addEventListener('mouseleave', (e) => {
-            setHovered(false);
+            OEditorApp.getInstance().close();
         });
     }
 
@@ -558,7 +562,12 @@ function EditorAppHeader(props) {
             top = oEditorApp.offsetTop;
         }
         if (top <= skeletonHeader.offsetHeight + marge) {
-            top = skeletonHeader.offsetHeight + marge;
+            // top = skeletonHeader.offsetHeight + marge;
+
+            top =
+                (window.innerHeight - skeletonHeader.offsetHeight) / 2 -
+                oEditorApp.offsetHeight / 2 +
+                skeletonHeader.offsetHeight;
         } else if (
             top + oEditorApp.offsetHeight >=
             window.innerHeight - marge
@@ -570,24 +579,26 @@ function EditorAppHeader(props) {
     }
 
     function improveOEditorPositionX(right = null) {
-        if (right == null) {
-            right =
-                window.innerWidth -
-                (oEditorApp.offsetLeft + oEditorApp.offsetWidth);
-        }
-        if (
-            right <=
-            window.innerWidth - editPostVisualEditor.offsetWidth + marge
-        ) {
-            right =
-                window.innerWidth - editPostVisualEditor.offsetWidth + marge;
-        }
-        if (right + oEditorApp.offsetWidth >= window.innerWidth - marge) {
-            right = window.innerWidth - marge - oEditorApp.offsetWidth;
-        }
-
-        if (!hovered) {
-            right = 50 - oEditorApp.offsetWidth;
+        if (!props.isOpen) {
+            right = -oEditorApp.offsetWidth;
+        } else {
+            if (right == null) {
+                right =
+                    window.innerWidth -
+                    (oEditorApp.offsetLeft + oEditorApp.offsetWidth);
+            }
+            if (
+                right <=
+                window.innerWidth - editPostVisualEditor.offsetWidth + marge
+            ) {
+                right =
+                    window.innerWidth -
+                    editPostVisualEditor.offsetWidth +
+                    marge;
+            }
+            if (right + oEditorApp.offsetWidth >= window.innerWidth - marge) {
+                right = window.innerWidth - marge - oEditorApp.offsetWidth;
+            }
         }
 
         oEditorApp.style.right = right + 'px';
@@ -595,6 +606,11 @@ function EditorAppHeader(props) {
 
     return (
         <>
+            <div className={`open-marker${props.isOpen ? ' hidden' : ''}`}>
+                <Button variant="primary">
+                    <Dashicon icon="arrow-left" />
+                </Button>
+            </div>
             <div
                 className="resizer top-left"
                 onMouseDown={(e) => {

@@ -1167,6 +1167,23 @@ body.o-editor-enabled .panelInspectorInsertNewBlock .components-tab-panel__tab-c
 .is-reusable-block .o-editor-app_footer .components-button.is-primary:hover {
   background: #866ec1;
 }
+.o-editor-app .open-marker {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  top: 0;
+  bottom: 0;
+  left: -50px;
+  opacity: 1;
+  transition: all 0.1s ease-in-out;
+}
+.o-editor-app .open-marker .components-button {
+  padding: 30px 6px;
+}
+.o-editor-app .open-marker.hidden {
+  opacity: 0;
+}
 .o-editor-app .resizer {
   position: absolute;
   width: 30px;
