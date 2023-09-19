@@ -14691,6 +14691,7 @@ function EditorAppHeader(props) {
   const [oEditorHeight, setOEditorHeight] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
   const [mouseTop, setMouseTop] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
   const [mouseLeft, setMouseLeft] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
+  const [hovered, setHovered] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   const editPostVisualEditor = document.querySelector('.o-editor .edit-post-visual-editor');
   const oEditorApp = document.querySelector('.o-editor-app');
   const skeletonHeader = document.querySelector('#editor .interface-interface-skeleton__header');
@@ -14748,6 +14749,12 @@ function EditorAppHeader(props) {
     window.addEventListener('resize', () => {
       improveOEditorPositionY();
       improveOEditorPositionX();
+    });
+    oEditorApp.addEventListener('mouseenter', e => {
+      setHovered(true);
+    });
+    oEditorApp.addEventListener('mouseleave', e => {
+      setHovered(false);
     });
   }
   function mouseDown(e, marker) {
@@ -14824,6 +14831,9 @@ function EditorAppHeader(props) {
     }
     if (right + oEditorApp.offsetWidth >= window.innerWidth - marge) {
       right = window.innerWidth - marge - oEditorApp.offsetWidth;
+    }
+    if (!hovered) {
+      right = 50 - oEditorApp.offsetWidth;
     }
     oEditorApp.style.right = right + 'px';
   }
@@ -15863,7 +15873,20 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
       // }}
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "o-toolbar"
-    }, editZone));
+    }, editZone), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "overlay",
+      onMouseDown: () => {
+        const domBlock = document.querySelector('#block-' + this.props.clientId);
+        domBlock?.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center'
+        });
+      }
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h2", null, this.title), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
+      variant: "primary"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
+      icon: "edit"
+    }), " Edit")));
   }
   renderButtonEditZone() {
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {

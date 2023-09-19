@@ -401,6 +401,7 @@ function EditorAppHeader(props) {
     const [oEditorHeight, setOEditorHeight] = useState(null);
     const [mouseTop, setMouseTop] = useState(null);
     const [mouseLeft, setMouseLeft] = useState(null);
+    const [hovered, setHovered] = useState(false);
 
     const editPostVisualEditor = document.querySelector(
         '.o-editor .edit-post-visual-editor',
@@ -467,6 +468,13 @@ function EditorAppHeader(props) {
         window.addEventListener('resize', () => {
             improveOEditorPositionY();
             improveOEditorPositionX();
+        });
+
+        oEditorApp.addEventListener('mouseenter', (e) => {
+            setHovered(true);
+        });
+        oEditorApp.addEventListener('mouseleave', (e) => {
+            setHovered(false);
         });
     }
 
@@ -576,6 +584,10 @@ function EditorAppHeader(props) {
         }
         if (right + oEditorApp.offsetWidth >= window.innerWidth - marge) {
             right = window.innerWidth - marge - oEditorApp.offsetWidth;
+        }
+
+        if (!hovered) {
+            right = 50 - oEditorApp.offsetWidth;
         }
 
         oEditorApp.style.right = right + 'px';

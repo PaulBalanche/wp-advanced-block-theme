@@ -11,7 +11,7 @@
     z-index: 99999;
     box-sizing: border-box;
     // transition-property: transform, width, height;
-    transition-property: transform;
+    transition-property: transform, right;
     transition-duration: 0.2s;
     transition-timing-function: ease-out;
     display: flex;
@@ -19,6 +19,9 @@
     box-shadow: $o-depth-100;
     transform: translate(840px, 0);
 
+    &.moving {
+        transition-property: transform;
+    }
     .show & {
         transform: translate(0, 0);
     }
