@@ -89,7 +89,7 @@ class Config {
                         <th scope="row"><label for="blogname">themespecJsonFileName</label></th>
                         <td>
                             <input type="text" class="regular-text" disabled="disabled" value="' . $this->get('themespecJsonFileName') . '" />
-                            <span>' . $this->display_config_exists( $this->get('themespecJsonFileName') ) . '</span>
+                            <span>' . $this->isValidThemespecJsonFileName() . '</span>
                         </td>
                     </tr>
                     <tr>
@@ -126,6 +126,21 @@ class Config {
             return '<span class="dashicons dashicons-yes" style="color:#46B450"></span>';
         }
         
+        return '<span class="dashicons dashicons-no-alt" style="color:#DC3232"></span>';
+    }
+
+    public function isValidThemespecJsonFileName() {
+
+        if( $this->display_config_exists( $this->get('themespecJsonFileName') )) {
+
+            $return = '<span class="dashicons dashicons-yes" style="color:#46B450"></span>';
+
+            if( ! is_array($this->specData) || count($this->specData) == 0  ) {
+                $return .= '<span class="dashicons dashicons-no-alt" style="color:#DC3232"></span> Empty or invalid file...';
+            }
+
+            return $return;
+        }
         return '<span class="dashicons dashicons-no-alt" style="color:#DC3232"></span>';
     }
 

@@ -5,6 +5,7 @@ namespace Abt\Singleton;
 class Timber {
 
     private static $_instance;
+    private $template_locations = null;
 
     public function __construct() {
         $this->init();
@@ -47,13 +48,12 @@ class Timber {
 
         new \Timber\Timber();
 
-        // Template Locations
-        $locations = [
+        $this->template_locations  = [
             get_stylesheet_directory() . '/' . Config::getInstance()->get_front_end_file_path( Config::getInstance()->get('templateViewsLocation') ),
-            ABT_PLUGIN_DIR . 'views'
+            ABT_PLUGIN_DIR . 'views/'
         ];
 
-        \Timber\Timber::$locations = apply_filters( 'Abt\timber_locations', $locations );
+        \Timber\Timber::$locations = apply_filters( 'Abt\timber_locations', $this->template_locations );
     }
 
 
@@ -76,11 +76,21 @@ class Timber {
 
             $path_view = ( strpos($twig_view, '.twig') !== false ) ? $twig_view : $twig_view . '/' . $twig_view . '.twig';
 
-            if ( defined('TIMBER_RENDER_ECHOES') && TIMBER_RENDER_ECHOES ) {
-                \Timber\Timber::render( $path_view, $context );
+            $twig_template_exists = false;
+            foreach( $this->template_locations as $location) {
+                if( file_exists($location . $path_view) ) {
+                    $twig_template_exists = true;
+                    break;
+                }
             }
-            else {
-                return \Timber\Timber::compile( $path_view, $context );
+
+            if( $twig_template_exists ) {
+                if ( defined('TIMBER_RENDER_ECHOES') && TIMBER_RENDER_ECHOES ) {
+                    \Timber\Timber::render( $path_view, $context );
+                }
+                else {
+                    return \Timber\Timber::compile( $path_view, $context );
+                }
             }
         }
     }

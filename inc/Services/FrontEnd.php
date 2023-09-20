@@ -59,12 +59,10 @@ class FrontEnd extends ServiceBase {
         $component_dir = get_stylesheet_directory() . '/' . $component_relative_dir;
 
         $path_viewspec_file = glob( $component_dir . $componentName . '/*.spec.json' );
-        if( $path_viewspec_file && is_array($path_viewspec_file) && count($path_viewspec_file) == 1 ) {
-            $path_viewspec_file = $path_viewspec_file[0];
-        }
+        $path_viewspec_file = ( $path_viewspec_file && is_array($path_viewspec_file) && count($path_viewspec_file) == 1 ) ? $path_viewspec_file[0] : false;
 
         // Get the file content
-        $component_viewspec = ( file_exists( $path_viewspec_file ) ) ? json_decode( file_get_contents( $path_viewspec_file ), true ) : [];
+        $component_viewspec = ( $path_viewspec_file && file_exists( $path_viewspec_file ) ) ? json_decode( file_get_contents( $path_viewspec_file ), true ) : [];
         $component_viewspec = apply_filters( 'Abt\pre_get_component_viewspec', $component_viewspec, $component );
         if( is_array($component_viewspec) ) {
             
