@@ -478,7 +478,9 @@ function EditorAppHeader(props) {
             console.log('enter');
         });
         oEditorApp.addEventListener('mouseleave', (e) => {
-            OEditorApp.getInstance().close();
+            if (!document.body.classList.contains('modal-open')) {
+                OEditorApp.getInstance().close();
+            }
         });
     }
 
