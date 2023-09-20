@@ -561,19 +561,20 @@ function EditorAppHeader(props) {
         if (top == null) {
             top = oEditorApp.offsetTop;
         }
-        if (top <= skeletonHeader.offsetHeight + marge) {
-            // top = skeletonHeader.offsetHeight + marge;
 
-            top =
-                (window.innerHeight - skeletonHeader.offsetHeight) / 2 -
-                oEditorApp.offsetHeight / 2 +
-                skeletonHeader.offsetHeight;
-        } else if (
-            top + oEditorApp.offsetHeight >=
-            window.innerHeight - marge
-        ) {
-            top = window.innerHeight - marge - oEditorApp.offsetHeight;
-        }
+        top =
+            (window.innerHeight - skeletonHeader.offsetHeight) / 2 -
+            oEditorApp.offsetHeight / 2 +
+            skeletonHeader.offsetHeight;
+
+        // if (top <= skeletonHeader.offsetHeight + marge) {
+        //     top = skeletonHeader.offsetHeight + marge;
+        // } else if (
+        //     top + oEditorApp.offsetHeight >=
+        //     window.innerHeight - marge
+        // ) {
+        //     top = window.innerHeight - marge - oEditorApp.offsetHeight;
+        // }
 
         oEditorApp.style.top = top + 'px';
     }

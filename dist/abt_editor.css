@@ -1179,7 +1179,7 @@ body.o-editor-enabled .panelInspectorInsertNewBlock .components-tab-panel__tab-c
   transition: all 0.1s ease-in-out;
 }
 .o-editor-app .open-marker .components-button {
-  padding: 30px 6px;
+  padding: 48px 6px;
 }
 .o-editor-app .open-marker.hidden {
   opacity: 0;
