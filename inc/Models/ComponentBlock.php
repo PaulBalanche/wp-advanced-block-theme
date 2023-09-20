@@ -198,7 +198,7 @@ class ComponentBlock extends ModelBase
             );
         }
 
-        return false;
+        return null;
     }
 
     /**
@@ -269,7 +269,7 @@ class ComponentBlock extends ModelBase
                 "props_categories" =>
                     $component_frontspec["props_categories"] ?? null,
                 "path" => $component_frontspec["path"] ?? null,
-                "preview" => $component_frontspec["preview"] ?? null,
+                "preview" => $component_frontspec["preview"] ?? $this->get_screenshot_src(),
                 "models" => $component_frontspec["models"] ?? null,
                 "parent" => $component_frontspec["parent"] ?? $default_parent,
             ],

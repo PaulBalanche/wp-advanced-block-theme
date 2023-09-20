@@ -11693,6 +11693,7 @@ Object.values(GLOBAL_LOCALIZED.components).forEach(element => {
     }
   };
   _Static_Attributes__WEBPACK_IMPORTED_MODULE_6__.Attributes.initComponentAttributes(initAttributes, element.props);
+  console.log(element);
   (0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_2__.registerBlockType)('custom/wpe-component-' + element.id, {
     title: element.name,
     category: element.category.slug,

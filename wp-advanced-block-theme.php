@@ -3,7 +3,7 @@
  * Plugin Name: WP Advanced Block Theme
  * Plugin URI: https://paul-balanche.gitbook.io/wp-advanced-block-theme-plugin-documentation/
  * Description: Provide personnal Gutenberg Blocks to create clean and flexible layouts based on your own HTML code.
- * Version: 1.5.9
+ * Version: 1.5.91
  * Requires at least: 6.0
  * Requires PHP: 8.0
  * Author: Paul Balanche - BuzzBrothers
