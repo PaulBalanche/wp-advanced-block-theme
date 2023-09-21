@@ -252,9 +252,9 @@ export default class OEditorApp extends Component {
         this.setState({ isOpen: true });
     }
 
-    // close() {
-    //     this.setState({ isOpen: false });
-    // }
+    close() {
+        this.setState({ isOpen: false });
+    }
 
     renderBreadcrumb() {
         return this.state.route != null ||
@@ -329,7 +329,10 @@ export default class OEditorApp extends Component {
                     className={`o-editor-app ${componentToRender?.getExtraClassName?.()}`}
                 >
                     {componentToRender?.renderTitle && (
-                        <EditorAppHeader isOpen={this.state.isOpen}>
+                        <EditorAppHeader
+                            isOpen={this.state.isOpen}
+                            openMarker={componentToRender?.getOpenMarker?.()}
+                        >
                             <nav>
                                 <ol>
                                     {this.renderBreadcrumb()}
@@ -568,9 +571,12 @@ function EditorAppHeader(props) {
     return (
         <>
             <div className={`open-marker${props.isOpen ? ' hidden' : ''}`}>
-                <Button variant="primary">
-                    <Dashicon icon="arrow-left" />
-                </Button>
+                {props.openMarker}
+                {!props.openMarker && (
+                    <Button variant="primary">
+                        <Dashicon icon="arrow-left" />
+                    </Button>
+                )}
             </div>
             <div
                 className="resizer top-left"

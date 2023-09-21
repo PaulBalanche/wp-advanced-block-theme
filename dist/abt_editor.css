@@ -1202,16 +1202,29 @@ body.o-editor-enabled .panelInspectorInsertNewBlock .components-tab-panel__tab-c
 .o-editor-app .open-marker {
   position: absolute;
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-end;
   justify-content: center;
   top: 0;
   bottom: 0;
-  left: -50px;
+  left: -80px;
+  width: 80px;
   opacity: 1;
   transition: all 0.1s ease-in-out;
 }
 .o-editor-app .open-marker .components-button {
-  padding: 48px 6px;
+  padding: 48px 18px;
+}
+.o-editor-app .open-marker .components-button.all-blocks {
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.o-editor-app .open-marker .components-button.insert {
+  border-top-right-radius: 0;
+  border-top-left-radius: 0;
+  padding: 24px 18px;
+  background: var(--wp-components-color-accent-darker-10, var(--wp-admin-theme-color-darker-10, #2145e6));
+  color: var(--wp-components-color-accent-inverted, #fff);
 }
 .o-editor-app .open-marker.hidden {
   opacity: 0;

@@ -23,6 +23,19 @@ export default class OEditorInspector {
         return <OButtonBlockAppender buttonDashicon="insert" />;
     }
 
+    getOpenMarker() {
+        return (
+            <>
+                <Button variant="primary" className="all-blocks">
+                    <Dashicon icon="screenoptions" />
+                </Button>
+                <Button variant="primary" className="insert">
+                    <Dashicon icon="insert" />
+                </Button>
+            </>
+        );
+    }
+
     renderTools() {
         return null;
         return (

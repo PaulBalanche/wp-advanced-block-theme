@@ -1,3 +1,4 @@
+import { Button, Dashicon } from '@wordpress/components';
 import __OEditorApp from './OEditorApp';
 
 export default class OEditorBlock {
@@ -14,6 +15,14 @@ export default class OEditorBlock {
 
     renderTools() {
         return this._blockInstance.renderTools?.();
+    }
+
+    getOpenMarker() {
+        return (
+            <Button variant="primary">
+                <Dashicon icon="edit" />
+            </Button>
+        );
     }
 
     renderFooter() {
