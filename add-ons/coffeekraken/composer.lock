@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Coffeekraken/coffeekraken.git",
-                "reference": "ea454d4ae228975dd909a8f5cdc0de2b1c8ca7e2"
+                "reference": "25319e16c473cbddf330135e1a74c916ac30770b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Coffeekraken/coffeekraken/zipball/ea454d4ae228975dd909a8f5cdc0de2b1c8ca7e2",
-                "reference": "ea454d4ae228975dd909a8f5cdc0de2b1c8ca7e2",
+                "url": "https://api.github.com/repos/Coffeekraken/coffeekraken/zipball/25319e16c473cbddf330135e1a74c916ac30770b",
+                "reference": "25319e16c473cbddf330135e1a74c916ac30770b",
                 "shasum": ""
             },
             "require": {
@@ -41,7 +41,7 @@
                 "issues": "https://github.com/Coffeekraken/coffeekraken/issues",
                 "source": "https://github.com/Coffeekraken/coffeekraken/tree/master"
             },
-            "time": "2023-09-18T14:06:58+00:00"
+            "time": "2023-09-21T14:30:32+00:00"
         },
         {
             "name": "eftec/bladeone",

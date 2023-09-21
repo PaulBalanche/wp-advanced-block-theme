@@ -743,24 +743,6 @@ export class WpeComponentBase extends Component {
                 // }}
             >
                 <div className="o-toolbar">{editZone}</div>
-                <div
-                    className="overlay"
-                    onMouseDown={() => {
-                        const domBlock = document.querySelector(
-                            '#block-' + this.props.clientId,
-                        );
-                        domBlock?.scrollIntoView({
-                            behavior: 'smooth',
-                            block: 'center',
-                        });
-                        __OEditorApp.getInstance().open();
-                    }}
-                >
-                    <h2>{this.title}</h2>
-                    <Button variant="primary">
-                        <Dashicon icon="edit" /> Edit
-                    </Button>
-                </div>
             </div>
         );
     }

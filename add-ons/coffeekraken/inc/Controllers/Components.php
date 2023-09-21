@@ -100,7 +100,7 @@ class Components extends ControllerBase {
             if( str_replace( get_stylesheet_directory() . '/' . $this->get_config()->get_front_end_file_path( $this->get_config()->get('templateViewsLocation') ) , '', $block['dir'] ) == $component ) {
 
                 $namespace_settings = $this->get_components_namespace_settings( str_replace('/', '.', $component ), $this->get_config()->get('templateViewsLocation') );
-                $component_viewspec = json_decode(json_encode( \SViews\specs\readViewsSpec( str_replace('/', '.', $component ), $namespace_settings ) ), true);
+                $component_viewspec = json_decode(json_encode( \SViews\specs\readViewSpec( str_replace('/', '.', $component ), $namespace_settings ) ), true);
                 break;
             }
         }

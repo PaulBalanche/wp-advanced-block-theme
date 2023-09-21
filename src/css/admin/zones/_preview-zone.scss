@@ -70,53 +70,9 @@
             z-index: 31;
         }
 
-        // &::before {
-        & > .o-toolbar-container .overlay {
-            display: flex;
-            flex-direction: column;
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0;
-            cursor: pointer !important;
-            // pointer-events: none !important;
-            transition: $o-transition-fast;
-            // outline: 3px solid var(--wp-admin-theme-color);
-            background: rgb(0 0 0 / 80%);
-            align-items: center;
-            justify-content: center;
-            color: white;
-
-            .components-button {
-                //     font-size: 16px;
-                //     padding: $o-space-40 $o-space-60 $o-space-40 $o-space-50;
-
-                .dashicon {
-                    margin-right: $o-space-10;
-                }
-            }
-        }
-
-        &:hover {
-            & > .o-toolbar-container .overlay {
-                opacity: 1;
-            }
-
-            &.is-selected > .o-toolbar-container .overlay,
-            &:has(.block-editor-block-list__block:hover)
-                > .o-toolbar-container
-                .overlay {
-                opacity: 0;
-            }
-        }
-        &.is-empty > .o-toolbar-container .overlay {
-            opacity: 0.6;
-        }
-
         &.is-selected {
             box-shadow: 0px 0px 100px rgb(0 0 0 / 20%);
+            // z-index: 1 !important;
         }
     }
 
@@ -133,6 +89,19 @@
         .block-editor-block-list__block:hover {
         opacity: 1;
     }
+
+    // &:has(.block-editor-block-list__block.is-selected)
+    //     .editor-styles-wrapper.block-editor-writing-flow::after {
+    //     display: block;
+    //     content: '';
+    //     position: absolute;
+    //     top: 0;
+    //     bottom: 0;
+    //     left: 0;
+    //     right: 0;
+    //     background: #000;
+    //     opacity: 0.7;
+    // }
 
     /**
     * Toolbar

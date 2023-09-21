@@ -50,6 +50,9 @@
             &:has(> .loaderLiveRenderingIframe) {
                 height: 100vh;
             }
+            &:has(> .block-edit-overlay.errors) {
+                min-height: 250px;
+            }
 
             &:first-child {
                 margin-top: 0;
@@ -120,6 +123,76 @@
                 .grid-layout {
                     background: white;
                 }
+            }
+
+            .block-edit-overlay {
+                display: flex;
+                flex-direction: column;
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                opacity: 0;
+                cursor: pointer !important;
+                transition: $o-transition-fast;
+                background: rgb(0 0 0 / 80%);
+                align-items: center;
+                justify-content: center;
+                color: white;
+                gap: $o-space-30;
+                box-sizing: border-box;
+
+                &.errors {
+                    opacity: 1;
+                    border-top: 6px solid $o-accent-red-color;
+                }
+
+                h2 {
+                    margin: 0;
+
+                    .error-attributes {
+                        position: relative;
+                        top: -$o-space-30;
+                        margin-left: $o-space-10;
+                        color: white;
+                        border-radius: 50%;
+                        width: 23px;
+                        height: 23px;
+                        display: inline-flex;
+                        align-items: center;
+                        justify-content: center;
+                        font-size: 11px;
+                        background: $o-accent-red-color;
+                    }
+                }
+
+                p {
+                    margin: 0;
+                }
+
+                .components-button {
+                    //     font-size: 16px;
+                    //     padding: $o-space-40 $o-space-60 $o-space-40 $o-space-50;
+
+                    .dashicon {
+                        margin-right: $o-space-10;
+                    }
+                }
+            }
+            &:hover {
+                & > .block-edit-overlay {
+                    opacity: 1;
+                }
+
+                &.is-selected > .block-edit-overlay:not(.errors),
+                &:has(.block-editor-block-list__block:hover)
+                    > .block-edit-overlay:not(.errors) {
+                    opacity: 0;
+                }
+            }
+            &.is-empty > .block-edit-overlay:not(.errors) {
+                opacity: 0.6;
             }
         }
     }

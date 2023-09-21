@@ -1,6 +1,6 @@
 import { store as blockEditorStore } from '@wordpress/block-editor';
 import { getBlockContent } from '@wordpress/blocks';
-import { Dashicon } from '@wordpress/components';
+import { Button, Dashicon } from '@wordpress/components';
 import { compose } from '@wordpress/compose';
 import { withDispatch, withSelect } from '@wordpress/data';
 
@@ -172,7 +172,7 @@ class WpeComponent extends WpeComponentBase {
                 );
             } else {
                 if (previewReady) {
-                    render.push(this.renderEditFormZone());
+                    // render.push(this.renderEditFormZone());
                     render.push(this.renderLoaderPreview());
                     render.push(this.renderIframePreview());
 
@@ -188,47 +188,49 @@ class WpeComponent extends WpeComponentBase {
                             />,
                         );
                     }
-                } else if (error != null) {
-                    if (typeof error == 'object') {
-                        let countError = Object.keys(error).length;
-                        render.push(this.renderEditFormZone());
-                        render.push(
-                            <div
-                                key={this.props.clientId + '-placeholder'}
-                                className="wpe-block-placeholder center"
-                            >
-                                <div className="inner">
-                                    <h2>
-                                        {this.title}
-                                        <span className="error-attributes">
-                                            {countError}
-                                        </span>
-                                    </h2>
-                                    <p>
-                                        Fix error{countError > 1 && 's'} to make
-                                        this block visible.
-                                    </p>
-                                </div>
-                            </div>,
-                        );
-                    } else {
-                        render.push(this.renderEditFormZone());
-                        render.push(
-                            <div
-                                key={this.props.clientId + '-placeholder'}
-                                className="wpe-block-placeholder center"
-                            >
-                                <div className="inner">
-                                    <Dashicon icon="info" />
-                                    <p>{error}</p>
-                                </div>
-                            </div>,
-                        );
-                    }
-                } else {
-                    render.push(this.renderEditFormZone());
+                } else if (error == null) {
+                    // render.push(this.renderEditFormZone());
                     render.push(this.renderLoaderPreview());
                 }
+
+                render.push(
+                    <div
+                        className={`block-edit-overlay${
+                            error != null ? ' errors' : ''
+                        }`}
+                        onMouseDown={() => {
+                            const domBlock = document.querySelector(
+                                '#block-' + this.props.clientId,
+                            );
+                            domBlock?.scrollIntoView({
+                                behavior: 'smooth',
+                                block: 'center',
+                            });
+                            __OEditorApp.getInstance().open();
+                        }}
+                    >
+                        <h2>
+                            {this.title}
+                            {error != null && typeof error == 'object' && (
+                                <span className="error-attributes">
+                                    {Object.keys(error).length}
+                                </span>
+                            )}
+                        </h2>
+                        {error != null && typeof error == 'object' && (
+                            <p>
+                                Fix error{Object.keys(error).length > 1 && 's'}{' '}
+                                to make this block visible.
+                            </p>
+                        )}
+                        {error != null && typeof error == 'string' && (
+                            <p>{error}</p>
+                        )}
+                        <Button variant="primary">
+                            <Dashicon icon="edit" /> Edit
+                        </Button>
+                    </div>,
+                );
             }
 
             return render;
