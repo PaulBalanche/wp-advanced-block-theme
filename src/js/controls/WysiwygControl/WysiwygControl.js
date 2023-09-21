@@ -23,7 +23,6 @@ class WysiwygControl extends Component {
 
     getTypo() {
         let typo = {};
-        console.log(this.props.componentInstance.props.theme_spec.editor.typo);
         if (
             this.props?.componentInstance?.props?.theme_spec?.editor?.typo &&
             typeof this.props.componentInstance.props.theme_spec.editor.typo ==

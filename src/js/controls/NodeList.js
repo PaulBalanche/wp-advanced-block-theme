@@ -26,6 +26,7 @@ export function NodeList({ id, label, keys, componentInstance }) {
                                 _node: keys.join('|'),
                             }}
                             buttonDashicon="insert"
+                            label="Add block"
                         />
                     </ButtonGroup>
                 </div>

@@ -1,7 +1,5 @@
-import React from 'react';
-
 import { Button, Dashicon } from '@wordpress/components';
-
+import React from 'react';
 import __OEditorApp from './OEditorApp';
 
 export default class OEditorWelcome {
@@ -36,18 +34,12 @@ export default class OEditorWelcome {
 
     renderFooter() {
         return (
-            <>
-                <div className="o-flex-grow"></div>
-                <Button
-                    key={'buttonCloseEditZone'}
-                    className="abtButtonCloseEditZone"
-                    variant="secondary"
-                    onMouseDown={() => __OEditorApp.getInstance().clean()}
-                >
-                    <Dashicon icon="no-alt" />
-                    Close
-                </Button>
-            </>
+            <nav>
+                <ol>
+                    {__OEditorApp.getInstance().renderFooterBreadcrumb()}
+                    <li>Help</li>
+                </ol>
+            </nav>
         );
     }
 

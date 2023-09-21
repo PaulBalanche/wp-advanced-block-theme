@@ -1,3 +1,5 @@
+import __OEditorApp from './OEditorApp';
+
 export default class OEditorBlock {
     _blockInstance;
 
@@ -15,7 +17,14 @@ export default class OEditorBlock {
     }
 
     renderFooter() {
-        return this._blockInstance.renderFooter?.();
+        return (
+            <nav>
+                <ol>
+                    {__OEditorApp.getInstance().renderFooterBreadcrumb()}
+                    {this._blockInstance.renderFooter?.()}
+                </ol>
+            </nav>
+        );
     }
 
     render() {
@@ -24,10 +33,10 @@ export default class OEditorBlock {
     }
 
     getExtraClassName() {
-        var className = "block";
+        var className = 'block';
 
         if (this._blockInstance.isReusable()) {
-            className += " is-reusable";
+            className += ' is-reusable';
         }
 
         return className;

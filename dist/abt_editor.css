@@ -935,9 +935,9 @@ body.o-editor-enabled .panelInspectorInsertNewBlock .components-tab-panel__tab-c
   position: fixed;
   top: 0;
   right: 0;
-  width: 320px;
-  min-width: 250px;
+  width: 400px;
   min-height: 250px;
+  height: calc(100vh - 61px - 12px);
   background: white;
   border-radius: 10px;
   z-index: 99999;
@@ -958,16 +958,13 @@ body.o-editor-enabled .panelInspectorInsertNewBlock .components-tab-panel__tab-c
 }
 .o-editor-app.block {
   width: 800px;
-  height: calc(100vh - 61px - 60px);
   min-width: 600px;
-  min-height: 600px;
 }
 .o-editor-app.settings {
   width: 480px;
   height: 380px;
 }
 .o-editor-app.help {
-  width: 360px;
   height: 400px;
 }
 .is-mode-text .o-editor-app {
@@ -1111,12 +1108,47 @@ body.o-editor-enabled .panelInspectorInsertNewBlock .components-tab-panel__tab-c
 }
 .o-editor-app .o-editor-app_footer {
   display: flex;
-  padding: 24px 30px;
-  background: #fcfcfc;
+  padding: 18px 30px;
+  background: white;
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
   border-top: 1px solid #e8e8e8;
   gap: 18px;
+}
+.o-editor-app .o-editor-app_footer nav ol {
+  margin: 0;
+  list-style: none;
+  display: flex;
+}
+.o-editor-app .o-editor-app_footer nav ol li {
+  margin: 0;
+  padding: 0 12px;
+}
+.o-editor-app .o-editor-app_footer nav ol li.separator {
+  padding: 0;
+}
+.o-editor-app .o-editor-app_footer nav ol li:first-child {
+  padding-left: 0;
+}
+.o-editor-app .o-editor-app_footer nav ol li:last-child {
+  padding-right: 0;
+}
+.o-editor-app.inspector .o-editor-app_footer {
+  padding: 0;
+  border-top: none;
+}
+.o-editor-app.inspector .o-editor-app_footer .components-button.insert-new-block {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  padding: 24px 0;
+  font-size: 14px;
+  font-weight: 500;
+}
+.o-editor-app.inspector .o-editor-app_footer .components-button.insert-new-block .dashicon {
+  margin-right: 6px;
 }
 .o-editor-app.is-reusable .o-editor-app_header {
   background: #a68de3;

@@ -1,11 +1,7 @@
-import { Button, ButtonGroup, Dashicon } from '@wordpress/components';
-
-import __OEditorApp from './OEditorApp';
-
-import { OButtonBlockAppender } from './OButtonBlockAppender';
-import { OButtonPatternAppender } from './OButtonPatternAppender';
-
+import { Button, Dashicon } from '@wordpress/components';
 import { BlockList } from './BlockList';
+import { OButtonBlockAppender } from './OButtonBlockAppender';
+import __OEditorApp from './OEditorApp';
 
 export default class OEditorInspector {
     constructor(blocksList, selectBlock) {
@@ -21,6 +17,10 @@ export default class OEditorInspector {
                 </h2>
             </li>
         );
+    }
+
+    renderFooter() {
+        return <OButtonBlockAppender buttonDashicon="insert" />;
     }
 
     renderTools() {
@@ -55,10 +55,10 @@ export default class OEditorInspector {
         return (
             <>
                 {inner}
-                <ButtonGroup className="inspectorButtonInsertNew">
-                    <OButtonBlockAppender />
+                {/* <ButtonGroup className="inspectorButtonInsertNew">
+                    <OButtonBlockAppender buttonDashicon="insert" />
                     <OButtonPatternAppender />
-                </ButtonGroup>
+                </ButtonGroup> */}
             </>
         );
     }

@@ -15,6 +15,7 @@ const ButtonBlockAppender = ({
     buttonExtraClass = null,
     buttonDashicon = null,
     buttonVariant = 'primary',
+    label = 'Add',
 }) => {
     const [isOpen, setIsOpen] = useState(false);
 
@@ -42,10 +43,10 @@ const ButtonBlockAppender = ({
                 onClick={() => {
                     setIsOpen(true);
                 }}
-                className={buttonExtraClass}
+                className={'insert-new-block ' + buttonExtraClass}
             >
                 {buttonDashicon && <Dashicon icon={buttonDashicon} />}
-                Add block
+                {label}
             </Button>
             {isOpen && (
                 <OBlocksAppender

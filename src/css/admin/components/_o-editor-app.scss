@@ -2,10 +2,9 @@
     position: fixed;
     top: 0;
     right: 0;
-    width: 320px;
-    min-width: 250px;
+    width: 400px;
     min-height: 250px;
-    // height: calc(100vh - 61px - 2 * $o-space-50);
+    height: calc(100vh - 61px - 2 * $o-space-10);
     background: white;
     border-radius: $o-border-radius;
     z-index: 99999;
@@ -28,9 +27,7 @@
 
     &.block {
         width: 800px;
-        height: calc(100vh - 61px - 2 * $o-space-50);
         min-width: 600px;
-        min-height: 600px;
     }
 
     &.settings {
@@ -39,7 +36,6 @@
     }
 
     &.help {
-        width: 360px;
         height: 400px;
     }
 
@@ -215,12 +211,58 @@
 
     .o-editor-app_footer {
         display: flex;
-        padding: $o-padding;
-        background: $o-background-color;
+        padding: $o-space-30 $o-space-50;
+        background: white;
         border-bottom-left-radius: $o-border-radius;
         border-bottom-right-radius: $o-border-radius;
         border-top: 1px solid $o-main-color-border;
         gap: $o-space-30;
+
+        nav {
+            ol {
+                margin: 0;
+                list-style: none;
+                display: flex;
+
+                li {
+                    margin: 0;
+                    padding: 0 $o-space-20;
+
+                    &.separator {
+                        padding: 0;
+                    }
+
+                    &:first-child {
+                        padding-left: 0;
+                    }
+                    &:last-child {
+                        padding-right: 0;
+                    }
+                }
+            }
+        }
+    }
+
+    &.inspector {
+        .o-editor-app_footer {
+            padding: 0;
+            border-top: none;
+
+            .components-button.insert-new-block {
+                display: flex;
+                justify-content: center;
+                width: 100%;
+                border-bottom-left-radius: 10px;
+                border-bottom-right-radius: 10px;
+                padding: $o-space-40 0;
+                font-size: 14px;
+                font-weight: 500;
+
+                .dashicon {
+                    margin-right: $o-space-10;
+                }
+            }
+        }
     }
 
     &.is-reusable {

@@ -9,7 +9,14 @@ import {
     Placeholder,
 } from '@wordpress/components';
 
-import { chevronDown, chevronUp, cog, pages, trash } from '@wordpress/icons';
+import {
+    chevronDown,
+    chevronUp,
+    cog,
+    external,
+    pages,
+    trash,
+} from '@wordpress/icons';
 
 import { Attributes } from '../Static/Attributes';
 import { Render } from '../Static/Render';
@@ -22,6 +29,7 @@ import __OEditorApp from './OEditorApp';
 import __OModal from './OModal';
 import __OUserPreferences from './OUserPreferences';
 
+import { Fragment } from 'react';
 import globalData from '../global';
 
 export class WpeComponentBase extends Component {
@@ -121,6 +129,21 @@ export class WpeComponentBase extends Component {
         return null;
     }
 
+    getNavParent() {
+        const navParent = [];
+        if (
+            this.props.parentsBlock != null &&
+            typeof this.props.parentsBlock == 'object' &&
+            this.props.parentsBlock.length > 0
+        ) {
+            this.props.parentsBlock.forEach((element) => {
+                navParent.push(element);
+            });
+        }
+
+        return navParent;
+    }
+
     renderTitle() {
         const anchor = this.getAttribute('anchor');
         const displayAnchor =
@@ -130,41 +153,33 @@ export class WpeComponentBase extends Component {
                 /^[a-z0-9]+-[a-z0-9]+-[a-z0-9]+-[a-z0-9]+-[a-z0-9]+$/,
             ) == null;
 
-        let countChild = 2;
         const path = [];
-        if (
-            this.props.parentsBlock != null &&
-            typeof this.props.parentsBlock == 'object' &&
-            this.props.parentsBlock.length > 0
-        ) {
-            this.props.parentsBlock.forEach((element, index) => {
-                path.push(
-                    <li
-                        key={'breadcrumb-parent-block-' + index}
-                        className="breadcrumb-parent-block"
+        this.getNavParent().forEach((element) => {
+            path.push(
+                <li
+                    key={'breadcrumb-parent-block-' + element.clientId}
+                    className="breadcrumb-parent-block"
+                >
+                    <Button
+                        key={'path-button-' + element.clientId}
+                        className="path-element"
+                        onMouseDown={() =>
+                            this.props.selectBlock(element.clientId)
+                        }
                     >
-                        <Button
-                            key={'path-button-' + element.clientId}
-                            className="path-element"
-                            onMouseDown={() =>
-                                this.props.selectBlock(element.clientId)
-                            }
-                        >
-                            <Dashicon icon="arrow-right-alt2" />
-                            {getBlockType(element.name).title}
-                        </Button>
-                    </li>,
-                );
-                countChild++;
-            });
-        }
+                        <Dashicon icon="arrow-right-alt2" />
+                        {getBlockType(element.name).title}
+                    </Button>
+                </li>,
+            );
+        });
 
         return (
             <>
                 {path}
                 <li className="breadcrumb-current">
                     <h2>
-                        {this.props.title ?? this.title ?? 'Editor'}
+                        {this.title ?? this.title ?? 'Editor'}
                         {displayAnchor && (
                             <span className="subtitle">#{anchor}</span>
                         )}
@@ -174,21 +189,86 @@ export class WpeComponentBase extends Component {
         );
     }
 
+    renderFooter() {
+        const path = [];
+        this.getNavParent().forEach((element, index) => {
+            path.push(
+                <Fragment
+                    key={
+                        'footer-breadcrumb-' + index + '-' + this.props.clientId
+                    }
+                >
+                    <li className="separator">/</li>
+                    <li className="breadcrumb-parent-block">
+                        <Button
+                            key={'path-button-footer-' + element.clientId}
+                            variant="link"
+                            onMouseDown={() =>
+                                this.props.selectBlock(element.clientId)
+                            }
+                        >
+                            {getBlockType(element.name).title}
+                        </Button>
+                    </li>
+                </Fragment>,
+            );
+        });
+
+        return (
+            <>
+                {path}
+                {this.title && (
+                    <>
+                        <li
+                            key={
+                                'footer-breadcrumb-parent-block-separator-current'
+                            }
+                            className="separator"
+                        >
+                            /
+                        </li>
+                        <li key={'footer-breadcrumb-parent-block-current'}>
+                            {this.title}
+                        </li>
+                    </>
+                )}
+            </>
+        );
+    }
+
     renderTools() {
         const menuGroup = [];
 
-        const rootClientId =
-            this.props.parentsBlock != null &&
-            typeof this.props.parentsBlock == 'object' &&
-            this.props.parentsBlock.length > 0
-                ? this.props.parentsBlock[this.props.parentsBlock.length - 1]
-                      .clientId
-                : undefined;
+        if (typeof this.previewUrl != 'undefined') {
+            menuGroup.push(
+                <MenuGroup key={this.props.clientId + '-toolsDropdownMenu-top'}>
+                    <MenuItem
+                        key={
+                            this.props.clientId +
+                            '-toolsDropdownMenu-top-Preview'
+                        }
+                        icon={external}
+                        onClick={() => window.open(this.previewUrl, '_blank')}
+                    >
+                        Open preview
+                    </MenuItem>
+                </MenuGroup>,
+            );
+        }
 
         if (
             typeof this.props.moveBlocksUp != 'undefined' ||
             typeof this.props.moveBlocksDown != 'undefined'
         ) {
+            const rootClientId =
+                this.props.parentsBlock != null &&
+                typeof this.props.parentsBlock == 'object' &&
+                this.props.parentsBlock.length > 0
+                    ? this.props.parentsBlock[
+                          this.props.parentsBlock.length - 1
+                      ].clientId
+                    : undefined;
+
             const groupMoveBlock = [];
 
             if (
@@ -255,7 +335,6 @@ export class WpeComponentBase extends Component {
                     }
                     icon={pages}
                     onClick={() => {
-                        __OEditorApp.getInstance().hide();
                         this.props.duplicateBlocks([this.props.clientId]);
                     }}
                 >
@@ -610,35 +689,6 @@ export class WpeComponentBase extends Component {
         }
     }
 
-    renderFooter() {
-        return (
-            <>
-                {typeof this.previewUrl != 'undefined' && (
-                    <Button
-                        key={this.props.clientId + '-buttonPreviewUrl'}
-                        className="abtButtonPreviewUrl"
-                        variant="primary"
-                        href={this.previewUrl}
-                        target="_blank"
-                    >
-                        <Dashicon icon="external" />
-                        Open preview
-                    </Button>
-                )}
-                <div className="o-flex-grow"></div>
-                <Button
-                    key={this.props.clientId + '-buttonCloseEditZone'}
-                    className="abtButtonCloseEditZone"
-                    variant="secondary"
-                    onMouseDown={() => __OEditorApp.getInstance().clean()}
-                >
-                    <Dashicon icon="no-alt" />
-                    Close
-                </Button>
-            </>
-        );
-    }
-
     renderInspectorControls() {
         return null;
     }
@@ -752,7 +802,6 @@ export class WpeComponentBase extends Component {
                             variant="primary"
                             onMouseDown={() => {
                                 this.hideModal('removeSubmitted');
-                                __OEditorApp.getInstance().hide();
                                 this.props.removeBlock(this.props.clientId);
                             }}
                         >

@@ -49,10 +49,6 @@ export default class OEditorApp extends Component {
     }
 
     componentDidMount() {
-        // init shortcuts and mouse events
-        this._initShortcuts();
-        this._initMouseEvents();
-
         if (
             this.props.context.editorMode == 'visual' &&
             this.state.needToBeMounted
@@ -119,53 +115,6 @@ export default class OEditorApp extends Component {
         } else if (!this.state.needToBeMounted) {
             this._unmount();
         }
-    }
-
-    _initMouseEvents() {}
-
-    _initShortcuts() {
-        // let isEditing = false;
-        // // listen for escape to close the editor
-        // document.addEventListener("focusin", (e) => {
-        //     if (
-        //         e.target.tagName === "TEXTAREA" ||
-        //         e.target.tagName === "INPUT"
-        //     ) {
-        //         isEditing = true;
-        //         console.log("EDITING", isEditing);
-        //     }
-        // });
-        // document.addEventListener("focusout", (e) => {
-        //     if (
-        //         e.target.tagName === "TEXTAREA" ||
-        //         e.target.tagName === "INPUT"
-        //     ) {
-        //         setTimeout(() => {
-        //             // isEditing = false;
-        //             console.log("__EDITING", isEditing);
-        //         }, 1000);
-        //     }
-        // });
-        // document.addEventListener("keyup", (e) => {
-        //     if (e.key === "Escape" && !isEditing) {
-        //         e.preventDefault();
-        //         this.goInspector();
-        //     }
-        // });
-
-        // liten for maintaining the "§" key to hide and show the editor
-        document.addEventListener('keydown', (e) => {
-            if (e.key === '§') {
-                e.preventDefault();
-                this.hide();
-            }
-        });
-        document.addEventListener('keyup', (e) => {
-            if (e.key === '§') {
-                e.preventDefault();
-                this.show();
-            }
-        });
     }
 
     _showEditorLoadingZone() {
@@ -303,17 +252,9 @@ export default class OEditorApp extends Component {
         this.setState({ isOpen: true });
     }
 
-    close() {
-        this.setState({ isOpen: false });
-    }
-
-    show() {
-        this._$editApp.classList.remove('hide', 'is-updating');
-    }
-
-    hide() {
-        this._$editApp.classList.add('hide');
-    }
+    // close() {
+    //     this.setState({ isOpen: false });
+    // }
 
     renderBreadcrumb() {
         return this.state.route != null ||
@@ -328,6 +269,24 @@ export default class OEditorApp extends Component {
                     onMouseDown={() => this.goInspector()}
                 >
                     <Dashicon icon="screenoptions" /> All blocks
+                </Button>
+            </li>
+        ) : null;
+    }
+
+    renderFooterBreadcrumb() {
+        return this.state.route != null ||
+            (this.props.context.selectedBlockClientId != undefined &&
+                typeof globalData.componentInstances[
+                    this.props.context.selectedBlockClientId
+                ] != 'undefined') ? (
+            <li>
+                <Button
+                    key={'breadcrumb-home'}
+                    variant="link"
+                    onMouseDown={() => this.goInspector()}
+                >
+                    All blocks
                 </Button>
             </li>
         ) : null;
@@ -475,7 +434,6 @@ function EditorAppHeader(props) {
 
         oEditorApp.addEventListener('mouseenter', (e) => {
             OEditorApp.getInstance().open();
-            console.log('enter');
         });
         oEditorApp.addEventListener('mouseleave', (e) => {
             if (!document.body.classList.contains('modal-open')) {
