@@ -53,7 +53,12 @@ class Timber {
             ABT_PLUGIN_DIR . 'views/'
         ];
 
-        \Timber\Timber::$locations = apply_filters( 'Abt\timber_locations', $this->template_locations );
+        $this->template_locations = apply_filters( 'Abt\timber_locations', $this->template_locations);
+        foreach( $this->template_locations as $key => $val ) {
+            $this->template_locations[$key] = rtrim($val, '/') . '/';
+        }
+
+        \Timber\Timber::$locations = $this->template_locations;
     }
 
 
@@ -78,6 +83,7 @@ class Timber {
 
             $twig_template_exists = false;
             foreach( $this->template_locations as $location) {
+
                 if( file_exists($location . $path_view) ) {
                     $twig_template_exists = true;
                     break;

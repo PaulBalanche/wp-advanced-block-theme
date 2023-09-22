@@ -9,7 +9,7 @@ class Prop {
 
     function __construct( $key, $value, $specs, $content = '' ) {
 
-        $this->type = ( isset($specs['type']) && trim(strtolower($specs['type'])) == 'node' ) ? 'node' : ( (isset($specs['repeatable']) && $specs['repeatable'] ) ? 'repeatable' : 'simple' );
+        $this->type = ( isset($specs['type']) && in_array( trim(strtolower($specs['type'])), [ 'node', 'html' ] ) ) ? 'node' : ( (isset($specs['repeatable']) && $specs['repeatable'] ) ? 'repeatable' : 'simple' );
         switch( $this->getType() ) {
 
             case 'simple':

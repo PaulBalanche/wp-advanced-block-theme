@@ -198,6 +198,7 @@ export function BaseControl(props) {
 
             case 'richText':
             case 'wysiwyg':
+            case 'textarea':
                 return (
                     <WysiwygControl
                         key={props.id}
@@ -289,6 +290,7 @@ export function BaseControl(props) {
                 break;
 
             case 'node':
+            case 'html':
                 return (
                     <NodeList
                         key={props.id}

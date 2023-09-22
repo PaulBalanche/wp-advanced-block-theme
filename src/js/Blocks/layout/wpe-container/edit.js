@@ -2,8 +2,10 @@
  * WordPress dependencies
  */
 import { store as blockEditorStore } from '@wordpress/block-editor';
+import { Button, Dashicon } from '@wordpress/components';
 import { compose } from '@wordpress/compose';
 import { withDispatch, withSelect } from '@wordpress/data';
+import __OEditorApp from '../../../Components/OEditorApp';
 import { WpeComponentBase } from '../../../Components/WpeComponentBase';
 
 /**
@@ -19,8 +21,27 @@ class WpeContainer extends WpeComponentBase {
 
         return (
             <div {...innerBlocksProps}>
-                {this.renderEditFormZone()}
+                {/* {this.renderEditFormZone()} */}
                 {children}
+                <div
+                    key={this.props.clientId + '-blockEditOverlay'}
+                    className={`block-edit-overlay`}
+                    onMouseDown={() => {
+                        const domBlock = document.querySelector(
+                            '#block-' + this.props.clientId,
+                        );
+                        domBlock?.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'center',
+                        });
+                        __OEditorApp.getInstance().open();
+                    }}
+                >
+                    <h2>Container</h2>
+                    <Button variant="primary">
+                        <Dashicon icon="edit" /> Edit
+                    </Button>
+                </div>
             </div>
         );
     }

@@ -34,6 +34,8 @@ export default class OEditorApp extends Component {
             needToBeMounted: true,
             currentDevice: null,
             isOpen: false,
+            closeAllowed: false,
+            timeOutAllowingToClose: null,
         };
 
         // @ts-ignore
@@ -46,6 +48,12 @@ export default class OEditorApp extends Component {
         if (GLOBAL_LOCALIZED?.editor?.style) {
             this._$editApp.classList.add(GLOBAL_LOCALIZED.editor.style);
         }
+
+        this._$editApp.addEventListener('scroll', (event) => {
+            if (this.state.closeAllowed) {
+                this.close();
+            }
+        });
     }
 
     componentDidMount() {
@@ -248,12 +256,24 @@ export default class OEditorApp extends Component {
         }
     }
 
-    open() {
-        this.setState({ isOpen: true });
+    open(closeAllowed = true) {
+        clearTimeout(this.state.timeOutAllowingToClose);
+        this.setState({ isOpen: true, closeAllowed: false });
+
+        if (closeAllowed) {
+            let timeOutAllowingToClose = setTimeout(() => {
+                this.allowToClose();
+            }, 1000);
+            this.setState({ timeOutAllowingToClose: timeOutAllowingToClose });
+        }
+    }
+
+    allowToClose() {
+        this.setState({ closeAllowed: true });
     }
 
     close() {
-        this.setState({ isOpen: false });
+        this.setState({ isOpen: false, closeAllowed: false });
     }
 
     renderBreadcrumb() {
@@ -436,12 +456,12 @@ function EditorAppHeader(props) {
         });
 
         oEditorApp.addEventListener('mouseenter', (e) => {
-            OEditorApp.getInstance().open();
+            OEditorApp.getInstance().open(false);
         });
         oEditorApp.addEventListener('mouseleave', (e) => {
-            if (!document.body.classList.contains('modal-open')) {
-                OEditorApp.getInstance().close();
-            }
+            // if (!document.body.classList.contains('modal-open')) {
+            OEditorApp.getInstance().allowToClose();
+            // }
         });
     }
 

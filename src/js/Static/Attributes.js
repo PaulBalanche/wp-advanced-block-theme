@@ -155,9 +155,11 @@ export class Attributes {
         switch (type) {
             case 'text':
             case 'richText':
+            case 'textarea':
             case 'wysiwyg':
             case 'spaces':
             case 'node':
+            case 'html':
                 break;
             case 'string':
                 args.isNumber = false;
@@ -284,7 +286,6 @@ export class Attributes {
             switch (currentType) {
                 case 'string':
                 case 'text':
-                case 'richText':
                 case 'select':
                 case 'color':
                 case 'radio':
@@ -306,6 +307,8 @@ export class Attributes {
                 case 'file':
                 case 'gallery':
                 case 'wysiwyg':
+                case 'richText':
+                case 'textarea':
                 case 'spaces':
                     attributes[key] = {
                         type: 'object',

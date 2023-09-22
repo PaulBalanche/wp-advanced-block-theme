@@ -8,13 +8,13 @@ use Abt\Singleton\Config;
 class DraftJsToHtml {
     
     public static function rawToHtml( $raw ) {
-
+        
         // Get default style
         $themeSpec = Config::getInstance()->get_spec();
         $typo = [];
         $defaultStyle = null;
-        if( isset($themeSpec['typo']) && is_array($themeSpec['typo']) ) {
-            $typo = $themeSpec['typo'];
+        if( isset($themeSpec['theme']) && is_array($themeSpec['theme']) && isset($themeSpec['theme']['lnf']) && is_array($themeSpec['theme']['lnf']) && isset($themeSpec['theme']['lnf']['typo']) && is_array($themeSpec['theme']['lnf']['typo']) ) {
+            $typo = $themeSpec['theme']['lnf']['typo'];
             foreach( $typo as $key_typo => $val_typo ) {
                 if( isset($val_typo['default']) && $val_typo['default'] ) {
                     $defaultStyle = $key_typo;
@@ -36,7 +36,7 @@ class DraftJsToHtml {
                         $block['inlineStyleRanges'][$keyInlineStyle]['type'] = ( isset($typo[ $inlineStyle['style'] ]) && isset($typo[ $inlineStyle['style'] ]['type']) ) ? $typo[ $inlineStyle['style'] ]['type'] : null;
                     }
 
-                    $block['text'] = nl2br($block['text']);
+                    $block['text'] = htmlentities($block['text']);
                     $block['type'] = ( ! isset($block['type']) || ( isset($block['type']) && ( empty($block['type']) || $block['type'] == 'unstyled' ) ) ) ? $defaultStyle : $block['type'];
                     $content[] = self::generateDeepStyleObject( $block, $block['type'] );
                 }
@@ -233,7 +233,7 @@ class DraftJsToHtml {
                         ],
                     ]);
                 } else {
-                    $html .= $subContent;
+                    $html .= nl2br($subContent);
                 }
             }
         }

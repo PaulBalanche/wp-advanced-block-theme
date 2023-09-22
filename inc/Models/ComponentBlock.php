@@ -236,6 +236,10 @@ class ComponentBlock extends ModelBase
                     $inner_blocks = null;
                     break;
                 }
+                if( isset($prop['type'])&& $prop['type'] == 'html' ) {
+                    $inner_blocks = true;
+                    break;
+                }
             }
         }
 
@@ -357,7 +361,6 @@ class ComponentBlock extends ModelBase
                     switch ($currentType) {
                         case "string":
                         case "text":
-                        case "richText":
                         case "select":
                         case "color":
                         case "radio":
@@ -370,6 +373,8 @@ class ComponentBlock extends ModelBase
                             break;
 
                         case "wysiwyg":
+                        case "richText":
+                        case "textarea":
                         case "object":
                         case "link":
                         case "image":
@@ -377,6 +382,7 @@ class ComponentBlock extends ModelBase
                         case "file":
                         case "spaces":
                         case "node":
+                        case "html":
                             $currentType = "object";
                             break;
 

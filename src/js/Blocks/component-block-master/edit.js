@@ -155,10 +155,16 @@ class WpeComponent extends WpeComponentBase {
 
     liveRendering() {
         if (
+            false &&
             typeof this.props.block_spec.inner_blocks != 'undefined' &&
             this.props.block_spec.inner_blocks
         ) {
-            return <div {...this.props.innerBlocksProps} />;
+            return (
+                <div
+                    key={this.props.clientId + '-innerBlocksProps'}
+                    {...this.props.innerBlocksProps}
+                />
+            );
         } else {
             const { error, previewReady } = this.state;
             var render = [];
@@ -195,6 +201,7 @@ class WpeComponent extends WpeComponentBase {
 
                 render.push(
                     <div
+                        key={this.props.clientId + '-blockEditOverlay'}
                         className={`block-edit-overlay${
                             error != null ? ' errors' : ''
                         }`}

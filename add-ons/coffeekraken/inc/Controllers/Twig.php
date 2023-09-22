@@ -37,15 +37,12 @@ class Twig extends ControllerBase {
         return $twig;
     }
 
-
     public function timber_locations( $locations ) {
 
         $locations = array_merge( $locations, \SViews\twig\getDefaultViewDirs() );
 
         return $locations;
     }
-
-
 
     public function localize_editor_script( $spec, $block, $js_variable ) {
 

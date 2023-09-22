@@ -11582,9 +11582,7 @@ class WpeComponent extends _Components_WpeComponentBase__WEBPACK_IMPORTED_MODULE
     return $iframe;
   }
   liveRendering() {
-    if (typeof this.props.block_spec.inner_blocks != 'undefined' && this.props.block_spec.inner_blocks) {
-      return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("div", this.props.innerBlocksProps);
-    } else {
+    if (false) {} else {
       const {
         error,
         previewReady
@@ -11610,6 +11608,7 @@ class WpeComponent extends _Components_WpeComponentBase__WEBPACK_IMPORTED_MODULE
           render.push(this.renderLoaderPreview());
         }
         render.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("div", {
+          key: this.props.clientId + '-blockEditOverlay',
           className: `block-edit-overlay${error != null ? ' errors' : ''}`,
           onMouseDown: () => {
             const domBlock = document.querySelector('#block-' + this.props.clientId);
@@ -12028,11 +12027,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/block-editor */ "@wordpress/block-editor");
 /* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _wordpress_compose__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/compose */ "@wordpress/compose");
-/* harmony import */ var _wordpress_compose__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_compose__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/data */ "@wordpress/data");
-/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_data__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _Components_WpeComponentBase__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../Components/WpeComponentBase */ "./src/js/Components/WpeComponentBase.tsx");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _wordpress_compose__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/compose */ "@wordpress/compose");
+/* harmony import */ var _wordpress_compose__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_compose__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/data */ "@wordpress/data");
+/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_wordpress_data__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _Components_OEditorApp__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../Components/OEditorApp */ "./src/js/Components/OEditorApp.tsx");
+/* harmony import */ var _Components_WpeComponentBase__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../Components/WpeComponentBase */ "./src/js/Components/WpeComponentBase.tsx");
 
 /**
  * WordPress dependencies
@@ -12042,10 +12044,12 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+
 /**
  * registerBlockType edit function
  */
-class WpeContainer extends _Components_WpeComponentBase__WEBPACK_IMPORTED_MODULE_4__.WpeComponentBase {
+class WpeContainer extends _Components_WpeComponentBase__WEBPACK_IMPORTED_MODULE_6__.WpeComponentBase {
   constructor() {
     super(...arguments);
   }
@@ -12055,10 +12059,25 @@ class WpeContainer extends _Components_WpeComponentBase__WEBPACK_IMPORTED_MODULE
       ...innerBlocksProps
     } = this.props.innerBlocksProps;
     innerBlocksProps.key = 'innerBlocksProps_' + this.props.clientId;
-    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", innerBlocksProps, this.renderEditFormZone(), children);
+    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", innerBlocksProps, children, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      key: this.props.clientId + '-blockEditOverlay',
+      className: `block-edit-overlay`,
+      onMouseDown: () => {
+        const domBlock = document.querySelector('#block-' + this.props.clientId);
+        domBlock?.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center'
+        });
+        _Components_OEditorApp__WEBPACK_IMPORTED_MODULE_5__["default"].getInstance().open();
+      }
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h2", null, "Container"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Button, {
+      variant: "primary"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Dashicon, {
+      icon: "edit"
+    }), " Edit")));
   }
 }
-const EditMode = (0,_wordpress_compose__WEBPACK_IMPORTED_MODULE_2__.compose)([(0,_wordpress_data__WEBPACK_IMPORTED_MODULE_3__.withSelect)((select, props) => {
+const EditMode = (0,_wordpress_compose__WEBPACK_IMPORTED_MODULE_3__.compose)([(0,_wordpress_data__WEBPACK_IMPORTED_MODULE_4__.withSelect)((select, props) => {
   // Detect if inside a reusable block
   const getBlockParents = select('core/block-editor').getBlockParents(props.clientId);
   const parentsBlock = [];
@@ -12070,7 +12089,7 @@ const EditMode = (0,_wordpress_compose__WEBPACK_IMPORTED_MODULE_2__.compose)([(0
     isParentOfSelectedBlock: select('core/block-editor').hasSelectedInnerBlock(props.clientId, true),
     parentsBlock
   };
-}), (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_3__.withDispatch)(dispatch => {
+}), (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_4__.withDispatch)(dispatch => {
   const {
     removeBlock,
     duplicateBlocks
@@ -14452,7 +14471,9 @@ class OEditorApp extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Compone
       route: null,
       needToBeMounted: true,
       currentDevice: null,
-      isOpen: false
+      isOpen: false,
+      closeAllowed: false,
+      timeOutAllowingToClose: null
     };
 
     // @ts-ignore
@@ -14464,6 +14485,11 @@ class OEditorApp extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Compone
     if (GLOBAL_LOCALIZED?.editor?.style) {
       this._$editApp.classList.add(GLOBAL_LOCALIZED.editor.style);
     }
+    this._$editApp.addEventListener('scroll', event => {
+      if (this.state.closeAllowed) {
+        this.close();
+      }
+    });
   }
   componentDidMount() {
     if (this.props.context.editorMode == 'visual' && this.state.needToBeMounted
@@ -14621,13 +14647,30 @@ class OEditorApp extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Compone
     }
   }
   open() {
+    let closeAllowed = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
+    clearTimeout(this.state.timeOutAllowingToClose);
     this.setState({
-      isOpen: true
+      isOpen: true,
+      closeAllowed: false
+    });
+    if (closeAllowed) {
+      let timeOutAllowingToClose = setTimeout(() => {
+        this.allowToClose();
+      }, 1000);
+      this.setState({
+        timeOutAllowingToClose: timeOutAllowingToClose
+      });
+    }
+  }
+  allowToClose() {
+    this.setState({
+      closeAllowed: true
     });
   }
   close() {
     this.setState({
-      isOpen: false
+      isOpen: false,
+      closeAllowed: false
     });
   }
   renderBreadcrumb() {
@@ -14740,14 +14783,15 @@ function EditorAppHeader(props) {
       improveOEditorPositionX();
     });
     oEditorApp.addEventListener('mouseenter', e => {
-      OEditorApp.getInstance().open();
+      OEditorApp.getInstance().open(false);
     });
     oEditorApp.addEventListener('mouseleave', e => {
-      if (!document.body.classList.contains('modal-open')) {
-        OEditorApp.getInstance().close();
-      }
+      // if (!document.body.classList.contains('modal-open')) {
+      OEditorApp.getInstance().allowToClose();
+      // }
     });
   }
+
   function mouseDown(e, marker) {
     setOEditorTop(oEditorApp.offsetTop);
     setOEditorRight(window.innerWidth - (oEditorApp.offsetLeft + oEditorApp.offsetWidth));
@@ -16084,9 +16128,11 @@ class Attributes {
     switch (type) {
       case 'text':
       case 'richText':
+      case 'textarea':
       case 'wysiwyg':
       case 'spaces':
       case 'node':
+      case 'html':
         break;
       case 'string':
         args.isNumber = false;
@@ -16177,7 +16223,6 @@ class Attributes {
       switch (currentType) {
         case 'string':
         case 'text':
-        case 'richText':
         case 'select':
         case 'color':
         case 'radio':
@@ -16198,6 +16243,8 @@ class Attributes {
         case 'file':
         case 'gallery':
         case 'wysiwyg':
+        case 'richText':
+        case 'textarea':
         case 'spaces':
           attributes[key] = {
             type: 'object'
@@ -16268,7 +16315,7 @@ function Control(props) {
   const error = props.error;
   const componentInstance = props.componentInstance;
   const isSortableItem = typeof props.sortableIndex != 'undefined';
-  const directSubmission = !['string', 'number', 'integer', 'text', 'richText', 'wysiwyg', 'color'].includes(props.type);
+  const directSubmission = !['string', 'number', 'integer', 'text', 'richText', 'textarea', 'wysiwyg', 'color'].includes(props.type);
   const [value, setValue] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(props.controllerValue);
   const [updating, setUpdating] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   const [editMode, setEditMode] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
@@ -16366,7 +16413,7 @@ function Control(props) {
         icon: "info"
       }), error.warning));
     }
-    if (value != null && !['object', 'spaces', 'link', 'image'].includes(type)) {
+    if (value != null && !['object', 'spaces', 'link', 'image', 'textarea', 'richText', 'wysiwyg'].includes(type)) {
       labelFormatted.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
         key: getKey() + 'defaultOverlayContainer-button',
         onMouseDown: () => {
@@ -17114,6 +17161,7 @@ function BaseControl(props) {
         break;
       case 'richText':
       case 'wysiwyg':
+      case 'textarea':
         return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_WysiwygControl_WysiwygControl__WEBPACK_IMPORTED_MODULE_16__["default"], {
           key: props.id,
           id: props.id,
@@ -17178,6 +17226,7 @@ function BaseControl(props) {
         });
         break;
       case 'node':
+      case 'html':
         return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_NodeList__WEBPACK_IMPORTED_MODULE_6__.NodeList, {
           key: props.id,
           id: props.id,
@@ -18387,6 +18436,7 @@ class DraftEditor extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Compon
     this.toggleInlineStyle = this._toggleInlineStyle.bind(this);
     this.toggleColorStyle = this._toggleColorStyle.bind(this);
     this.handleKeyCommand = this.handleKeyCommand.bind(this);
+    this.defaultBlockLabel = 'Default';
     this.defineBlocks();
     this.defineInlineStyles();
     this.confirmLink = this._confirmLink.bind(this);
@@ -18458,7 +18508,9 @@ class DraftEditor extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Compon
     }, callback);
   }
   defineBlocks() {
-    this.blockTypes = {};
+    this.blockTypes = {
+      default: []
+    };
     this.blockRenderMap = {};
     for (const [key, val] of Object.entries(this.props.typo)) {
       if (!val.isBlock) {
@@ -18471,6 +18523,11 @@ class DraftEditor extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Compon
         }
       }
       if (val.isDefault) {
+        this.blockTypes['default'].push({
+          label: val.label,
+          style: key
+        });
+        this.defaultBlockLabel = val.label;
         this.blockRenderMap.unstyled = {
           element: 'div',
           wrapper: (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(WrapperBlockRendering, {
@@ -18576,7 +18633,7 @@ class DraftEditor extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Compon
     const BlockStyleControls = props => {
       const selection = props.editorState.getSelection();
       const blockType = props.editorState.getCurrentContent().getBlockForKey(selection.getStartKey()).getType();
-      let currentBlockStyle = 'Default';
+      let currentBlockStyle = this.defaultBlockLabel;
       let dropDownItems = [];
       for (const [key, val] of Object.entries(this.blockTypes)) {
         let children = [];

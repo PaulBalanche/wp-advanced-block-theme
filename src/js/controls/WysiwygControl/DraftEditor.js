@@ -73,6 +73,7 @@ export class DraftEditor extends Component {
         this.toggleColorStyle = this._toggleColorStyle.bind(this);
         this.handleKeyCommand = this.handleKeyCommand.bind(this);
 
+        this.defaultBlockLabel = 'Default';
         this.defineBlocks();
         this.defineInlineStyles();
 
@@ -174,7 +175,7 @@ export class DraftEditor extends Component {
     }
 
     defineBlocks() {
-        this.blockTypes = {};
+        this.blockTypes = { default: [] };
         this.blockRenderMap = {};
         for (const [key, val] of Object.entries(this.props.typo)) {
             if (!val.isBlock) {
@@ -189,6 +190,12 @@ export class DraftEditor extends Component {
             }
 
             if (val.isDefault) {
+                this.blockTypes['default'].push({
+                    label: val.label,
+                    style: key,
+                });
+                this.defaultBlockLabel = val.label;
+
                 this.blockRenderMap.unstyled = {
                     element: 'div',
                     wrapper: (
@@ -339,7 +346,7 @@ export class DraftEditor extends Component {
                 .getBlockForKey(selection.getStartKey())
                 .getType();
 
-            let currentBlockStyle = 'Default';
+            let currentBlockStyle = this.defaultBlockLabel;
             let dropDownItems = [];
             for (const [key, val] of Object.entries(this.blockTypes)) {
                 let children = [];

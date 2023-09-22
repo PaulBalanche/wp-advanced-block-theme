@@ -29,6 +29,7 @@ export function Control(props) {
         'integer',
         'text',
         'richText',
+        'textarea',
         'wysiwyg',
         'color',
     ].includes(props.type);
@@ -207,7 +208,15 @@ export function Control(props) {
 
         if (
             value != null &&
-            !['object', 'spaces', 'link', 'image'].includes(type)
+            ![
+                'object',
+                'spaces',
+                'link',
+                'image',
+                'textarea',
+                'richText',
+                'wysiwyg',
+            ].includes(type)
         ) {
             labelFormatted.push(
                 <Button

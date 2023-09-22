@@ -131,6 +131,7 @@ class SimpleProp
 
             case "wysiwyg":
             case "richText":
+            case "textarea":
                 return Wysiwyg::isValid($this);
 
             case "select":
@@ -188,6 +189,7 @@ class SimpleProp
 
             case "wysiwyg":
             case "richText":
+            case "textarea":
                 return Wysiwyg::format($this);
 
             case "select":
@@ -198,6 +200,7 @@ class SimpleProp
                 return Spaces::format($this);
             
             case "node":
+            case "html":
                 return Node::format($this);
 
             default:

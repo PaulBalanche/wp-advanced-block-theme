@@ -7,9 +7,7 @@ use Abt\Helpers\DraftJsToHtml;
 class Wysiwyg extends Base {
     
     public static function format( &$propInstance ) {
-                    
-        return [
-            'value' => DraftJsToHtml::rawToHtml( $propInstance->getValue() )
-        ];
+
+        return DraftJsToHtml::rawToHtml( $propInstance->getValue() );
     }
 }
