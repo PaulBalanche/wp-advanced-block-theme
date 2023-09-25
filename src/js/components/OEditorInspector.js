@@ -29,9 +29,9 @@ export default class OEditorInspector {
                 <Button variant="primary" className="all-blocks">
                     <Dashicon icon="screenoptions" />
                 </Button>
-                <Button variant="primary" className="insert">
+                {/* <Button variant="primary" className="insert">
                     <Dashicon icon="insert" />
-                </Button>
+                </Button> */}
             </>
         );
     }

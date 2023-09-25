@@ -11588,6 +11588,12 @@ class WpeComponent extends _Components_WpeComponentBase__WEBPACK_IMPORTED_MODULE
         previewReady
       } = this.state;
       var render = [];
+      let errorsBlock = 0;
+      for (var i in error) {
+        if (typeof error[i].error != 'undefined') {
+          errorsBlock++;
+        }
+      }
       if (this.editorPreviewImage) {
         render.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("img", {
           src: this.editorPreviewImage,
@@ -11603,13 +11609,13 @@ class WpeComponent extends _Components_WpeComponentBase__WEBPACK_IMPORTED_MODULE
               key: this.props.clientId + '-innerBlocksProps'
             }, this.props.innerBlocksProps)));
           }
-        } else if (error == null) {
+        } else if (errorsBlock == 0) {
           // render.push(this.renderEditFormZone());
           render.push(this.renderLoaderPreview());
         }
         render.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("div", {
           key: this.props.clientId + '-blockEditOverlay',
-          className: `block-edit-overlay${error != null ? ' errors' : ''}`,
+          className: `block-edit-overlay${errorsBlock > 0 ? ' errors' : ''}`,
           onMouseDown: () => {
             const domBlock = document.querySelector('#block-' + this.props.clientId);
             domBlock?.scrollIntoView({
@@ -11618,9 +11624,9 @@ class WpeComponent extends _Components_WpeComponentBase__WEBPACK_IMPORTED_MODULE
             });
             _Components_OEditorApp__WEBPACK_IMPORTED_MODULE_9__["default"].getInstance().open();
           }
-        }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("h2", null, this.title, error != null && typeof error == 'object' && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("span", {
+        }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("h2", null, this.title, errorsBlock > 0 && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("span", {
           className: "error-attributes"
-        }, Object.keys(error).length)), error != null && typeof error == 'object' && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("p", null, "Fix error", Object.keys(error).length > 1 && 's', ' ', "to make this block visible."), error != null && typeof error == 'string' && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("p", null, error), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.Button, {
+        }, errorsBlock)), errorsBlock > 0 && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("p", null, "Fix error", errorsBlock > 1 && 's', " to make this block visible."), error != null && typeof error == 'string' && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("p", null, error), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.Button, {
           variant: "primary"
         }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.Dashicon, {
           icon: "edit"
@@ -14679,7 +14685,10 @@ class OEditorApp extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Compone
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
       key: 'breadcrumb-home',
       className: "breadcrumb path-element",
-      onMouseDown: () => this.goInspector()
+      onMouseDown: () => {
+        this.goInspector();
+        this.allowToClose();
+      }
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
       icon: "screenoptions"
     }), " All blocks")) : null;
@@ -14688,7 +14697,10 @@ class OEditorApp extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Compone
     return this.state.route != null || this.props.context.selectedBlockClientId != undefined && typeof _global__WEBPACK_IMPORTED_MODULE_6__["default"].componentInstances[this.props.context.selectedBlockClientId] != 'undefined' ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
       key: 'breadcrumb-home',
       variant: "link",
-      onMouseDown: () => this.goInspector()
+      onMouseDown: () => {
+        this.goInspector();
+        this.allowToClose();
+      }
     }, "All blocks")) : null;
   }
   render() {
@@ -15058,11 +15070,6 @@ class OEditorInspector {
       className: "all-blocks"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
       icon: "screenoptions"
-    })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
-      variant: "primary",
-      className: "insert"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
-      icon: "insert"
     })));
   }
   renderTools() {
@@ -16405,6 +16412,18 @@ function Control(props) {
         icon: "info"
       }), " ", error.error, ' '));
     }
+    if (description != null) {
+      labelFormatted.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Tooltip, {
+        key: id + '-tooltip',
+        text: description,
+        delay: "0",
+        position: "top"
+      }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+        className: "label-tooltip"
+      }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
+        icon: "info"
+      }))));
+    }
     if (error && typeof error == 'object' && typeof error.warning == 'string') {
       labelFormatted.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
         key: getKey() + '-label-warging',
@@ -16646,10 +16665,7 @@ class Render {
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       key: id + '-innerLabel',
       className: "inner"
-    }, inner), description != null && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
-      key: id + '-innerLabelDescription',
-      className: "components-input-control__description"
-    }, description));
+    }, inner));
   }
   static buttonAddRepeatableElt(id, keys, valueProp, controllerValue, componentInstance) {
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
@@ -17604,7 +17620,7 @@ function WpeLinkControl(_ref2) {
     onClick: () => setIsOpen(true)
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.Dashicon, {
     icon: "admin-links"
-  }), ' ', linkValue != null && typeof linkValue == 'object' ? `Edit${linkValue?.text ? ' "' + linkValue.text + '" ' : ' '}link` : 'Add link')), isOpen && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Components_WpeModal__WEBPACK_IMPORTED_MODULE_5__.WpeModal, {
+  }), linkValue != null && typeof linkValue == 'object' ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, "Edit\xA0", linkValue?.text ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("strong", null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("u", null, linkValue.text))) : 'link') : 'Add link')), isOpen && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Components_WpeModal__WEBPACK_IMPORTED_MODULE_5__.WpeModal, {
     key: id + '-linkWpeModal',
     id: id + '-linkWpeModal',
     title: linkValue != null && typeof linkValue == 'object' ? 'Edit link' : 'Add link',

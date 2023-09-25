@@ -1,6 +1,5 @@
-import { Component, useEffect, useState } from '@wordpress/element';
-
 import { Button, Dashicon } from '@wordpress/components';
+import { Component, useEffect, useState } from '@wordpress/element';
 
 import __OEditorBlock from './OEditorBlock';
 import __OEditorInspector from './OEditorInspector';
@@ -286,7 +285,10 @@ export default class OEditorApp extends Component {
                 <Button
                     key={'breadcrumb-home'}
                     className="breadcrumb path-element"
-                    onMouseDown={() => this.goInspector()}
+                    onMouseDown={() => {
+                        this.goInspector();
+                        this.allowToClose();
+                    }}
                 >
                     <Dashicon icon="screenoptions" /> All blocks
                 </Button>
@@ -304,7 +306,10 @@ export default class OEditorApp extends Component {
                 <Button
                     key={'breadcrumb-home'}
                     variant="link"
-                    onMouseDown={() => this.goInspector()}
+                    onMouseDown={() => {
+                        this.goInspector();
+                        this.allowToClose();
+                    }}
                 >
                     All blocks
                 </Button>

@@ -1,6 +1,5 @@
-import { Button, Dashicon } from '@wordpress/components';
+import { Button, Dashicon, Tooltip } from '@wordpress/components';
 import { useEffect, useState } from '@wordpress/element';
-
 import __ODevices from '../Components/ODevices';
 import { BaseControl } from '../controls/BaseControl';
 import { Attributes } from './Attributes';
@@ -190,6 +189,21 @@ export function Control(props) {
                     {' '}
                     <Dashicon icon="info" /> {error.error}{' '}
                 </div>,
+            );
+        }
+
+        if (description != null) {
+            labelFormatted.push(
+                <Tooltip
+                    key={id + '-tooltip'}
+                    text={description}
+                    delay="0"
+                    position="top"
+                >
+                    <div className="label-tooltip">
+                        <Dashicon icon="info" />
+                    </div>
+                </Tooltip>,
             );
         }
 

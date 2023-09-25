@@ -99,11 +99,19 @@
             }
 
             &:has(> .components-panel) > .responsive-buttons-container {
-                top: 21px;
+                top: 23px;
                 right: $o-space-90;
 
                 .components-button-group {
-                    border: none;
+                    background: rgb(255 255 255 / 60%);
+                }
+            }
+            &:has(
+                    > .components-panel
+                        > .components-panel__body:not(.is-opened)
+                ) {
+                & > .responsive-buttons-container {
+                    display: none;
                 }
             }
 
@@ -137,8 +145,8 @@
             }
 
             &.isResponsive {
-                top: 60px;
-                height: calc(100% - 55px);
+                top: 81px;
+                height: calc(100% - 81px);
 
                 .components-button {
                     opacity: 1;
@@ -154,6 +162,14 @@
                     opacity: 1;
                 }
             }
+        }
+        &:has(
+                > .responsive-tab-panel-wpe-component
+                    > .components-panel
+                    > .components-panel__body:not(.is-opened)
+            )
+            > .default-overlay-container {
+            display: none;
         }
 
         &::after,

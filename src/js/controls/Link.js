@@ -170,14 +170,23 @@ function WpeLinkControl({ id, label, value, onChange, extraContent }) {
                     }
                     onClick={() => setIsOpen(true)}
                 >
-                    <Dashicon icon="admin-links" />{' '}
-                    {linkValue != null && typeof linkValue == 'object'
-                        ? `Edit${
-                              linkValue?.text
-                                  ? ' "' + linkValue.text + '" '
-                                  : ' '
-                          }link`
-                        : 'Add link'}
+                    <Dashicon icon="admin-links" />
+                    {linkValue != null && typeof linkValue == 'object' ? (
+                        <>
+                            Edit&nbsp;
+                            {linkValue?.text ? (
+                                <>
+                                    <strong>
+                                        <u>{linkValue.text}</u>
+                                    </strong>
+                                </>
+                            ) : (
+                                'link'
+                            )}
+                        </>
+                    ) : (
+                        'Add link'
+                    )}
                 </Button>
             </ButtonGroup>
             {isOpen && (

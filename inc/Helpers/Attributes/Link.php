@@ -5,7 +5,7 @@ namespace Abt\Helpers\Attributes;
 class Link extends Base {
     
     public static function isValid( &$propInstance ) {
-        
+
         $value = $propInstance->getValue();
         if( is_array($value) && isset($value['link']) && is_array($value['link']) ) {
 

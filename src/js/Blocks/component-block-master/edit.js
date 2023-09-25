@@ -169,6 +169,13 @@ class WpeComponent extends WpeComponentBase {
             const { error, previewReady } = this.state;
             var render = [];
 
+            let errorsBlock = 0;
+            for (var i in error) {
+                if (typeof error[i].error != 'undefined') {
+                    errorsBlock++;
+                }
+            }
+
             if (this.editorPreviewImage) {
                 render.push(
                     <img
@@ -194,7 +201,7 @@ class WpeComponent extends WpeComponentBase {
                             />,
                         );
                     }
-                } else if (error == null) {
+                } else if (errorsBlock == 0) {
                     // render.push(this.renderEditFormZone());
                     render.push(this.renderLoaderPreview());
                 }
@@ -203,7 +210,7 @@ class WpeComponent extends WpeComponentBase {
                     <div
                         key={this.props.clientId + '-blockEditOverlay'}
                         className={`block-edit-overlay${
-                            error != null ? ' errors' : ''
+                            errorsBlock > 0 ? ' errors' : ''
                         }`}
                         onMouseDown={() => {
                             const domBlock = document.querySelector(
@@ -218,16 +225,16 @@ class WpeComponent extends WpeComponentBase {
                     >
                         <h2>
                             {this.title}
-                            {error != null && typeof error == 'object' && (
+                            {errorsBlock > 0 && (
                                 <span className="error-attributes">
-                                    {Object.keys(error).length}
+                                    {errorsBlock}
                                 </span>
                             )}
                         </h2>
-                        {error != null && typeof error == 'object' && (
+                        {errorsBlock > 0 && (
                             <p>
-                                Fix error{Object.keys(error).length > 1 && 's'}{' '}
-                                to make this block visible.
+                                Fix error{errorsBlock > 1 && 's'} to make this
+                                block visible.
                             </p>
                         )}
                         {error != null && typeof error == 'string' && (

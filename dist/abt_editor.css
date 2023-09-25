@@ -203,13 +203,10 @@
 .o-editor .components-base-control__forced_label .inner .resetDefault .dashicon {
   margin-right: 2px;
 }
-.o-editor .components-base-control .components-base-control__label .components-input-control__description,
-.o-editor .components-base-control .components-input-control__label .components-input-control__description,
-.o-editor .components-base-control__forced_label .components-input-control__description {
-  padding-left: 13px;
-  margin-top: 0;
-  color: rgb(100, 100, 100);
-  font-weight: 400;
+.o-editor .label-tooltip .dashicon {
+  margin-left: 6px;
+  font-size: 15px;
+  color: rgb(200, 200, 200);
 }
 .o-editor .block-editor-block-list__layout > .wp-block:has(> .loaderLiveRenderingIframe) {
   height: 100vh;
@@ -589,11 +586,14 @@ ul.block-list:has(li.is-hover) li.is-hover .dashicon {
   right: 0;
 }
 .o-editor .basicField .responsive-tab-panel-wpe-component:has(> .components-panel) > .responsive-buttons-container {
-  top: 21px;
+  top: 23px;
   right: 54px;
 }
 .o-editor .basicField .responsive-tab-panel-wpe-component:has(> .components-panel) > .responsive-buttons-container .components-button-group {
-  border: none;
+  background: rgba(255, 255, 255, 0.6);
+}
+.o-editor .basicField .responsive-tab-panel-wpe-component:has(> .components-panel > .components-panel__body:not(.is-opened)) > .responsive-buttons-container {
+  display: none;
 }
 .o-editor .basicField .responsive-tab-panel-wpe-component .tab-panel-wpe-component.videoType {
   margin-top: 24px;
@@ -621,8 +621,8 @@ ul.block-list:has(li.is-hover) li.is-hover .dashicon {
   transition: all 0.3s ease-in-out;
 }
 .o-editor .basicField .default-overlay-container.isResponsive {
-  top: 60px;
-  height: calc(100% - 55px);
+  top: 81px;
+  height: calc(100% - 81px);
 }
 .o-editor .basicField .default-overlay-container.isResponsive .components-button {
   opacity: 1;
@@ -632,6 +632,9 @@ ul.block-list:has(li.is-hover) li.is-hover .dashicon {
 }
 .o-editor .basicField .default-overlay-container:hover .components-button {
   opacity: 1;
+}
+.o-editor .basicField:has(> .responsive-tab-panel-wpe-component > .components-panel > .components-panel__body:not(.is-opened)) > .default-overlay-container {
+  display: none;
 }
 .o-editor .basicField::after,
 .o-editor .basicField .components-base-control__label::after {
@@ -1502,6 +1505,10 @@ body.o-editor-enabled .panelInspectorInsertNewBlock .components-tab-panel__tab-c
 .o-editor .components-panel > .components-panel__body > .components-panel__body-title button {
   padding: 24px 30px;
 }
+.o-editor .components-panel > .components-panel__body > .components-panel__body-title button > .inner {
+  display: flex !important;
+  align-items: center !important;
+}
 .o-editor .components-panel > .is-opened.components-panel__body > .components-panel__body-title {
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
@@ -1518,11 +1525,17 @@ body.o-editor-enabled .panelInspectorInsertNewBlock .components-tab-panel__tab-c
   color: rgb(100, 100, 100);
   width: 100%;
 }
-.o-editor .components-panel:hover, .o-editor .components-panel:focus, .o-editor .components-panel:focus-within, .o-editor .components-panel:has(> .is-opened.components-panel__body) {
+.o-editor .components-panel:hover, .o-editor .components-panel:has(> .is-opened.components-panel__body) {
   border-color: #d8eef8;
 }
-.o-editor .components-panel:hover > .components-panel__body > .components-panel__body-title, .o-editor .components-panel:focus > .components-panel__body > .components-panel__body-title, .o-editor .components-panel:focus-within > .components-panel__body > .components-panel__body-title, .o-editor .components-panel:has(> .is-opened.components-panel__body) > .components-panel__body > .components-panel__body-title {
+.o-editor .components-panel:hover > .components-panel__body > .components-panel__body-title, .o-editor .components-panel:has(> .is-opened.components-panel__body) > .components-panel__body > .components-panel__body-title {
   background: #d8eef8 !important;
+}
+.o-editor .components-panel:hover > .components-panel__body > .components-panel__body-title button, .o-editor .components-panel:has(> .is-opened.components-panel__body) > .components-panel__body > .components-panel__body-title button {
+  padding: 24px 30px;
+}
+.o-editor .components-panel:hover > .components-panel__body > .components-panel__body-title button > .inner .label-tooltip .dashicon, .o-editor .components-panel:has(> .is-opened.components-panel__body) > .components-panel__body > .components-panel__body-title button > .inner .label-tooltip .dashicon {
+  color: var(--wp-admin-theme-color);
 }
 
 .o-editor .radio-control-container .components-radio-control__option {

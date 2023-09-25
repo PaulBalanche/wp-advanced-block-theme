@@ -54,12 +54,12 @@ class RepeatableProp extends SimpleProp {
         foreach( $this->getValue() as $key_repeatableValue => $repeatableValue ) {
 
             $SimplePropInstance = new SimpleProp($key_repeatableValue, $repeatableValue, $this->getSpecs() );
-            if( $SimplePropInstance->isValid() ) {
+            if( $SimplePropInstance->isValid() && ! is_null($SimplePropInstance->getValue()) && ! empty( $SimplePropInstance->getValue() ) ) {
                 $valueFormatted[$key_repeatableValue] = $SimplePropInstance->format();
             }
         }
 
-        return $valueFormatted;
+        return ( count($valueFormatted) > 0 ) ? $valueFormatted : null;
     }
 
 }

@@ -109,14 +109,6 @@ export class Render {
                 <div key={id + '-innerLabel'} className="inner">
                     {inner}
                 </div>
-                {description != null && (
-                    <p
-                        key={id + '-innerLabelDescription'}
-                        className="components-input-control__description"
-                    >
-                        {description}
-                    </p>
-                )}
             </>
         );
     }
