@@ -134,11 +134,12 @@ export function Control(props) {
             props.onChange(newValue, [props.sortableIndex]);
         }
 
-        if (directSubmit || directSubmission) {
-            onDirectSubmit(newValue);
-        } else {
-            setUpdating(true);
-        }
+        onSubmit();
+        // if (directSubmit || directSubmission) {
+        //     onDirectSubmit(newValue);
+        // } else {
+        //     setUpdating(true);
+        // }
     }
 
     function onSubmit() {
@@ -150,6 +151,10 @@ export function Control(props) {
             componentInstance,
         );
         setUpdating(false);
+        // componentInstance.updatePreview();
+    }
+
+    function onEndUpdate() {
         componentInstance.updatePreview();
     }
 
@@ -332,11 +337,17 @@ export function Control(props) {
         return className.length > 0 ? className.join(' ') : '';
     }
 
-    function renderSavedButton() {
-        return !haveToDisplayDefaultValue() &&
+    function haveToDisplaySavedButton() {
+        return (
+            !haveToDisplayDefaultValue() &&
             updating &&
             !isSortableItem &&
-            !directSubmission ? (
+            !directSubmission
+        );
+    }
+
+    function renderSavedButton() {
+        return haveToDisplaySavedButton() ? (
             <div
                 key={getKey() + 'buttonsChangesContainer'}
                 className="buttons-changes-container"
@@ -430,8 +441,10 @@ export function Control(props) {
                     args={args}
                     error={error}
                     onChange={(newValue) => onChange(newValue)}
+                    onEndUpdate={() => onEndUpdate()}
                     onSubmit={() => onSubmit()}
                     componentInstance={componentInstance}
+                    savedButton={haveToDisplaySavedButton()}
                 />,
             );
         }

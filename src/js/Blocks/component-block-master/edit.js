@@ -50,7 +50,6 @@ class WpeComponent extends WpeComponentBase {
     shouldComponentUpdate(nextProps, nextState) {
         if (!this.editorPreviewImage) {
             this._iframeResize.bind(this);
-
             if (!this.state.needPreviewUpdate && nextState.needPreviewUpdate) {
                 this.apiFetch(nextProps.attributes);
             }
@@ -89,8 +88,7 @@ class WpeComponent extends WpeComponentBase {
                     needPreviewUpdate: false,
                     error: typeof res.data != 'undefined' ? res.data : null,
                 });
-            }
-            {
+            } else {
                 this.setState({
                     error: res.data,
                     needPreviewUpdate: false,

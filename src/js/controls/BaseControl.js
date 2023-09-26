@@ -87,6 +87,7 @@ export function BaseControl(props) {
                         label={props.label}
                         value={props.value != null ? props.value : ''}
                         onChange={(newValue) => onChange(newValue)}
+                        savedButton={props.savedButton}
                     />
                 );
                 break;
@@ -220,6 +221,7 @@ export function BaseControl(props) {
                         label={props.label}
                         value={props.value != null ? props.value : ''}
                         onChange={(newValue) => onChange(newValue)}
+                        onEndUpdate={() => props.onEndUpdate()}
                     />
                 );
                 break;

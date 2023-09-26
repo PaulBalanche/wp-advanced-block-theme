@@ -467,7 +467,7 @@ export class WpeComponentBase extends Component {
             return null;
         }
 
-        var catReOrder = {};
+        let catReOrder = {};
         const defaultCat = {
             default: { name: 'General', props: {} },
             block_settings: {

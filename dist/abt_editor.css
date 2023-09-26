@@ -125,8 +125,10 @@
   margin-bottom: 160px;
 }
 
-.o-editor .components-color-picker .components-h-stack {
-  display: none;
+.o-editor .basicField .component-color-indicator {
+  cursor: pointer;
+  width: 42px;
+  height: 42px;
 }
 
 .o-editor .block-editor-block-list__block[data-type="custom/wpe-column"] {
@@ -664,12 +666,6 @@ ul.block-list:has(li.is-hover) li.is-hover .dashicon {
 }
 .o-editor .tab-panel-wpe-component {
   width: 100%;
-}
-.o-editor .tab-panel-wpe-component:has(.basicField.updating) .components-base-control__label {
-  filter: blur(5px);
-}
-.o-editor .tab-panel-wpe-component:has(.basicField.updating) .components-base-control__label::after {
-  display: block;
 }
 .o-editor .tab-panel-wpe-component:has(.basicField.updating) .basicField:not(.updating) {
   filter: blur(5px);

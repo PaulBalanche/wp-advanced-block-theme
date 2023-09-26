@@ -11533,8 +11533,7 @@ class WpeComponent extends _Components_WpeComponentBase__WEBPACK_IMPORTED_MODULE
           needPreviewUpdate: false,
           error: typeof res.data != 'undefined' ? res.data : null
         });
-      }
-      {
+      } else {
         this.setState({
           error: res.data,
           needPreviewUpdate: false
@@ -15754,7 +15753,7 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
     if (!_OEditorApp__WEBPACK_IMPORTED_MODULE_6__["default"].exists() || !_OEditorApp__WEBPACK_IMPORTED_MODULE_6__["default"].getInstance().isBlockEdited(this.props.clientId)) {
       return null;
     }
-    var catReOrder = {};
+    let catReOrder = {};
     const defaultCat = {
       default: {
         name: 'General',
@@ -16378,15 +16377,21 @@ function Control(props) {
     if (isSortableItem && typeof props.onChange != 'undefined') {
       props.onChange(newValue, [props.sortableIndex]);
     }
-    if (directSubmit || directSubmission) {
-      onDirectSubmit(newValue);
-    } else {
-      setUpdating(true);
-    }
+    onSubmit();
+    // if (directSubmit || directSubmission) {
+    //     onDirectSubmit(newValue);
+    // } else {
+    //     setUpdating(true);
+    // }
   }
+
   function onSubmit() {
     _Attributes__WEBPACK_IMPORTED_MODULE_4__.Attributes.updateAttributes(keys, valueProp, value, false, componentInstance);
     setUpdating(false);
+    // componentInstance.updatePreview();
+  }
+
+  function onEndUpdate() {
     componentInstance.updatePreview();
   }
   function onDirectSubmit(newValue) {
@@ -16497,8 +16502,11 @@ function Control(props) {
     }
     return className.length > 0 ? className.join(' ') : '';
   }
+  function haveToDisplaySavedButton() {
+    return !haveToDisplayDefaultValue() && updating && !isSortableItem && !directSubmission;
+  }
   function renderSavedButton() {
-    return !haveToDisplayDefaultValue() && updating && !isSortableItem && !directSubmission ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    return haveToDisplaySavedButton() ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       key: getKey() + 'buttonsChangesContainer',
       className: "buttons-changes-container"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
@@ -16559,8 +16567,10 @@ function Control(props) {
         args: args,
         error: error,
         onChange: newValue => onChange(newValue),
+        onEndUpdate: () => onEndUpdate(),
         onSubmit: () => onSubmit(),
-        componentInstance: componentInstance
+        componentInstance: componentInstance,
+        savedButton: haveToDisplaySavedButton()
       }));
     }
     if (isResponsive && defaultDeviceIsDefined()) {
@@ -17012,7 +17022,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _Checkbox__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Checkbox */ "./src/js/controls/Checkbox.js");
-/* harmony import */ var _Color__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Color */ "./src/js/controls/Color.js");
+/* harmony import */ var _Color__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Color */ "./src/js/controls/Color.tsx");
 /* harmony import */ var _DateTime__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./DateTime */ "./src/js/controls/DateTime.js");
 /* harmony import */ var _File__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./File */ "./src/js/controls/File.js");
 /* harmony import */ var _Link__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./Link */ "./src/js/controls/Link.js");
@@ -17096,7 +17106,8 @@ function BaseControl(props) {
           id: props.id,
           label: props.label,
           value: props.value != null ? props.value : '',
-          onChange: newValue => onChange(newValue)
+          onChange: newValue => onChange(newValue),
+          savedButton: props.savedButton
         });
         break;
       case 'checkbox':
@@ -17194,7 +17205,8 @@ function BaseControl(props) {
           id: props.id,
           label: props.label,
           value: props.value != null ? props.value : '',
-          onChange: newValue => onChange(newValue)
+          onChange: newValue => onChange(newValue),
+          onEndUpdate: () => props.onEndUpdate()
         });
         break;
       case 'link':
@@ -17335,10 +17347,10 @@ function Checkbox(_ref) {
 
 /***/ }),
 
-/***/ "./src/js/controls/Color.js":
-/*!**********************************!*\
-  !*** ./src/js/controls/Color.js ***!
-  \**********************************/
+/***/ "./src/js/controls/Color.tsx":
+/*!***********************************!*\
+  !*** ./src/js/controls/Color.tsx ***!
+  \***********************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -17354,22 +17366,40 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 function Color(_ref) {
   let {
     id,
     label,
     value,
-    onChange
+    onChange,
+    savedButton
   } = _ref;
+  const [isOpen, setIsOpen] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
+  const [updating, setUpdating] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
+  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (isOpen) {
+      if (!updating && savedButton) {
+        setUpdating(true);
+      }
+      if (updating && !savedButton) {
+        setIsOpen(false);
+        setUpdating(false);
+      }
+    }
+  }, [isOpen, savedButton]);
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    key: id + '-ColorPickerComponentsBaseControl',
+    key: `${id}-ColorPickerComponentsBaseControl`,
     className: "components-base-control"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    key: id + '-ColorPickerComponentsBaseControlField',
+    key: `${id}-ColorPickerComponentsBaseControlField`,
     className: "components-base-control__field"
-  }, _Static_Render__WEBPACK_IMPORTED_MODULE_2__.Render.label(id, label), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.ColorPicker, {
+  }, _Static_Render__WEBPACK_IMPORTED_MODULE_2__.Render.label(id, label), !isOpen && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.ColorIndicator, {
+    key: `${id}-ColorIndicatorBaseControlField`,
+    colorValue: value,
+    onMouseDown: () => setIsOpen(true)
+  }), isOpen && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.ColorPicker, {
     color: value != '' ? value : null,
-    label: label,
     onChange: newValue => onChange(newValue),
     enableAlpha: true
   })));
@@ -18261,13 +18291,15 @@ function Textarea(_ref) {
     id,
     label,
     value,
-    onChange
+    onChange,
+    onEndUpdate
   } = _ref;
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.TextareaControl, {
     key: id,
     label: label,
     value: value,
-    onChange: newValue => onChange(newValue)
+    onChange: newValue => onChange(newValue),
+    onBlur: () => onEndUpdate()
   });
 }
 

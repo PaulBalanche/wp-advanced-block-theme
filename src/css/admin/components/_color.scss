@@ -1,7 +1,9 @@
 .o-editor {
-    .components-color-picker {
-        .components-h-stack {
-            display: none;
+    .basicField {
+        .component-color-indicator {
+            cursor: pointer;
+            width: $o-space-70;
+            height: $o-space-70;
         }
     }
 }
