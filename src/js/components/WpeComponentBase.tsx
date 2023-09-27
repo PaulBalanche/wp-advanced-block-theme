@@ -627,7 +627,7 @@ export class WpeComponentBase extends Component {
 
             tabPanel.push({
                 name: keyCat,
-                title: titleTab,
+                title: titleTab + ' ' + this.state.needPreviewUpdate,
                 content: currentEditCat,
             });
         }
@@ -684,8 +684,11 @@ export class WpeComponentBase extends Component {
     }
 
     updatePreview() {
-        if (typeof this.state.needPreviewUpdate != 'undefined') {
-            this.setState({ needPreviewUpdate: true });
+        if (
+            typeof this.state.needPreviewUpdate != 'undefined' &&
+            this.state.needPreviewUpdate
+        ) {
+            this.apiFetch();
         }
     }
 

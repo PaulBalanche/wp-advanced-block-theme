@@ -174,9 +174,6 @@ class WysiwygControl extends Component {
                             onChange={this.onChange}
                             typo={this.getTypo()}
                             tools={this.getTools()}
-                            onBlur={() =>
-                                this.props.componentInstance.updatePreview()
-                            }
                         />
                     </div>
                 </div>

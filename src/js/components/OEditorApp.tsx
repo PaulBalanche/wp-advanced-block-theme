@@ -464,9 +464,17 @@ function EditorAppHeader(props) {
             OEditorApp.getInstance().open(false);
         });
         oEditorApp.addEventListener('mouseleave', (e) => {
-            // if (!document.body.classList.contains('modal-open')) {
-            OEditorApp.getInstance().allowToClose();
-            // }
+            if (
+                OEditorApp.getInstance().props.context.selectedBlockClientId !=
+                    undefined &&
+                typeof globalData.componentInstances[
+                    OEditorApp.getInstance().props.context.selectedBlockClientId
+                ] != 'undefined'
+            ) {
+                globalData.componentInstances[
+                    OEditorApp.getInstance().props.context.selectedBlockClientId
+                ].updatePreview();
+            }
         });
     }
 

@@ -15,8 +15,8 @@ import { Render } from './Render';
 export function Sortable(props) {
     const [items, setItems] = useState(Object.keys(props.value));
 
-    function updateValue(newValue, directSubmit = false) {
-        props.onChange(newValue, directSubmit);
+    function updateValue(newValue) {
+        props.onChange(newValue);
     }
 
     function onChange(newValue, index) {

@@ -22,19 +22,25 @@ export function Control(props) {
     const error = props.error;
     const componentInstance = props.componentInstance;
     const isSortableItem = typeof props.sortableIndex != 'undefined';
-    const directSubmission = ![
-        'string',
-        'number',
-        'integer',
-        'text',
-        'richText',
-        'textarea',
-        'wysiwyg',
-        'color',
+    const directSubmission = [
+        'select',
+        'boolean',
+        'switch',
+        'date',
+        'datetime',
+        'image',
+        'file',
+        'gallery',
+        'video',
+        'link',
+        'radio',
+        'relation',
+        'form',
+        'node',
+        'html',
     ].includes(props.type);
 
     const [value, setValue] = useState(props.controllerValue);
-    const [updating, setUpdating] = useState(false);
     const [editMode, setEditMode] = useState(null);
 
     useEffect(() => {
@@ -121,7 +127,7 @@ export function Control(props) {
         );
     }
 
-    function onChange(newValue, directSubmit = false) {
+    function onChange(newValue) {
         if (isResponsive) {
             newValue = {
                 ...value,
@@ -135,11 +141,6 @@ export function Control(props) {
         }
 
         onSubmit();
-        // if (directSubmit || directSubmission) {
-        //     onDirectSubmit(newValue);
-        // } else {
-        //     setUpdating(true);
-        // }
     }
 
     function onSubmit() {
@@ -150,23 +151,13 @@ export function Control(props) {
             false,
             componentInstance,
         );
-        setUpdating(false);
-        // componentInstance.updatePreview();
-    }
+        componentInstance.setState({ needPreviewUpdate: true });
 
-    function onEndUpdate() {
-        componentInstance.updatePreview();
-    }
-
-    function onDirectSubmit(newValue) {
-        Attributes.updateAttributes(
-            keys,
-            valueProp,
-            newValue,
-            false,
-            componentInstance,
-        );
-        componentInstance.updatePreview();
+        if (directSubmission) {
+            setTimeout(() => {
+                componentInstance.updatePreview();
+            });
+        }
     }
 
     function getLabel() {
@@ -330,37 +321,7 @@ export function Control(props) {
             }
         }
 
-        if (updating && !isSortableItem && !directSubmission) {
-            className.push('updating');
-        }
-
         return className.length > 0 ? className.join(' ') : '';
-    }
-
-    function haveToDisplaySavedButton() {
-        return (
-            !haveToDisplayDefaultValue() &&
-            updating &&
-            !isSortableItem &&
-            !directSubmission
-        );
-    }
-
-    function renderSavedButton() {
-        return haveToDisplaySavedButton() ? (
-            <div
-                key={getKey() + 'buttonsChangesContainer'}
-                className="buttons-changes-container"
-            >
-                <Button
-                    key={getKey() + 'submitChanges-button'}
-                    onMouseDown={() => onSubmit()}
-                    variant="primary"
-                >
-                    <Dashicon icon="saved" /> Apply
-                </Button>
-            </div>
-        ) : null;
     }
 
     function renderDefaultValueOverlay() {
@@ -421,9 +382,7 @@ export function Control(props) {
                     required_field={required_field}
                     args={args}
                     error={itemsError}
-                    onChange={(newValue, directSubmit) =>
-                        onChange(newValue, directSubmit)
-                    }
+                    onChange={(newValue) => onChange(newValue)}
                     label={getLabel()}
                 />,
             );
@@ -441,10 +400,8 @@ export function Control(props) {
                     args={args}
                     error={error}
                     onChange={(newValue) => onChange(newValue)}
-                    onEndUpdate={() => onEndUpdate()}
                     onSubmit={() => onSubmit()}
                     componentInstance={componentInstance}
-                    savedButton={haveToDisplaySavedButton()}
                 />,
             );
         }
@@ -488,7 +445,6 @@ export function Control(props) {
         getKey(),
         <>
             {render()}
-            {renderSavedButton()}
             {renderDefaultValueOverlay()}
         </>,
         getContainerClassName(),

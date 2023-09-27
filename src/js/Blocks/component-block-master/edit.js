@@ -33,29 +33,12 @@ class WpeComponent extends WpeComponentBase {
             this.props.clientId;
 
         this.iframeResize = this._iframeResize.bind(this);
-
-        this.editorPreviewImage = this?.props?.attributes?.editorPreviewImage
-            ? this.props.attributes.editorPreviewImage
-            : false;
     }
 
     componentDidMount() {
-        if (!this.editorPreviewImage) {
-            setTimeout(() => {
-                this.apiFetch();
-            });
-        }
-    }
-
-    shouldComponentUpdate(nextProps, nextState) {
-        if (!this.editorPreviewImage) {
-            this._iframeResize.bind(this);
-            if (!this.state.needPreviewUpdate && nextState.needPreviewUpdate) {
-                this.apiFetch(nextProps.attributes);
-            }
-        }
-
-        return true;
+        setTimeout(() => {
+            this.apiFetch();
+        });
     }
 
     apiFetch(attributes = null) {
@@ -152,101 +135,74 @@ class WpeComponent extends WpeComponentBase {
     }
 
     liveRendering() {
-        if (
-            false &&
-            typeof this.props.block_spec.inner_blocks != 'undefined' &&
-            this.props.block_spec.inner_blocks
-        ) {
-            return (
-                <div
-                    key={this.props.clientId + '-innerBlocksProps'}
-                    {...this.props.innerBlocksProps}
-                />
-            );
-        } else {
-            const { error, previewReady } = this.state;
-            var render = [];
+        const { error, previewReady } = this.state;
+        var render = [];
 
-            let errorsBlock = 0;
-            for (var i in error) {
-                if (typeof error[i].error != 'undefined') {
-                    errorsBlock++;
-                }
+        let errorsBlock = 0;
+        for (var i in error) {
+            if (typeof error[i].error != 'undefined') {
+                errorsBlock++;
             }
+        }
 
-            if (this.editorPreviewImage) {
-                render.push(
-                    <img
-                        src={this.editorPreviewImage}
-                        className="editorPreviewImage"
-                    />,
-                );
-            } else {
-                if (previewReady) {
-                    // render.push(this.renderEditFormZone());
-                    render.push(this.renderLoaderPreview());
-                    render.push(this.renderIframePreview());
+        if (previewReady) {
+            // render.push(this.renderEditFormZone());
+            render.push(this.renderLoaderPreview());
+            render.push(this.renderIframePreview());
 
-                    if (
-                        typeof this.props.block_spec.inner_blocks !=
-                            'undefined' &&
-                        this.props.block_spec.inner_blocks !== false
-                    ) {
-                        render.push(
-                            <div
-                                key={this.props.clientId + '-innerBlocksProps'}
-                                {...this.props.innerBlocksProps}
-                            />,
-                        );
-                    }
-                } else if (errorsBlock == 0) {
-                    // render.push(this.renderEditFormZone());
-                    render.push(this.renderLoaderPreview());
-                }
-
+            if (
+                typeof this.props.block_spec.inner_blocks != 'undefined' &&
+                this.props.block_spec.inner_blocks !== false
+            ) {
                 render.push(
                     <div
-                        key={this.props.clientId + '-blockEditOverlay'}
-                        className={`block-edit-overlay${
-                            errorsBlock > 0 ? ' errors' : ''
-                        }`}
-                        onMouseDown={() => {
-                            const domBlock = document.querySelector(
-                                '#block-' + this.props.clientId,
-                            );
-                            domBlock?.scrollIntoView({
-                                behavior: 'smooth',
-                                block: 'center',
-                            });
-                            __OEditorApp.getInstance().open();
-                        }}
-                    >
-                        <h2>
-                            {this.title}
-                            {errorsBlock > 0 && (
-                                <span className="error-attributes">
-                                    {errorsBlock}
-                                </span>
-                            )}
-                        </h2>
-                        {errorsBlock > 0 && (
-                            <p>
-                                Fix error{errorsBlock > 1 && 's'} to make this
-                                block visible.
-                            </p>
-                        )}
-                        {error != null && typeof error == 'string' && (
-                            <p>{error}</p>
-                        )}
-                        <Button variant="primary">
-                            <Dashicon icon="edit" /> Edit
-                        </Button>
-                    </div>,
+                        key={this.props.clientId + '-innerBlocksProps'}
+                        {...this.props.innerBlocksProps}
+                    />,
                 );
             }
-
-            return render;
+        } else if (errorsBlock === 0) {
+            // render.push(this.renderEditFormZone());
+            render.push(this.renderLoaderPreview());
         }
+
+        render.push(
+            <div
+                key={this.props.clientId + '-blockEditOverlay'}
+                className={`block-edit-overlay${
+                    errorsBlock > 0 ? ' errors' : ''
+                }`}
+                onMouseDown={() => {
+                    const domBlock = document.querySelector(
+                        '#block-' + this.props.clientId,
+                    );
+                    domBlock?.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'center',
+                    });
+                    __OEditorApp.getInstance().open();
+                }}
+            >
+                <h2>
+                    {this.title}
+                    {errorsBlock > 0 && (
+                        <span className="error-attributes">{errorsBlock}</span>
+                    )}
+                </h2>
+                {errorsBlock > 0 && (
+                    <p>
+                        Fix error{errorsBlock > 1 && 's'} to make this block
+                        visible.
+                    </p>
+                )}
+                {error != null && typeof error == 'string' && <p>{error}</p>}
+                <Button variant="primary">
+                    <Dashicon icon="edit" /> Edit
+                </Button>
+            </div>,
+        );
+
+        return render;
     }
 }
 
@@ -256,14 +212,14 @@ export const EditMode = compose([
         const { __experimentalGetPreviewDeviceType } = select('core/edit-post');
         let relations = [];
 
-        if (props.name == 'custom/wpe-component-' + props.block_spec.id) {
+        if (props.name === 'custom/wpe-component-' + props.block_spec.id) {
             // Loop Props
             for (const [keyProp, valueProp] of Object.entries(
                 props.block_spec.props,
             )) {
                 if (
-                    (valueProp.type == 'relation' ||
-                        valueProp.type == 'form') &&
+                    (valueProp.type === 'relation' ||
+                        valueProp.type === 'form') &&
                     typeof valueProp.entity != 'undefined' &&
                     relations[valueProp.entity] == null
                 ) {

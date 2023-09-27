@@ -11494,23 +11494,11 @@ class WpeComponent extends _Components_WpeComponentBase__WEBPACK_IMPORTED_MODULE
     this.description = this.props.block_spec.description;
     this.previewUrl = GLOBAL_LOCALIZED.rest_api_url + GLOBAL_LOCALIZED.rest_api_namespace + GLOBAL_LOCALIZED.componentblock_attr_autosaves_rest_api_resource_path + '/' + GLOBAL_LOCALIZED.post_id + '/' + this.props.block_spec.id + '/' + this.props.clientId;
     this.iframeResize = this._iframeResize.bind(this);
-    this.editorPreviewImage = this?.props?.attributes?.editorPreviewImage ? this.props.attributes.editorPreviewImage : false;
   }
   componentDidMount() {
-    if (!this.editorPreviewImage) {
-      setTimeout(() => {
-        this.apiFetch();
-      });
-    }
-  }
-  shouldComponentUpdate(nextProps, nextState) {
-    if (!this.editorPreviewImage) {
-      this._iframeResize.bind(this);
-      if (!this.state.needPreviewUpdate && nextState.needPreviewUpdate) {
-        this.apiFetch(nextProps.attributes);
-      }
-    }
-    return true;
+    setTimeout(() => {
+      this.apiFetch();
+    });
   }
   apiFetch() {
     let attributes = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
@@ -11581,58 +11569,49 @@ class WpeComponent extends _Components_WpeComponentBase__WEBPACK_IMPORTED_MODULE
     return $iframe;
   }
   liveRendering() {
-    if (false) {} else {
-      const {
-        error,
-        previewReady
-      } = this.state;
-      var render = [];
-      let errorsBlock = 0;
-      for (var i in error) {
-        if (typeof error[i].error != 'undefined') {
-          errorsBlock++;
-        }
+    const {
+      error,
+      previewReady
+    } = this.state;
+    var render = [];
+    let errorsBlock = 0;
+    for (var i in error) {
+      if (typeof error[i].error != 'undefined') {
+        errorsBlock++;
       }
-      if (this.editorPreviewImage) {
-        render.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("img", {
-          src: this.editorPreviewImage,
-          className: "editorPreviewImage"
-        }));
-      } else {
-        if (previewReady) {
-          // render.push(this.renderEditFormZone());
-          render.push(this.renderLoaderPreview());
-          render.push(this.renderIframePreview());
-          if (typeof this.props.block_spec.inner_blocks != 'undefined' && this.props.block_spec.inner_blocks !== false) {
-            render.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("div", (0,_babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_0__["default"])({
-              key: this.props.clientId + '-innerBlocksProps'
-            }, this.props.innerBlocksProps)));
-          }
-        } else if (errorsBlock == 0) {
-          // render.push(this.renderEditFormZone());
-          render.push(this.renderLoaderPreview());
-        }
-        render.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("div", {
-          key: this.props.clientId + '-blockEditOverlay',
-          className: `block-edit-overlay${errorsBlock > 0 ? ' errors' : ''}`,
-          onMouseDown: () => {
-            const domBlock = document.querySelector('#block-' + this.props.clientId);
-            domBlock?.scrollIntoView({
-              behavior: 'smooth',
-              block: 'center'
-            });
-            _Components_OEditorApp__WEBPACK_IMPORTED_MODULE_9__["default"].getInstance().open();
-          }
-        }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("h2", null, this.title, errorsBlock > 0 && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("span", {
-          className: "error-attributes"
-        }, errorsBlock)), errorsBlock > 0 && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("p", null, "Fix error", errorsBlock > 1 && 's', " to make this block visible."), error != null && typeof error == 'string' && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("p", null, error), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.Button, {
-          variant: "primary"
-        }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.Dashicon, {
-          icon: "edit"
-        }), " Edit")));
-      }
-      return render;
     }
+    if (previewReady) {
+      // render.push(this.renderEditFormZone());
+      render.push(this.renderLoaderPreview());
+      render.push(this.renderIframePreview());
+      if (typeof this.props.block_spec.inner_blocks != 'undefined' && this.props.block_spec.inner_blocks !== false) {
+        render.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("div", (0,_babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_0__["default"])({
+          key: this.props.clientId + '-innerBlocksProps'
+        }, this.props.innerBlocksProps)));
+      }
+    } else if (errorsBlock === 0) {
+      // render.push(this.renderEditFormZone());
+      render.push(this.renderLoaderPreview());
+    }
+    render.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("div", {
+      key: this.props.clientId + '-blockEditOverlay',
+      className: `block-edit-overlay${errorsBlock > 0 ? ' errors' : ''}`,
+      onMouseDown: () => {
+        const domBlock = document.querySelector('#block-' + this.props.clientId);
+        domBlock?.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center'
+        });
+        _Components_OEditorApp__WEBPACK_IMPORTED_MODULE_9__["default"].getInstance().open();
+      }
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("h2", null, this.title, errorsBlock > 0 && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("span", {
+      className: "error-attributes"
+    }, errorsBlock)), errorsBlock > 0 && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("p", null, "Fix error", errorsBlock > 1 && 's', " to make this block visible."), error != null && typeof error == 'string' && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("p", null, error), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.Button, {
+      variant: "primary"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.Dashicon, {
+      icon: "edit"
+    }), " Edit")));
+    return render;
   }
 }
 const EditMode = (0,_wordpress_compose__WEBPACK_IMPORTED_MODULE_5__.compose)([(0,_wordpress_data__WEBPACK_IMPORTED_MODULE_6__.withSelect)((select, props) => {
@@ -11643,10 +11622,10 @@ const EditMode = (0,_wordpress_compose__WEBPACK_IMPORTED_MODULE_5__.compose)([(0
     __experimentalGetPreviewDeviceType
   } = select('core/edit-post');
   let relations = [];
-  if (props.name == 'custom/wpe-component-' + props.block_spec.id) {
+  if (props.name === 'custom/wpe-component-' + props.block_spec.id) {
     // Loop Props
     for (const [keyProp, valueProp] of Object.entries(props.block_spec.props)) {
-      if ((valueProp.type == 'relation' || valueProp.type == 'form') && typeof valueProp.entity != 'undefined' && relations[valueProp.entity] == null) {
+      if ((valueProp.type === 'relation' || valueProp.type === 'form') && typeof valueProp.entity != 'undefined' && relations[valueProp.entity] == null) {
         relations[valueProp.entity] = getEntityRecords('postType', valueProp.entity, {
           per_page: -1,
           status: 'publish'
@@ -14797,12 +14776,11 @@ function EditorAppHeader(props) {
       OEditorApp.getInstance().open(false);
     });
     oEditorApp.addEventListener('mouseleave', e => {
-      // if (!document.body.classList.contains('modal-open')) {
-      OEditorApp.getInstance().allowToClose();
-      // }
+      if (OEditorApp.getInstance().props.context.selectedBlockClientId != undefined && typeof _global__WEBPACK_IMPORTED_MODULE_6__["default"].componentInstances[OEditorApp.getInstance().props.context.selectedBlockClientId] != 'undefined') {
+        _global__WEBPACK_IMPORTED_MODULE_6__["default"].componentInstances[OEditorApp.getInstance().props.context.selectedBlockClientId].updatePreview();
+      }
     });
   }
-
   function mouseDown(e, marker) {
     setOEditorTop(oEditorApp.offsetTop);
     setOEditorRight(window.innerWidth - (oEditorApp.offsetLeft + oEditorApp.offsetWidth));
@@ -15860,7 +15838,7 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
 
       tabPanel.push({
         name: keyCat,
-        title: titleTab,
+        title: titleTab + ' ' + this.state.needPreviewUpdate,
         content: currentEditCat
       });
     }
@@ -15899,10 +15877,8 @@ class WpeComponentBase extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.C
     return this.state.modal[modal];
   }
   updatePreview() {
-    if (typeof this.state.needPreviewUpdate != 'undefined') {
-      this.setState({
-        needPreviewUpdate: true
-      });
+    if (typeof this.state.needPreviewUpdate != 'undefined' && this.state.needPreviewUpdate) {
+      this.apiFetch();
     }
   }
   renderInspectorControls() {
@@ -16321,9 +16297,8 @@ function Control(props) {
   const error = props.error;
   const componentInstance = props.componentInstance;
   const isSortableItem = typeof props.sortableIndex != 'undefined';
-  const directSubmission = !['string', 'number', 'integer', 'text', 'richText', 'textarea', 'wysiwyg', 'color'].includes(props.type);
+  const directSubmission = ['select', 'boolean', 'switch', 'date', 'datetime', 'image', 'file', 'gallery', 'video', 'link', 'radio', 'relation', 'form', 'node', 'html'].includes(props.type);
   const [value, setValue] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(props.controllerValue);
-  const [updating, setUpdating] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   const [editMode, setEditMode] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
   (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (!!editMode && editMode != _Components_ODevices__WEBPACK_IMPORTED_MODULE_2__["default"].getInstance().getCurrentDevice()) {
@@ -16364,7 +16339,6 @@ function Control(props) {
     return value != null && typeof value == 'object' && typeof value[_Components_ODevices__WEBPACK_IMPORTED_MODULE_2__["default"].getInstance().getDefaultDevice()] != 'undefined';
   }
   function onChange(newValue) {
-    let directSubmit = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
     if (isResponsive) {
       newValue = {
         ...value,
@@ -16378,25 +16352,17 @@ function Control(props) {
       props.onChange(newValue, [props.sortableIndex]);
     }
     onSubmit();
-    // if (directSubmit || directSubmission) {
-    //     onDirectSubmit(newValue);
-    // } else {
-    //     setUpdating(true);
-    // }
   }
-
   function onSubmit() {
     _Attributes__WEBPACK_IMPORTED_MODULE_4__.Attributes.updateAttributes(keys, valueProp, value, false, componentInstance);
-    setUpdating(false);
-    // componentInstance.updatePreview();
-  }
-
-  function onEndUpdate() {
-    componentInstance.updatePreview();
-  }
-  function onDirectSubmit(newValue) {
-    _Attributes__WEBPACK_IMPORTED_MODULE_4__.Attributes.updateAttributes(keys, valueProp, newValue, false, componentInstance);
-    componentInstance.updatePreview();
+    componentInstance.setState({
+      needPreviewUpdate: true
+    });
+    if (directSubmission) {
+      setTimeout(() => {
+        componentInstance.updatePreview();
+      });
+    }
   }
   function getLabel() {
     if (label == null) {
@@ -16497,25 +16463,7 @@ function Control(props) {
         className.push('has-warning');
       }
     }
-    if (updating && !isSortableItem && !directSubmission) {
-      className.push('updating');
-    }
     return className.length > 0 ? className.join(' ') : '';
-  }
-  function haveToDisplaySavedButton() {
-    return !haveToDisplayDefaultValue() && updating && !isSortableItem && !directSubmission;
-  }
-  function renderSavedButton() {
-    return haveToDisplaySavedButton() ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      key: getKey() + 'buttonsChangesContainer',
-      className: "buttons-changes-container"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
-      key: getKey() + 'submitChanges-button',
-      onMouseDown: () => onSubmit(),
-      variant: "primary"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
-      icon: "saved"
-    }), " Apply")) : null;
   }
   function renderDefaultValueOverlay() {
     const text = isResponsive && defaultDeviceIsDefined() ? `Define ${label} for ${_Components_ODevices__WEBPACK_IMPORTED_MODULE_2__["default"].getInstance().getCurrentDevice()}` : 'Override default value';
@@ -16551,7 +16499,7 @@ function Control(props) {
         required_field: required_field,
         args: args,
         error: itemsError,
-        onChange: (newValue, directSubmit) => onChange(newValue, directSubmit),
+        onChange: newValue => onChange(newValue),
         label: getLabel()
       }));
     } else {
@@ -16567,10 +16515,8 @@ function Control(props) {
         args: args,
         error: error,
         onChange: newValue => onChange(newValue),
-        onEndUpdate: () => onEndUpdate(),
         onSubmit: () => onSubmit(),
-        componentInstance: componentInstance,
-        savedButton: haveToDisplaySavedButton()
+        componentInstance: componentInstance
       }));
     }
     if (isResponsive && defaultDeviceIsDefined()) {
@@ -16594,7 +16540,7 @@ function Control(props) {
     }
     return render;
   }
-  return _Render__WEBPACK_IMPORTED_MODULE_5__.Render.fieldContainer(getKey(), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, render(), renderSavedButton(), renderDefaultValueOverlay()), getContainerClassName());
+  return _Render__WEBPACK_IMPORTED_MODULE_5__.Render.fieldContainer(getKey(), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, render(), renderDefaultValueOverlay()), getContainerClassName());
 }
 
 /***/ }),
@@ -16808,8 +16754,7 @@ __webpack_require__.r(__webpack_exports__);
 function Sortable(props) {
   const [items, setItems] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(Object.keys(props.value));
   function updateValue(newValue) {
-    let directSubmit = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
-    props.onChange(newValue, directSubmit);
+    props.onChange(newValue);
   }
   function onChange(newValue, index) {
     const newControllerValue = [];
@@ -17205,8 +17150,7 @@ function BaseControl(props) {
           id: props.id,
           label: props.label,
           value: props.value != null ? props.value : '',
-          onChange: newValue => onChange(newValue),
-          onEndUpdate: () => props.onEndUpdate()
+          onChange: newValue => onChange(newValue)
         });
         break;
       case 'link':
@@ -17372,22 +17316,9 @@ function Color(_ref) {
     id,
     label,
     value,
-    onChange,
-    savedButton
+    onChange
   } = _ref;
   const [isOpen, setIsOpen] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
-  const [updating, setUpdating] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
-  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    if (isOpen) {
-      if (!updating && savedButton) {
-        setUpdating(true);
-      }
-      if (updating && !savedButton) {
-        setIsOpen(false);
-        setUpdating(false);
-      }
-    }
-  }, [isOpen, savedButton]);
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     key: `${id}-ColorPickerComponentsBaseControl`,
     className: "components-base-control"
@@ -18291,15 +18222,13 @@ function Textarea(_ref) {
     id,
     label,
     value,
-    onChange,
-    onEndUpdate
+    onChange
   } = _ref;
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.TextareaControl, {
     key: id,
     label: label,
     value: value,
-    onChange: newValue => onChange(newValue),
-    onBlur: () => onEndUpdate()
+    onChange: newValue => onChange(newValue)
   });
 }
 
@@ -19222,8 +19151,7 @@ class WysiwygControl extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Com
       initialContent: objectValue,
       onChange: this.onChange,
       typo: this.getTypo(),
-      tools: this.getTools(),
-      onBlur: () => this.props.componentInstance.updatePreview()
+      tools: this.getTools()
     }))));
   }
 }
