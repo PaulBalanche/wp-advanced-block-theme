@@ -8,7 +8,7 @@ export function PropsObject({
     props,
     keys,
     valueProp,
-    componentInstance,
+    clientId,
     error,
 }) {
     let fieldsetObject = [];
@@ -29,7 +29,7 @@ export function PropsObject({
                 valueSubProp,
                 keys.concat(keySubProp),
                 valueProp,
-                componentInstance,
+                clientId,
                 subPropError,
             ),
         );

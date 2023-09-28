@@ -9,12 +9,12 @@ import '../css/admin/_index.scss';
 import OEditorApp from './Components/OEditorApp';
 
 import './Blocks/component-block-master/index';
-import './Blocks/layout/wpe-column/index';
-import './Blocks/layout/wpe-container/index';
-import './Blocks/layout/wpe-gallery/index';
-import './Blocks/layout/wpe-grid/index';
-import './Blocks/layout/wpe-slide/index';
-import './Blocks/layout/wpe-slider/index';
+// import './Blocks/layout/wpe-column/index';
+// import './Blocks/layout/wpe-container/index';
+// import './Blocks/layout/wpe-gallery/index';
+// import './Blocks/layout/wpe-grid/index';
+// import './Blocks/layout/wpe-slide/index';
+// import './Blocks/layout/wpe-slider/index';
 
 class OEditor {
     constructor() {

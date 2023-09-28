@@ -95,9 +95,9 @@ export default class OEditorApp extends Component {
                 this._mount();
             }
 
-            for (var i in globalData.componentInstances) {
-                globalData.componentInstances[i].forceUpdate();
-            }
+            // for (var i in globalData.componentInstances) {
+            //     globalData.componentInstances[i].forceUpdate();
+            // }
 
             // Force first of reusable block selection
             if (this.props.context.selectedBlockClientId != null) {
@@ -170,7 +170,7 @@ export default class OEditorApp extends Component {
             if (anchorDetection != null) {
                 const clientIdRequested = anchorDetection[1];
 
-                for (var i in globalData.componentInstances) {
+                for (let i in globalData.componentInstances) {
                     if (
                         globalData.componentInstances[i].getId() ==
                         clientIdRequested
@@ -196,7 +196,7 @@ export default class OEditorApp extends Component {
         this.setState({ route: null });
     }
 
-    isBlockEdited(clientId) {
+    isBlockEdited(clientId: string) {
         if (this.state.route != null) {
             return false;
         }
@@ -205,11 +205,7 @@ export default class OEditorApp extends Component {
             return false;
         }
 
-        if (this.props.context.selectedBlockClientId != clientId) {
-            return false;
-        }
-
-        return true;
+        return this.props.context.selectedBlockClientId == clientId;
     }
 
     forceSelectComponent(component: any): void {
@@ -329,13 +325,7 @@ export default class OEditorApp extends Component {
                 break;
             default:
                 var componentToRender =
-                    this.props.context.selectedBlockClientId != undefined &&
-                    typeof globalData.componentInstances[
-                        this.props.context.selectedBlockClientId
-                    ] != 'undefined' &&
-                    globalData.componentInstances[
-                        this.props.context.selectedBlockClientId
-                    ].isEditable()
+                    this.props.context.selectedBlockClientId != undefined
                         ? new __OEditorBlock(
                               globalData.componentInstances[
                                   this.props.context.selectedBlockClientId

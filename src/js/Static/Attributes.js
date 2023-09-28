@@ -1,4 +1,6 @@
 import { Control } from './Control';
+import { store as blockEditorStore } from '@wordpress/block-editor';
+import { useDispatch } from '@wordpress/data';
 
 export class Attributes {
     static returnStringOrNumber(value, isNumber = false) {
@@ -10,24 +12,24 @@ export class Attributes {
         currentValueProp,
         currentValueRepeatableField,
         isNumber = false,
-        componentInstance,
+        clientId,
     ) {
         Attributes.updateAttributes(
             arrayKey,
             currentValueProp,
             currentValueRepeatableField.concat(''),
             isNumber,
-            componentInstance,
+            clientId,
         );
     }
 
-    static removeEltRepeatable(arrayKey, currentValueProp, componentInstance) {
+    static removeEltRepeatable(arrayKey, currentValueProp, clientId) {
         Attributes.updateAttributes(
             arrayKey,
             currentValueProp,
             false,
             false,
-            componentInstance,
+            clientId,
         );
     }
 
@@ -42,7 +44,7 @@ export class Attributes {
         currentValue,
         newValue,
         isNumber = false,
-        componentInstance,
+        setAttributes,
     ) {
         const newValueToUpdate = Attributes.recursiveUpdateObjectFromObject(
             arrayKey,
@@ -50,7 +52,8 @@ export class Attributes {
             newValue,
             isNumber,
         );
-        componentInstance.setAttributes({
+
+        setAttributes({
             [arrayKey[0]]: newValueToUpdate[arrayKey[0]],
         });
     }
@@ -119,10 +122,17 @@ export class Attributes {
         return objectReturned;
     }
 
-    static renderProp(prop, keys, valueProp, componentInstance, error = false) {
+    static renderProp(
+        prop,
+        keys,
+        valueProp,
+        clientId,
+        error = false,
+        onChange = null,
+        setAttributes = null,
+    ) {
         const type = prop.type.toLowerCase();
-        const blockKey =
-            componentInstance.props.clientId + '-' + keys.join('-');
+        const blockKey = clientId + '-' + keys.join('-');
         const repeatable =
             typeof prop.repeatable != 'undefined' && !!prop.repeatable
                 ? true
@@ -261,7 +271,9 @@ export class Attributes {
                 }
                 args={args}
                 error={error}
-                componentInstance={componentInstance}
+                clientId={clientId}
+                onChange={onChange}
+                setAttributes={setAttributes}
             />
         );
     }

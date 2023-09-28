@@ -5,6 +5,8 @@ import { BaseControl } from '../controls/BaseControl';
 import { Attributes } from './Attributes';
 import { Render } from './Render';
 import { Sortable } from './Sortable';
+import { store as blockEditorStore } from '@wordpress/block-editor';
+import { useDispatch } from '@wordpress/data';
 
 export function Control(props) {
     const id = props.keys.join('-');
@@ -20,7 +22,7 @@ export function Control(props) {
     const isResponsive = props.isResponsive;
     const args = props.args;
     const error = props.error;
-    const componentInstance = props.componentInstance;
+    const clientId = props.clientId;
     const isSortableItem = typeof props.sortableIndex != 'undefined';
     const directSubmission = [
         'select',
@@ -42,6 +44,7 @@ export function Control(props) {
 
     const [value, setValue] = useState(props.controllerValue);
     const [editMode, setEditMode] = useState(null);
+    const { updateBlockAttributes } = useDispatch(blockEditorStore);
 
     useEffect(() => {
         if (
@@ -140,22 +143,18 @@ export function Control(props) {
             props.onChange(newValue, [props.sortableIndex]);
         }
 
-        onSubmit();
-    }
-
-    function onSubmit() {
         Attributes.updateAttributes(
             keys,
             valueProp,
-            value,
+            newValue,
             false,
-            componentInstance,
+            props.setAttributes,
         );
-        componentInstance.setState({ needPreviewUpdate: true });
+        props.onChange();
 
         if (directSubmission) {
             setTimeout(() => {
-                componentInstance.updatePreview();
+                // componentInstance.updatePreview();
             });
         }
     }
@@ -373,7 +372,7 @@ export function Control(props) {
                     key={getKey() + '-Sortable'}
                     id={getKey() + '-Sortable'}
                     type={type}
-                    componentInstance={componentInstance}
+                    clientId={clientId}
                     blockKey={getKey()}
                     keys={getKeys()}
                     controllerValue={props.controllerValue}
@@ -401,7 +400,7 @@ export function Control(props) {
                     error={error}
                     onChange={(newValue) => onChange(newValue)}
                     onSubmit={() => onSubmit()}
-                    componentInstance={componentInstance}
+                    clientId={clientId}
                 />,
             );
         }

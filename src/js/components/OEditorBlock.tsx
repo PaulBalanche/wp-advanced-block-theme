@@ -6,15 +6,15 @@ export default class OEditorBlock {
 
     constructor(blockInstance) {
         this._blockInstance = blockInstance;
-        document.location.hash = `${this._blockInstance.getId()}`;
+        // document.location.hash = `${this._blockInstance.getId()}`;
     }
 
     renderTitle() {
-        return this._blockInstance.renderTitle?.();
+        // return this._blockInstance.renderTitle?.();
     }
 
     renderTools() {
-        return this._blockInstance.renderTools?.();
+        // return this._blockInstance.renderTools?.();
     }
 
     getOpenMarker() {
@@ -30,7 +30,7 @@ export default class OEditorBlock {
             <nav>
                 <ol>
                     {__OEditorApp.getInstance().renderFooterBreadcrumb()}
-                    {this._blockInstance.renderFooter?.()}
+                    {/*{this._blockInstance.renderFooter?.()}*/}
                 </ol>
             </nav>
         );
@@ -44,9 +44,9 @@ export default class OEditorBlock {
     getExtraClassName() {
         var className = 'block';
 
-        if (this._blockInstance.isReusable()) {
-            className += ' is-reusable';
-        }
+        // if (this._blockInstance.isReusable()) {
+        //     className += ' is-reusable';
+        // }
 
         return className;
     }

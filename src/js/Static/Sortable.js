@@ -134,7 +134,7 @@ export function Sortable(props) {
                 >
                     <Control
                         type={props.type}
-                        componentInstance={props.componentInstance}
+                        clientId={props.clientId}
                         blockKey={props.blockKey + '-' + keyLoop}
                         label={labelRepeatableItem}
                         keys={props.keys.concat(keyLoop)}
