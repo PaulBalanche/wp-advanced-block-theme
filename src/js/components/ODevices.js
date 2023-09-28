@@ -109,7 +109,7 @@ export default class ODevices extends Component {
             }
         }
 
-        __OEditorApp.getInstance().setCurrentDevice(newDevice);
+        // __OEditorApp.getInstance().setCurrentDevice(newDevice);
     }
 
     getMediaQueries() {

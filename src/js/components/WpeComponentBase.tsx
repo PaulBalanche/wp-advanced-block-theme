@@ -44,7 +44,7 @@ function WpeComponentBase({
     });
 
     // Detect if inside a reusable block
-    const { parentsBlock } = useSelect(
+    const { parentsBlock, selectedBlockClientId } = useSelect(
         (select) => {
             const getBlockParents =
                 select('core/block-editor').getBlockParents(clientId);
@@ -55,7 +55,13 @@ function WpeComponentBase({
                 );
             }
 
-            return { parentsBlock: parentsBlock };
+            const selectedBlockClientId =
+                select('core/block-editor').getSelectedBlockClientId();
+
+            return {
+                parentsBlock: parentsBlock,
+                selectedBlockClientId: selectedBlockClientId,
+            };
         },
         [clientId],
     );
@@ -430,10 +436,7 @@ function WpeComponentBase({
     }
 
     function renderPropsEdition() {
-        if (
-            !__OEditorApp.exists() ||
-            !__OEditorApp.getInstance().isBlockEdited(clientId)
-        ) {
+        if (clientId != selectedBlockClientId) {
             return null;
         }
 
@@ -681,12 +684,6 @@ function WpeComponentBase({
         );
 
         if (!titleOnly) {
-            // Separator
-            // editZone.push(<div key={ clientId + "_EditZoneSeparator1" } className="separator"></div>);
-
-            // Edit button
-            // editZone.push(this.renderButtonEditZone());
-
             // Additionnal content
             if (content != null) {
                 // Separator
@@ -700,43 +697,15 @@ function WpeComponentBase({
                 // Additionnal content
                 editZone.push(content);
             }
-
-            // editZone.push(this.renderTools());
         }
 
         return (
             <div
                 key={clientId + '-EditZoneButtonGroup'}
                 className="o-toolbar-container"
-                // onDoubleClick={(e) => {
-                //     __OEditorApp.getInstance().open( this );
-                //     if( this.getReusableBlock() != null ) {
-                //         __OModal.getInstance().showModal('alertReusableBlock', true);
-                //     }
-                // }}
             >
                 <div className="o-toolbar">{editZone}</div>
             </div>
-        );
-    }
-
-    function renderButtonEditZone() {
-        return (
-            <Button
-                key={clientId + '-EditZoneButtonEdition'}
-                className="abtButtonEditZone"
-                variant="primary"
-                onMouseDown={() => {
-                    __OEditorApp.getInstance().open(this);
-                    if (this.getReusableBlock() != null) {
-                        __OModal
-                            .getInstance()
-                            .showModal('alertReusableBlock', true);
-                    }
-                }}
-            >
-                <Dashicon icon="edit" /> Edit
-            </Button>
         );
     }
 

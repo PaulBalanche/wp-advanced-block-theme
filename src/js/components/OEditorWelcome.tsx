@@ -20,9 +20,9 @@ export default class OEditorWelcome {
                     <Button
                         key="o-editor-help-settings"
                         variant="tertiary"
-                        onMouseDown={() =>
-                            __OEditorApp.getInstance().routeTo('settings')
-                        }
+                        // onMouseDown={() =>
+                        //     // __OEditorApp.getInstance().routeTo('settings')
+                        // }
                     >
                         <Dashicon icon="admin-settings" />
                         User preferences
@@ -36,7 +36,7 @@ export default class OEditorWelcome {
         return (
             <nav>
                 <ol>
-                    {__OEditorApp.getInstance().renderFooterBreadcrumb()}
+                    {/*{__OEditorApp.getInstance().renderFooterBreadcrumb()}*/}
                     <li>Help</li>
                 </ol>
             </nav>

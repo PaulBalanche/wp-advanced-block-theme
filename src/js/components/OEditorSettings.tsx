@@ -17,7 +17,7 @@ export default class OEditorSettings {
         return (
             <nav>
                 <ol>
-                    {__OEditorApp.getInstance().renderFooterBreadcrumb()}
+                    {/*{__OEditorApp.getInstance().renderFooterBreadcrumb()}*/}
                     <li>User preferences</li>
                 </ol>
             </nav>

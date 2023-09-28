@@ -11,7 +11,6 @@ import { useState, useEffect } from '@wordpress/element';
 import { getBlockType } from '@wordpress/blocks';
 import WpeComponentBase from '../../Components/WpeComponentBase';
 import { OButtonBlockAppender } from '../../Components/OButtonBlockAppender';
-import __OEditorApp from '../../Components/OEditorApp';
 import apiFetch from '@wordpress/api-fetch';
 
 function EditMode({
@@ -105,10 +104,6 @@ function EditMode({
             } else {
                 setError(res.data);
             }
-
-            // if (__OEditorApp.getInstance()) {
-            //     __OEditorApp.getInstance().forceUpdate();
-            // }
         });
     }
 
@@ -125,8 +120,6 @@ function EditMode({
             iFrame.parentNode.style.height = heightIframe;
             iFrame.contentWindow.document.body.style.overflowY = 'hidden';
         }
-
-        // __OEditorApp.getInstance().refreshScrollrefreshScroll();
     }
 
     function renderLoaderPreview() {
@@ -203,7 +196,6 @@ function EditMode({
                         behavior: 'smooth',
                         block: 'center',
                     });
-                    __OEditorApp.getInstance().open();
                 }}
             >
                 <h2>

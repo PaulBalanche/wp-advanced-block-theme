@@ -34,7 +34,7 @@ class WpeContainer extends WpeComponentBase {
                             behavior: 'smooth',
                             block: 'center',
                         });
-                        __OEditorApp.getInstance().open();
+                        // __OEditorApp.getInstance().open();
                     }}
                 >
                     <h2>Container</h2>

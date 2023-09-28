@@ -2,11 +2,12 @@ import { Button, Dashicon } from '@wordpress/components';
 import { useSelect } from '@wordpress/data';
 import { getBlockType } from '@wordpress/blocks';
 import __OEditorApp from './OEditorApp';
+import { OEditorAppHeader } from './OEditorAppHeader';
 
-export function OEditorBlock(clientId) {
+export function OEditorBlock({ clientId, isOpen, breadcrumb }) {
     const { block, parentsBlock } = useSelect(
         (select) => {
-            const block = getBlock(clientId);
+            const block = select('core/block-editor').getBlock(clientId);
             const getBlockParents =
                 select('core/block-editor').getBlockParents(clientId);
             const parentsBlock = [];
@@ -86,7 +87,7 @@ export function OEditorBlock(clientId) {
         return (
             <nav>
                 <ol>
-                    {__OEditorApp.getInstance().renderFooterBreadcrumb()}
+                    {/*{__OEditorApp.getInstance().renderFooterBreadcrumb()}*/}
                     {/*{this._blockInstance.renderFooter?.()}*/}
                 </ol>
             </nav>
@@ -102,4 +103,20 @@ export function OEditorBlock(clientId) {
 
         return className;
     }
+
+    return (
+        <>
+            <OEditorAppHeader isOpen={isOpen} openMarker={getOpenMarker()}>
+                <nav>
+                    <ol>
+                        {breadcrumb}
+                        {renderTitle()}
+                        {renderTools()}
+                    </ol>
+                </nav>
+            </OEditorAppHeader>
+            <div className="o-editor-app_body"></div>
+            <div className="o-editor-app_footer">{renderFooter()}</div>
+        </>
+    );
 }

@@ -160,7 +160,7 @@ export function Control(props) {
             setUpdatePreviewTimeoutRef(
                 setTimeout(() => {
                     props.setNeedPreviewUpdate();
-                }, 2000),
+                }, 1500),
             );
         }
     }
@@ -437,7 +437,7 @@ export function Control(props) {
                 render,
                 (newDevice) => {
                     componentInstance.setState({ currentEditedProp: id });
-                    __ODevices.getInstance().setCurrentDevice(newDevice);
+                    // __ODevices.getInstance().setCurrentDevice(newDevice);
                 },
                 type,
             );
