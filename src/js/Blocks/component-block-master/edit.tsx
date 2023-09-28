@@ -237,7 +237,7 @@ function EditMode({
             description={block_spec.description}
             block_spec={block_spec}
             error={error}
-            onChange={() => setNeedPreviewUpdate(true)}
+            setNeedPreviewUpdate={() => setNeedPreviewUpdate(true)}
         >
             {liveRendering()}
         </WpeComponentBase>

@@ -36,7 +36,7 @@ function WpeComponentBase({
     description,
     block_spec,
     error,
-    onChange,
+    setNeedPreviewUpdate,
     children,
 }) {
     const [modal, setModal] = useState({
@@ -70,7 +70,7 @@ function WpeComponentBase({
 
     const title =
         typeof name != 'undefined' ? getBlockType(name).title : 'Undefined...';
-    const reusableBlock = isReusableBlock();
+    const reusableBlock = checkIsReusableBlock();
 
     globalData.componentInstances[clientId] = this;
     if (getAttribute('anchor') != null) {
@@ -97,7 +97,7 @@ function WpeComponentBase({
             : null;
     }
 
-    function isReusableBlock() {
+    function checkIsReusableBlock() {
         if (typeof parentsBlock == 'object') {
             for (let i in parentsBlock) {
                 if (isReusableBlock(parentsBlock[i])) {
@@ -563,7 +563,7 @@ function WpeComponentBase({
                         { [keyProp]: valueProp },
                         clientId,
                         currentAttributeError,
-                        onChange,
+                        setNeedPreviewUpdate,
                         setAttributes,
                     ),
                 );

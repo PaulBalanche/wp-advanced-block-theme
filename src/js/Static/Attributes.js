@@ -128,7 +128,7 @@ export class Attributes {
         valueProp,
         clientId,
         error = false,
-        onChange = null,
+        setNeedPreviewUpdate = null,
         setAttributes = null,
     ) {
         const type = prop.type.toLowerCase();
@@ -272,7 +272,7 @@ export class Attributes {
                 args={args}
                 error={error}
                 clientId={clientId}
-                onChange={onChange}
+                setNeedPreviewUpdate={setNeedPreviewUpdate}
                 setAttributes={setAttributes}
             />
         );

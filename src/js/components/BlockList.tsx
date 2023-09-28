@@ -5,7 +5,7 @@ import { SlideDown } from 'react-slidedown';
 import '../../../node_modules/react-slidedown/lib/slidedown.css';
 import globalData from '../global';
 
-export const BlockList = (props) => {
+export function BlockList(props) {
     const children = [];
     props.blocksList.forEach((block) => {
         if (
@@ -38,9 +38,9 @@ export const BlockList = (props) => {
             <ul className="block-list">{children}</ul>
         )
     ) : null;
-};
+}
 
-const BlockListItem = ({ block, selectBlock }) => {
+function BlockListItem({ block, selectBlock }) {
     const [isOpen, setIsOpen] = useState(false);
     const [isHover, setIsHover] = useState(false);
     const [timeoutId, setTimeoutId] = useState(null);
@@ -94,7 +94,7 @@ const BlockListItem = ({ block, selectBlock }) => {
     ) {
         let errorsBlock = 0;
         let warningsBlock = 0;
-        for (var i in globalData.componentInstances[block.clientId].state
+        for (let i in globalData.componentInstances[block.clientId].state
             .error) {
             if (
                 typeof globalData.componentInstances[block.clientId].state
@@ -209,4 +209,4 @@ const BlockListItem = ({ block, selectBlock }) => {
             )}
         </li>
     );
-};
+}

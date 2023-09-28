@@ -1,7 +1,7 @@
 import { Button, Dashicon } from '@wordpress/components';
 import { Component, useEffect, useState } from '@wordpress/element';
 
-import __OEditorBlock from './OEditorBlock';
+import { OEditorBlock } from './OEditorBlock';
 import __OEditorInspector from './OEditorInspector';
 import __OEditorSettings from './OEditorSettings';
 import __OEditorWelcome from './OEditorWelcome';
@@ -95,10 +95,6 @@ export default class OEditorApp extends Component {
                 this._mount();
             }
 
-            // for (var i in globalData.componentInstances) {
-            //     globalData.componentInstances[i].forceUpdate();
-            // }
-
             // Force first of reusable block selection
             if (this.props.context.selectedBlockClientId != null) {
                 for (var i in this.props.context.blocksList) {
@@ -168,19 +164,7 @@ export default class OEditorApp extends Component {
             const anchorDetection =
                 document.location.hash?.match(/^#([a-zA-Z0-9-]+)/);
             if (anchorDetection != null) {
-                const clientIdRequested = anchorDetection[1];
-
-                for (let i in globalData.componentInstances) {
-                    if (
-                        globalData.componentInstances[i].getId() ==
-                        clientIdRequested
-                    ) {
-                        this.forceSelectComponent(
-                            globalData.componentInstances[i],
-                        );
-                        break;
-                    }
-                }
+                this.props.context.selectBlock(anchorDetection[1]);
             }
         }
     }
@@ -206,26 +190,6 @@ export default class OEditorApp extends Component {
         }
 
         return this.props.context.selectedBlockClientId == clientId;
-    }
-
-    forceSelectComponent(component: any): void {
-        // If clientId given, get the block instance related
-        if (typeof component == 'string') {
-            for (var i in globalData.componentInstances) {
-                if (
-                    globalData.componentInstances[i].props.clientId == component
-                ) {
-                    component = globalData.componentInstances[i];
-                    break;
-                }
-            }
-        }
-
-        if (typeof component == 'string') {
-            return;
-        }
-
-        this.props.context.selectBlock(component.props.clientId);
     }
 
     refreshScroll() {
@@ -273,10 +237,7 @@ export default class OEditorApp extends Component {
 
     renderBreadcrumb() {
         return this.state.route != null ||
-            (this.props.context.selectedBlockClientId != undefined &&
-                typeof globalData.componentInstances[
-                    this.props.context.selectedBlockClientId
-                ] != 'undefined') ? (
+            this.props.context.selectedBlockClientId != undefined ? (
             <li className="breadcrumb-home">
                 <Button
                     key={'breadcrumb-home'}
@@ -294,10 +255,7 @@ export default class OEditorApp extends Component {
 
     renderFooterBreadcrumb() {
         return this.state.route != null ||
-            (this.props.context.selectedBlockClientId != undefined &&
-                typeof globalData.componentInstances[
-                    this.props.context.selectedBlockClientId
-                ] != 'undefined') ? (
+            this.props.context.selectedBlockClientId != undefined ? (
             <li>
                 <Button
                     key={'breadcrumb-home'}
@@ -326,11 +284,7 @@ export default class OEditorApp extends Component {
             default:
                 var componentToRender =
                     this.props.context.selectedBlockClientId != undefined
-                        ? new __OEditorBlock(
-                              globalData.componentInstances[
-                                  this.props.context.selectedBlockClientId
-                              ],
-                          )
+                        ? OEditorBlock(this.props.context.selectedBlockClientId)
                         : new __OEditorInspector(
                               this.props.context.blocksList,
                               this.props.context.selectBlock,
@@ -452,19 +406,6 @@ function EditorAppHeader(props) {
 
         oEditorApp.addEventListener('mouseenter', (e) => {
             OEditorApp.getInstance().open(false);
-        });
-        oEditorApp.addEventListener('mouseleave', (e) => {
-            if (
-                OEditorApp.getInstance().props.context.selectedBlockClientId !=
-                    undefined &&
-                typeof globalData.componentInstances[
-                    OEditorApp.getInstance().props.context.selectedBlockClientId
-                ] != 'undefined'
-            ) {
-                globalData.componentInstances[
-                    OEditorApp.getInstance().props.context.selectedBlockClientId
-                ].updatePreview();
-            }
         });
     }
 

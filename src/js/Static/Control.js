@@ -44,6 +44,8 @@ export function Control(props) {
 
     const [value, setValue] = useState(props.controllerValue);
     const [editMode, setEditMode] = useState(null);
+    const [updatePreviewTimeoutRef, setUpdatePreviewTimeoutRef] =
+        useState(null);
     const { updateBlockAttributes } = useDispatch(blockEditorStore);
 
     useEffect(() => {
@@ -150,12 +152,16 @@ export function Control(props) {
             false,
             props.setAttributes,
         );
-        props.onChange();
 
+        clearTimeout(updatePreviewTimeoutRef);
         if (directSubmission) {
-            setTimeout(() => {
-                // componentInstance.updatePreview();
-            });
+            props.setNeedPreviewUpdate();
+        } else {
+            setUpdatePreviewTimeoutRef(
+                setTimeout(() => {
+                    props.setNeedPreviewUpdate();
+                }, 2000),
+            );
         }
     }
 
