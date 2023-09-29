@@ -1,4 +1,4 @@
-import { Component } from "@wordpress/element";
+import { Component } from '@wordpress/element';
 
 import {
     Button,
@@ -6,11 +6,11 @@ import {
     PanelBody,
     SelectControl,
     TabPanel,
-} from "@wordpress/components";
+} from '@wordpress/components';
 
-import { merge } from "merge-anything";
+import { merge } from 'merge-anything';
 
-import __ODevices from "../../Components/ODevices";
+import { Devices } from '../../Static/Devices';
 
 export class MarginControls extends Component {
     constructor(attr) {
@@ -21,31 +21,31 @@ export class MarginControls extends Component {
             ? attr.margin
             : [
                   {
-                      label: "1",
-                      value: "1",
+                      label: '1',
+                      value: '1',
                   },
                   {
-                      label: "2",
-                      value: "2",
+                      label: '2',
+                      value: '2',
                   },
                   {
-                      label: "3",
-                      value: "3",
+                      label: '3',
+                      value: '3',
                   },
                   {
-                      label: "4",
-                      value: "4",
+                      label: '4',
+                      value: '4',
                   },
                   {
-                      label: "5",
-                      value: "5",
+                      label: '5',
+                      value: '5',
                   },
               ];
 
-        if (!this.parentProps.attributes.hasOwnProperty("padding")) {
+        if (!this.parentProps.attributes.hasOwnProperty('padding')) {
             this.parentProps.attributes.padding = {};
         }
-        if (!this.parentProps.attributes.hasOwnProperty("margin")) {
+        if (!this.parentProps.attributes.hasOwnProperty('margin')) {
             this.parentProps.attributes.margin = {};
         }
 
@@ -54,36 +54,34 @@ export class MarginControls extends Component {
             margin: {},
         };
 
-        Object.keys(__ODevices.getInstance().getMediaQueries()).forEach(
-            (layout) => {
-                this.state.padding[layout] = {
-                    all: undefined,
-                    top: undefined,
-                    bottom: undefined,
-                    left: undefined,
-                    right: undefined,
-                    x: undefined,
-                    y: undefined,
-                };
-                this.state.margin[layout] = {
-                    all: undefined,
-                    top: undefined,
-                    bottom: undefined,
-                    left: undefined,
-                    right: undefined,
-                    x: undefined,
-                    y: undefined,
-                };
-            }
-        );
+        Object.keys(Devices.getMediaQueries()).forEach((layout) => {
+            this.state.padding[layout] = {
+                all: undefined,
+                top: undefined,
+                bottom: undefined,
+                left: undefined,
+                right: undefined,
+                x: undefined,
+                y: undefined,
+            };
+            this.state.margin[layout] = {
+                all: undefined,
+                top: undefined,
+                bottom: undefined,
+                left: undefined,
+                right: undefined,
+                x: undefined,
+                y: undefined,
+            };
+        });
 
         this.state.padding = merge(
             this.state.padding,
-            this.parentProps.attributes.padding
+            this.parentProps.attributes.padding,
         );
         this.state.margin = merge(
             this.state.margin,
-            this.parentProps.attributes.margin
+            this.parentProps.attributes.margin,
         );
     }
 
@@ -121,12 +119,10 @@ export class MarginControls extends Component {
 
     resetPadding(deviceType) {
         let newPadding = {};
-        Object.keys(__ODevices.getInstance().getMediaQueries()).forEach(
-            (layout) => {
-                newPadding[layout] =
-                    deviceType == layout ? {} : this.state.padding[layout];
-            }
-        );
+        Object.keys(Devices.getMediaQueries()).forEach((layout) => {
+            newPadding[layout] =
+                deviceType == layout ? {} : this.state.padding[layout];
+        });
 
         this.setState({ padding: newPadding });
         this.parentProps.setAttributes({ padding: newPadding });
@@ -134,12 +130,10 @@ export class MarginControls extends Component {
 
     resetMargin(deviceType) {
         let newMargin = {};
-        Object.keys(__ODevices.getInstance().getMediaQueries()).forEach(
-            (layout) => {
-                newMargin[layout] =
-                    deviceType == layout ? {} : this.state.margin[layout];
-            }
-        );
+        Object.keys(Devices.getMediaQueries()).forEach((layout) => {
+            newMargin[layout] =
+                deviceType == layout ? {} : this.state.margin[layout];
+        });
 
         this.setState({ margin: newMargin });
         this.parentProps.setAttributes({ margin: newMargin });
@@ -147,25 +141,25 @@ export class MarginControls extends Component {
 
     renderBtnReset(property, deviceType) {
         var propertyToTreat =
-            property == "padding" ? this.state.padding : this.state.margin;
+            property == 'padding' ? this.state.padding : this.state.margin;
 
         var btnResetPadding = [];
         if (
-            typeof propertyToTreat[deviceType] == "object" &&
+            typeof propertyToTreat[deviceType] == 'object' &&
             Object.keys(propertyToTreat).length > 0
         ) {
             for (const [key, value] of Object.entries(
-                propertyToTreat[deviceType]
+                propertyToTreat[deviceType],
             )) {
-                if (typeof value != "undefined") {
+                if (typeof value != 'undefined') {
                     btnResetPadding.push(
                         <div
                             key={
-                                "containerReset-" +
+                                'containerReset-' +
                                 property +
-                                "-" +
+                                '-' +
                                 deviceType +
-                                "-" +
+                                '-' +
                                 this.parentProps.clientId
                             }
                         >
@@ -174,7 +168,7 @@ export class MarginControls extends Component {
                                 variant="secondary"
                                 className="is-secondary"
                                 onMouseDown={() => {
-                                    if (property == "padding") {
+                                    if (property == 'padding') {
                                         this.resetPadding(deviceType);
                                     } else {
                                         this.resetMargin(deviceType);
@@ -183,7 +177,7 @@ export class MarginControls extends Component {
                             >
                                 Reset {deviceType}
                             </Button>
-                        </div>
+                        </div>,
                     );
 
                     break;
@@ -195,27 +189,26 @@ export class MarginControls extends Component {
     }
 
     render() {
-
         const currentDevice = __ODevices.getInstance().getCurrentDevice();
 
         return (
             <>
-                <PanelBody title={"Padding"} initialOpen={false}>
+                <PanelBody title={'Padding'} initialOpen={false}>
                     <TabPanel
                         className="padding-tab-panel"
                         activeClass="active-tab"
                         initialTabName={currentDevice}
-                        tabs={Object.keys(
-                            __ODevices.getInstance().getMediaQueries()
-                        ).map((layout) => {
-                            return {
-                                name: layout,
-                                title:
-                                    layout.charAt(0).toUpperCase() +
-                                    layout.slice(1),
-                                className: "tab-" + layout,
-                            };
-                        })}
+                        tabs={Object.keys(Devices.getMediaQueries()).map(
+                            (layout) => {
+                                return {
+                                    name: layout,
+                                    title:
+                                        layout.charAt(0).toUpperCase() +
+                                        layout.slice(1),
+                                    className: 'tab-' + layout,
+                                };
+                            },
+                        )}
                     >
                         {(tab) => (
                             <>
@@ -223,10 +216,10 @@ export class MarginControls extends Component {
                                     label="All"
                                     value={this.state.padding[tab.name].all}
                                     options={[
-                                        { label: "Default", value: "" },
+                                        { label: 'Default', value: '' },
                                     ].concat(this.spacing)}
                                     onChange={(value) => {
-                                        this.setPadding("all", tab.name, value);
+                                        this.setPadding('all', tab.name, value);
                                     }}
                                 />
                                 <HorizontalRule />
@@ -235,13 +228,13 @@ export class MarginControls extends Component {
                                         label="Padding Y"
                                         value={this.state.padding[tab.name].y}
                                         options={[
-                                            { label: "Default", value: "" },
+                                            { label: 'Default', value: '' },
                                         ].concat(this.spacing)}
                                         onChange={(value) => {
                                             this.setPadding(
-                                                "y",
+                                                'y',
                                                 tab.name,
-                                                value
+                                                value,
                                             );
                                         }}
                                     />
@@ -252,13 +245,13 @@ export class MarginControls extends Component {
                                                 this.state.padding[tab.name].top
                                             }
                                             options={[
-                                                { label: "Default", value: "" },
+                                                { label: 'Default', value: '' },
                                             ].concat(this.spacing)}
                                             onChange={(value) =>
                                                 this.setPadding(
-                                                    "top",
+                                                    'top',
                                                     tab.name,
-                                                    value
+                                                    value,
                                                 )
                                             }
                                         />
@@ -269,13 +262,13 @@ export class MarginControls extends Component {
                                                     .bottom
                                             }
                                             options={[
-                                                { label: "Default", value: "" },
+                                                { label: 'Default', value: '' },
                                             ].concat(this.spacing)}
                                             onChange={(value) =>
                                                 this.setPadding(
-                                                    "bottom",
+                                                    'bottom',
                                                     tab.name,
-                                                    value
+                                                    value,
                                                 )
                                             }
                                         />
@@ -285,13 +278,13 @@ export class MarginControls extends Component {
                                         label="X"
                                         value={this.state.padding[tab.name].x}
                                         options={[
-                                            { label: "Default", value: "" },
+                                            { label: 'Default', value: '' },
                                         ].concat(this.spacing)}
                                         onChange={(value) => {
                                             this.setPadding(
-                                                "x",
+                                                'x',
                                                 tab.name,
-                                                value
+                                                value,
                                             );
                                         }}
                                     />
@@ -303,13 +296,13 @@ export class MarginControls extends Component {
                                                     .left
                                             }
                                             options={[
-                                                { label: "Default", value: "" },
+                                                { label: 'Default', value: '' },
                                             ].concat(this.spacing)}
                                             onChange={(value) =>
                                                 this.setPadding(
-                                                    "left",
+                                                    'left',
                                                     tab.name,
-                                                    value
+                                                    value,
                                                 )
                                             }
                                         />
@@ -320,39 +313,39 @@ export class MarginControls extends Component {
                                                     .right
                                             }
                                             options={[
-                                                { label: "Default", value: "" },
+                                                { label: 'Default', value: '' },
                                             ].concat(this.spacing)}
                                             onChange={(value) =>
                                                 this.setPadding(
-                                                    "right",
+                                                    'right',
                                                     tab.name,
-                                                    value
+                                                    value,
                                                 )
                                             }
                                         />
                                     </div>
                                 </div>
-                                {this.renderBtnReset("padding", tab.name)}
+                                {this.renderBtnReset('padding', tab.name)}
                             </>
                         )}
                     </TabPanel>
                 </PanelBody>
-                <PanelBody title={"Margin"} initialOpen={false}>
+                <PanelBody title={'Margin'} initialOpen={false}>
                     <TabPanel
                         className="margin-tab-panel"
                         activeClass="active-tab"
                         initialTabName={currentDevice}
-                        tabs={Object.keys(
-                            __ODevices.getInstance().getMediaQueries()
-                        ).map((layout) => {
-                            return {
-                                name: layout,
-                                title:
-                                    layout.charAt(0).toUpperCase() +
-                                    layout.slice(1),
-                                className: "tab-" + layout,
-                            };
-                        })}
+                        tabs={Object.keys(Devices.getMediaQueries()).map(
+                            (layout) => {
+                                return {
+                                    name: layout,
+                                    title:
+                                        layout.charAt(0).toUpperCase() +
+                                        layout.slice(1),
+                                    className: 'tab-' + layout,
+                                };
+                            },
+                        )}
                     >
                         {(tab) => (
                             <>
@@ -360,10 +353,10 @@ export class MarginControls extends Component {
                                     label="All"
                                     value={this.state.margin[tab.name].all}
                                     options={[
-                                        { label: "Default", value: "" },
+                                        { label: 'Default', value: '' },
                                     ].concat(this.spacing)}
                                     onChange={(value) => {
-                                        this.setMargin("all", tab.name, value);
+                                        this.setMargin('all', tab.name, value);
                                     }}
                                 />
                                 <HorizontalRule />
@@ -372,13 +365,13 @@ export class MarginControls extends Component {
                                         label="Y"
                                         value={this.state.margin[tab.name].y}
                                         options={[
-                                            { label: "Default", value: "" },
+                                            { label: 'Default', value: '' },
                                         ].concat(this.spacing)}
                                         onChange={(value) => {
                                             this.setMargin(
-                                                "y",
+                                                'y',
                                                 tab.name,
-                                                value
+                                                value,
                                             );
                                         }}
                                     />
@@ -389,13 +382,13 @@ export class MarginControls extends Component {
                                                 this.state.margin[tab.name].top
                                             }
                                             options={[
-                                                { label: "Default", value: "" },
+                                                { label: 'Default', value: '' },
                                             ].concat(this.spacing)}
                                             onChange={(value) =>
                                                 this.setMargin(
-                                                    "top",
+                                                    'top',
                                                     tab.name,
-                                                    value
+                                                    value,
                                                 )
                                             }
                                         />
@@ -406,13 +399,13 @@ export class MarginControls extends Component {
                                                     .bottom
                                             }
                                             options={[
-                                                { label: "Default", value: "" },
+                                                { label: 'Default', value: '' },
                                             ].concat(this.spacing)}
                                             onChange={(value) =>
                                                 this.setMargin(
-                                                    "bottom",
+                                                    'bottom',
                                                     tab.name,
-                                                    value
+                                                    value,
                                                 )
                                             }
                                         />
@@ -422,13 +415,13 @@ export class MarginControls extends Component {
                                         label="X"
                                         value={this.state.margin[tab.name].x}
                                         options={[
-                                            { label: "Default", value: "" },
+                                            { label: 'Default', value: '' },
                                         ].concat(this.spacing)}
                                         onChange={(value) => {
                                             this.setMargin(
-                                                "x",
+                                                'x',
                                                 tab.name,
-                                                value
+                                                value,
                                             );
                                         }}
                                     />
@@ -439,13 +432,13 @@ export class MarginControls extends Component {
                                                 this.state.margin[tab.name].left
                                             }
                                             options={[
-                                                { label: "Default", value: "" },
+                                                { label: 'Default', value: '' },
                                             ].concat(this.spacing)}
                                             onChange={(value) =>
                                                 this.setMargin(
-                                                    "left",
+                                                    'left',
                                                     tab.name,
-                                                    value
+                                                    value,
                                                 )
                                             }
                                         />
@@ -456,19 +449,19 @@ export class MarginControls extends Component {
                                                     .right
                                             }
                                             options={[
-                                                { label: "Default", value: "" },
+                                                { label: 'Default', value: '' },
                                             ].concat(this.spacing)}
                                             onChange={(value) =>
                                                 this.setMargin(
-                                                    "right",
+                                                    'right',
                                                     tab.name,
-                                                    value
+                                                    value,
                                                 )
                                             }
                                         />
                                     </div>
                                 </div>
-                                {this.renderBtnReset("margin", tab.name)}
+                                {this.renderBtnReset('margin', tab.name)}
                             </>
                         )}
                     </TabPanel>
@@ -481,32 +474,32 @@ export class MarginControls extends Component {
 export function generateMarginClassName(props) {
     var { attributes, className } = props;
 
-    if (typeof className == "undefined") className = "";
+    if (typeof className == 'undefined') className = '';
 
-    if (typeof attributes.margin == "object") {
+    if (typeof attributes.margin == 'object') {
         for (const [key, value] of Object.entries(attributes.margin)) {
             switch (value) {
                 case 0:
-                    className += " " + key + "-none";
+                    className += ' ' + key + '-none';
                     break;
                 case 1:
-                    className += " " + key + "-smaller";
+                    className += ' ' + key + '-smaller';
                     break;
                 case 2:
-                    className += " " + key + "-small";
+                    className += ' ' + key + '-small';
                     break;
                 case 3:
-                    className += " " + key + "-medium";
+                    className += ' ' + key + '-medium';
                     break;
                 case 4:
-                    className += " " + key + "-big";
+                    className += ' ' + key + '-big';
                     break;
                 case 5:
-                    className += " " + key + "-bigger";
+                    className += ' ' + key + '-bigger';
                     break;
             }
         }
     }
 
-    return className != "" ? className : false;
+    return className != '' ? className : false;
 }

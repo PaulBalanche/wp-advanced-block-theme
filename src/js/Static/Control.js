@@ -1,13 +1,13 @@
 import { Button, Dashicon, Tooltip } from '@wordpress/components';
 import { useEffect, useState, useContext } from '@wordpress/element';
-import __ODevices from '../Components/ODevices';
+import { Devices } from './Devices';
 import { BaseControl } from '../controls/BaseControl';
 import { Attributes } from './Attributes';
 import { Render } from './Render';
 import { Sortable } from './Sortable';
 import { store as blockEditorStore } from '@wordpress/block-editor';
 import { useDispatch } from '@wordpress/data';
-import { ODeviceContext } from '../Context/OContext';
+import { ODeviceContext } from '../Context/Providers/ODeviceProvider';
 
 export function Control(props) {
     const id = props.keys.join('-');
@@ -81,7 +81,7 @@ export function Control(props) {
 
         if (
             isResponsive &&
-            currentDevice != __ODevices.getInstance().getDefaultDevice() &&
+            currentDevice != Devices.getDefaultDevice() &&
             defaultDeviceIsDefined() &&
             typeof value[currentDevice] == 'undefined'
         ) {
@@ -94,11 +94,11 @@ export function Control(props) {
     function getDefaultValue() {
         if (
             isResponsive &&
-            currentDevice != __ODevices.getInstance().getDefaultDevice() &&
+            currentDevice != Devices.getDefaultDevice() &&
             defaultDeviceIsDefined() &&
             typeof value[currentDevice] == 'undefined'
         ) {
-            return value[__ODevices.getInstance().getDefaultDevice()];
+            return value[Devices.getDefaultDevice()];
         }
 
         if (default_value_is_defined()) {
@@ -120,8 +120,7 @@ export function Control(props) {
         return (
             value != null &&
             typeof value == 'object' &&
-            typeof value[__ODevices.getInstance().getDefaultDevice()] !=
-                'undefined'
+            typeof value[Devices.getDefaultDevice()] != 'undefined'
         );
     }
 
@@ -322,9 +321,7 @@ export function Control(props) {
     function renderDefaultValueOverlay() {
         const text =
             isResponsive && defaultDeviceIsDefined()
-                ? `Define ${label} for ${__ODevices
-                      .getInstance()
-                      .getCurrentDevice()}`
+                ? `Define ${label} for ${currentDevice}`
                 : 'Override default value';
         const extraClass =
             isResponsive && defaultDeviceIsDefined() ? 'isResponsive' : null;
@@ -400,32 +397,23 @@ export function Control(props) {
         }
 
         if (isResponsive && defaultDeviceIsDefined()) {
-            const defaultDevice = __ODevices.getInstance().getDefaultDevice();
+            const defaultDevice = Devices.getDefaultDevice();
 
             render = Render.responsiveTabComponent(
                 getKey(),
-                Object.keys(__ODevices.getInstance().getMediaQueries()).map(
-                    (layout) => {
-                        return {
-                            name: layout,
-                            title:
-                                layout.charAt(0).toUpperCase() +
-                                layout.slice(1),
-                            className: 'tab-' + layout,
-                            active: currentDevice == layout ? true : false,
-                            isDefault: defaultDevice == layout ? true : false,
-                            isValid:
-                                typeof value[layout] != 'undefined'
-                                    ? true
-                                    : false,
-                        };
-                    },
-                ),
+                Object.keys(Devices.getMediaQueries()).map((layout) => {
+                    return {
+                        name: layout,
+                        title: layout.charAt(0).toUpperCase() + layout.slice(1),
+                        className: 'tab-' + layout,
+                        active: currentDevice == layout ? true : false,
+                        isDefault: defaultDevice == layout ? true : false,
+                        isValid:
+                            typeof value[layout] != 'undefined' ? true : false,
+                    };
+                }),
                 render,
-                (newDevice) => {
-                    componentInstance.setState({ currentEditedProp: id });
-                    // __ODevices.getInstance().setCurrentDevice(newDevice);
-                },
+                (newDevice) => Devices.setCurrentDevice(newDevice),
                 type,
             );
         }

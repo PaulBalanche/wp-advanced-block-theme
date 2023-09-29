@@ -28,7 +28,7 @@ import { Fragment } from 'react';
 import globalData from '../global';
 import EditMode from '../Blocks/component-block-master/edit';
 
-function WpeComponentBase({
+export default function WpeComponentBase({
     attributes,
     setAttributes,
     clientId,
@@ -95,12 +95,6 @@ function WpeComponentBase({
             typeof block_spec.props == 'object' &&
             Object.keys(block_spec.props).length > 0
         );
-    }
-
-    function getCurrentEditedProp() {
-        return typeof this.state.currentEditedProp != 'undefined'
-            ? this.state.currentEditedProp
-            : null;
     }
 
     function checkIsReusableBlock() {
@@ -754,5 +748,3 @@ function WpeComponentBase({
 
     return render;
 }
-
-export default WpeComponentBase;

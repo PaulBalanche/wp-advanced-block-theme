@@ -1,41 +1,19 @@
 import { Button, ButtonGroup } from '@wordpress/components';
 import { createPortal, useContext, useEffect } from '@wordpress/element';
 import { Render } from '../Static/Render';
-import { ODeviceContext } from '../Context/OContext';
+import { ODeviceContext } from '../Context/Providers/ODeviceProvider';
 import { Devices } from '../Static/Devices';
 
 export default function ODevices() {
     const currentDevice = useContext(ODeviceContext);
-    const mediaQueries = Devices.getMediaQueries();
 
     useEffect(() => {
-        setCurrentDevice(currentDevice);
+        Devices.setCurrentDevice(currentDevice);
     }, []);
 
-    function setCurrentDevice(newDevice) {
-        document.querySelector('.o-editor').setAttribute('o-device', newDevice);
-
-        var editor_area = document.querySelector('#editor');
-        var layout_flow_area = document.querySelector('.is-root-container');
-        if (editor_area && layout_flow_area) {
-            layout_flow_area.style.margin = 'auto';
-
-            if (typeof mediaQueries[newDevice] != 'undefined') {
-                if (
-                    mediaQueries[newDevice]['maxWidth'] != null &&
-                    mediaQueries[newDevice]['maxWidth'] <=
-                        editor_area.offsetWidth
-                ) {
-                    layout_flow_area.style.width =
-                        mediaQueries[newDevice]['maxWidth'] + 'px';
-                } else {
-                    layout_flow_area.style.removeProperty('width');
-                }
-            }
-        }
-    }
-
     function getButtonGroup() {
+        const mediaQueries = Devices.getMediaQueries();
+
         if (typeof mediaQueries[currentDevice] == 'undefined') {
             return null;
         }
@@ -55,7 +33,7 @@ export default function ODevices() {
                                 isPressed={currentDevice == layout}
                                 className={extraClass}
                                 onMouseDown={() => {
-                                    setCurrentDevice(layout);
+                                    Devices.setCurrentDevice(layout);
                                 }}
                             >
                                 {Render.getDeviceLabel(layout)}

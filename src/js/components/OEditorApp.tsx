@@ -15,7 +15,6 @@ import OUserPreferences from './OUserPreferences';
 export default function OEditorApp({ context }) {
     const [route, setRoute] = useState(null);
     const [needToBeMounted, setNeedToBeMounted] = useState(true);
-    const [currentDevice, setCurrentDevice] = useState(null);
     const [isOpen, setIsOpen] = useState(true);
 
     // get the actual edit app dom node
@@ -33,10 +32,6 @@ export default function OEditorApp({ context }) {
             _mount();
         }
     }, []);
-
-    // function setCurrentDevice(newDevice) {
-    //     setCurrentDevice(newDevice);
-    // }
 
     function _mount() {
         // Route the Editor App related to anchor

@@ -39,4 +39,28 @@ export class Devices {
 
         return mediaQueriesSorted;
     }
+
+    static setCurrentDevice(newDevice) {
+        const mediaQueries = Devices.getMediaQueries();
+        document.querySelector('.o-editor').setAttribute('o-device', newDevice);
+
+        const editor_area = document.querySelector('#editor');
+        const layout_flow_area = document.querySelector('.is-root-container');
+        if (editor_area && layout_flow_area) {
+            layout_flow_area.style.margin = 'auto';
+
+            if (typeof mediaQueries[newDevice] != 'undefined') {
+                if (
+                    mediaQueries[newDevice]['maxWidth'] != null &&
+                    mediaQueries[newDevice]['maxWidth'] <=
+                        editor_area.offsetWidth
+                ) {
+                    layout_flow_area.style.width =
+                        mediaQueries[newDevice]['maxWidth'] + 'px';
+                } else {
+                    layout_flow_area.style.removeProperty('width');
+                }
+            }
+        }
+    }
 }
