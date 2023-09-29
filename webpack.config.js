@@ -5,7 +5,7 @@ module.exports = {
     ...defaultConfig,
     entry: {
         ...defaultConfig.entry,
-        abt_editor: path.resolve(__dirname, 'src/js/index.tsx'),
+        abt_editor: path.resolve(__dirname, 'src/js/index.js'),
     },
     output: {
         ...defaultConfig.output,

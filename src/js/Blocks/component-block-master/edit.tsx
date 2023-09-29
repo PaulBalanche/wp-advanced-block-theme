@@ -13,7 +13,7 @@ import WpeComponentBase from '../../Components/WpeComponentBase';
 import { OButtonBlockAppender } from '../../Components/OButtonBlockAppender';
 import apiFetch from '@wordpress/api-fetch';
 
-function EditMode({
+export function EditMode({
     attributes,
     setAttributes,
     clientId,
@@ -235,8 +235,6 @@ function EditMode({
         </WpeComponentBase>
     );
 }
-
-export default EditMode;
 
 // export const EditModeOld = compose([
 //     withSelect((select, props) => {

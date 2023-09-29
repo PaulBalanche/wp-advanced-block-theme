@@ -298,7 +298,7 @@ export function BaseControl(props) {
                         id={props.id}
                         label={props.label}
                         keys={props.keys}
-                        componentInstance={props.componentInstance}
+                        clientId={props.clientId}
                     />
                 );
                 break;

@@ -1,14 +1,10 @@
-import { compose } from '@wordpress/compose';
-import { withDispatch, withSelect } from '@wordpress/data';
+import { useSelect, useDispatch } from '@wordpress/data';
 import { createRoot } from '@wordpress/element';
-
 import { store as blockEditorStore } from '@wordpress/block-editor';
-
 import '../css/admin/_index.scss';
-
 import OEditorApp from './Components/OEditorApp';
-
-import './Blocks/component-block-master/index';
+import { OContext } from './Context/OContext';
+import './Blocks/component-block-master';
 // import './Blocks/layout/wpe-column/index';
 // import './Blocks/layout/wpe-container/index';
 // import './Blocks/layout/wpe-gallery/index';
@@ -16,38 +12,50 @@ import './Blocks/component-block-master/index';
 // import './Blocks/layout/wpe-slide/index';
 // import './Blocks/layout/wpe-slider/index';
 
-class OEditor {
-    constructor() {
-        // move wp ui elements
-        this._moveWpUiElements();
-
-        // init theme (Coffeekraken)
-        this._initTheme();
-
-        // add the scoping class "o-editor"
-        const $editorContainer = document.querySelector(
-            '.interface-interface-skeleton__content',
-        );
-        if ($editorContainer) {
-            document.querySelector('body').classList?.add?.('o-editor-enabled');
-
-            $editorContainer.classList?.add?.('o-editor');
-            $editorContainer.classList?.add?.('init');
-
-            // create the container for our app
-            const $editorApp = document.createElement('div');
-            $editorApp.classList.add('o-editor-container');
-            $editorContainer.appendChild($editorApp);
-
-            const root = createRoot($editorApp);
-            root.render(<OEditorAppContext />);
+window.addEventListener('load', function () {
+    setTimeout(() => {
+        if (document.querySelector('body.post-type-page')) {
+            oEditorRun();
+        } else {
+            _hideEditorLoadingZone();
         }
+    });
+});
+
+function oEditorRun() {
+    // move wp ui elements
+    _moveWpUiElements();
+
+    // init theme
+    _initTheme();
+
+    // add the scoping class "o-editor"
+    const $editorContainer = document.querySelector(
+        '.interface-interface-skeleton__content',
+    );
+    if ($editorContainer) {
+        document.querySelector('body').classList?.add?.('o-editor-enabled');
+
+        $editorContainer.classList?.add?.('o-editor');
+        $editorContainer.classList?.add?.('init');
+
+        // create the container for our app
+        const $editorApp = document.createElement('div');
+        $editorApp.classList.add('o-editor-container');
+        $editorContainer.appendChild($editorApp);
+
+        const root = createRoot($editorApp);
+        root.render(
+            <OContext>
+                <OEditor />
+            </OContext>,
+        );
     }
 
     /**
-     * Move some elements of the wordpress UI
+     * Move some elements of the Wordpress UI
      */
-    _moveWpUiElements() {
+    function _moveWpUiElements() {
         let postTitle = document.querySelector(
             '.edit-post-visual-editor__post-title-wrapper',
         );
@@ -60,7 +68,7 @@ class OEditor {
     /**
      * Just add the theme background color from the frontspec if needed
      */
-    _initTheme() {
+    function _initTheme() {
         if (
             GLOBAL_LOCALIZED?.editor?.backgroundColor &&
             GLOBAL_LOCALIZED.editor.backgroundColor != null
@@ -72,73 +80,65 @@ class OEditor {
         }
     }
 }
+function OEditor() {
+    const { blocksList, selectedBlockClientId, editorMode, inserterItems } =
+        useSelect((select) => {
+            const blocksList = select('core/block-editor').getBlocks();
+            for (let i in blocksList) {
+                if (
+                    blocksList[i].name == 'core/block' &&
+                    typeof blocksList[i].attributes.ref != 'undefined' &&
+                    blocksList[i].innerBlocks == 0
+                ) {
+                    let wpReusableBlock = select('core').getEntityRecord(
+                        'postType',
+                        'wp_block',
+                        blocksList[i].attributes.ref,
+                    );
+                    if (typeof wpReusableBlock != 'undefined') {
+                        blocksList[i].postName = wpReusableBlock.title.raw;
+                    }
 
-function OEditorAppDisplay(props) {
-    return <OEditorApp context={props} />;
-}
-
-const OEditorAppContext = compose([
-    withSelect((select) => {
-        const blocksList = select('core/block-editor').getBlocks();
-        for (var i in blocksList) {
-            if (
-                blocksList[i].name == 'core/block' &&
-                typeof blocksList[i].attributes.ref != 'undefined' &&
-                blocksList[i].innerBlocks == 0
-            ) {
-                let wpReusableBlock = select('core').getEntityRecord(
-                    'postType',
-                    'wp_block',
-                    blocksList[i].attributes.ref,
-                );
-                if (typeof wpReusableBlock != 'undefined') {
-                    blocksList[i].postName = wpReusableBlock.title.raw;
-                }
-
-                let childrenBlocksList = select('core/block-editor').getBlocks(
-                    blocksList[i].clientId,
-                );
-                if (childrenBlocksList.length > 0) {
-                    blocksList[i].isReusable = true;
-                    blocksList[i].children = childrenBlocksList;
+                    let childrenBlocksList = select(
+                        'core/block-editor',
+                    ).getBlocks(blocksList[i].clientId);
+                    if (childrenBlocksList.length > 0) {
+                        blocksList[i].isReusable = true;
+                        blocksList[i].children = childrenBlocksList;
+                    }
                 }
             }
-        }
-        const selectedBlockClientId =
-            select('core/block-editor').getSelectedBlockClientId();
+            const selectedBlockClientId =
+                select('core/block-editor').getSelectedBlockClientId();
 
-        const editorMode = select('core/edit-post').getEditorMode();
+            const editorMode = select('core/edit-post').getEditorMode();
 
-        const inserterItems = select('core/block-editor').getInserterItems();
+            const inserterItems =
+                select('core/block-editor').getInserterItems();
 
-        return {
-            blocksList,
-            selectedBlockClientId,
-            editorMode,
-            inserterItems,
-        };
-    }),
-    withDispatch((dispatch) => {
-        const { selectBlock, resetSelection, insertBlock } =
-            dispatch(blockEditorStore);
+            return {
+                blocksList,
+                selectedBlockClientId,
+                editorMode,
+                inserterItems,
+            };
+        });
 
-        return {
-            selectBlock,
-            resetSelection,
-            insertBlock,
-        };
-    }),
-])(OEditorAppDisplay);
+    const { selectBlock, resetSelection, insertBlock } =
+        useDispatch(blockEditorStore);
 
-window.addEventListener('load', function () {
-    setTimeout(() => {
-        if (document.querySelector('body.post-type-page')) {
-            new OEditor();
-        } else {
-            _hideEditorLoadingZone();
-        }
-    });
-});
+    const context = {
+        blocksList: blocksList,
+        selectedBlockClientId: selectedBlockClientId,
+        editorMode: editorMode,
+        inserterItems: inserterItems,
+        selectBlock: selectBlock,
+        resetSelection: resetSelection,
+        insertBlock: insertBlock,
+    };
+
+    return <OEditorApp context={context} />;
+}
 
 function _hideEditorLoadingZone() {
     const $loadingZone = document.querySelector('.o-editor-loading-zone');

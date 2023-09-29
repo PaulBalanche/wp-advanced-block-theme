@@ -3,7 +3,7 @@ import { BlockList } from '../Components/BlockList';
 import { OButtonBlockAppender } from '../Components/OButtonBlockAppender';
 import { Render } from '../Static/Render';
 
-export function NodeList({ id, label, keys, componentInstance }) {
+export function NodeList({ id, label, keys, clientId }) {
     // return (
     //     <div
     //         key={id + '-NodeListComponentsBaseControl'}
@@ -21,7 +21,7 @@ export function NodeList({ id, label, keys, componentInstance }) {
     //                 />
     //                 <ButtonGroup className="inspectorButtonInsertNew">
     //                     <OButtonBlockAppender
-    //                         rootClientId={componentInstance.props.clientId}
+    //                         rootClientId={clientId}
     //                         extraAttributes={{
     //                             _node: keys.join('|'),
     //                         }}

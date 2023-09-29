@@ -1,126 +1,42 @@
 import { Button, ButtonGroup } from '@wordpress/components';
-import { Component, createPortal } from '@wordpress/element';
-
-import __OEditorApp from './OEditorApp';
-
+import { createPortal, useContext, useEffect } from '@wordpress/element';
 import { Render } from '../Static/Render';
+import { ODeviceContext } from '../Context/OContext';
+import { Devices } from '../Static/Devices';
 
-export default class ODevices extends Component {
-    static _instance;
-    static getInstance() {
-        return this._instance;
-    }
+export default function ODevices() {
+    const currentDevice = useContext(ODeviceContext);
+    const mediaQueries = Devices.getMediaQueries();
 
-    constructor(props) {
-        super(props);
+    useEffect(() => {
+        setCurrentDevice(currentDevice);
+    }, []);
 
-        this.state = {
-            currentDevice: null,
-        };
-
-        // @ts-ignore
-        this.constructor._instance = this;
-
-        this.mediaQueries = {};
-        this.defaultMediaQuery = null;
-    }
-
-    componentDidMount() {
-        if (
-            GLOBAL_LOCALIZED.theme_spec?.media?.queries &&
-            typeof GLOBAL_LOCALIZED.theme_spec.media.queries == 'object'
-        ) {
-            this.mediaQueries = this.sortMediaQueries(
-                GLOBAL_LOCALIZED.theme_spec.media.queries,
-            );
-
-            if (
-                this.getCurrentDevice() == null ||
-                (GLOBAL_LOCALIZED.theme_spec?.media?.defaultMedia &&
-                    typeof this.mediaQueries[
-                        GLOBAL_LOCALIZED.theme_spec.media.defaultMedia
-                    ] != 'undefined')
-            ) {
-                this.defaultMediaQuery =
-                    GLOBAL_LOCALIZED.theme_spec.media.defaultMedia;
-                this.setCurrentDevice(
-                    GLOBAL_LOCALIZED.theme_spec.media.defaultMedia,
-                );
-            }
-        } else {
-            this.mediaQueries = {
-                desktop: {
-                    minWidth: null,
-                    maxWidth: null,
-                },
-            };
-            this.defaultMediaQuery = 'desktop';
-            this.setCurrentDevice('desktop');
-        }
-    }
-
-    sortMediaQueries(mediaQueries) {
-        var mediaQueriesSorted = {};
-
-        while (Object.keys(mediaQueries).length > 0) {
-            var min = 0;
-            var keyMin = null;
-            Object.keys(mediaQueries).forEach((layout) => {
-                if (keyMin == null || mediaQueries[layout].minWidth < min) {
-                    keyMin = layout;
-                    min = mediaQueries[layout].minWidth;
-                }
-            });
-
-            mediaQueriesSorted[keyMin] = mediaQueries[keyMin];
-            delete mediaQueries[keyMin];
-        }
-
-        return mediaQueriesSorted;
-    }
-
-    getCurrentDevice() {
-        return this.state.currentDevice;
-    }
-
-    getDefaultDevice() {
-        return this.defaultMediaQuery;
-    }
-
-    setCurrentDevice(newDevice) {
-        this.setState({ currentDevice: newDevice });
+    function setCurrentDevice(newDevice) {
+        document.querySelector('.o-editor').setAttribute('o-device', newDevice);
 
         var editor_area = document.querySelector('#editor');
         var layout_flow_area = document.querySelector('.is-root-container');
         if (editor_area && layout_flow_area) {
             layout_flow_area.style.margin = 'auto';
 
-            if (typeof this.getMediaQueries()[newDevice] != 'undefined') {
+            if (typeof mediaQueries[newDevice] != 'undefined') {
                 if (
-                    this.getMediaQueries()[newDevice]['maxWidth'] != null &&
-                    this.getMediaQueries()[newDevice]['maxWidth'] <=
+                    mediaQueries[newDevice]['maxWidth'] != null &&
+                    mediaQueries[newDevice]['maxWidth'] <=
                         editor_area.offsetWidth
                 ) {
                     layout_flow_area.style.width =
-                        this.getMediaQueries()[newDevice]['maxWidth'] + 'px';
+                        mediaQueries[newDevice]['maxWidth'] + 'px';
                 } else {
                     layout_flow_area.style.removeProperty('width');
                 }
             }
         }
-
-        // __OEditorApp.getInstance().setCurrentDevice(newDevice);
     }
 
-    getMediaQueries() {
-        return this.mediaQueries;
-    }
-
-    getButtonGroup() {
-        const currentDevice = this.getCurrentDevice();
-        const defaultDevice = this.getDefaultDevice();
-
-        if (typeof this.getMediaQueries()[currentDevice] == 'undefined') {
+    function getButtonGroup() {
+        if (typeof mediaQueries[currentDevice] == 'undefined') {
             return null;
         }
 
@@ -130,16 +46,16 @@ export default class ODevices extends Component {
                     key="devicesButtonGroup"
                     className="devicesButtonGroup"
                 >
-                    {Object.keys(this.getMediaQueries()).map((layout) => {
+                    {Object.keys(mediaQueries).map((layout) => {
                         const extraClass =
-                            defaultDevice == layout ? 'default' : null;
+                            currentDevice == layout ? 'default' : null;
                         return (
                             <Button
                                 key={'layoutButton_' + layout}
                                 isPressed={currentDevice == layout}
                                 className={extraClass}
                                 onMouseDown={() => {
-                                    this.setCurrentDevice(layout);
+                                    setCurrentDevice(layout);
                                 }}
                             >
                                 {Render.getDeviceLabel(layout)}
@@ -159,11 +75,5 @@ export default class ODevices extends Component {
         );
     }
 
-    render() {
-        // return null;
-        return createPortal(
-            this.getButtonGroup(),
-            document.querySelector('.o-editor'),
-        );
-    }
+    return createPortal(getButtonGroup(), document.querySelector('.o-editor'));
 }

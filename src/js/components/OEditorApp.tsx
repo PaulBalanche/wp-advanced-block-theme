@@ -4,6 +4,7 @@ import { OEditorBlock } from './OEditorBlock';
 import { OEditorInspector } from './OEditorInspector';
 import __OEditorSettings from './OEditorSettings';
 import __OEditorWelcome from './OEditorWelcome';
+import { useContext } from 'react';
 
 import globalData from '../global';
 
@@ -15,9 +16,7 @@ export default function OEditorApp({ context }) {
     const [route, setRoute] = useState(null);
     const [needToBeMounted, setNeedToBeMounted] = useState(true);
     const [currentDevice, setCurrentDevice] = useState(null);
-    const [isOpen, setIsOpen] = useState(false);
-    const [closeAllowed, setCloseAllowed] = useState(false);
-    const [timeOutAllowingToClose, setTimeOutAllowingToClose] = useState(null);
+    const [isOpen, setIsOpen] = useState(true);
 
     // get the actual edit app dom node
     const _$editApp = document.querySelector('.o-editor');
@@ -27,11 +26,7 @@ export default function OEditorApp({ context }) {
         _$editApp.classList.add(GLOBAL_LOCALIZED.editor.style);
     }
 
-    _$editApp.addEventListener('scroll', (event) => {
-        if (closeAllowed) {
-            close();
-        }
-    });
+    // _$editApp.addEventListener('scroll', (event) => {});
 
     useEffect(() => {
         if (context.editorMode == 'visual' && needToBeMounted) {
@@ -61,38 +56,33 @@ export default function OEditorApp({ context }) {
     }
 
     useEffect(() => {
-        // if (context.editorMode == 'visual') {
-        //     if (
-        //         needToBeMounted &&
-        //         context.blocksList.length > 0
-        //     ) {
-        //         _mount();
-        //     }
-        //
-        //     // Force first of reusable block selection
-        //     if (context.selectedBlockClientId != null) {
-        //         for (var i in context.blocksList) {
-        //             if (
-        //                 context.blocksList[i].clientId ==
-        //                     context.selectedBlockClientId &&
-        //                 typeof context.blocksList[i].isReusable !=
-        //                     'undefined' &&
-        //                 context.blocksList[i].isReusable &&
-        //                 typeof context.blocksList[i].children !=
-        //                     'undefined' &&
-        //                 context.blocksList[i].children.length > 0
-        //             ) {
-        //                 context.selectBlock(
-        //                     context.blocksList[i].children[0]
-        //                         .clientId,
-        //                 );
-        //             }
-        //         }
-        //     }
-        // } else if (!needToBeMounted) {
-        //     _unmount();
-        // }
-    });
+        if (context.editorMode == 'visual') {
+            if (needToBeMounted) {
+                _mount();
+            }
+
+            // Force first of reusable block selection
+            // if (context.selectedBlockClientId != null) {
+            //     for (var i in context.blocksList) {
+            //         if (
+            //             context.blocksList[i].clientId ==
+            //                 context.selectedBlockClientId &&
+            //             typeof context.blocksList[i].isReusable !=
+            //                 'undefined' &&
+            //             context.blocksList[i].isReusable &&
+            //             typeof context.blocksList[i].children != 'undefined' &&
+            //             context.blocksList[i].children.length > 0
+            //         ) {
+            //             context.selectBlock(
+            //                 context.blocksList[i].children[0].clientId,
+            //             );
+            //         }
+            //     }
+            // }
+        } else if (!needToBeMounted) {
+            _unmount();
+        }
+    }, [needToBeMounted]);
 
     function _showEditorLoadingZone() {
         const $loadingZone = document.querySelector('.o-editor-loading-zone');
@@ -164,27 +154,12 @@ export default function OEditorApp({ context }) {
         }
     }
 
-    function open(closeAllowed = true) {
-        clearTimeout(timeOutAllowingToClose);
+    function open() {
         setIsOpen(true);
-        setCloseAllowed(false);
-
-        if (closeAllowed) {
-            setTimeOutAllowingToClose(
-                setTimeout(() => {
-                    allowToClose();
-                }, 1000),
-            );
-        }
-    }
-
-    function allowToClose() {
-        setCloseAllowed(true);
     }
 
     function close() {
         setIsOpen(false);
-        setCloseAllowed(false);
     }
 
     function renderBreadcrumb() {
@@ -195,7 +170,6 @@ export default function OEditorApp({ context }) {
                     className="breadcrumb path-element"
                     onMouseDown={() => {
                         goInspector();
-                        allowToClose();
                     }}
                 >
                     <Dashicon icon="screenoptions" /> All blocks
@@ -212,7 +186,6 @@ export default function OEditorApp({ context }) {
                     variant="link"
                     onMouseDown={() => {
                         goInspector();
-                        allowToClose();
                     }}
                 >
                     All blocks
@@ -254,14 +227,16 @@ export default function OEditorApp({ context }) {
                     ? 'block'
                     : 'inspector';
     }
+
     return (
         <>
             <ODevices />
             <section
                 key="o-editor-app"
                 className={`o-editor-app ${extraClassName}`}
-                onMouseEnter={() => open(false)}
-                onMouseLeave={() => allowToClose()}
+                onMouseEnter={() => {
+                    open();
+                }}
             >
                 {componentToRender}
             </section>

@@ -1,19 +1,11 @@
 import { registerBlockType } from '@wordpress/blocks';
-
-import {
-    InnerBlocks,
-    useBlockProps,
-    useInnerBlocksProps,
-} from '@wordpress/block-editor';
-
-import { ButtonGroup } from '@wordpress/components';
-import { OButtonBlockAppender } from '../../Components/OButtonBlockAppender';
-
+import { InnerBlocks, useBlockProps } from '@wordpress/block-editor';
+import { OContext } from '../../Context/OContext';
 import { Attributes } from '../../Static/Attributes';
-import EditMode from './edit';
+import { EditMode } from './edit';
 
 Object.values(GLOBAL_LOCALIZED.components).forEach((element) => {
-    var initAttributes = {
+    const initAttributes = {
         id_component: {
             type: 'string',
         },
@@ -41,11 +33,15 @@ Object.values(GLOBAL_LOCALIZED.components).forEach((element) => {
                   }
                 : null,
         edit: (props) => {
-            return EditMode({
-                ...props,
-                block_spec: element,
-                theme_spec: GLOBAL_LOCALIZED.theme_spec,
-            });
+            return (
+                <OContext>
+                    <EditMode
+                        {...props}
+                        block_spec={element}
+                        theme_spec={GLOBAL_LOCALIZED.theme_spec}
+                    />
+                </OContext>
+            );
         },
         save: () => {
             return (

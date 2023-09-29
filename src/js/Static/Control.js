@@ -1,5 +1,5 @@
 import { Button, Dashicon, Tooltip } from '@wordpress/components';
-import { useEffect, useState } from '@wordpress/element';
+import { useEffect, useState, useContext } from '@wordpress/element';
 import __ODevices from '../Components/ODevices';
 import { BaseControl } from '../controls/BaseControl';
 import { Attributes } from './Attributes';
@@ -7,6 +7,7 @@ import { Render } from './Render';
 import { Sortable } from './Sortable';
 import { store as blockEditorStore } from '@wordpress/block-editor';
 import { useDispatch } from '@wordpress/data';
+import { ODeviceContext } from '../Context/OContext';
 
 export function Control(props) {
     const id = props.keys.join('-');
@@ -48,20 +49,16 @@ export function Control(props) {
         useState(null);
     const { updateBlockAttributes } = useDispatch(blockEditorStore);
 
+    const currentDevice = useContext(ODeviceContext);
+
     useEffect(() => {
-        if (
-            !!editMode &&
-            editMode != __ODevices.getInstance().getCurrentDevice()
-        ) {
+        if (!!editMode && editMode != currentDevice) {
             setEditMode(null);
         }
     });
 
     function haveToDisplayDefaultValue() {
-        if (
-            !!editMode &&
-            editMode == __ODevices.getInstance().getCurrentDevice()
-        ) {
+        if (!!editMode && editMode == currentDevice) {
             return false;
         }
 
@@ -84,11 +81,9 @@ export function Control(props) {
 
         if (
             isResponsive &&
-            __ODevices.getInstance().getCurrentDevice() !=
-                __ODevices.getInstance().getDefaultDevice() &&
+            currentDevice != __ODevices.getInstance().getDefaultDevice() &&
             defaultDeviceIsDefined() &&
-            typeof value[__ODevices.getInstance().getCurrentDevice()] ==
-                'undefined'
+            typeof value[currentDevice] == 'undefined'
         ) {
             return true;
         }
@@ -99,11 +94,9 @@ export function Control(props) {
     function getDefaultValue() {
         if (
             isResponsive &&
-            __ODevices.getInstance().getCurrentDevice() !=
-                __ODevices.getInstance().getDefaultDevice() &&
+            currentDevice != __ODevices.getInstance().getDefaultDevice() &&
             defaultDeviceIsDefined() &&
-            typeof value[__ODevices.getInstance().getCurrentDevice()] ==
-                'undefined'
+            typeof value[currentDevice] == 'undefined'
         ) {
             return value[__ODevices.getInstance().getDefaultDevice()];
         }
@@ -136,7 +129,7 @@ export function Control(props) {
         if (isResponsive) {
             newValue = {
                 ...value,
-                ...{ [__ODevices.getInstance().getCurrentDevice()]: newValue },
+                ...{ [currentDevice]: newValue },
             };
         }
         setValue(newValue);
@@ -267,7 +260,6 @@ export function Control(props) {
         let keyFormatted = key;
 
         if (isResponsive) {
-            const currentDevice = __ODevices.getInstance().getCurrentDevice();
             keyFormatted = keyFormatted + '-' + currentDevice;
         }
 
@@ -278,7 +270,6 @@ export function Control(props) {
         let keysFormatted = Object.assign([], keys);
 
         if (isResponsive) {
-            const currentDevice = __ODevices.getInstance().getCurrentDevice();
             keysFormatted.push(currentDevice);
         }
 
@@ -291,7 +282,6 @@ export function Control(props) {
         }
 
         if (isResponsive) {
-            const currentDevice = __ODevices.getInstance().getCurrentDevice();
             if (
                 value != null &&
                 typeof value == 'object' &&
@@ -347,9 +337,7 @@ export function Control(props) {
                 <Button
                     key={getKey() + 'defaultOverlayContainer-button'}
                     onMouseDown={() => {
-                        setEditMode(
-                            __ODevices.getInstance().getCurrentDevice(),
-                        );
+                        setEditMode(currentDevice);
                     }}
                     variant="primary"
                 >
@@ -412,7 +400,6 @@ export function Control(props) {
         }
 
         if (isResponsive && defaultDeviceIsDefined()) {
-            const currentDevice = __ODevices.getInstance().getCurrentDevice();
             const defaultDevice = __ODevices.getInstance().getDefaultDevice();
 
             render = Render.responsiveTabComponent(
