@@ -2,8 +2,13 @@ import { ButtonGroup } from '@wordpress/components';
 import { BlockList } from '../Components/BlockList';
 import { OButtonBlockAppender } from '../Components/OButtonBlockAppender';
 import { Render } from '../Static/Render';
+import { useContext } from '@wordpress/element';
+import { OBlockEditorContext } from '../Context/Providers/OBlockEditorProvider';
 
-export function NodeList({ id, label, keys, clientId }) {
+export function NodeList({ id, label, keys }) {
+    const { clientId, selectBlock, blocksList } =
+        useContext(OBlockEditorContext);
+
     return (
         <div
             key={id + '-NodeListComponentsBaseControl'}
@@ -16,8 +21,8 @@ export function NodeList({ id, label, keys, clientId }) {
                 {Render.label(id, label)}
                 <div className="nodeListComponentsContainer">
                     <BlockList
-                        blocksList={componentInstance.props.blocksList}
-                        selectBlock={componentInstance.props.selectBlock}
+                        blocksList={blocksList}
+                        selectBlock={selectBlock}
                     />
                     <ButtonGroup className="inspectorButtonInsertNew">
                         <OButtonBlockAppender

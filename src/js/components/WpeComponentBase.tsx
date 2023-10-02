@@ -1,5 +1,4 @@
-import { createPortal, useState } from '@wordpress/element';
-import { store as blockEditorStore } from '@wordpress/block-editor';
+import { createPortal, useContext, useState } from '@wordpress/element';
 import {
     Button,
     Dashicon,
@@ -18,23 +17,17 @@ import {
 } from '@wordpress/icons';
 import { Attributes } from '../Static/Attributes';
 import { Render } from '../Static/Render';
-import { useSelect, useDispatch } from '@wordpress/data';
 import { getBlockType, isReusableBlock } from '@wordpress/blocks';
 import { WpeModal } from './WpeModal';
-import __OEditorApp from './OEditorApp';
-import __OModal from './OModal';
 import __OUserPreferences from './OUserPreferences';
 import { Fragment } from 'react';
-import globalData from '../global';
-import EditMode from '../Blocks/component-block-master/edit';
+import { OBlockEditorContext } from '../Context/Providers/OBlockEditorProvider';
 
 export default function WpeComponentBase({
     attributes,
     setAttributes,
-    clientId,
     name,
     description,
-    block_spec,
     error,
     setNeedPreviewUpdate,
     children,
@@ -43,42 +36,22 @@ export default function WpeComponentBase({
         removeSubmitted: false,
     });
 
-    // Detect if inside a reusable block
-    const { parentsBlock, selectedBlockClientId } = useSelect(
-        (select) => {
-            const getBlockParents =
-                select('core/block-editor').getBlockParents(clientId);
-            const parentsBlock = [];
-            for (let i in getBlockParents) {
-                parentsBlock.push(
-                    select('core/block-editor').getBlock(getBlockParents[i]),
-                );
-            }
-
-            const selectedBlockClientId =
-                select('core/block-editor').getSelectedBlockClientId();
-
-            return {
-                parentsBlock: parentsBlock,
-                selectedBlockClientId: selectedBlockClientId,
-            };
-        },
-        [clientId],
-    );
-
     const {
+        clientId,
+        parentsBlock,
+        selectedBlockClientId,
         selectBlock,
         removeBlock,
         duplicateBlocks,
         moveBlocksUp,
         moveBlocksDown,
-    } = useDispatch(blockEditorStore);
+        blockSpec,
+    } = useContext(OBlockEditorContext);
 
     const title =
         typeof name != 'undefined' ? getBlockType(name).title : 'Undefined...';
     const reusableBlock = checkIsReusableBlock();
 
-    globalData.componentInstances[clientId] = this;
     if (getAttribute('anchor') != null) {
         setAttributes({ anchor: clientId });
     }
@@ -89,11 +62,11 @@ export default function WpeComponentBase({
 
     function propsExists() {
         return (
-            typeof block_spec != 'undefined' &&
-            typeof block_spec == 'object' &&
-            typeof block_spec.props != 'undefined' &&
-            typeof block_spec.props == 'object' &&
-            Object.keys(block_spec.props).length > 0
+            typeof blockSpec != 'undefined' &&
+            typeof blockSpec == 'object' &&
+            typeof blockSpec.props != 'undefined' &&
+            typeof blockSpec.props == 'object' &&
+            Object.keys(blockSpec.props).length > 0
         );
     }
 
@@ -461,11 +434,11 @@ export default function WpeComponentBase({
                 }
             }
             if (
-                typeof block_spec.props_categories != 'undefined' &&
-                block_spec.props_categories != null
+                typeof blockSpec.props_categories != 'undefined' &&
+                blockSpec.props_categories != null
             ) {
                 for (const [keyCatProps, valueCatProps] of Object.entries(
-                    block_spec.props_categories,
+                    blockSpec.props_categories,
                 )) {
                     catReOrder[valueCatProps.id] = {
                         name: valueCatProps.name,
@@ -481,7 +454,7 @@ export default function WpeComponentBase({
 
             // 2. Loop Props
             for (const [keyProp, valueProp] of Object.entries(
-                block_spec.props,
+                blockSpec.props,
             )) {
                 if (typeof valueProp != 'object' || valueProp == null) continue;
 

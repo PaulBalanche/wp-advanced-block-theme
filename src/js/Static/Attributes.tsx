@@ -7,32 +7,6 @@ export class Attributes {
         return !!isNumber ? parseInt(value, 10) : value;
     }
 
-    static addEltToRepeatable(
-        arrayKey,
-        currentValueProp,
-        currentValueRepeatableField,
-        isNumber = false,
-        clientId,
-    ) {
-        Attributes.updateAttributes(
-            arrayKey,
-            currentValueProp,
-            currentValueRepeatableField.concat(''),
-            isNumber,
-            clientId,
-        );
-    }
-
-    static removeEltRepeatable(arrayKey, currentValueProp, clientId) {
-        Attributes.updateAttributes(
-            arrayKey,
-            currentValueProp,
-            false,
-            false,
-            clientId,
-        );
-    }
-
     static fileSizeFormat(filesizeInBytes) {
         if (filesizeInBytes > 1000000)
             return Math.round(filesizeInBytes / 10000) / 100 + ' Mo';

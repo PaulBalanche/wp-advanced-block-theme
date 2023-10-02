@@ -208,7 +208,7 @@ export function BaseControl(props) {
                         keys={props.keys}
                         valueProp={props.valueProp}
                         objectValue={props.value != null ? props.value : ''}
-                        componentInstance={props.componentInstance}
+                        onChange={(newValue) => onChange(newValue)}
                     />
                 );
                 break;
@@ -279,11 +279,6 @@ export function BaseControl(props) {
                         id={props.id}
                         label={props.label}
                         entity={props.args.entity}
-                        relations={
-                            props.componentInstance.props.relations[
-                                props.args.entity
-                            ]
-                        }
                         value={props.value != null ? props.value : undefined}
                         onChange={(newValue) => onChange(newValue)}
                     />
@@ -298,7 +293,6 @@ export function BaseControl(props) {
                         id={props.id}
                         label={props.label}
                         keys={props.keys}
-                        clientId={props.clientId}
                     />
                 );
                 break;

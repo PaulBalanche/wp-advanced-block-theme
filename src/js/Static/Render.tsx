@@ -113,53 +113,6 @@ export class Render {
         );
     }
 
-    static buttonAddRepeatableElt(
-        id,
-        keys,
-        valueProp,
-        controllerValue,
-        componentInstance,
-    ) {
-        return (
-            <Button
-                key={id + '-repeatableAddElt'}
-                className="repeatableAddElt"
-                onMouseDown={() => {
-                    Attributes.addEltToRepeatable(
-                        keys,
-                        valueProp,
-                        controllerValue,
-                        false,
-                        componentInstance,
-                    );
-                }}
-                variant="secondary"
-            >
-                <Dashicon icon="insert" /> Add
-            </Button>
-        );
-    }
-
-    static buttonRemoveRepeatableElt(id, keys, valueProp, componentInstance) {
-        return (
-            <Button
-                key={id + '-repeatableRemoveElt'}
-                className="repeatableRemoveElt"
-                onMouseDown={() => {
-                    Attributes.removeEltRepeatable(
-                        keys,
-                        valueProp,
-                        componentInstance,
-                    );
-                }}
-                variant="secondary"
-                isSmall
-            >
-                <Dashicon icon="no-alt" /> Remove
-            </Button>
-        );
-    }
-
     static repeatableObjectLabelFormatting(blockKey, valueProp, keyLoop) {
         var labelKey = Attributes.returnStringOrNumber(keyLoop, true) + 1;
         labelKey = labelKey < 10 ? '0' + labelKey : labelKey;

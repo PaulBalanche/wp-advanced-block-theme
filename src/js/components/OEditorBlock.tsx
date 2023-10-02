@@ -3,27 +3,16 @@ import { useSelect } from '@wordpress/data';
 import { getBlockType } from '@wordpress/blocks';
 import __OEditorApp from './OEditorApp';
 import { OEditorAppHeader } from './OEditorAppHeader';
+import { useContext } from '@wordpress/element';
+import { OBlockEditorContext } from '../Context/Providers/OBlockEditorProvider';
 
-export function OEditorBlock({ clientId, isOpen, breadcrumb }) {
-    const { block, parentsBlock } = useSelect(
-        (select) => {
-            const block = select('core/block-editor').getBlock(clientId);
-            const getBlockParents =
-                select('core/block-editor').getBlockParents(clientId);
-            const parentsBlock = [];
-            for (let i in getBlockParents) {
-                parentsBlock.push(
-                    select('core/block-editor').getBlock(getBlockParents[i]),
-                );
-            }
-            return { block: block, parentsBlock: parentsBlock };
-        },
-        [clientId],
-    );
+export function OEditorBlock({ isOpen, breadcrumb }) {
+    const { blockInstance, parentsBlock, selectBlock } =
+        useContext(OBlockEditorContext);
 
     const title =
-        typeof block.name != 'undefined'
-            ? getBlockType(block.name).title
+        typeof blockInstance.name != 'undefined'
+            ? getBlockType(blockInstance.name).title
             : 'Undefined...';
 
     function getNavParent() {

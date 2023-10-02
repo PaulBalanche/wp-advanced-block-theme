@@ -45,11 +45,7 @@ function oEditorRun() {
         $editorContainer.appendChild($editorApp);
 
         const root = createRoot($editorApp);
-        root.render(
-            <OContext>
-                <OEditor />
-            </OContext>,
-        );
+        root.render(<OEditor />);
     }
 
     /**
@@ -81,63 +77,18 @@ function oEditorRun() {
     }
 }
 function OEditor() {
-    const { blocksList, selectedBlockClientId, editorMode, inserterItems } =
-        useSelect((select) => {
-            const blocksList = select('core/block-editor').getBlocks();
-            for (let i in blocksList) {
-                if (
-                    blocksList[i].name == 'core/block' &&
-                    typeof blocksList[i].attributes.ref != 'undefined' &&
-                    blocksList[i].innerBlocks == 0
-                ) {
-                    let wpReusableBlock = select('core').getEntityRecord(
-                        'postType',
-                        'wp_block',
-                        blocksList[i].attributes.ref,
-                    );
-                    if (typeof wpReusableBlock != 'undefined') {
-                        blocksList[i].postName = wpReusableBlock.title.raw;
-                    }
+    const { selectedBlockClientId } = useSelect((select) => {
+        return {
+            selectedBlockClientId:
+                select('core/block-editor').getSelectedBlockClientId(),
+        };
+    });
 
-                    let childrenBlocksList = select(
-                        'core/block-editor',
-                    ).getBlocks(blocksList[i].clientId);
-                    if (childrenBlocksList.length > 0) {
-                        blocksList[i].isReusable = true;
-                        blocksList[i].children = childrenBlocksList;
-                    }
-                }
-            }
-            const selectedBlockClientId =
-                select('core/block-editor').getSelectedBlockClientId();
-
-            const editorMode = select('core/edit-post').getEditorMode();
-
-            const inserterItems =
-                select('core/block-editor').getInserterItems();
-
-            return {
-                blocksList,
-                selectedBlockClientId,
-                editorMode,
-                inserterItems,
-            };
-        });
-
-    const { selectBlock, resetSelection, insertBlock } =
-        useDispatch(blockEditorStore);
-
-    const context = {
-        blocksList: blocksList,
-        selectedBlockClientId: selectedBlockClientId,
-        editorMode: editorMode,
-        inserterItems: inserterItems,
-        selectBlock: selectBlock,
-        resetSelection: resetSelection,
-        insertBlock: insertBlock,
-    };
-
-    return <OEditorApp context={context} />;
+    return (
+        <OContext clientId={selectedBlockClientId}>
+            <OEditorApp />
+        </OContext>
+    );
 }
 
 function _hideEditorLoadingZone() {

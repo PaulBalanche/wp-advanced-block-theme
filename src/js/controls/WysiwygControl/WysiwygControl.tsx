@@ -1,36 +1,27 @@
-import { Component } from '@wordpress/element';
-
+import { useContext } from '@wordpress/element';
 import { Attributes } from '../../Static/Attributes';
 import { Render } from '../../Static/Render';
 import { DraftEditor } from './DraftEditor';
+import { OBlockEditorContext } from '../../Context/Providers/OBlockEditorProvider';
 
-class WysiwygControl extends Component {
-    constructor(props) {
-        super(props);
+export default function WysiwygControl({
+    id,
+    label,
+    keys,
+    valueProp,
+    objectValue,
+    repeatable = false,
+    onChange,
+}) {
+    const { clientId, themeSpec } = useContext(OBlockEditorContext);
 
-        this.onChange = (newContent) => this.handleChange(newContent);
-    }
-
-    handleChange(newContent) {
-        Attributes.updateAttributes(
-            this.props.keys,
-            this.props.valueProp,
-            newContent,
-            false,
-            this.props.componentInstance,
-        );
-    }
-
-    getTypo() {
+    function getTypo() {
         let typo = {};
         if (
-            this.props?.componentInstance?.props?.theme_spec?.editor?.typo &&
-            typeof this.props.componentInstance.props.theme_spec.editor.typo ==
-                'object'
+            themeSpec?.editor?.typo &&
+            typeof themeSpec.editor.typo == 'object'
         ) {
-            for (const [key, val] of Object.entries(
-                this.props.componentInstance.props.theme_spec.editor.typo,
-            )) {
+            for (const [key, val] of Object.entries(themeSpec.editor.typo)) {
                 if (key == 'a') {
                     continue;
                 }
@@ -75,7 +66,7 @@ class WysiwygControl extends Component {
         return typo;
     }
 
-    getTools() {
+    function getTools() {
         let tools = {
             a: {
                 style: {
@@ -85,16 +76,13 @@ class WysiwygControl extends Component {
         };
 
         if (
-            this.props?.componentInstance?.props?.theme_spec?.editor?.typo &&
-            typeof this.props.componentInstance.props.theme_spec.editor.typo ==
-                'object'
+            themeSpec?.editor?.typo &&
+            typeof themeSpec.editor.typo == 'object'
         ) {
-            for (const [key, val] of Object.entries(
-                this.props.componentInstance.props.theme_spec.editor.typo,
-            )) {
+            for (const [key, val] of Object.entries(themeSpec.editor.typo)) {
                 let editorCss = null;
 
-                if (key == 'a') {
+                if (key === 'a') {
                     if (val?.style && typeof val.style == 'object') {
                         editorCss = {};
                         for (const [keyCss, valCss] of Object.entries(
@@ -129,57 +117,29 @@ class WysiwygControl extends Component {
         return tools;
     }
 
-    render() {
-        var {
-            id,
-            label,
-            keys,
-            valueProp,
-            objectValue,
-            repeatable = false,
-        } = this.props;
-
-        if (repeatable) {
-            label = (
-                <>
-                    {label}
-                    {Render.buttonRemoveRepeatableElt(id, () => {
-                        Attributes.removeEltRepeatable(
-                            keys,
-                            valueProp,
-                            this.props.componentInstance,
-                        );
-                    })}
-                </>
-            );
-        }
-
-        return (
+    return (
+        <div
+            key={id + '-WysiwygComponentsBaseControl'}
+            className="components-base-control"
+        >
             <div
-                key={id + '-WysiwygComponentsBaseControl'}
-                className="components-base-control"
+                key={id + '-WysiwygComponentsBaseControlField'}
+                className="components-base-control__field"
             >
                 <div
-                    key={id + '-WysiwygComponentsBaseControlField'}
-                    className="components-base-control__field"
+                    key={id + '-WysiwygContainer'}
+                    className="wysiwyg-container"
                 >
-                    <div
-                        key={id + '-WysiwygContainer'}
-                        className="wysiwyg-container"
-                    >
-                        {Render.label(id, label)}
-                        <DraftEditor
-                            id={id}
-                            initialContent={objectValue}
-                            onChange={this.onChange}
-                            typo={this.getTypo()}
-                            tools={this.getTools()}
-                        />
-                    </div>
+                    {Render.label(id, label)}
+                    <DraftEditor
+                        id={id}
+                        initialContent={objectValue}
+                        onChange={onChange}
+                        typo={getTypo()}
+                        tools={getTools()}
+                    />
                 </div>
             </div>
-        );
-    }
+        </div>
+    );
 }
-
-export default WysiwygControl;

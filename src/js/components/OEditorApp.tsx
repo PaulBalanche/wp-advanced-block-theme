@@ -6,16 +6,23 @@ import __OEditorSettings from './OEditorSettings';
 import __OEditorWelcome from './OEditorWelcome';
 import { useContext } from 'react';
 
-import globalData from '../global';
-
 import ODevices from './ODevices';
 import OModal from './OModal';
 import OUserPreferences from './OUserPreferences';
+import { OBlockEditorContext } from '../Context/Providers/OBlockEditorProvider';
 
 export default function OEditorApp({ context }) {
     const [route, setRoute] = useState(null);
     const [needToBeMounted, setNeedToBeMounted] = useState(true);
     const [isOpen, setIsOpen] = useState(true);
+
+    const {
+        blocksList,
+        selectedBlockClientId,
+        editorMode,
+        selectBlock,
+        resetSelection,
+    } = useContext(OBlockEditorContext);
 
     // get the actual edit app dom node
     const _$editApp = document.querySelector('.o-editor');
@@ -28,7 +35,7 @@ export default function OEditorApp({ context }) {
     // _$editApp.addEventListener('scroll', (event) => {});
 
     useEffect(() => {
-        if (context.editorMode == 'visual' && needToBeMounted) {
+        if (editorMode == 'visual' && needToBeMounted) {
             _mount();
         }
     }, []);
@@ -51,25 +58,25 @@ export default function OEditorApp({ context }) {
     }
 
     useEffect(() => {
-        if (context.editorMode == 'visual') {
+        if (editorMode == 'visual') {
             if (needToBeMounted) {
                 _mount();
             }
 
             // Force first of reusable block selection
-            // if (context.selectedBlockClientId != null) {
-            //     for (var i in context.blocksList) {
+            // if (selectedBlockClientId != null) {
+            //     for (var i in blocksList) {
             //         if (
-            //             context.blocksList[i].clientId ==
-            //                 context.selectedBlockClientId &&
-            //             typeof context.blocksList[i].isReusable !=
+            //             blocksList[i].clientId ==
+            //                 selectedBlockClientId &&
+            //             typeof blocksList[i].isReusable !=
             //                 'undefined' &&
-            //             context.blocksList[i].isReusable &&
-            //             typeof context.blocksList[i].children != 'undefined' &&
-            //             context.blocksList[i].children.length > 0
+            //             blocksList[i].isReusable &&
+            //             typeof blocksList[i].children != 'undefined' &&
+            //             blocksList[i].children.length > 0
             //         ) {
-            //             context.selectBlock(
-            //                 context.blocksList[i].children[0].clientId,
+            //             selectBlock(
+            //                 blocksList[i].children[0].clientId,
             //             );
             //         }
             //     }
@@ -123,7 +130,7 @@ export default function OEditorApp({ context }) {
             const anchorDetection =
                 document.location.hash?.match(/^#([a-zA-Z0-9-]+)/);
             if (anchorDetection != null) {
-                context.selectBlock(anchorDetection[1]);
+                selectBlock(anchorDetection[1]);
             }
         }
     }
@@ -140,12 +147,8 @@ export default function OEditorApp({ context }) {
     }
 
     function clean() {
-        if (context.selectedBlockClientId != undefined) {
-            context.resetSelection(
-                context.selectedBlockClientId,
-                context.selectedBlockClientId,
-                -1,
-            );
+        if (selectedBlockClientId != undefined) {
+            resetSelection(selectedBlockClientId, selectedBlockClientId, -1);
         }
     }
 
@@ -158,7 +161,7 @@ export default function OEditorApp({ context }) {
     }
 
     function renderBreadcrumb() {
-        return route != null || context.selectedBlockClientId != undefined ? (
+        return route != null || selectedBlockClientId != undefined ? (
             <li className="breadcrumb-home">
                 <Button
                     key={'breadcrumb-home'}
@@ -174,7 +177,7 @@ export default function OEditorApp({ context }) {
     }
 
     function renderFooterBreadcrumb() {
-        return route != null || context.selectedBlockClientId != undefined ? (
+        return route != null || selectedBlockClientId != undefined ? (
             <li>
                 <Button
                     key={'breadcrumb-home'}
@@ -189,7 +192,7 @@ export default function OEditorApp({ context }) {
         ) : null;
     }
 
-    if (context.editorMode != 'visual') return null;
+    if (editorMode != 'visual') return null;
 
     switch (route) {
         case 'settings':
@@ -202,9 +205,8 @@ export default function OEditorApp({ context }) {
             break;
         default:
             var componentToRender =
-                context.selectedBlockClientId != undefined ? (
+                selectedBlockClientId != undefined ? (
                     <OEditorBlock
-                        clientId={context.selectedBlockClientId}
                         isOpen={isOpen}
                         breadcrumb={renderBreadcrumb()}
                     />
@@ -212,15 +214,13 @@ export default function OEditorApp({ context }) {
                     <OEditorInspector
                         isOpen={isOpen}
                         breadcrumb={renderBreadcrumb()}
-                        blocksList={context.blocksList}
-                        selectBlock={context.selectBlock}
+                        blocksList={blocksList}
+                        selectBlock={selectBlock}
                     />
                 );
 
             var extraClassName =
-                context.selectedBlockClientId != undefined
-                    ? 'block'
-                    : 'inspector';
+                selectedBlockClientId != undefined ? 'block' : 'inspector';
     }
 
     return (

@@ -3,7 +3,6 @@ import { Button, ButtonGroup, Dashicon } from '@wordpress/components';
 import { Fragment, useState } from '@wordpress/element';
 import { SlideDown } from 'react-slidedown';
 import '../../../node_modules/react-slidedown/lib/slidedown.css';
-import globalData from '../global';
 
 export function BlockList(props) {
     const children = [];
@@ -61,7 +60,7 @@ function BlockListItem({ block, selectBlock }) {
     }
 
     const parentDomBlocks = [];
-    var closestParent = domBlock;
+    let closestParent: ParentNode = domBlock;
     if (closestParent != null) {
         while (true) {
             closestParent = closestParent.parentNode;
@@ -82,50 +81,6 @@ function BlockListItem({ block, selectBlock }) {
         block.name == 'core/block' && typeof block.postName != 'undefined'
             ? block.postName + ' (' + getBlockType(block.name).title + ')'
             : getBlockType(block.name).title;
-
-    if (
-        typeof globalData.componentInstances == 'object' &&
-        typeof globalData.componentInstances[block.clientId] != 'undefined' &&
-        typeof globalData.componentInstances[block.clientId].state.error ==
-            'object' &&
-        globalData.componentInstances[block.clientId].state.error != null &&
-        Object.keys(globalData.componentInstances[block.clientId].state.error)
-            .length > 0
-    ) {
-        let errorsBlock = 0;
-        let warningsBlock = 0;
-        for (let i in globalData.componentInstances[block.clientId].state
-            .error) {
-            if (
-                typeof globalData.componentInstances[block.clientId].state
-                    .error[i].error != 'undefined'
-            ) {
-                errorsBlock++;
-            }
-            if (
-                typeof globalData.componentInstances[block.clientId].state
-                    .error[i].warning != 'undefined'
-            ) {
-                warningsBlock++;
-            }
-        }
-        if (errorsBlock > 0) {
-            blockName = (
-                <>
-                    {blockName}
-                    <span className="error-attributes">{errorsBlock}</span>
-                </>
-            );
-        }
-        // else if (warningsBlock > 0) {
-        //     blockName = (
-        //         <>
-        //             {blockName}
-        //             <span className="warning-attributes">{warningsBlock}</span>
-        //         </>
-        //     );
-        // }
-    }
 
     let displayInnerBlocks = false;
     if (block.innerBlocks.length > 0) {

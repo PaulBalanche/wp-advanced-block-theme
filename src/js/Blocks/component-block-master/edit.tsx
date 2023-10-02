@@ -1,38 +1,29 @@
-import {
-    store as blockEditorStore,
-    InnerBlocks,
-    useBlockProps,
-    useInnerBlocksProps,
-} from '@wordpress/block-editor';
+import { useBlockProps, useInnerBlocksProps } from '@wordpress/block-editor';
 import { getBlockContent } from '@wordpress/blocks';
 import { Button, Dashicon, ButtonGroup } from '@wordpress/components';
-import { useSelect } from '@wordpress/data';
-import { useState, useEffect } from '@wordpress/element';
+import { useState, useEffect, useContext } from '@wordpress/element';
 import { getBlockType } from '@wordpress/blocks';
 import WpeComponentBase from '../../Components/WpeComponentBase';
 import { OButtonBlockAppender } from '../../Components/OButtonBlockAppender';
 import apiFetch from '@wordpress/api-fetch';
+import { OBlockEditorContext } from '../../Context/Providers/OBlockEditorProvider';
 
-export function EditMode({
-    attributes,
-    setAttributes,
-    clientId,
-    name,
-    block_spec,
-    theme_spec,
-}) {
+export function EditMode({ attributes, setAttributes, name }) {
     const [previewReady, setPreviewReady] = useState(false);
     const [iframeLoaded, setIframeLoaded] = useState(false);
     const [needPreviewUpdate, setNeedPreviewUpdate] = useState(true);
     const [error, setError] = useState(false);
 
+    const { clientId, blockInstance, blockSpec } =
+        useContext(OBlockEditorContext);
+
     const innerBlocksProps =
-        typeof block_spec.inner_blocks != 'undefined' &&
-        block_spec.inner_blocks !== false
+        typeof blockSpec.inner_blocks != 'undefined' &&
+        blockSpec.inner_blocks !== false
             ? useInnerBlocksProps(
                   useBlockProps({
                       className:
-                          block_spec.inner_blocks == null ? 'hidden' : true,
+                          blockSpec.inner_blocks == null ? 'hidden' : true,
                   }),
                   {
                       renderAppender: () => (
@@ -44,18 +35,9 @@ export function EditMode({
               )
             : null;
 
-    const { blockInstance } = useSelect(
-        (select) => {
-            return {
-                blockInstance: select('core/block-editor').getBlock(clientId),
-            };
-        },
-        [clientId],
-    );
-
     // Because of ID will be not saved to the block’s comment delimiter default attribute, we manually set it.
     if (typeof attributes.id_component == 'undefined')
-        setAttributes({ id_component: block_spec.id });
+        setAttributes({ id_component: blockSpec.id });
 
     const previewUrl =
         GLOBAL_LOCALIZED.rest_api_url +
@@ -64,7 +46,7 @@ export function EditMode({
         '/' +
         GLOBAL_LOCALIZED.post_id +
         '/' +
-        block_spec.id +
+        blockSpec.id +
         '/' +
         clientId;
 
@@ -168,8 +150,8 @@ export function EditMode({
             render.push(renderIframePreview());
 
             if (
-                typeof block_spec.inner_blocks != 'undefined' &&
-                block_spec.inner_blocks !== false
+                typeof blockSpec.inner_blocks != 'undefined' &&
+                blockSpec.inner_blocks !== false
             ) {
                 render.push(
                     <div
@@ -224,10 +206,8 @@ export function EditMode({
         <WpeComponentBase
             attributes={attributes}
             setAttributes={setAttributes}
-            clientId={clientId}
             name={name}
-            description={block_spec.description}
-            block_spec={block_spec}
+            description={blockSpec.description}
             error={error}
             setNeedPreviewUpdate={() => setNeedPreviewUpdate(true)}
         >
@@ -242,10 +222,10 @@ export function EditMode({
 //         const { __experimentalGetPreviewDeviceType } = select('core/edit-post');
 //         let relations = [];
 //
-//         if (props.name === 'custom/wpe-component-' + props.block_spec.id) {
+//         if (props.name === 'custom/wpe-component-' + props.blockSpec.id) {
 //             // Loop Props
 //             for (const [keyProp, valueProp] of Object.entries(
-//                 props.block_spec.props,
+//                 props.blockSpec.props,
 //             )) {
 //                 if (
 //                     (valueProp.type === 'relation' ||

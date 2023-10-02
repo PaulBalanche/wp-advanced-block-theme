@@ -1,14 +1,13 @@
 import { SelectControl } from '@wordpress/components';
+import { useContext } from '@wordpress/element';
+import { OBlockEditorContext } from '../Context/Providers/OBlockEditorProvider';
 
-export function Relation({ id, label, entity, relations, value, onChange }) {
-    if (
-        typeof entity == 'undefined' ||
-        typeof relations == 'undefined' ||
-        relations == null ||
-        Object.keys(relations).length == 0
-    ) {
+export function Relation({ id, label, entity, value, onChange }) {
+    if (typeof entity == 'undefined') {
         return null;
     }
+
+    const { relations } = useContext(OBlockEditorContext);
 
     return (
         <SelectControl
@@ -18,7 +17,7 @@ export function Relation({ id, label, entity, relations, value, onChange }) {
             options={[
                 { label: '--Please choose a ' + entity + ' --', value: '' },
             ].concat(
-                relations.map(function (value) {
+                relations[entity].map(function (value) {
                     return { label: value.title.raw, value: value.id };
                 }),
             )}
