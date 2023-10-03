@@ -134,7 +134,6 @@ export function Sortable(props) {
                 >
                     <Control
                         type={props.type}
-                        clientId={props.clientId}
                         blockKey={props.blockKey + '-' + keyLoop}
                         label={labelRepeatableItem}
                         keys={props.keys.concat(keyLoop)}
@@ -153,7 +152,6 @@ export function Sortable(props) {
                             onChange(newValue, index)
                         }
                         sortableIndex={keyLoop}
-                        updateBlockAttributes={props.updateBlockAttributes}
                     />
                 </SortableItem>,
             );

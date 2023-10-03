@@ -8,6 +8,7 @@ import { Sortable } from './Sortable';
 import { store as blockEditorStore } from '@wordpress/block-editor';
 import { useDispatch } from '@wordpress/data';
 import { ODeviceContext } from '../Context/Providers/ODeviceProvider';
+import { OBlockEditorContext } from '../Context/Providers/OBlockEditorProvider';
 
 export function Control(props) {
     const id = props.keys.join('-');
@@ -23,12 +24,12 @@ export function Control(props) {
     const isResponsive = props.isResponsive;
     const args = props.args;
     const error = props.error;
-    const clientId = props.clientId;
     const isSortableItem = typeof props.sortableIndex != 'undefined';
 
     const [value, setValue] = useState(props.controllerValue);
     const [editMode, setEditMode] = useState(null);
 
+    const { clientId, updateBlockAttributes } = useContext(OBlockEditorContext);
     const currentDevice = useContext(ODeviceContext);
 
     useEffect(() => {
@@ -122,7 +123,7 @@ export function Control(props) {
             valueProp,
             newValue,
             false,
-            props.updateBlockAttributes,
+            updateBlockAttributes,
             clientId,
         );
     }
@@ -333,7 +334,6 @@ export function Control(props) {
                     key={getKey() + '-Sortable'}
                     id={getKey() + '-Sortable'}
                     type={type}
-                    clientId={clientId}
                     blockKey={getKey()}
                     keys={getKeys()}
                     controllerValue={props.controllerValue}
@@ -344,7 +344,6 @@ export function Control(props) {
                     error={itemsError}
                     onChange={(newValue) => onChange(newValue)}
                     label={getLabel()}
-                    updateBlockAttributes={props.updateBlockAttributes}
                 />,
             );
         } else {
@@ -361,7 +360,6 @@ export function Control(props) {
                     args={args}
                     error={error}
                     onChange={(newValue) => onChange(newValue)}
-                    clientId={clientId}
                 />,
             );
         }

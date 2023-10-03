@@ -10,11 +10,8 @@ export function PropsObject({
     props,
     keys,
     valueProp,
-    clientId,
     error,
 }) {
-    const { updateBlockAttributes } = useContext(OBlockEditorContext);
-
     let fieldsetObject = [];
 
     for (const [keySubProp, valueSubProp] of Object.entries(props)) {
@@ -33,8 +30,6 @@ export function PropsObject({
                 valueSubProp,
                 keys.concat(keySubProp),
                 valueProp,
-                clientId,
-                updateBlockAttributes,
                 subPropError,
             ),
         );

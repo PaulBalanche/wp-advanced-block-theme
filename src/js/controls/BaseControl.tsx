@@ -219,7 +219,6 @@ export function BaseControl(props) {
                         valueProp={props.valueProp}
                         props={props.args.props}
                         onChange={(newValue) => onChange(newValue)}
-                        clientId={props.clientId}
                         error={props.error}
                     />
                 );
@@ -248,7 +247,6 @@ export function BaseControl(props) {
                                     valueProp={props.valueProp}
                                     props={props.args.props}
                                     onChange={(newValue) => onChange(newValue)}
-                                    clientId={props.clientId}
                                     error={props.error}
                                 />
                             ) : null

@@ -12551,8 +12551,7 @@ function OEditorBlock(_ref) {
     parentsBlock,
     selectBlock,
     blockSpec,
-    blockAttributes,
-    updateBlockAttributes
+    blockAttributes
   } = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useContext)(_Context_Providers_OBlockEditorProvider__WEBPACK_IMPORTED_MODULE_4__.OBlockEditorContext);
   const title = typeof blockInstance.name != 'undefined' ? (0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_2__.getBlockType)(blockInstance.name).title : 'Undefined...';
   function getNavParent() {
@@ -12682,7 +12681,7 @@ function OEditorBlock(_ref) {
         let valueProp = getAttribute(keyProp);
         currentEditCat.push(_Static_Attributes__WEBPACK_IMPORTED_MODULE_5__.Attributes.renderProp(prop, [keyProp], {
           [keyProp]: valueProp
-        }, clientId, updateBlockAttributes));
+        }));
       }
       let titleTab = valCat.name;
       tabPanel.push({
@@ -13711,8 +13710,8 @@ class Attributes {
     }
     return objectReturned;
   }
-  static renderProp(prop, keys, valueProp, clientId, updateBlockAttributes) {
-    let error = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : false;
+  static renderProp(prop, keys, valueProp, clientId) {
+    let error = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : false;
     const type = prop.type.toLowerCase();
     const blockKey = clientId + '-' + keys.join('-');
     const repeatable = typeof prop.repeatable != 'undefined' && !!prop.repeatable ? true : false;
@@ -13812,9 +13811,7 @@ class Attributes {
       repeatable: repeatable,
       isResponsive: typeof prop.responsive != 'undefined' && !!prop.responsive ? true : false,
       args: args,
-      error: error,
-      clientId: clientId,
-      updateBlockAttributes: updateBlockAttributes
+      error: error
     });
   }
   static initComponentAttributes(attributes, props) {
@@ -13895,6 +13892,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Render__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./Render */ "./src/js/Static/Render.tsx");
 /* harmony import */ var _Sortable__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./Sortable */ "./src/js/Static/Sortable.tsx");
 /* harmony import */ var _Context_Providers_ODeviceProvider__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../Context/Providers/ODeviceProvider */ "./src/js/Context/Providers/ODeviceProvider.tsx");
+/* harmony import */ var _Context_Providers_OBlockEditorProvider__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../Context/Providers/OBlockEditorProvider */ "./src/js/Context/Providers/OBlockEditorProvider.tsx");
+
 
 
 
@@ -13917,10 +13916,13 @@ function Control(props) {
   const isResponsive = props.isResponsive;
   const args = props.args;
   const error = props.error;
-  const clientId = props.clientId;
   const isSortableItem = typeof props.sortableIndex != 'undefined';
   const [value, setValue] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(props.controllerValue);
   const [editMode, setEditMode] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
+  const {
+    clientId,
+    updateBlockAttributes
+  } = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useContext)(_Context_Providers_OBlockEditorProvider__WEBPACK_IMPORTED_MODULE_8__.OBlockEditorContext);
   const currentDevice = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useContext)(_Context_Providers_ODeviceProvider__WEBPACK_IMPORTED_MODULE_7__.ODeviceContext);
   (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (!!editMode && editMode != currentDevice) {
@@ -13973,7 +13975,7 @@ function Control(props) {
     if (isSortableItem && typeof props.onChange != 'undefined') {
       props.onChange(newValue, [props.sortableIndex]);
     }
-    _Attributes__WEBPACK_IMPORTED_MODULE_4__.Attributes.updateAttributes(keys, valueProp, newValue, false, props.updateBlockAttributes, clientId);
+    _Attributes__WEBPACK_IMPORTED_MODULE_4__.Attributes.updateAttributes(keys, valueProp, newValue, false, updateBlockAttributes, clientId);
   }
   function getLabel() {
     if (label == null) {
@@ -14098,7 +14100,6 @@ function Control(props) {
         key: getKey() + '-Sortable',
         id: getKey() + '-Sortable',
         type: type,
-        clientId: clientId,
         blockKey: getKey(),
         keys: getKeys(),
         controllerValue: props.controllerValue,
@@ -14108,8 +14109,7 @@ function Control(props) {
         args: args,
         error: itemsError,
         onChange: newValue => onChange(newValue),
-        label: getLabel(),
-        updateBlockAttributes: props.updateBlockAttributes
+        label: getLabel()
       }));
     } else {
       render.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_controls_BaseControl__WEBPACK_IMPORTED_MODULE_3__.BaseControl, {
@@ -14123,8 +14123,7 @@ function Control(props) {
         type: type,
         args: args,
         error: error,
-        onChange: newValue => onChange(newValue),
-        clientId: clientId
+        onChange: newValue => onChange(newValue)
       }));
     }
     if (isResponsive && defaultDeviceIsDefined()) {
@@ -14471,7 +14470,6 @@ function Sortable(props) {
         error: error
       }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Control__WEBPACK_IMPORTED_MODULE_5__.Control, {
         type: props.type,
-        clientId: props.clientId,
         blockKey: props.blockKey + '-' + keyLoop,
         label: labelRepeatableItem,
         keys: props.keys.concat(keyLoop),
@@ -14481,8 +14479,7 @@ function Sortable(props) {
         args: typeof props.args != 'undefined' ? props.args : null,
         error: null,
         onChange: (newValue, index) => onChange(newValue, index),
-        sortableIndex: keyLoop,
-        updateBlockAttributes: props.updateBlockAttributes
+        sortableIndex: keyLoop
       })));
     }
     return renderItems;
@@ -14789,7 +14786,6 @@ function BaseControl(props) {
           valueProp: props.valueProp,
           props: props.args.props,
           onChange: newValue => onChange(newValue),
-          clientId: props.clientId,
           error: props.error
         });
         break;
@@ -14809,7 +14805,6 @@ function BaseControl(props) {
             valueProp: props.valueProp,
             props: props.args.props,
             onChange: newValue => onChange(newValue),
-            clientId: props.clientId,
             error: props.error
           }) : null,
           onChange: newValue => onChange(newValue)
@@ -15526,11 +15521,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _Static_Attributes__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Static/Attributes */ "./src/js/Static/Attributes.tsx");
 /* harmony import */ var _Static_Render__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Static/Render */ "./src/js/Static/Render.tsx");
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _Context_Providers_OBlockEditorProvider__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Context/Providers/OBlockEditorProvider */ "./src/js/Context/Providers/OBlockEditorProvider.tsx");
-
-
 
 
 function PropsObject(_ref) {
@@ -15541,18 +15531,14 @@ function PropsObject(_ref) {
     props,
     keys,
     valueProp,
-    clientId,
     error
   } = _ref;
-  const {
-    updateBlockAttributes
-  } = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useContext)(_Context_Providers_OBlockEditorProvider__WEBPACK_IMPORTED_MODULE_3__.OBlockEditorContext);
   let fieldsetObject = [];
   for (const [keySubProp, valueSubProp] of Object.entries(props)) {
     const subPropError = error && typeof error == 'object' && error != null && typeof error.props == 'object' && typeof error.props[keySubProp] != 'undefined' ? error.props[keySubProp] : false;
     // const subPropError = false;
 
-    fieldsetObject.push(_Static_Attributes__WEBPACK_IMPORTED_MODULE_0__.Attributes.renderProp(valueSubProp, keys.concat(keySubProp), valueProp, clientId, updateBlockAttributes, subPropError));
+    fieldsetObject.push(_Static_Attributes__WEBPACK_IMPORTED_MODULE_0__.Attributes.renderProp(valueSubProp, keys.concat(keySubProp), valueProp, subPropError));
   }
   if (label == null) return fieldsetObject;
   return _Static_Render__WEBPACK_IMPORTED_MODULE_1__.Render.panelComponent(id, label, fieldsetObject, false, '', description);

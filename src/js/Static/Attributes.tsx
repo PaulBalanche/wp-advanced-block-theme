@@ -97,14 +97,7 @@ export class Attributes {
         return objectReturned;
     }
 
-    static renderProp(
-        prop,
-        keys,
-        valueProp,
-        clientId,
-        updateBlockAttributes,
-        error = false,
-    ) {
+    static renderProp(prop, keys, valueProp, clientId, error = false) {
         const type = prop.type.toLowerCase();
         const blockKey = clientId + '-' + keys.join('-');
         const repeatable =
@@ -245,8 +238,6 @@ export class Attributes {
                 }
                 args={args}
                 error={error}
-                clientId={clientId}
-                updateBlockAttributes={updateBlockAttributes}
             />
         );
     }

@@ -14,7 +14,6 @@ export function OEditorBlock({ isOpen, breadcrumb }) {
         selectBlock,
         blockSpec,
         blockAttributes,
-        updateBlockAttributes,
     } = useContext(OBlockEditorContext);
 
     const title =
@@ -216,13 +215,9 @@ export function OEditorBlock({ isOpen, breadcrumb }) {
 
                 let valueProp = getAttribute(keyProp);
                 currentEditCat.push(
-                    Attributes.renderProp(
-                        prop,
-                        [keyProp],
-                        { [keyProp]: valueProp },
-                        clientId,
-                        updateBlockAttributes,
-                    ),
+                    Attributes.renderProp(prop, [keyProp], {
+                        [keyProp]: valueProp,
+                    }),
                 );
             }
 

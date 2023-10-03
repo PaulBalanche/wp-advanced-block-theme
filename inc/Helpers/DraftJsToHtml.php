@@ -6,9 +6,9 @@ use Abt\Services\Render as RenderService;
 use Abt\Singleton\Config;
 
 class DraftJsToHtml {
-    
+
     public static function rawToHtml( $raw ) {
-        
+
         // Get default style
         $themeSpec = Config::getInstance()->get_spec();
         $typo = [];
@@ -27,11 +27,11 @@ class DraftJsToHtml {
 
         if( is_array($raw) && isset($raw['blocks']) && is_array($raw['blocks']) ) {
             foreach( $raw['blocks'] as $block ) {
-                
+
                 self::mergeEntityWithInlineStyle( $block['inlineStyleRanges'], $block['entityRanges'], $raw['entityMap'] );
 
                 if( is_array($block) && isset($block['text']) && ! empty($block['text']) ) {
-                    
+
                     foreach( $block['inlineStyleRanges'] as $keyInlineStyle => $inlineStyle ) {
                         $block['inlineStyleRanges'][$keyInlineStyle]['type'] = ( isset($typo[ $inlineStyle['style'] ]) && isset($typo[ $inlineStyle['style'] ]['type']) ) ? $typo[ $inlineStyle['style'] ]['type'] : null;
                     }
@@ -66,7 +66,7 @@ class DraftJsToHtml {
                 self::mapEntity( $entityRange, $entityMap );
 
                 $index_to_put = count( $inlineStyleRanges );
-                    
+
                 foreach( $inlineStyleRanges as $keyInlineStyle => $inlineStyle ) {
 
                     if( $entityRange['offset'] > $inlineStyle['offset'] )
@@ -76,11 +76,11 @@ class DraftJsToHtml {
 
                     break;
                 }
-                
+
                 $prev_tab = array_slice( $inlineStyleRanges, 0, $index_to_put, true );
                 $next_tab = array_slice( $inlineStyleRanges, $index_to_put, count($inlineStyleRanges), true );
                 $inlineStyleRanges = array_values( $prev_tab + [ $index_to_put . '_entity_' . $keyEntityRange => $entityRange ] + $next_tab  );
-                    
+
                 unset( $entityRanges[$keyEntityRange] );
             }
         }
@@ -99,7 +99,7 @@ class DraftJsToHtml {
                 ];
                 break;
         }
-        
+
         unset( $entityRange['key'] );
     }
 
@@ -124,18 +124,18 @@ class DraftJsToHtml {
         &$breakPoint = []
     ) {
         $content = [''];
-    
+
         $textSplitted = str_split($block['text']);
         foreach ($textSplitted as $key => $character) {
             if ($key < $char_position) {
                 continue;
             }
-    
+
             if (isset($breakPoint[$key]) && $breakPoint[$key] > 0) {
                 $breakPoint[$key]--;
                 break;
             }
-    
+
             // Opening sub-style
             foreach (
                 $block['inlineStyleRanges']
@@ -159,10 +159,10 @@ class DraftJsToHtml {
                     continue 2;
                 }
             }
-    
+
             $content[count($content) - 1] .= $character;
             $char_position++;
-    
+
             // Closing sub-style
             foreach (
                 $block['inlineStyleRanges']
@@ -175,15 +175,15 @@ class DraftJsToHtml {
                 }
             }
         }
-    
+
         if (empty($content[0])) {
             array_shift($content);
         }
-    
+
         if (empty($content[count($content) - 1])) {
             unset($content[count($content) - 1]);
         }
-    
+
         return [
             'id' => $style,
             'type' => $type,
