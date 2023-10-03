@@ -18,7 +18,8 @@ export class Attributes {
         currentValue,
         newValue,
         isNumber = false,
-        setAttributes,
+        updateBlockAttributes,
+        clientId,
     ) {
         const newValueToUpdate = Attributes.recursiveUpdateObjectFromObject(
             arrayKey,
@@ -27,7 +28,7 @@ export class Attributes {
             isNumber,
         );
 
-        setAttributes({
+        updateBlockAttributes(clientId, {
             [arrayKey[0]]: newValueToUpdate[arrayKey[0]],
         });
     }
@@ -101,9 +102,8 @@ export class Attributes {
         keys,
         valueProp,
         clientId,
+        updateBlockAttributes,
         error = false,
-        setNeedPreviewUpdate = null,
-        setAttributes = null,
     ) {
         const type = prop.type.toLowerCase();
         const blockKey = clientId + '-' + keys.join('-');
@@ -246,8 +246,7 @@ export class Attributes {
                 args={args}
                 error={error}
                 clientId={clientId}
-                setNeedPreviewUpdate={setNeedPreviewUpdate}
-                setAttributes={setAttributes}
+                updateBlockAttributes={updateBlockAttributes}
             />
         );
     }

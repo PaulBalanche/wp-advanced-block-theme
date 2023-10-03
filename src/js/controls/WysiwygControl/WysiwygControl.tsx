@@ -13,7 +13,7 @@ export default function WysiwygControl({
     repeatable = false,
     onChange,
 }) {
-    const { clientId, themeSpec } = useContext(OBlockEditorContext);
+    const { themeSpec } = useContext(OBlockEditorContext);
 
     function getTypo() {
         let typo = {};

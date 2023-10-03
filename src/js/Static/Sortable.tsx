@@ -153,6 +153,7 @@ export function Sortable(props) {
                             onChange(newValue, index)
                         }
                         sortableIndex={keyLoop}
+                        updateBlockAttributes={props.updateBlockAttributes}
                     />
                 </SortableItem>,
             );

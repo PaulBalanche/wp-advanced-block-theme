@@ -39,6 +39,34 @@ export function BaseControl(props) {
                 );
                 break;
 
+            case 'text':
+                return (
+                    <Textarea
+                        key={props.id}
+                        id={props.id}
+                        label={props.label}
+                        value={props.value != null ? props.value : ''}
+                        onChange={(newValue) => onChange(newValue)}
+                    />
+                );
+                break;
+
+            case 'richText':
+            case 'wysiwyg':
+            case 'textarea':
+                return (
+                    <WysiwygControl
+                        key={props.id}
+                        id={props.id}
+                        label={props.label}
+                        keys={props.keys}
+                        valueProp={props.valueProp}
+                        objectValue={props.value != null ? props.value : ''}
+                        onChange={(newValue) => onChange(newValue)}
+                    />
+                );
+                break;
+
             case 'select':
                 return (
                     <Select
@@ -193,34 +221,6 @@ export function BaseControl(props) {
                         onChange={(newValue) => onChange(newValue)}
                         clientId={props.clientId}
                         error={props.error}
-                    />
-                );
-                break;
-
-            case 'richText':
-            case 'wysiwyg':
-            case 'textarea':
-                return (
-                    <WysiwygControl
-                        key={props.id}
-                        id={props.id}
-                        label={props.label}
-                        keys={props.keys}
-                        valueProp={props.valueProp}
-                        objectValue={props.value != null ? props.value : ''}
-                        onChange={(newValue) => onChange(newValue)}
-                    />
-                );
-                break;
-
-            case 'text':
-                return (
-                    <Textarea
-                        key={props.id}
-                        id={props.id}
-                        label={props.label}
-                        value={props.value != null ? props.value : ''}
-                        onChange={(newValue) => onChange(newValue)}
                     />
                 );
                 break;

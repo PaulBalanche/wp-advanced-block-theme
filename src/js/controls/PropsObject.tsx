@@ -1,5 +1,7 @@
 import { Attributes } from '../Static/Attributes';
 import { Render } from '../Static/Render';
+import { useContext } from '@wordpress/element';
+import { OBlockEditorContext } from '../Context/Providers/OBlockEditorProvider';
 
 export function PropsObject({
     id,
@@ -11,6 +13,8 @@ export function PropsObject({
     clientId,
     error,
 }) {
+    const { updateBlockAttributes } = useContext(OBlockEditorContext);
+
     let fieldsetObject = [];
 
     for (const [keySubProp, valueSubProp] of Object.entries(props)) {
@@ -30,6 +34,7 @@ export function PropsObject({
                 keys.concat(keySubProp),
                 valueProp,
                 clientId,
+                updateBlockAttributes,
                 subPropError,
             ),
         );

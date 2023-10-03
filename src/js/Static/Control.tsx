@@ -25,29 +25,9 @@ export function Control(props) {
     const error = props.error;
     const clientId = props.clientId;
     const isSortableItem = typeof props.sortableIndex != 'undefined';
-    const directSubmission = [
-        'select',
-        'boolean',
-        'switch',
-        'date',
-        'datetime',
-        'image',
-        'file',
-        'gallery',
-        'video',
-        'link',
-        'radio',
-        'relation',
-        'form',
-        'node',
-        'html',
-    ].includes(props.type);
 
     const [value, setValue] = useState(props.controllerValue);
     const [editMode, setEditMode] = useState(null);
-    const [updatePreviewTimeoutRef, setUpdatePreviewTimeoutRef] =
-        useState(null);
-    const { updateBlockAttributes } = useDispatch(blockEditorStore);
 
     const currentDevice = useContext(ODeviceContext);
 
@@ -142,19 +122,9 @@ export function Control(props) {
             valueProp,
             newValue,
             false,
-            props.setAttributes,
+            props.updateBlockAttributes,
+            clientId,
         );
-
-        clearTimeout(updatePreviewTimeoutRef);
-        if (directSubmission) {
-            props.setNeedPreviewUpdate();
-        } else {
-            setUpdatePreviewTimeoutRef(
-                setTimeout(() => {
-                    props.setNeedPreviewUpdate();
-                }, 1500),
-            );
-        }
     }
 
     function getLabel() {
@@ -374,6 +344,7 @@ export function Control(props) {
                     error={itemsError}
                     onChange={(newValue) => onChange(newValue)}
                     label={getLabel()}
+                    updateBlockAttributes={props.updateBlockAttributes}
                 />,
             );
         } else {
@@ -390,7 +361,6 @@ export function Control(props) {
                     args={args}
                     error={error}
                     onChange={(newValue) => onChange(newValue)}
-                    onSubmit={() => onSubmit()}
                     clientId={clientId}
                 />,
             );

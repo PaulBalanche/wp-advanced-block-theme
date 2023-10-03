@@ -11,8 +11,9 @@ import { OBlockEditorContext } from '../../Context/Providers/OBlockEditorProvide
 export function EditMode({ attributes, setAttributes, name }) {
     const [previewReady, setPreviewReady] = useState(false);
     const [iframeLoaded, setIframeLoaded] = useState(false);
-    const [needPreviewUpdate, setNeedPreviewUpdate] = useState(true);
     const [error, setError] = useState(false);
+    const [updatePreviewTimeoutRef, setUpdatePreviewTimeoutRef] =
+        useState(null);
 
     const { clientId, blockInstance, blockSpec } =
         useContext(OBlockEditorContext);
@@ -53,13 +54,15 @@ export function EditMode({ attributes, setAttributes, name }) {
     const iframeResize = _iframeResize.bind(this);
 
     useEffect(() => {
-        if (needPreviewUpdate) {
-            runApiFetch(attributes);
-        }
-    }, [attributes, needPreviewUpdate]);
+        clearTimeout(updatePreviewTimeoutRef);
+        setUpdatePreviewTimeoutRef(
+            setTimeout(() => {
+                runApiFetch(attributes);
+            }, 1500),
+        );
+    }, [attributes]);
 
     function runApiFetch(attributes = null) {
-        setNeedPreviewUpdate(false);
         setPreviewReady(false);
         setIframeLoaded(false);
         setError(null);
@@ -209,48 +212,8 @@ export function EditMode({ attributes, setAttributes, name }) {
             name={name}
             description={blockSpec.description}
             error={error}
-            setNeedPreviewUpdate={() => setNeedPreviewUpdate(true)}
         >
             {liveRendering()}
         </WpeComponentBase>
     );
 }
-
-// export const EditModeOld = compose([
-//     withSelect((select, props) => {
-//         const { getEntityRecords } = select('core');
-//         const { __experimentalGetPreviewDeviceType } = select('core/edit-post');
-//         let relations = [];
-//
-//         if (props.name === 'custom/wpe-component-' + props.blockSpec.id) {
-//             // Loop Props
-//             for (const [keyProp, valueProp] of Object.entries(
-//                 props.blockSpec.props,
-//             )) {
-//                 if (
-//                     (valueProp.type === 'relation' ||
-//                         valueProp.type === 'form') &&
-//                     typeof valueProp.entity != 'undefined' &&
-//                     relations[valueProp.entity] == null
-//                 ) {
-//                     relations[valueProp.entity] = getEntityRecords(
-//                         'postType',
-//                         valueProp.entity,
-//                         {
-//                             per_page: -1,
-//                             status: 'publish',
-//                         },
-//                     );
-//                 }
-//             }
-//         }
-//
-//         return {
-//             relations: relations,
-//             blockInstance: select('core/block-editor').getBlock(props.clientId),
-//             blocksList: select('core/block-editor').getBlocks(props.clientId),
-//         };
-//     }),
-//
-//     }),
-// ])(WpeComponent);

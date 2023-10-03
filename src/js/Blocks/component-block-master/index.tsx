@@ -34,12 +34,7 @@ Object.values(GLOBAL_LOCALIZED.components).forEach((element) => {
                 : null,
         edit: (props) => {
             return (
-                <OContext
-                    clientId={props.clientId}
-                    name={props.name}
-                    blockSpec={element}
-                    themeSpec={GLOBAL_LOCALIZED.theme_spec}
-                >
+                <OContext clientId={props.clientId}>
                     <EditMode {...props} />
                 </OContext>
             );
