@@ -13710,10 +13710,10 @@ class Attributes {
     }
     return objectReturned;
   }
-  static renderProp(prop, keys, valueProp, clientId) {
-    let error = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : false;
+  static renderProp(prop, keys, valueProp) {
+    let error = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
     const type = prop.type.toLowerCase();
-    const blockKey = clientId + '-' + keys.join('-');
+    const blockKey = keys.join('-');
     const repeatable = typeof prop.repeatable != 'undefined' && !!prop.repeatable ? true : false;
     const label = typeof prop.label != 'undefined' ? prop.label : typeof prop.title != 'undefined' ? prop.title : keys.slice(-1);
     const description = typeof prop.description != 'undefined' ? prop.description : null;

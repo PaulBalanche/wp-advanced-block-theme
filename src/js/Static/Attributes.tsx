@@ -97,9 +97,9 @@ export class Attributes {
         return objectReturned;
     }
 
-    static renderProp(prop, keys, valueProp, clientId, error = false) {
+    static renderProp(prop, keys, valueProp, error = false) {
         const type = prop.type.toLowerCase();
-        const blockKey = clientId + '-' + keys.join('-');
+        const blockKey = keys.join('-');
         const repeatable =
             typeof prop.repeatable != 'undefined' && !!prop.repeatable
                 ? true
