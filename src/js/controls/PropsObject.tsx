@@ -3,15 +3,7 @@ import { Render } from '../Static/Render';
 import { useContext } from '@wordpress/element';
 import { OBlockEditorContext } from '../Context/Providers/OBlockEditorProvider';
 
-export function PropsObject({
-    id,
-    label,
-    description,
-    props,
-    keys,
-    valueProp,
-    error,
-}) {
+export function PropsObject({ id, label, props, keys, valueProp, error }) {
     let fieldsetObject = [];
 
     for (const [keySubProp, valueSubProp] of Object.entries(props)) {
@@ -37,12 +29,5 @@ export function PropsObject({
 
     if (label == null) return fieldsetObject;
 
-    return Render.panelComponent(
-        id,
-        label,
-        fieldsetObject,
-        false,
-        '',
-        description,
-    );
+    return Render.panelComponent(id, label, fieldsetObject, false, '');
 }

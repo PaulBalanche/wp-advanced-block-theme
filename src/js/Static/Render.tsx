@@ -39,45 +39,25 @@ export class Render {
         inner,
         initialOpen = false,
         extraClass = '',
-        description = null,
     ) {
         var className = [];
         if (extraClass != '') className.push(extraClass);
 
         return (
             <Panel key={id + '-panel'} className={className.join(' ')}>
-                {this.panelBodyComponent(
-                    id,
-                    label,
-                    inner,
-                    initialOpen,
-                    description,
-                )}
+                {this.panelBodyComponent(id, label, inner, initialOpen)}
             </Panel>
         );
     }
 
-    static panelBodyComponent(
-        id,
-        label,
-        inner,
-        initialOpen = false,
-        description = null,
-    ) {
+    static panelBodyComponent(id, label, inner, initialOpen = false) {
         return (
             <PanelBody
                 key={id + '-PanelBody'}
                 title={label}
                 initialOpen={label != null ? initialOpen : true}
             >
-                <PanelRow>
-                    {description != null && (
-                        <div className="components-panel__row__description">
-                            {description}
-                        </div>
-                    )}
-                    {inner}
-                </PanelRow>
+                <PanelRow>{inner}</PanelRow>
             </PanelBody>
         );
     }

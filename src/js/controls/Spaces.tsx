@@ -1,7 +1,7 @@
 import { __experimentalBoxControl as BoxControl } from '@wordpress/components';
 import { Render } from '../Static/Render';
 
-export function Spaces({ id, label, description, value, onChange }) {
+export function Spaces({ id, label, value, onChange }) {
     const paddingValue =
         typeof value == 'object' && typeof value.padding == 'object'
             ? {
@@ -125,6 +125,5 @@ export function Spaces({ id, label, description, value, onChange }) {
         </>,
         true,
         '',
-        description,
     );
 }

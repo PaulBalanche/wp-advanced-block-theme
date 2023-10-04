@@ -3,7 +3,7 @@ import { Fragment } from 'react';
 import { Render } from '../Static/Render';
 import { File } from './File';
 
-export function Video({ id, label, description, value, onChange }) {
+export function Video({ id, label, value, onChange }) {
     const typeVideoPanel = [];
 
     // File
@@ -67,7 +67,6 @@ export function Video({ id, label, description, value, onChange }) {
                 null,
                 null,
                 'videoType',
-                description,
             )}
         </Fragment>
     );

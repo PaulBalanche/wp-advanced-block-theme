@@ -11,10 +11,11 @@ import OModal from './OModal';
 import OUserPreferences from './OUserPreferences';
 import { OBlockEditorContext } from '../Context/Providers/OBlockEditorProvider';
 
-export default function OEditorApp({ context }) {
+export default function OEditorApp() {
     const [route, setRoute] = useState(null);
     const [needToBeMounted, setNeedToBeMounted] = useState(true);
-    const [isOpen, setIsOpen] = useState(true);
+    const [isOpen, setIsOpen] = useState(false);
+    const [closingTimeOut, setClosingTimeOut] = useState(null);
 
     const {
         blocksList,
@@ -32,7 +33,16 @@ export default function OEditorApp({ context }) {
         _$editApp.classList.add(GLOBAL_LOCALIZED.editor.style);
     }
 
-    // _$editApp.addEventListener('scroll', (event) => {});
+    function scheduleClosing() {
+        if (!document.querySelector('body').classList.contains('modal-open')) {
+            clearTimeout(closingTimeOut);
+            setClosingTimeOut(
+                setTimeout(() => {
+                    close();
+                }, 3000),
+            );
+        }
+    }
 
     useEffect(() => {
         if (editorMode == 'visual' && needToBeMounted) {
@@ -47,6 +57,7 @@ export default function OEditorApp({ context }) {
         _hideEditorLoadingZone();
         _showEditorApp();
 
+        open();
         setNeedToBeMounted(false);
     }
 
@@ -61,6 +72,11 @@ export default function OEditorApp({ context }) {
         if (editorMode == 'visual') {
             if (needToBeMounted) {
                 _mount();
+            }
+
+            if (selectedBlockClientId != null) {
+                open();
+                scheduleClosing();
             }
 
             // Force first of reusable block selection
@@ -84,7 +100,7 @@ export default function OEditorApp({ context }) {
         } else if (!needToBeMounted) {
             _unmount();
         }
-    }, [needToBeMounted]);
+    }, [needToBeMounted, selectedBlockClientId]);
 
     function _showEditorLoadingZone() {
         const $loadingZone = document.querySelector('.o-editor-loading-zone');
@@ -153,6 +169,7 @@ export default function OEditorApp({ context }) {
     }
 
     function open() {
+        clearTimeout(closingTimeOut);
         setIsOpen(true);
     }
 
@@ -230,9 +247,8 @@ export default function OEditorApp({ context }) {
             <section
                 key="o-editor-app"
                 className={`o-editor-app ${extraClassName}`}
-                onMouseEnter={() => {
-                    open();
-                }}
+                onMouseEnter={() => open()}
+                onMouseLeave={() => scheduleClosing()}
             >
                 {componentToRender}
             </section>
