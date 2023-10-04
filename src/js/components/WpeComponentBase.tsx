@@ -1,11 +1,11 @@
 import { useContext, useState } from '@wordpress/element';
 import { Button, Dashicon } from '@wordpress/components';
-import { getBlockType, isReusableBlock } from '@wordpress/blocks';
+import { isReusableBlock } from '@wordpress/blocks';
 import { WpeModal } from './WpeModal';
 import __OUserPreferences from './OUserPreferences';
 import { OBlockEditorContext } from '../Context/Providers/OBlockEditorProvider';
 
-export default function WpeComponentBase({
+export function WpeComponentBase({
     attributes,
     setAttributes,
     name,
@@ -27,10 +27,9 @@ export default function WpeComponentBase({
         moveBlocksUp,
         moveBlocksDown,
         blockSpec,
+        blockTitle,
     } = useContext(OBlockEditorContext);
 
-    const title =
-        typeof name != 'undefined' ? getBlockType(name).title : 'Undefined...';
     const reusableBlock = checkIsReusableBlock();
 
     if (getAttribute('anchor') != null) {
@@ -162,7 +161,7 @@ export default function WpeComponentBase({
         // Title
         editZone.push(
             <div key={clientId + '_EditZoneTitle'} className="title">
-                {title}
+                {blockTitle}
             </div>,
         );
 
@@ -198,7 +197,7 @@ export default function WpeComponentBase({
             <WpeModal
                 key={clientId + '-removeBlockWpeModal'}
                 id={clientId + '-removeBlockWpeModal'}
-                title={'Confirm "' + title + '" suppression'}
+                title={'Confirm "' + blockTitle + '" suppression'}
                 onClose={() => hideModal('removeSubmitted')}
                 type="warning"
             >
@@ -229,10 +228,5 @@ export default function WpeComponentBase({
         ) : null;
     }
 
-    const render = [];
-
-    render.push(children);
-    render.push(renderRemoveModal());
-
-    return render;
+    return children;
 }

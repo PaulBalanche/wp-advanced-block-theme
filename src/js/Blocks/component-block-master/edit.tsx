@@ -1,8 +1,7 @@
 import { useBlockProps, useInnerBlocksProps } from '@wordpress/block-editor';
-import { getBlockContent, getBlockType } from '@wordpress/blocks';
+import { getBlockContent } from '@wordpress/blocks';
 import { Button, ButtonGroup } from '@wordpress/components';
-import { useContext, useEffect, useState } from '@wordpress/element';
-import WpeComponentBase from '../../Components/WpeComponentBase';
+import { useContext, useEffect, useState, useRef } from '@wordpress/element';
 import { OButtonBlockAppender } from '../../Components/OButtonBlockAppender';
 import apiFetch from '@wordpress/api-fetch';
 import { OBlockEditorContext } from '../../Context/Providers/OBlockEditorProvider';
@@ -10,12 +9,20 @@ import { OBlockEditorContext } from '../../Context/Providers/OBlockEditorProvide
 export function EditMode({ attributes, setAttributes, name }) {
     const [previewReady, setPreviewReady] = useState(false);
     const [iframeLoaded, setIframeLoaded] = useState(false);
-    const [error, setError] = useState(false);
+    const [error, setError] = useState(null);
     const [updatePreviewTimeoutRef, setUpdatePreviewTimeoutRef] =
         useState(null);
 
-    const { clientId, blockInstance, blockSpec } =
-        useContext(OBlockEditorContext);
+    const iframeRef = useRef(null);
+
+    const {
+        clientId,
+        blockInstance,
+        blockSpec,
+        selectBlock,
+        componentRestApiUrl,
+        blockTitle,
+    } = useContext(OBlockEditorContext);
 
     const innerBlocksProps =
         typeof blockSpec.inner_blocks != 'undefined' &&
@@ -35,19 +42,6 @@ export function EditMode({ attributes, setAttributes, name }) {
               )
             : null;
 
-    const previewUrl =
-        GLOBAL_LOCALIZED.rest_api_url +
-        GLOBAL_LOCALIZED.rest_api_namespace +
-        GLOBAL_LOCALIZED.componentblock_attr_autosaves_rest_api_resource_path +
-        '/' +
-        GLOBAL_LOCALIZED.post_id +
-        '/' +
-        blockSpec.id +
-        '/' +
-        clientId;
-
-    const iframeResize = _iframeResize.bind(this);
-
     useEffect(() => {
         clearTimeout(updatePreviewTimeoutRef);
         setUpdatePreviewTimeoutRef(
@@ -63,15 +57,7 @@ export function EditMode({ attributes, setAttributes, name }) {
         setError(null);
 
         apiFetch({
-            path:
-                GLOBAL_LOCALIZED.rest_api_namespace +
-                GLOBAL_LOCALIZED.componentblock_attr_autosaves_rest_api_resource_path +
-                '/' +
-                GLOBAL_LOCALIZED.post_id +
-                '/' +
-                attributes.id_component +
-                '/' +
-                clientId,
+            path: componentRestApiUrl,
             method: 'POST',
             data: {
                 attributes: attributes,
@@ -87,20 +73,16 @@ export function EditMode({ attributes, setAttributes, name }) {
         });
     }
 
-    function _iframeResize() {
+    const iframeResize = () => {
         setIframeLoaded(true);
 
-        const iFrame = document.getElementById(
-            clientId + '-LiveRenderingIframe',
-        );
-        if (iFrame) {
-            const heightIframe =
-                iFrame.contentWindow.document.body.offsetHeight + 'px';
-            iFrame.height = heightIframe;
-            iFrame.parentNode.style.height = heightIframe;
-            iFrame.contentWindow.document.body.style.overflowY = 'hidden';
-        }
-    }
+        const heightIframe =
+            iframeRef.current.contentWindow.document.body.offsetHeight + 'px';
+        iframeRef.current.height = heightIframe;
+        iframeRef.current.parentNode.style.height = heightIframe;
+        iframeRef.current.contentWindow.document.body.style.overflowY =
+            'hidden';
+    };
 
     function renderLoaderPreview() {
         const className = iframeLoaded
@@ -122,10 +104,10 @@ export function EditMode({ attributes, setAttributes, name }) {
     function renderIframePreview() {
         return (
             <iframe
-                className="o-preview-iframe"
                 key={clientId + '-LiveRenderingIframe'}
-                id={clientId + '-LiveRenderingIframe'}
-                src={previewUrl}
+                ref={iframeRef}
+                className="o-preview-iframe"
+                src={GLOBAL_LOCALIZED.rest_api_url + componentRestApiUrl}
                 onLoad={iframeResize}
             ></iframe>
         );
@@ -134,10 +116,10 @@ export function EditMode({ attributes, setAttributes, name }) {
     function liveRendering() {
         const render = [];
 
-        let errorsBlock = 0;
+        let countErrorsBlock = 0;
         for (let i in error) {
             if (typeof error[i].error != 'undefined') {
-                errorsBlock++;
+                countErrorsBlock++;
             }
         }
 
@@ -156,7 +138,7 @@ export function EditMode({ attributes, setAttributes, name }) {
                     />,
                 );
             }
-        } else if (errorsBlock === 0) {
+        } else if (countErrorsBlock === 0) {
             render.push(renderLoaderPreview());
         }
 
@@ -164,28 +146,31 @@ export function EditMode({ attributes, setAttributes, name }) {
             <div
                 key={clientId + '-blockEditOverlay'}
                 className={`block-edit-overlay${
-                    errorsBlock > 0 ? ' errors' : ''
+                    countErrorsBlock > 0 ? ' errors' : ''
                 }`}
                 onMouseDown={() => {
-                    const domBlock = document.querySelector(
-                        '#block-' + clientId,
-                    );
-                    domBlock?.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'center',
-                    });
+                    selectBlock(clientId);
+                    // const domBlock = document.querySelector(
+                    //     '#block-' + clientId,
+                    // );
+                    // domBlock?.scrollIntoView({
+                    //     behavior: 'smooth',
+                    //     block: 'center',
+                    // });
                 }}
             >
                 <h2>
-                    {getBlockType(name).title}
-                    {errorsBlock > 0 && (
-                        <span className="error-attributes">{errorsBlock}</span>
+                    {blockTitle}
+                    {countErrorsBlock > 0 && (
+                        <span className="error-attributes">
+                            {countErrorsBlock}
+                        </span>
                     )}
                 </h2>
-                {errorsBlock > 0 && (
+                {countErrorsBlock > 0 && (
                     <p>
-                        Fix error{errorsBlock > 1 && 's'} to make this block
-                        visible.
+                        Fix error{countErrorsBlock > 1 && 's'} to make this
+                        block visible.
                     </p>
                 )}
                 {error != null && typeof error == 'string' && <p>{error}</p>}
@@ -196,15 +181,5 @@ export function EditMode({ attributes, setAttributes, name }) {
         return render;
     }
 
-    return (
-        <WpeComponentBase
-            attributes={attributes}
-            setAttributes={setAttributes}
-            name={name}
-            description={blockSpec.description}
-            error={error}
-        >
-            {liveRendering()}
-        </WpeComponentBase>
-    );
+    return liveRendering();
 }

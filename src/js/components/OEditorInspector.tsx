@@ -24,19 +24,6 @@ export function OEditorInspector({
         return <OButtonBlockAppender buttonDashicon="insert" />;
     }
 
-    function getOpenMarker() {
-        return (
-            <>
-                <Button variant="primary" className="all-blocks">
-                    <Dashicon icon="screenoptions" />
-                </Button>
-                {/* <Button variant="primary" className="insert">
-                    <Dashicon icon="insert" />
-                </Button> */}
-            </>
-        );
-    }
-
     function renderTools() {
         return null;
         // return (
@@ -83,7 +70,7 @@ export function OEditorInspector({
             key="o-editor-app"
             className={`o-editor-app ${getExtraClassName?.()}`}
         >
-            <OEditorAppHeader isOpen={isOpen} openMarker={getOpenMarker()}>
+            <OEditorAppHeader isOpen={isOpen}>
                 <nav>
                     <ol>
                         {breadcrumb}

@@ -1,7 +1,7 @@
 import { Button, Dashicon, Tooltip } from '@wordpress/components';
 import { useEffect, useState, useContext } from '@wordpress/element';
 import { Devices } from './Devices';
-import { BaseControl } from '../controls/BaseControl';
+import { BaseControl } from '../Controls/BaseControl';
 import { Attributes } from './Attributes';
 import { Render } from './Render';
 import { Sortable } from './Sortable';

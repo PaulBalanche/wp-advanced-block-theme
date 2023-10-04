@@ -1,6 +1,5 @@
-import { useSelect, useDispatch } from '@wordpress/data';
+import { useSelect } from '@wordpress/data';
 import { createRoot } from '@wordpress/element';
-import { store as blockEditorStore } from '@wordpress/block-editor';
 import '../css/admin/_index.scss';
 import OEditorApp from './Components/OEditorApp';
 import { OContext } from './Context/OContext';

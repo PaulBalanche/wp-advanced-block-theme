@@ -38,6 +38,7 @@ export default function OEditorApp() {
             clearTimeout(closingTimeOut);
             setClosingTimeOut(
                 setTimeout(() => {
+                    goInspector();
                     close();
                 }, 3000),
             );

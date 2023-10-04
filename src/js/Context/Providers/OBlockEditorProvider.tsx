@@ -1,11 +1,14 @@
-import { createContext, useEffect } from '@wordpress/element';
+import { createContext } from '@wordpress/element';
 import { useSelect, useDispatch } from '@wordpress/data';
 import { store as blockEditorStore } from '@wordpress/block-editor';
+import { getBlockType } from '@wordpress/blocks';
 
 export function OBlockEditorProvider({ clientId, children }) {
     const {
         blockInstance,
         parentsBlock,
+        componentRestApiUrl,
+        blockTitle,
         selectedBlockClientId,
         blocksList,
         relations,
@@ -17,6 +20,8 @@ export function OBlockEditorProvider({ clientId, children }) {
             const parentsBlock = [];
             const relations = [];
             let blockSpec = null;
+            let componentRestApiUrl = null;
+            let blockTitle = null;
             const blockInstance =
                 select('core/block-editor').getBlock(clientId);
 
@@ -38,6 +43,18 @@ export function OBlockEditorProvider({ clientId, children }) {
                             GLOBAL_LOCALIZED.components[componentKey].id
                     ) {
                         blockSpec = GLOBAL_LOCALIZED.components[componentKey];
+
+                        componentRestApiUrl =
+                            GLOBAL_LOCALIZED.rest_api_namespace +
+                            GLOBAL_LOCALIZED.componentblock_attr_autosaves_rest_api_resource_path +
+                            '/' +
+                            GLOBAL_LOCALIZED.post_id +
+                            '/' +
+                            blockSpec.id +
+                            '/' +
+                            clientId;
+
+                        blockTitle = getBlockType(blockInstance.name).title;
 
                         // Loop Props
                         for (const [keyProp, valueProp] of Object.entries(
@@ -72,6 +89,8 @@ export function OBlockEditorProvider({ clientId, children }) {
                 relations,
                 blockInstance,
                 blockSpec,
+                blockTitle,
+                componentRestApiUrl,
                 selectedBlockClientId:
                     select('core/block-editor').getSelectedBlockClientId(),
                 blockAttributes:
@@ -100,6 +119,8 @@ export function OBlockEditorProvider({ clientId, children }) {
                 clientId,
                 blockInstance,
                 parentsBlock,
+                componentRestApiUrl,
+                blockTitle,
                 selectedBlockClientId,
                 selectBlock,
                 resetSelection,

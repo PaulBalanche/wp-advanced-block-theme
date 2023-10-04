@@ -205,12 +205,9 @@ export function OEditorAppHeader(props) {
     return (
         <>
             <div className={`open-marker${props.isOpen ? ' hidden' : ''}`}>
-                {props.openMarker}
-                {!props.openMarker && (
-                    <Button variant="primary">
-                        <Dashicon icon="arrow-left" />
-                    </Button>
-                )}
+                <Button variant="primary" className="all-blocks">
+                    <Dashicon icon="screenoptions" />
+                </Button>
             </div>
             <div
                 className="resizer top-left"
