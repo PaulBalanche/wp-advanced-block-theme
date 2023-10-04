@@ -209,6 +209,7 @@ export default function OEditorApp({ context }) {
                     <OEditorBlock
                         isOpen={isOpen}
                         breadcrumb={renderBreadcrumb()}
+                        footerBreadcrumb={renderFooterBreadcrumb()}
                     />
                 ) : (
                     <OEditorInspector

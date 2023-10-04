@@ -5,7 +5,8 @@
     "main": "wp-advanced-block-theme",
     "scripts": {
         "start": "wp-scripts start --config webpack.config.js",
-        "build": "wp-scripts build --config webpack.config.js"
+        "build": "wp-scripts build --config webpack.config.js",
+        "generate_component_blocks": "wp-env run cli wp wpe-blocks generate_component_blocks"
     },
     "author": "Paul Balanche <pb@buzzbrothers.ch>",
     "license": "ISC",

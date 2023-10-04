@@ -36,10 +36,6 @@ export function EditMode({ attributes, setAttributes, name }) {
               )
             : null;
 
-    // Because of ID will be not saved to the block’s comment delimiter default attribute, we manually set it.
-    if (typeof attributes.id_component == 'undefined')
-        setAttributes({ id_component: blockSpec.id });
-
     const previewUrl =
         GLOBAL_LOCALIZED.rest_api_url +
         GLOBAL_LOCALIZED.rest_api_namespace +

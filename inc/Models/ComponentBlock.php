@@ -68,7 +68,7 @@ class ComponentBlock extends ModelBase
     public static function format_id($blockId)
     {
         return str_replace(
-            Config::getInstance()->get("componentBlockPrefixName") . "-",
+            Config::getInstance()->get("blocksNamespace") . "/",
             "",
             str_replace("_", "-", trim(strtolower($blockId)))
         );
@@ -116,11 +116,7 @@ class ComponentBlock extends ModelBase
      */
     public function get_block_name()
     {
-        return $this->get_config()->get("blocksNamespace") .
-            "/" .
-            $this->get_config()->get("componentBlockPrefixName") .
-            "-" .
-            $this->get_ID();
+        return str_replace( $this->get_config()->get("componentBlockPrefixName") . "-", "", $this->get_ID() );
     }
 
     /**
@@ -132,7 +128,8 @@ class ComponentBlock extends ModelBase
         return get_stylesheet_directory() .
             "/" .
             $this->get_config()->get("componentBlocksLocation") .
-            $this->get_block_name();
+            $this->get_config()->get("blocksNamespace") . "/" .
+            $this->get_ID();
     }
 
     /**
@@ -144,7 +141,8 @@ class ComponentBlock extends ModelBase
         return get_stylesheet_directory_uri() .
             "/" .
             $this->get_config()->get("componentBlocksLocation") .
-            $this->get_block_name();
+            $this->get_config()->get("blocksNamespace") . "/" .
+            $this->get_ID();
     }
 
     /**
@@ -207,8 +205,9 @@ class ComponentBlock extends ModelBase
      */
     public function generate_block_spec($component_frontspec)
     {
+
         // Define component ID
-        $this->set_ID($component_frontspec["id"]);
+        $this->set_ID($this->get_config()->get("componentBlockPrefixName") . "-" . $component_frontspec["id"]);
 
         // Get the block directory
         $block_dir = $this->get_block_dir();
@@ -246,8 +245,8 @@ class ComponentBlock extends ModelBase
         $this->blockSpec = apply_filters(
             "Abt\generate_component_block_spec",
             [
-                "id" => $this->get_ID(),
-                "name" => $component_frontspec["name"] ?? $this->get_ID(),
+                "id" => $this->get_block_name(),
+                "name" => $component_frontspec["name"] ?? $this->get_block_name(),
                 "description" => $component_frontspec["description"] ?? "",
                 "category" =>
                     isset($component_frontspec["category"]) &&
@@ -330,13 +329,10 @@ class ComponentBlock extends ModelBase
             $metadata = [];
 
             // Name
-            $metadata["name"] = $this->get_block_name($this->get_ID());
+            $metadata["name"] = $this->get_config()->get("blocksNamespace") . "/" . $this->get_ID();
 
             // Attributes
             $attributes = [
-                "id_component" => [
-                    "type" => "string",
-                ],
                 "_node" => [
                     "type" => "string",
                 ],
@@ -469,7 +465,7 @@ class ComponentBlock extends ModelBase
                 $render_attributes
             );
             $render_attributes = apply_filters(
-                'Abt\render_component_block_attributes_' . $this->get_ID(),
+                'Abt\render_component_block_attributes_' . $this->get_block_name(),
                 $render_attributes
             );
 
@@ -488,13 +484,13 @@ class ComponentBlock extends ModelBase
                 // Start rendering
                 if (
                     apply_filters(
-                        "Abt\display_component_block_" . $this->get_ID(),
+                        "Abt\display_component_block_" . $this->get_block_name(),
                         true,
                         $render_attributes
                     )
                 ) {
                     return apply_filters(
-                        'Abt\render_component_block_' . $this->get_ID(),
+                        'Abt\render_component_block_' . $this->get_block_name(),
                         $this->nodeWrapper(RenderService::render(
                             $block_spec["path"],
                             $render_attributes

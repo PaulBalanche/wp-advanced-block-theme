@@ -16,7 +16,7 @@ class ComponentBlocks extends ServiceBase {
 
     /**
      * Register dynamic component block
-     * 
+     *
      */
     public function register_component_blocks() {
 
@@ -28,7 +28,7 @@ class ComponentBlocks extends ServiceBase {
 
     /**
      * Managing block categories
-     * 
+     *
      */
     function filter_block_categories( $block_categories, $editor_context ) {
 
@@ -59,7 +59,7 @@ class ComponentBlocks extends ServiceBase {
 
     /**
      * Get all the back-end blocks spec
-     * 
+     *
      */
     public static function get_all_blocks_spec() {
 
@@ -75,7 +75,7 @@ class ComponentBlocks extends ServiceBase {
                 if( is_dir( $blocks_dir . '/' . $block ) && $block != '..' && $block != '.' ) {
 
                     // ComponentBlock instanciation && get block spec
-                    $componentBlockInstance = Main::getInstance()->get_component_block_instance( $block );
+                    $componentBlockInstance = Main::getInstance()->get_component_block_instance($block);
                     $block_spec = $componentBlockInstance->get_block_spec();
                     if( $block_spec && is_array($block_spec) ) {
                         $all_blocks_spec[] = $block_spec;
@@ -91,7 +91,7 @@ class ComponentBlocks extends ServiceBase {
 
     /**
      * Get all the back-end block metadata json files
-     * 
+     *
      */
     public function get_all_blocks_metadata() {
 
@@ -107,7 +107,7 @@ class ComponentBlocks extends ServiceBase {
                 if( is_dir( $blocks_dir . '/' . $block ) && $block != '..' && $block != '.' ) {
 
                     // ComponentBlock instanciation && get block spec
-                    $componentBlockInstance = Main::getInstance()->get_component_block_instance( $block );
+                    $componentBlockInstance = Main::getInstance()->get_component_block_instance($this->get_config()->get('blocksNamespace') . "/" . $block);
                     $block_metadata_json_file = $componentBlockInstance->get_block_metadata_json_file();
                     if( $block_metadata_json_file ) {
                         $blocks_metadata[] = $block_metadata_json_file;
@@ -123,7 +123,7 @@ class ComponentBlocks extends ServiceBase {
 
     /**
      * If needed, override layout block spec juste before generate it
-     * 
+     *
      */
     public function override_block_spec( $block_spec, $componentBlockInstance ) {
 
@@ -135,10 +135,10 @@ class ComponentBlocks extends ServiceBase {
 
     /**
      *  Allow all custom/wpe-component registered
-     * 
+     *
      */
     public function allowed_block_types_all( $allowed_block_types ) {
-     
+
         if( is_array($allowed_block_types) && in_array( $this->get_config()->get('blocksNamespace') . '/' . $this->get_config()->get('componentBlockPrefixName'), $allowed_block_types ) ) {
             $allowed_block_types = array_merge( $allowed_block_types, Main::getInstance()->get_registered_blocks() );
         }
@@ -149,8 +149,8 @@ class ComponentBlocks extends ServiceBase {
 
 
     /**
-     * 
-     * 
+     *
+     *
      */
     public static function get_attributes_autosaves_rest_api_resource_path() {
 
@@ -161,10 +161,10 @@ class ComponentBlocks extends ServiceBase {
 
     /**
      *  Attributes auto-saves GET used for live-rendering
-     * 
+     *
      */
     public static function attributes_autosaves_get( $request ) {
-    
+
         if( ! $request || ! $request instanceof \WP_REST_Request ) {
             wp_send_json_error( 'Invalid request' );
         }
@@ -177,7 +177,7 @@ class ComponentBlocks extends ServiceBase {
         $client_id = $request['client_id'];
         $component_id = $request['component_id'];
 
-        $componentBlockInstance = Main::getInstance()->get_component_block_instance( $component_id );
+        $componentBlockInstance = Main::getInstance()->get_component_block_instance( Config::getInstance()->get("componentBlockPrefixName") . "-" . $component_id );
         $json_params = $componentBlockInstance->attributes_autosaves_get($post_id, $client_id);
         $componentBlockInstance->set_attributes( ( isset($json_params['attributes']) ) ? $json_params['attributes'] : [] );
         $componentBlockInstance->set_content( ( isset($json_params['content']) ) ? apply_filters('the_content', $json_params['content']) : '' );
@@ -191,7 +191,7 @@ class ComponentBlocks extends ServiceBase {
 
     /**
      *  Attributes auto-saves POST used for live-rendering
-     * 
+     *
      */
     public static function attributes_autosaves_post( $request ) {
 
@@ -212,7 +212,7 @@ class ComponentBlocks extends ServiceBase {
         }
         $attributes = $json_params['attributes'];
 
-        $componentBlockInstance = Main::getInstance()->get_component_block_instance( $request['component_id'] );
+        $componentBlockInstance = Main::getInstance()->get_component_block_instance( Config::getInstance()->get("componentBlockPrefixName") . "-" . $request['component_id'] );
         $block_spec = $componentBlockInstance->get_block_spec();
         if( is_array($block_spec) ) {
 
@@ -237,7 +237,7 @@ class ComponentBlocks extends ServiceBase {
 
     /**
      * This is our callback function that embeds our resource in a WP_REST_Response
-     * 
+     *
      */
     public static function attributes_autosaves_get_permissions_check() {
 
@@ -254,7 +254,7 @@ class ComponentBlocks extends ServiceBase {
 
     /**
      * This is our callback function that embeds our resource in a WP_REST_Response
-     * 
+     *
      */
     public static function attributes_autosaves_post_permissions_check() {
 

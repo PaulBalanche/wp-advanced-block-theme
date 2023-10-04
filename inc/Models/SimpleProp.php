@@ -116,7 +116,7 @@ class SimpleProp
 
             case "relation":
                 return Relation::isValid($this);
-            
+
             case "form":
                 return Form::isValid($this);
 
@@ -195,10 +195,10 @@ class SimpleProp
             case "select":
             case "color":
                 return Select::format($this);
-            
+
             case "spaces":
                 return Spaces::format($this);
-            
+
             case "node":
             case "html":
                 return Node::format($this);

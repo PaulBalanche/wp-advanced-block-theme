@@ -31,7 +31,7 @@ class Main {
     function __construct() {
 
         $this->config = Config::getInstance();
-        
+
         // Filters
         new SpacingFilter();
         new BlocksFilter();
@@ -57,7 +57,7 @@ class Main {
     /**
      * Utility method to retrieve the main instance of the class.
      * The instance will be created if it does not exist yet.
-     * 
+     *
      */
     public static function getInstance() {
 
@@ -70,16 +70,16 @@ class Main {
     public function get_config() {
         return $this->config;
     }
-    
+
     public function get_theme_controller() {
         return $this->themeController;
     }
-    
+
 
 
     /**
      * Get ComponentBlock instance object if exists, or create it
-     * 
+     *
      */
     public function get_component_block_instance( $blockId ) {
 
@@ -96,7 +96,7 @@ class Main {
 
     /**
      * Get Core instance object if exists, or create it
-     * 
+     *
      */
     public function get_core_block_instance( $blockId ) {
 
@@ -106,12 +106,12 @@ class Main {
 
         return $this->coreBlockInstances[ $blockId ];
     }
-    
-    
-    
+
+
+
     /**
      * Get Layout instance object if exists, or create it
-     * 
+     *
      */
     public function get_layout_block_instance( $blockId ) {
 
@@ -126,17 +126,17 @@ class Main {
 
     /**
      * Add ComponentBlock instance object
-     * 
+     *
      */
     public function add_component_block_instance( $instance ) {
         $this->componentBlockInstances[ $instance->get_ID() ] = $instance;
     }
-    
-    
-    
+
+
+
     /**
      * Add CoreBlock instance object
-     * 
+     *
      */
     public function add_core_block_instance( $instance ) {
         $this->coreBlockInstances[ $instance->get_ID() ] = $instance;
@@ -146,7 +146,7 @@ class Main {
 
     /**
      * Add LayoutBlock instance object
-     * 
+     *
      */
     public function add_layout_block_instance( $instance ) {
         $this->layoutBlockInstances[ $instance->get_ID() ] = $instance;
@@ -156,7 +156,7 @@ class Main {
 
     /**
      * Save registered blocks
-     * 
+     *
      */
     public function add_block_registered( $blockId ) {
         $this->blocksRegistered[] = $blockId;
@@ -166,7 +166,7 @@ class Main {
 
     /**
      * Get registered blocks
-     * 
+     *
      */
     public function get_registered_blocks() {
         return $this->blocksRegistered;

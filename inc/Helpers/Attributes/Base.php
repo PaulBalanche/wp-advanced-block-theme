@@ -3,7 +3,7 @@
 namespace Abt\Helpers\Attributes;
 
 class Base {
-    
+
     public static function isValid( &$propInstance ) {
 
         if( empty($propInstance->getValue()) ) {
@@ -14,7 +14,7 @@ class Base {
     }
 
     public static function format( &$propInstance ) {
-        
+
         return $propInstance->getValue();
     }
 }

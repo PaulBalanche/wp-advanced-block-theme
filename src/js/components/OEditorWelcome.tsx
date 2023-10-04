@@ -42,8 +42,4 @@ export default class OEditorWelcome {
             </nav>
         );
     }
-
-    getExtraClassName() {
-        return 'help';
-    }
 }

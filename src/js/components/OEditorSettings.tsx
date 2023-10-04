@@ -38,8 +38,4 @@ export default class OEditorSettings {
             </ul>
         );
     }
-
-    getExtraClassName() {
-        return 'settings';
-    }
 }

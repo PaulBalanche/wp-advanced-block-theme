@@ -30,7 +30,7 @@ class NodeList extends SimpleProp {
             }
         }
 
-        return ( isset($this->getSpecs()['repeatable']) && $this->getSpecs()['repeatable'] ) ? $nodes : implode($nodes);
+        return ( isset($this->getSpecs()['repeatable']) && $this->getSpecs()['repeatable'] ) ? (count($nodes) > 0  ? $nodes : null ) : implode($nodes);
     }
 
 }

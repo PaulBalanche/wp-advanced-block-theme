@@ -23,6 +23,7 @@ class ComponentBlockMaster extends ModelBase
     public function register_components()
     {
         $blocks_metadata = $this->componentBlocksService->get_all_blocks_metadata();
+//        echo '<pre>';print_r($blocks_metadata);
         if (is_array($blocks_metadata) && count($blocks_metadata) > 0) {
             foreach ($blocks_metadata as $metadata_json_file) {
                 // Registers a block type. The recommended way is to register a block type using the metadata stored in the block.json file.
@@ -46,15 +47,13 @@ class ComponentBlockMaster extends ModelBase
      * Static render method
      *
      */
-    public static function render($attributes, $content)
+    public static function render($attributes, $content, $block)
     {
-        if (!isset($attributes["id_component"])) {
+        if (!is_object($block) || !isset($block->name) ) {
             return;
         }
 
-        $componentBlockInstance = Main::getInstance()->get_component_block_instance(
-            $attributes["id_component"]
-        );
+        $componentBlockInstance = Main::getInstance()->get_component_block_instance($block->name);
         $componentBlockInstance->set_attributes($attributes);
         $componentBlockInstance->set_content($content);
         return $componentBlockInstance->render();

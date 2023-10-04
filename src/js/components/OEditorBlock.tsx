@@ -1,12 +1,28 @@
-import { Button, Dashicon, Placeholder } from '@wordpress/components';
-import { getBlockType } from '@wordpress/blocks';
+import {
+    Button,
+    Dashicon,
+    DropdownMenu,
+    MenuGroup,
+    MenuItem,
+    Placeholder,
+} from '@wordpress/components';
+import { getBlockType, isReusableBlock } from '@wordpress/blocks';
 import { OEditorAppHeader } from './OEditorAppHeader';
 import { OBlockEditorContext } from '../Context/Providers/OBlockEditorProvider';
 import { Attributes } from '../Static/Attributes';
 import { Render } from '../Static/Render';
 import { useContext } from '@wordpress/element';
+import { Fragment } from 'react';
+import {
+    chevronDown,
+    chevronUp,
+    cog,
+    external,
+    pages,
+    trash,
+} from '@wordpress/icons';
 
-export function OEditorBlock({ isOpen, breadcrumb }) {
+export function OEditorBlock({ isOpen, breadcrumb, footerBreadcrumb }) {
     const {
         clientId,
         blockInstance,
@@ -14,12 +30,27 @@ export function OEditorBlock({ isOpen, breadcrumb }) {
         selectBlock,
         blockSpec,
         blockAttributes,
+        moveBlocksUp,
+        moveBlocksDown,
+        duplicateBlocks,
+        removeBlock,
     } = useContext(OBlockEditorContext);
 
     const title =
         typeof blockInstance.name != 'undefined'
             ? getBlockType(blockInstance.name).title
             : 'Undefined...';
+
+    const previewUrl =
+        GLOBAL_LOCALIZED.rest_api_url +
+        GLOBAL_LOCALIZED.rest_api_namespace +
+        GLOBAL_LOCALIZED.componentblock_attr_autosaves_rest_api_resource_path +
+        '/' +
+        GLOBAL_LOCALIZED.post_id +
+        '/' +
+        blockSpec.id +
+        '/' +
+        clientId;
 
     function getNavParent() {
         const navParent = [];
@@ -66,8 +97,227 @@ export function OEditorBlock({ isOpen, breadcrumb }) {
         );
     }
 
+    function checkIsReusableBlock() {
+        if (typeof parentsBlock == 'object') {
+            for (let i in parentsBlock) {
+                if (isReusableBlock(parentsBlock[i])) {
+                    return parentsBlock[i].attributes.ref;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    function renderFooter() {
+        const path = [];
+        getNavParent().forEach((element, index) => {
+            path.push(
+                <Fragment key={'footer-breadcrumb-' + index + '-' + clientId}>
+                    <li className="separator">/</li>
+                    <li className="breadcrumb-parent-block">
+                        <Button
+                            key={'path-button-footer-' + element.clientId}
+                            variant="link"
+                            onMouseDown={() => selectBlock(element.clientId)}
+                        >
+                            {getBlockType(element.name).title}
+                        </Button>
+                    </li>
+                </Fragment>,
+            );
+        });
+
+        return (
+            <>
+                {path}
+                {title && (
+                    <>
+                        <li
+                            key={
+                                'footer-breadcrumb-parent-block-separator-current'
+                            }
+                            className="separator"
+                        >
+                            /
+                        </li>
+                        <li key={'footer-breadcrumb-parent-block-current'}>
+                            {title}
+                        </li>
+                    </>
+                )}
+            </>
+        );
+    }
+
     function renderTools() {
-        // return this._blockInstance.renderTools?.();
+        const menuGroup = [];
+
+        menuGroup.push(
+            <MenuGroup key={clientId + '-toolsDropdownMenu-top'}>
+                <MenuItem
+                    key={clientId + '-toolsDropdownMenu-top-Preview'}
+                    icon={external}
+                    onClick={() => window.open(previewUrl, '_blank')}
+                >
+                    Open preview
+                </MenuItem>
+            </MenuGroup>,
+        );
+
+        if (
+            typeof moveBlocksUp != 'undefined' ||
+            typeof moveBlocksDown != 'undefined'
+        ) {
+            const rootClientId =
+                parentsBlock != null &&
+                typeof parentsBlock == 'object' &&
+                parentsBlock.length > 0
+                    ? parentsBlock[parentsBlock.length - 1].clientId
+                    : undefined;
+
+            const groupMoveBlock = [];
+
+            if (
+                typeof moveBlocksUp != 'undefined' &&
+                checkIsReusableBlock() == null
+            ) {
+                groupMoveBlock.push(
+                    <MenuItem
+                        key={clientId + '-toolsDropdownMenu-move-up'}
+                        icon={chevronUp}
+                        onClick={() => moveBlocksUp([clientId], rootClientId)}
+                    >
+                        Move up
+                    </MenuItem>,
+                );
+            }
+
+            if (
+                typeof moveBlocksDown != 'undefined' &&
+                checkIsReusableBlock() == null
+            ) {
+                groupMoveBlock.push(
+                    <MenuItem
+                        key={clientId + '-toolsDropdownMenu-move-down'}
+                        icon={chevronDown}
+                        onClick={() => moveBlocksDown([clientId], rootClientId)}
+                    >
+                        Move down
+                    </MenuItem>,
+                );
+            }
+
+            menuGroup.push(
+                <MenuGroup key={clientId + '-toolsDropdownMenu-move'}>
+                    {groupMoveBlock}
+                </MenuGroup>,
+            );
+        }
+
+        if (typeof duplicateBlocks != 'undefined') {
+            const groupSpecificTools = [];
+
+            groupSpecificTools.push(
+                <MenuItem
+                    key={
+                        clientId + '-toolsDropdownMenu-SpecificTools-duplicate'
+                    }
+                    icon={pages}
+                    onClick={() => {
+                        duplicateBlocks([clientId]);
+                    }}
+                >
+                    Duplicate
+                </MenuItem>,
+            );
+
+            menuGroup.push(
+                <MenuGroup key={clientId + '-toolsDropdownMenu-SpecificTools'}>
+                    {groupSpecificTools}
+                </MenuGroup>,
+            );
+        }
+
+        if (checkIsReusableBlock() != null) {
+            menuGroup.push(
+                <MenuGroup key={clientId + '-toolsDropdownMenu-reusable'}>
+                    <MenuItem
+                        key={
+                            clientId + '-toolsDropdownMenu-reusable-manage-all'
+                        }
+                        onClick={() =>
+                            window.open(
+                                GLOBAL_LOCALIZED.admin_url +
+                                    'edit.php?post_type=wp_block',
+                                '_blank',
+                            )
+                        }
+                    >
+                        Manage all reusable blocks
+                    </MenuItem>
+                    <MenuItem
+                        key={
+                            clientId +
+                            '-toolsDropdownMenu-reusable-convert-to-regular'
+                        }
+                        onClick={() =>
+                            window.open(
+                                GLOBAL_LOCALIZED.admin_url +
+                                    'post.php?post=' +
+                                    checkIsReusableBlock() +
+                                    '&action=edit',
+                                '_blank',
+                            )
+                        }
+                    >
+                        Convert to regular blocks
+                    </MenuItem>
+                    <MenuItem
+                        key={clientId + '-toolsDropdownMenu-reusable-manage'}
+                        onClick={() =>
+                            window.open(
+                                GLOBAL_LOCALIZED.admin_url +
+                                    'post.php?post=' +
+                                    checkIsReusableBlock() +
+                                    '&action=edit',
+                                '_blank',
+                            )
+                        }
+                    >
+                        Manage this reusable block
+                    </MenuItem>
+                </MenuGroup>,
+            );
+        }
+
+        if (typeof removeBlock != 'undefined') {
+            menuGroup.push(
+                <MenuGroup key={clientId + '-toolsDropdownMenu-remove'}>
+                    <MenuItem
+                        key={clientId + '-toolsDropdownMenu-remove-trash'}
+                        icon={trash}
+                        onClick={() => showModal('removeSubmitted')}
+                    >
+                        Remove {title}
+                    </MenuItem>
+                </MenuGroup>,
+            );
+        }
+
+        return menuGroup.length > 0 ? (
+            <li className="breadcrumb-tools">
+                <DropdownMenu
+                    key={clientId + '-toolsDropdownMenu'}
+                    icon={cog}
+                    label="Advanced"
+                >
+                    {() => {
+                        return menuGroup;
+                    }}
+                </DropdownMenu>
+            </li>
+        ) : null;
     }
 
     function getOpenMarker() {
@@ -76,27 +326,6 @@ export function OEditorBlock({ isOpen, breadcrumb }) {
                 <Dashicon icon="edit" />
             </Button>
         );
-    }
-
-    function renderFooter() {
-        return (
-            <nav>
-                <ol>
-                    {/*{__OEditorApp.getInstance().renderFooterBreadcrumb()}*/}
-                    {/*{this._blockInstance.renderFooter?.()}*/}
-                </ol>
-            </nav>
-        );
-    }
-
-    function getExtraClassName() {
-        var className = 'block';
-
-        // if (this._blockInstance.isReusable()) {
-        //     className += ' is-reusable';
-        // }
-
-        return className;
     }
 
     function getAttribute(key) {
@@ -259,7 +488,14 @@ export function OEditorBlock({ isOpen, breadcrumb }) {
                 </nav>
             </OEditorAppHeader>
             <div className="o-editor-app_body">{renderPropsEdition()}</div>
-            <div className="o-editor-app_footer">{renderFooter()}</div>
+            <div className="o-editor-app_footer">
+                <nav>
+                    <ol>
+                        {footerBreadcrumb}
+                        {renderFooter()}
+                    </ol>
+                </nav>
+            </div>
         </>
     );
 }
