@@ -143,7 +143,7 @@
                 opacity: 0;
                 cursor: pointer !important;
                 transition: $o-transition-fast;
-                background: rgb(0 0 0 / 80%);
+                background: rgb(0 0 0 / 60%);
                 align-items: center;
                 justify-content: center;
                 color: white;
@@ -184,6 +184,12 @@
 
                     .dashicon {
                         margin-right: $o-space-10;
+                    }
+
+                    &.is-link {
+                        padding: 0;
+                        color: white;
+                        font-style: italic;
                     }
                 }
             }

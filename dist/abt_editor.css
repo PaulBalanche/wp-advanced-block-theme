@@ -288,7 +288,7 @@
   opacity: 0;
   cursor: pointer !important;
   transition: all 0.1s ease-in-out;
-  background: rgba(0, 0, 0, 0.8);
+  background: rgba(0, 0, 0, 0.6);
   align-items: center;
   justify-content: center;
   color: white;
@@ -321,6 +321,11 @@
 }
 .o-editor .block-editor-block-list__layout > .wp-block .block-edit-overlay .components-button .dashicon {
   margin-right: 6px;
+}
+.o-editor .block-editor-block-list__layout > .wp-block .block-edit-overlay .components-button.is-link {
+  padding: 0;
+  color: white;
+  font-style: italic;
 }
 .o-editor .block-editor-block-list__layout > .wp-block:hover > .block-edit-overlay {
   opacity: 1;

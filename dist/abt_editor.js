@@ -11447,7 +11447,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
 function EditMode(_ref) {
   let {
     attributes,
@@ -11523,14 +11522,13 @@ function EditMode(_ref) {
     })));
   }
   function renderIframePreview() {
-    const $iframe = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("iframe", {
+    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("iframe", {
       className: "o-preview-iframe",
       key: clientId + '-LiveRenderingIframe',
       id: clientId + '-LiveRenderingIframe',
       src: previewUrl,
       onLoad: iframeResize
     });
-    return $iframe;
   }
   function liveRendering() {
     const render = [];
@@ -11564,10 +11562,8 @@ function EditMode(_ref) {
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("h2", null, (0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_3__.getBlockType)(name).title, errorsBlock > 0 && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("span", {
       className: "error-attributes"
     }, errorsBlock)), errorsBlock > 0 && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("p", null, "Fix error", errorsBlock > 1 && 's', " to make this block visible."), error != null && typeof error == 'string' && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("p", null, error), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.Button, {
-      variant: "primary"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.Dashicon, {
-      icon: "edit"
-    }), " Edit")));
+      variant: "link"
+    }, "Click to edit")));
     return render;
   }
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)(_Components_WpeComponentBase__WEBPACK_IMPORTED_MODULE_5__["default"], {

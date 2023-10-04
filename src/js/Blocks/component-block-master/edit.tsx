@@ -1,8 +1,7 @@
 import { useBlockProps, useInnerBlocksProps } from '@wordpress/block-editor';
-import { getBlockContent } from '@wordpress/blocks';
-import { Button, Dashicon, ButtonGroup } from '@wordpress/components';
-import { useState, useEffect, useContext } from '@wordpress/element';
-import { getBlockType } from '@wordpress/blocks';
+import { getBlockContent, getBlockType } from '@wordpress/blocks';
+import { Button, ButtonGroup } from '@wordpress/components';
+import { useContext, useEffect, useState } from '@wordpress/element';
 import WpeComponentBase from '../../Components/WpeComponentBase';
 import { OButtonBlockAppender } from '../../Components/OButtonBlockAppender';
 import apiFetch from '@wordpress/api-fetch';
@@ -121,7 +120,7 @@ export function EditMode({ attributes, setAttributes, name }) {
     }
 
     function renderIframePreview() {
-        const $iframe = (
+        return (
             <iframe
                 className="o-preview-iframe"
                 key={clientId + '-LiveRenderingIframe'}
@@ -130,8 +129,6 @@ export function EditMode({ attributes, setAttributes, name }) {
                 onLoad={iframeResize}
             ></iframe>
         );
-
-        return $iframe;
     }
 
     function liveRendering() {
@@ -192,9 +189,7 @@ export function EditMode({ attributes, setAttributes, name }) {
                     </p>
                 )}
                 {error != null && typeof error == 'string' && <p>{error}</p>}
-                <Button variant="primary">
-                    <Dashicon icon="edit" /> Edit
-                </Button>
+                <Button variant="link">Click to edit</Button>
             </div>,
         );
 
