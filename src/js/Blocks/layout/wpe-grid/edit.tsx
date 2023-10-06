@@ -163,7 +163,7 @@ class WpeGrid extends WpeComponentBase {
                     </div>
                 </>,
                 (newDevice) => {
-                    __ODevices.getInstance().setCurrentDevice(newDevice);
+                    // __ODevices.getInstance().setCurrentDevice(newDevice);
                 },
                 'grid-layout',
             ),

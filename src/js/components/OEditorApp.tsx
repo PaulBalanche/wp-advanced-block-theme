@@ -75,7 +75,7 @@ export default function OEditorApp() {
                 _mount();
             }
 
-            if (selectedBlockClientId != null) {
+            if (!isOpen && selectedBlockClientId != null) {
                 open();
                 scheduleClosing();
             }
@@ -101,7 +101,7 @@ export default function OEditorApp() {
         } else if (!needToBeMounted) {
             _unmount();
         }
-    }, [needToBeMounted, selectedBlockClientId]);
+    }, [needToBeMounted, selectedBlockClientId, isOpen]);
 
     function _showEditorLoadingZone() {
         const $loadingZone = document.querySelector('.o-editor-loading-zone');
@@ -249,7 +249,10 @@ export default function OEditorApp() {
                 key="o-editor-app"
                 className={`o-editor-app ${extraClassName}`}
                 onMouseEnter={() => open()}
-                onMouseLeave={() => scheduleClosing()}
+                onMouseLeave={() => {
+                    scheduleClosing();
+                    console.log('onMouseLeave');
+                }}
             >
                 {componentToRender}
             </section>

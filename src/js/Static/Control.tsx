@@ -30,7 +30,7 @@ export function Control(props) {
     const [editMode, setEditMode] = useState(null);
 
     const { clientId, updateBlockAttributes } = useContext(OBlockEditorContext);
-    const currentDevice = useContext(ODeviceContext);
+    const { currentDevice, setDevice } = useContext(ODeviceContext);
 
     useEffect(() => {
         if (!!editMode && editMode != currentDevice) {
@@ -172,19 +172,6 @@ export function Control(props) {
         }
 
         if (
-            error &&
-            typeof error == 'object' &&
-            typeof error.warning == 'string'
-        ) {
-            labelFormatted.push(
-                <div key={getKey() + '-label-warging'} className="warning">
-                    <Dashicon icon="info" />
-                    {error.warning}
-                </div>,
-            );
-        }
-
-        if (
             value != null &&
             ![
                 'object',
@@ -281,8 +268,6 @@ export function Control(props) {
         if (error && error != null && typeof error == 'object') {
             if (typeof error.error != 'undefined') {
                 className.push('has-error');
-            } else if (typeof error.warning != 'undefined') {
-                className.push('has-warning');
             }
         }
 
@@ -365,8 +350,6 @@ export function Control(props) {
         }
 
         if (isResponsive && defaultDeviceIsDefined()) {
-            const defaultDevice = Devices.getDefaultDevice();
-
             render = Render.responsiveTabComponent(
                 getKey(),
                 Object.keys(Devices.getMediaQueries()).map((layout) => {
@@ -375,13 +358,14 @@ export function Control(props) {
                         title: layout.charAt(0).toUpperCase() + layout.slice(1),
                         className: 'tab-' + layout,
                         active: currentDevice == layout ? true : false,
-                        isDefault: defaultDevice == layout ? true : false,
+                        isDefault:
+                            Devices.getDefaultDevice() == layout ? true : false,
                         isValid:
                             typeof value[layout] != 'undefined' ? true : false,
                     };
                 }),
                 render,
-                (newDevice) => Devices.setCurrentDevice(newDevice),
+                (newDevice) => setDevice(newDevice),
                 type,
             );
         }

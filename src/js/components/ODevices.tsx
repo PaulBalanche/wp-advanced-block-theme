@@ -5,11 +5,7 @@ import { ODeviceContext } from '../Context/Providers/ODeviceProvider';
 import { Devices } from '../Static/Devices';
 
 export default function ODevices() {
-    const currentDevice = useContext(ODeviceContext);
-
-    useEffect(() => {
-        Devices.setCurrentDevice(currentDevice);
-    }, []);
+    const { currentDevice, setDevice } = useContext(ODeviceContext);
 
     function getButtonGroup() {
         const mediaQueries = Devices.getMediaQueries();
@@ -26,15 +22,15 @@ export default function ODevices() {
                 >
                     {Object.keys(mediaQueries).map((layout) => {
                         const extraClass =
-                            currentDevice == layout ? 'default' : null;
+                            Devices.getDefaultDevice() == layout
+                                ? 'default'
+                                : null;
                         return (
                             <Button
                                 key={'layoutButton_' + layout}
                                 isPressed={currentDevice == layout}
                                 className={extraClass}
-                                onMouseDown={() => {
-                                    Devices.setCurrentDevice(layout);
-                                }}
+                                onMouseDown={() => setDevice(layout)}
                             >
                                 {Render.getDeviceLabel(layout)}
                             </Button>

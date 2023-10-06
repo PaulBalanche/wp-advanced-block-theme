@@ -1,7 +1,9 @@
 import { createContext } from '@wordpress/element';
 import { useSelect, useDispatch } from '@wordpress/data';
 import { store as blockEditorStore } from '@wordpress/block-editor';
+import { store as blockDirectoryStore } from '@wordpress/block-directory';
 import { getBlockType } from '@wordpress/blocks';
+import { store as noticesStore } from '@wordpress/notices';
 
 export function OBlockEditorProvider({ clientId, children }) {
     const {
@@ -15,6 +17,8 @@ export function OBlockEditorProvider({ clientId, children }) {
         editorMode,
         blockAttributes,
         blockSpec,
+        notices,
+        blocksErrorNotices,
     } = useSelect(
         (select) => {
             const parentsBlock = [];
@@ -97,6 +101,10 @@ export function OBlockEditorProvider({ clientId, children }) {
                     select('core/block-editor').getBlockAttributes(clientId),
                 blocksList: select('core/block-editor').getBlocks(clientId),
                 editorMode: select('core/edit-post').getEditorMode(),
+                notices: select(noticesStore).getNotices(),
+                blocksErrorNotices: select(
+                    'core/block-directory',
+                ).getErrorNotices(),
             };
         },
         [clientId],
@@ -112,6 +120,9 @@ export function OBlockEditorProvider({ clientId, children }) {
         moveBlocksDown,
         updateBlockAttributes,
     } = useDispatch(blockEditorStore);
+
+    const { setErrorNotice, clearErrorNotice } =
+        useDispatch(blockDirectoryStore);
 
     return (
         <OBlockEditorContext.Provider
@@ -136,6 +147,9 @@ export function OBlockEditorProvider({ clientId, children }) {
                 editorMode,
                 blockAttributes,
                 updateBlockAttributes,
+                blocksErrorNotices,
+                setErrorNotice,
+                clearErrorNotice,
             }}
         >
             {children}

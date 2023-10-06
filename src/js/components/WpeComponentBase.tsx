@@ -17,18 +17,8 @@ export function WpeComponentBase({
         removeSubmitted: false,
     });
 
-    const {
-        clientId,
-        parentsBlock,
-        selectedBlockClientId,
-        selectBlock,
-        removeBlock,
-        duplicateBlocks,
-        moveBlocksUp,
-        moveBlocksDown,
-        blockSpec,
-        blockTitle,
-    } = useContext(OBlockEditorContext);
+    const { clientId, parentsBlock, removeBlock, blockTitle } =
+        useContext(OBlockEditorContext);
 
     const reusableBlock = checkIsReusableBlock();
 

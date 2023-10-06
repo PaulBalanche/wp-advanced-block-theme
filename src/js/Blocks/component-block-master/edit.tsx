@@ -6,7 +6,7 @@ import { OButtonBlockAppender } from '../../Components/OButtonBlockAppender';
 import apiFetch from '@wordpress/api-fetch';
 import { OBlockEditorContext } from '../../Context/Providers/OBlockEditorProvider';
 
-export function EditMode({ attributes, setAttributes, name }) {
+export function EditMode({ attributes }) {
     const [previewReady, setPreviewReady] = useState(false);
     const [iframeLoaded, setIframeLoaded] = useState(false);
     const [error, setError] = useState(null);
@@ -22,6 +22,8 @@ export function EditMode({ attributes, setAttributes, name }) {
         selectBlock,
         componentRestApiUrl,
         blockTitle,
+        setErrorNotice,
+        clearErrorNotice,
     } = useContext(OBlockEditorContext);
 
     const innerBlocksProps =
@@ -67,8 +69,10 @@ export function EditMode({ attributes, setAttributes, name }) {
             if (res.success) {
                 setPreviewReady(true);
                 setError(typeof res.data != 'undefined' ? res.data : null);
+                clearErrorNotice(clientId);
             } else {
                 setError(res.data);
+                setErrorNotice(clientId, res.data);
             }
         });
     }
@@ -181,5 +185,5 @@ export function EditMode({ attributes, setAttributes, name }) {
         return render;
     }
 
-    return liveRendering();
+    return <>{liveRendering()}</>;
 }

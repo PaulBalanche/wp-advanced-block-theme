@@ -185,7 +185,7 @@ class WpeColumn extends WpeComponentBase {
                         </div>
                     </>,
                     (newDevice) => {
-                        __ODevices.getInstance().setCurrentDevice(newDevice);
+                        // __ODevices.getInstance().setCurrentDevice(newDevice);
                     },
                     'column-layout',
                 ),

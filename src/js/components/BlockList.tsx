@@ -1,8 +1,9 @@
 import { getBlockType } from '@wordpress/blocks';
 import { Button, ButtonGroup, Dashicon } from '@wordpress/components';
-import { Fragment, useState } from '@wordpress/element';
+import { Fragment, useContext, useState } from '@wordpress/element';
 import { SlideDown } from 'react-slidedown';
 import '../../../node_modules/react-slidedown/lib/slidedown.css';
+import { OBlockEditorContext } from '../Context/Providers/OBlockEditorProvider';
 
 export function BlockList(props) {
     const children = [];
@@ -44,6 +45,8 @@ function BlockListItem({ block, selectBlock }) {
     const [isHover, setIsHover] = useState(false);
     const [timeoutId, setTimeoutId] = useState(null);
 
+    const { blocksErrorNotices } = useContext(OBlockEditorContext);
+
     const anchor = block.attributes?.anchor;
     const displayAnchor =
         typeof anchor != 'undefined' &&
@@ -81,6 +84,29 @@ function BlockListItem({ block, selectBlock }) {
         block.name == 'core/block' && typeof block.postName != 'undefined'
             ? block.postName + ' (' + getBlockType(block.name).title + ')'
             : getBlockType(block.name).title;
+
+    if (
+        typeof blocksErrorNotices[block.clientId] == 'object' &&
+        typeof blocksErrorNotices[block.clientId].message == 'object'
+    ) {
+        let errorsBlock = 0;
+        for (const i in blocksErrorNotices[block.clientId].message) {
+            if (
+                typeof blocksErrorNotices[block.clientId].message[i].error !=
+                'undefined'
+            ) {
+                errorsBlock++;
+            }
+        }
+        if (errorsBlock > 0) {
+            blockName = (
+                <>
+                    {blockName}
+                    <span className="error-attributes">{errorsBlock}</span>
+                </>
+            );
+        }
+    }
 
     let displayInnerBlocks = false;
     if (block.innerBlocks.length > 0) {

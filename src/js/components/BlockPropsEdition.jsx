@@ -5,7 +5,7 @@ import { OBlockEditorContext } from '../Context/Providers/OBlockEditorProvider';
 import { Placeholder } from '@wordpress/components';
 
 export function BlockPropsEdition() {
-    const { clientId, blockSpec, blockAttributes } =
+    const { clientId, blockSpec, blockAttributes, blocksErrorNotices } =
         useContext(OBlockEditorContext);
 
     function getAttribute(key) {
@@ -95,7 +95,6 @@ export function BlockPropsEdition() {
 
         let currentEditCat = [];
         let errorAttributes = 0;
-        let warningAttributes = 0;
 
         forEachCatProps: for (const [keyProp, prop] of Object.entries(
             valCat.props,
@@ -116,16 +115,43 @@ export function BlockPropsEdition() {
                 }
             }
 
+            let currentAttributeError = false;
+
+            if (
+                typeof blocksErrorNotices[clientId] == 'object' &&
+                typeof blocksErrorNotices[clientId].message == 'object' &&
+                typeof blocksErrorNotices[clientId].message[keyProp] ==
+                    'object' &&
+                typeof blocksErrorNotices[clientId].message[keyProp].error ==
+                    'string'
+            ) {
+                currentAttributeError =
+                    blocksErrorNotices[clientId].message[keyProp];
+                errorAttributes++;
+            }
+
             let valueProp = getAttribute(keyProp);
             currentEditCat.push(
-                Attributes.renderProp(prop, [keyProp], {
-                    [keyProp]: valueProp,
-                }),
+                Attributes.renderProp(
+                    prop,
+                    [keyProp],
+                    {
+                        [keyProp]: valueProp,
+                    },
+                    currentAttributeError,
+                ),
             );
         }
 
         let titleTab = valCat.name;
-
+        if (errorAttributes > 0) {
+            titleTab = (
+                <>
+                    {titleTab}
+                    <span className="error-attributes">{errorAttributes}</span>
+                </>
+            );
+        }
         tabPanel.push({
             name: keyCat,
             title: titleTab,

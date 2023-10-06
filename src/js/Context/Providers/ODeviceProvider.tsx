@@ -1,41 +1,50 @@
 import { createContext, useState } from '@wordpress/element';
+import { useSelect, useDispatch } from '@wordpress/data';
 import { Devices } from '../../Static/Devices';
+import { store as blockPreferencesStore } from '@wordpress/preferences';
 
 export function ODeviceProvider({ children }) {
-    const [currentDevice, setCurrentDevice] = useState(
-        Devices.getDefaultDevice(),
-    );
+    const { device } = useSelect((select) => {
+        const localStorageDevice = select('core/preferences').get(
+            'custom/o-editor',
+            'device',
+        );
+        return {
+            device: localStorageDevice ?? Devices.getDefaultDevice(),
+        };
+    }, []);
+    const { set } = useDispatch(blockPreferencesStore);
 
-    // Select the node that will be observed for mutations
-    const targetNode = document.querySelector(
-        '.interface-interface-skeleton__content',
-    );
+    const editor_area = document.querySelector('#editor');
+    const layout_flow_area = document.querySelector('.is-root-container');
+    if (editor_area && layout_flow_area) {
+        layout_flow_area.style.margin = 'auto';
 
-    // Callback function to execute when mutations are observed
-    const callback = (mutationList, observer) => {
-        for (const mutation of mutationList) {
+        const mediaQueries = Devices.getMediaQueries();
+        if (typeof mediaQueries[device] != 'undefined') {
             if (
-                mutation.type === 'attributes' &&
-                mutation.attributeName == 'o-device'
+                mediaQueries[device]['maxWidth'] != null &&
+                mediaQueries[device]['maxWidth'] <= editor_area.offsetWidth
             ) {
-                setCurrentDevice(
-                    targetNode.getAttribute(mutation.attributeName),
-                );
+                layout_flow_area.style.width =
+                    mediaQueries[device]['maxWidth'] + 'px';
+            } else {
+                layout_flow_area.style.removeProperty('width');
             }
         }
-    };
-
-    // Create an observer instance linked to the callback function
-    const observer = new MutationObserver(callback);
-
-    // Start observing the target node for configured mutations
-    observer.observe(targetNode, { attributes: true });
+    }
 
     return (
-        <ODeviceContext.Provider value={currentDevice}>
+        <ODeviceContext.Provider
+            value={{
+                currentDevice: device,
+                setDevice: (newDevice) =>
+                    set('custom/o-editor', 'device', newDevice),
+            }}
+        >
             {children}
         </ODeviceContext.Provider>
     );
 }
 
-export const ODeviceContext = createContext('desktop');
+export const ODeviceContext = createContext(null);
