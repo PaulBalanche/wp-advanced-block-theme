@@ -6,21 +6,18 @@ import { registerBlockType } from '@wordpress/blocks';
 import { ButtonGroup } from '@wordpress/components';
 import { addFilter } from '@wordpress/hooks';
 import { OButtonBlockAppender } from '../../../Components/OButtonBlockAppender';
-
+import { OContext } from '../../../Context/OContext';
 import { Attributes } from '../../../Static/Attributes';
 import { EditMode } from './edit';
 
 let attributes = {};
-if (
-    GLOBAL_LOCALIZED.blocks_spec['wpe-container'] != null &&
-    typeof GLOBAL_LOCALIZED.blocks_spec['wpe-container'] == 'object' &&
-    typeof GLOBAL_LOCALIZED.blocks_spec['wpe-container'].props == 'object'
-) {
-    Attributes.initComponentAttributes(
-        attributes,
-        GLOBAL_LOCALIZED.blocks_spec['wpe-container'].props,
-    );
-}
+Object.values(GLOBAL_LOCALIZED.components).forEach((element) => {
+    if (element?.id || element.id != 'wpe-container') return;
+
+    if (element.props != null && typeof element.props == 'object') {
+        Attributes.initComponentAttributes(attributes, element.props);
+    }
+});
 
 registerBlockType('custom/wpe-container', {
     title: 'Container',
@@ -58,24 +55,10 @@ registerBlockType('custom/wpe-container', {
     },
     attributes: attributes,
     edit: (props) => {
-        const innerBlocksProps = useInnerBlocksProps(
-            useBlockProps({ className: '' }),
-            {
-                renderAppender: () => (
-                    <ButtonGroup className="inspectorButtonInsertNew">
-                        <OButtonBlockAppender rootClientId={props.clientId} />
-                    </ButtonGroup>
-                ),
-            },
-        );
-
         return (
-            <EditMode
-                {...props}
-                innerBlocksProps={innerBlocksProps}
-                blocks_spec={GLOBAL_LOCALIZED.blocks_spec['wpe-container']}
-                theme_spec={GLOBAL_LOCALIZED.theme_spec}
-            />
+            <OContext clientId={props.clientId}>
+                <EditMode {...props} />
+            </OContext>
         );
     },
     save: () => {

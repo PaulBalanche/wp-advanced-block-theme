@@ -5,7 +5,7 @@ import OEditorApp from './Components/OEditorApp';
 import { OContext } from './Context/OContext';
 import './Blocks/component-block-master';
 // import './Blocks/layout/wpe-column/index';
-// import './Blocks/layout/wpe-container/index';
+import './Blocks/layout/wpe-container/index';
 // import './Blocks/layout/wpe-gallery/index';
 // import './Blocks/layout/wpe-grid/index';
 // import './Blocks/layout/wpe-slide/index';

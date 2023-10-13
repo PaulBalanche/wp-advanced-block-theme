@@ -14,7 +14,7 @@ class LayoutBlocks extends ServiceBase {
 
     /**
      * Register custom blocks
-     * 
+     *
      */
     public function register_layout_blocks() {
 
@@ -29,7 +29,7 @@ class LayoutBlocks extends ServiceBase {
 
     /**
      * Managing block categories
-     * 
+     *
      */
     function filter_block_categories( $block_categories, $editor_context ) {
 
@@ -50,7 +50,7 @@ class LayoutBlocks extends ServiceBase {
 
     /**
      * Get layout blocks defined in plugin
-     * 
+     *
      */
     public function get_layout_blocks() {
 
@@ -77,7 +77,7 @@ class LayoutBlocks extends ServiceBase {
 
     /**
      * If needed, override layout block spec juste before generate it
-     * 
+     *
      */
     public function override_block_spec( $block_spec, $layoutBlockInstance ) {
 
@@ -92,7 +92,7 @@ class LayoutBlocks extends ServiceBase {
         foreach( $this->get_layout_blocks() as $layout_block ) {
 
             $layoutBlockInstance = Main::getInstance()->get_layout_block_instance( $layout_block );
-            $blocks_spec[ $layoutBlockInstance->get_ID() ] = $layoutBlockInstance->get_block_spec();
+            $blocks_spec[] = $layoutBlockInstance->get_block_spec();
         }
 
         return $blocks_spec;

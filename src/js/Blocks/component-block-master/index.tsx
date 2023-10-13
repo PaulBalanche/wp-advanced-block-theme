@@ -5,6 +5,8 @@ import { Attributes } from '../../Static/Attributes';
 import { EditMode } from './edit';
 
 Object.values(GLOBAL_LOCALIZED.components).forEach((element) => {
+    if (element?.isLayout) return;
+
     const initAttributes = {
         id_component: {
             type: 'string',

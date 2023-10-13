@@ -85,6 +85,7 @@ class LayoutBlock extends ModelBase
     public function get_block_spec()
     {
         if (is_null($this->blockSpec)) {
+
             $spec_json_file =
                 $this->get_theme_custom_block_dir() .
                 "/" .
@@ -98,6 +99,12 @@ class LayoutBlock extends ModelBase
                     $this->blockSpec = $block_spec;
                 }
             }
+            else {
+                $this->blockSpec = [];
+            }
+
+            $this->blockSpec['id'] = $this->get_ID();
+            $this->blockSpec['isLayout'] = true;
         }
 
         return $this->blockSpec;

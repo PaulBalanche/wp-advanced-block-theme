@@ -63,7 +63,12 @@ class BlockEditor extends ControllerBase
                 "rest_api_namespace" => $this->get_config()->get("rest_api_namespace"),
                 "componentblock_attr_autosaves_rest_api_resource_path" => ComponentBlocksService::get_attributes_autosaves_rest_api_resource_path(),
                 "current_user_can_edit_posts" => current_user_can("edit_posts") ? "1" : "0",
-                "components" => ComponentBlocksService::get_all_blocks_spec(),
+                "components" => array_merge(ComponentBlocksService::get_all_blocks_spec(), apply_filters(
+                    "Abt\localize_editor_script",
+                    apply_filters('Abt\editor_script_localize_blocks_spec', []),
+                    $this->get_config()->get("componentBlockPrefixName"),
+                    "block_spec"
+                )),
                 "container" => $this->get_config()->get_spec("container"),
                 "galleryType" => $this->get_config()->get_spec("galleryType"),
                 "theme_spec" => apply_filters(
@@ -71,12 +76,6 @@ class BlockEditor extends ControllerBase
                     $this->get_config()->get_spec(),
                     $this->get_config()->get("componentBlockPrefixName"),
                     "theme_spec"
-                ),
-                "blocks_spec" => apply_filters(
-                    "Abt\localize_editor_script",
-                    apply_filters('Abt\editor_script_localize_blocks_spec', []),
-                    $this->get_config()->get("componentBlockPrefixName"),
-                    "block_spec"
                 ),
                 "editor" => [
                     "style" => ( $editorConfig && is_array($editorConfig) && isset($editorConfig["style"]) && $editorConfig["style"] == "dark" ) ? "dark" : "light",

@@ -75,6 +75,10 @@ const BlocksAppender = ({
                                                         }
                                                     />
                                                 )}
+                                                {!block?.example?.attributes
+                                                    ?.editorPreviewImage && (
+                                                    <img src="https://picsum.photos/400/225" />
+                                                )}
                                             </div>
                                             <div className="blockTitle">
                                                 {block.title}

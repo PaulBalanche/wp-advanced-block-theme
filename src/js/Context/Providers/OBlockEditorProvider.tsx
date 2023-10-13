@@ -3,7 +3,6 @@ import { useSelect, useDispatch } from '@wordpress/data';
 import { store as blockEditorStore } from '@wordpress/block-editor';
 import { store as blockDirectoryStore } from '@wordpress/block-directory';
 import { getBlockType } from '@wordpress/blocks';
-import { store as noticesStore } from '@wordpress/notices';
 
 export function OBlockEditorProvider({ clientId, children }) {
     const {
@@ -17,8 +16,9 @@ export function OBlockEditorProvider({ clientId, children }) {
         editorMode,
         blockAttributes,
         blockSpec,
-        notices,
         blocksErrorNotices,
+        isSelectedBlock,
+        isParentOfSelectedBlock,
     } = useSelect(
         (select) => {
             const parentsBlock = [];
@@ -101,10 +101,14 @@ export function OBlockEditorProvider({ clientId, children }) {
                     select('core/block-editor').getBlockAttributes(clientId),
                 blocksList: select('core/block-editor').getBlocks(clientId),
                 editorMode: select('core/edit-post').getEditorMode(),
-                notices: select(noticesStore).getNotices(),
                 blocksErrorNotices: select(
                     'core/block-directory',
                 ).getErrorNotices(),
+                isSelectedBlock:
+                    select('core/block-editor').isBlockSelected(clientId),
+                isParentOfSelectedBlock: select(
+                    'core/block-editor',
+                ).hasSelectedInnerBlock(clientId, true),
             };
         },
         [clientId],
@@ -150,6 +154,8 @@ export function OBlockEditorProvider({ clientId, children }) {
                 blocksErrorNotices,
                 setErrorNotice,
                 clearErrorNotice,
+                isSelectedBlock,
+                isParentOfSelectedBlock,
             }}
         >
             {children}
