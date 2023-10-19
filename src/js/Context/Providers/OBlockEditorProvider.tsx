@@ -2,6 +2,7 @@ import { createContext } from '@wordpress/element';
 import { useSelect, useDispatch } from '@wordpress/data';
 import { store as blockEditorStore } from '@wordpress/block-editor';
 import { store as blockDirectoryStore } from '@wordpress/block-directory';
+import { store as noticesStore } from '@wordpress/notices';
 import { getBlockType } from '@wordpress/blocks';
 
 export function OBlockEditorProvider({ clientId, children }) {
@@ -19,6 +20,7 @@ export function OBlockEditorProvider({ clientId, children }) {
         blocksErrorNotices,
         isSelectedBlock,
         isParentOfSelectedBlock,
+        inserterItems,
     } = useSelect(
         (select) => {
             const parentsBlock = [];
@@ -109,6 +111,8 @@ export function OBlockEditorProvider({ clientId, children }) {
                 isParentOfSelectedBlock: select(
                     'core/block-editor',
                 ).hasSelectedInnerBlock(clientId, true),
+                inserterItems:
+                    select('core/block-editor').getInserterItems(clientId),
             };
         },
         [clientId],
@@ -127,6 +131,13 @@ export function OBlockEditorProvider({ clientId, children }) {
 
     const { setErrorNotice, clearErrorNotice } =
         useDispatch(blockDirectoryStore);
+
+    const { createSuccessNotice } = useDispatch(noticesStore);
+
+    const isEmptyPage =
+        clientId == null &&
+        (!blocksList ||
+            (typeof blocksList == 'object' && blocksList.length == 0));
 
     return (
         <OBlockEditorContext.Provider
@@ -156,6 +167,9 @@ export function OBlockEditorProvider({ clientId, children }) {
                 clearErrorNotice,
                 isSelectedBlock,
                 isParentOfSelectedBlock,
+                inserterItems,
+                createSuccessNotice,
+                isEmptyPage,
             }}
         >
             {children}

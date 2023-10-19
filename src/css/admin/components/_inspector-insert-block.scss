@@ -1,9 +1,4 @@
 body.o-editor-enabled {
-    .wpe-modal:has(.panelInspectorInsertNewBlock) {
-        width: 1400px;
-        max-width: 95%;
-    }
-
     .block-editor-block-list__block.wp-block .block-list-appender {
         position: relative;
     }
@@ -38,69 +33,94 @@ body.o-editor-enabled {
         }
     }
 
-    .panelInspectorInsertNewBlock {
-        .components-tab-panel__tabs {
-            background: #d8eef8;
-            padding: 0 $o-space-40;
+    .wpe-modal.modal-insertNewBlock {
+        width: 1400px;
+        max-width: 95%;
 
-            button {
-                border-bottom: 2px solid #d8eef8;
+        .new_page_info {
+            text-align: center;
 
-                &.active-tab {
-                    border-color: var(--wp-admin-theme-color);
+            h1 {
+            }
+            p {
+            }
+        }
+
+        .titleModal {
+            text-align: center;
+            padding: $o-space-20 0 $o-space-40 0;
+            color: $o-accent-color;
+        }
+
+        .panelInspectorInsertNewBlock {
+            .components-tab-panel__tabs {
+                background: #d8eef8;
+                padding: 0 $o-space-40;
+
+                button {
+                    border-bottom: 2px solid #d8eef8;
+
+                    &.active-tab {
+                        border-color: var(--wp-admin-theme-color);
+                    }
                 }
             }
         }
 
-        .components-tab-panel__tab-content {
-            .items {
-                display: flex;
-                flex-wrap: wrap;
-                row-gap: $o-space-20;
-                column-gap: calc(4% / 3);
+        .items {
+            display: flex;
+            flex-wrap: wrap;
+            row-gap: $o-space-40;
+            column-gap: $o-space-40;
+            padding: $o-space-40;
+            background: $background300;
 
-                .item {
-                    position: relative;
-                    display: block;
-                    width: 24%;
-                    cursor: pointer;
-                    background: rgb(250, 250, 250);
+            .item {
+                position: relative;
+                display: block;
+                width: calc((100% - 3 * $o-space-40) / 4);
+                cursor: pointer;
+                background: rgb(250, 250, 250);
 
-                    &:hover {
-                        .blockTitle {
-                            color: var(--wp-admin-theme-color);
-                        }
-                        .previewContainer {
-                            img {
-                                transform: scale(1.05);
-                            }
-                        }
-                    }
-
-                    .previewContainer {
-                        position: relative;
-                        width: 100%;
-                        aspect-ratio: 16/9;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        background: $background300;
-                        overflow: hidden;
-
-                        img {
-                            object-fit: contain;
-                            width: 100%;
-                            height: 100%;
-                            transition: $o-transition-default;
-                        }
-                    }
-
+                &:hover {
                     .blockTitle {
-                        text-align: center;
-                        font-weight: 500;
-                        padding: 12px 0;
+                        background: var(--wp-admin-theme-color);
+                    }
+                    .previewContainer {
+                        img {
+                            transform: scale(1.05);
+                        }
+                    }
+                }
+
+                .previewContainer {
+                    position: relative;
+                    width: 100%;
+                    aspect-ratio: 16/9;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    overflow: hidden;
+
+                    img {
+                        object-fit: cover;
+                        width: 100%;
+                        height: 100%;
                         transition: $o-transition-default;
                     }
+                }
+
+                .blockTitle {
+                    position: absolute;
+                    bottom: 0;
+                    left: 0;
+                    width: 100%;
+                    text-align: center;
+                    font-weight: 600;
+                    padding: 12px 0;
+                    transition: $o-transition-default;
+                    background: rgb(0 0 0 / 60%);
+                    color: white;
                 }
             }
         }

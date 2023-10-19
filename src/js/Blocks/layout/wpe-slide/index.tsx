@@ -64,7 +64,7 @@ registerBlockType('custom/wpe-slide', {
             {
                 renderAppender: () => (
                     <ButtonGroup className="inspectorButtonInsertNew">
-                        <OButtonBlockAppender rootClientId={props.clientId} />
+                        <OButtonBlockAppender />
                     </ButtonGroup>
                 ),
             },

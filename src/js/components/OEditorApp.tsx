@@ -23,6 +23,7 @@ export default function OEditorApp() {
         editorMode,
         selectBlock,
         resetSelection,
+        isEmptyPage,
     } = useContext(OBlockEditorContext);
 
     // get the actual edit app dom node
@@ -225,13 +226,13 @@ export default function OEditorApp() {
             var componentToRender =
                 selectedBlockClientId != undefined ? (
                     <OEditorBlock
-                        isOpen={isOpen}
+                        isOpen={isOpen && !isEmptyPage}
                         breadcrumb={renderBreadcrumb()}
                         footerBreadcrumb={renderFooterBreadcrumb()}
                     />
                 ) : (
                     <OEditorInspector
-                        isOpen={isOpen}
+                        isOpen={isOpen && !isEmptyPage}
                         breadcrumb={renderBreadcrumb()}
                         blocksList={blocksList}
                         selectBlock={selectBlock}
@@ -249,10 +250,7 @@ export default function OEditorApp() {
                 key="o-editor-app"
                 className={`o-editor-app ${extraClassName}`}
                 onMouseEnter={() => open()}
-                onMouseLeave={() => {
-                    scheduleClosing();
-                    console.log('onMouseLeave');
-                }}
+                onMouseLeave={() => scheduleClosing()}
             >
                 {componentToRender}
             </section>

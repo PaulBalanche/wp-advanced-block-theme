@@ -7,6 +7,7 @@ import {
     trash,
 } from '@wordpress/icons';
 import { DropdownMenu, MenuGroup, MenuItem } from '@wordpress/components';
+import { isReusableBlock } from '@wordpress/blocks';
 import { useContext } from '@wordpress/element';
 import { OBlockEditorContext } from '../Context/Providers/OBlockEditorProvider';
 

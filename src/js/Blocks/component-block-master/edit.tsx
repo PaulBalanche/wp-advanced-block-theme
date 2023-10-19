@@ -37,7 +37,7 @@ export function EditMode({ attributes }) {
                   {
                       renderAppender: () => (
                           <ButtonGroup className="inspectorButtonInsertNew">
-                              <OButtonBlockAppender rootClientId={clientId} />
+                              <OButtonBlockAppender />
                           </ButtonGroup>
                       ),
                   },

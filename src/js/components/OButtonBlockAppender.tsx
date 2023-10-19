@@ -1,23 +1,19 @@
 import { Button, Dashicon } from '@wordpress/components';
-import { compose } from '@wordpress/compose';
-import { useState } from '@wordpress/element';
+import { useContext, useState } from '@wordpress/element';
 import { OBlocksAppender } from './OBlocksAppender';
+import { OBlockEditorContext } from '../Context/Providers/OBlockEditorProvider';
 
-import { withDispatch, withSelect } from '@wordpress/data';
-
-import { store as blockEditorStore } from '@wordpress/block-editor';
-
-const ButtonBlockAppender = ({
-    inserterItems = null,
-    insertBlock = null,
-    rootClientId,
+export function OButtonBlockAppender({
     extraAttributes = {},
     buttonExtraClass = null,
     buttonDashicon = null,
     buttonVariant = 'primary',
     label = 'Add',
-}) => {
-    const [isOpen, setIsOpen] = useState(false);
+}) {
+    const { clientId, insertBlock, inserterItems, isEmptyPage } =
+        useContext(OBlockEditorContext);
+
+    const [isOpen, setIsOpen] = useState(isEmptyPage);
 
     let blockCategories = [];
     inserterItems.forEach((block) => {
@@ -50,7 +46,7 @@ const ButtonBlockAppender = ({
             </Button>
             {isOpen && (
                 <OBlocksAppender
-                    rootClientId={rootClientId}
+                    rootClientId={clientId}
                     blocks={inserterItems}
                     blockCategories={blockCategories}
                     insertBlockFunction={insertBlock}
@@ -62,28 +58,4 @@ const ButtonBlockAppender = ({
             )}
         </>
     );
-};
-
-export const OButtonBlockAppender = compose([
-    withSelect((select, props) => {
-        const clientId =
-            typeof props.rootClientId != 'undefined'
-                ? props.rootClientId
-                : undefined;
-
-        const inserterItems =
-            select('core/block-editor').getInserterItems(clientId);
-
-        return {
-            inserterItems,
-            rootClientId: clientId,
-        };
-    }),
-    withDispatch((dispatch) => {
-        const { insertBlock } = dispatch(blockEditorStore);
-
-        return {
-            insertBlock,
-        };
-    }),
-])(ButtonBlockAppender);
+}

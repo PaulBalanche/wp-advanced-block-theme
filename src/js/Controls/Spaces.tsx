@@ -123,7 +123,7 @@ export function Spaces({ id, label, value, onChange }) {
                 </div>,
             )}
         </>,
-        true,
+        false,
         '',
     );
 }

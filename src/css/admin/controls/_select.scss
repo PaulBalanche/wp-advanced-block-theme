@@ -2,6 +2,7 @@
     .components-input-control__container {
         .components-select-control__input {
             @include o-field;
+            padding: $o-space-20 $o-space-40 !important;
         }
 
         .components-input-control-suffix-wrapper {

@@ -23,8 +23,21 @@ export const WpeModal = (props) => {
                     title={props.title}
                     onRequestClose={closeModal}
                     className={classNameModal.join(' ')}
-                    shouldCloseOnEsc={true}
-                    shouldCloseOnClickOutside={true}
+                    shouldCloseOnEsc={
+                        typeof props.shouldCloseOnEsc != 'undefined'
+                            ? props.shouldCloseOnEsc
+                            : true
+                    }
+                    shouldCloseOnClickOutside={
+                        typeof props.shouldCloseOnClickOutside != 'undefined'
+                            ? props.shouldCloseOnClickOutside
+                            : true
+                    }
+                    __experimentalHideHeader={
+                        typeof props.hideHeader != 'undefined'
+                            ? props.hideHeader
+                            : false
+                    }
                 >
                     <div className="components-modal__body">
                         {props.children}

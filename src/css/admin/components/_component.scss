@@ -28,6 +28,7 @@
             height: auto !important;
 
             .resetDefault {
+                display: none;
                 margin-left: auto;
                 text-decoration: none;
 
@@ -36,6 +37,14 @@
                 }
             }
         }
+    }
+
+    .components-base-control:hover
+        > .components-base-control__field
+        > .components-base-control__label
+        > .inner
+        > .resetDefault {
+        display: flex;
     }
 
     .label-tooltip {

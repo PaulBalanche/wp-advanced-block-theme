@@ -40,7 +40,7 @@ export class Render {
         initialOpen = false,
         extraClass = '',
     ) {
-        var className = [];
+        const className = [];
         if (extraClass != '') className.push(extraClass);
 
         return (
@@ -55,7 +55,7 @@ export class Render {
             <PanelBody
                 key={id + '-PanelBody'}
                 title={label}
-                initialOpen={label != null ? initialOpen : true}
+                initialOpen={initialOpen}
             >
                 <PanelRow>{inner}</PanelRow>
             </PanelBody>

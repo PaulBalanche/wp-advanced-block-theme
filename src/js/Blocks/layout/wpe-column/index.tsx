@@ -70,7 +70,7 @@ registerBlockType('custom/wpe-column', {
             {
                 renderAppender: () => (
                     <ButtonGroup className="inspectorButtonInsertNew">
-                        <OButtonBlockAppender rootClientId={props.clientId} />
+                        <OButtonBlockAppender />
                         <OButtonPatternAppender rootClientId={props.clientId} />
                     </ButtonGroup>
                 ),
