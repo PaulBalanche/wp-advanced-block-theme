@@ -50,15 +50,7 @@ export function OEditorInspector({
             ) : (
                 <p>Empty page...</p>
             );
-        return (
-            <>
-                {inner}
-                {/* <ButtonGroup className="inspectorButtonInsertNew">
-                    <OButtonBlockAppender buttonDashicon="insert" />
-                    <OButtonPatternAppender />
-                </ButtonGroup> */}
-            </>
-        );
+        return <>{inner}</>;
     }
 
     function getExtraClassName() {

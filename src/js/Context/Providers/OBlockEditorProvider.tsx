@@ -21,6 +21,8 @@ export function OBlockEditorProvider({ clientId, children }) {
         isSelectedBlock,
         isParentOfSelectedBlock,
         inserterItems,
+        patterns,
+        patternCategories,
     } = useSelect(
         (select) => {
             const parentsBlock = [];
@@ -90,6 +92,9 @@ export function OBlockEditorProvider({ clientId, children }) {
                 }
             }
 
+            const { __experimentalGetAllowedPatterns, getSettings } =
+                select(blockEditorStore);
+
             return {
                 parentsBlock,
                 relations,
@@ -113,6 +118,9 @@ export function OBlockEditorProvider({ clientId, children }) {
                 ).hasSelectedInnerBlock(clientId, true),
                 inserterItems:
                     select('core/block-editor').getInserterItems(clientId),
+                patterns: __experimentalGetAllowedPatterns(clientId),
+                patternCategories:
+                    getSettings().__experimentalBlockPatternCategories,
             };
         },
         [clientId],
@@ -122,6 +130,7 @@ export function OBlockEditorProvider({ clientId, children }) {
         selectBlock,
         resetSelection,
         insertBlock,
+        insertBlocks,
         removeBlock,
         duplicateBlocks,
         moveBlocksUp,
@@ -151,6 +160,7 @@ export function OBlockEditorProvider({ clientId, children }) {
                 selectBlock,
                 resetSelection,
                 insertBlock,
+                insertBlocks,
                 removeBlock,
                 duplicateBlocks,
                 moveBlocksUp,
@@ -170,6 +180,8 @@ export function OBlockEditorProvider({ clientId, children }) {
                 inserterItems,
                 createSuccessNotice,
                 isEmptyPage,
+                patterns,
+                patternCategories,
             }}
         >
             {children}

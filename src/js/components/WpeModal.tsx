@@ -38,6 +38,11 @@ export const WpeModal = (props) => {
                             ? props.hideHeader
                             : false
                     }
+                    isFullScreen={
+                        typeof props.isFullScreen != 'undefined'
+                            ? props.isFullScreen
+                            : false
+                    }
                 >
                     <div className="components-modal__body">
                         {props.children}

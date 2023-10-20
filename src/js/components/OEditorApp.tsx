@@ -35,15 +35,22 @@ export default function OEditorApp() {
     }
 
     function scheduleClosing() {
-        if (!document.querySelector('body').classList.contains('modal-open')) {
-            clearTimeout(closingTimeOut);
-            setClosingTimeOut(
-                setTimeout(() => {
+        clearTimeout(closingTimeOut);
+        setClosingTimeOut(
+            setTimeout(() => {
+                if (
+                    !document
+                        .querySelector('body')
+                        .classList.contains('modal-open') &&
+                    !document.querySelector(
+                        '.block-editor-block-settings-menu__popover',
+                    )
+                ) {
                     goInspector();
                     close();
-                }, 3000),
-            );
-        }
+                }
+            }, 3000),
+        );
     }
 
     useEffect(() => {

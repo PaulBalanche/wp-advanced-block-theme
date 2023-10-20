@@ -9,7 +9,7 @@ class BlockPatterns extends ControllerBase {
 
     public function __construct() {
         parent::__construct();
-        
+
         $this->add_actions();
     }
 
@@ -17,7 +17,7 @@ class BlockPatterns extends ControllerBase {
 
     /**
      * Add Wordpress actions
-     * 
+     *
      */
     public function add_actions() {
 
@@ -29,7 +29,7 @@ class BlockPatterns extends ControllerBase {
 
     /**
      * Register theme Gutenberg pattern categories
-     * 
+     *
      */
     public function register_block_pattern_categories (){
 
@@ -39,7 +39,7 @@ class BlockPatterns extends ControllerBase {
             if( $pattern_categories_data && is_array($pattern_categories_data) ) {
 
                 foreach ( $pattern_categories_data as $name => $properties ) {
-                    
+
                     if ( ! \WP_Block_Pattern_Categories_Registry::get_instance()->is_registered( $name ) && is_array($properties) && isset( $properties['label'] ) ) {
                         register_block_pattern_category( $name, $properties );
                     }
@@ -52,7 +52,7 @@ class BlockPatterns extends ControllerBase {
 
     /**
      * Register theme Gutenberg patterns
-     * 
+     *
      */
     public function register_block_patterns() {
 
@@ -61,7 +61,7 @@ class BlockPatterns extends ControllerBase {
             $patterns = glob( get_stylesheet_directory() . self::$themePatternsPath . '/*.json' );
             if( $patterns && is_array($patterns) && count($patterns) > 0 ) {
                 foreach( $patterns as $pattern ) {
-                        
+
                     // Get info file
                     $file_pathinfo = pathinfo( $pattern );
                     if( $file_pathinfo['extension'] == 'json'  && ! \WP_Block_Patterns_Registry::get_instance()->is_registered( $file_pathinfo['filename'] ) ) {
@@ -71,6 +71,11 @@ class BlockPatterns extends ControllerBase {
                         if( is_array($pattern_data) && isset($pattern_data['title']) && file_exists($contentFileName) ) {
 
                             $pattern_data['content'] = file_get_contents($contentFileName);
+
+                            if(file_exists(get_stylesheet_directory() . self::$themePatternsPath . '/' . $file_pathinfo['filename'] . '.png') ) {
+                                $pattern_data['preview'] = get_stylesheet_directory_uri() . self::$themePatternsPath . '/' . $file_pathinfo['filename'] . '.png';
+                            }
+
                             register_block_pattern( get_stylesheet() . '/' . $file_pathinfo['filename'], $pattern_data );
                         }
                     }

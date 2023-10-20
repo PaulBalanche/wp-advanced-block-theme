@@ -10,26 +10,9 @@ export function OButtonBlockAppender({
     buttonVariant = 'primary',
     label = 'Add',
 }) {
-    const { clientId, insertBlock, inserterItems, isEmptyPage } =
-        useContext(OBlockEditorContext);
+    const { isEmptyPage } = useContext(OBlockEditorContext);
 
     const [isOpen, setIsOpen] = useState(isEmptyPage);
-
-    let blockCategories = [];
-    inserterItems.forEach((block) => {
-        if (!blockCategories.includes(block.category)) {
-            blockCategories.push(block.category);
-        }
-    });
-    blockCategories = blockCategories.map((category) => {
-        return {
-            name: category,
-            title:
-                category == 'wpe-layout'
-                    ? 'Layout'
-                    : category.charAt(0).toUpperCase() + category.slice(1),
-        };
-    });
 
     return (
         <>
@@ -46,10 +29,6 @@ export function OButtonBlockAppender({
             </Button>
             {isOpen && (
                 <OBlocksAppender
-                    rootClientId={clientId}
-                    blocks={inserterItems}
-                    blockCategories={blockCategories}
-                    insertBlockFunction={insertBlock}
                     onClose={() => {
                         setIsOpen(false);
                     }}

@@ -12250,60 +12250,129 @@ __webpack_require__.r(__webpack_exports__);
 
 function OBlocksAppender(_ref) {
   let {
-    rootClientId,
-    blocks,
-    blockCategories,
-    insertBlockFunction,
     onClose,
     extraAttributes = {}
   } = _ref;
   const {
+    clientId,
     isEmptyPage,
-    createSuccessNotice
+    createSuccessNotice,
+    inserterItems,
+    insertBlock,
+    insertBlocks,
+    patterns,
+    patternCategories
   } = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useContext)(_Context_Providers_OBlockEditorProvider__WEBPACK_IMPORTED_MODULE_5__.OBlockEditorContext);
-  function renderComponentsCat() {
-    let category = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+  function getBlocks() {
+    return inserterItems.map(block => {
+      return !(0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__.isReusableBlock)(block) ? block : null;
+    });
+  }
+  function getReusableBlocks() {
+    return inserterItems.map(block => {
+      return (0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__.isReusableBlock)(block) ? block : null;
+    });
+  }
+  function getBlocksCategories() {
+    const blockCategories = [];
+    getBlocks().forEach(block => {
+      if (block != null && typeof block == 'object' && !blockCategories.includes(block.category)) {
+        blockCategories.push(block.category);
+      }
+    });
+    return blockCategories.map(category => {
+      return {
+        name: category,
+        title: category == 'wpe-layout' ? 'Layout' : category.charAt(0).toUpperCase() + category.slice(1)
+      };
+    });
+  }
+  function getPatternCategories() {
+    const patternCategoriesToDisplay = [];
+    patterns.forEach((pattern, index) => {
+      if (pattern.categories == null || typeof pattern.categories != 'object' || pattern.categories.length == 0) {
+        patterns[index].categories = ['uncategorized'];
+      }
+      pattern.categories.forEach(category => {
+        if (!patternCategoriesToDisplay.includes(category)) {
+          patternCategoriesToDisplay.push(category);
+        }
+      });
+    });
+    return patternCategoriesToDisplay.map(category => {
+      let categoryFormatted = {
+        name: category,
+        title: category.charAt(0).toUpperCase() + category.slice(1)
+      };
+      patternCategories.forEach(initialCategory => {
+        if (initialCategory.name == category) {
+          categoryFormatted = {
+            name: initialCategory.name,
+            title: initialCategory.label
+          };
+          return;
+        }
+      });
+      return categoryFormatted;
+    });
+  }
+  function renderEntities(entities) {
+    let category = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "items"
-    }, blocks.map((block, index) => {
-      if (category == null || block.category == category) {
+    }, entities.map((entity, index) => {
+      if (entity != null && typeof entity == 'object' && (category == null || typeof entity.categories != 'undefined' && entity.categories?.length > 0 && entity.categories.includes(category) || typeof entity.category != 'undefined' && entity.category == category)) {
         return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
           key: 'o-editor-inspector-modal-block-' + index,
           className: "item",
           onMouseDown: () => {
-            insertBlockFunction((0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__.createBlock)(block.name, {
-              ...block.initialAttributes,
-              ...extraAttributes
-            }), undefined, rootClientId !== null && rootClientId !== void 0 ? rootClientId : undefined, true);
+            if ((0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__.isReusableBlock)(entity) || typeof entity.content == 'undefined') {
+              insertBlock((0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__.createBlock)(entity.name, {
+                ...entity.initialAttributes,
+                ...extraAttributes
+              }), undefined, clientId !== null && clientId !== void 0 ? clientId : undefined, true);
+            } else {
+              insertBlocks((0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__.parse)(entity.content), undefined, clientId !== null && clientId !== void 0 ? clientId : undefined, true);
+            }
             onClose();
             createSuccessNotice((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.sprintf)( /* translators: %s: block pattern title. */
-            (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('"%s" inserted.'), block.title), {
+            (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('"%s" inserted.'), entity.title), {
               type: 'snackbar',
               icon: '🔥'
             });
           }
         }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
           className: "previewContainer"
-        }, block?.example?.attributes?.editorPreviewImage && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
-          src: block.example.attributes.editorPreviewImage
-        }), !block?.example?.attributes?.editorPreviewImage && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
+        }, entity?.example?.attributes?.editorPreviewImage && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
+          src: entity.example.attributes.editorPreviewImage
+        }), !entity?.example?.attributes?.editorPreviewImage && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
           src: "https://picsum.photos/400/225"
         })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
           className: "blockTitle"
-        }, block.title));
+        }, entity.title));
       }
     }));
   }
-  function renderComponents() {
-    if (blockCategories.length > 1) {
-      return renderTabPanelComponent();
+  function renderBlocks() {
+    if (getBlocksCategories().length > 1) {
+      return renderTabPanelEntities(getBlocksCategories(), getBlocks());
     } else {
-      return renderComponentsCat();
+      return renderEntities(getBlocks());
     }
   }
-  function renderTabPanelComponent() {
-    return _Static_Render__WEBPACK_IMPORTED_MODULE_2__.Render.tabPanelComponent('o-editor-inspector-tab-insertNewBlock', blockCategories, tabPanel => {
-      return renderComponentsCat(tabPanel.name);
+  function renderReusableBlocks() {
+    return renderEntities(getReusableBlocks());
+  }
+  function renderPatterns() {
+    if (getPatternCategories().length > 1) {
+      return renderTabPanelEntities(getPatternCategories(), patterns);
+    } else {
+      return renderEntities(patterns);
+    }
+  }
+  function renderTabPanelEntities(categories, entities) {
+    return _Static_Render__WEBPACK_IMPORTED_MODULE_2__.Render.tabPanelComponent('o-editor-inspector-tab-insertNewBlock', categories, tabPanel => {
+      return renderEntities(entities, tabPanel.name);
     }, null, null, 'panelInspectorInsertNewBlock');
   }
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_WpeModal__WEBPACK_IMPORTED_MODULE_4__.WpeModal, {
@@ -12313,14 +12382,32 @@ function OBlocksAppender(_ref) {
     onClose: () => {
       onClose();
     },
+    title: "Insert block(s)",
     shouldCloseOnEsc: !isEmptyPage,
     shouldCloseOnClickOutside: !isEmptyPage,
-    hideHeader: true
+    isFullScreen: true,
+    hideHeader: isEmptyPage
   }, isEmptyPage && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "new_page_info"
-  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h1", null, "Welcome! "), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "This page is blank. Its construction begins here!")), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h2", {
-    className: "titleModal"
-  }, "Insert a block into those available below."), renderComponents());
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h1", null, "Welcome! "), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "This page is blank. Its construction begins here!"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "Insert a ", (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("strong", null, "block"), " or a", ' ', (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("strong", null, "blocks pattern"), ".")), _Static_Render__WEBPACK_IMPORTED_MODULE_2__.Render.tabPanelComponent('o-editor-inspector-tab-blocks-appender', [{
+    name: 'blocks',
+    title: 'Blocks'
+  }, {
+    name: 'reusable_blocks',
+    title: 'Reusable blocks'
+  }, {
+    name: 'patterns',
+    title: 'Patterns'
+  }], tab => {
+    switch (tab.name) {
+      case 'blocks':
+        return renderBlocks();
+      case 'reusable_blocks':
+        return renderReusableBlocks();
+      case 'patterns':
+        return renderPatterns();
+    }
+  }, null, null, 'switch_blocks_patterns'));
 }
 
 /***/ }),
@@ -12356,24 +12443,9 @@ function OButtonBlockAppender(_ref) {
     label = 'Add'
   } = _ref;
   const {
-    clientId,
-    insertBlock,
-    inserterItems,
     isEmptyPage
   } = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useContext)(_Context_Providers_OBlockEditorProvider__WEBPACK_IMPORTED_MODULE_3__.OBlockEditorContext);
   const [isOpen, setIsOpen] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(isEmptyPage);
-  let blockCategories = [];
-  inserterItems.forEach(block => {
-    if (!blockCategories.includes(block.category)) {
-      blockCategories.push(block.category);
-    }
-  });
-  blockCategories = blockCategories.map(category => {
-    return {
-      name: category,
-      title: category == 'wpe-layout' ? 'Layout' : category.charAt(0).toUpperCase() + category.slice(1)
-    };
-  });
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
     key: 'o-editor-inspector-button-insertNewBlock',
     variant: buttonVariant,
@@ -12384,10 +12456,6 @@ function OButtonBlockAppender(_ref) {
   }, buttonDashicon && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dashicon, {
     icon: buttonDashicon
   }), label), isOpen && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_OBlocksAppender__WEBPACK_IMPORTED_MODULE_2__.OBlocksAppender, {
-    rootClientId: clientId,
-    blocks: inserterItems,
-    blockCategories: blockCategories,
-    insertBlockFunction: insertBlock,
     onClose: () => {
       setIsOpen(false);
     },
@@ -12514,13 +12582,13 @@ function OEditorApp() {
     _$editApp.classList.add(GLOBAL_LOCALIZED.editor.style);
   }
   function scheduleClosing() {
-    if (!document.querySelector('body').classList.contains('modal-open')) {
-      clearTimeout(closingTimeOut);
-      setClosingTimeOut(setTimeout(() => {
+    clearTimeout(closingTimeOut);
+    setClosingTimeOut(setTimeout(() => {
+      if (!document.querySelector('body').classList.contains('modal-open') && !document.querySelector('.block-editor-block-settings-menu__popover')) {
         goInspector();
         close();
-      }, 3000));
-    }
+      }
+    }, 3000));
   }
   (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (editorMode == 'visual' && needToBeMounted) {
@@ -13413,7 +13481,8 @@ const WpeModal = props => {
     className: classNameModal.join(' '),
     shouldCloseOnEsc: typeof props.shouldCloseOnEsc != 'undefined' ? props.shouldCloseOnEsc : true,
     shouldCloseOnClickOutside: typeof props.shouldCloseOnClickOutside != 'undefined' ? props.shouldCloseOnClickOutside : true,
-    __experimentalHideHeader: typeof props.hideHeader != 'undefined' ? props.hideHeader : false
+    __experimentalHideHeader: typeof props.hideHeader != 'undefined' ? props.hideHeader : false,
+    isFullScreen: typeof props.isFullScreen != 'undefined' ? props.isFullScreen : false
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "components-modal__body"
   }, props.children)));
@@ -13501,7 +13570,9 @@ function OBlockEditorProvider(_ref) {
     blocksErrorNotices,
     isSelectedBlock,
     isParentOfSelectedBlock,
-    inserterItems
+    inserterItems,
+    patterns,
+    patternCategories
   } = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_1__.useSelect)(select => {
     const parentsBlock = [];
     const relations = [];
@@ -13533,6 +13604,10 @@ function OBlockEditorProvider(_ref) {
         }
       }
     }
+    const {
+      __experimentalGetAllowedPatterns,
+      getSettings
+    } = select(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.store);
     return {
       parentsBlock,
       relations,
@@ -13547,13 +13622,16 @@ function OBlockEditorProvider(_ref) {
       blocksErrorNotices: select('core/block-directory').getErrorNotices(),
       isSelectedBlock: select('core/block-editor').isBlockSelected(clientId),
       isParentOfSelectedBlock: select('core/block-editor').hasSelectedInnerBlock(clientId, true),
-      inserterItems: select('core/block-editor').getInserterItems(clientId)
+      inserterItems: select('core/block-editor').getInserterItems(clientId),
+      patterns: __experimentalGetAllowedPatterns(clientId),
+      patternCategories: getSettings().__experimentalBlockPatternCategories
     };
   }, [clientId]);
   const {
     selectBlock,
     resetSelection,
     insertBlock,
+    insertBlocks,
     removeBlock,
     duplicateBlocks,
     moveBlocksUp,
@@ -13579,6 +13657,7 @@ function OBlockEditorProvider(_ref) {
       selectBlock,
       resetSelection,
       insertBlock,
+      insertBlocks,
       removeBlock,
       duplicateBlocks,
       moveBlocksUp,
@@ -13597,7 +13676,9 @@ function OBlockEditorProvider(_ref) {
       isParentOfSelectedBlock,
       inserterItems,
       createSuccessNotice,
-      isEmptyPage
+      isEmptyPage,
+      patterns,
+      patternCategories
     }
   }, children);
 }

@@ -2,7 +2,6 @@ import { useBlockProps, useInnerBlocksProps } from '@wordpress/block-editor';
 import { registerBlockType } from '@wordpress/blocks';
 
 import { OButtonBlockAppender } from '../../../Components/OButtonBlockAppender';
-import { OButtonPatternAppender } from '../../../Components/OButtonPatternAppender';
 import { Attributes } from '../../../Static/Attributes';
 import { EditMode } from './edit';
 
@@ -71,7 +70,6 @@ registerBlockType('custom/wpe-column', {
                 renderAppender: () => (
                     <ButtonGroup className="inspectorButtonInsertNew">
                         <OButtonBlockAppender />
-                        <OButtonPatternAppender rootClientId={props.clientId} />
                     </ButtonGroup>
                 ),
             },

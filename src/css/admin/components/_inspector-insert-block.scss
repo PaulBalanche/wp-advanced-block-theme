@@ -34,34 +34,52 @@ body.o-editor-enabled {
     }
 
     .wpe-modal.modal-insertNewBlock {
-        width: 1400px;
-        max-width: 95%;
+        max-width: 1800px;
 
         .new_page_info {
             text-align: center;
+            margin: $o-space-50 0;
+        }
 
-            h1 {
-            }
-            p {
+        .components-tab-panel__tabs {
+            background: none;
+            justify-content: center;
+
+            button {
+                position: relative;
+                padding: $o-space-20 $o-space-40;
+                border-bottom: 2px solid transparent;
+                transition: all 0.1s ease-in-out;
             }
         }
 
-        .titleModal {
-            text-align: center;
-            padding: $o-space-20 0 $o-space-40 0;
-            color: $o-accent-color;
+        .switch_blocks_patterns > .components-tab-panel__tabs {
+            background: $background300;
+
+            button {
+                padding: $o-space-40 $o-space-80;
+                border-bottom: 2px solid transparent;
+
+                &.active-tab {
+                    color: var(--wp-admin-theme-color);
+                    border-color: var(--wp-admin-theme-color);
+                }
+            }
         }
 
         .panelInspectorInsertNewBlock {
             .components-tab-panel__tabs {
-                background: #d8eef8;
-                padding: 0 $o-space-40;
+                padding-top: $o-space-40;
 
                 button {
-                    border-bottom: 2px solid #d8eef8;
+                    height: auto;
+                    border-radius: $o-border-radius !important;
+                    border: none;
+                    background: $background300;
 
                     &.active-tab {
-                        border-color: var(--wp-admin-theme-color);
+                        background: var(--wp-admin-theme-color);
+                        color: white;
                     }
                 }
             }
@@ -70,17 +88,17 @@ body.o-editor-enabled {
         .items {
             display: flex;
             flex-wrap: wrap;
-            row-gap: $o-space-40;
-            column-gap: $o-space-40;
-            padding: $o-space-40;
-            background: $background300;
+            row-gap: $o-space-60;
+            column-gap: $o-space-60;
+            padding: $o-space-60 0;
 
             .item {
                 position: relative;
                 display: block;
-                width: calc((100% - 3 * $o-space-40) / 4);
+                width: calc((100% - 2 * $o-space-60) / 3);
                 cursor: pointer;
-                background: rgb(250, 250, 250);
+                border: 2px solid white;
+                box-shadow: $o-depth-100;
 
                 &:hover {
                     .blockTitle {
@@ -119,7 +137,7 @@ body.o-editor-enabled {
                     font-weight: 600;
                     padding: 12px 0;
                     transition: $o-transition-default;
-                    background: rgb(0 0 0 / 60%);
+                    background: rgb(0 0 0 / 80%);
                     color: white;
                 }
             }
